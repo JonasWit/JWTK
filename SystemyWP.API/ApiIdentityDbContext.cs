@@ -1,0 +1,16 @@
+﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace SystemyWP.API
+{
+    public class ApiIdentityDbContext : IdentityDbContext, IDataProtectionKeyContext
+    {
+        public ApiIdentityDbContext(DbContextOptions<ApiIdentityDbContext> options) : base(options)
+        {
+            
+        }
+        
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+    }
+}

@@ -1,0 +1,37 @@
+﻿@page
+@model SystemyWP.API.Pages.Account.Login
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<form method="post">
+    <input type="hidden" asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl">
+    <div class="field">
+        <label>Username</label>
+        <input asp-for="Form.Username"></input>
+        <span asp-validation-for="Form.Username"></span>
+    </div>
+    <div class="field">
+        <label>Password</label>
+        <input asp-for="Form.Password"></input>
+        <span asp-validation-for="Form.Password"></span>
+    </div>
+    @if (Model.CustomErrors.Count > 0)
+    {
+        <div class="field">
+            @foreach (var e in Model.CustomErrors)
+            {
+                <div class="error">@e</div>
+            }
+        </div>
+    }
+    <div class="field flex-row">
+        <button type="submit">Log In</button>
+    </div>
+    <hr>
+    <div class="field flex-row">
+        <a asp-page="/Account/Register" asp-route-returnUrl="@Model.Form.ReturnUrl">Create Account</a>
+    </div>
+</form>
