@@ -52,7 +52,7 @@ namespace SystemyWP.API.Pages.Account
             var existingUser = await userManager.FindByNameAsync(Form.Username);
             if (existingUser is not null)
             {
-                CustomErrors.Add("Username already taken!");
+                CustomErrors.Add("Ta nazwa użytkownika jest już zajęta.");
                 return Page();
             }
             
@@ -70,7 +70,7 @@ namespace SystemyWP.API.Pages.Account
                 return Redirect(Form.ReturnUrl);
             }
             
-            CustomErrors.Add("Failed to create account!");
+            CustomErrors.Add("Wystąpił błąd, spróbuj jeszcze raz.");
             
             return Page();
         }

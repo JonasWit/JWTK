@@ -1,11 +1,13 @@
 <template>
   <v-app dark>
+    <popup/>
     <v-app-bar app>
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">Tricking Library</span>
         <span class="d-flex d-md-none">TL</span>
       </nuxt-link>
 
+      <v-spacer/>
       <v-switch v-model="lightTheme"></v-switch>
       <v-btn @click="defaultTest">TEST</v-btn>
 
@@ -19,6 +21,12 @@
                 </v-btn>
               </template>
               <v-list>
+                <v-list-item to="/client-profile">
+                  <v-list-item-title>
+                    <v-icon left>mdi-cogs</v-icon>
+                    Mój Profil
+                  </v-list-item-title>
+                </v-list-item>
                 <v-list-item v-if="portalAdmin" to="/admin-panel">
                   <v-list-item-title>
                     <v-icon left>mdi-cogs</v-icon>

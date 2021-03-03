@@ -1,11 +1,52 @@
 ﻿<template>
-  <h1>Admin Panel</h1>
+  <div>
+    <div>
+      <v-text-field label="Email" :disabled="loading" v-model="email">
+        <template slot="append-outer">
+          <v-btn :disabled="loading" color="primary" @click="sendInvite">Invite</v-btn>
+        </template>
+      </v-text-field>
+    </div>
+    <v-list>
+      <v-list-item v-for="user in moderators" :key="user.id">
+        <v-list-item-content>
+          <v-list-item-title>{{ user.email }}</v-list-item-title>
+          <v-list-item-subtitle>{{ user.id }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </div>
 </template>
 
 <script>
 export default {
   name: "index",
-  middleware: ['portal-admin'],
+  data: () => ({
+    moderators: [],
+    email: "",
+    loading: false
+  }),
+  middleware: ["portal-admin"],
+  fetch() {
+    return this.$axios.$get("/api/admin/clients")
+      .then(moderators => this.moderators = moderators);
+  },
+  methods: {
+    sendInvite() {
+      if (this.loading) return;
+      this.loading = true;
+      const data = {
+        email: this.email,
+        returnUrl: location.origin
+      };
+      return this.$axios.$post("/api/admin/clients", data)
+        .then(() => {
+          this.email = "";
+          this.loading = false;
+        })
+        .finally(this.$fetch);
+    }
+  }
 };
 </script>
 

@@ -22,7 +22,7 @@ namespace SystemyWP.API.Services.Email
             var msg = MailHelper.CreateSingleEmail(
                 new EmailAddress(_optionsMonitor.CurrentValue.From),
                 new EmailAddress(email),
-                "systemy WP - Zaproszenie"
+                "SystemyWP - Zaproszenie"
                 , "",
                 htmlContent
             );

@@ -23,6 +23,8 @@ namespace SystemyWP.API
         {
             public const string Role = "role";
             public static readonly Claim ClientClaim = new Claim(Role, Roles.Client);
+            public static readonly Claim ClientAdminClaim = new Claim(Role, Roles.ClientAdmin);
+            public static readonly Claim PortalAdminClaim = new Claim(Role, Roles.PortalAdmin);
             public const string AppAccess = "appAccess";
             public const string DataAccessKey = "dataAccess";
         }
