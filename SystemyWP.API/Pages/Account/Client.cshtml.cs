@@ -56,7 +56,7 @@ namespace SystemyWP.API.Pages.Account
                 return Page();
             }
             
-            var user = await userManager.FindByNameAsync(Form.Email);
+            var user = await userManager.FindByEmailAsync(Form.Email);
 
             var resetPassword = await userManager
                 .ResetPasswordAsync(user, Form.Code, Form.Password);
@@ -64,6 +64,7 @@ namespace SystemyWP.API.Pages.Account
             if (resetPassword.Succeeded)
             {
                 user.UserName = Form.Username;
+                user.EmailConfirmed = true;
                 userManager.UpdateAsync(user);
                 
                 await signInManager.SignInAsync(user, true);

@@ -34,7 +34,7 @@ namespace SystemyWP.API.Controllers
 
             var user = await _appDbContext.Users
                 .Where(x => x.Id.Equals(userId))
-                .Select(UserProjections.UserProjection(Role, DataAccessKey, AllowedApps))
+                .Select(UserProjections.UserProjection(Username, Role, DataAccessKey, AllowedApps))
                 .FirstOrDefaultAsync();
 
             if (user is not null) return Ok(user);
@@ -42,13 +42,15 @@ namespace SystemyWP.API.Controllers
             var newUser = new User
             {
                 Id = UserId,
-                Username = Username,
             };
 
             _appDbContext.Add(newUser);
             await _appDbContext.SaveChangesAsync();
 
-            return Ok(UserProjections.UserProjection(Role, DataAccessKey, AllowedApps).Compile().Invoke(newUser));
+            return Ok(UserProjections
+                .UserProjection(Username, Role, DataAccessKey, AllowedApps)
+                .Compile()
+                .Invoke(newUser));
         }
 
         [HttpPut("me/image")]

@@ -1,0 +1,11 @@
+﻿@page
+@model SystemyWP.API.Pages.Account.Lockout
+@{
+    ViewData["Title"] = "Uwaga! Zablokowano możliwość zalogowania do tego konta";
+    Layout = "_Layout";
+}
+
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">Przekroczono limit nieudanych prób zalogowania do tego konta. Dla bezpieczeństwa zostało ono zablokowane na 15 minut. Prosimu spróbować ponownie po upływie tego czasu.</p>
+</header>

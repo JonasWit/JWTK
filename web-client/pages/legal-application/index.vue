@@ -4,7 +4,6 @@
 
 <script>
 export default {
-  name: "index",
   middleware: ['legal-app-permission'],
 };
 </script>

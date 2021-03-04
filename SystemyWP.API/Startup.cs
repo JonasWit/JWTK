@@ -57,7 +57,7 @@ namespace SystemyWP.API
             services.AddFileServices(_configuration);   
             services.AddCors(options => options.AddPolicy(NuxtJsApp, build => build
                     .AllowAnyHeader()
-                    .WithOrigins("https://localhost:3000", "https://app.systemywp.pl")
+                    .WithOrigins("https://localhost:3000", "https://portal.systemywp.pl")
                     .AllowAnyMethod()
                     .AllowCredentials()));          
  
@@ -92,9 +92,9 @@ namespace SystemyWP.API
                     config.UseNpgsql(_configuration.GetConnectionString("Default")));
             }
             
-            services.AddDataProtection()
-                .SetApplicationName("SystemyWP")
-                .PersistKeysToDbContext<ApiIdentityDbContext>();
+            // services.AddDataProtection()
+            //     .SetApplicationName("SystemyWspomaganiaPracy")
+            //     .PersistKeysToDbContext<ApiIdentityDbContext>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {

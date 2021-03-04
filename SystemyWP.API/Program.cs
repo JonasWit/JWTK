@@ -44,6 +44,7 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(testClient, new[]
                     {
+                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.Client),
                         new Claim(SystemyWPConstants.Claims.DataAccessKey, "profile-test-1"),
                         new Claim(SystemyWPConstants.Claims.AppAccess,
                             SystemyWPConstants.Apps.LegalApp)
@@ -54,7 +55,6 @@ namespace SystemyWP.API
                 context.Add(new User
                 {
                     Id = testClient.Id,
-                    Username = testClient.UserName,
                 });
                 
                 var clientAdmin = new IdentityUser("TestClientAdmin") {Email = "testAdminClient@test.com"};
@@ -68,11 +68,8 @@ namespace SystemyWP.API
                 context.Add(new User
                 {
                     Id = clientAdmin.Id,
-                    Username = clientAdmin.UserName,
                 });
 
-
-                    
                 var portalAdmin = new IdentityUser("TestPortalAdmin") {Email = "testAdminPortal@test.com"};
                 userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
                 userManager
@@ -88,7 +85,6 @@ namespace SystemyWP.API
                 context.Add(new User
                 {
                     Id = portalAdmin.Id,
-                    Username = portalAdmin.UserName,
                 });  
         
                 

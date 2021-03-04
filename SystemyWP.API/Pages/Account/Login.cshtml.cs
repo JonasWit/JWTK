@@ -36,6 +36,10 @@ namespace SystemyWP.API.Pages.Account
             {
                 return Redirect(Form.ReturnUrl);
             }
+            if (signInResult.IsLockedOut)
+            {
+                return RedirectToPage("./Lockout");
+            }
             
             CustomErrors.Add("Invalid Login Attempt");
 
