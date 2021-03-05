@@ -48,7 +48,7 @@ export default {
 
       this.form.userId = this.selectedUser.id;
 
-      return this.$axios.post("/api/admin/user/lock", this.form)
+      return this.$axios.post("/api/portal-admin/user/lock", this.form)
         .catch((e) => {
           console.log(e);
         }).finally(() => {
@@ -62,7 +62,7 @@ export default {
 
       this.form.userId = this.selectedUser.id;
 
-      return this.$axios.post("/api/admin/user/unlock", this.form)
+      return this.$axios.post("/api/portal-admin/user/unlock", this.form)
         .catch((e) => {
           console.log(e);
         }).finally(() => {

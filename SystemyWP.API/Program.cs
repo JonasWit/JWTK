@@ -37,17 +37,31 @@ namespace SystemyWP.API
             var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
+            var fakeCounter = 10;
+
+            for (int i = 0; i < fakeCounter; i++)
+            {
+                context.AccessKeys.Add(new AccessKey
+                {
+                    Id = $"access-key-{i}",
+                    ExpireDate = DateTime.UtcNow.AddDays(i),
+                    Created = DateTime.UtcNow
+                });
+            }
+            
             if (!identityContext.Users.Any(x => x.UserName.Equals("test")) && env.IsDevelopment())
             {
-                var testClient = new IdentityUser("TestClient") {Email = "testClient@test.com"};
+                var testClient = new IdentityUser("TestClient")
+                {
+                    Email = "testClient@test.com",
+                    LockoutEnabled = true
+                };
                 userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
                 userManager
                     .AddClaimsAsync(testClient, new[]
                     {
                         new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.Client),
-                        new Claim(SystemyWPConstants.Claims.DataAccessKey, "profile-test-1"),
-                        new Claim(SystemyWPConstants.Claims.AppAccess,
-                            SystemyWPConstants.Apps.LegalApp)
+                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
                     })
                     .GetAwaiter()
                     .GetResult();
@@ -56,12 +70,38 @@ namespace SystemyWP.API
                 {
                     Id = testClient.Id,
                 });
+
+                var testClient2 = new IdentityUser("TestClient2")
+                {
+                    Email = "testClient2@test.com",
+                    LockoutEnabled = true
+                };
+                userManager.CreateAsync(testClient2, "password").GetAwaiter().GetResult();
+                userManager
+                    .AddClaimsAsync(testClient2, new[]
+                    {
+                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.Client),
+                    })
+                    .GetAwaiter()
+                    .GetResult();
+
+                context.Add(new User
+                {
+                    Id = testClient2.Id,
+                });
                 
-                var clientAdmin = new IdentityUser("TestClientAdmin") {Email = "testAdminClient@test.com"};
+                var clientAdmin = new IdentityUser("TestClientAdmin")
+                {
+                    Email = "testAdminClient@test.com", 
+                    LockoutEnabled = true
+                };
                 userManager.CreateAsync(clientAdmin, "password").GetAwaiter().GetResult();
                 userManager
-                    .AddClaimAsync(clientAdmin, new Claim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.ClientAdmin))
+                    .AddClaimsAsync(clientAdmin, new[]
+                    {
+                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.ClientAdmin),
+                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
+                    })
                     .GetAwaiter()
                     .GetResult();               
                 
@@ -76,8 +116,7 @@ namespace SystemyWP.API
                     .AddClaimsAsync(portalAdmin, new[]
                     {
                         new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.PortalAdmin),
-                        new Claim(SystemyWPConstants.Claims.DataAccessKey, "portalAdmin-key"),
-                        new Claim(SystemyWPConstants.Claims.AppAccess, SystemyWPConstants.Apps.LegalApp)
+                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
                     })
                     .GetAwaiter()
                     .GetResult();               
@@ -86,9 +125,17 @@ namespace SystemyWP.API
                 {
                     Id = portalAdmin.Id,
                 });  
-        
                 
                 context.SaveChanges();
+
+
+                
+                
+                
+                
+                
+                
+                
             }
             else if (!identityContext.Users.Any(x => x.UserName.Equals("admin")) && env.IsProduction())
             {

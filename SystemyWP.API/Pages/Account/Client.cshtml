@@ -14,18 +14,18 @@
         <label>@Model.Form.Email</label>
     </div>
     <div class="field">
-        <label>Username</label>
-        <input asp-for="Form.Username"></input>
+        <label>Nazwa Użytkowinika</label>
+        <input asp-for="Form.Username"/>
         <span asp-validation-for="Form.Username"></span>
     </div>
     <div class="field">
-        <label>Password</label>
-        <input asp-for="Form.Password"></input>
+        <label>Hasło</label>
+        <input asp-for="Form.Password"/>
         <span asp-validation-for="Form.Password"></span>
     </div>
     <div class="field">
-        <label>Confirm Password</label>
-        <input asp-for="Form.ConfirmPassword"></input>
+        <label>Potwierdź Hasło</label>
+        <input asp-for="Form.ConfirmPassword"/>
         <span asp-validation-for="Form.ConfirmPassword"></span>
     </div>
     @if (Model.CustomErrors.Count > 0)
@@ -38,7 +38,7 @@
         </div>
     }
     <div class="field flex-row">
-        <button type="submit">Register</button>
+        <button type="submit">Zarejestruj</button>
     </div>
     <hr>
 </form>

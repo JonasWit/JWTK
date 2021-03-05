@@ -21,8 +21,8 @@ const config = {
     },
   },
   head: {
-    titleTemplate: '%s - Tricking Library',
-    title: 'Welcome',
+    titleTemplate: '%s - Systemy Wspomagania Pracy',
+    title: 'SWP',
     htmlAttrs: {
       lang: 'en'
     },

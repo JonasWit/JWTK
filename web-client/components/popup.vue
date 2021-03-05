@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-snackbar :value="message" timeout="4000">
+  <v-snackbar :value="message" timeout="2000">
     <v-icon :color="popupConfig.color">{{ popupConfig.icon }}</v-icon>
     {{ message }}
   </v-snackbar>
@@ -8,6 +8,7 @@
 <script>
 import {mapState} from "vuex";
 import {POPUP_TYPES} from "@/store/popup";
+
 export default {
   name: "popup",
   computed: {
@@ -25,5 +26,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

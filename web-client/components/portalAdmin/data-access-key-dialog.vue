@@ -4,17 +4,15 @@
       <v-card-title>
         Data Access Key
       </v-card-title>
-      <v-form ref="dataAccessKeyForm" v-model="validation.valid">
+      <v-form>
         <v-card-text>
           <p v-if="selectedUser && selectedUser.dataAccessKey">Current Key: {{ selectedUser.dataAccessKey }}</p>
-          <!--          <v-text-field :rules="validation.key" label="Key" v-model="form.dataAccessKey"></v-text-field>-->
-
-          <v-combobox clearable :rules="validation.key" v-model="form.dataAccessKey" :items="activeKeys"></v-combobox>
+          <v-select v-model="form.dataAccessKey" :items="activeKeys" filled label="Filled style"></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn :disabled="!validation.valid" outlined color="warning" text @click="grantAccessKey()">
+          <v-btn :disabled="!form.dataAccessKey" outlined color="warning" text @click="grantAccessKey()">
             Grant Key
           </v-btn>
           <v-btn v-if="selectedUser" :disabled="!selectedUser.dataAccessKey" outlined color="error" text
@@ -49,19 +47,13 @@ export default {
       dataAccessKey: "",
       userId: ""
     },
-    validation: {
-      valid: false,
-      key: [
-        v => !!v || "Key is required!",
-        v => v?.length >= 5 || "5 or more characters!"
-      ],
-    },
   }),
   async fetch() {
-    await this.$axios.$get("/api/admin/access-keys")
+    await this.$axios.$get("/api/portal-admin/access-keys")
       .then((res) => {
         console.log(res);
-        this.activeKeys = res;
+        this.activeKeys = res.map(x => x.id);
+        console.log(this.activeKeys);
       });
   },
   created() {
@@ -71,15 +63,13 @@ export default {
   },
   methods: {
     async grantAccessKey() {
-      if (!this.$refs.dataAccessKeyForm.validate()) return;
-
       if (this.loading) return;
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
       console.log("accessKeyPayload", this.form.dataAccessKey);
 
-      return this.$axios.post("/api/admin/client/grantAccessKey", this.form)
+      return this.$axios.post("/api/portal-admin/client/grant/access-key", this.form)
         .catch((e) => {
           console.log(e);
         }).finally(() => {
@@ -88,14 +78,12 @@ export default {
         });
     },
     async revokeAccessKey() {
-      if (!this.selectedUser.dataAccessKey) return;
-
       if (this.loading) return;
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
 
-      return this.$axios.post("/api/admin/client/revokeAccessKey", this.form)
+      return this.$axios.post("/api/portal-admin/client/revoke/access-key", this.form)
         .catch((e) => {
           console.log(e);
         }).finally(() => {

@@ -1,12 +1,16 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title v-if="selectedUser.locked">Unlock User</v-card-title>
-      <v-card-title v-else>Roles Management</v-card-title>
+      <v-card-title>Roles Management</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn v-if="selectedUser.locked" outlined color="warning" text @click="unlock">
-          Update
+        <v-btn v-if="selectedUser.role === 'Client'" outlined color="warning" text @click="switchRole('ClientAdmin')">
+          <v-icon medium color="warning">mdi-arrow-up-thick</v-icon>
+          Client Admin
+        </v-btn>
+        <v-btn v-if="selectedUser.role === 'ClientAdmin'" outlined color="warning" text @click="switchRole('Client')">
+          <v-icon medium color="warning">mdi-arrow-down-thick</v-icon>
+          Client
         </v-btn>
         <v-spacer/>
         <v-btn outlined color="success" text @click="cancelDialog">
@@ -29,22 +33,19 @@ export default {
   },
   data: () => ({
     loading: false,
-    form: {
-      userId: "",
-      role: ""
-    }
   }),
-  async fetch() {
-
-  },
+  computed: {},
   methods: {
-    switchRole() {
+    switchRole(role) {
+      if (role === this.selectedUser.role) return;
+
       if (this.loading) return;
       this.loading = true;
 
-      this.dataKeyForm.userId = this.selectedUser.id;
-
-      return this.$axios.$post("/api/admin/user/role", this.form)
+      return this.$axios.$post("/api/portal-admin/user/change-role", {
+        userId: this.selectedUser.id,
+        role: role
+      })
         .catch((e) => {
           console.log(e);
         }).finally(() => {

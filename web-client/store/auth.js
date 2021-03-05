@@ -4,23 +4,25 @@
 
 export const state = initState;
 
-const ROLES = {
+export const ROLES = {
+  INVITED: "Invited",
   CLIENT: "Client",
   CLIENT_ADMIN: "ClientAdmin",
   PORTAL_ADMIN: "PortalAdmin",
 };
 
-const APP_ACCESS = {
+export const APP_ACCESS = {
   LEGAL_APP: "LegalApp",
 };
 
 export const getters = {
   authenticated: state => state.profile != null,
+  invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
   client: (state, getters) => getters.authenticated && state.profile.role === ROLES.CLIENT,
   clientAdmin: (state, getters) => getters.authenticated &&
     (state.profile.role === ROLES.CLIENT_ADMIN || getters.portalAdmin),
   portalAdmin: (state, getters) => getters.authenticated && state.profile.role === ROLES.PORTAL_ADMIN,
-  legalAppAllowed: (state, getters) => getters.authenticated && state.profile.allowedApps.some(x => x === APP_ACCESS.LEGAL_APP),
+  legalAppAllowed: (state, getters) => getters.authenticated && state.profile.legalAppAllowed === true,
 };
 
 export const mutations = {

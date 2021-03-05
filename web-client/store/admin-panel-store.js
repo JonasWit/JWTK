@@ -17,7 +17,7 @@ export const mutations = {
 
 export const actions = {
   getUsers({commit}) {
-    return this.$axios.$get("/api/admin/users")
+    return this.$axios.$get("/api/portal-admin/users")
       .then((users) => {
         console.log('Downloaded Users', users);
         commit('updateUsersList', {users});

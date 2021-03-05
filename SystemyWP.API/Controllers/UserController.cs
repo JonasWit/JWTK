@@ -32,9 +32,12 @@ namespace SystemyWP.API.Controllers
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
 
+            var userProfile = _appDbContext.Users
+                .FirstOrDefault(x => x.Id.Equals(userId));
+
             var user = await _appDbContext.Users
                 .Where(x => x.Id.Equals(userId))
-                .Select(UserProjections.UserProjection(Username, Role, DataAccessKey, AllowedApps))
+                .Select(UserProjections.UserProjection(Username, Role, userProfile.AccessKeyId, LegalAppAllowed))
                 .FirstOrDefaultAsync();
 
             if (user is not null) return Ok(user);
@@ -48,7 +51,7 @@ namespace SystemyWP.API.Controllers
             await _appDbContext.SaveChangesAsync();
 
             return Ok(UserProjections
-                .UserProjection(Username, Role, DataAccessKey, AllowedApps)
+                .UserProjection(Username, Role, userProfile.AccessKeyId, LegalAppAllowed)
                 .Compile()
                 .Invoke(newUser));
         }

@@ -30,8 +30,8 @@ namespace SystemyWP.API.Pages.Account
             }
 
             var signInResult = await signInManager
-                .PasswordSignInAsync(Form.Username, Form.Password, true, false);
-            
+                .PasswordSignInAsync(Form.Username, Form.Password, true, lockoutOnFailure: true);
+
             if (signInResult.Succeeded)
             {
                 return Redirect(Form.ReturnUrl);
@@ -41,7 +41,7 @@ namespace SystemyWP.API.Pages.Account
                 return RedirectToPage("./Lockout");
             }
             
-            CustomErrors.Add("Invalid Login Attempt");
+            CustomErrors.Add("Nieudana próba logowania!");
 
             return Page();
         }

@@ -1,10 +1,9 @@
 <template>
   <v-app dark>
-    <popup/>
     <v-app-bar app>
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
-        <span class="d-none d-md-flex">Tricking Library</span>
-        <span class="d-flex d-md-none">TL</span>
+        <span class="d-none d-md-flex">SystemyWP</span>
+        <span class="d-flex d-md-none">SWP</span>
       </nuxt-link>
 
       <v-spacer/>
@@ -36,7 +35,7 @@
                 <v-list-item v-if="legalAppAllowed" to="/legal-application">
                   <v-list-item-title>
                     <v-icon left>mdi-cogs</v-icon>
-                      Moja Kancelaria
+                    Moja Kancelaria
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="logout">
@@ -66,6 +65,7 @@
         <nuxt/>
       </v-container>
     </v-main>
+    <popup/>
   </v-app>
 </template>
 

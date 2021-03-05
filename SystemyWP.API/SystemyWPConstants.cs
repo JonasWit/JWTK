@@ -10,8 +10,7 @@ namespace SystemyWP.API
             public const string Client = nameof(Client);
             public const string ClientAdmin = nameof(ClientAdmin);
             public const string PortalAdmin = nameof(PortalAdmin);
-            public const string AppAccess = nameof(AppAccess);
-            public const string DataAccess = nameof(DataAccess);
+            public const string LegalAppAccess = nameof(LegalAppAccess);
         }
 
         public struct IdentityResources
@@ -21,16 +20,18 @@ namespace SystemyWP.API
 
         public struct Claims
         {
-            public const string Role = "role";
+            public const string Role = "Role";
+            public const string LegalAppAccess = "LegalAppAccess";
+            public static readonly Claim InvitedClaim = new Claim(Role, Roles.Invited);
             public static readonly Claim ClientClaim = new Claim(Role, Roles.Client);
             public static readonly Claim ClientAdminClaim = new Claim(Role, Roles.ClientAdmin);
             public static readonly Claim PortalAdminClaim = new Claim(Role, Roles.PortalAdmin);
-            public const string AppAccess = "appAccess";
-            public const string DataAccessKey = "dataAccess";
+            public static readonly Claim LegalAppAccessClaim = new Claim(LegalAppAccess, Apps.LegalApp);
         }
 
         public struct Roles
         {
+            public const string Invited = nameof(Invited);
             public const string Client = nameof(Client);
             public const string ClientAdmin = nameof(ClientAdmin);
             public const string PortalAdmin = nameof(PortalAdmin);

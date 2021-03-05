@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks;
+using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -107,6 +102,9 @@ namespace SystemyWP.API
                         options.Password.RequireLowercase = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequireNonAlphanumeric = false;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                        options.Lockout.MaxFailedAccessAttempts = 3;
+                        options.Lockout.AllowedForNewUsers = true;
                     }
                     else
                     {
@@ -115,16 +113,27 @@ namespace SystemyWP.API
                         options.Password.RequireLowercase = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequireNonAlphanumeric = false;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                        options.Lockout.MaxFailedAccessAttempts = 3;
+                        options.Lockout.AllowedForNewUsers = true;
                     }
                 })
+                .AddErrorDescriber<PolishIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
                 .AddDefaultTokenProviders();
+            
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.FromSeconds(10);
+            });
 
             services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = "/Account/Login";
                 config.LogoutPath = "/api/auth/logout";
                 config.Cookie.Domain = _configuration["CookieDomain"];
+                config.Cookie.Name = "systemywp_id";
+                config.ExpireTimeSpan = TimeSpan.FromHours(2);      
             });
 
             services.AddAuthorization(options =>
@@ -147,13 +156,9 @@ namespace SystemyWP.API
                     .RequireClaim(SystemyWPConstants.Claims.Role,
                         SystemyWPConstants.Roles.PortalAdmin));
 
-                options.AddPolicy(SystemyWPConstants.Policies.AppAccess, policy => policy
+                options.AddPolicy(SystemyWPConstants.Policies.LegalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.AppAccess));
-
-                options.AddPolicy(SystemyWPConstants.Policies.DataAccess, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.DataAccessKey));
+                    .RequireClaim(SystemyWPConstants.Claims.LegalAppAccess));
             });
         }
     }

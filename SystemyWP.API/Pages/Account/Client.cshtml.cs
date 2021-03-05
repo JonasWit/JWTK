@@ -65,7 +65,11 @@ namespace SystemyWP.API.Pages.Account
             {
                 user.UserName = Form.Username;
                 user.EmailConfirmed = true;
+         
                 userManager.UpdateAsync(user);
+                
+                await userManager.RemoveFromRoleAsync(user, SystemyWPConstants.Roles.Invited);
+                await userManager.AddToRoleAsync(user, SystemyWPConstants.Roles.Client);   
                 
                 await signInManager.SignInAsync(user, true);
                 return Redirect(Form.ReturnUrl);

@@ -8,7 +8,7 @@ namespace SystemyWP.API.Projections
     public static class UserProjections
     {
         public static Expression<Func<User, object>> UserProjection(string userName, string role, 
-            string dataAccessKey, List<string> allowedApps) =>
+            string dataAccessKey, bool legalAppAllowed) =>
             user => new
             {
                 user.Id,
@@ -16,7 +16,7 @@ namespace SystemyWP.API.Projections
                 user.Image,
                 Role = role,
                 DataAccessKey = dataAccessKey,
-                AllowedApps = allowedApps
+                LegalAppAllowed = legalAppAllowed
             };
 
         public class UserViewModel
@@ -30,7 +30,7 @@ namespace SystemyWP.API.Projections
             public bool PolicyAccepted { get; set; }  
             public bool RulesAccepted { get; set; }  
             public string DataAccessKey { get; set; }
-            public List<string> AllowedApps { get; set; } = new List<string>();   
+            public bool  LegalAppAllowed { get; set; }
             public bool Locked { get; set; }    
         }
     }
