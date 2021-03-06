@@ -56,10 +56,10 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import DataAccessKeyDialog from "@/components/portalAdmin/data-access-key-dialog";
-import LockUserDialog from "@/components/portalAdmin/lock-user-dialog";
-import RolesManagementDialog from "@/components/portalAdmin/roles-management-dialog";
-import ApplicationsAccessDialog from "@/components/portalAdmin/applications-access-dialog";
+import DataAccessKeyDialog from "@/components/portal-admin/data-access-key-dialog";
+import LockUserDialog from "@/components/portal-admin/lock-user-dialog";
+import RolesManagementDialog from "@/components/portal-admin/roles-management-dialog";
+import ApplicationsAccessDialog from "@/components/portal-admin/applications-access-dialog";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,

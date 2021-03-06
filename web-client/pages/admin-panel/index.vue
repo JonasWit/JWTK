@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import UsersAdminPanel from "@/components/portalAdmin/user-admin-panel";
-import AccessKeysAdmin from "@/components/portalAdmin/access-keys-admin-panel";
+import UsersAdminPanel from "@/components/portal-admin/user-admin-panel";
+import AccessKeysAdmin from "@/components/portal-admin/access-keys-admin-panel";
 
 export default {
   middleware: ["portal-admin"],
