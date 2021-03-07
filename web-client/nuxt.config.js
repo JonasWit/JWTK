@@ -47,7 +47,22 @@ const config = {
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: [
+    {
+      path: '~/components/',
+    },
+    {
+      path: '~/components/auth/',
+    },
+    {
+      path: '~/components/home-page/',
+    },
+    {
+      path: '~/components/portal-admin/',
+      prefix: 'padmin'
+    },
+
+  ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

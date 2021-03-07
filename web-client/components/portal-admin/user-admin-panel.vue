@@ -44,22 +44,19 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <data-access-key-dialog v-on:action-completed="dataKeyDialogClosed" v-if="showDataAccessKeyDialog"
-                            :selected-user="selectedUser"/>
-    <lock-user-dialog v-on:action-completed="lockDialogClosed" v-if="showLockDialog" :selected-user="selectedUser"/>
-    <roles-management-dialog v-on:action-completed="rolesDialogClosed" v-if="showRolesDialog"
+    <padmin-data-access-key-dialog v-on:action-completed="dataKeyDialogClosed" v-if="showDataAccessKeyDialog"
+                                   :selected-user="selectedUser"/>
+    <padmin-lock-user-dialog v-on:action-completed="lockDialogClosed" v-if="showLockDialog"
                              :selected-user="selectedUser"/>
-    <applications-access-dialog v-on:action-completed="appsDialogClosed" v-if="showAppsDialog"
-                                :selected-user="selectedUser"/>
+    <padmin-roles-management-dialog v-on:action-completed="rolesDialogClosed" v-if="showRolesDialog"
+                                    :selected-user="selectedUser"/>
+    <padmin-applications-access-dialog v-on:action-completed="appsDialogClosed" v-if="showAppsDialog"
+                                       :selected-user="selectedUser"/>
   </div>
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
-import DataAccessKeyDialog from "@/components/portal-admin/data-access-key-dialog";
-import LockUserDialog from "@/components/portal-admin/lock-user-dialog";
-import RolesManagementDialog from "@/components/portal-admin/roles-management-dialog";
-import ApplicationsAccessDialog from "@/components/portal-admin/applications-access-dialog";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,
@@ -72,7 +69,6 @@ const initState = () => ({
 });
 
 export default {
-  components: {RolesManagementDialog, LockUserDialog, DataAccessKeyDialog, ApplicationsAccessDialog},
   name: "user-admin-panel",
   data: initState,
   beforeMount() {
