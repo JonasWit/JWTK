@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SystemyWP.API.Pages.Account
 {
-    public class Moderator : BasePage
+    public class Client : BasePage
     {
         [BindProperty] public ModeratorRegisterForm Form { get; set; } 
         

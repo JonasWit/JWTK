@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Validation
 {
-    public class GrantDataAccessKeyValidation: AbstractValidator<GrantDataAccessKey>
+    public class GrantDataAccessKeyValidation: AbstractValidator<GrantDataAccessKeyForm>
     {
         public GrantDataAccessKeyValidation()
         {

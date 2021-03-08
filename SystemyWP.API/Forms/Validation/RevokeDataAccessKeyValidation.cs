@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Validation
 {
-    public class RevokeDataAccessKeyValidation: AbstractValidator<RevokeDataAccessKey>
+    public class RevokeDataAccessKeyValidation: AbstractValidator<RevokeDataAccessKeyForm>
     {
         public RevokeDataAccessKeyValidation()
         {

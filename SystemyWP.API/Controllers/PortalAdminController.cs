@@ -8,6 +8,8 @@ using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Email;
 using SystemyWP.Data;
+using SystemyWP.Data.Models;
+using SystemyWP.Data.Models.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +22,8 @@ namespace SystemyWP.API.Controllers
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
     public class PortalAdminController : ApiController
     {
-        private readonly AppDbContext _context;
-        private readonly ApiIdentityDbContext _apiIdentityContext;
-
-        public PortalAdminController(AppDbContext context, 
-            ApiIdentityDbContext apiIdentityContext)
-        {
-            _context = context;
-            _apiIdentityContext = apiIdentityContext;
-        }
-        
         [HttpGet("clients")]
-        public async Task<IActionResult> ListAccessKeys(
+        public async Task<IActionResult> ListClients(
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var users = await userManager.GetUsersForClaimAsync(
@@ -40,36 +32,58 @@ namespace SystemyWP.API.Controllers
             return Ok(users.Select(x => new
             {
                 x.Id,
-                x.Email
+                x.Email,
             }));
         }
 
         [HttpGet("access-keys")]
-        public async Task<IActionResult> ListClients(
-            [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> ListAccessKeys([FromServices] AppDbContext context) =>
+            Ok(context.AccessKeys.Select(AccessKeyProjection.Projection).ToList());
+
+        [HttpPost("access-key/create")]
+        public async Task<IActionResult> CreateAccessKey(
+            [FromServices] AppDbContext context,
+            [FromBody] CreateAccessKeyForm form)
         {
-            return Ok(_context.AccessKeys.ToList());
+            if (context.AccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
+            {
+                return BadRequest("Key with this name already exists!");
+            }
+
+            context.Add(new AccessKey
+            {
+                Name = form.KeyName,
+                ExpireDate = form.ExpireDate
+            });
+
+            await context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPost("client/grant/access-key")]
         public async Task<IActionResult> GrantDataAccessKey(
-            [FromBody] GrantDataAccessKey form,
+            [FromServices] AppDbContext context,
+            [FromBody] GrantDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var user = await userManager.FindByIdAsync(form.UserId);
-            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
             if (user is null || userProfile is null)
             {
                 return BadRequest("There is no user with this ID!");
             }
 
-            userProfile.AccessKeyId = form.DataAccessKey;
+            var accessKey =
+                context.AccessKeys.
+                    FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
 
-            _context.Users.Update(userProfile);
-            
-            var result =  await _context.SaveChangesAsync();
-            
+            userProfile.AccessKeyId = accessKey.Id;
+
+            context.Users.Update(userProfile);
+
+            var result = await context.SaveChangesAsync();
+
             if (result > 0)
             {
                 return Ok($"Data Access Key {form.DataAccessKey} Added!");
@@ -82,18 +96,19 @@ namespace SystemyWP.API.Controllers
 
         [HttpPost("client/revoke/access-key")]
         public async Task<IActionResult> RevokeDataAccessKey(
-            [FromBody] RevokeDataAccessKey form,
+            [FromBody] RevokeDataAccessKeyForm form,
+            [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var user = await userManager.FindByIdAsync(form.UserId);
-            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
             if (user is null || userProfile is null)
             {
                 return BadRequest("There is no user with this ID!");
             }
 
-            var assignedKey = _context.AccessKeys
+            var assignedKey = context.AccessKeys
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Users.Any(x => x.Id.Equals(user.Id)));
 
@@ -101,8 +116,8 @@ namespace SystemyWP.API.Controllers
             {
                 assignedKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
 
-                _context.Update(assignedKey);
-                var result = await _context.SaveChangesAsync();
+                context.Update(assignedKey);
+                var result = await context.SaveChangesAsync();
 
                 if (result > 0)
                 {
@@ -111,7 +126,7 @@ namespace SystemyWP.API.Controllers
             }
             else
             {
-                return BadRequest("Key not found!");      
+                return BadRequest("Key not found!");
             }
 
             return BadRequest("Error when removing the access key!");
@@ -122,31 +137,30 @@ namespace SystemyWP.API.Controllers
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] AppDbContext context)
         {
-            var userIds = userManager.Users
-                .Select(x => x.Id)
-                .ToList();
-
             var identityUsers = userManager.Users.ToList();
-            var result = new List<UserProjections.UserViewModel>();
 
+            var result = new List<UserProjections.UserViewModel>();
             foreach (var identityUser in identityUsers)
             {
-                var userClaims = (await userManager.GetClaimsAsync(identityUser) as List<Claim>) 
+                var userClaims = (await userManager.GetClaimsAsync(identityUser) as List<Claim>)
                                  ?? new List<Claim>();
-                var userProfile = _context.Users
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefault(x => x.Id.Equals(identityUser.Id));
-                
+
+                var accessKey = context.AccessKeys
+                    .Include(x => x.Users)
+                    .Where(x => x.Users.Any(x => x.Id.Equals(identityUser.Id)))
+                    .Select(AccessKeyProjection.Projection)
+                    .FirstOrDefault();  
+
                 result.Add(new UserProjections.UserViewModel
                 {
                     Id = identityUser.Id,
                     Username = identityUser.UserName,
                     Email = identityUser.Email,
                     LegalAppAllowed = userClaims
-                        .Any(x => x.Type.Equals(SystemyWPConstants.Claims.LegalAppAccess)),
+                        .Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess)),
                     Image = context.Users
                         .FirstOrDefault(x => x.Id.Equals(identityUser.Id))?.Image,
-                    DataAccessKey = userProfile.AccessKey?.Id,
+                    DataAccessKey = accessKey,
                     Role = userClaims
                         .FirstOrDefault(x =>
                             x.Type.Equals(SystemyWPConstants.Claims.Role))?.Value,
@@ -169,18 +183,18 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("There is no user with this ID!");
             }
-            
+
             var result = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(+25));
 
             if (result.Succeeded)
             {
-                await userManager.UpdateSecurityStampAsync(user);      
+                await userManager.UpdateSecurityStampAsync(user);
                 return Ok("User locked!");
             }
-            
+
             return BadRequest("Error during lock!");
         }
-        
+
         [HttpPost("user/unlock")]
         public async Task<IActionResult> UnlockUser(
             [FromServices] UserManager<IdentityUser> userManager,
@@ -192,7 +206,7 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("There is no user with this ID!");
             }
-            
+
             var result = await userManager.SetLockoutEndDateAsync(user, null);
 
             if (result.Succeeded) return Ok("User locked!");
@@ -260,7 +274,7 @@ namespace SystemyWP.API.Controllers
                         if (form.Role.Equals(
                             SystemyWPConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            var addToRoleResult = 
+                            var addToRoleResult =
                                 await userManager.AddClaimAsync(user, SystemyWPConstants.Claims.ClientClaim);
                             if (addToRoleResult.Succeeded)
                             {
@@ -270,7 +284,7 @@ namespace SystemyWP.API.Controllers
                         else if (form.Role.Equals(
                             SystemyWPConstants.Roles.ClientAdmin, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            var addToRoleResult = 
+                            var addToRoleResult =
                                 await userManager.AddClaimAsync(user, SystemyWPConstants.Claims.ClientAdminClaim);
                             if (addToRoleResult.Succeeded)
                             {
@@ -279,35 +293,91 @@ namespace SystemyWP.API.Controllers
                         }
                         else
                         {
-                            return BadRequest("Unable to add to new role!");           
+                            return BadRequest("Unable to add to new role!");
                         }
                     }
                     else
                     {
-                        return BadRequest("Unable to remove from role!");           
+                        return BadRequest("Unable to remove from role!");
                     }
                 }
                 else
                 {
-                    return BadRequest("Unable to sign out user!");         
+                    return BadRequest("Unable to sign out user!");
                 }
             }
             else
             {
                 return BadRequest("User already in this role!");
             }
-            
+
             return Ok();
         }
 
         [HttpPost("user/delete")]
         public async Task<IActionResult> DeleteUser(string userId)
         {
-
-
-
             return Ok();
         }
-        
+
+        [HttpPost("user/grant/legal-app")]
+        public async Task<IActionResult> GrantLegalAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            var user = await userManager.FindByIdAsync(form.UserId);
+            var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
+
+            if (user is null)
+            {
+                return BadRequest("User not found!");
+            }
+
+            if (legalAppClaim.Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess) &&
+                                       x.Value.Equals(SystemyWPConstants.Apps.LegalApp)))
+            {
+                return BadRequest("User already have access!");
+            }
+
+            var result = await userManager
+                .AddClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);
+
+            if (result.Succeeded)
+            {
+                return Ok("Claim Added!");
+            }
+
+            return BadRequest("Error when adding claim!");
+        }
+
+        [HttpPost("user/revoke/legal-app")]
+        public async Task<IActionResult> RevokeLegalAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            var user = await userManager.FindByIdAsync(form.UserId);
+            var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
+
+            if (user is null)
+            {
+                return BadRequest("User not found!");
+            }
+
+            if (!legalAppClaim.Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess) &&
+                                        x.Value.Equals(SystemyWPConstants.Apps.LegalApp)))
+            {
+                return BadRequest("User already does not have access!");
+            }
+
+            var result = await userManager
+                .RemoveClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);
+
+            if (result.Succeeded)
+            {
+                return Ok("Claim Removed!");
+            }
+
+            return BadRequest("Error when removing claim!");
+        }
     }
 }

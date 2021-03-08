@@ -9,12 +9,12 @@
 <form method="post">
     <input type="hidden" asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl">
     <div class="field">
-        <label>Username</label>
+        <label>Nazwa Użytkowika</label>
         <input asp-for="Form.Username"></input>
         <span asp-validation-for="Form.Username"></span>
     </div>
     <div class="field">
-        <label>Password</label>
+        <label>Hasło</label>
         <input asp-for="Form.Password"></input>
         <span asp-validation-for="Form.Password"></span>
     </div>

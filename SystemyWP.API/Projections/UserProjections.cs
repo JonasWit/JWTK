@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using SystemyWP.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace SystemyWP.API.Projections
 {
     public static class UserProjections
     {
-        public static Expression<Func<User, object>> UserProjection(string userName, string role, 
-            string dataAccessKey, bool legalAppAllowed) =>
+        public static Expression<Func<User, object>> UserProjection(string userName, string role, bool legalAppAllowed) =>
             user => new
             {
                 user.Id,
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = dataAccessKey,
+                DataAccessKey = user.AccessKey,
                 LegalAppAllowed = legalAppAllowed
             };
 
@@ -29,7 +31,7 @@ namespace SystemyWP.API.Projections
             public bool EmailConfirmed { get; set; }  
             public bool PolicyAccepted { get; set; }  
             public bool RulesAccepted { get; set; }  
-            public string DataAccessKey { get; set; }
+            public object DataAccessKey { get; set; }
             public bool  LegalAppAllowed { get; set; }
             public bool Locked { get; set; }    
         }

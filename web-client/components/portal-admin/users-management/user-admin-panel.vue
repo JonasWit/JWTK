@@ -1,25 +1,46 @@
 ﻿<template>
   <div>
-    <div>
-      <v-text-field label="Email" :disabled="loading" v-model="email">
-        <template slot="append-outer">
-          <v-btn :disabled="loading" color="primary" @click="sendInvite">Invite</v-btn>
+    <div class="mb-4">
+      <v-form>
+        <v-text-field ref="inviteForm" :rules="validation.emailRules" label="Email" :disabled="loading" v-model="email">
+          <template slot="append-outer">
+            <v-btn color="primary" depressed :disabled="loading" @click="sendInvite">Invite</v-btn>
+          </template>
+        </v-text-field>
+      </v-form>
+    </div>
+
+    <div class="mb-4">
+      <v-autocomplete clearable v-model="searchResult" placeholder="Start typing to Search" dense hide-details
+                      append-icon="" prepend-inner-icon="mdi-magnify" :items="userItems" :filter="searchFilter">
+        <template v-slot:item="{item,on , attrs}">
+          <v-list-item v-on="on" :attrs="attrs">
+            <v-list-item-content>{{ item.email }}</v-list-item-content>
+            <v-spacer/>
+            <v-list-item-content>{{ item.name }}</v-list-item-content>
+          </v-list-item>
         </template>
-      </v-text-field>
+      </v-autocomplete>
     </div>
 
     <v-list>
-      <v-list-item v-for="user in users" :key="user.id" class="mb-2">
+      <v-list-item v-for="user in usersList" :key="user.id" class="mb-2">
         <v-list-item-content>
           <v-list-item-title>User Name: {{ user.username }}</v-list-item-title>
           <v-list-item-title>Email: {{ user.email }}</v-list-item-title>
           <v-list-item-subtitle>Role: {{ user.role }}</v-list-item-subtitle>
-
-          <v-list-item-subtitle v-if="user.dataAccessKey">Data Access Key: {{
-              user.dataAccessKey
-            }}
+          <v-list-item-subtitle class="success--text" v-if="user.legalAppAllowed">Legal App: Allowed
           </v-list-item-subtitle>
-          <v-list-item-subtitle v-else>No Data Access Key</v-list-item-subtitle>
+          <v-list-item-subtitle class="error--text" v-else>Legal App: Forbidden</v-list-item-subtitle>
+
+          <div v-if="user.dataAccessKey">
+            <v-list-item-subtitle class="success--text">Data Access Key: {{ user.dataAccessKey.name }}
+            </v-list-item-subtitle>
+            <v-list-item-subtitle class="success--text">Expiration:
+              {{ user.dataAccessKey.expireDate.substr(0, 10) }}
+            </v-list-item-subtitle>
+          </div>
+          <v-list-item-subtitle class="error--text" v-else>No Data Access Key</v-list-item-subtitle>
         </v-list-item-content>
         <v-spacer/>
         <v-list-item-content>
@@ -57,6 +78,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+import {hasOccurrences} from "@/data/functions";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,
@@ -66,6 +88,20 @@ const initState = () => ({
   selectedUser: null,
   loading: false,
   email: "",
+  searchResult: "",
+  validation: {
+    valid: false,
+    emailRules: [
+      v => /.+@.+/.test(v) || 'E-mail must be valid',
+    ],
+  },
+});
+
+const searchItemFactory = (name, email) => ({
+  name,
+  email,
+  searchIndex: (name + email).toLowerCase(),
+  text: name
 });
 
 export default {
@@ -75,10 +111,24 @@ export default {
     this.getUsers();
   },
   computed: {
-    ...mapState('admin-panel-store', ['users'])
+    ...mapState('admin-panel-store', ['users']),
+    userItems() {
+      return []
+        .concat(this.users.map(x => searchItemFactory(x.username, x.email)));
+    },
+    usersList() {
+      if (!this.searchResult) {
+        return this.users;
+      } else {
+        return this.users.filter(x => x.username === this.searchResult);
+      }
+    }
   },
   methods: {
     ...mapActions('admin-panel-store', ['getUsers']),
+    searchFilter(item, queryText, itemText) {
+      return hasOccurrences(item.searchIndex, queryText);
+    },
     appsDialogOpen(user) {
       this.selectedUser = user;
       this.showAppsDialog = true;
@@ -125,6 +175,8 @@ export default {
         };
     },
     sendInvite() {
+      if (!this.$refs.inviteForm.validate()) return;
+
       if (this.loading) return;
       this.loading = true;
 

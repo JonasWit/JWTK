@@ -1,18 +1,17 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title v-if="selectedUser.locked">Unlock User</v-card-title>
-      <v-card-title v-else>Lock User</v-card-title>
+      <v-card-title>Applications Access Management</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn v-if="selectedUser.locked" outlined color="warning" text @click="unlock">
-          Unlock
+        <v-btn v-if="selectedUser.legalAppAllowed" color="warning" text @click="revokeLegalAppAccess">
+          Revoke Legal App Access
         </v-btn>
-        <v-btn v-else=outlined color="warning" text @click="lock">
-          Lock
+        <v-btn v-else=outlined color="warning" text @click="grantLegalAppAccess">
+          Grant Legal App Access
         </v-btn>
         <v-spacer/>
-        <v-btn outlined color="success" text @click="cancelDialog">
+        <v-btn color="success" text @click="cancelDialog">
           Cancel
         </v-btn>
       </v-card-actions>
@@ -22,7 +21,7 @@
 
 <script>
 export default {
-  name: "lock-user-dialog",
+  name: "applications-access-dialog",
   props: {
     selectedUser: {
       required: true,
@@ -32,39 +31,25 @@ export default {
   },
   data: () => ({
     loading: false,
-    form: {
-      userId: ""
-    },
   }),
-  created() {
-    if (this.selectedUser.dataAccessKey) {
-      this.form.dataAccessKey = this.selectedUser.dataAccessKey;
-    }
-  },
   methods: {
-    lock() {
+    async grantLegalAppAccess() {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-
-      return this.$axios.post("/api/portal-admin/user/lock", this.form)
+      return this.$axios.post("/api/portal-admin/user/grant/legal-app", {userId: this.selectedUser.id})
         .catch((e) => {
-          console.log(e);
         }).finally(() => {
           this.loading = false;
           this.$emit('action-completed');
         });
     },
-    unlock() {
+    async revokeLegalAppAccess() {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-
-      return this.$axios.post("/api/portal-admin/user/unlock", this.form)
+      return this.$axios.post("/api/portal-admin/user/revoke/legal-app", {userId: this.selectedUser.id})
         .catch((e) => {
-          console.log(e);
         }).finally(() => {
           this.loading = false;
           this.$emit('action-completed');
@@ -73,7 +58,7 @@ export default {
     cancelDialog() {
       this.$emit('action-completed');
     }
-  }
+  },
 };
 </script>
 

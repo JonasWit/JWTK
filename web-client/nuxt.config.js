@@ -61,6 +61,14 @@ const config = {
       path: '~/components/portal-admin/',
       prefix: 'padmin'
     },
+    {
+      path: '~/components/portal-admin/access-keys',
+      prefix: 'padmin'
+    },
+    {
+      path: '~/components/portal-admin/users-management',
+      prefix: 'padmin'
+    },
 
   ],
 

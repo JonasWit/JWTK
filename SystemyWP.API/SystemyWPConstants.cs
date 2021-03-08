@@ -21,12 +21,12 @@ namespace SystemyWP.API
         public struct Claims
         {
             public const string Role = "Role";
-            public const string LegalAppAccess = "LegalAppAccess";
+            public const string AppAccess = "AppAccess";
             public static readonly Claim InvitedClaim = new Claim(Role, Roles.Invited);
             public static readonly Claim ClientClaim = new Claim(Role, Roles.Client);
             public static readonly Claim ClientAdminClaim = new Claim(Role, Roles.ClientAdmin);
             public static readonly Claim PortalAdminClaim = new Claim(Role, Roles.PortalAdmin);
-            public static readonly Claim LegalAppAccessClaim = new Claim(LegalAppAccess, Apps.LegalApp);
+            public static readonly Claim LegalAppAccessClaim = new Claim(AppAccess, Apps.LegalApp);
         }
 
         public struct Roles

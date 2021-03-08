@@ -4,6 +4,7 @@ using SystemyWP.API.Services.Email;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -85,12 +86,12 @@ namespace SystemyWP.API
             {
                 services.AddDbContext<ApiIdentityDbContext>(config =>
                     config.UseNpgsql(_configuration.GetConnectionString("Default")));
+                
+                services.AddDataProtection()
+                    .SetApplicationName("SystemyWspomaganiaPracy")
+                    .PersistKeysToDbContext<ApiIdentityDbContext>();
             }
             
-            // services.AddDataProtection()
-            //     .SetApplicationName("SystemyWspomaganiaPracy")
-            //     .PersistKeysToDbContext<ApiIdentityDbContext>();
-
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
@@ -158,7 +159,7 @@ namespace SystemyWP.API
 
                 options.AddPolicy(SystemyWPConstants.Policies.LegalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.LegalAppAccess));
+                    .RequireClaim(SystemyWPConstants.Claims.AppAccess));
             });
         }
     }

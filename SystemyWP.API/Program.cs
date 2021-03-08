@@ -39,15 +39,17 @@ namespace SystemyWP.API
 
             var fakeCounter = 10;
 
-            for (int i = 0; i < fakeCounter; i++)
+            for (int i = 0; i < 4; i++)
             {
                 context.AccessKeys.Add(new AccessKey
                 {
-                    Id = $"access-key-{i}",
+                    Name = $"access-key-{i}",
                     ExpireDate = DateTime.UtcNow.AddDays(i),
                     Created = DateTime.UtcNow
                 });
             }
+            
+            context.SaveChanges();
             
             if (!identityContext.Users.Any(x => x.UserName.Equals("test")) && env.IsDevelopment())
             {
@@ -60,8 +62,8 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(testClient, new[]
                     {
-                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.Client),
-                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
+                        SystemyWPConstants.Claims.ClientClaim,
+                        SystemyWPConstants.Claims.LegalAppAccessClaim
                     })
                     .GetAwaiter()
                     .GetResult();
@@ -80,7 +82,7 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(testClient2, new[]
                     {
-                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.Client),
+                        SystemyWPConstants.Claims.ClientClaim,
                     })
                     .GetAwaiter()
                     .GetResult();
@@ -88,6 +90,7 @@ namespace SystemyWP.API
                 context.Add(new User
                 {
                     Id = testClient2.Id,
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
                 });
                 
                 var clientAdmin = new IdentityUser("TestClientAdmin")
@@ -99,8 +102,7 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(clientAdmin, new[]
                     {
-                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.ClientAdmin),
-                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
+                        SystemyWPConstants.Claims.ClientAdminClaim,
                     })
                     .GetAwaiter()
                     .GetResult();               
@@ -108,15 +110,37 @@ namespace SystemyWP.API
                 context.Add(new User
                 {
                     Id = clientAdmin.Id,
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
+                });
+                
+                var clientAdmin2 = new IdentityUser("TestClientAdmin2")
+                {
+                    Email = "testAdminClient2@test.com", 
+                    LockoutEnabled = true
+                };
+                userManager.CreateAsync(clientAdmin2, "password").GetAwaiter().GetResult();
+                userManager
+                    .AddClaimsAsync(clientAdmin2, new[]
+                    {
+                        SystemyWPConstants.Claims.ClientAdminClaim,
+                        SystemyWPConstants.Claims.LegalAppAccessClaim
+                    })
+                    .GetAwaiter()
+                    .GetResult();               
+                
+                context.Add(new User
+                {
+                    Id = clientAdmin2.Id,
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
                 });
 
-                var portalAdmin = new IdentityUser("TestPortalAdmin") {Email = "testAdminPortal@test.com"};
+                var portalAdmin = new IdentityUser("MarzenaWitek") {Email = "testAdminPortal@test.com"};
                 userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
                 userManager
                     .AddClaimsAsync(portalAdmin, new[]
                     {
-                        new Claim(SystemyWPConstants.Claims.Role, SystemyWPConstants.Roles.PortalAdmin),
-                        new Claim(SystemyWPConstants.Claims.LegalAppAccess, SystemyWPConstants.Apps.LegalApp)
+                        SystemyWPConstants.Claims.LegalAppAccessClaim,
+                        SystemyWPConstants.Claims.PortalAdminClaim
                     })
                     .GetAwaiter()
                     .GetResult();               

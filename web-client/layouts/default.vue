@@ -1,14 +1,18 @@
 <template>
   <v-app dark>
     <v-app-bar app>
+
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>
         <span class="d-flex d-md-none">SWP</span>
       </nuxt-link>
 
       <v-spacer/>
-      <v-switch v-model="lightTheme"></v-switch>
-      <v-btn @click="defaultTest">TEST</v-btn>
+      <div class="d-flex mx-4">
+        <v-icon small color="success">mdi-weather-night</v-icon>
+        <v-switch flat v-model="lightTheme"></v-switch>
+        <v-icon medium color="success">mdi-weather-sunny</v-icon>
+      </div>
 
       <if-auth>
         <template v-slot:allowed="{portalAdmin, legalAppAllowed, client}">
@@ -60,6 +64,7 @@
       </if-auth>
 
     </v-app-bar>
+
     <v-main>
       <v-container>
         <nuxt/>
