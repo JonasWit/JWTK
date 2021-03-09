@@ -79,14 +79,16 @@ export default {
       this.loading = true;
 
       const payload = {
-        keyName: this.form.keyName,
+        newKeyName: this.form.keyName,
+        oldKeyName: this.selectedKey.name,
         expireDate: this.form.expireDate,
       };
-      return this.$axios.post("/api/portal-admin/access-key/create", payload)
+
+      return this.$axios.$put("/api/portal-admin/key-admin/access-key/update", payload)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.$emit('add-key-action-completed');
+          this.$emit('action-completed');
         });
     },
     cancelDialog() {

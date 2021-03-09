@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Validation
 {
-    public class CreateAccessKeyValidation: AbstractValidator<CreateAccessKeyForm>
+    public class CreateAccessKeyValidation: AbstractValidator<AccessKeyForm>
     {
         public CreateAccessKeyValidation()
         {

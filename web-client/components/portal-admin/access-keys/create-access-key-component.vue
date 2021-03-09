@@ -1,34 +1,33 @@
 ﻿<template>
   <div>
-    <v-card>
-      <v-card-title>Access Key Management</v-card-title>
-      <v-divider></v-divider>
-      <v-form ref="dataAccessKeyForm" v-model="validation.valid">
 
-        <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
-                      required></v-text-field>
-        <v-menu ref="menu" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
-                :return-value.sync="form.expireDate">
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field class="ma-3" :rules="validation.expireDate" readonly v-bind="attrs" v-on="on"
-                          v-model="form.expireDate" label="Expire Date" prepend-icon="mdi-calendar"></v-text-field>
-          </template>
-          <v-date-picker :min="todayDate" v-model="form.expireDate" no-title scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="menu = false">
-              Cancel
-            </v-btn>
-            <v-btn text color="primary" @click="$refs.menu.save(form.expireDate)">
-              OK
-            </v-btn>
-          </v-date-picker>
-        </v-menu>
-      </v-form>
-      <v-card-actions>
-        <v-spacer/>
-        <v-btn text color="warning" @click="addKey">Add Key</v-btn>
-      </v-card-actions>
-    </v-card>
+
+    <v-form ref="dataAccessKeyForm" v-model="validation.valid">
+
+      <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
+                    required></v-text-field>
+      <v-menu ref="menu" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
+              :return-value.sync="form.expireDate">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field class="ma-3" :rules="validation.expireDate" readonly v-bind="attrs" v-on="on"
+                        v-model="form.expireDate" label="Expire Date" prepend-icon="mdi-calendar"></v-text-field>
+        </template>
+        <v-date-picker :min="todayDate" v-model="form.expireDate" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="menu = false">
+            Cancel
+          </v-btn>
+          <v-btn text color="primary" @click="$refs.menu.save(form.expireDate)">
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+    </v-form>
+
+    <div class="d-flex align--left">
+      <v-spacer/>
+      <v-btn text color="warning" @click="addKey">Add Key</v-btn>
+    </div>
   </div>
 </template>
 
@@ -70,12 +69,12 @@ export default {
         expireDate: this.form.expireDate,
       };
 
-      return this.$axios.post("/api/portal-admin/access-key/create", payload)
+      return this.$axios.$post("/api/portal-admin/key-admin/access-key/create", payload)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
           this.resetForm();
-          this.$emit('add-key-action-completed');
+          this.$emit('action-completed');
         });
     },
     resetForm() {

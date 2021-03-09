@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms
 {
-    public class CreateAccessKeyForm
+    public class AccessKeyForm
     {
         public string KeyName { get; set; }     
         public DateTime ExpireDate { get; set; }  

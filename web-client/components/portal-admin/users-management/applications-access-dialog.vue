@@ -37,7 +37,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.post("/api/portal-admin/user/grant/legal-app", {userId: this.selectedUser.id})
+      return this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id})
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
@@ -48,7 +48,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.post("/api/portal-admin/user/revoke/legal-app", {userId: this.selectedUser.id})
+      return this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id})
         .catch((e) => {
         }).finally(() => {
           this.loading = false;

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections;
+using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,8 +29,13 @@ namespace SystemyWP.API.Controllers
         }
 
         [HttpGet("me")]
-        public async Task<IActionResult> GetMe()
+        public async Task<IActionResult> GetMe([FromServices] PortalLogger logger)
         {
+            for (int i = 0; i < 25; i++)
+            {
+                await logger.Log(LogType.Access, $"Profile requested", UserId, Username);
+            }
+
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
 
@@ -68,16 +75,16 @@ namespace SystemyWP.API.Controllers
             if (user is null) return NoContent();
 
             await using (var stream = new MemoryStream())
-            // using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
-            // {
-            //     imageProcessor.Mutate(x => x.Resize(48, 48));
-            //     var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
-            //     var saveImage = fileManager.SaveProfileImageAsync(stream);
-            //     await Task.WhenAll(processImage, saveImage);
-            //     user.Image = await saveImage;
-            // }
+                // using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
+                // {
+                //     imageProcessor.Mutate(x => x.Resize(48, 48));
+                //     var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
+                //     var saveImage = fileManager.SaveProfileImageAsync(stream);
+                //     await Task.WhenAll(processImage, saveImage);
+                //     user.Image = await saveImage;
+                // }
 
-            await _appDbContext.SaveChangesAsync();
+                await _appDbContext.SaveChangesAsync();
             return Ok();
         }
     }

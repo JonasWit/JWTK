@@ -1,6 +1,7 @@
 ﻿const initState = () => ({
   users: [],
-  accessKeys: []
+  accessKeys: [],
+  logs: []
 });
 
 export const state = initState;
@@ -21,7 +22,7 @@ export const mutations = {
 
 export const actions = {
   getUsers({commit}) {
-    return this.$axios.$get("/api/portal-admin/users")
+    return this.$axios.$get("/api/portal-admin/user-admin/users")
       .then((users) => {
         commit('updateUsersList', {users});
       })
@@ -29,7 +30,7 @@ export const actions = {
       });
   },
   getAccessKeys({commit}) {
-    return this.$axios.$get("/api/portal-admin/access-keys")
+    return this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((keys) => {
         commit('updateAccessKeysList', {keys});
       })

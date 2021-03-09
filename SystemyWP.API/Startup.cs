@@ -1,6 +1,7 @@
 using System;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,8 @@ namespace SystemyWP.API
 
             services.AddRazorPages();
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
+
+            services.AddTransient<PortalLogger>();
 
             services.AddScoped<EmailClient>();
             services.AddFileServices(_configuration);   

@@ -42,7 +42,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$post("/api/portal-admin/user/change-role", {
+      return this.$axios.$post("/api/portal-admin/user-admin/user/change-role", {
         userId: this.selectedUser.id,
         role: role
       })

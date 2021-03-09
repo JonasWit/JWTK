@@ -51,7 +51,7 @@ export default {
     },
   }),
   async fetch() {
-    await this.$axios.$get("/api/portal-admin/access-keys")
+    await this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((res) => {
         this.activeKeys = res.map(x => x.name);
         console.log(this.activeKeys);
@@ -70,7 +70,7 @@ export default {
       this.form.userId = this.selectedUser.id;
       console.log("accessKeyPayload", this.form.dataAccessKey);
 
-      return this.$axios.post("/api/portal-admin/client/grant/access-key", this.form)
+      return this.$axios.$post("/api/portal-admin/user/grant/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
@@ -83,7 +83,7 @@ export default {
 
       this.form.userId = this.selectedUser.id;
 
-      return this.$axios.post("/api/portal-admin/client/revoke/access-key", this.form)
+      return this.$axios.$post("/api/portal-admin/user/revoke/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;

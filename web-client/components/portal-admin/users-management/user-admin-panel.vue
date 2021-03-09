@@ -125,7 +125,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
+    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
@@ -154,6 +154,7 @@ export default {
     dataKeyDialogClosed() {
       this.showDataAccessKeyDialog = false;
       this.selectedUser = null;
+      this.getAccessKeys();
       this.getUsers();
     },
     lockDialogOpen(user) {
@@ -166,13 +167,9 @@ export default {
       this.getUsers();
     },
     resetData() {
-      this.selectedUser = null,
-        this.loading = false,
-        this.email = "",
-        this.dataKeyForm = {
-          dataKeyString: "",
-          userId: ""
-        };
+      this.selectedUser = null;
+      this.loading = false;
+      this.email = "";
     },
     sendInvite() {
       if (!this.$refs.inviteForm.validate()) return;

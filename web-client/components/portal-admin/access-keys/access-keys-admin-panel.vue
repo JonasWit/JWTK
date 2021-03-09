@@ -3,7 +3,7 @@
     <padmin-edit-access-key-form-dialog v-if="showKeyDialog" :selected-key="selectedKey"
                                         v-on:action-completed="keyDialogClosed"/>
 
-    <padmin-create-access-key-component v-on:add-key-action-completed="keyAdded"/>
+    <padmin-create-access-key-component v-on:action-completed="keyAdded"/>
 
     <v-list>
       <v-list-item v-for="keyItem in keysList" :key="keyItem.id" class="mb-2">
@@ -13,6 +13,8 @@
               keyItem.expireDate.substr(0, 10)
             }}
           </v-list-item-subtitle>
+          <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
+          </v-list-item-subtitle>
         </v-list-item-content>
         <v-spacer/>
         <v-list-item-content>
@@ -20,9 +22,7 @@
             <v-btn class="mx-3" icon @click.stop="keyDialogOpen(keyItem)">
               <v-icon medium color="warning">mdi-pencil</v-icon>
             </v-btn>
-            <v-btn class="mx-3" icon @click.stop="">
-              <v-icon medium color="error">mdi-delete</v-icon>
-            </v-btn>
+            <padmin-delete-access-key-dialog :selected-key="keyItem" v-on:action-completed="refreshAfterKeyDelete"/>
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -71,8 +71,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys']),
-    ...mapActions('admin-panel-store', ['getUsers']),
+    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    refreshAfterKeyDelete() {
+      this.getAccessKeys();
+      this.getUsers();
+    },
     keyDialogOpen(keyItem) {
       this.selectedKey = keyItem;
       this.showKeyDialog = true;
@@ -88,6 +91,7 @@ export default {
       this.selectedKey = null;
       this.searchResult = "";
       this.getAccessKeys();
+      this.getUsers();
     }
   }
 };

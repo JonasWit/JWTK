@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace SystemyWP.API
 {
@@ -161,12 +163,18 @@ namespace SystemyWP.API
                 
                 
             }
-            else if (!identityContext.Users.Any(x => x.UserName.Equals("admin")) && env.IsProduction())
+            else if (!identityContext.Users
+                .Any(x => 
+                    x.UserName.Equals("admin")) && env.IsProduction())
             {
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
                 var admin = new IdentityUser("admin") {Email = "admin@test.com"};
-                userManager.CreateAsync(admin, config.GetSection("AdminPassword").Value).GetAwaiter().GetResult();
+                userManager
+                    .CreateAsync(admin, config
+                        .GetSection("AdminPassword").Value)
+                    .GetAwaiter()
+                    .GetResult();
                 userManager
                     .AddClaimAsync(admin, new Claim(SystemyWPConstants.Claims.Role,
                         SystemyWPConstants.Roles.PortalAdmin))

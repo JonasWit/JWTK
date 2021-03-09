@@ -69,6 +69,10 @@ const config = {
       path: '~/components/portal-admin/users-management',
       prefix: 'padmin'
     },
+    {
+      path: '~/components/portal-admin/log-manager',
+      prefix: 'padmin'
+    },
 
   ],
 
