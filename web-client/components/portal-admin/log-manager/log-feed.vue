@@ -1,10 +1,56 @@
 ﻿<template>
-  <div v-scroll="onScroll">
-    <padmin-log-item :log-item="l" v-for="l in logs" :key="`lon-item-${l.id}`"/>
+  <div>
+    <v-form ref="minLogDateForm" v-model="validation.valid">
+      <v-menu ref="menuMin" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
+              :return-value.sync="form.minDate">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field class="ma-3" :rules="validation.minDate" readonly v-bind="attrs" v-on="on"
+                        v-model="form.minDate" label="From" prepend-icon="mdi-calendar"></v-text-field>
+        </template>
+        <v-date-picker :max="todayDate" v-model="form.minDate" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="menuMin = false">
+            Cancel
+          </v-btn>
+          <v-btn text color="primary" @click="$refs.menuMin.save(form.minDate)">
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+      <v-menu ref="menuMax" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
+              :return-value.sync="form.maxDate">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field class="ma-3" :rules="validation.maxDate" readonly v-bind="attrs" v-on="on"
+                        v-model="form.maxDate" label="To" prepend-icon="mdi-calendar"></v-text-field>
+        </template>
+        <v-date-picker :max="todayDate" v-model="form.maxDate" no-title scrollable>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="menuMax = false">
+            Cancel
+          </v-btn>
+          <v-btn text color="primary" @click="$refs.menuMax.save(form.maxDate)">
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+    </v-form>
+    <div class="d-flex justify-center">
+      <v-btn class="mx-1" @click="search">Search</v-btn>
+      <v-btn class="mx-1" @click="clear">Clear</v-btn>
+    </div>
+
+    <div v-scroll="onScroll">
+      <padmin-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+    </div>
   </div>
 </template>
 
 <script>
+
+const initForm = () => ({
+  minDate: null,
+  maxDate: null
+});
 
 export default {
   name: "log-feed",
@@ -16,17 +62,35 @@ export default {
   },
   data: () => ({
     logs: [],
+    searchConditionsProvided: false,
     cursor: 0,
     finished: false,
-    loading: false
+    loading: false,
+    form: initForm,
+    validation: {
+      valid: false,
+      minDate: [
+        v => !!v || "Min date is required!",
+      ],
+      maxDate: [
+        v => !!v || "Max date is required!",
+      ],
+    },
   }),
   created() {
     this.handleLogs();
   },
   computed: {
     query() {
-      return `?cursor=${this.cursor}&take=10`;
-    }
+      if (this.searchConditionsProvided) {
+        return `/dates?from=${this.form.minDate}&to=${this.form.maxDate}&cursor=${this.cursor}&take=10`;
+      } else {
+        return `?cursor=${this.cursor}&take=10`;
+      }
+    },
+    todayDate() {
+      return new Date().toISOString().substr(0, 10);
+    },
   },
   methods: {
     onScroll() {
@@ -37,8 +101,29 @@ export default {
         this.handleLogs();
       }
     },
+    search() {
+      if (!this.$refs.minLogDateForm.validate()) return;
+      if (this.loading === true) return;
+      this.loading = true;
+
+      this.logs = [];
+      this.searchConditionsProvided = true;
+      this.cursor = 0;
+      this.handleLogs();
+
+      this.loading = false;
+    },
+    clear() {
+      this.searchConditionsProvided = false;
+      this.cursor = 0;
+      this.logs = [];
+      this.form = initForm();
+
+      this.handleLogs();
+    },
     handleLogs() {
       this.loading = true;
+
       console.log(this.query);
       this.loadLogs(this.query)
         .then(logs => {

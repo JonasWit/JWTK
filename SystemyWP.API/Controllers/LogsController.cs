@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
@@ -30,7 +31,27 @@ namespace SystemyWP.API.Controllers
                 .Skip(cursor)
                 .Take(take)
                 .Select(LogRecordProjection.Projection)
-                .ToListAsync();    
-        
+                .ToListAsync();
+
+        [HttpGet("logs/split/dates/")]
+        public Task<List<object>> ListLogRecords([FromServices] AppDbContext context, string from, string to,
+            int cursor, int take)
+        {
+            if (DateTime.TryParse(from, out DateTime fromDate) &&
+                DateTime.TryParse(to, out DateTime toDate))
+            {
+                return context.PortalLogs
+                    .Where(x => x.Created >= fromDate && x.Created <= toDate)
+                    .OrderByDescending(x => x.Created)
+                    .Skip(cursor)
+                    .Take(take)
+                    .Select(LogRecordProjection.Projection)
+                    .ToListAsync();
+            }
+            else
+            {
+                return Task.FromResult(new List<object>());
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SystemyWP.API.Services.Storage
@@ -16,6 +17,11 @@ namespace SystemyWP.API.Services.Storage
         {
             var fileName = SystemyWPConstants.Files.GenerateProfileFileName();
             return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
+        }
+
+        public Task<string> DeleteProfileImageAsync(string filePath)
+        {
+            return _s3Client.DeleteFile(filePath);
         }
     }
 }

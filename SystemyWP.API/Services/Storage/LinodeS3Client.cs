@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -14,7 +15,7 @@ namespace SystemyWP.API.Services.Storage
         {
             _settings = optionsMonitor.CurrentValue;
         }
-        
+
         public async Task<string> SaveFile(string fileName, string mime, Stream fileStream)
         {
             using var client = Client;
@@ -31,9 +32,26 @@ namespace SystemyWP.API.Services.Storage
             return ObjectUrl(fileName);
         }
 
-        private string ObjectUrl(string fileName) => 
+        public async Task<string> DeleteFile(string fileUrl)
+        {
+            using var client = Client;
+            var path = ObjectRootUrl(Path.GetFileName(fileUrl));
+
+            var request = new DeleteObjectRequest
+            {
+                BucketName = _settings.Bucket,
+                Key = ObjectRootUrl(Path.GetFileName(fileUrl)),
+            };
+            var result = await client.DeleteObjectAsync(request);
+            return result.RequestCharged;
+        }
+
+        private string ObjectUrl(string fileName) =>
             $"{_settings.ServiceUrl}/{_settings.Bucket}/{_settings.Root}/{fileName}";
-        
+
+        private string ObjectRootUrl(string fileName) =>
+            $"{_settings.Root}/{fileName}";
+
         private AmazonS3Client Client => new AmazonS3Client(
             _settings.AccessKey, _settings.SecretKey,
             new AmazonS3Config

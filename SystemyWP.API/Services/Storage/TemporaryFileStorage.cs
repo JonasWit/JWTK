@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using SystemyWP.API.Settings;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace SystemyWP.API.Services.Storage

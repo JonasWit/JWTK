@@ -58,6 +58,10 @@ const config = {
       path: '~/components/home-page/',
     },
     {
+      path: '~/components/user-profile',
+      prefix: 'profile'
+    },
+    {
       path: '~/components/portal-admin/',
       prefix: 'padmin'
     },

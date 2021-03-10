@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
@@ -7,13 +6,15 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace SystemyWP.API.Controllers
 {
@@ -21,29 +22,21 @@ namespace SystemyWP.API.Controllers
     [Authorize]
     public class UserController : ApiController
     {
-        private readonly AppDbContext _appDbContext;
-
-        public UserController(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext;
-        }
-
         [HttpGet("me")]
-        public async Task<IActionResult> GetMe([FromServices] PortalLogger logger)
+        public async Task<IActionResult> GetMe([FromServices] PortalLogger logger,
+            [FromServices] AppDbContext context)
         {
-            for (int i = 0; i < 25; i++)
-            {
-                await logger.Log(LogType.Access, $"Profile requested", UserId, Username);
-            }
+            await logger.Log(LogType.Access, $"Profile requested", UserId, Username);
 
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
 
-            var userProfile = _appDbContext.Users
+            var userProfile = context.Users
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(userId));
-
-            var user = await _appDbContext.Users
+            
+            var user = await context.Users
+                .Where(x => x.Id.Equals(UserId))
                 .Include(x => x.AccessKey)
                 .Select(UserProjections.UserProjection(Username, Role, LegalAppAllowed))
                 .FirstOrDefaultAsync();
@@ -55,8 +48,8 @@ namespace SystemyWP.API.Controllers
                 Id = UserId,
             };
 
-            _appDbContext.Add(newUser);
-            await _appDbContext.SaveChangesAsync();
+            context.Add(newUser);
+            await context.SaveChangesAsync();
 
             return Ok(UserProjections
                 .UserProjection(Username, Role, LegalAppAllowed)
@@ -66,25 +59,31 @@ namespace SystemyWP.API.Controllers
 
         [HttpPut("me/image")]
         public async Task<IActionResult> UpdateProfileImage(
+            [FromServices] AppDbContext context,
             IFormFile image,
             [FromServices] IFileProvider fileManager)
         {
             if (image is null) return BadRequest();
 
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
             if (user is null) return NoContent();
 
-            await using (var stream = new MemoryStream())
-                // using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
-                // {
-                //     imageProcessor.Mutate(x => x.Resize(48, 48));
-                //     var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
-                //     var saveImage = fileManager.SaveProfileImageAsync(stream);
-                //     await Task.WhenAll(processImage, saveImage);
-                //     user.Image = await saveImage;
-                // }
+            if (!string.IsNullOrEmpty(user.Image))
+            {
+                await fileManager.DeleteProfileImageAsync(user.Image);
+            }
 
-                await _appDbContext.SaveChangesAsync();
+            await using (var stream = new MemoryStream())
+            using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
+            {
+                imageProcessor.Mutate(x => x.Resize(120, 120));
+                var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
+                var saveImage = fileManager.SaveProfileImageAsync(stream);
+                await Task.WhenAll(processImage, saveImage);
+                user.Image = await saveImage;
+            }
+            
+            await context.SaveChangesAsync();
             return Ok();
         }
     }

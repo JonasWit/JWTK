@@ -68,9 +68,7 @@ export default {
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
-      console.log("accessKeyPayload", this.form.dataAccessKey);
-
-      return this.$axios.$post("/api/portal-admin/user/grant/access-key", this.form)
+      return this.$axios.$post("/api/portal-admin/key-admin/user/grant/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
@@ -82,8 +80,7 @@ export default {
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
-
-      return this.$axios.$post("/api/portal-admin/user/revoke/access-key", this.form)
+      return this.$axios.$post("/api/portal-admin/key-admin/user/revoke/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;

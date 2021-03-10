@@ -5,8 +5,6 @@ namespace SystemyWP.Data.Models
     public class User : BaseModel<string>
     {
         public string Image { get; set; }
-
-        public AccessKey? AccessKey { get; set; } 
-        public int? AccessKeyId { get; set; }
+        public AccessKey AccessKey { get; set; }
     }
 }

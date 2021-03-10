@@ -99,7 +99,7 @@ namespace SystemyWP.API.Controllers
             var accessKey =
                 context.AccessKeys.FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
 
-            userProfile.AccessKeyId = accessKey.Id;
+            accessKey.Users.Add(userProfile);
 
             context.Users.Update(userProfile);
 

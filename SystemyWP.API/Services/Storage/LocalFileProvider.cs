@@ -26,6 +26,11 @@ namespace SystemyWP.API.Services.Storage
             return $"{_settings.ImageUrl}/{fileName}";
         }
 
+        public Task<string> DeleteProfileImageAsync(string filePath)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private async Task SaveFile(Stream fileStream, string fileName)
         {
             var savePath = Path.Combine(_webHostEnvironment.WebRootPath, fileName);

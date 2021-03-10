@@ -16,6 +16,19 @@ export const APP_ACCESS = {
 };
 
 export const getters = {
+  userRole(state) {
+    if (state.profile.role === ROLES.INVITED) {
+      return "Zaproszony";
+    } else if (state.profile.role === ROLES.CLIENT) {
+      return "Klient";
+    } else if (state.profile.role === ROLES.CLIENT_ADMIN) {
+      return "Klient z uprawnieniemiami Administratora";
+    } else if (state.profile.role === ROLES.PORTAL_ADMIN) {
+      return "Administarator Portalu";
+    } else {
+      return "Brak Roli!";
+    }
+  },
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
   client: (state, getters) => getters.authenticated && state.profile.role === ROLES.CLIENT,

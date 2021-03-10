@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
@@ -53,6 +52,19 @@ namespace SystemyWP.API.Services.PortalLoggerService
                 Message = message,
                 UserId = userId,
                 Username = userEmail
+            });
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task LogTest(LogType logType, string message, string userId, string userEmail, DateTime created)
+        {
+            _context.PortalLogs.Add(new PortalLog
+            {
+                LogType = logType,
+                Message = message,
+                UserId = userId,
+                Username = userEmail,
+                Created = created
             });
             await _context.SaveChangesAsync();
         }

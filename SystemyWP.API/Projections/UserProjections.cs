@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using SystemyWP.Data.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace SystemyWP.API.Projections
 {
@@ -13,9 +9,9 @@ namespace SystemyWP.API.Projections
         public static Expression<Func<User, object>> UserProjection(string userName, string role, bool legalAppAllowed) =>
             user => new
             {
-                user.Id,
+                Id = user.Id,
                 Username = userName,
-                user.Image,
+                Image = user.Image,
                 Role = role,
                 DataAccessKey = user.AccessKey,
                 LegalAppAllowed = legalAppAllowed

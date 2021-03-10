@@ -24,7 +24,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item to="/client-profile">
+                <v-list-item to="/user-profile">
                   <v-list-item-title>
                     <v-icon left>mdi-cogs</v-icon>
                     Mój Profil

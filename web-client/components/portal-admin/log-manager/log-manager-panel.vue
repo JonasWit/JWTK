@@ -1,6 +1,5 @@
 ﻿<template>
   <div>
-    <padmin-log-search-options/>
     <padmin-log-feed :load-logs="loadLogs"/>
   </div>
 </template>

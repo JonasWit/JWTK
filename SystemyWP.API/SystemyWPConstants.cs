@@ -50,7 +50,7 @@ namespace SystemyWP.API
                 public const string S3 = nameof(S3);
             }
 
-            private const string ProfilePrefix = "p_";
+            private const string ProfilePrefix = "profile_picture_";
 
             public static string GenerateProfileFileName()
             {

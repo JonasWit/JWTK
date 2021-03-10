@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models;
 
 namespace SystemyWP.API.Projections

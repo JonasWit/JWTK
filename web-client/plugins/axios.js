@@ -14,7 +14,7 @@
         }
       }
       if ((status | 0) === 401) {
-        store.dispatch('popup/error', "Brak dostępu!");
+        store.dispatch('popup/error', "Brak dostępu - zaloguj się pomownie!");
         return {error};
       }
     }

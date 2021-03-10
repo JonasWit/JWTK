@@ -16,5 +16,14 @@ namespace SystemyWP.API.Projections
                 key.ExpireDate,
                 assignedUsers = key.Users.AsQueryable().Count()
             };
+        
+        public static Func<AccessKey, object> CreateFlat => FlatProjection.Compile();
+        public static Expression<Func<AccessKey, object>> FlatProjection =>
+            key => new
+            {
+                key.Id,
+                key.Name,
+                key.ExpireDate,
+            };
     }
 }

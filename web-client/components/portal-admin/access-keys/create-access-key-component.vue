@@ -1,7 +1,5 @@
 ﻿<template>
   <div>
-
-
     <v-form ref="dataAccessKeyForm" v-model="validation.valid">
 
       <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
@@ -61,6 +59,7 @@ export default {
   },
   methods: {
     addKey() {
+      if (!this.$refs.dataAccessKeyForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
 
