@@ -48,8 +48,8 @@ export const actions = {
   initialize({commit}) {
     return this.$axios.$get('/api/users/me')
       .then((profile) => {
+        console.log(profile);
         commit('saveProfile', {profile},
-          console.log(profile)
         );
       })
       .catch(() => {

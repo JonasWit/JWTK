@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.PortalLoggerService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,10 @@ namespace SystemyWP.API.Controllers
             await emailClient.SendClientInvite(form.Email, link);
 
             return Ok(link);
+        }
+
+        public PortalAdminController(PortalLogger portalLogger) : base(portalLogger)
+        {
         }
     }
 }

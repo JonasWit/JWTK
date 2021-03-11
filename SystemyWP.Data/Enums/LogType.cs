@@ -3,9 +3,9 @@
     public enum LogType
     {
         Access = 0,
-        LegalSwp = 1,
         Exception = 2,
-        Information = 3,
-        Application = 4,
+        PortalAdminAction = 5,
+        ClientAdminAction = 6,
+        PersonalDataAction = 7,
     }
 }

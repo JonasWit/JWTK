@@ -1,20 +1,18 @@
 ﻿<template>
-  <div>
-    <v-card color="basil">
-      <v-toolbar>
-        <v-tabs v-model="tab" centered>
-          <v-tab v-for="(t, i) in tabs" :key="`portal-admin-tab-${i}`">
-            {{ t.title }}
-          </v-tab>
-        </v-tabs>
-      </v-toolbar>
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="(t, i) in tabs" :key="`portal-admin-tab-body-${i}`">
-          <component class="ma-3" :is="t.component"/>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card>
-  </div>
+  <v-card>
+    <v-toolbar>
+      <v-tabs v-model="tab" centered>
+        <v-tab v-for="(t, i) in tabs" :key="`portal-admin-tab-${i}`">
+          {{ t.title }}
+        </v-tab>
+      </v-tabs>
+    </v-toolbar>
+    <v-tabs-items v-model="tab">
+      <v-tab-item v-for="(t, i) in tabs" :key="`portal-admin-tab-body-${i}`">
+        <component class="ma-3" :is="t.component"/>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-card>
 </template>
 
 <script>

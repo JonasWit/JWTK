@@ -1,7 +1,7 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title>
+      <v-card-title class="justify-center">
         Data Access Key
       </v-card-title>
       <v-form>
@@ -9,11 +9,10 @@
           <p v-if="selectedUser && selectedUser.dataAccessKey">Current Key: {{
               selectedUser.dataAccessKey.name
             }}</p>
-          <v-select v-model="form.dataAccessKey" :items="activeKeys" filled label="Filled style"></v-select>
+          <v-select v-model="form.dataAccessKey" :items="activeKeys" filled label="Choose a Key"></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-spacer/>
           <v-btn :disabled="!form.dataAccessKey" color="warning" text @click="grantAccessKey()">
             Grant Key
           </v-btn>
@@ -54,7 +53,6 @@ export default {
     await this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((res) => {
         this.activeKeys = res.map(x => x.name);
-        console.log(this.activeKeys);
       });
   },
   created() {

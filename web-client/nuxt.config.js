@@ -59,7 +59,7 @@ const config = {
     },
     {
       path: '~/components/user-profile',
-      prefix: 'profile'
+      prefix: 'prof'
     },
     {
       path: '~/components/portal-admin/',

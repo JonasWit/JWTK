@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.API.Services.Storage;
@@ -23,10 +24,10 @@ namespace SystemyWP.API.Controllers
     public class UserController : ApiController
     {
         [HttpGet("me")]
-        public async Task<IActionResult> GetMe([FromServices] PortalLogger logger,
+        public async Task<IActionResult> GetMe(
             [FromServices] AppDbContext context)
         {
-            await logger.Log(LogType.Access, $"Profile requested", UserId, Username);
+            await _portalLogger.Log(LogType.Access, $"Profile requested", UserId, Username);
 
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
@@ -57,6 +58,67 @@ namespace SystemyWP.API.Controllers
                 .Invoke(newUser));
         }
 
+        [HttpPut("personal-data/update")]
+        public async Task<IActionResult> UpdatePersonalData(
+            [FromServices] AppDbContext context,
+            [FromBody] UserPersonalDataForm form)
+        {
+            await _portalLogger.Log(LogType.PersonalDataAction, $"Personal data - update requested", UserId, Username);
+
+            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+            if (userProfile is null)
+            {
+                return BadRequest("Nie znaleziono profilu użytkownika. Skontaktuj się z administratorem!");
+            }
+
+            userProfile.Address = form.Address;
+            userProfile.City = form.City;
+            userProfile.Country = form.Country;
+            userProfile.Name = form.Name;
+            userProfile.Surname = form.Surname;
+            userProfile.Vivodership = form.Vivodership;
+            userProfile.AddressCorrespondence = form.AddressCorrespondence;
+            userProfile.PhoneNumber = form.PhoneNumber;
+            userProfile.PostCode = form.PostCode;
+            userProfile.CompanyFullName = form.CompanyFullName;
+            userProfile.KRS = form.KRS;
+            userProfile.NIP = form.NIP;
+            userProfile.REGON = form.REGON;
+
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        
+        [HttpDelete("personal-data/clear/{userId}")]
+        public async Task<IActionResult> DeletePersonalData(string userId,
+            [FromServices] AppDbContext context)
+        {
+            await _portalLogger.Log(LogType.PersonalDataAction, $"Personal data - delete requested", UserId, Username);
+            
+            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+            if (userProfile is null)
+            {
+                return BadRequest("Nie znaleziono profilu użytkownika. Skontaktuj się z administratorem!");
+            }
+
+            userProfile.Address = null;
+            userProfile.City = null;
+            userProfile.Country = null;
+            userProfile.Name = null;
+            userProfile.Surname = null;
+            userProfile.Vivodership = null;
+            userProfile.AddressCorrespondence = null;
+            userProfile.PhoneNumber = null;
+            userProfile.PostCode = null;
+            userProfile.CompanyFullName = null;
+            userProfile.KRS = null;
+            userProfile.NIP = null;
+            userProfile.REGON = null;
+
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPut("me/image")]
         public async Task<IActionResult> UpdateProfileImage(
             [FromServices] AppDbContext context,
@@ -85,6 +147,10 @@ namespace SystemyWP.API.Controllers
             
             await context.SaveChangesAsync();
             return Ok();
+        }
+
+        public UserController(PortalLogger portalLogger) : base(portalLogger)
+        {
         }
     }
 }

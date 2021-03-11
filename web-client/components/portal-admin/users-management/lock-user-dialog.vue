@@ -1,8 +1,8 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title v-if="selectedUser.locked">Unlock User</v-card-title>
-      <v-card-title v-else>Lock User</v-card-title>
+      <v-card-title class="justify-center" v-if="selectedUser.locked">Unlock User</v-card-title>
+      <v-card-title class="justify-center" v-else>Lock User</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn v-if="selectedUser.locked" color="warning" text @click="unlock">
@@ -50,7 +50,6 @@ export default {
 
       return this.$axios.$post("/api/portal-admin/user-admin/user/lock", this.form)
         .catch((e) => {
-          console.log(e);
         }).finally(() => {
           this.loading = false;
           this.$emit('action-completed');
@@ -64,7 +63,6 @@ export default {
 
       return this.$axios.$post("/api/portal-admin/user-admin/user/unlock", this.form)
         .catch((e) => {
-          console.log(e);
         }).finally(() => {
           this.loading = false;
           this.$emit('action-completed');

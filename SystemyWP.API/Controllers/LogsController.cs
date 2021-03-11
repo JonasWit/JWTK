@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections;
+using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,10 @@ namespace SystemyWP.API.Controllers
             {
                 return Task.FromResult(new List<object>());
             }
+        }
+
+        public LogsController(PortalLogger portalLogger) : base(portalLogger)
+        {
         }
     }
 }

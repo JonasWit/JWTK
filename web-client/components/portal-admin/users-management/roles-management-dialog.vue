@@ -1,7 +1,7 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title>Roles Management</v-card-title>
+      <v-card-title class="justify-center">Roles Management</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn v-if="selectedUser.role === 'Client'" color="warning" text @click="switchRole('ClientAdmin')">

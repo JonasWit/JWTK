@@ -30,6 +30,20 @@ namespace SystemyWP.API.Services.PortalLoggerService
             await _context.SaveChangesAsync();
         }
         
+        public async Task Log(LogType logType, string message, string sourceType, string sourceMethod, string userId, Exception ex)
+        {
+            _context.PortalLogs.Add(new PortalLog
+            {
+                LogType = logType,
+                Message = message,
+                SourceType = sourceType,
+                SourceMethod = sourceMethod,
+                ExceptionDetails = ex.Message,
+                UserId = userId,
+            });
+            await _context.SaveChangesAsync();
+        }
+
         public async Task Log(LogType logType, string message, string sourceType, string sourceMethod, string userId, string userEmail)
         {
             _context.PortalLogs.Add(new PortalLog
@@ -56,6 +70,19 @@ namespace SystemyWP.API.Services.PortalLoggerService
             await _context.SaveChangesAsync();
         }
         
+        public async Task Log(LogType logType, string message, string exceptionDetials, string userId, string userName)
+        {
+            _context.PortalLogs.Add(new PortalLog
+            {
+                LogType = logType,
+                Message = message,
+                ExceptionDetails = exceptionDetials,
+                UserId = userId,
+                Username = userName
+            });
+            await _context.SaveChangesAsync();
+        }
+
         public async Task LogTest(LogType logType, string message, string userId, string userEmail, DateTime created)
         {
             _context.PortalLogs.Add(new PortalLog

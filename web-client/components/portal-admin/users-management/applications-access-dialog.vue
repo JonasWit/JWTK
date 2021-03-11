@@ -1,7 +1,7 @@
 ﻿<template>
   <v-dialog :value="selectedUser" persistent width="500">
     <v-card>
-      <v-card-title>Applications Access Management</v-card-title>
+      <v-card-title class="justify-center">Applications Access Management</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn v-if="selectedUser.legalAppAllowed" color="warning" text @click="revokeLegalAppAccess">

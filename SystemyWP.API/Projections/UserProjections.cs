@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models;
 
@@ -9,12 +10,25 @@ namespace SystemyWP.API.Projections
         public static Expression<Func<User, object>> UserProjection(string userName, string role, bool legalAppAllowed) =>
             user => new
             {
-                Id = user.Id,
+                user.Id,
                 Username = userName,
-                Image = user.Image,
+                user.Image,
                 Role = role,
                 DataAccessKey = user.AccessKey,
-                LegalAppAllowed = legalAppAllowed
+                LegalAppAllowed = legalAppAllowed,
+                user.PhoneNumber,
+                user.Address,
+                user.City,
+                user.Country,
+                user.Name,
+                user.Surname,
+                user.Vivodership,
+                user.AddressCorrespondence,
+                user.PostCode,
+                user.CompanyFullName,
+                user.KRS,
+                user.NIP,
+                user.REGON
             };
 
         public class UserViewModel

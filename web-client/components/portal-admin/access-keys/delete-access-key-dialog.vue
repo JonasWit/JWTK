@@ -7,7 +7,7 @@
     </template>
 
     <v-card>
-      <v-card-title>Delete Access Key</v-card-title>
+      <v-card-title class="justify-center">Delete Access Key</v-card-title>
       <v-divider/>
       <v-card-text>
         <v-card-subtitle class="success--text" v-if="selectedKey.assignedUsers === 0">This key has no assigned users
@@ -47,7 +47,6 @@ export default {
 
       return this.$axios.$delete(`/api/portal-admin/key-admin/access-key/${this.selectedKey.id}`)
         .catch((e) => {
-          console.log(e);
         }).finally(() => {
           this.loading = false;
           this.$emit('action-completed');

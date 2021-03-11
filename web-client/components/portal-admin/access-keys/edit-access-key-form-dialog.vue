@@ -1,9 +1,9 @@
 ﻿<template>
   <v-dialog persistent width="700" :value="selectedKey">
     <v-card>
-      <v-card-title>Access Key Management</v-card-title>
+      <v-card-title class="justify-center">Access Key Management</v-card-title>
       <v-divider></v-divider>
-      <v-form ref="dataAccessKeyForm" v-model="validation.valid">
+      <v-form ref="editDataAccessKeyForm" v-model="validation.valid">
 
         <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
                       required></v-text-field>
@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     editKey() {
+      if (!this.$refs.editDataAccessKeyForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
 

@@ -1,4 +1,5 @@
 ﻿using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Services.PortalLoggerService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
@@ -8,6 +9,8 @@ namespace SystemyWP.API.Controllers
     [Authorize(SystemyWPConstants.Policies.LegalAppAccess)]
     public class LegalAppClientController : ApiController
     {
-        
+        public LegalAppClientController(PortalLogger portalLogger) : base(portalLogger)
+        {
+        }
     }
 }

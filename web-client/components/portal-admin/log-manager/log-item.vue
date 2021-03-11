@@ -6,6 +6,10 @@
         <v-spacer/>
         <v-card-title :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-card-title>
       </div>
+      <v-card-subtitle v-if="logItem.exceptionDetails" class="py-0">Details: {{
+          logItem.exceptionDetails
+        }}
+      </v-card-subtitle>
       <v-card-subtitle class="py-0">Created: {{ logItem.created }}</v-card-subtitle>
       <v-card-subtitle class="py-0">User Id: {{ logItem.userId }}</v-card-subtitle>
       <v-card-subtitle class="py-0">User Name: {{ logItem.username }}</v-card-subtitle>
@@ -25,6 +29,8 @@ export default {
   methods: {
     getTypeColor(type) {
       if (type === "Access") {
+        return "warning--text";
+      } else if (type === "PortalAdminAction") {
         return "warning--text";
       } else {
         return "success--text";

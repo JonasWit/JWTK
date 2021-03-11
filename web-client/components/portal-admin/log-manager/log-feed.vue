@@ -34,9 +34,12 @@
         </v-date-picker>
       </v-menu>
     </v-form>
+    <div class="d-flex justify-center mb-3">
+      <v-btn text depressed class="mx-1" @click="search">Search</v-btn>
+      <v-btn text depressed class="mx-1" @click="clear">Clear</v-btn>
+    </div>
     <div class="d-flex justify-center">
-      <v-btn class="mx-1" @click="search">Search</v-btn>
-      <v-btn class="mx-1" @click="clear">Clear</v-btn>
+      <v-btn text depressed color="warning" class="mx-1" @click="refresh">Refresh Logs</v-btn>
     </div>
 
     <div v-scroll="onScroll">
@@ -96,7 +99,6 @@ export default {
     onScroll() {
       if (this.finished || this.loading) return;
       const loadMore = document.body.offsetHeight - (window.pageYOffset + window.innerHeight) < 500;
-
       if (loadMore) {
         this.handleLogs();
       }
@@ -118,16 +120,18 @@ export default {
       this.cursor = 0;
       this.logs = [];
       this.form = initForm();
-
+      this.handleLogs();
+    },
+    refresh() {
+      this.cursor = 0;
+      this.logs = [];
       this.handleLogs();
     },
     handleLogs() {
       this.loading = true;
 
-      console.log(this.query);
       this.loadLogs(this.query)
         .then(logs => {
-          console.log(logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {
