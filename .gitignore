@@ -1,6 +1,6 @@
 .idea
-.cert
-.key
+*.cert
+*.key
 bin/
 obj/
 
