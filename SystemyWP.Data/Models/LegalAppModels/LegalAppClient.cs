@@ -19,6 +19,8 @@ namespace SystemyWP.Data.Models.LegalAppModels
         public string Email { get; set; }
         [MaxLength(50)]
         public string PhoneNumber { get; set; }
+        [MaxLength(50)]
+        public string DataAccessKey { get; set; }
 
         public List<LegalAppCase> Cases { get; set; } = new List<LegalAppCase>();
         public List<LegalAppClientContactPerson> ContactPeople { get; set; } = new List<LegalAppClientContactPerson>();

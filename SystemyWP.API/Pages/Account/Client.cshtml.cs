@@ -14,10 +14,13 @@ namespace SystemyWP.API.Pages.Account
             [Required] 
             public string ReturnUrl { get; set; }
             [Required]
-            [DataType(DataType.EmailAddress)]
+            [DataType(DataType.EmailAddress, ErrorMessage = "Niepoprawny adres email")]
             public string Email { get; set; }
             public string Code { get; set; }
             [Required]
+            [StringLength(20, ErrorMessage = "Nazwa użytkownika może mieć maksymalnie 20 znaków")]
+            [RegularExpression(@"[A-Za-z0-9._-]", 
+                ErrorMessage = "Niepoprawna nazwa użytkownika")]
             public string Username { get; set; }
             [Required]
             [DataType(DataType.Password)]
@@ -25,7 +28,7 @@ namespace SystemyWP.API.Pages.Account
             
             [Required]
             [DataType(DataType.Password)]
-            [Compare(nameof(Password))]
+            [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
         }
         

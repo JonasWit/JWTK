@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models;
+using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Services.PortalLoggerService
 {

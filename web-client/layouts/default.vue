@@ -8,10 +8,8 @@
       </nuxt-link>
 
       <v-spacer/>
-      <div class="d-flex mx-4">
-        <v-icon small color="success">mdi-weather-night</v-icon>
-        <v-switch flat v-model="lightTheme"></v-switch>
-        <v-icon medium color="success">mdi-weather-sunny</v-icon>
+      <div class="mr-5">
+        <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="lightTheme"/>
       </div>
 
       <if-auth>
@@ -26,7 +24,7 @@
               <v-list>
                 <v-list-item to="/user-profile">
                   <v-list-item-title>
-                    <v-icon left>mdi-cogs</v-icon>
+                    <v-icon left>mdi-clipboard-edit-outline</v-icon>
                     Mój Profil
                   </v-list-item-title>
                 </v-list-item>
@@ -38,7 +36,7 @@
                 </v-list-item>
                 <v-list-item v-if="legalAppAllowed" to="/legal-application">
                   <v-list-item-title>
-                    <v-icon left>mdi-cogs</v-icon>
+                    <v-icon left>mdi-scale-balance</v-icon>
                     Moja Kancelaria
                   </v-list-item-title>
                 </v-list-item>

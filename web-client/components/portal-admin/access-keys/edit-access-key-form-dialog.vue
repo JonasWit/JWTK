@@ -49,7 +49,7 @@ export default {
       valid: false,
       key: [
         v => !!v || "Key is required!",
-        v => v?.length >= 10 || "10 or more characters!"
+        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
       ],
       expireDate: [
         v => !!v || "Duration is required!",

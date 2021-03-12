@@ -5,31 +5,16 @@
         <div>
           <v-hover v-slot:default="{ hover }">
             <v-avatar size="75">
-              <v-btn
-                :disabled="uploadingImage"
-                icon
-                v-if="hover"
-                @click="$refs.profileImageInput.click()"
-              >
+              <v-btn :disabled="uploadingImage" icon v-if="hover" @click="$refs.profileImageInput.click()">
                 <v-icon>mdi-account-edit</v-icon>
               </v-btn>
-              <img
-                v-else-if="profile.image"
-                :src="profile.image"
-                alt="profile image"
-              />
+              <img v-else-if="profile.image" :src="profile.image" alt="profile image"/>
               <v-icon x-large v-else>mdi-account</v-icon>
             </v-avatar>
           </v-hover>
         </div>
-        <input
-          class="d-none"
-          type="file"
-          accept="image/*"
-          ref="profileImageInput"
-          @change="changeProfileImage"
-        />
-        <v-list-item-content>
+        <input class="d-none" type="file" accept="image/*" ref="profileImageInput" @change="changeProfileImage"/>
+        <v-list-item-content class="ml-2">
           <v-list-item-title class="title">
             {{ profile.username }}
           </v-list-item-title>
@@ -41,7 +26,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "main-header",
@@ -73,5 +58,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

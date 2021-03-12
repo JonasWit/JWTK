@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models;
+using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Projections
 {

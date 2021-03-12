@@ -10,20 +10,20 @@
         Edycja Danych Personalnych
       </v-card-title>
       <v-form ref="editPersonalDataFrom" v-model="validation.valid">
-        <v-text-field class="ma-3" v-model="form.phoneNumber" :rules="validation.normalLength"
+        <v-text-field class="ma-3" v-model="form.phoneNumber" :rules="validation.smallLength"
                       label="Numer Telefonu"></v-text-field>
         <v-text-field class="ma-3" v-model="form.companyFullName" :rules="validation.normalLength"
                       label="Firma"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.name" :rules="validation.normalLength" label="Imię"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.surname" :rules="validation.normalLength"
+        <v-text-field class="ma-3" v-model="form.name" :rules="validation.smallLength" label="Imię"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.surname" :rules="validation.smallLength"
                       label="Nazwisko"></v-text-field>
         <v-text-field class="ma-3" v-model="form.address" :rules="validation.extendedLength"
                       label="Adres"></v-text-field>
         <v-text-field class="ma-3" v-model="form.addressCorrespondence" :rules="validation.extendedLength"
                       label="Adres Korespondencyjny"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.nip" :rules="validation.normalLength" label="NIP"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.regon" :rules="validation.normalLength" label="REGON"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.krs" :rules="validation.normalLength" label="KRS"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.nip" :rules="validation.smallLength" label="NIP"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.regon" :rules="validation.smallLength" label="REGON"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.krs" :rules="validation.smallLength" label="KRS"></v-text-field>
       </v-form>
       <v-divider></v-divider>
       <v-card-actions>
@@ -66,6 +66,9 @@ export default {
     },
     validation: {
       valid: false,
+      smallLength: [
+        v => v?.length <= 20 || "Nie więcej niż 20 znaków."
+      ],
       normalLength: [
         v => v?.length <= 50 || "Nie więcej niż 50 znaków."
       ],

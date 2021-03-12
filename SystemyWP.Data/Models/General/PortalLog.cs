@@ -1,7 +1,7 @@
 ﻿using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.Abstractions;
 
-namespace SystemyWP.Data.Models
+namespace SystemyWP.Data.Models.General
 {
     public class PortalLog : BaseModel<long>
     {

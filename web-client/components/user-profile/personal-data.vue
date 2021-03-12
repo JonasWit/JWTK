@@ -1,6 +1,6 @@
 ﻿<template>
   <v-card>
-    <v-card-title class="d-flex justify-center"> Dane Personalne </v-card-title>
+    <v-card-title class="d-flex justify-center"> Dane Personalne</v-card-title>
     <v-card-text class="py-0">
       <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
     </v-card-text>
@@ -35,18 +35,18 @@
     <v-card-text class="py-0">
       <strong>KRS:</strong> {{ profile.krs }}
     </v-card-text>
-    <v-divider class="my-2" />
+    <v-divider class="my-2"/>
     <v-card-actions class="pt-0">
-      <prof-personal-data-edit-dialog v-on:action-completed="initialize" />
+      <prof-personal-data-edit-dialog v-on:action-completed="initialize"/>
       <v-btn text @click="downloadPersonalData">Pobierz</v-btn>
-      <v-spacer />
-      <prof-confirm-personal-data-delete v-on:action-completed="" />
+      <v-spacer/>
+      <prof-confirm-personal-data-delete v-on:action-completed=""/>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "personal-data",
@@ -63,11 +63,18 @@ export default {
       const payload = {
         nazwaUzytkownika: this.profile.username,
         numerTelefonu: this.profile.phoneNumber,
+        firma: this.profile.companyFullName,
+        imie: this.profile.name,
+        nazwisko: this.profile.surname,
         adres: this.profile.address,
+        adresKorespondencyjny: this.profile.addressCorrespondence,
+        nip: this.profile.nip,
+        regon: this.profile.regon,
+        krs: this.profile.krs,
       };
 
       const data = JSON.stringify(payload);
-      const blob = new Blob([data], { type: "text/plain" });
+      const blob = new Blob([data], {type: "text/plain"});
       const e = document.createEvent("MouseEvents"),
         a = document.createElement("a");
       a.download = "personal-data.json";
@@ -96,5 +103,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -28,18 +28,13 @@ namespace SystemyWP.API
             _configuration = configuration;
             _env = env;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
-            if (_env.IsDevelopment())
-            {
-                services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
-            }
-            else
-            {
-                services.AddDbContext<AppDbContext>(options =>
-                    options.UseNpgsql(_configuration.GetConnectionString("Default")));
-            }
+            // services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(_configuration.GetConnectionString("Default")));
 
             AddIdentity(services);
 
@@ -53,15 +48,14 @@ namespace SystemyWP.API
             services.AddTransient<PortalLogger>();
 
             services.AddScoped<EmailClient>();
-            services.AddFileServices(_configuration);   
+            services.AddFileServices(_configuration);
             services.AddCors(options => options.AddPolicy(NuxtJsApp, build => build
-                    .AllowAnyHeader()
-                    .WithOrigins("https://localhost:3000", "https://portal.systemywp.pl")
-                    .AllowAnyMethod()
-                    .AllowCredentials()));          
- 
+                .AllowAnyHeader()
+                .WithOrigins("https://localhost:3000", "https://portal.systemywp.pl")
+                .AllowAnyMethod()
+                .AllowCredentials()));
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (_env.IsDevelopment()) app.UseDeveloperExceptionPage();
@@ -77,24 +71,19 @@ namespace SystemyWP.API
                 endpoints.MapRazorPages();
             });
         }
-        
+
         private void AddIdentity(IServiceCollection services)
         {
-            if (_env.IsDevelopment())
-            {
-                services.AddDbContext<ApiIdentityDbContext>(config =>
-                    config.UseInMemoryDatabase("DevIdentity"));
-            }
-            else
-            {
-                services.AddDbContext<ApiIdentityDbContext>(config =>
-                    config.UseNpgsql(_configuration.GetConnectionString("Default")));
-                
-                services.AddDataProtection()
-                    .SetApplicationName("SystemyWspomaganiaPracy")
-                    .PersistKeysToDbContext<ApiIdentityDbContext>();
-            }
-            
+            services.AddDbContext<ApiIdentityDbContext>(config =>
+                config.UseNpgsql(_configuration.GetConnectionString("Default")));
+
+            services.AddDataProtection()
+                .SetApplicationName("SystemyWP")
+                .PersistKeysToDbContext<ApiIdentityDbContext>();
+
+            //     services.AddDbContext<ApiIdentityDbContext>(config =>
+            //         config.UseInMemoryDatabase("DevIdentity"));
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
@@ -125,7 +114,7 @@ namespace SystemyWP.API
                 .AddErrorDescriber<PolishIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 options.ValidationInterval = TimeSpan.FromSeconds(10);
@@ -137,7 +126,7 @@ namespace SystemyWP.API
                 config.LogoutPath = "/api/auth/logout";
                 config.Cookie.Domain = _configuration["CookieDomain"];
                 config.Cookie.Name = "systemywp_id";
-                config.ExpireTimeSpan = TimeSpan.FromHours(2);      
+                config.ExpireTimeSpan = TimeSpan.FromHours(2);
             });
 
             services.AddAuthorization(options =>
@@ -145,14 +134,14 @@ namespace SystemyWP.API
                 options.AddPolicy(SystemyWPConstants.Policies.Client, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.Client, 
-                        SystemyWPConstants.Roles.PortalAdmin, 
+                        SystemyWPConstants.Roles.Client,
+                        SystemyWPConstants.Roles.PortalAdmin,
                         SystemyWPConstants.Roles.ClientAdmin));
-                
+
                 options.AddPolicy(SystemyWPConstants.Policies.ClientAdmin, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.PortalAdmin, 
+                        SystemyWPConstants.Roles.PortalAdmin,
                         SystemyWPConstants.Roles.ClientAdmin));
 
                 options.AddPolicy(SystemyWPConstants.Policies.PortalAdmin, policy => policy

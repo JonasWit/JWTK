@@ -1,13 +1,15 @@
-﻿using SystemyWP.Data.Models.Abstractions;
+﻿using System.Collections.Generic;
+using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
-namespace SystemyWP.Data.Models
+namespace SystemyWP.Data.Models.General
 {
     public class User : BaseModel<string>
     {
         public string Image { get; set; }
+        [ProtectedPersonalData]
         public AccessKey AccessKey { get; set; }
-        
         [ProtectedPersonalData]
         public string PhoneNumber { get; set; }
         [ProtectedPersonalData]
@@ -34,5 +36,8 @@ namespace SystemyWP.Data.Models
         public string REGON { get; set; }
         [ProtectedPersonalData]
         public string KRS { get; set; }
+
+        public List<DataAccess> DataAccess { get; set; } =
+            new List<DataAccess>();
     }
 }
