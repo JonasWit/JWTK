@@ -5,13 +5,14 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
+using SystemyWP.Data.DataAccessModifiers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp
 {
-    [Microsoft.AspNetCore.Components.Route("/api/legal-app-clients")]
+    [Route("/api/legal-app-clients")]
     [Authorize(SystemyWPConstants.Policies.Client)]
     [Authorize(SystemyWPConstants.Policies.LegalAppAccess)]
     public class LegalAppClientController : ApiController
@@ -38,21 +39,36 @@ namespace SystemyWP.API.Controllers.LegalApp
                 Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
             {
                 result.AddRange(context.LegalAppClients
-                    .Where(x => x.DataAccessKey.Equals(user.AccessKey))
+                    .Include(x => 
+                        x.LegalAppCases)
+                    .Where(x => 
+                        x.DataAccessKey.Equals(user.AccessKey.Name))
                     .Select(LegalAppClientProjection.FlatProjection)
                     .ToList());
                 
-                return result;
+                return Ok(result);
             }
-            else if(Role.Equals(SystemyWPConstants.Roles.Client))
+            
+            if(Role.Equals(SystemyWPConstants.Roles.Client))
             {
+                //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
+                
+                result.AddRange(context.LegalAppClients
+                    .Include(x => 
+                        x.LegalAppCases)
+                    .Where(x => 
+                        x.DataAccessKey.Equals(user.AccessKey.Name) && 
+                        context.DataAccesses.Where(x => x.UserId.Equals(UserId))
+                            .Any(y => y.RestrictedType == RestrictedType.LegalAppClient && 
+                                      y.ItemId == x.Id))
+                    .Select(LegalAppClientProjection.FlatProjection)
+                    .ToList());          
+                
                 //todo: add validation with DataAccessTable
                 return Ok(result);
             }
-            else
-            {
-                return BadRequest("Brak dostępu!");     
-            }
+
+            return BadRequest("Brak dostępu!");
         }
     }
 }

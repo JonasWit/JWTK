@@ -10,7 +10,7 @@
         <v-list-item-content>
           <v-list-item-title>Key Name: {{ keyItem.name }}</v-list-item-title>
           <v-list-item-subtitle :class="colorDates(keyItem.expireDate)">Expiration Date: {{
-              keyItem.expireDate.substr(0, 10)
+              formatDate(keyItem.expireDate)
             }}
           </v-list-item-subtitle>
           <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
@@ -35,6 +35,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+import {addDays, formatDate} from "@/data/dateExtensions";
 
 const searchItemFactory = (id, exp) => ({
   id,
@@ -75,17 +76,17 @@ export default {
   },
   methods: {
     ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    formatDate(date) {
+      return formatDate(date);
+    },
     colorDates(date) {
       let today = new Date();
       const expireDate = Date.parse(date);
 
-      console.log('expire', expireDate);
-      console.log('today', today);
-
-      if (expireDate > today.addDays(7)) {
+      if (expireDate > addDays(today, 7)) {
         return "success--text";
       }
-      if (expireDate < today.addDays(7) && expireDate > today) {
+      if (expireDate < addDays(today, 7) && expireDate > today) {
         return "warning--text";
       }
       if (expireDate < today) {

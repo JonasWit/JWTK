@@ -32,7 +32,7 @@ namespace SystemyWP.API
             {
                 ProdAdminSeed(host);
             }
-            
+
             host.Run();
         }
 
@@ -47,7 +47,7 @@ namespace SystemyWP.API
             using var scope = host.Services.CreateScope();
             var identityContext = scope.ServiceProvider.GetRequiredService<ApiIdentityDbContext>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            
+
             if (!identityContext.Users.Any(x => x.UserName.Equals("MarzenaWitek")))
             {
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
@@ -65,37 +65,48 @@ namespace SystemyWP.API
                     .GetResult();
             }
         }
-        
+
         private static void DevDataSeedLegalApp(IHost host)
         {
             using var scope = host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            for (int i = 0; i < 20; i++)
+            var adminUser = userManager.FindByNameAsync("portaladmin1");
+
+            for (var i = 0; i < 50; i++)
             {
-                context.Add(new LegalAppProtectedDataClient
+                var newClient = new LegalAppProtectedDataClient
                 {
                     DataAccessKey = "access-key-1",
                     Name = $"#{i}# Test Client",
                     Address = $"#{i}# Test Address {i}{i}{i}{i}-{i}{i}{i}{i}/{i}{i}{i}",
                     Active = true,
                     Email = $"test-{i}@email{i}.com",
-                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}"
-                });
+                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}",
+                    Created = DateTime.Now,
+                    Updated = DateTime.Now,
+                    CreatedBy = "portaladmin1",
+                    UpdatedBy = "portaladmin1"
+                };
+                
+                if (i % 2 == 0)
+                {
+                    newClient.DataAccessKey = "access-key-1";
+                    context.Add(newClient);
+                }
+                else if (i % 3 == 0)
+                {
+                    newClient.DataAccessKey = "access-key-3";
+                    context.Add(newClient);
+                }
+                else
+                {
+                    newClient.DataAccessKey = "access-key-2";
+                    context.Add(newClient);  
+                }
             }
             
-            for (int i = 0; i < 5; i++)
-            {
-                context.Add(new LegalAppProtectedDataClient
-                {
-                    DataAccessKey = "access-key-2",
-                    Name = $"#{i}# Test Client",
-                    Address = $"#{i}# Test Address 1212-2323 / 123123",
-                    Active = true,
-                    Email = $"test-{i}@email{i}.com",
-                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}"
-                });
-            }
             context.SaveChanges();
         }
 
@@ -119,7 +130,7 @@ namespace SystemyWP.API
             }
 
             //Seed access keys
-            for (int i = 1; i < 3; i++)
+            for (var i = -2; i < 5; i++)
             {
                 context.AccessKeys.Add(new AccessKey
                 {
@@ -128,9 +139,11 @@ namespace SystemyWP.API
                     Created = DateTime.UtcNow
                 });
             }
-            
+
+            context.SaveChanges();
+
             //Seed Client Admins
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 6; i++)
             {
                 var clientAdmin = new IdentityUser($"clientadmin{i}")
                 {
@@ -147,14 +160,19 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
 
-                context.Add(new User
+                var userRecord = new User
                 {
                     Id = clientAdmin.Id,
-                });
+                    AccessKey = i % 2 == 0
+                        ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
+                        : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
+                };
+
+                context.Add(userRecord);
             }
 
             //Seed Clients
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 12; i++)
             {
                 var testClient = new IdentityUser($"client{i}")
                 {
@@ -171,14 +189,19 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
 
-                context.Add(new User
+                var userRecord = new User
                 {
                     Id = testClient.Id,
-                });
+                    AccessKey = i % 2 == 0
+                        ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
+                        : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
+                };
+
+                context.Add(userRecord);
             }
-            
-            //Seed Poeral Admins
-            for (int i = 0; i < 2; i++)
+
+            //Seed Portal Admins
+            for (var i = 1; i < 2; i++)
             {
                 var portalAdmin = new IdentityUser($"portaladmin{i}")
                 {
@@ -196,10 +219,11 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1")),
                     Id = portalAdmin.Id,
                 });
             }
-            
+
             context.SaveChanges();
         }
     }

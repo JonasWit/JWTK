@@ -59,6 +59,8 @@ namespace SystemyWP.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (_env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            
+            //todo: add fallback to error page
 
             app.UseCors(NuxtJsApp);
             app.UseRouting();

@@ -36,10 +36,13 @@ namespace SystemyWP.API.Controllers
                 .Include(x => x.Users)
                 .AsEnumerable()
                 .Select(x => AccessKeyProjection
-                    .FullProjection(legalAppRelatedDataCount
-                        .First(y => y.KeyName.Equals(x.Name)).Count).Compile().Invoke(x))
+                    .FullProjection(
+                        legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name)) ? 
+                            legalAppRelatedDataCount.FirstOrDefault(y => y.KeyName.Equals(x.Name)).Count
+                        : 0)
+                    .Compile()
+                    .Invoke(x))
                 .ToList();
-            
             return Ok(results);
         }
 

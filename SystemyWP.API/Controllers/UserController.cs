@@ -52,10 +52,12 @@ namespace SystemyWP.API.Controllers
             context.Add(newUser);
             await context.SaveChangesAsync();
 
-            return Ok(UserProjections
+            var returnObject = UserProjections
                 .UserProjection(Username, Role, LegalAppAllowed)
                 .Compile()
-                .Invoke(newUser));
+                .Invoke(newUser);
+
+            return Ok(returnObject);
         }
 
         [HttpPut("personal-data/update")]

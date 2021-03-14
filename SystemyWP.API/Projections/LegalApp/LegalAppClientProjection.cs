@@ -11,6 +11,7 @@ namespace SystemyWP.API.Projections.LegalApp
         public static Expression<Func<LegalAppProtectedDataClient, object>> FlatProjection =>
             legalAppClient => new
             {
+                legalAppClient.DataAccessKey,
                 legalAppClient.Created,
                 legalAppClient.CreatedBy,
                 legalAppClient.Updated,

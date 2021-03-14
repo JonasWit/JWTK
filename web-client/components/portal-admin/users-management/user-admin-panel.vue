@@ -37,7 +37,7 @@
             <v-list-item-subtitle class="success--text">Data Access Key: {{ user.dataAccessKey.name }}
             </v-list-item-subtitle>
             <v-list-item-subtitle class="success--text">Expiration:
-              {{ user.dataAccessKey.expireDate.substr(0, 10) }}
+              {{ formatDate(user.dataAccessKey.expireDate) }}
             </v-list-item-subtitle>
           </div>
           <v-list-item-subtitle class="error--text" v-else>No Data Access Key</v-list-item-subtitle>
@@ -79,6 +79,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import {hasOccurrences} from "@/data/functions";
+import {formatDate} from "@/data/dateExtensions";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,
@@ -126,6 +127,9 @@ export default {
   },
   methods: {
     ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    formatDate(date) {
+      return formatDate(date);
+    },
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
