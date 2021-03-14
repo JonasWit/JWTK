@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using SystemyWP.Data;
-using SystemyWP.Data.Models;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -26,8 +25,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                DataSeed(host);
-                DataSeedLegalApp(host);
+                DevIdentitySeed(host);
+                DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
@@ -67,27 +66,40 @@ namespace SystemyWP.API
             }
         }
         
-        private static void DataSeedLegalApp(IHost host)
+        private static void DevDataSeedLegalApp(IHost host)
         {
             using var scope = host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             for (int i = 0; i < 20; i++)
             {
-                context.Add(new LegalAppClient
+                context.Add(new LegalAppProtectedDataClient
                 {
-                    DataAccessKey = "access-key-{1}",
-                    
+                    DataAccessKey = "access-key-1",
+                    Name = $"#{i}# Test Client",
+                    Address = $"#{i}# Test Address {i}{i}{i}{i}-{i}{i}{i}{i}/{i}{i}{i}",
+                    Active = true,
+                    Email = $"test-{i}@email{i}.com",
+                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}"
                 });
             }
             
-            
-            
-            
-            
+            for (int i = 0; i < 5; i++)
+            {
+                context.Add(new LegalAppProtectedDataClient
+                {
+                    DataAccessKey = "access-key-2",
+                    Name = $"#{i}# Test Client",
+                    Address = $"#{i}# Test Address 1212-2323 / 123123",
+                    Active = true,
+                    Email = $"test-{i}@email{i}.com",
+                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}"
+                });
+            }
+            context.SaveChanges();
         }
 
-        private static void DataSeed(IHost host)
+        private static void DevIdentitySeed(IHost host)
         {
             using var scope = host.Services.CreateScope();
 
@@ -106,7 +118,8 @@ namespace SystemyWP.API
                 databaseCreator.CreateTables();
             }
 
-            for (int i = 0; i < 4; i++)
+            //Seed access keys
+            for (int i = 1; i < 3; i++)
             {
                 context.AccessKeys.Add(new AccessKey
                 {
@@ -115,14 +128,37 @@ namespace SystemyWP.API
                     Created = DateTime.UtcNow
                 });
             }
-
-            context.SaveChanges();
-
-            if (!identityContext.Users.Any(x => x.UserName.Equals("test")) && env.IsDevelopment())
+            
+            //Seed Client Admins
+            for (int i = 0; i < 2; i++)
             {
-                var testClient = new IdentityUser("TestClient")
+                var clientAdmin = new IdentityUser($"clientadmin{i}")
                 {
-                    Email = "testClient@test.com",
+                    Email = $"clientadmin{i}@test.com",
+                    LockoutEnabled = true
+                };
+                userManager.CreateAsync(clientAdmin, "password").GetAwaiter().GetResult();
+                userManager
+                    .AddClaimsAsync(clientAdmin, new[]
+                    {
+                        SystemyWPConstants.Claims.ClientAdminClaim,
+                        SystemyWPConstants.Claims.LegalAppAccessClaim
+                    })
+                    .GetAwaiter()
+                    .GetResult();
+
+                context.Add(new User
+                {
+                    Id = clientAdmin.Id,
+                });
+            }
+
+            //Seed Clients
+            for (int i = 0; i < 10; i++)
+            {
+                var testClient = new IdentityUser($"client{i}")
+                {
+                    Email = $"client{i}@test.com",
                     LockoutEnabled = true
                 };
                 userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
@@ -139,69 +175,15 @@ namespace SystemyWP.API
                 {
                     Id = testClient.Id,
                 });
-
-                var testClient2 = new IdentityUser("TestClient2")
+            }
+            
+            //Seed Poeral Admins
+            for (int i = 0; i < 2; i++)
+            {
+                var portalAdmin = new IdentityUser($"portaladmin{i}")
                 {
-                    Email = "testClient2@test.com",
-                    LockoutEnabled = true
+                    Email = $"portaladmin{i}@test.com"
                 };
-                userManager.CreateAsync(testClient2, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(testClient2, new[]
-                    {
-                        SystemyWPConstants.Claims.ClientClaim,
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                context.Add(new User
-                {
-                    Id = testClient2.Id,
-                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
-                });
-
-                var clientAdmin = new IdentityUser("TestClientAdmin")
-                {
-                    Email = "testAdminClient@test.com",
-                    LockoutEnabled = true
-                };
-                userManager.CreateAsync(clientAdmin, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(clientAdmin, new[]
-                    {
-                        SystemyWPConstants.Claims.ClientAdminClaim,
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                context.Add(new User
-                {
-                    Id = clientAdmin.Id,
-                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
-                });
-
-                var clientAdmin2 = new IdentityUser("TestClientAdmin2")
-                {
-                    Email = "testAdminClient2@test.com",
-                    LockoutEnabled = true
-                };
-                userManager.CreateAsync(clientAdmin2, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(clientAdmin2, new[]
-                    {
-                        SystemyWPConstants.Claims.ClientAdminClaim,
-                        SystemyWPConstants.Claims.LegalAppAccessClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                context.Add(new User
-                {
-                    Id = clientAdmin2.Id,
-                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
-                });
-
-                var portalAdmin = new IdentityUser("MarzenaWitek") {Email = "testAdminPortal@test.com"};
                 userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
                 userManager
                     .AddClaimsAsync(portalAdmin, new[]
@@ -216,36 +198,9 @@ namespace SystemyWP.API
                 {
                     Id = portalAdmin.Id,
                 });
-
-                context.SaveChanges();
-
-
-                for (int i = 0; i < 10; i++)
-                {
-                    context.Add(new LegalAppClient
-                    {
-                        Active = true,
-                        Name = $"Test Client - {i}",
-                    });
-                }
             }
-            else if (!identityContext.Users.Any(x =>
-                x.UserName.Equals("admin")) && env.IsProduction())
-            {
-                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-                var admin = new IdentityUser("admin") {Email = "admin@test.com"};
-                userManager
-                    .CreateAsync(admin, config
-                        .GetSection("AdminPassword").Value)
-                    .GetAwaiter()
-                    .GetResult();
-                userManager
-                    .AddClaimAsync(admin, new Claim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.PortalAdmin))
-                    .GetAwaiter()
-                    .GetResult();
-            }
+            
+            context.SaveChanges();
         }
     }
 }

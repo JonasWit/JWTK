@@ -1,17 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
+﻿using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
 
-namespace SystemyWP.Data.Models.LegalAppModels
+namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
-    public class LegalAppCaseNote : BaseModel<int>
+    public class LegalAppCaseNote : NoteBaseModel<long>
     {
-        public bool Active { get; set; }
-        [MaxLength(50)]
-        [Required]
-        public string Name { get; set; }
-        [MaxLength(500)]
-        public string Message { get; set; }
-        
         public int LegalAppCaseId { get; set; }
         public LegalAppCase LegalAppCase { get; set; }     
     }

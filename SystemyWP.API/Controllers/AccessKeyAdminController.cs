@@ -7,7 +7,6 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,11 +20,28 @@ namespace SystemyWP.API.Controllers
     public class AccessKeyAdminController : ApiController
     {
         [HttpGet("access-keys")]
-        public IEnumerable<object> ListAccessKeys([FromServices] AppDbContext context) =>
-            context.AccessKeys
+        public async Task<ActionResult<IEnumerable<object>>> ListAccessKeys(
+            [FromServices] AppDbContext context)
+        {
+            var legalAppRelatedDataCount = await context.LegalAppClients
+                .GroupBy(x => x.DataAccessKey)
+                .Select(x => new
+                {
+                    KeyName = x.Key,
+                    Count = x.Select(y => y.Id).Distinct().Count()
+                })
+                .ToListAsync();
+
+            var results = context.AccessKeys
                 .Include(x => x.Users)
-                .Select(AccessKeyProjection.Projection)
+                .AsEnumerable()
+                .Select(x => AccessKeyProjection
+                    .FullProjection(legalAppRelatedDataCount
+                        .First(y => y.KeyName.Equals(x.Name)).Count).Compile().Invoke(x))
                 .ToList();
+            
+            return Ok(results);
+        }
 
         [HttpPost("access-key/create")]
         public async Task<IActionResult> CreateAccessKey(
@@ -85,8 +101,17 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("Key with this id does not exists!");
             }
+
+            var relatedLegalAppData = context.LegalAppClients
+                .Count(x => x.DataAccessKey.Equals(keyToDelete.Name));
             
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Access Key delete requested for: {keyToDelete.Name}", UserId, Username);
+            await _portalLogger.Log(LogType.PortalAdminAction, $"Access Key delete requested for: {keyToDelete.Name}, Related Legal App Clients: {relatedLegalAppData}", UserId, Username);
+
+            if (relatedLegalAppData > 0)
+            {
+                context.LegalAppClients.RemoveRange(context.LegalAppClients
+                    .Where(x => x.DataAccessKey.Equals(keyToDelete.Name)));
+            }
 
             context.AccessKeys.Remove(keyToDelete);
             await context.SaveChangesAsync();

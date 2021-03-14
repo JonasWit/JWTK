@@ -9,11 +9,13 @@
       <v-list-item v-for="keyItem in keysList" :key="keyItem.id" class="mb-2">
         <v-list-item-content>
           <v-list-item-title>Key Name: {{ keyItem.name }}</v-list-item-title>
-          <v-list-item-subtitle>Expiration Date: {{
+          <v-list-item-subtitle :class="colorDates(keyItem.expireDate)">Expiration Date: {{
               keyItem.expireDate.substr(0, 10)
             }}
           </v-list-item-subtitle>
           <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>Related Legal App Data: {{ keyItem.relatedLegalAppClients }}
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-spacer/>
@@ -40,6 +42,7 @@ const searchItemFactory = (id, exp) => ({
   searchIndex: (id + exp).toLowerCase(),
   text: id
 });
+
 
 export default {
   name: "access-keys-admin-panel",
@@ -72,6 +75,25 @@ export default {
   },
   methods: {
     ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    colorDates(date) {
+      let today = new Date();
+      const expireDate = Date.parse(date);
+
+      console.log('expire', expireDate);
+      console.log('today', today);
+
+      if (expireDate > today.addDays(7)) {
+        return "success--text";
+      }
+      if (expireDate < today.addDays(7) && expireDate > today) {
+        return "warning--text";
+      }
+      if (expireDate < today) {
+        return "error--text";
+      }
+      return "error--text";
+
+    },
     refreshAfterKeyDelete() {
       this.getAccessKeys();
       this.getUsers();
