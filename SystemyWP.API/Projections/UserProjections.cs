@@ -13,7 +13,7 @@ namespace SystemyWP.API.Projections
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = user.AccessKey,
+                DataAccessKey = AccessKeyProjection.CreateFlat(user.AccessKey),
                 LegalAppAllowed = legalAppAllowed,
                 user.PhoneNumber,
                 user.Address,

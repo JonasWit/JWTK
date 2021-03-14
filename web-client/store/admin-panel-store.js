@@ -33,6 +33,7 @@ export const actions = {
     return this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((keys) => {
         console.log(keys);
+
         commit('updateAccessKeysList', {keys});
       })
       .catch(() => {
