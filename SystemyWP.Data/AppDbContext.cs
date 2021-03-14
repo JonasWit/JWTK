@@ -1,7 +1,8 @@
 ﻿using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels;
+using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.Data
@@ -9,18 +10,38 @@ namespace SystemyWP.Data
     public class AppDbContext: DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        
+
+        #region Portal
+
         public DbSet<User> Users { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
         public DbSet<PortalLog> PortalLogs { get; set; }      
         
-        #region LegalApp
+        #endregion
 
+        #region Applications
+
+        //Access
         public DbSet<DataAccess> DataAccesses { get; set; }  
-        public DbSet<LegalAppClient> LegalAppClients { get; set; }       
+        
+        #endregion
+        
+        #region LegalApp
+        
+        //General
+        public DbSet<LegalAppReminder> LegalAppReminders { get; set; }        
+        
+        //Client Tree
+        public DbSet<LegalAppProtectedDataClient> LegalAppClients { get; set; }  
+        public DbSet<LegalAppClientContactPerson> LegalAppClientContactPersons { get; set; }   
+        public DbSet<LegalAppClientFinance> LegalAppClientFinances { get; set; }   
+        public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
+        
+        //Case Tree
         public DbSet<LegalAppCase> LegalAppCases { get; set; }          
         public DbSet<LegalAppCaseNote> LegalAppCaseNotes { get; set; } 
         public DbSet<LegalAppClientContactPerson> LegalAppClientContactPeople { get; set; }
+        public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; }    
         
         #endregion
         
@@ -40,22 +61,44 @@ namespace SystemyWP.Data
             
             #endregion
             
-            //Client`s inner objects
-            modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.Cases)
-                .WithOne(e => e.LegalAppClient)
+            //Client relations
+            modelBuilder.Entity<LegalAppProtectedDataClient>()
+                .HasMany(c => c.LegalAppCases)
+                .WithOne(e => e.LegalAppProtectedDataClient)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.ContactPeople)
-                .WithOne(e => e.LegalAppClient)
-                .OnDelete(DeleteBehavior.Cascade);         
+            modelBuilder.Entity<LegalAppProtectedDataClient>()
+                .HasMany(c => c.LegalAppClientNotes)
+                .WithOne(e => e.LegalAppProtectedDataClient)
+                .OnDelete(DeleteBehavior.Cascade);
             
+            modelBuilder.Entity<LegalAppProtectedDataClient>()
+                .HasMany(c => c.LegalAppClientFinances)
+                .WithOne(e => e.LegalAppProtectedDataClient)
+                .OnDelete(DeleteBehavior.Cascade);
             
-            //Case`s inner objects
+            modelBuilder.Entity<LegalAppProtectedDataClient>()
+                .HasMany(c => c.LegalAppClientContactPersons)
+                .WithOne(e => e.LegalAppProtectedDataClient)
+                .OnDelete(DeleteBehavior.Cascade);     
             
+            //Case relations
+            modelBuilder.Entity<LegalAppCase>()
+                .HasMany(c => c.LegalAppCaseContactPersons)
+                .WithOne(e => e.LegalAppCase)
+                .OnDelete(DeleteBehavior.Cascade);  
             
+            modelBuilder.Entity<LegalAppCase>()
+                .HasMany(c => c.LegalAppCaseNotes)
+                .WithOne(e => e.LegalAppCase)
+                .OnDelete(DeleteBehavior.Cascade); 
+            
+            modelBuilder.Entity<LegalAppCase>()
+                .HasMany(c => c.LegalAppCaseDeadlines)
+                .WithOne(e => e.LegalAppCase)
+                .OnDelete(DeleteBehavior.Cascade); 
 
+   
         }
     }
 }

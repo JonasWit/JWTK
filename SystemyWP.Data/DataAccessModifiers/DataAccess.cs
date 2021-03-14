@@ -1,5 +1,4 @@
-﻿using SystemyWP.Data.Models;
-using SystemyWP.Data.Models.Abstractions;
+﻿using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.Data.DataAccessModifiers

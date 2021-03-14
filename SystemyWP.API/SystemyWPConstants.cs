@@ -13,10 +13,10 @@ namespace SystemyWP.API
             public const string LegalAppAccess = nameof(LegalAppAccess);
         }
 
-        public struct IdentityResources
-        {
-            public const string RoleScope = "role";
-        }
+        // public struct IdentityResources
+        // {
+        //     public const string RoleScope = "role";
+        // }
 
         public struct Claims
         {
