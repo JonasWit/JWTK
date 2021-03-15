@@ -31,19 +31,22 @@ namespace SystemyWP.API.Controllers
 
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
-
-            var userProfile = context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefault(x => x.Id.Equals(userId));
             
             var user = await context.Users
-                .Where(x => x.Id.Equals(UserId))
-                .Include(x => x.AccessKey)
-                .Select(UserProjections.UserProjection(Username, Role, LegalAppAllowed))
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-            if (user is not null) return Ok(user);
+            if (user is not null)
+            {
+                user.AccessKey = context.AccessKeys
+                    .Include(x => x.Users)
+                    .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
+                return Ok(UserProjections
+                    .UserProjection(Username, Role, LegalAppAllowed)
+                    .Compile()
+                    .Invoke(user));
+            }
+            
             var newUser = new User
             {
                 Id = UserId,
@@ -51,13 +54,11 @@ namespace SystemyWP.API.Controllers
 
             context.Add(newUser);
             await context.SaveChangesAsync();
-
-            var returnObject = UserProjections
+            
+            return Ok(UserProjections
                 .UserProjection(Username, Role, LegalAppAllowed)
                 .Compile()
-                .Invoke(newUser);
-
-            return Ok(returnObject);
+                .Invoke(newUser));
         }
 
         [HttpPut("personal-data/update")]

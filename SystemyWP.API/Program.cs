@@ -189,13 +189,16 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
 
-                var userRecord = new User
+                var userRecord = new User {Id = testClient.Id};
+                
+                if (i % 2 == 0)
                 {
-                    Id = testClient.Id,
-                    AccessKey = i % 2 == 0
-                        ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
-                        : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
-                };
+                    userRecord.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"));
+                }
+                else if (i % 3 == 0)
+                {
+                    userRecord.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"));
+                }
 
                 context.Add(userRecord);
             }

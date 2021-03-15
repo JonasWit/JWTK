@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -21,8 +22,62 @@ namespace SystemyWP.API.Controllers.LegalApp
         {
         }
 
+        [HttpGet("client/{clientId}")]
+        public ActionResult<object> CreateClient(
+            [FromServices] AppDbContext context,
+            int clientId)
+        {
+            var user = context.Users
+                .Include(x => x.AccessKey)
+                .FirstOrDefault(x => x.Id.Equals(UserId));
+
+            if (user.AccessKey is null)
+            {
+                return BadRequest("Brak klucza!");
+            }
+
+            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            {
+                var result = context.LegalAppClients
+                    .Include(x =>
+                        x.LegalAppCases)
+                    .Where(x =>
+                        x.DataAccessKey.Equals(user.AccessKey.Name))
+                    .Select(LegalAppClientProjection.FlatProjection)
+                    .FirstOrDefault();
+
+                return Ok(result);
+            }
+
+            if (Role.Equals(SystemyWPConstants.Roles.Client))
+            {
+                //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
+
+                var result = context.LegalAppClients
+                    .Include(x =>
+                        x.LegalAppCases)
+                    .Where(x =>
+                        x.DataAccessKey.Equals(user.AccessKey.Name) &&
+                        context.DataAccesses.Where(x => x.UserId.Equals(UserId))
+                            .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
+                                      y.ItemId == x.Id))
+                    .Select(LegalAppClientProjection.FlatProjection)
+                    .FirstOrDefault();
+
+                if (result is null)
+                {
+                    return StatusCode(403);
+                }
+
+                return Ok(result);
+            }
+
+            return BadRequest("Wystąpił błąd!");
+        }
+
         [HttpGet("clients")]
-        public ActionResult<IEnumerable<object>> ListClient([FromServices] AppDbContext context)
+        public ActionResult<IEnumerable<object>> ListClients([FromServices] AppDbContext context)
         {
             var user = context.Users
                 .Include(x => x.AccessKey)
@@ -39,31 +94,31 @@ namespace SystemyWP.API.Controllers.LegalApp
                 Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
             {
                 result.AddRange(context.LegalAppClients
-                    .Include(x => 
+                    .Include(x =>
                         x.LegalAppCases)
-                    .Where(x => 
+                    .Where(x =>
                         x.DataAccessKey.Equals(user.AccessKey.Name))
                     .Select(LegalAppClientProjection.FlatProjection)
                     .ToList());
-                
+
                 return Ok(result);
             }
-            
-            if(Role.Equals(SystemyWPConstants.Roles.Client))
+
+            if (Role.Equals(SystemyWPConstants.Roles.Client))
             {
                 //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
-                
+
                 result.AddRange(context.LegalAppClients
-                    .Include(x => 
+                    .Include(x =>
                         x.LegalAppCases)
-                    .Where(x => 
-                        x.DataAccessKey.Equals(user.AccessKey.Name) && 
+                    .Where(x =>
+                        x.DataAccessKey.Equals(user.AccessKey.Name) &&
                         context.DataAccesses.Where(x => x.UserId.Equals(UserId))
-                            .Any(y => y.RestrictedType == RestrictedType.LegalAppClient && 
+                            .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
                     .Select(LegalAppClientProjection.FlatProjection)
-                    .ToList());          
-                
+                    .ToList());
+
                 //todo: add validation with DataAccessTable
                 return Ok(result);
             }

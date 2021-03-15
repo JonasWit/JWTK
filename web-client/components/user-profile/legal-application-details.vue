@@ -1,6 +1,8 @@
 ﻿<template>
   <v-card>
-    <v-card-title class="d-flex justify-center"> Moja Kancelaria </v-card-title>
+    <v-card-title class="d-flex justify-center"> Moja Kancelaria</v-card-title>
+
+
   </v-card>
 </template>
 
@@ -10,5 +12,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

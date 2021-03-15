@@ -8,8 +8,9 @@ namespace SystemyWP.Data.Models.General
     public class User : BaseModel<string>
     {
         public string Image { get; set; }
-        [ProtectedPersonalData]
+        
         public AccessKey AccessKey { get; set; }
+
         [ProtectedPersonalData]
         public string PhoneNumber { get; set; }
         [ProtectedPersonalData]

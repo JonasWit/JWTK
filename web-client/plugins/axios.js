@@ -13,10 +13,11 @@
           return {error};
         }
       }
-      if ((status | 0) === 401) {
+      if ((status | 0) === 401 || (status | 0) === 403) {
         store.dispatch('popup/error', "Brak dostępu - zaloguj się pomownie!");
         return {error};
       }
+
     }
   });
 }

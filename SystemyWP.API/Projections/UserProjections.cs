@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Projections
@@ -13,7 +14,7 @@ namespace SystemyWP.API.Projections
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = AccessKeyProjection.CreateFlat(user.AccessKey),
+                DataAccessKey = user.AccessKey == null ? null : AccessKeyProjection.CreateFlat(user.AccessKey),
                 LegalAppAllowed = legalAppAllowed,
                 user.PhoneNumber,
                 user.Address,
