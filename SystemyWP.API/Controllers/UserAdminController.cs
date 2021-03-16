@@ -57,7 +57,7 @@ namespace SystemyWP.API.Controllers
                 });
             }
 
-            return result;
+            return result.OrderByDescending(x => x.Email).ToList();
         }
 
         [HttpPost("user/lock")]
@@ -173,7 +173,7 @@ namespace SystemyWP.API.Controllers
         }
 
         [HttpPost("user/delete")]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public IActionResult DeleteUser(string userId)
         {
             return Ok();
         }

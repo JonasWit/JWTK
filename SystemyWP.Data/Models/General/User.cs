@@ -8,6 +8,7 @@ namespace SystemyWP.Data.Models.General
     public class User : BaseModel<string>
     {
         public string Image { get; set; }
+        public bool LightMode  { get; set; }
         
         public AccessKey AccessKey { get; set; }
 

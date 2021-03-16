@@ -12,7 +12,7 @@ namespace SystemyWP.API.Projections
             {
                 log.Message,
                 log.Username,
-                log.ExceptionDetails,
+                ExceptionDetails = log.StackTrace,
                 LogType = log.LogType.ToString(),
                 log.SourceMethod,
                 log.SourceType,

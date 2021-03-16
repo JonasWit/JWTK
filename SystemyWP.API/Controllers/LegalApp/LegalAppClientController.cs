@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -44,7 +42,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         x.LegalAppCases)
                     .Where(x =>
                         x.DataAccessKey.Equals(user.AccessKey.Name))
-                    .Select(LegalAppClientProjection.FlatProjection)
+                    .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
                 return Ok(result);
@@ -62,7 +60,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         context.DataAccesses.Where(x => x.UserId.Equals(UserId))
                             .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
-                    .Select(LegalAppClientProjection.FlatProjection)
+                    .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
                 if (result is null)
@@ -98,7 +96,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         x.LegalAppCases)
                     .Where(x =>
                         x.DataAccessKey.Equals(user.AccessKey.Name))
-                    .Select(LegalAppClientProjection.FlatProjection)
+                    .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
 
                 return Ok(result);
@@ -116,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         context.DataAccesses.Where(x => x.UserId.Equals(UserId))
                             .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
-                    .Select(LegalAppClientProjection.FlatProjection)
+                    .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
 
                 //todo: add validation with DataAccessTable

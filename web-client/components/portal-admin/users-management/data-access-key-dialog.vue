@@ -1,5 +1,10 @@
 ﻿<template>
-  <v-dialog :value="selectedUser" persistent width="500">
+  <v-dialog v-model="dialog" :value="selectedUser" persistent width="500">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+        <v-icon medium color="error">mdi-key-variant</v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="justify-center">
         Data Access Key
@@ -21,7 +26,7 @@
             Revoke Key
           </v-btn>
           <v-spacer/>
-          <v-btn color="success" text @click="cancelDialog">
+          <v-btn color="success" text @click="dialog = false">
             Cancel
           </v-btn>
         </v-card-actions>
@@ -31,6 +36,8 @@
 </template>
 
 <script>
+
+import {mapActions} from "vuex";
 
 export default {
   name: "data-access-key-dialog",
@@ -43,6 +50,7 @@ export default {
   },
   data: () => ({
     activeKeys: [],
+    dialog: false,
     loading: false,
     form: {
       dataAccessKey: "",
@@ -61,6 +69,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('admin-panel-store', ['getUsers']),
     async grantAccessKey() {
       if (this.loading) return;
       this.loading = true;
@@ -70,7 +79,8 @@ export default {
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.$emit('action-completed');
+          this.dialog = false;
+          this.getUsers();
         });
     },
     async revokeAccessKey() {
@@ -82,12 +92,10 @@ export default {
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.$emit('action-completed');
+          this.dialog = false;
+          this.getUsers();
         });
     },
-    cancelDialog() {
-      this.$emit('action-completed');
-    }
   },
 };
 </script>

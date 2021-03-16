@@ -5,7 +5,7 @@ using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.API.Projections.LegalApp
 {
-    public class LegalAppClientProjection
+    public class LegalAppClientProjections
     {
         public static Func<LegalAppProtectedDataClient, object> CreateFlat => FlatProjection.Compile();
         public static Expression<Func<LegalAppProtectedDataClient, object>> FlatProjection =>
@@ -24,6 +24,18 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.PhoneNumber, 
                 legalAppClient.AlternativePhoneNumber,
                 Cases = legalAppClient.LegalAppCases.AsQueryable().Count()
+            };
+        
+        public static Func<LegalAppProtectedDataClient, object> CreateMinimal => MinimalProjection.Compile();
+        public static Expression<Func<LegalAppProtectedDataClient, object>> MinimalProjection =>
+            legalAppClient => new
+            {
+                legalAppClient.Id,
+                legalAppClient.DataAccessKey,
+                legalAppClient.Name,
+                Cases = legalAppClient.LegalAppCases
+                    .Select(LegalAppCaseProjections.CreateMinimal)
+                    .ToList()
             };
     }
 }

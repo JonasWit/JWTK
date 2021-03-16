@@ -5,21 +5,24 @@
       <div>
         <prof-personal-data/>
       </div>
-      <div class="mt-4">
-        <prof-legal-application-details v-if="profile.legalAppAllowed"/>
-      </div>
+      <if-auth>
+        <template v-slot:allowed="{portalAdmin, legalAppAllowed, client, clientAdmin}">
+          <div v-if="legalAppAllowed && (portalAdmin || clientAdmin)" class="mt-4">
+            <prof-legal-application-details v-if="profile.legalAppAllowed"/>
+          </div>
+        </template>
+      </if-auth>
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapState} from "vuex";
+import {mapState} from "vuex";
 
 export default {
   middleware: ["client"],
   data: () => ({}),
   computed: {
-    ...mapGetters("auth", ['clientAdmin', 'client']),
     ...mapState("auth", ["profile"]),
   },
 };

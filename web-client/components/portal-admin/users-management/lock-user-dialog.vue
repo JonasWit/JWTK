@@ -1,5 +1,11 @@
 ﻿<template>
-  <v-dialog :value="selectedUser" persistent width="500">
+  <v-dialog v-model="dialog" :value="selectedUser" persistent width="500">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+        <v-icon color="success" v-if="!selectedUser.locked" medium>mdi-lock-open-variant</v-icon>
+        <v-icon color="warning" v-else medium>mdi-lock</v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="justify-center" v-if="selectedUser.locked">Unlock User</v-card-title>
       <v-card-title class="justify-center" v-else>Lock User</v-card-title>
@@ -12,7 +18,7 @@
           Lock
         </v-btn>
         <v-spacer/>
-        <v-btn color="success" text @click="cancelDialog">
+        <v-btn color="success" text @click="dialog = false">
           Cancel
         </v-btn>
       </v-card-actions>
@@ -21,6 +27,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "lock-user-dialog",
   props: {
@@ -31,17 +39,14 @@ export default {
     }
   },
   data: () => ({
+    dialog: false,
     loading: false,
     form: {
       userId: ""
     },
   }),
-  created() {
-    if (this.selectedUser.dataAccessKey) {
-      this.form.dataAccessKey = this.selectedUser.dataAccessKey;
-    }
-  },
   methods: {
+    ...mapActions('admin-panel-store', ['getUsers']),
     lock() {
       if (this.loading) return;
       this.loading = true;
@@ -52,7 +57,8 @@ export default {
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.$emit('action-completed');
+          this.dialog = false;
+          this.getUsers();
         });
     },
     unlock() {
@@ -65,12 +71,10 @@ export default {
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.$emit('action-completed');
+          this.dialog = false;
+          this.getUsers();
         });
     },
-    cancelDialog() {
-      this.$emit('action-completed');
-    }
   }
 };
 </script>

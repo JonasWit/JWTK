@@ -82,23 +82,36 @@ export default {
   data: () => ({
     lightTheme: false
   }),
+  created() {
+    if (this.authenticated) {
+      this.lightTheme = this.profile.lightMode;
+    }
+  },
   watch: {
-    lightTheme: function (val) {
+    lightTheme: async function (val) {
       if (val) {
         this.$vuetify.theme.light = true;
         this.$vuetify.theme.dark = false;
+        if (this.authenticated) {
+          await this.$axios.$put('/api/users/me/theme', {lightMode: true})
+            .finally(this.initialize);
+        }
       } else {
         this.$vuetify.theme.light = false;
         this.$vuetify.theme.dark = true;
+        if (this.authenticated) {
+          await this.$axios.$put('/api/users/me/theme', {lightMode: false})
+            .finally(this.initialize);
+        }
       }
     }
   },
   computed: {
     ...mapState('auth', ['profile']),
-    ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin']),
+    ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin', 'authenticated']),
   },
   methods: {
-    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', ['logout', 'initialize']),
     defaultTest() {
       return this.$axios.$get('/api/test/testAll')
         .then(res => console.log(res))

@@ -1,5 +1,10 @@
 ﻿<template>
-  <v-dialog :value="selectedUser" persistent width="500">
+  <v-dialog v-model="dialog" :value="selectedUser" persistent width="500">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+        <v-icon medium color="success">mdi-account-group</v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="justify-center">Roles Management</v-card-title>
       <v-divider></v-divider>
@@ -13,7 +18,7 @@
           Client
         </v-btn>
         <v-spacer/>
-        <v-btn color="success" text @click="cancelDialog">
+        <v-btn color="success" text @click="dialog = false">
           Cancel
         </v-btn>
       </v-card-actions>
@@ -22,6 +27,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "roles-management-dialog",
   props: {
@@ -32,10 +39,12 @@ export default {
     }
   },
   data: () => ({
+    dialog: false,
     loading: false,
   }),
   computed: {},
   methods: {
+    ...mapActions('admin-panel-store', ['getUsers']),
     switchRole(role) {
       if (role === this.selectedUser.role) return;
 
@@ -50,12 +59,10 @@ export default {
           console.log(e);
         }).finally(() => {
           this.loading = false;
-          this.$emit('action-completed');
+          this.getUsers();
+          this.dialog = false;
         });
     },
-    cancelDialog() {
-      this.$emit('action-completed');
-    }
   }
 };
 </script>

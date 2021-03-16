@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
@@ -13,6 +14,7 @@ namespace SystemyWP.API.Projections
                 user.Id,
                 Username = userName,
                 user.Image,
+                user.LightMode,
                 Role = role,
                 DataAccessKey = user.AccessKey == null ? null : AccessKeyProjection.CreateFlat(user.AccessKey),
                 LegalAppAllowed = legalAppAllowed,
@@ -29,6 +31,38 @@ namespace SystemyWP.API.Projections
                 user.KRS,
                 user.NIP,
                 user.REGON
+            };
+        
+        public static Expression<Func<User, object>> RelatedUserProjection(string userName, string email, string role) =>
+            user => new
+            {
+                user.Id,
+                Email = email,
+                Username = userName,
+                user.Image,
+                user.LightMode,
+                Role = role,
+                DataAccessKey = user.AccessKey == null ? null : AccessKeyProjection.CreateFlat(user.AccessKey),
+                user.PhoneNumber,
+                user.Address,
+                user.City,
+                user.Country,
+                user.Name,
+                user.Surname,
+                user.Vivodership,
+                user.AddressCorrespondence,
+                user.PostCode,
+                user.CompanyFullName,
+                user.KRS,
+                user.NIP,
+                user.REGON,
+                DataAccess = user.DataAccess
+                    .AsQueryable()
+                    .Where(x => 
+                        x.RestrictedType.Equals(RestrictedType.LegalAppCase) ||
+                        x.RestrictedType.Equals(RestrictedType.LegalAppClient))
+                    .Select(DataAccessProjections.Projection)
+                    .ToList()
             };
 
         public class UserViewModel

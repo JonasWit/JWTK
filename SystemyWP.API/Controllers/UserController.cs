@@ -23,6 +23,10 @@ namespace SystemyWP.API.Controllers
     [Authorize]
     public class UserController : ApiController
     {
+        public UserController(PortalLogger portalLogger) : base(portalLogger)
+        {
+        }
+
         [HttpGet("me")]
         public async Task<IActionResult> GetMe(
             [FromServices] AppDbContext context)
@@ -31,7 +35,7 @@ namespace SystemyWP.API.Controllers
 
             var userId = UserId;
             if (string.IsNullOrEmpty(userId)) return BadRequest();
-            
+
             var user = await context.Users
                 .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
@@ -46,7 +50,7 @@ namespace SystemyWP.API.Controllers
                     .Compile()
                     .Invoke(user));
             }
-            
+
             var newUser = new User
             {
                 Id = UserId,
@@ -54,7 +58,7 @@ namespace SystemyWP.API.Controllers
 
             context.Add(newUser);
             await context.SaveChangesAsync();
-            
+
             return Ok(UserProjections
                 .UserProjection(Username, Role, LegalAppAllowed)
                 .Compile()
@@ -91,13 +95,13 @@ namespace SystemyWP.API.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
-        
+
         [HttpDelete("personal-data/clear/{userId}")]
         public async Task<IActionResult> DeletePersonalData(string userId,
             [FromServices] AppDbContext context)
         {
             await _portalLogger.Log(LogType.PersonalDataAction, $"Personal data - delete requested", UserId, Username);
-            
+
             var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
             if (userProfile is null)
             {
@@ -147,13 +151,23 @@ namespace SystemyWP.API.Controllers
                 await Task.WhenAll(processImage, saveImage);
                 user.Image = await saveImage;
             }
-            
+
             await context.SaveChangesAsync();
             return Ok();
         }
 
-        public UserController(PortalLogger portalLogger) : base(portalLogger)
+        [HttpPut("me/theme")]
+        public async Task<IActionResult> UpdateTheme(
+            [FromServices] AppDbContext context,
+            [FromBody] LightModeSwitchForm form)
         {
+            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+
+            if (userProfile is null) return BadRequest("Nie znaleziono użytkownika!");
+
+            userProfile.LightMode = form.LightMode;
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

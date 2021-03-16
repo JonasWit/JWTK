@@ -62,6 +62,10 @@ const config = {
       prefix: 'prof'
     },
     {
+      path: '~/components/user-profile/legal-app-details-components',
+      prefix: 'prof'
+    },
+    {
       path: '~/components/portal-admin/',
       prefix: 'padmin'
     },
