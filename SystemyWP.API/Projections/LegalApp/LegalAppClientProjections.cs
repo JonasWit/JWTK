@@ -34,7 +34,9 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.DataAccessKey,
                 legalAppClient.Name,
                 Cases = legalAppClient.LegalAppCases
-                    .Select(LegalAppCaseProjections.CreateMinimal)
+                    .AsQueryable()
+                    .Where(x => x.Active)
+                    .Select(LegalAppCaseProjections.MinimalProjection)
                     .ToList()
             };
     }

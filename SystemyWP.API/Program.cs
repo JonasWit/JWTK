@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -84,11 +85,21 @@ namespace SystemyWP.API
                     Active = true,
                     Email = $"test-{i}@email{i}.com",
                     PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}",
-                    Created = DateTime.Now,
-                    Updated = DateTime.Now,
                     CreatedBy = "portaladmin1",
                     UpdatedBy = "portaladmin1"
                 };
+
+                for (int j = 0; j < 30; j++)
+                {
+                    newClient.LegalAppCases.Add( new LegalAppCase
+                    {
+                        Name = $"Test Case - {j} - Client: {newClient.Name}",
+                        Signature = $"XYZ-{j}-XYZ-{j}",
+                        Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        CreatedBy = "portaladmin1",
+                        UpdatedBy = "portaladmin1"
+                    });
+                }
                 
                 if (i % 2 == 0)
                 {

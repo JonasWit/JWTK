@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
@@ -15,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp
 {
-    [Route("/api/legal-app-statistics")]
+    [Route("/api/legal-app-admin")]
     [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
     public class LegalAppAdminController : ApiController
     {
@@ -66,22 +67,21 @@ namespace SystemyWP.API.Controllers.LegalApp
             return Ok(result);
         }
 
-        [HttpGet("related-data")]
-        public async Task<ActionResult<IEnumerable<object>>> GetClientsAndCasesForAccess(
+        [HttpGet("update-legal-app-data-access")]
+        public async Task<IActionResult> UpdateLegalAppDataAccess(
+            [FromBody] LegalAppUpdateUserAccess form,
             [FromServices] AppDbContext context)
         {
-            try
-            {
-        
-            }
-            catch (Exception ex)
-            {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
-                return BadRequest();
-            }
+            
+            
+            
+            
+            
+            
 
 
-            throw new NotImplementedException();
+            return Ok();
         }
+        
     }
 }

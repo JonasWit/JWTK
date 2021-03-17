@@ -19,11 +19,6 @@ namespace SystemyWP.API.Controllers.BaseClases
             _portalLogger = portalLogger;
         }
 
-        protected async Task<User> GetUserProfile([FromServices] AppDbContext context) => await context.Users
-            .Where(x => x.Id.Equals(UserId))
-            .Include(x => x.AccessKey)
-            .FirstOrDefaultAsync();
-
         protected string UserId => GetClaim(ClaimTypes.NameIdentifier);
         protected string Username => GetClaim(ClaimTypes.Name);
         protected string Role => GetClaim(SystemyWPConstants.Claims.Role);

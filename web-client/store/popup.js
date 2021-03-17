@@ -25,6 +25,7 @@ export const actions = {
     commit('show', {message, type: POPUP_TYPES.ERROR});
   },
   success({commit}, message) {
+    console.log('update');
     commit('show', {message, type: POPUP_TYPES.SUCCESS});
   },
 };

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -116,12 +119,40 @@ namespace SystemyWP.API.Controllers.LegalApp
                                       y.ItemId == x.Id))
                     .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
-
-                //todo: add validation with DataAccessTable
+                
                 return Ok(result);
             }
 
             return BadRequest("Brak dostępu!");
+        }
+        
+        [HttpGet("admin/flat")]
+        [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
+        public async Task<ActionResult<IEnumerable<object>>> GetClientsAndCasesForAccess(
+            [FromServices] AppDbContext context)
+        {
+            try
+            {
+                var user = await context.Users
+                    .Where(x => x.Id.Equals(UserId))
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefaultAsync();
+                
+                var result = await context.LegalAppClients
+                    .Where(x => 
+                        x.DataAccessKey.Equals(user.AccessKey.Name))
+                    .Include(x => 
+                        x.LegalAppCases)
+                    .Select(LegalAppClientProjections.MinimalProjection)
+                    .ToListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
+                return BadRequest();
+            }
         }
     }
 }

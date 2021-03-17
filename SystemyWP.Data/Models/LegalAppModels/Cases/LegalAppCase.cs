@@ -7,7 +7,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCase : BaseModel<long>
     {
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
         [MaxLength(200)]
         [Required]
         public string Name { get; set; }

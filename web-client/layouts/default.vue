@@ -1,5 +1,7 @@
 <template>
   <v-app dark>
+    <popup/>
+    <snackbar-notifier/>
     <v-app-bar app>
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
@@ -68,17 +70,17 @@
         <nuxt/>
       </v-container>
     </v-main>
-    <popup/>
   </v-app>
 </template>
 
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
+import SnackbarNotifier from "@/components/snackbar";
 
 export default {
   name: "default",
-  components: {IfAuth},
+  components: {SnackbarNotifier, IfAuth},
   data: () => ({
     lightTheme: false
   }),
