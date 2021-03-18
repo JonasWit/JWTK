@@ -74,6 +74,7 @@ namespace SystemyWP.API
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
             var adminUser = userManager.FindByNameAsync("portaladmin1");
+            var random = new Random();
 
             for (var i = 0; i < 50; i++)
             {
@@ -89,11 +90,11 @@ namespace SystemyWP.API
                     UpdatedBy = "portaladmin1"
                 };
 
-                for (int j = 0; j < 30; j++)
+                for (int j = 0; j < random.Next(1, 20); j++)
                 {
                     newClient.LegalAppCases.Add( new LegalAppCase
                     {
-                        Name = $"Test Case - {j} - Client: {newClient.Name}",
+                        Name = $"Test Case - {j} - Lorem ipsum dolor sit amet",
                         Signature = $"XYZ-{j}-XYZ-{j}",
                         Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                         CreatedBy = "portaladmin1",

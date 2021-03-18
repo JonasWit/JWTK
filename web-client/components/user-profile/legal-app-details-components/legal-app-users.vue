@@ -6,9 +6,9 @@
           <v-card-title>Uzytkownicy</v-card-title>
           <v-card-subtitle>Jako Administratom możesz zarządzać dostępem do danych dla poszczególnych użytkowników
           </v-card-subtitle>
-          <v-select no-data-text="Brak danych" clearable :item-text="item => item.username +' - '+ item.email"
-                    v-model="selectedUser" :items="normalUsers" filled label="Wybierz Uzytkownika"
-                    return-object></v-select>
+          <v-select class="px-4" no-data-text="Brak danych" clearable
+                    :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
+                    filled label="Wybierz Uzytkownika" return-object></v-select>
         </div>
       </v-col>
       <v-col class="d-flex justify-center align-start" cols="12" md="3">
@@ -16,20 +16,21 @@
           <v-card-title>Dostęp do danych</v-card-title>
           <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
           </v-card-subtitle>
-          <div v-if="this.selectedUser">
-            <v-select no-data-text="Brak danych" multiple chips clearable :item-text="item => item.name"
-                      v-model="selectedClients" :items="clients" filled label="Wybierz Klienta" return-object
-                      deletable-chips small-chips></v-select>
+          <div class="my-3" v-if="this.selectedUser">
+            <div class="px-4">
+              <h4>Lista Klientów</h4>
+            </div>
+            <div>
+              <v-treeview color="warning" item-children="cases" v-model="selection" :items="clients" item-key="key"
+                          :selection-type="selectionType" selectable return-object></v-treeview>
 
-            <v-select no-data-text="Brak danych" multiple chips v-if="this.selectedClients" clearable
-                      :item-text="item => item.name" v-model="selectedCases" :items="this.cases" filled
-                      label="Wybierz Sprawę" return-object deletable-chips small-chips></v-select>
 
+            </div>
             <div>
               <v-card-actions class="pt-0">
                 <v-btn text color="warning" @click="updateAccess">Zmień dostępy</v-btn>
                 <v-spacer/>
-                <v-btn text color="success" @click="resetState">Odśwież</v-btn>
+                <v-btn text color="success" @click="reset">Odśwież</v-btn>
               </v-card-actions>
             </div>
           </div>
@@ -52,24 +53,22 @@
 import {mapActions} from "vuex";
 
 export default {
-  name: "legal-app-user-statistics",
+  name: "legal-app-users",
   data: () => ({
-    loading: true,
+    loading: false,
     selectedUser: null,
-    selectedClients: null,
-    selectedCases: null,
     relatedUsers: [],
     clients: [],
-    cases: []
+    selection: [],
+    selectionType: 'leaf',
   }),
   watch: {
-    selectedUser(selectedUser) {
-      if (selectedUser) {
-      }
+    selectedUser() {
+      this.selectedClients = [];
+      this.selectedCases = [];
     },
-    selectedClients(selectedClients) {
-      this.cases = [];
-      selectedClients.forEach(x => this.cases.push(...x.cases));
+    selection(selection) {
+      console.log('selected data:', selection);
     }
   },
   beforeMount() {
@@ -80,42 +79,24 @@ export default {
   },
   computed: {
     normalUsers(state) {
-      return state.relatedUsers
+      return this.relatedUsers
         .filter(x => x.role === "Client");
     },
+    selectedClientsCases() {
+      if (this.selectedClients) {
+        let availableCases = [];
+        this.clients.filter(client => this.selectedClients.some(clientId => clientId === client.id))
+          .forEach(client => availableCases.push(client.cases.map(c => ({
+            id: c.id,
+            name: c.name,
+            clientName: client.name
+          }))));
+        return [].concat.apply([], availableCases);
+      }
+    }
   },
   methods: {
     ...mapActions('popup', ['success']),
-    showSnackbar() {
-
-    },
-    resetState() {
-      this.loading = true;
-      this.selectedUser = null;
-      this.selectedClients = [];
-      this.selectedCases = [];
-      this.relatedUsers = [];
-      this.getRelatedUsers();
-      this.getClients();
-      this.loading = false;
-    },
-    async updateAccess() {
-      const payload = {
-        userId: this.selectedUser.id,
-        allowedClients: this.selectedClients && this.selectedClients.map(x => x.id),
-        allowedCases: this.selectedCases && this.selectedCases.map(x => x.id),
-      };
-
-      console.log(payload);
-
-      await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
-        .then(() => {
-          this.$notifier.showSuccessMessage("Zmieniono dotępy!");
-        })
-        .catch(() => {
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        });
-    },
     getRelatedUsers() {
       return this.$axios.$get("/api/legal-app-admin/related-users")
         .then((relatedUsers) => {
@@ -125,12 +106,41 @@ export default {
         });
     },
     getClients() {
+      console.log('Getting clients');
       return this.$axios.$get("/api/legal-app-clients/admin/flat")
         .then((clients) => {
-          this.clients = clients;
+          let response = clients.map(client => ({...client, key: `client-${client.id}`}));
+          response.forEach(client => {
+            client.cases = client.cases.map(c => ({...c, key: `case-${c.id}`}));
+          });
+          this.clients = response;
         })
         .catch(() => {
         });
+    },
+
+    reset() {
+      Object.assign(this.$data, this.$options.data.call(this));
+    },
+    async updateAccess() {
+      console.log('selected cases:', this.selectedCases);
+      console.log('selected clients:', this.selectedClients);
+
+      const payload = {
+        userId: this.selectedUser.id,
+        allowedClients: this.selectedClients && this.selectedClients.map(x => x),
+        allowedCases: this.selectedCases && this.selectedCases.map(x => x.id),
+      };
+
+      console.log('payload:', payload);
+
+      // await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
+      //   .then(() => {
+      //     this.$notifier.showSuccessMessage("Zmieniono dotępy!");
+      //   })
+      //   .catch(() => {
+      //     this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      //   });
     },
   }
 };

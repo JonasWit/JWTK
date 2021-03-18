@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <v-card class="mb-2">
-      <v-card-title class="d-flex justify-center">Moja Kancelaria</v-card-title>
+      <v-card-title class="d-flex justify-center">Kancelaria - Dostępy</v-card-title>
       <prof-legal-app-users/>
     </v-card>
   </div>

@@ -43,7 +43,7 @@ const config = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    "~/plugins/axios",
+    '~/plugins/axios',
     '~/plugins/notifier.js'
   ],
 
