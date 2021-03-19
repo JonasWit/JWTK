@@ -34,7 +34,7 @@ jobs:
         run: |
           echo "$ssh_key" > ~/ssh_key
           chmod 600 ~/ssh_key
-          rsync -e "ssh -i ~/ssh_key -o StrictHostKeyChecking=no" -avzr ./SystemyWP.API/bin/Release/net5.0/publish/ "$user"@"$target_ip":/var/systemywp/api
+          rsync -e "ssh -p 717 -i ~/ssh_key -o StrictHostKeyChecking=no" -avzr ./SystemyWP.API/bin/Release/net5.0/publish/ "$user"@"$target_ip":/var/systemywp/api
         env:
           ssh_key: ${{ secrets.GIT_ACTIONS_SSH }}
           user: ${{ secrets.GIT_ACTIONS_USER }}
