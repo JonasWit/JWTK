@@ -20,7 +20,7 @@ jobs:
       - name: Inject Secrets
         uses: microsoft/variable-substitution@v1
         with:
-          files: './SystemyWP.Api/bin/Release/net5.0/publish/appsettings.Production.json'
+          files: './SystemyWP.API/bin/Release/net5.0/publish/appsettings.Production.json'
         env:
           ConnectionStrings.Default: ${{ secrets.POSTGRESQL_CONNECTION_STRING }}
           AdminPassword: ${{ secrets.ADMIN_PASSWORD }}
