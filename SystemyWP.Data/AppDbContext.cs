@@ -32,7 +32,7 @@ namespace SystemyWP.Data
         public DbSet<LegalAppReminder> LegalAppReminders { get; set; }        
         
         //Client Tree
-        public DbSet<LegalAppProtectedDataClient> LegalAppClients { get; set; }  
+        public DbSet<LegalAppClient> LegalAppClients { get; set; }  
         public DbSet<LegalAppClientContactPerson> LegalAppClientContactPersons { get; set; }   
         public DbSet<LegalAppClientFinance> LegalAppClientFinances { get; set; }   
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
@@ -62,24 +62,24 @@ namespace SystemyWP.Data
             #endregion
             
             //Client relations
-            modelBuilder.Entity<LegalAppProtectedDataClient>()
+            modelBuilder.Entity<LegalAppClient>()
                 .HasMany(c => c.LegalAppCases)
-                .WithOne(e => e.LegalAppProtectedDataClient)
+                .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<LegalAppProtectedDataClient>()
+            modelBuilder.Entity<LegalAppClient>()
                 .HasMany(c => c.LegalAppClientNotes)
-                .WithOne(e => e.LegalAppProtectedDataClient)
+                .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<LegalAppProtectedDataClient>()
+            modelBuilder.Entity<LegalAppClient>()
                 .HasMany(c => c.LegalAppClientFinances)
-                .WithOne(e => e.LegalAppProtectedDataClient)
+                .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<LegalAppProtectedDataClient>()
+            modelBuilder.Entity<LegalAppClient>()
                 .HasMany(c => c.LegalAppClientContactPersons)
-                .WithOne(e => e.LegalAppProtectedDataClient)
+                .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);     
             
             //Case relations

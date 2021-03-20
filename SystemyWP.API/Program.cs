@@ -78,7 +78,7 @@ namespace SystemyWP.API
 
             for (var i = 0; i < 50; i++)
             {
-                var newClient = new LegalAppProtectedDataClient
+                var newClient = new LegalAppClient
                 {
                     DataAccessKey = "access-key-1",
                     Name = $"#{i}# Test Client",
@@ -142,7 +142,7 @@ namespace SystemyWP.API
             }
 
             //Seed access keys
-            for (var i = -2; i < 5; i++)
+            for (var i = -2; i < 6; i++)
             {
                 context.AccessKeys.Add(new AccessKey
                 {
@@ -155,7 +155,7 @@ namespace SystemyWP.API
             context.SaveChanges();
 
             //Seed Client Admins
-            for (var i = 0; i < 6; i++)
+            for (var i = 0; i < 7; i++)
             {
                 var clientAdmin = new IdentityUser($"clientadmin{i}")
                 {
@@ -172,15 +172,40 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
 
-                var userRecord = new User
+                switch (i)
                 {
-                    Id = clientAdmin.Id,
-                    AccessKey = i % 2 == 0
-                        ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
-                        : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
-                };
-
-                context.Add(userRecord);
+                    case 1:
+                    {
+                        var userRecord = new User
+                        {
+                            Id = clientAdmin.Id,
+                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-4"))
+                        };    
+                        context.Add(userRecord);
+                        break;
+                    }
+                    case 2:
+                    {
+                        var userRecord = new User
+                        {
+                            Id = clientAdmin.Id,
+                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-5"))
+                        };    
+                        context.Add(userRecord);
+                        break;
+                    }
+                    default:
+                    {
+                        var userRecord = new User
+                        {
+                            Id = clientAdmin.Id,
+                            AccessKey = i % 2 == 0
+                                ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
+                                : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
+                        };
+                        break;
+                    }
+                }
             }
 
             //Seed Clients
@@ -202,6 +227,11 @@ namespace SystemyWP.API
                     .GetResult();
 
                 var userRecord = new User {Id = testClient.Id};
+
+                if (i == 1)
+                {
+                    userRecord.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-4"));
+                }
                 
                 if (i % 2 == 0)
                 {

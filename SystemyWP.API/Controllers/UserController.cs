@@ -155,19 +155,5 @@ namespace SystemyWP.API.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
-
-        [HttpPut("me/theme")]
-        public async Task<IActionResult> UpdateTheme(
-            [FromServices] AppDbContext context,
-            [FromBody] LightModeSwitchForm form)
-        {
-            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-
-            if (userProfile is null) return BadRequest("Nie znaleziono użytkownika!");
-
-            userProfile.LightMode = form.LightMode;
-            await context.SaveChangesAsync();
-            return Ok();
-        }
     }
 }

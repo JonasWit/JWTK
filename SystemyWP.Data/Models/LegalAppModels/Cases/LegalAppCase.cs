@@ -8,7 +8,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
     public class LegalAppCase : BaseModel<long>
     {
         public bool Active { get; set; } = true;
-        [MaxLength(200)]
+        [MaxLength(50)]
         [Required]
         public string Name { get; set; }
         [MaxLength(200)]
@@ -24,6 +24,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
             new List<LegalAppCaseDeadline>();
         
         public int LegalAppClientId { get; set; }
-        public LegalAppProtectedDataClient LegalAppProtectedDataClient { get; set; }
+        public LegalAppClient LegalAppClient { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿<template>
   <v-card>
     <v-card-title class="d-flex justify-center"> Dane Personalne</v-card-title>
-
     <v-card-text class="py-0">
       <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
     </v-card-text>

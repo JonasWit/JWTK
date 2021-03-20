@@ -5,6 +5,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
     public class LegalAppClientNote: NoteBaseModel<long>
     {
         public int LegalAppClientId { get; set; }
-        public LegalAppProtectedDataClient LegalAppProtectedDataClient { get; set; }
+        public LegalAppClient LegalAppClient { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 <template>
   <v-app dark>
+    <client-only>
+      <cookie-consent/>
+    </client-only>
     <popup/>
     <snackbar-notifier/>
     <v-app-bar app>
@@ -77,6 +80,7 @@
 import {mapActions, mapGetters, mapState} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
+import {checkCookie, getCookie, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
 
 export default {
   name: "default",
@@ -84,26 +88,39 @@ export default {
   data: () => ({
     lightTheme: false
   }),
-  created() {
-    if (this.authenticated) {
-      this.lightTheme = this.profile.lightMode;
+  beforeMount() {
+    const themeCookie = getCookie("custom-color-theme");
+    if (themeCookie) {
+      this.lightTheme = themeCookie === "light";
     }
   },
   watch: {
-    lightTheme: async function (val) {
+    lightTheme: function (val) {
       if (val) {
         this.$vuetify.theme.light = true;
         this.$vuetify.theme.dark = false;
-        if (this.authenticated) {
-          await this.$axios.$put('/api/users/me/theme', {lightMode: true})
-            .finally(this.initialize);
+
+        if (getGDPRConsent()) {
+          if (checkCookie("custom-color-theme")) {
+            setCookie("custom-color-theme", "", 0);
+            setCookie("custom-color-theme", "light", 31);
+          } else {
+            setCookie("custom-color-theme", "light", 31);
+          }
         }
       } else {
         this.$vuetify.theme.light = false;
         this.$vuetify.theme.dark = true;
-        if (this.authenticated) {
-          await this.$axios.$put('/api/users/me/theme', {lightMode: false})
-            .finally(this.initialize);
+
+        console.log("Check GDPR", getGDPRConsent());
+
+        if (getGDPRConsent()) {
+          if (checkCookie("custom-color-theme")) {
+            setCookie("custom-color-theme", "", 0);
+            setCookie("custom-color-theme", "dark", 31);
+          } else {
+            setCookie("custom-color-theme", "dark", 31);
+          }
         }
       }
     }

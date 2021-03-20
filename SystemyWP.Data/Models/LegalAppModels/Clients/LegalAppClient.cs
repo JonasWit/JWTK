@@ -5,7 +5,7 @@ using SystemyWP.Data.Models.LegalAppModels.Cases;
 
 namespace SystemyWP.Data.Models.LegalAppModels.Clients
 {
-    public class LegalAppProtectedDataClient : LegalAppProtectedDataBaseModel<int>
+    public class LegalAppClient : LegalAppProtectedDataBaseModel<int>
     {
         public bool Active { get; set; }
         

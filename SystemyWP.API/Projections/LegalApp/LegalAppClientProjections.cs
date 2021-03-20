@@ -7,8 +7,8 @@ namespace SystemyWP.API.Projections.LegalApp
 {
     public class LegalAppClientProjections
     {
-        public static Func<LegalAppProtectedDataClient, object> CreateFlat => FlatProjection.Compile();
-        public static Expression<Func<LegalAppProtectedDataClient, object>> FlatProjection =>
+        public static Func<LegalAppClient, object> CreateFlat => FlatProjection.Compile();
+        public static Expression<Func<LegalAppClient, object>> FlatProjection =>
             legalAppClient => new
             {
                 legalAppClient.DataAccessKey,
@@ -26,8 +26,8 @@ namespace SystemyWP.API.Projections.LegalApp
                 Cases = legalAppClient.LegalAppCases.AsQueryable().Count()
             };
         
-        public static Func<LegalAppProtectedDataClient, object> CreateMinimal => MinimalProjection.Compile();
-        public static Expression<Func<LegalAppProtectedDataClient, object>> MinimalProjection =>
+        public static Func<LegalAppClient, object> CreateMinimal => MinimalProjection.Compile();
+        public static Expression<Func<LegalAppClient, object>> MinimalProjection =>
             legalAppClient => new
             {
                 legalAppClient.Id,

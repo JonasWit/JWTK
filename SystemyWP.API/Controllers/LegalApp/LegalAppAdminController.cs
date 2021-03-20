@@ -29,22 +29,26 @@ namespace SystemyWP.API.Controllers.LegalApp
             [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
-            await _portalLogger.Log(LogType.Access, $"Related users requested", UserId, Username);
+            await _portalLogger.Log(LogType.Access, $"Related users data requested", UserId, Username);
             var result = new List<object>();
-            
+
             try
             {
-                var adminUser = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-                var accessKey = context.AccessKeys
-                    .Include(x => x.Users)
-                    .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(UserId)));
+                //Get current admin who made request
+                var adminUser = context.Users
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefault(x => x.Id.Equals(UserId));
 
+                if (adminUser is null) throw new Exception("Error!");
+
+                //Get related users with the same data access key
                 var relatedUsers = context.Users
+                    .Include(x => x.AccessKey)
+                    .Where(x => x.AccessKey.Name.Equals(adminUser.AccessKey.Name))
                     .Include(x => x.DataAccess)
-                    // .AsEnumerable()
-                    // .Where(x => 
-                    //     accessKey != null && accessKey.Users.Any(y => y.Id.Equals(x.Id)))
                     .ToList();
+
+                if (relatedUsers.Count == 0) return Ok(result);
 
                 foreach (var relatedUser in relatedUsers)
                 {
@@ -57,14 +61,14 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Compile()
                         .Invoke(relatedUser));
                 }
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-
-            return Ok(result);
         }
 
         [HttpGet("update-legal-app-data-access")]
@@ -72,16 +76,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             [FromBody] LegalAppUpdateUserAccess form,
             [FromServices] AppDbContext context)
         {
-            
-            
-            
-            
-            
-            
-
-
             return Ok();
         }
-        
     }
 }

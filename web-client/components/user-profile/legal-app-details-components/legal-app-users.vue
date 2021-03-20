@@ -9,6 +9,9 @@
           <v-select class="px-4" no-data-text="Brak danych" clearable
                     :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
                     filled label="Wybierz Uzytkownika" return-object></v-select>
+          <div class="d-flex justify-center">
+            <v-btn text color="success" @click="reset">Odśwież Panel</v-btn>
+          </div>
         </div>
       </v-col>
       <v-col class="d-flex justify-center align-start" cols="12" md="3">
@@ -16,22 +19,17 @@
           <v-card-title>Dostęp do danych</v-card-title>
           <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
           </v-card-subtitle>
-          <div class="my-3" v-if="this.selectedUser">
-            <div class="px-4">
-              <h4>Lista Klientów</h4>
-            </div>
-            <div>
-              <v-treeview color="warning" item-children="cases" v-model="selection" :items="clients" item-key="key"
-                          :selection-type="selectionType" selectable return-object></v-treeview>
-
-
-            </div>
+          <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
             <div>
               <v-card-actions class="pt-0">
-                <v-btn text color="warning" @click="updateAccess">Zmień dostępy</v-btn>
-                <v-spacer/>
-                <v-btn text color="success" @click="reset">Odśwież</v-btn>
+                <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
+                                             button-text="Zapisz Zmiany"
+                                             message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
               </v-card-actions>
+            </div>
+            <div>
+              <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
+                          item-key="key" :selection-type="selectionType" selectable return-object></v-treeview>
             </div>
           </div>
         </div>
@@ -58,17 +56,30 @@ export default {
     loading: false,
     selectedUser: null,
     relatedUsers: [],
-    clients: [],
-    selection: [],
-    selectionType: 'leaf',
+    treeViewData: [],
+    treeViewSelection: [],
+    selectionType: 'independent',
   }),
   watch: {
     selectedUser() {
-      this.selectedClients = [];
-      this.selectedCases = [];
+      this.treeViewSelection = [];
+      // this.selectedClients = [];
+      // this.selectedCases = [];
     },
-    selection(selection) {
-      console.log('selected data:', selection);
+    treeViewSelection(selection) {
+      let clients = selection.filter(x => x.key.includes('client'));
+
+      const casesWithoutClient = selection
+        .filter(x => x.key.includes('case'))
+        .filter(cs => !clients.some(cl => cl.cases.some(c => c.id === cs.id)));
+      if (casesWithoutClient.length > 0) {
+        let clientsToPush = casesWithoutClient.map(caseWithoutClient => {
+          return this.treeViewData
+            .filter(item => item.key.includes('client'))
+            .find(cl => cl.cases.some(cs => cs.id === caseWithoutClient.id));
+        });
+        this.treeViewSelection = this.treeViewSelection.concat([...new Set(clientsToPush)]);
+      }
     }
   },
   beforeMount() {
@@ -78,58 +89,53 @@ export default {
     this.loading = false;
   },
   computed: {
-    normalUsers(state) {
+    normalUsers() {
       return this.relatedUsers
         .filter(x => x.role === "Client");
     },
-    selectedClientsCases() {
-      if (this.selectedClients) {
-        let availableCases = [];
-        this.clients.filter(client => this.selectedClients.some(clientId => clientId === client.id))
-          .forEach(client => availableCases.push(client.cases.map(c => ({
-            id: c.id,
-            name: c.name,
-            clientName: client.name
-          }))));
-        return [].concat.apply([], availableCases);
-      }
-    }
   },
   methods: {
     ...mapActions('popup', ['success']),
-    getRelatedUsers() {
-      return this.$axios.$get("/api/legal-app-admin/related-users")
+    async getRelatedUsers() {
+      await this.$axios.$get("/api/legal-app-admin/related-users")
         .then((relatedUsers) => {
           this.relatedUsers = relatedUsers;
         })
         .catch(() => {
         });
     },
-    getClients() {
-      console.log('Getting clients');
-      return this.$axios.$get("/api/legal-app-clients/admin/flat")
+    async getClients() {
+      await this.$axios.$get("/api/legal-app-clients/admin/flat")
         .then((clients) => {
           let response = clients.map(client => ({...client, key: `client-${client.id}`}));
           response.forEach(client => {
             client.cases = client.cases.map(c => ({...c, key: `case-${c.id}`}));
           });
-          this.clients = response;
+          this.treeViewData = response;
         })
         .catch(() => {
         });
     },
 
     reset() {
+      this.loading = true;
       Object.assign(this.$data, this.$options.data.call(this));
+      this.getRelatedUsers();
+      this.getClients();
+      this.loading = false;
     },
     async updateAccess() {
-      console.log('selected cases:', this.selectedCases);
-      console.log('selected clients:', this.selectedClients);
+      let accessToClients = this.treeViewSelection
+        .filter(x => x.key.includes('client'))
+        .map(x => x.id);
+      let accessToCases = this.treeViewSelection
+        .filter(x => x.key.includes('case'))
+        .map(x => x.id);
 
       const payload = {
         userId: this.selectedUser.id,
-        allowedClients: this.selectedClients && this.selectedClients.map(x => x),
-        allowedCases: this.selectedCases && this.selectedCases.map(x => x.id),
+        allowedCases: accessToCases,
+        allowedClients: accessToClients
       };
 
       console.log('payload:', payload);
