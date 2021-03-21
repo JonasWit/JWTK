@@ -1,7 +1,7 @@
 <template>
   <div>
     <video id="video" :src="video" style="max-height: 700px; height: 100vh; min-width: 100%; object-fit: cover"
-           autoplay="true" loop="true"></video>
+           autoplay="true" loop="true" muted></video>
     <div style="position:absolute; top: 10%; z-index: 1; padding: 25px;">
       <div>
         <h1>Witaj na stronie Systemy Wspomagania Pracy</h1>
@@ -24,7 +24,7 @@ export default {
     video: `${require('~/assets/images/home-page-video.mp4')}`
   }),
 
-}
+};
 </script>
 
 <style scoped>

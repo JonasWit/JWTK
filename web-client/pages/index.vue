@@ -1,14 +1,17 @@
 <template>
   <div>
     <home-welcome/>
-    <home-main-content/>
+  
+
   </div>
 </template>
 
 <script>
 import HomeMainContent from "~/components/home-page/home-main-content";
+import HomeProducts from "@/components/home-page/home-products-kancelaria";
+import HomePricing from "@/components/home-page/home-pricing";
 
 export default {
-  components: {HomeMainContent}
+  components: {HomePricing, HomeProducts, HomeMainContent}
 };
 </script>
