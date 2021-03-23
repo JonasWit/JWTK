@@ -32,6 +32,10 @@ export default {
         return "warning--text";
       } else if (type === "PortalAdminAction") {
         return "warning--text";
+      } else if (type === "AccessViolation") {
+        return "error--text";
+      } else if (type === "Exception") {
+        return "error--text";
       } else {
         return "success--text";
       }

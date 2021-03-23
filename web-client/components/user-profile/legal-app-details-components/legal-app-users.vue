@@ -25,11 +25,16 @@
                 <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
                                              button-text="Zapisz Zmiany"
                                              message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
+
+                <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Pełny Dostęp"
+                                             button-text="Pełny Dostęp"
+                                             message="Uzytkownik otrzyma dostęp do wszyskich danych które są obecnie wprowadzone!"/>
               </v-card-actions>
             </div>
             <div>
               <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
-                          item-key="key" :selection-type="selectionType" selectable return-object></v-treeview>
+                          item-key="key" item-text="displayText" :selection-type="selectionType" selectable
+                          return-object></v-treeview>
             </div>
           </div>
         </div>
@@ -49,10 +54,12 @@
 <script>
 
 import {mapActions} from "vuex";
+import {LegalAppDataAccessItems} from "@/data/enums";
 
 export default {
   name: "legal-app-users",
   data: () => ({
+    displayTextSize: 20,
     loading: false,
     selectedUser: null,
     relatedUsers: [],
@@ -61,24 +68,53 @@ export default {
     selectionType: 'independent',
   }),
   watch: {
-    selectedUser() {
-      this.treeViewSelection = [];
-      // this.selectedClients = [];
-      // this.selectedCases = [];
+    selectedUser(selection) {
+      if (selection) {
+        this.treeViewSelection = [];
+        if (this.treeViewData.length > 0) {
+          if (selection.dataAccess) {
+            if (selection.dataAccess.length > 0) {
+              const casesToSelect = selection.dataAccess
+                .filter(x => x.restrictedType === LegalAppDataAccessItems.CASE);
+              const clientsToSelect = selection.dataAccess
+                .filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT);
+
+              let itemsToPush = [];
+
+              this.treeViewData.forEach(cl => {
+                cl.cases.forEach(cs => {
+                  if (casesToSelect.some(z => z.itemId === cs.id)) {
+                    itemsToPush.push(cs);
+                  }
+                });
+              });
+
+              this.treeViewData.forEach(cl => {
+                if (clientsToSelect.some(z => z.itemId === cl.id)) {
+                  itemsToPush.push(cl);
+                }
+              });
+              this.treeViewSelection = this.treeViewSelection.concat([...new Set(itemsToPush)]);
+            }
+          }
+        }
+      }
     },
     treeViewSelection(selection) {
-      let clients = selection.filter(x => x.key.includes('client'));
+      if (this.selectedUser) {
+        let clients = selection.filter(x => x.key.includes('client'));
 
-      const casesWithoutClient = selection
-        .filter(x => x.key.includes('case'))
-        .filter(cs => !clients.some(cl => cl.cases.some(c => c.id === cs.id)));
-      if (casesWithoutClient.length > 0) {
-        let clientsToPush = casesWithoutClient.map(caseWithoutClient => {
-          return this.treeViewData
-            .filter(item => item.key.includes('client'))
-            .find(cl => cl.cases.some(cs => cs.id === caseWithoutClient.id));
-        });
-        this.treeViewSelection = this.treeViewSelection.concat([...new Set(clientsToPush)]);
+        const casesWithoutClient = selection
+          .filter(x => x.key.includes('case'))
+          .filter(cs => !clients.some(cl => cl.cases.some(c => c.id === cs.id)));
+        if (casesWithoutClient.length > 0) {
+          let clientsToPush = casesWithoutClient.map(caseWithoutClient => {
+            return this.treeViewData
+              .filter(item => item.key.includes('client'))
+              .find(cl => cl.cases.some(cs => cs.id === caseWithoutClient.id));
+          });
+          this.treeViewSelection = this.treeViewSelection.concat([...new Set(clientsToPush)]);
+        }
       }
     }
   },
@@ -105,18 +141,25 @@ export default {
         });
     },
     async getClients() {
+      this.loading = true;
       await this.$axios.$get("/api/legal-app-clients/admin/flat")
         .then((clients) => {
           let response = clients.map(client => ({...client, key: `client-${client.id}`}));
           response.forEach(client => {
-            client.cases = client.cases.map(c => ({...c, key: `case-${c.id}`}));
+            client.displayText = `${client.name.substring(0, this.displayTextSize)}...`;
+            client.cases = client.cases.map(c => ({
+              ...c, key: `case-${c.id}`,
+              displayText: `${c.name.substring(0, this.displayTextSize)}...`
+            }));
           });
           this.treeViewData = response;
         })
         .catch(() => {
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
-
     reset() {
       this.loading = true;
       Object.assign(this.$data, this.$options.data.call(this));
@@ -125,6 +168,7 @@ export default {
       this.loading = false;
     },
     async updateAccess() {
+      this.loading = true;
       let accessToClients = this.treeViewSelection
         .filter(x => x.key.includes('client'))
         .map(x => x.id);
@@ -138,15 +182,16 @@ export default {
         allowedClients: accessToClients
       };
 
-      console.log('payload:', payload);
-
-      // await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
-      //   .then(() => {
-      //     this.$notifier.showSuccessMessage("Zmieniono dotępy!");
-      //   })
-      //   .catch(() => {
-      //     this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-      //   });
+      await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
+        .then(() => {
+          this.$notifier.showSuccessMessage("Zmieniono dotępy!");
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.getRelatedUsers();
+          this.getClients();
+        })
+        .catch(() => {
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        });
     },
   }
 };

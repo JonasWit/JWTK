@@ -64,7 +64,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import {hasOccurrences} from "@/data/functions";
-import {formatDate} from "@/data/dateExtensions";
+import {formatDate} from "@/data/date-extensions";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,

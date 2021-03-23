@@ -35,7 +35,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import {addDays, formatDate} from "@/data/dateExtensions";
+import {addDays, formatDate} from "@/data/date-extensions";
 
 const searchItemFactory = (id, exp) => ({
   id,
