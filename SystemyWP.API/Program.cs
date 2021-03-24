@@ -90,18 +90,22 @@ namespace SystemyWP.API
                     UpdatedBy = "portaladmin1"
                 };
 
-                for (int j = 0; j < random.Next(1, 20); j++)
+                if (i % 2 == 0)
                 {
-                    newClient.LegalAppCases.Add( new LegalAppCase
+                    for (int j = 0; j < random.Next(1, 20); j++)
                     {
-                        Name = $"Test Case - {j} - Lorem ipsum dolor sit amet",
-                        Signature = $"XYZ-{j}-XYZ-{j}",
-                        Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                        CreatedBy = "portaladmin1",
-                        UpdatedBy = "portaladmin1"
-                    });
+                        newClient.LegalAppCases.Add(new LegalAppCase
+                        {
+                            Name = $"Test Case - {j} - Lorem ipsum dolor sit amet",
+                            Signature = $"XYZ-{j}-XYZ-{j}",
+                            Description =
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            CreatedBy = "portaladmin1",
+                            UpdatedBy = "portaladmin1"
+                        });
+                    }
                 }
-                
+
                 if (i % 2 == 0)
                 {
                     newClient.DataAccessKey = "access-key-1";

@@ -8,6 +8,7 @@ using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
+using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -71,11 +72,73 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
 
-        [HttpGet("update-legal-app-data-access")]
+        [HttpPost("update-legal-app-data-access")]
         public async Task<IActionResult> UpdateLegalAppDataAccess(
-            [FromBody] LegalAppUpdateUserAccess form,
+            [FromBody] LegalAppUpdateUserAccessForm form,
             [FromServices] AppDbContext context)
         {
+            try
+            {
+                var requester = context.Users
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefault(x => x.Id.Equals(UserId));
+
+                var user = context.Users
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefault(x => x.Id.Equals(form.UserId));
+
+                if (requester is null || 
+                    user is null || 
+                    requester.AccessKey is null || 
+                    user.AccessKey is null)
+                {
+                    return BadRequest();
+                }
+
+                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
+                {
+                    await _portalLogger.Log(
+                        LogType.AccessViolation, 
+                        $"User {Username} wanted to change access to data with but Access Keys did not match!",
+                        UserId, 
+                        UserEmail);
+                    return BadRequest();
+                }
+                
+                context.DataAccesses.RemoveRange(
+                    context.DataAccesses
+                        .Where(x => x.UserId.Equals(user.Id)));
+
+                foreach (var allowedClient in form.AllowedClients)
+                {
+                    context.Add(new DataAccess
+                    {
+                        RestrictedType = RestrictedType.LegalAppClient,
+                        ItemId = allowedClient,
+                        UserId = user.Id
+                    });
+                }
+                
+                foreach (var allowedCase in form.AllowedCases)
+                {
+                    context.Add(new DataAccess
+                    {
+                        RestrictedType = RestrictedType.LegalAppCase,
+                        ItemId = allowedCase,
+                        UserId = user.Id,
+                        CreatedBy = UserId,
+                        UpdatedBy = UserId
+                    });
+                }
+
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
+                return BadRequest(ex.Message);
+            }
+            
             return Ok();
         }
     }

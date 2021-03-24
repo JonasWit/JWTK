@@ -3,44 +3,51 @@
     <v-row v-if="!loading" justify="space-around">
       <v-col class="d-flex justify-center align-start" cols="12" md="3">
         <div>
-          <v-card-title>Uzytkownicy</v-card-title>
-          <v-card-subtitle>Jako Administratom możesz zarządzać dostępem do danych dla poszczególnych użytkowników
-          </v-card-subtitle>
-          <v-select class="px-4" no-data-text="Brak danych" clearable
-                    :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
-                    filled label="Wybierz Uzytkownika" return-object></v-select>
-          <div class="d-flex justify-center">
-            <v-btn text color="success" @click="reset">Odśwież Panel</v-btn>
-          </div>
+          <v-card>
+            <v-card-title class="mb-2">Uzytkownicy</v-card-title>
+            <v-card-subtitle>Jako Administratom możesz zarządzać dostępem do danych dla poszczególnych użytkowników
+            </v-card-subtitle>
+            <v-select class="px-4" no-data-text="Brak danych" clearable
+                      :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
+                      filled label="Wybierz Uzytkownika" return-object></v-select>
+            <div class="d-flex justify-center">
+              <v-btn class="mb-1" text color="success" @click="reset">Odśwież Panel</v-btn>
+            </div>
+          </v-card>
         </div>
       </v-col>
       <v-col class="d-flex justify-center align-start" cols="12" md="3">
         <div>
-          <v-card-title>Dostęp do danych</v-card-title>
-          <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
-          </v-card-subtitle>
-          <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
-            <div>
-              <v-card-actions class="pt-0">
-                <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
-                                             button-text="Zapisz Zmiany"
-                                             message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
+          <v-card>
+            <v-card-title class="mb-2">Dostęp do danych</v-card-title>
+            <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
+            </v-card-subtitle>
+            <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
+              <div>
+                <v-card-actions class="pt-0">
+                  <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
+                                               button-text="Zapisz Zmiany"
+                                               message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
 
-                <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Pełny Dostęp"
-                                             button-text="Pełny Dostęp"
-                                             message="Uzytkownik otrzyma dostęp do wszyskich danych które są obecnie wprowadzone!"/>
-              </v-card-actions>
+                  <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Pełny Dostęp"
+                                               button-text="Pełny Dostęp"
+                                               message="Uzytkownik otrzyma dostęp do wszyskich danych które są obecnie wprowadzone!"/>
+                </v-card-actions>
+              </div>
+              <div>
+                <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
+                            item-key="key" item-text="displayText" :selection-type="selectionType" selectable
+                            return-object></v-treeview>
+              </div>
             </div>
-            <div>
-              <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
-                          item-key="key" item-text="displayText" :selection-type="selectionType" selectable
-                          return-object></v-treeview>
+            <div class="px-4" v-else>
+              <p class="success--text">Wybierz Użytkownika by zmienić jego dostęp do danych </p>
             </div>
-          </div>
+          </v-card>
         </div>
       </v-col>
     </v-row>
-    <v-row v-else justify="space-around">
+    <v-row v-else>
       <v-col class="d-flex justify-center align-start" cols="12" md="3">
         <v-skeleton-loader type="card, actions"></v-skeleton-loader>
       </v-col>
@@ -53,16 +60,15 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import {LegalAppDataAccessItems} from "@/data/enums";
 
 export default {
-  name: "legal-app-users",
+  name: "legal-app-user-access",
   data: () => ({
     displayTextSize: 20,
     loading: false,
     selectedUser: null,
-    relatedUsers: [],
     treeViewData: [],
     treeViewSelection: [],
     selectionType: 'independent',
@@ -125,21 +131,11 @@ export default {
     this.loading = false;
   },
   computed: {
-    normalUsers() {
-      return this.relatedUsers
-        .filter(x => x.role === "Client");
-    },
+    ...mapGetters('profile-panel-legal-app-store', ['relatedUsers', 'normalUsers']),
   },
   methods: {
     ...mapActions('popup', ['success']),
-    async getRelatedUsers() {
-      await this.$axios.$get("/api/legal-app-admin/related-users")
-        .then((relatedUsers) => {
-          this.relatedUsers = relatedUsers;
-        })
-        .catch(() => {
-        });
-    },
+    ...mapActions('profile-panel-legal-app-store', ['getRelatedUsers']),
     async getClients() {
       this.loading = true;
       await this.$axios.$get("/api/legal-app-clients/admin/flat")
@@ -163,12 +159,12 @@ export default {
     reset() {
       this.loading = true;
       Object.assign(this.$data, this.$options.data.call(this));
-      this.getRelatedUsers();
       this.getClients();
       this.loading = false;
     },
     async updateAccess() {
       this.loading = true;
+
       let accessToClients = this.treeViewSelection
         .filter(x => x.key.includes('client'))
         .map(x => x.id);
@@ -181,13 +177,12 @@ export default {
         allowedCases: accessToCases,
         allowedClients: accessToClients
       };
-
       await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
           Object.assign(this.$data, this.$options.data.call(this));
-          this.getRelatedUsers();
           this.getClients();
+          this.loading = false;
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");

@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms
 {
-    public class LegalAppUpdateUserAccess
+    public class LegalAppUpdateUserAccessForm
     {
         public string UserId { get; set; }
         public List<int> AllowedClients { get; set; } = new List<int>();

@@ -21,6 +21,7 @@ namespace SystemyWP.API.Controllers.BaseClases
 
         protected string UserId => GetClaim(ClaimTypes.NameIdentifier);
         protected string Username => GetClaim(ClaimTypes.Name);
+        protected string UserEmail => GetClaim(ClaimTypes.Email);
         protected string Role => GetClaim(SystemyWPConstants.Claims.Role);
 
         private string GetClaim(string claimType) => User.Claims

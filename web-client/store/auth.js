@@ -1,15 +1,10 @@
-﻿const initState = () => ({
+﻿import {ROLES} from "@/data/enums";
+
+const initState = () => ({
   profile: null,
 });
 
 export const state = initState;
-
-export const ROLES = {
-  INVITED: "Invited",
-  CLIENT: "Client",
-  CLIENT_ADMIN: "ClientAdmin",
-  PORTAL_ADMIN: "PortalAdmin",
-};
 
 export const APP_ACCESS = {
   LEGAL_APP: "LegalApp",

@@ -63,7 +63,7 @@ const config = {
       prefix: 'prof'
     },
     {
-      path: '~/components/user-profile/legal-app-details-components',
+      path: '~/components/user-profile/legal-app-access-details-components',
       prefix: 'prof'
     },
     {

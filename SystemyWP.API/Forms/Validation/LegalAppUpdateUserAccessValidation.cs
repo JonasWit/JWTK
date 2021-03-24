@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Validation
 {
-    public class LegalAppUpdateUserAccessValidation: AbstractValidator<LegalAppUpdateUserAccess>
+    public class LegalAppUpdateUserAccessValidation: AbstractValidator<LegalAppUpdateUserAccessForm>
     {
         public LegalAppUpdateUserAccessValidation()
         {

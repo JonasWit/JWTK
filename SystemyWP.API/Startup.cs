@@ -6,6 +6,8 @@ using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +83,12 @@ namespace SystemyWP.API
 
             services.AddDataProtection()
                 .SetApplicationName("SystemyWP")
+                .UseCryptographicAlgorithms(
+                    new AuthenticatedEncryptorConfiguration()
+                    {
+                        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+                        ValidationAlgorithm = ValidationAlgorithm.HMACSHA512
+                    })
                 .PersistKeysToDbContext<ApiIdentityDbContext>();
 
             //     services.AddDbContext<ApiIdentityDbContext>(config =>

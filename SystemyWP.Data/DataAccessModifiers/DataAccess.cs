@@ -3,7 +3,7 @@ using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.Data.DataAccessModifiers
 {
-    public class DataAccess : BaseModel<int>
+    public class DataAccess : BaseModel<long>
     {
         public RestrictedType RestrictedType { get; set; }
         public int ItemId { get; set; }
