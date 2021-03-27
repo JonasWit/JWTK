@@ -2,13 +2,16 @@
   <v-row>
     <ul class="nav-list d-flex justify-space-between">
       <li class="nav-item">
-        <nuxt-link to="/home-main-content">O Nas</nuxt-link>
+        <nuxt-link to="/">Home</nuxt-link>
       </li>
       <li class="nav-item">
-        <nuxt-link to="/home-main-content">Oferta</nuxt-link>
+        <nuxt-link to="/home-about">O Nas</nuxt-link>
       </li>
       <li class="nav-item">
-        <nuxt-link to="/home-products-kancelaria">Produkty</nuxt-link>
+        <nuxt-link to="/home-products">Oferta</nuxt-link>
+      </li>
+      <li class="nav-item">
+        <nuxt-link to="/home-legal-app">Twoja Kancelaria</nuxt-link>
       </li>
       <li class="nav-item">
         <nuxt-link to="/home-contact">Kontakt</nuxt-link>
@@ -35,7 +38,7 @@ export default {
 }
 
 .nav-item {
-  margin: 0 10px;
+  margin: 0 20px;
 }
 
 .nav-item a {

@@ -1,4 +1,6 @@
 * Home page - prizing page
 Photo by <a href="https://unsplash.com/@stilclassics?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">STIL</a> on <a href="/s/photos/business?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-  
-  
+ 
+* background - oferta
+<a href='https://www.freepik.com/vectors/background'>Background vector created by freepik - www.freepik.com</a> - background  
+
