@@ -8,35 +8,32 @@
 
 <form method="post">
     <input type="hidden" asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl">
-    <div class="field">
+    <div>
         <label>Nazwa Użytkowika</label>
-        <input asp-for="Form.Username"></input>
+        <input asp-for="Form.Username"/>
         <span asp-validation-for="Form.Username"></span>
     </div>
-    <div class="field">
+    <div>
         <label>Hasło</label>
-        <input asp-for="Form.Password"></input>
+        <input asp-for="Form.Password"/>
         <span asp-validation-for="Form.Password"></span>
     </div>
     @if (Model.CustomErrors.Count > 0)
     {
-        <div class="field">
+        <div>
             @foreach (var e in Model.CustomErrors)
             {
                 <div class="error">@e</div>
             }
         </div>
     }
-    <div class="field flex-row">
+    <div >
         <button type="submit">Zaloguj</button>
     </div>
     <hr>
-    <div class="form-group">
+    <div >
         <p>
             <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
         </p>
     </div>
-    @* <div class="field flex-row"> *@
-    @*     <a asp-page="/Account/Register" asp-route-returnUrl="@Model.Form.ReturnUrl">Create Account</a> *@
-    @* </div> *@
 </form>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SystemyWP.API.Pages.Account
@@ -10,5 +11,6 @@ namespace SystemyWP.API.Pages.Account
         {
             
         }
+        public IActionResult OnPostAsync() => RedirectToPage("./Login");
     }
 }

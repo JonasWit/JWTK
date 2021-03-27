@@ -27,7 +27,9 @@ namespace SystemyWP.API.Pages.Account
         {
             if (string.IsNullOrEmpty(Form.ReturnUrl))
             {
-                Form.ReturnUrl = env.IsDevelopment() ? @"https://localhost:3000/" : @"https://portal.systemywp.pl";
+                Form.ReturnUrl = env.IsDevelopment() ? 
+                    @"https://localhost:3000/" : 
+                    @"https://portal.systemywp.pl";
             }
  
             if (!ModelState.IsValid)
