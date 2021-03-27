@@ -7,6 +7,7 @@ const config = {
   publicRuntimeConfig: {
     auth: {
       loginPath: process.env.LOGIN_PATH,
+      changePassPath: process.env.PASSWORD_CHANGE_PATH,
       logoutPath: process.env.LOGOUT_PATH,
     },
     axios: {

@@ -28,10 +28,15 @@
         </div>
     }
     <div class="field flex-row">
-        <button type="submit">Log In</button>
+        <button type="submit">Zaloguj</button>
     </div>
     <hr>
-    <div class="field flex-row">
-        <a asp-page="/Account/Register" asp-route-returnUrl="@Model.Form.ReturnUrl">Create Account</a>
+    <div class="form-group">
+        <p>
+            <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
+        </p>
     </div>
+    @* <div class="field flex-row"> *@
+    @*     <a asp-page="/Account/Register" asp-route-returnUrl="@Model.Form.ReturnUrl">Create Account</a> *@
+    @* </div> *@
 </form>

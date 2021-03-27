@@ -26,8 +26,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                DevIdentitySeed(host);
-                DevDataSeedLegalApp(host);
+                //DevIdentitySeed(host);
+                //DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
@@ -140,9 +140,9 @@ namespace SystemyWP.API
                 identityContext.Database.EnsureDeleted();
                 identityContext.Database.EnsureCreated();
 
-                var databaseCreator =
-                    (RelationalDatabaseCreator) context.Database.GetService<IDatabaseCreator>();
-                databaseCreator.CreateTables();
+                 var databaseCreator =
+                     (RelationalDatabaseCreator) context.Database.GetService<IDatabaseCreator>();
+                 databaseCreator.CreateTables();
             }
 
             //Seed access keys
@@ -164,7 +164,8 @@ namespace SystemyWP.API
                 var clientAdmin = new IdentityUser($"clientadmin{i}")
                 {
                     Email = $"clientadmin{i}@test.com",
-                    LockoutEnabled = true
+                    LockoutEnabled = true,
+                    EmailConfirmed = true
                 };
                 userManager.CreateAsync(clientAdmin, "password").GetAwaiter().GetResult();
                 userManager
@@ -218,7 +219,8 @@ namespace SystemyWP.API
                 var testClient = new IdentityUser($"client{i}")
                 {
                     Email = $"client{i}@test.com",
-                    LockoutEnabled = true
+                    LockoutEnabled = true,
+                    EmailConfirmed = true
                 };
                 userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
                 userManager
@@ -250,11 +252,35 @@ namespace SystemyWP.API
             }
 
             //Seed Portal Admins
+            
+            var portalAdmin = new IdentityUser($"pat")
+            {
+                Email = $"witek.j87@gmail.com",
+                EmailConfirmed = true
+            };
+            
+            userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
+            userManager
+                .AddClaimsAsync(portalAdmin, new[]
+                {
+                    SystemyWPConstants.Claims.LegalAppAccessClaim,
+                    SystemyWPConstants.Claims.PortalAdminClaim
+                })
+                .GetAwaiter()
+                .GetResult();
+
+            context.Add(new User
+            {
+                AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1")),
+                Id = portalAdmin.Id,
+            });
+            
             for (var i = 1; i < 2; i++)
             {
-                var portalAdmin = new IdentityUser($"portaladmin{i}")
+                portalAdmin = new IdentityUser($"portaladmin{i}")
                 {
-                    Email = $"portaladmin{i}@test.com"
+                    Email = $"portaladmin{i}@test.com",
+                    EmailConfirmed = true
                 };
                 userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
                 userManager

@@ -2,6 +2,7 @@
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace SystemyWP.API.Controllers
     {
 
         [HttpGet("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout(string logoutId, 
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,

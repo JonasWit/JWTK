@@ -29,5 +29,19 @@ namespace SystemyWP.API.Services.Email
 
             return _client.SendEmailAsync(msg);
         }
+        
+        public Task<Response> SendEmailAsync(string email, string title, string content)
+        {
+            var htmlContent = content;
+            var msg = MailHelper.CreateSingleEmail(
+                new EmailAddress(_optionsMonitor.CurrentValue.From),
+                new EmailAddress(email),
+                title
+                , "",
+                htmlContent
+            );
+
+            return _client.SendEmailAsync(msg);
+        }
     }
 }

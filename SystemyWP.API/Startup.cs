@@ -60,8 +60,15 @@ namespace SystemyWP.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (_env.IsDevelopment()) app.UseDeveloperExceptionPage();
-            
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
             //todo: add fallback to error page
 
             app.UseCors(NuxtJsApp);
@@ -91,9 +98,6 @@ namespace SystemyWP.API
                     })
                 .PersistKeysToDbContext<ApiIdentityDbContext>();
 
-            //     services.AddDbContext<ApiIdentityDbContext>(config =>
-            //         config.UseInMemoryDatabase("DevIdentity"));
-
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
@@ -111,11 +115,11 @@ namespace SystemyWP.API
                     }
                     else
                     {
-                        options.Password.RequireDigit = false;
-                        options.Password.RequiredLength = 8;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequireDigit = true;
+                        options.Password.RequiredLength = 12;
+                        options.Password.RequireLowercase = true;
+                        options.Password.RequireUppercase = true;
+                        options.Password.RequireNonAlphanumeric = true;
                         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                         options.Lockout.MaxFailedAccessAttempts = 3;
                         options.Lockout.AllowedForNewUsers = true;
@@ -124,6 +128,9 @@ namespace SystemyWP.API
                 .AddErrorDescriber<PolishIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
                 .AddDefaultTokenProviders();
+            
+            services.Configure<DataProtectionTokenProviderOptions>(o =>
+                o.TokenLifespan = TimeSpan.FromHours(3));
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
@@ -136,7 +143,7 @@ namespace SystemyWP.API
                 config.LogoutPath = "/api/auth/logout";
                 config.Cookie.Domain = _configuration["CookieDomain"];
                 config.Cookie.Name = "systemywp_id";
-                config.ExpireTimeSpan = TimeSpan.FromHours(2);
+                config.ExpireTimeSpan = TimeSpan.FromHours(5);
             });
 
             services.AddAuthorization(options =>

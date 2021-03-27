@@ -55,6 +55,11 @@ export const actions = {
     const returnUrl = encodeURIComponent(location.href);
     window.location = `${this.$config.auth.loginPath}?returnUrl=${returnUrl}`;
   },
+  changePassword() {
+    if (process.server) return;
+    const returnUrl = encodeURIComponent(location.href);
+    window.location = `${this.$config.auth.changePassPath}?returnUrl=${returnUrl}`;
+  },
   logout() {
     if (process.server) return;
     window.location = this.$config.auth.logoutPath;

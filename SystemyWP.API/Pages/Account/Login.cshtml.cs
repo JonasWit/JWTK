@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace SystemyWP.API.Pages.Account
 {
@@ -21,8 +22,14 @@ namespace SystemyWP.API.Pages.Account
         }
 
         public async Task<IActionResult> OnPostAsync(
-            [FromServices] SignInManager<IdentityUser> signInManager)
+            [FromServices] SignInManager<IdentityUser> signInManager,
+            [FromServices] IHostEnvironment env)
         {
+            if (string.IsNullOrEmpty(Form.ReturnUrl))
+            {
+                Form.ReturnUrl = env.IsDevelopment() ? @"https://localhost:3000/" : @"https://portal.systemywp.pl";
+            }
+ 
             if (!ModelState.IsValid)
             {
                 return Page(); 

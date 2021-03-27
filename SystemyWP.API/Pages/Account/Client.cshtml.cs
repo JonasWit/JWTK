@@ -23,6 +23,9 @@ namespace SystemyWP.API.Pages.Account
                 ErrorMessage = "Niepoprawna nazwa użytkownika")]
             public string Username { get; set; }
             [Required]
+            [StringLength(25, ErrorMessage = "Hasło musi mieć od 12 do 25 znaków", MinimumLength = 12)]
+            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
+                ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
             
@@ -67,7 +70,7 @@ namespace SystemyWP.API.Pages.Account
             {
                 user.UserName = Form.Username;
                 user.EmailConfirmed = true;
-         
+                
                 userManager.UpdateAsync(user);
                 
                 await userManager.RemoveFromRoleAsync(user, SystemyWPConstants.Roles.Invited);

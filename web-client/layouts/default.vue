@@ -3,7 +3,6 @@
     <client-only>
       <cookie-consent/>
     </client-only>
-    <popup/>
     <snackbar-notifier/>
     <v-app-bar app>
 
@@ -48,10 +47,16 @@
                     Moja Kancelaria
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item @click="changePassword">
+                  <v-list-item-title>
+                    <v-icon left>mdi-lock-reset</v-icon>
+                    Zmiana Hasła
+                  </v-list-item-title>
+                </v-list-item>
                 <v-list-item @click="logout">
                   <v-list-item-title>
                     <v-icon left>mdi-logout</v-icon>
-                    Logout
+                    Wyloguj
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -61,7 +66,7 @@
         <template v-slot:forbidden="{login}">
           <v-btn class="d-none d-md-flex" outlined @click="login">
             <v-icon left>mdi-login</v-icon>
-            Log In
+            Zaloguj
           </v-btn>
           <v-btn class="d-flex d-md-none" icon @click="login">
             <v-icon>mdi-login</v-icon>
@@ -133,12 +138,7 @@ export default {
     ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin', 'authenticated']),
   },
   methods: {
-    ...mapActions('auth', ['logout', 'initialize']),
-    defaultTest() {
-      return this.$axios.$get('/api/test/testAll')
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-    }
+    ...mapActions('auth', ['logout', 'initialize', 'changePassword']),
   }
 };
 </script>
