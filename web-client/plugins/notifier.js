@@ -1,6 +1,6 @@
 ﻿export default ({app, store}, inject) => {
   inject('notifier', {
-    showSuccessMessage(content) {
+    showSuccessMessage(content = '') {
       store.commit('snackbar/showSuccessMessage', content);
     },
     showWarningMessage(content) {

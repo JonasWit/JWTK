@@ -3,7 +3,7 @@
     <client-only>
       <cookie-consent/>
     </client-only>
-    <snackbar-notifier/>
+    <snackbar/>
     <v-app-bar app>
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">

@@ -7,18 +7,15 @@
 
 <script>
 export default {
-  name: "snackbar-notifier",
-  data() {
-    return {
-      show: false,
-      message: '',
-      color: '',
-      icon: ''
-    };
-  },
-
+  data: () => ({
+    show: false,
+    message: '',
+    color: '',
+    icon: ''
+  }),
   created() {
     this.$store.subscribe((mutation, state) => {
+      console.log("Error message in component");
       if (mutation.type === 'snackbar/showMessage' ||
         mutation.type === 'snackbar/showSuccessMessage' ||
         mutation.type === 'snackbar/showWarningMessage' ||

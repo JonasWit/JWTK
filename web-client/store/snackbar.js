@@ -13,11 +13,11 @@ export const mutations = {
   showWarningMessage(state, payload) {
     state.content = payload;
     state.color = 'warning';
-    state.icon = 'mdi-alert-circle';
+    state.icon = 'mdi-alert-outline';
   },
   showErrorMessage(state, payload) {
     state.content = payload;
     state.color = 'error';
-    state.icon = 'mdi-alert-circle';
+    state.icon = 'mdi-alert-decagram-outline';
   }
 };
