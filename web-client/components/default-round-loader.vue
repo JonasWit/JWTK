@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "account-removal"
+  name: "default-round-loader"
 };
 </script>
 

@@ -1,15 +1,16 @@
 ﻿<template>
   <div>
-    <v-row v-if="!loading" justify="space-around">
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
+    <v-row v-if="!loading">
+      <v-col class="d-flex align-start" cols="12" md="6">
         <div>
-          <v-card>
-            <v-card-title class="mb-2">Powiązani Użytkownicy</v-card-title>
+          <v-card elevation="0">
+            <v-card-title class="pb-0">Powiązani</v-card-title>
+            <v-card-title class="pt-0 mb-2">Użytkownicy</v-card-title>
             <v-card-subtitle>Jako Administrator możesz zarządzać dostępem do danych dla poszczególnych użytkowników
             </v-card-subtitle>
             <v-list style="max-height: 300px" class="overflow-y-auto">
               <v-list-item-group v-model="selectedUser" return-object>
-                <v-list-item v-for="(user, i) in relatedUsers" :key="i">
+                <v-list-item v-for="(user, i) in relatedUsers" :key="i" :value="user">
                   <user-header :image-url="user.image" :username="user.username" :role="user.role" :link="false"
                                size="36"/>
                 </v-list-item>
@@ -18,14 +19,14 @@
           </v-card>
         </div>
       </v-col>
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
+      <v-col class="d-flex align-start" cols="12" md="6">
         <div>
-          <v-card>
+          <v-card elevation="0">
             <v-card-title class="mb-2">Dane Użytkownika</v-card-title>
             <v-card-subtitle>Statystyki i informacje o powiązanym użytkowniku
             </v-card-subtitle>
-            <div class="my-3" v-if="selectedUser >= 0">
-              <v-simple-table dense>
+            <div class="my-3" v-if="selectedUser">
+              <v-simple-table class="mb-3" dense>
                 <template v-slot:default>
                   <thead>
                   <tr>
@@ -45,6 +46,14 @@
                   </tbody>
                 </template>
               </v-simple-table>
+              <div v-if="selectedUser.lastLogin">
+                <v-card-text>
+                  <div class="subtitle-1">
+                    Ostatnie Logowanie:
+                  </div>
+                  <div>{{ formatDate(selectedUser.lastLogin) }}</div>
+                </v-card-text>
+              </div>
             </div>
             <div class="px-4" v-else>
               <p class="success--text">Wybierz Użytkownika z listy by zobaczyć szczegóły</p>
@@ -54,11 +63,8 @@
       </v-col>
     </v-row>
     <v-row v-else justify="space-around">
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
-        <v-skeleton-loader type="card, actions"></v-skeleton-loader>
-      </v-col>
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
-        <v-skeleton-loader type="card, actions"></v-skeleton-loader>
+      <v-col class="d-flex justify-center align-center mt-2" cols="12">
+        <v-progress-circular :size="50" :width="7" indeterminate/>
       </v-col>
     </v-row>
   </div>
@@ -68,6 +74,7 @@
 import {mapGetters} from "vuex";
 import UserHeader from "@/components/user-header";
 import {LegalAppDataAccessItems} from "@/data/enums";
+import {formatDate} from "@/data/date-extensions";
 
 export default {
   name: "legal-app-user-data",
@@ -76,25 +83,22 @@ export default {
     selectedUser: null,
     loading: false
   }),
-  watch: {
-    selectedUser(selection) {
-      console.log(selection);
-    }
-  },
-  beforeMount() {
-  },
   computed: {
     ...mapGetters('profile-panel-legal-app-store', ['relatedUsers']),
     countAllowedClients() {
       if (!this.selectedUser) return 0;
-      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT);
+      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT).length;
     },
     countAllowedCases() {
       if (!this.selectedUser) return 0;
-      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CASE);
+      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CASE).length;
     }
   },
-  methods: {}
+  methods: {
+    formatDate(date) {
+      return formatDate(date);
+    },
+  }
 };
 </script>
 

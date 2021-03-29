@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.Abstractions;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +38,8 @@ namespace SystemyWP.Data.Models.General
         public string REGON { get; set; }
         [ProtectedPersonalData]
         public string KRS { get; set; }
+        
+        public DateTime? LastLogin  { get; set; }  
 
         public List<DataAccess> DataAccess { get; set; } =
             new List<DataAccess>();

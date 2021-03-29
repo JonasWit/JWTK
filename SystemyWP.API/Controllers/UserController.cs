@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
@@ -14,6 +15,7 @@ using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,10 +43,12 @@ namespace SystemyWP.API.Controllers
 
             if (user is not null)
             {
+                user.LastLogin = DateTime.UtcNow;
                 user.AccessKey = context.AccessKeys
                     .Include(x => x.Users)
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
+                await context.SaveChangesAsync();
                 return Ok(UserProjections
                     .UserProjection(Username, Role, LegalAppAllowed)
                     .Compile()
@@ -54,6 +58,7 @@ namespace SystemyWP.API.Controllers
             var newUser = new User
             {
                 Id = UserId,
+                LastLogin = DateTime.UtcNow
             };
 
             context.Add(newUser);
@@ -153,6 +158,15 @@ namespace SystemyWP.API.Controllers
             }
 
             await context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("personal-data/delete-account")]
+        public IActionResult DeleteAccount()
+        {
+
+
+
             return Ok();
         }
     }

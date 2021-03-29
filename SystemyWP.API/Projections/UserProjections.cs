@@ -29,7 +29,8 @@ namespace SystemyWP.API.Projections
                 user.CompanyFullName,
                 user.KRS,
                 user.NIP,
-                user.REGON
+                user.REGON,
+                user.LastLogin
             };
         
         public static Expression<Func<User, object>> RelatedUserProjection(string userName, string email, string role) =>
@@ -54,6 +55,7 @@ namespace SystemyWP.API.Projections
                 user.KRS,
                 user.NIP,
                 user.REGON,
+                user.LastLogin,
                 DataAccess = user.DataAccess
                     .AsQueryable()
                     .Where(x => 

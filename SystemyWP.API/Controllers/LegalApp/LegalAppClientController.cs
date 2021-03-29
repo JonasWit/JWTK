@@ -32,7 +32,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(UserId));
 
-            if (user.AccessKey is null)
+            if (user?.AccessKey is null)
             {
                 return BadRequest("Brak klucza!");
             }
@@ -84,7 +84,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(UserId));
 
-            if (user.AccessKey is null)
+            if (user?.AccessKey is null)
             {
                 return BadRequest("Brak klucza!");
             }

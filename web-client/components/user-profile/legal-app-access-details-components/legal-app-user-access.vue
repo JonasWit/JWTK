@@ -1,37 +1,42 @@
-﻿<template>
+﻿<template xmlns="">
   <div>
-    <v-row v-if="!loading" justify="space-around">
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
+    <v-row v-if="!loading">
+      <v-col class="d-flex align-start" cols="12" md="6">
         <div>
-          <v-card>
+          <v-card elevation="0">
             <v-card-title class="mb-2">Uzytkownicy</v-card-title>
-            <v-card-subtitle>Jako Administratom możesz zarządzać dostępem do danych dla poszczególnych użytkowników
+            <v-card-subtitle>Jako Administrator możesz zarządzać dostępem do danych dla poszczególnych użytkowników
             </v-card-subtitle>
             <v-select class="px-4" no-data-text="Brak danych" clearable
                       :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
                       filled label="Wybierz Uzytkownika" return-object></v-select>
-            <div class="d-flex justify-center">
-              <v-btn class="mb-1" text color="success" @click="reset">Odśwież Panel</v-btn>
+            <div class="d-flex flex-column">
+              <v-btn class="mb-1" text color="success" @click="reset">Odśwież</v-btn>
+            </div>
+            <div class="d-flex flex-column" v-if="this.selectedUser && this.treeViewData.length > 0">
+              <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
+                                           button-text="Zapisz Zmiany"
+                                           message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
+              <default-confirmation-dialog v-on:action-confirmed="grantFullAccess" title="Pełny Dostęp"
+                                           button-text="Nadaj Pełny Dostęp"
+                                           message="Uzytkownik otrzyma dostęp do wszyskich danych Klientów i Spraw, które są obecnie wprowadzone w aplikacji!"/>
+              <default-confirmation-dialog button-color="error" v-on:action-confirmed="revokeAllAccesses"
+                                           title="Obierz Dostęp" button-text="Obierz dostęp"
+                                           message="Użytkownikowi zostanią odebrane waszystkie dostępy do danych, które obecnie posiada!"/>
             </div>
           </v-card>
         </div>
       </v-col>
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
+      <v-col class="d-flex align-start" cols="12" md="6">
         <div>
-          <v-card>
+          <v-card elevation="0">
             <v-card-title class="mb-2">Dostęp do danych</v-card-title>
             <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
             </v-card-subtitle>
             <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
               <div>
                 <v-card-actions class="pt-0">
-                  <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
-                                               button-text="Zapisz Zmiany"
-                                               message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
 
-                  <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Pełny Dostęp"
-                                               button-text="Pełny Dostęp"
-                                               message="Uzytkownik otrzyma dostęp do wszyskich danych które są obecnie wprowadzone!"/>
                 </v-card-actions>
               </div>
               <div>
@@ -48,11 +53,8 @@
       </v-col>
     </v-row>
     <v-row v-else>
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
-        <v-skeleton-loader type="card, actions"></v-skeleton-loader>
-      </v-col>
-      <v-col class="d-flex justify-center align-start" cols="12" md="3">
-        <v-skeleton-loader type="card, actions"></v-skeleton-loader>
+      <v-col class="d-flex justify-center align-center mt-2" cols="12">
+        <v-progress-circular :size="50" :width="7" indeterminate/>
       </v-col>
     </v-row>
   </div>
@@ -62,9 +64,11 @@
 
 import {mapActions, mapGetters} from "vuex";
 import {LegalAppDataAccessItems} from "@/data/enums";
+import DefaultConfirmationDialog from "@/components/default-confirmation-dialog";
 
 export default {
   name: "legal-app-user-access",
+  components: {DefaultConfirmationDialog},
   data: () => ({
     displayTextSize: 20,
     loading: false,
@@ -124,9 +128,13 @@ export default {
       }
     }
   },
+  fetch() {
+    this.loading = true;
+    this.getClients();
+    this.loading = false;
+  },
   beforeMount() {
     this.loading = true;
-    this.getRelatedUsers();
     this.getClients();
     this.loading = false;
   },
@@ -136,9 +144,9 @@ export default {
   methods: {
     ...mapActions('popup', ['success']),
     ...mapActions('profile-panel-legal-app-store', ['getRelatedUsers']),
-    async getClients() {
+    getClients() {
       this.loading = true;
-      await this.$axios.$get("/api/legal-app-clients/admin/flat")
+      return this.$axios.$get("/api/legal-app-clients/admin/flat")
         .then((clients) => {
           let response = clients.map(client => ({...client, key: `client-${client.id}`}));
           response.forEach(client => {
@@ -157,12 +165,16 @@ export default {
         });
     },
     reset() {
-      this.loading = true;
       Object.assign(this.$data, this.$options.data.call(this));
+      this.getUsersAndClients();
+    },
+    getUsersAndClients() {
+      this.loading = true;
+      this.getRelatedUsers();
       this.getClients();
       this.loading = false;
     },
-    async updateAccess() {
+    updateAccess() {
       this.loading = true;
 
       let accessToClients = this.treeViewSelection
@@ -177,17 +189,50 @@ export default {
         allowedCases: accessToCases,
         allowedClients: accessToClients
       };
-      await this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
+      return this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
           Object.assign(this.$data, this.$options.data.call(this));
-          this.getClients();
-          this.loading = false;
+          this.getUsersAndClients();
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         });
     },
+    grantFullAccess() {
+      this.loading = true;
+
+      const payload = {
+        userId: this.selectedUser.id,
+      };
+
+      return this.$axios.$post("/api/legal-app-admin/full-legal-app-data-access", payload)
+        .then(() => {
+          this.$notifier.showSuccessMessage("Zmieniono dotępy!");
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.getUsersAndClients();
+        })
+        .catch(() => {
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        });
+    },
+    revokeAllAccesses() {
+      this.loading = true;
+
+      const payload = {
+        userId: this.selectedUser.id,
+      };
+
+      return this.$axios.$post("/api/legal-app-admin/revoke-legal-app-data-access", payload)
+        .then(() => {
+          this.$notifier.showSuccessMessage("Zmieniono dotępy!");
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.getUsersAndClients();
+        })
+        .catch(() => {
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        });
+    }
   }
 };
 </script>

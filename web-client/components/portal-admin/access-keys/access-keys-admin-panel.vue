@@ -2,9 +2,7 @@
   <div>
     <padmin-edit-access-key-form-dialog v-if="showKeyDialog" :selected-key="selectedKey"
                                         v-on:action-completed="keyDialogClosed"/>
-
     <padmin-create-access-key-component v-on:action-completed="keyAdded"/>
-
     <v-list>
       <v-list-item v-for="keyItem in keysList" :key="keyItem.id" class="mb-2">
         <v-list-item-content>

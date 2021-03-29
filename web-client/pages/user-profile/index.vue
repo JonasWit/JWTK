@@ -10,6 +10,9 @@
           <div v-if="legalAppAllowed && (portalAdmin || clientAdmin)" class="mt-4">
             <prof-legal-application-details v-if="profile.legalAppAllowed"/>
           </div>
+          <div>
+            <prof-account-remove/>
+          </div>
         </template>
       </if-auth>
     </div>

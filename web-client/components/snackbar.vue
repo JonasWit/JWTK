@@ -15,7 +15,6 @@ export default {
   }),
   created() {
     this.$store.subscribe((mutation, state) => {
-      console.log("Error message in component");
       if (mutation.type === 'snackbar/showMessage' ||
         mutation.type === 'snackbar/showSuccessMessage' ||
         mutation.type === 'snackbar/showWarningMessage' ||

@@ -1,7 +1,7 @@
 ﻿<template>
   <v-dialog v-model="dialog" persistent width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text color="warning" v-bind="attrs" v-on="on">{{ buttonText }}</v-btn>
+      <v-btn text :color="buttonColor" v-bind="attrs" v-on="on">{{ buttonText }}</v-btn>
     </template>
     <v-card>
       <v-card-title class="justify-center">{{ title }}</v-card-title>
@@ -32,6 +32,11 @@ export default {
       required: true,
       type: String,
       default: "No message!"
+    },
+    buttonColor: {
+      required: false,
+      type: String,
+      default: "warning"
     },
     title: {
       required: true,

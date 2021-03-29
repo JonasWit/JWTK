@@ -1,4 +1,5 @@
 ﻿import {ROLES} from "@/data/enums";
+import {getGDPRConsent} from "~/data/cookie-handlers";
 
 const initState = () => ({
   profile: null,
@@ -52,6 +53,8 @@ export const actions = {
   },
   login() {
     if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
     const returnUrl = encodeURIComponent(location.href);
     window.location = `${this.$config.auth.loginPath}?returnUrl=${returnUrl}`;
   },

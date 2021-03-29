@@ -22,6 +22,7 @@
 
 import LegalAppAccesses
   from "@/components/user-profile/legal-app-access-details-components/legal-app-user-manager-panel";
+import LegalAppData from "@/components/user-profile/legal-app-access-details-components/legal-app-data-manager-panel";
 
 export default {
   name: "legal-application-details",
@@ -29,7 +30,7 @@ export default {
     legalAppTab: 0,
     legalAppTabs: [
       {title: "Dostępy", component: LegalAppAccesses},
-      {title: "Dane", component: ""},
+      {title: "Dane", component: LegalAppData},
     ]
   }),
   methods: {}

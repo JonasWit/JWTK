@@ -75,7 +75,6 @@
       </if-auth>
 
     </v-app-bar>
-
     <v-main>
       <v-container fluid>
         <nuxt/>
@@ -85,7 +84,6 @@
     </v-main>
     <footer/>
   </v-app>
-
 </template>
 
 <script>
@@ -100,6 +98,14 @@ export default {
   data: () => ({
     lightTheme: false
   }),
+  fetch() {
+    if (process.env.NODE_ENV === 'development') {
+      console.log("###DEBUG MODE###");
+    } else {
+      console.log = () => {
+      };
+    }
+  },
   beforeMount() {
     const themeCookie = getCookie("custom-color-theme");
     if (themeCookie) {
@@ -111,27 +117,23 @@ export default {
       if (val) {
         this.$vuetify.theme.light = true;
         this.$vuetify.theme.dark = false;
-
         if (getGDPRConsent()) {
           if (checkCookie("custom-color-theme")) {
             setCookie("custom-color-theme", "", 0);
-            setCookie("custom-color-theme", "light", 31);
+            setCookie("custom-color-theme", "light", 365);
           } else {
-            setCookie("custom-color-theme", "light", 31);
+            setCookie("custom-color-theme", "light", 365);
           }
         }
       } else {
         this.$vuetify.theme.light = false;
         this.$vuetify.theme.dark = true;
-
-        console.log("Check GDPR", getGDPRConsent());
-
         if (getGDPRConsent()) {
           if (checkCookie("custom-color-theme")) {
             setCookie("custom-color-theme", "", 0);
-            setCookie("custom-color-theme", "dark", 31);
+            setCookie("custom-color-theme", "dark", 365);
           } else {
-            setCookie("custom-color-theme", "dark", 31);
+            setCookie("custom-color-theme", "dark", 365);
           }
         }
       }

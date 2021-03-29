@@ -21,7 +21,7 @@ namespace SystemyWP.API.Controllers
             [FromServices] IWebHostEnvironment env,
             [FromServices] PortalLogger logger)
         {
-            await logger.Log(LogType.Access, $"Personal data - update requested.", UserId, Username);
+            await logger.Log(LogType.Access, $"Logout.", UserId, Username);
             
             await signInManager.SignOutAsync();
             return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");

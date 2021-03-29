@@ -1,8 +1,7 @@
-﻿export const setCookie = (cname, cvalue, exdays) => {
+﻿export const setCookie = (cname, cvalue, exdays, samesite = "strict") => {
   let d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  document.cookie = `${cname}=${cvalue};expires=${d.toUTCString()};samesite=${samesite};path=/`;
 };
 
 export const getCookie = (cname) => {
@@ -10,10 +9,10 @@ export const getCookie = (cname) => {
   let ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }
@@ -22,20 +21,11 @@ export const getCookie = (cname) => {
 
 export const checkCookie = (cookieName) => {
   const cookie = getCookie(cookieName);
-  if (cookie !== "") {
-    return true;
-  } else {
-    return false;
-  }
+  return cookie !== "";
 };
-
 
 export const getGDPRConsent = () => {
   if (process.browser) {
-    if (localStorage.getItem("GDPR:accepted") === "true") {
-      return true;
-    } else {
-      return false;
-    }
+    return localStorage.getItem("GDPR:accepted") === "true";
   }
 };

@@ -41,9 +41,6 @@
       <v-btn text @click="downloadPersonalData">Pobierz</v-btn>
       <v-spacer/>
       <prof-confirm-personal-data-delete v-on:action-completed=""/>
-      <v-btn text @click="testNotifier">TEST NOTIFIER</v-btn>
-      <v-btn text @click="testNotifier2">TEST NOTIFIER</v-btn>
-      <v-btn text @click="testNotifier3">TEST NOTIFIER</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -62,15 +59,6 @@ export default {
   },
   methods: {
     ...mapActions("auth", ["initialize"]),
-    testNotifier() {
-      this.$notifier.showErrorMessage("TEST ERROR!");
-    },
-    testNotifier2() {
-      this.$notifier.showWarningMessage("TEST warning!");
-    },
-    testNotifier3() {
-      this.$notifier.showSuccessMessage("TEST success!");
-    },
     downloadPersonalData() {
       const payload = {
         nazwaUzytkownika: this.profile.username,
