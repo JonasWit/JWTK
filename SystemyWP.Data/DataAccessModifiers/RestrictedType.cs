@@ -3,6 +3,6 @@
     public enum RestrictedType
     {
         LegalAppClient = 0,
-        LegalAppCase = 1
+        LegalAppCase = 1,
     }
 }

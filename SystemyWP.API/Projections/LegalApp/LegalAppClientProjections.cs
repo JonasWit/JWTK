@@ -22,7 +22,7 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.Name,       
                 legalAppClient.Email, 
                 legalAppClient.PhoneNumber, 
-                legalAppClient.AlternativePhoneNumber,
+                AlternativePhoneNumber = legalAppClient.SecondPhoneNumber,
                 Cases = legalAppClient.LegalAppCases.AsQueryable().Count()
             };
         

@@ -97,8 +97,11 @@ namespace SystemyWP.Data
                 .HasMany(c => c.LegalAppCaseDeadlines)
                 .WithOne(e => e.LegalAppCase)
                 .OnDelete(DeleteBehavior.Cascade); 
+            
+            //Client Finance Relations
 
-   
+            modelBuilder.Entity<LegalAppClientFinance>()
+                .HasOne(x => x.User);
         }
     }
 }
