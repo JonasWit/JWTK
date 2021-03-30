@@ -4,11 +4,13 @@ using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -144,6 +146,7 @@ namespace SystemyWP.API
                 config.Cookie.Domain = _configuration["CookieDomain"];
                 config.Cookie.Name = "systemywp_id";
                 config.ExpireTimeSpan = TimeSpan.FromHours(5);
+                config.Cookie.SameSite = SameSiteMode.Strict;
             });
 
             services.AddAuthorization(options =>
