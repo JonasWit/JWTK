@@ -6,7 +6,11 @@
 
 export const state = initState;
 
-export const getters = {};
+export const getters = {
+  accessKeys(state) {
+    return state.accessKeys;
+  }
+};
 
 export const mutations = {
   updateUsersList(state, {users}) {
@@ -32,6 +36,7 @@ export const actions = {
   getAccessKeys({commit}) {
     return this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((keys) => {
+        console.log('access-keys', keys);
         commit('updateAccessKeysList', {keys});
       })
       .catch(() => {

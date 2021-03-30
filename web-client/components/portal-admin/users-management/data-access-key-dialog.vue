@@ -37,7 +37,7 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "data-access-key-dialog",
@@ -57,16 +57,16 @@ export default {
       userId: ""
     },
   }),
-  async fetch() {
-    await this.$axios.$get("/api/portal-admin/key-admin/access-keys")
-      .then((res) => {
-        this.activeKeys = res.map(x => x.name);
-      });
+  fetch() {
+    this.activeKeys = this.accessKeys.map(x => x.name);
   },
   created() {
     if (this.selectedUser.dataAccessKey) {
       this.form.dataAccessKey = this.selectedUser.dataAccessKey;
     }
+  },
+  computed: {
+    ...mapGetters('admin-panel-store', ['accessKeys'])
   },
   methods: {
     ...mapActions('admin-panel-store', ['getUsers']),
