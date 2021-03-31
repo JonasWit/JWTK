@@ -1,19 +1,19 @@
 ﻿<template>
-  <div class="mb-2 py-1">
-    <v-card>
-      <div class="d-flex align-center">
-        <v-card-title>{{ logItem.message }}</v-card-title>
-        <v-spacer/>
-        <v-card-title :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-card-title>
-      </div>
-      <v-card-subtitle v-if="logItem.description" class="py-0">Details: {{
+  <v-list-item @click="" :key="`log-record-${logItem.id}`">
+    <v-list-item-content>
+      <v-list-item-title>{{ logItem.description }}</v-list-item-title>
+      <v-list-item-subtitle :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-list-item-subtitle>
+    </v-list-item-content>
+    <v-spacer/>
+    <v-list-item-content>
+      <v-list-item-subtitle>Created: {{ logItem.created }}</v-list-item-subtitle>
+      <v-list-item-subtitle v-if="logItem.description" class="py-0">Details: {{
           logItem.description
         }}
-      </v-card-subtitle>
-      <v-card-subtitle class="py-0">Created: {{ logItem.created }}</v-card-subtitle>
-      <v-card-subtitle class="py-0">User Email: {{ logItem.userEmail }}</v-card-subtitle>
-    </v-card>
-  </div>
+      </v-list-item-subtitle>
+      <v-list-item-subtitle class="py-0">User Email: {{ logItem.userEmail }}</v-list-item-subtitle>
+    </v-list-item-content>
+  </v-list-item>
 </template>
 
 <script>

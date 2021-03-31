@@ -60,7 +60,9 @@
     </div>
 
     <div v-scroll="onScroll">
-      <padmin-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+      <v-list>
+        <padmin-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+      </v-list>
     </div>
   </div>
 </template>
