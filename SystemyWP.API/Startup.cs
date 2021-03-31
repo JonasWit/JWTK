@@ -4,7 +4,6 @@ using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;

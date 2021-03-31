@@ -10,7 +10,6 @@ using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +30,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
-            await _portalLogger.Log(LogType.Access, $"Related users data requested", UserId, Username);
             var result = new List<object>();
 
             try
@@ -68,7 +66,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
                 return BadRequest(ex.Message);
             }
         }
@@ -98,11 +95,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
                 {
-                    await _portalLogger.Log(
-                        LogType.AccessViolation,
-                        $"User {Username} wanted to change access to data with but Access Keys did not match!",
-                        UserId,
-                        UserEmail);
                     return BadRequest();
                 }
 
@@ -136,7 +128,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
                 return BadRequest(ex.Message);
             }
 
@@ -168,11 +159,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
                 {
-                    await _portalLogger.Log(
-                        LogType.AccessViolation,
-                        $"User {Username} wanted to grant all access to data with but Access Keys did not match!",
-                        UserId,
-                        UserEmail);
                     return BadRequest();
                 }
 
@@ -214,7 +200,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
                 return BadRequest(ex.Message);
             }
 
@@ -246,11 +231,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
                 {
-                    await _portalLogger.Log(
-                        LogType.AccessViolation,
-                        $"User {Username} wanted to revoke access to data with but Access Keys did not match!",
-                        UserId,
-                        UserEmail);
                     return BadRequest();
                 }
 
@@ -262,7 +242,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
                 return BadRequest(ex.Message);
             }
 

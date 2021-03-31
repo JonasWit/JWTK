@@ -14,27 +14,17 @@ namespace SystemyWP.API.Services.PortalLoggerService
             _context = appDbContext;
         }
 
-        public async Task Log(LogType logType, string message, string userId, string userEmail)
+        public async Task Log(LogType logType, string endpoint, string userId, string userEmail, string description = "", string exceptionMessage = "", string exceptionStackTrace = "")
         {
             _context.PortalLogs.Add(new PortalLog
             {
                 LogType = logType,
-                Message = message,
+                Description = description,
                 UserId = userId,
-                Username = userEmail
-            });
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Log(LogType logType, string message, string exceptionDetails, string userId, string userName)
-        {
-            _context.PortalLogs.Add(new PortalLog
-            {
-                LogType = logType,
-                Message = message,
-                StackTrace = exceptionDetails,
-                UserId = userId,
-                Username = userName
+                UserEmail = userEmail,
+                Endpoint = endpoint,
+                ExceptionMessage = exceptionMessage,
+                ExceptionStackTrace = exceptionStackTrace,
             });
             await _context.SaveChangesAsync();
         }

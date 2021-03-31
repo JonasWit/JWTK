@@ -15,7 +15,6 @@ using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,41 +32,50 @@ namespace SystemyWP.API.Controllers
         public async Task<IActionResult> GetMe(
             [FromServices] AppDbContext context)
         {
-            await _portalLogger.Log(LogType.Access, $"Profile requested", UserId, Username);
-
-            var userId = UserId;
-            if (string.IsNullOrEmpty(userId)) return BadRequest();
-
-            var user = await context.Users
-                .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-
-            if (user is not null)
+            try
             {
-                user.LastLogin = DateTime.UtcNow;
-                user.AccessKey = context.AccessKeys
-                    .Include(x => x.Users)
-                    .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
+                await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Loggin in");
+                
+                var userId = UserId;
+                if (string.IsNullOrEmpty(userId)) return BadRequest();
 
+                var user = await context.Users
+                    .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+
+                if (user is not null)
+                {
+                    user.LastLogin = DateTime.UtcNow;
+                    user.AccessKey = context.AccessKeys
+                        .Include(x => x.Users)
+                        .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
+
+                    await context.SaveChangesAsync();
+                    return Ok(UserProjections
+                        .UserProjection(Username, Role, LegalAppAllowed)
+                        .Compile()
+                        .Invoke(user));
+                }
+
+                var newUser = new User
+                {
+                    Id = UserId,
+                    LastLogin = DateTime.UtcNow
+                };
+
+                context.Add(newUser);
                 await context.SaveChangesAsync();
+                
                 return Ok(UserProjections
                     .UserProjection(Username, Role, LegalAppAllowed)
                     .Compile()
-                    .Invoke(user));
+                    .Invoke(newUser));
+
             }
-
-            var newUser = new User
+            catch (Exception e)
             {
-                Id = UserId,
-                LastLogin = DateTime.UtcNow
-            };
-
-            context.Add(newUser);
-            await context.SaveChangesAsync();
-
-            return Ok(UserProjections
-                .UserProjection(Username, Role, LegalAppAllowed)
-                .Compile()
-                .Invoke(newUser));
+                Console.WriteLine(e);
+                return BadRequest();
+            }
         }
 
         [HttpPut("personal-data/update")]
@@ -75,8 +83,6 @@ namespace SystemyWP.API.Controllers
             [FromServices] AppDbContext context,
             [FromBody] UserPersonalDataForm form)
         {
-            await _portalLogger.Log(LogType.PersonalDataAction, $"Personal data - update requested", UserId, Username);
-
             var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
             if (userProfile is null)
             {
@@ -105,8 +111,6 @@ namespace SystemyWP.API.Controllers
         public async Task<IActionResult> DeletePersonalData(string userId,
             [FromServices] AppDbContext context)
         {
-            await _portalLogger.Log(LogType.PersonalDataAction, $"Personal data - delete requested", UserId, Username);
-
             var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
             if (userProfile is null)
             {

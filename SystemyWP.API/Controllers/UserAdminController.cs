@@ -8,7 +8,6 @@ using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -70,8 +69,6 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("There is no user with this ID!");
             }
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Lock User {user.Email}", UserId, Username);
 
             var result = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(+25));
             if (result.Succeeded)
@@ -79,14 +76,6 @@ namespace SystemyWP.API.Controllers
                 await userManager.UpdateSecurityStampAsync(user);
                 return Ok("User locked!");
             }
-
-            await _portalLogger
-                .Log(LogType.PortalAdminAction, 
-                    $"Lock User {user.Email} Error", string.Join("; ", 
-                        result.Errors.Select(x => x.Description).ToList()), 
-                    UserId,
-                    Username 
-                );
 
             return BadRequest("Error during lock!");
         }
@@ -101,8 +90,6 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("There is no user with this ID!");
             }
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Unlock User {user.Email}", UserId, Username);
 
             var result = await userManager.SetLockoutEndDateAsync(user, null);
             if (result.Succeeded) return Ok("User locked!");
@@ -117,9 +104,6 @@ namespace SystemyWP.API.Controllers
             var user = await userManager.FindByIdAsync(form.UserId);
             var userClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
             var roleClaim = userClaims.FirstOrDefault(x => x.Type.Equals(SystemyWPConstants.Claims.Role));
-            
-            await _portalLogger
-            .Log(LogType.PortalAdminAction, $"Role change requested for {user.Email}", UserId, Username);
 
             if (!form.Role.Equals(roleClaim.Value, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -196,9 +180,6 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("User already have access!");
             }
-            
-            await _portalLogger
-                .Log(LogType.PortalAdminAction, $"Legal App requested for {user.Email}", UserId, Username);
 
             var result = await userManager
                 .AddClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);
@@ -229,9 +210,6 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("User already does not have access!");
             }
-            
-            await _portalLogger
-                .Log(LogType.PortalAdminAction, $"Legal App revoked for {user.Email}", UserId, Username);
 
             var result = await userManager
                 .RemoveClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);

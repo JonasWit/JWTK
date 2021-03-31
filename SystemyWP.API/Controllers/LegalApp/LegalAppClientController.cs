@@ -7,7 +7,6 @@ using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -150,7 +149,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await _portalLogger.Log(LogType.Exception, ex.Message, ex.StackTrace, UserId, Username);
                 return BadRequest();
             }
         }

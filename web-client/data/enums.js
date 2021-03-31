@@ -17,3 +17,10 @@ export const ROLES = {
   PORTAL_ADMIN: "PortalAdmin",
 };
 
+export const LOG_TYPES = {
+  ACCESS: "Access",
+  EXCEPTION: "Exception",
+  ADMIN: "Admin",
+  PERSONALDATA: "PersonalData",
+  ISSUE: "Issue",
+};

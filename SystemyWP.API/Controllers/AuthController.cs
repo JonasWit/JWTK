@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.PortalLoggerService;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +20,6 @@ namespace SystemyWP.API.Controllers
             [FromServices] IWebHostEnvironment env,
             [FromServices] PortalLogger logger)
         {
-            await logger.Log(LogType.Access, $"Logout.", UserId, Username);
-            
             await signInManager.SignOutAsync();
             return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
         }

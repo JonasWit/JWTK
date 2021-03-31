@@ -1,11 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using SystemyWP.API.Services.PortalLoggerService;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {

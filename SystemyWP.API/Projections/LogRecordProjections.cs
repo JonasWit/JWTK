@@ -10,15 +10,14 @@ namespace SystemyWP.API.Projections
         public static Expression<Func<PortalLog, object>> Projection =>
             log => new
             {
-                log.Message,
-                log.Username,
-                ExceptionDetails = log.StackTrace,
+                log.Description,
+                ExceptionMessage  = string.IsNullOrEmpty(log.ExceptionMessage) ? null : log.ExceptionMessage,
+                ExceptionStackTrace = string.IsNullOrEmpty(log.ExceptionStackTrace) ? null : log.ExceptionStackTrace,
                 LogType = log.LogType.ToString(),
-                log.SourceMethod,
-                log.SourceType,
                 log.UserId,
                 log.Created,
-                log.Id
+                log.Id,
+                log.UserEmail
             };
     }
 }

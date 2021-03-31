@@ -6,18 +6,19 @@
         <v-spacer/>
         <v-card-title :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-card-title>
       </div>
-      <v-card-subtitle v-if="logItem.exceptionDetails" class="py-0">Details: {{
-          logItem.exceptionDetails
+      <v-card-subtitle v-if="logItem.description" class="py-0">Details: {{
+          logItem.description
         }}
       </v-card-subtitle>
       <v-card-subtitle class="py-0">Created: {{ logItem.created }}</v-card-subtitle>
-      <v-card-subtitle class="py-0">User Id: {{ logItem.userId }}</v-card-subtitle>
-      <v-card-subtitle class="py-0">User Name: {{ logItem.username }}</v-card-subtitle>
+      <v-card-subtitle class="py-0">User Email: {{ logItem.userEmail }}</v-card-subtitle>
     </v-card>
   </div>
 </template>
 
 <script>
+import {LOG_TYPES} from "@/data/enums";
+
 export default {
   name: "log-item",
   props: {
@@ -28,13 +29,9 @@ export default {
   },
   methods: {
     getTypeColor(type) {
-      if (type === "Access") {
+      if (type === LOG_TYPES.ISSUE) {
         return "warning--text";
-      } else if (type === "PortalAdminAction") {
-        return "warning--text";
-      } else if (type === "AccessViolation") {
-        return "error--text";
-      } else if (type === "Exception") {
+      } else if (type === LOG_TYPES.EXCEPTION) {
         return "error--text";
       } else {
         return "success--text";

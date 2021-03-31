@@ -1,39 +1,56 @@
 ﻿<template>
   <div>
     <v-form ref="minLogDateForm" v-model="validation.valid">
-      <v-menu ref="menuMin" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
-              :return-value.sync="form.minDate">
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field class="ma-3" :rules="validation.minDate" readonly v-bind="attrs" v-on="on"
-                        v-model="form.minDate" label="From" prepend-icon="mdi-calendar"></v-text-field>
-        </template>
-        <v-date-picker :max="todayDate" v-model="form.minDate" no-title scrollable>
-          <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="menuMin = false">
-            Cancel
-          </v-btn>
-          <v-btn text color="primary" @click="$refs.menuMin.save(form.minDate)">
-            OK
-          </v-btn>
-        </v-date-picker>
-      </v-menu>
-      <v-menu ref="menuMax" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
-              :return-value.sync="form.maxDate">
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field class="ma-3" :rules="validation.maxDate" readonly v-bind="attrs" v-on="on"
-                        v-model="form.maxDate" label="To" prepend-icon="mdi-calendar"></v-text-field>
-        </template>
-        <v-date-picker :max="todayDate" v-model="form.maxDate" no-title scrollable>
-          <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="menuMax = false">
-            Cancel
-          </v-btn>
-          <v-btn text color="primary" @click="$refs.menuMax.save(form.maxDate)">
-            OK
-          </v-btn>
-        </v-date-picker>
-      </v-menu>
+      <v-row v-if="!loading">
+        <v-col class="d-flex align-start" cols="12" md="6">
+          <div class="d-flex flex-column">
+            <v-menu ref="menuMin" transition="scale-transition" offset-y min-width="auto"
+                    :close-on-content-click="false" :return-value.sync="form.minDate">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field class="ma-3" :rules="validation.minDate" readonly v-bind="attrs" v-on="on"
+                              v-model="form.minDate" label="From" prepend-icon="mdi-calendar"></v-text-field>
+              </template>
+              <v-date-picker :max="todayDate" v-model="form.minDate" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="menuMin = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.menuMin.save(form.minDate)">
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+
+            <v-menu ref="menuMax" transition="scale-transition" offset-y min-width="auto"
+                    :close-on-content-click="false" :return-value.sync="form.maxDate">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field class="ma-3" :rules="validation.maxDate" readonly v-bind="attrs" v-on="on"
+                              v-model="form.maxDate" label="To" prepend-icon="mdi-calendar"></v-text-field>
+              </template>
+              <v-date-picker :max="todayDate" v-model="form.maxDate" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="menuMax = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.menuMax.save(form.maxDate)">
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+          </div>
+        </v-col>
+        <v-col class="d-flex align-start" cols="12" md="6">
+          <div class="d-flex flex-column">
+            <v-checkbox class="mx-3" v-model="access" label="Access"></v-checkbox>
+            <v-checkbox class="mt-0 mx-3" v-model="exception" label="Exception"></v-checkbox>
+            <v-checkbox class="mt-0 mx-3" v-model="admin" label="Admin"></v-checkbox>
+            <v-checkbox class="mt-0 mx-3" v-model="personalData" label="Personal Data"></v-checkbox>
+            <v-checkbox class="mt-0 mx-3" v-model="issue" label="Issue"></v-checkbox>
+          </div>
+        </v-col>
+      </v-row>
     </v-form>
+
     <div class="d-flex justify-center mb-3">
       <v-btn text depressed class="mx-1" @click="search">Search</v-btn>
       <v-btn text depressed class="mx-1" @click="clear">Clear</v-btn>
@@ -52,7 +69,8 @@
 
 const initForm = () => ({
   minDate: null,
-  maxDate: null
+  maxDate: null,
+
 });
 
 export default {
@@ -64,6 +82,11 @@ export default {
     }
   },
   data: () => ({
+    access: true,
+    exception: true,
+    admin: true,
+    personalData: true,
+    issue: true,
     logs: [],
     searchConditionsProvided: false,
     cursor: 0,
@@ -86,7 +109,7 @@ export default {
   computed: {
     query() {
       if (this.searchConditionsProvided) {
-        return `/dates?from=${this.form.minDate}&to=${this.form.maxDate}&cursor=${this.cursor}&take=10`;
+        return `/dates?from=${this.form.minDate}&to=${this.form.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}`;
       } else {
         return `?cursor=${this.cursor}&take=10`;
       }
@@ -107,7 +130,6 @@ export default {
       if (!this.$refs.minLogDateForm.validate()) return;
       if (this.loading === true) return;
       this.loading = true;
-
       this.logs = [];
       this.searchConditionsProvided = true;
       this.cursor = 0;
@@ -129,9 +151,10 @@ export default {
     },
     handleLogs() {
       this.loading = true;
-
+      console.log('query', this.query);
       this.loadLogs(this.query)
         .then(logs => {
+          console.log('logs', logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {

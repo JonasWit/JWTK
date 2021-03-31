@@ -6,7 +6,6 @@ using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +37,9 @@ namespace SystemyWP.API.Controllers
                 .Select(x => AccessKeyProjection
                     .FullProjection(
                         legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name)) ? 
-                            legalAppRelatedDataCount.FirstOrDefault(y => y.KeyName.Equals(x.Name)).Count
+                            legalAppRelatedDataCount
+                                .FirstOrDefault(y => y.KeyName.Equals(x.Name))
+                                .Count
                         : 0)
                     .Compile()
                     .Invoke(x))
@@ -55,8 +56,6 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("Key with this name already exists!");
             }
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"New Access Key requested: {form.KeyName}", UserId, Username);
 
             context.Add(new AccessKey
             {
@@ -65,7 +64,6 @@ namespace SystemyWP.API.Controllers
             });
 
             await context.SaveChangesAsync();
-            await _portalLogger.Log(LogType.Access, $"Data Access Key {form.KeyName} added by {Username}.", UserId, Username);
             return Ok();
         }
 
@@ -81,15 +79,12 @@ namespace SystemyWP.API.Controllers
             {
                 return BadRequest("Key with this name not exists!");
             }
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Access Key updated from: {keyToUpdate.Name} to: {form.NewKeyName}", UserId, Username);
 
             keyToUpdate.Name = form.NewKeyName;
             keyToUpdate.ExpireDate = form.ExpireDate;
 
             context.Update(keyToUpdate);
             await context.SaveChangesAsync();
-            await _portalLogger.Log(LogType.Access, $"Data Access Key {form.NewKeyName} updated by {Username}.", UserId, Username);
             return Ok();
         }
 
@@ -107,8 +102,6 @@ namespace SystemyWP.API.Controllers
 
             var relatedLegalAppData = context.LegalAppClients
                 .Count(x => x.DataAccessKey.Equals(keyToDelete.Name));
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Access Key delete requested for: {keyToDelete.Name}, Related Legal App Clients: {relatedLegalAppData}", UserId, Username);
 
             if (relatedLegalAppData > 0)
             {
@@ -137,8 +130,11 @@ namespace SystemyWP.API.Controllers
             
             var accessKey = context.AccessKeys
                 .FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
-            
-            await _portalLogger.Log(LogType.PortalAdminAction, $"Access Key {accessKey.Name} Requested for {user.Email}", UserId, Username);
+
+            if (accessKey is null)
+            {
+                return BadRequest("Key not found!");          
+            }
 
             accessKey.Users.Add(userProfile);
             context.Users.Update(userProfile);
@@ -172,9 +168,6 @@ namespace SystemyWP.API.Controllers
             var assignedKey = context.AccessKeys
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Users.Any(x => x.Id.Equals(user.Id)));
-            
-            await _portalLogger
-                .Log(LogType.PortalAdminAction, $"Access Key {assignedKey.Name} Revoke for {user.Email}", UserId, Username);
 
             if (assignedKey is not null)
             {
