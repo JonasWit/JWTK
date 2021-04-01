@@ -1,5 +1,8 @@
 ﻿<template>
-  <v-list-item @click="" :key="`log-record-${logItem.id}`">
+  <v-list-item :key="`log-record-${logItem.id}`">
+    <v-list-item-icon class="mx-0">
+      <padmin-log-item-details :log-item="logItem"/>
+    </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title>{{ logItem.description }}</v-list-item-title>
       <v-list-item-subtitle :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-list-item-subtitle>

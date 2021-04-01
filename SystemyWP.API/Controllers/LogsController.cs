@@ -36,25 +36,20 @@ namespace SystemyWP.API.Controllers
                 .ToListAsync();
 
         [HttpGet("logs/split/dates/")]
-        public Task<List<object>> ListLogRecords([FromServices] AppDbContext context, string from, string to,
+        public async Task<List<object>> ListLogRecords([FromServices] AppDbContext context, string from, string to,
             int cursor, int take, bool access, bool exception, bool admin, bool personalData, bool issue)
         {
             if (DateTime.TryParse(from, out DateTime fromDate) &&
                 DateTime.TryParse(to, out DateTime toDate))
             {
-                var types = new Dictionary<LogType, bool>
-                {
-                    {LogType.Access, access},
-                    {LogType.Admin, admin},
-                    {LogType.Exception, exception},
-                    {LogType.Issue, issue},
-                    {LogType.PersonalData, personalData}
-                };
-
-                return context.PortalLogs
+                return await context.PortalLogs
                     .Where(x =>
-                        (x.Created >= fromDate.AddDays(1) && x.Created <= toDate.AddDays(1)) &&
-                        (types[x.LogType] == true))
+                        (x.Created >= fromDate && x.Created <= toDate.AddDays(1)) &&
+                        ((x.LogType == LogType.Access && access) ||
+                         (x.LogType == LogType.Admin && admin) ||
+                         (x.LogType == LogType.Exception && exception) ||
+                         (x.LogType == LogType.Issue && issue) ||
+                         (x.LogType == LogType.PersonalData && personalData)))
                     .OrderByDescending(x => x.Created)
                     .Skip(cursor)
                     .Take(take)
@@ -63,7 +58,7 @@ namespace SystemyWP.API.Controllers
             }
             else
             {
-                return Task.FromResult(new List<object>());
+                return new List<object>();
             }
         }
 

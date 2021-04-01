@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.CustomExtensions;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -34,7 +36,10 @@ namespace SystemyWP.API.Controllers
         {
             try
             {
+                var testExc = new Exception("TEST exception");
+                testExc.SetStackTrace(new StackTrace());
                 await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Loggin in");
+                await _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Test Exception",testExc );
                 
                 var userId = UserId;
                 if (string.IsNullOrEmpty(userId)) return BadRequest();

@@ -1,51 +1,17 @@
 ﻿<template>
   <div>
-    <v-form ref="minLogDateForm" v-model="validation.valid">
+    <v-form ref="minLogDateForm">
       <v-row v-if="!loading">
-        <v-col class="d-flex align-start" cols="12" md="6">
-          <div class="d-flex flex-column">
-            <v-menu ref="menuMin" transition="scale-transition" offset-y min-width="auto"
-                    :close-on-content-click="false" :return-value.sync="form.minDate">
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field class="ma-3" :rules="validation.minDate" readonly v-bind="attrs" v-on="on"
-                              v-model="form.minDate" label="From" prepend-icon="mdi-calendar"></v-text-field>
-              </template>
-              <v-date-picker :max="todayDate" v-model="form.minDate" no-title scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menuMin = false">
-                  Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.menuMin.save(form.minDate)">
-                  OK
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
-
-            <v-menu ref="menuMax" transition="scale-transition" offset-y min-width="auto"
-                    :close-on-content-click="false" :return-value.sync="form.maxDate">
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field class="ma-3" :rules="validation.maxDate" readonly v-bind="attrs" v-on="on"
-                              v-model="form.maxDate" label="To" prepend-icon="mdi-calendar"></v-text-field>
-              </template>
-              <v-date-picker :max="todayDate" v-model="form.maxDate" no-title scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menuMax = false">
-                  Cancel
-                </v-btn>
-                <v-btn text color="primary" @click="$refs.menuMax.save(form.maxDate)">
-                  OK
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
-          </div>
+        <v-col class="d-flex justify-center" cols="12" md="6">
+          <v-date-picker :no-title="true" v-model="dates" range></v-date-picker>
         </v-col>
-        <v-col class="d-flex align-start" cols="12" md="6">
+        <v-col class="d-flex justify-right" cols="12" md="6">
           <div class="d-flex flex-column">
-            <v-checkbox class="mx-3" v-model="access" label="Access"></v-checkbox>
-            <v-checkbox class="mt-0 mx-3" v-model="exception" label="Exception"></v-checkbox>
-            <v-checkbox class="mt-0 mx-3" v-model="admin" label="Admin"></v-checkbox>
-            <v-checkbox class="mt-0 mx-3" v-model="personalData" label="Personal Data"></v-checkbox>
-            <v-checkbox class="mt-0 mx-3" v-model="issue" label="Issue"></v-checkbox>
+            <v-checkbox class="mx-4" v-model="access" label="Access"></v-checkbox>
+            <v-checkbox class="mt-0 mx-4" v-model="exception" label="Exception"></v-checkbox>
+            <v-checkbox class="mt-0 mx-4" v-model="admin" label="Admin"></v-checkbox>
+            <v-checkbox class="mt-0 mx-4" v-model="personalData" label="Personal Data"></v-checkbox>
+            <v-checkbox class="mt-0 mx-4" v-model="issue" label="Issue"></v-checkbox>
           </div>
         </v-col>
       </v-row>
@@ -69,12 +35,6 @@
 
 <script>
 
-const initForm = () => ({
-  minDate: null,
-  maxDate: null,
-
-});
-
 export default {
   name: "log-feed",
   props: {
@@ -84,6 +44,9 @@ export default {
     }
   },
   data: () => ({
+    dates: [],
+    minDate: "",
+    maxDate: "",
     access: true,
     exception: true,
     admin: true,
@@ -94,24 +57,46 @@ export default {
     cursor: 0,
     finished: false,
     loading: false,
-    form: initForm,
-    validation: {
-      valid: false,
-      minDate: [
-        v => !!v || "Min date is required!",
-      ],
-      maxDate: [
-        v => !!v || "Max date is required!",
-      ],
-    },
   }),
   created() {
     this.handleLogs();
   },
+  watch: {
+    dates(dates) {
+      if (dates.length === 0) {
+        this.minDate = new Date();
+        this.maxDate = new Date();
+      }
+      if (dates.length === 1) {
+        this.minDate = dates[0];
+        this.maxDate = dates[0];
+      }
+      if (dates.length === 2) {
+        let fromDate = dates[0].replace(/-/g, "");
+        let toDate = dates[1].replace(/-/g, "");
+
+        let firstDateInt = parseInt(fromDate);
+        let secondDateInt = parseInt(toDate);
+
+        if (firstDateInt > secondDateInt) {
+          this.minDate = dates[1];
+          this.maxDate = dates[0];
+        } else {
+          this.minDate = dates[0];
+          this.maxDate = dates[1];
+        }
+      }
+
+      console.log('fromDate', this.minDate);
+      console.log('toDate', this.maxDate);
+    }
+  },
   computed: {
     query() {
       if (this.searchConditionsProvided) {
-        return `/dates?from=${this.form.minDate}&to=${this.form.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}`;
+
+
+        return `/dates?from=${this.minDate}&to=${this.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}&exception=${this.exception}&admin=${this.admin}&personalData=${this.personalData}&issue=${this.issue}`;
       } else {
         return `?cursor=${this.cursor}&take=10`;
       }
@@ -129,7 +114,6 @@ export default {
       }
     },
     search() {
-      if (!this.$refs.minLogDateForm.validate()) return;
       if (this.loading === true) return;
       this.loading = true;
       this.logs = [];
@@ -143,7 +127,12 @@ export default {
       this.searchConditionsProvided = false;
       this.cursor = 0;
       this.logs = [];
-      this.form = initForm();
+      this.dates = [];
+      this.access = true;
+      this.exception = true;
+      this.admin = true;
+      this.personalData = true;
+      this.issue = true;
       this.handleLogs();
     },
     refresh() {

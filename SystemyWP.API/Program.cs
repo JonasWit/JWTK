@@ -208,6 +208,7 @@ namespace SystemyWP.API
                                 ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
                                 : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
                         };
+                        context.Add(userRecord);
                         break;
                     }
                 }

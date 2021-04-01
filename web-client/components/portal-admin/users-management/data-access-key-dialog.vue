@@ -17,7 +17,7 @@
           <v-select v-model="form.dataAccessKey" :items="activeKeys" filled label="Choose a Key"></v-select>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions v-if="!loading">
           <v-btn :disabled="!form.dataAccessKey" color="warning" text @click="grantAccessKey()">
             Grant Key
           </v-btn>
@@ -29,6 +29,11 @@
           <v-btn color="success" text @click="dialog = false">
             Cancel
           </v-btn>
+        </v-card-actions>
+        <v-card-actions v-else>
+          <v-col class="d-flex justify-center align-center mt-0 pa-1" cols="12">
+            <v-progress-circular :size="30" :width="5" indeterminate/>
+          </v-col>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -57,30 +62,45 @@ export default {
       userId: ""
     },
   }),
-  fetch() {
-    this.activeKeys = this.accessKeys.map(x => x.name);
+  watch: {
+    dialog(dialog) {
+      if (dialog === true) {
+        this.loading = true;
+        this.getAccessKeys();
+        if (this.selectedUser.dataAccessKey) {
+          this.form.dataAccessKey = this.selectedUser.dataAccessKey;
+        }
+        this.activeKeys = this.accessKeys.map(x => x.name);
+        this.loading = false;
+      }
+    }
   },
-  created() {
+  fetch() {
+    this.loading = true;
+    this.getAccessKeys();
     if (this.selectedUser.dataAccessKey) {
       this.form.dataAccessKey = this.selectedUser.dataAccessKey;
     }
+    this.activeKeys = this.accessKeys.map(x => x.name);
+    this.loading = false;
   },
   computed: {
     ...mapGetters('admin-panel-store', ['accessKeys'])
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
+    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
     async grantAccessKey() {
       if (this.loading) return;
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
+      console.log('user id', this.form.userId);
       return this.$axios.$post("/api/portal-admin/key-admin/user/grant/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
+          this.getUsers();
           this.loading = false;
           this.dialog = false;
-          this.getUsers();
         });
     },
     async revokeAccessKey() {
@@ -88,12 +108,13 @@ export default {
       this.loading = true;
 
       this.form.userId = this.selectedUser.id;
+      console.log('user id', this.form.userId);
       return this.$axios.$post("/api/portal-admin/key-admin/user/revoke/access-key", this.form)
         .catch((e) => {
         }).finally(() => {
+          this.getUsers();
           this.loading = false;
           this.dialog = false;
-          this.getUsers();
         });
     },
   },

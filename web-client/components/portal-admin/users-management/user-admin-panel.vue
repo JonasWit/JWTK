@@ -92,7 +92,9 @@ export default {
   name: "user-admin-panel",
   data: initState,
   beforeMount() {
+    this.loading = true;
     this.getUsers();
+    this.loading = false;
   },
   computed: {
     ...mapState('admin-panel-store', ['users']),
@@ -116,30 +118,6 @@ export default {
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
-    dataKeyDialogOpen(user) {
-      this.selectedUser = user;
-      this.showDataAccessKeyDialog = true;
-    },
-    dataKeyDialogClosed() {
-      this.showDataAccessKeyDialog = false;
-      this.selectedUser = null;
-      this.getAccessKeys();
-      this.getUsers();
-    },
-    lockDialogOpen(user) {
-      this.selectedUser = user;
-      this.showLockDialog = true;
-    },
-    lockDialogClosed() {
-      this.showLockDialog = false;
-      this.selectedUser = null;
-      this.getUsers();
-    },
-    resetData() {
-      this.selectedUser = null;
-      this.loading = false;
-      this.email = "";
-    },
     sendInvite() {
       if (!this.$refs.inviteForm.validate()) return;
 
@@ -151,13 +129,13 @@ export default {
         returnUrl: location.origin
       };
 
-      return this.$axios.$post("/api/portal-admin/clients", data)
-        .then(() => {
-          this.email = "";
-          this.loading = false;
-        })
-        .finally(this.getUsers());
+      this.inviteRequest(data);
+      this.loading = false;
     }
+  },
+  inviteRequest(data) {
+    return this.$axios.$post("/api/portal-admin/clients", data)
+      .finally(this.getUsers());
   }
 };
 </script>
