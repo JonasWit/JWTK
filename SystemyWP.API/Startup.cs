@@ -72,9 +72,7 @@ namespace SystemyWP.API
             {
                 app.UseExceptionHandler("/Error");
             }
-
-            //todo: add fallback to error page
-
+            
             app.UseCors(NuxtJsApp);
             app.UseRouting();
             app.UseAuthentication();
