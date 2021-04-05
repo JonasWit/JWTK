@@ -22,28 +22,28 @@ namespace SystemyWP.Data
         #region Applications
 
         //Access
-        public DbSet<DataAccess> DataAccesses { get; set; }  
-        public DbSet<ContactDetails> Contacts { get; set; }  
-        public DbSet<EmailAddress> EmailAddresses { get; set; }        
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; }        
-        public DbSet<PhysicalAddress> PhysicalAddresses { get; set; }  
+        public DbSet<DataAccess> DataAccesses { get; set; }
+        public DbSet<ContactDetails> Contacts { get; set; }
+        public DbSet<EmailAddress> EmailAddresses { get; set; }       
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }     
+        public DbSet<PhysicalAddress> PhysicalAddresses { get; set; }
         
         #endregion
         
         #region LegalApp
         
         //General
-        public DbSet<LegalAppReminder> LegalAppReminders { get; set; }        
+        public DbSet<LegalAppReminder> LegalAppReminders { get; set; }       
         
         //Client Tree
         public DbSet<LegalAppClient> LegalAppClients { get; set; }
-        public DbSet<LegalAppClientFinance> LegalAppClientFinances { get; set; }   
+        public DbSet<LegalAppClientFinance> LegalAppClientFinances { get; set; }
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
         
         //Case Tree
-        public DbSet<LegalAppCase> LegalAppCases { get; set; }          
+        public DbSet<LegalAppCase> LegalAppCases { get; set; }    
         public DbSet<LegalAppCaseNote> LegalAppCaseNotes { get; set; }
-        public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; }    
+        public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; } 
         
         #endregion
         
@@ -68,7 +68,7 @@ namespace SystemyWP.Data
 
             #endregion
     
-            #region Legal App Access Specific
+            #region Access Specific
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.DataAccess)

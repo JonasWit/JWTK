@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -31,20 +33,24 @@ namespace SystemyWP.API.Controllers
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,
             [FromServices] PortalLogger logger,
+            [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
-                var user = await userManager.FindByIdAsync(UserId);
                 await signInManager.SignOutAsync();
+                var user = await userManager.FindByIdAsync(UserId);
                 await userManager.UpdateSecurityStampAsync(user);
 
+                var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
 
-
-
-
+                if (userProfile is not null)
+                {
+                    context.Remove(userProfile);
+                }
+                
+                await context.SaveChangesAsync();
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
-
             }
             catch (Exception e)
             {
