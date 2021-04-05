@@ -8,9 +8,9 @@ namespace SystemyWP.Data.Models.General
     {
         [Required]
         public LogType LogType { get; set; }
-        public string Description { get; set; }   
-        public string Endpoint { get; set; }  
-        public string ExceptionMessage { get; set; }     
+        public string Description { get; set; }
+        public string Endpoint { get; set; } 
+        public string ExceptionMessage { get; set; }   
         public string ExceptionStackTrace { get; set; }
         [Required]
         public string UserId { get; set; }

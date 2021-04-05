@@ -18,12 +18,8 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.UpdatedBy,
                 legalAppClient.Id,
                 legalAppClient.Active,
-                legalAppClient.Address,
-                legalAppClient.Name,       
-                legalAppClient.Email, 
-                legalAppClient.PhoneNumber, 
-                AlternativePhoneNumber = legalAppClient.SecondPhoneNumber,
-                Cases = legalAppClient.LegalAppCases.AsQueryable().Count()
+                legalAppClient.Name,
+                legalAppClient.Contacts
             };
         
         public static Func<LegalAppClient, object> CreateMinimal => MinimalProjection.Compile();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using SystemyWP.Data;
@@ -26,8 +27,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                //DevIdentitySeed(host);
-                //DevDataSeedLegalApp(host);
+                DevIdentitySeed(host);
+                DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
@@ -82,17 +83,33 @@ namespace SystemyWP.API
                 {
                     DataAccessKey = "access-key-1",
                     Name = $"#{i}# Test Client",
-                    Address = $"#{i}# Test Address {i}{i}{i}{i}-{i}{i}{i}{i}/{i}{i}{i}",
                     Active = true,
-                    Email = $"test-{i}@email{i}.com",
-                    PhoneNumber = $"+{i}{i}-{i}{i}{i}-{i}{i}{i}-{i}{i}{i}",
                     CreatedBy = "portaladmin1",
                     UpdatedBy = "portaladmin1"
                 };
-
+                
+                for (var c = 0; c < random.Next(0, 10); c++)
+                {
+                    var contact = new ContactDetails();
+                    contact.Comment = $"Comment for Contact {i} -- {c}";
+                    contact.Name = $"Contact {i} -- {c}";
+                    contact.CreatedBy = "system";
+                    
+                    for (var em = 0; em < random.Next(0, 10); em++)
+                    {
+                        contact.Emails.Add(new EmailAddress
+                        {
+                            Comment = $"TEST Email address {c}--{em}",
+                            Email = $"{c}@{em}.com",
+                            CreatedBy = "system"
+                        });
+                    }
+                    newClient.Contacts.Add(contact);
+                }
+                
                 if (i % 2 == 0)
                 {
-                    for (int j = 0; j < random.Next(1, 20); j++)
+                    for (var j = 0; j < random.Next(0, 20); j++)
                     {
                         newClient.LegalAppCases.Add(new LegalAppCase
                         {
@@ -100,25 +117,32 @@ namespace SystemyWP.API
                             Signature = $"XYZ-{j}-XYZ-{j}",
                             Description =
                                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                            CreatedBy = "portaladmin1",
+                            CreatedBy = "system",
                             UpdatedBy = "portaladmin1"
                         });
                     }
                 }
-
-                if (i % 2 == 0)
+                
+                if (i < 10)
                 {
                     newClient.DataAccessKey = "access-key-1";
+                    newClient.CreatedBy = "system";
                     context.Add(newClient);
+                    continue;
                 }
-                else if (i % 3 == 0)
-                {
-                    newClient.DataAccessKey = "access-key-3";
-                    context.Add(newClient);
-                }
-                else
+                
+                if (i < 30)
                 {
                     newClient.DataAccessKey = "access-key-2";
+                    newClient.CreatedBy = "system";
+                    context.Add(newClient);
+                    continue;
+                }
+                
+                if (i < 50)
+                {
+                    newClient.DataAccessKey = "access-key-3";
+                    newClient.CreatedBy = "system";
                     context.Add(newClient);  
                 }
             }
@@ -152,7 +176,8 @@ namespace SystemyWP.API
                 {
                     Name = $"access-key-{i}",
                     ExpireDate = DateTime.UtcNow.AddDays(i),
-                    Created = DateTime.UtcNow
+                    Created = DateTime.UtcNow,
+                    CreatedBy = "system"
                 });
             }
 
@@ -184,7 +209,8 @@ namespace SystemyWP.API
                         var userRecord = new User
                         {
                             Id = clientAdmin.Id,
-                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-4"))
+                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-4")),
+                            CreatedBy = "system"
                         };    
                         context.Add(userRecord);
                         break;
@@ -194,7 +220,8 @@ namespace SystemyWP.API
                         var userRecord = new User
                         {
                             Id = clientAdmin.Id,
-                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-5"))
+                            AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-5")),
+                            CreatedBy = "system"
                         };    
                         context.Add(userRecord);
                         break;
@@ -206,7 +233,8 @@ namespace SystemyWP.API
                             Id = clientAdmin.Id,
                             AccessKey = i % 2 == 0
                                 ? context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"))
-                                : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"))
+                                : context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2")),
+                            CreatedBy = "system"
                         };
                         context.Add(userRecord);
                         break;
@@ -233,7 +261,7 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
 
-                var userRecord = new User {Id = testClient.Id};
+                var userRecord = new User {Id = testClient.Id, CreatedBy = "system"};
 
                 if (i == 1)
                 {
@@ -274,6 +302,7 @@ namespace SystemyWP.API
             {
                 AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1")),
                 Id = portalAdmin.Id,
+                CreatedBy = "system"
             });
             
             for (var i = 1; i < 2; i++)
@@ -297,6 +326,7 @@ namespace SystemyWP.API
                 {
                     AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1")),
                     Id = portalAdmin.Id,
+                    CreatedBy = "system"
                 });
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SystemyWP.Data.Models.Abstractions
 {
@@ -6,10 +7,11 @@ namespace SystemyWP.Data.Models.Abstractions
     {
         public TKey Id { get; set; }
         
+        [Required]
+        [MaxLength(200)]
         public string CreatedBy { get; set; }
-        public DateTime Created { get; set; } = DateTime.UtcNow;
         
-        public string UpdatedBy { get; set; }
-        public DateTime Updated { get; set; } = DateTime.UtcNow;
+        [Required]
+        public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }
