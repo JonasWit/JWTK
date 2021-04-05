@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SystemyWP.API.CustomAttributes;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Services.PortalLoggerService
 {
+    [TransientService]
     public class PortalLogger
     {
         private readonly AppDbContext _context;

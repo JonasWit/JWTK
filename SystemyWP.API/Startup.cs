@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Reflection;
+using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -47,8 +50,8 @@ namespace SystemyWP.API
 
             services.AddRazorPages();
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
-
-            services.AddTransient<PortalLogger>();
+            
+            AddUtilities(services);
 
             services.AddScoped<EmailClient>();
             services.AddFileServices(_configuration);
@@ -82,6 +85,28 @@ namespace SystemyWP.API
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });
+        }
+
+        private void AddUtilities(IServiceCollection services)
+        {
+            
+            var transientServiceType = typeof(TransientService);
+            var scopedServiceType = typeof(ScopedService);
+
+            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes;
+
+            var transientServices = appDefinedTypes
+                .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
+
+            var scopedServices = appDefinedTypes
+                .Where(x => x.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
+
+            foreach (var service in transientServices)
+                services.AddTransient(service);
+            
+
+            foreach (var service in scopedServices)
+                services.AddScoped(service);
         }
 
         private void AddIdentity(IServiceCollection services)
