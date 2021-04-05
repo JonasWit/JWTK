@@ -11,7 +11,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
         public int Minutes { get; set; }     
         public decimal Amount { get; set; }      
         
-        public int LegalAppClientId { get; set; }
         public LegalAppClient LegalAppClient { get; set; }
     }
 }
