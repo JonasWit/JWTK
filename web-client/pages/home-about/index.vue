@@ -25,13 +25,17 @@
       </v-card>
 
     </v-row>
-    <sticky-icons/>
+
+
   </v-container>
 </template>
 
 <script>
+import Footer from "@/components/home-page/footer";
+
 export default {
   name: "home-main-content",
+  components: {Footer},
   data: () => {
     return ({
       items: [

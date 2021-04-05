@@ -4,7 +4,7 @@
       <cookie-consent/>
     </client-only>
     <snackbar/>
-    <v-app-bar app color="pink darken-2">
+    <v-app-bar app color="indigo darken-4">
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>
@@ -78,11 +78,11 @@
     <v-main>
       <v-container fluid>
         <nuxt/>
-
+        <footer/>
       </v-container>
 
     </v-main>
-    <footer/>
+
   </v-app>
 </template>
 
