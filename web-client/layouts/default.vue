@@ -1,10 +1,10 @@
 <template>
-  <v-app dark>
+  <v-app light>
     <client-only>
       <cookie-consent/>
     </client-only>
     <snackbar/>
-    <v-app-bar app>
+    <v-app-bar app color="pink darken-2">
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>

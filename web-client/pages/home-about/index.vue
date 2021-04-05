@@ -54,8 +54,8 @@ export default {
           id: 3,
           img: `${require('~/assets/images/background.jpg')}`,
           icon: `${require('~/assets/images/icons8-short-hair-girl-question-mark-100.png')}`,
-          title: 'Doradztwo',
-          text: 'Pomagamy analizować potrzeby firmy celem dostosowania najlepszych rozwiązań usprawniających funkcjonowanie przedsiębiorstwa.'
+          title: 'Elastyczność',
+          text: 'Naszym celem jest zadowolenie klienta! Dlatego, realizując nasze projekty i nie wiem co tutaj napisać dalej. POMOCY!!!'
         },
 
 

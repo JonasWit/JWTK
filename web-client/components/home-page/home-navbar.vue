@@ -1,53 +1,59 @@
 ﻿<template>
-  <v-row>
-    <ul class="nav-list d-flex justify-space-between">
-      <li class="nav-item">
-        <nuxt-link to="/">Home</nuxt-link>
-      </li>
-      <li class="nav-item">
-        <nuxt-link to="/home-about">O Nas</nuxt-link>
-      </li>
-      <li class="nav-item">
-        <nuxt-link to="/home-products">Oferta</nuxt-link>
-      </li>
-      <li class="nav-item">
-        <nuxt-link to="/home-legal-app">Twoja Kancelaria</nuxt-link>
-      </li>
-      <li class="nav-item">
-        <nuxt-link to="/home-contact">Kontakt</nuxt-link>
-      </li>
-      <li class="nav-item">
-        <nuxt-link to="/home-pricing">Cennik</nuxt-link>
-      </li>
-    </ul>
+  <v-row class="ml-2">
+    <v-list selectable width="100%" class="nav-list d-flex justify-space-between">
+      <v-list-item  v-for="item in items" :key="item.id">
+        <nuxt-link class="nav-item" :to="item.route">{{item.name}}</nuxt-link>
+      </v-list-item>
+
+    </v-list>
   </v-row>
 </template>
 
 <script>
 export default {
   name: "home-navbar",
+  data: () => ({
+    items: [
+      { id: '1',
+        route: '/',
+        name: 'Home'},
+      { id: '2',
+        route: '/home-about',
+        name: 'O Nas'
+      },
+      { id: '3',
+        route: '/home-products',
+        name: 'Oferta'
+      },
+
+      { id: '4',
+        route: '/home-pricing',
+        name: 'Cennik'
+      },
+      { id: '5',
+        route: '/home-legal-app',
+        name: 'Twoja Kancelaria'
+      },
+      { id: '6',
+        route: '/home-contact',
+        name: 'Kontakt'
+      },
+    ],
+  }),
 
 };
 </script>
 
 <style scoped>
+
 .nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  background: transparent;
 }
-
 .nav-item {
-  margin: 0 20px;
-}
-
-.nav-item a {
+  white-space: nowrap;
   text-decoration: none;
-  color: #fefefe;
+  color: azure;
+  font-weight: bold;
 }
 
-.nav-item a:hover,
-.nav-item a:active {
-  color: #b4b4b4;
-}
 </style>
