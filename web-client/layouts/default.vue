@@ -1,10 +1,10 @@
 <template>
-  <v-app light>
+  <v-app dark>
     <client-only>
       <cookie-consent/>
     </client-only>
     <snackbar/>
-    <v-app-bar app color="indigo darken-4">
+    <v-app-bar app color="">
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>
@@ -78,10 +78,10 @@
     <v-main>
       <v-container fluid>
         <nuxt/>
-        <footer/>
       </v-container>
 
     </v-main>
+    <portal-footer/>
 
   </v-app>
 </template>
@@ -148,3 +148,13 @@ export default {
   }
 };
 </script>
+<style>
+
+container, app, main {
+  padding: 0 !important;
+  margin: 65px 0 0 0 !important;
+  width: 100vw !important;
+}
+
+
+</style>

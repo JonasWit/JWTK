@@ -12,7 +12,8 @@
     </v-row>
     <v-row class="d-flex justify-space-between">
       <v-card id="card" v-for="item in items" :key="item.id" width="350px" class="mx-auto my-2">
-        <v-img height="100%" :src="item.img" class="white--text align-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+        <v-img height="100%" :src="item.img" class="white--text align-center"
+               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
           <v-row align="center" justify="space-around">
             <img class="icon" :src="item.icon">
           </v-row>
@@ -22,13 +23,6 @@
 
       </v-card>
     </v-row>
-    <v-row>
-
-      <sticky-icons/>
-
-    </v-row>
-
-
   </v-container>
 </template>
 

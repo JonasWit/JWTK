@@ -1,9 +1,6 @@
 <template>
   <div>
     <home-welcome/>
-    <quick-links/>
-
-
   </div>
 </template>
 

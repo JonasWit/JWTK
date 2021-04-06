@@ -1,13 +1,13 @@
 ﻿<template>
   <v-container>
-    <v-row class="my-4">
+    <v-row>
       <v-row class="d-flex justify-space-between mb-2">
-        <v-content class="my-4 title" width="100vw" color="purple darken-1" dark>Sprawdź przykładowy cennik naszych
+        <div class="my-4 title" width="100vw" color="purple darken-1" dark>Sprawdź przykładowy cennik naszych
           usług.
           Aby
           poznać szczegóły zapraszamy do
           <nuxt-link to="/home-contact">kontaktu.</nuxt-link>
-        </v-content>
+        </div>
       </v-row>
       <v-row>
         <v-card v-for="item in items" :key="item.id" width="380px" class="mx-auto my-8" elevation="10">
@@ -92,4 +92,6 @@ export default {
   left: 60px;
   background-color: crimson;
 }
+
+
 </style>
