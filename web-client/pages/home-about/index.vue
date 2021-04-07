@@ -1,16 +1,20 @@
 <template>
   <v-container>
     <v-row class="my-4">
-      <v-card class="my-4" width="100vw" color="pink darken-2" dark><h2 class="px-2 py-3">Kim jesteśmy?</h2></v-card>
-      <div>
-        Systemy Wspomagania Pracy to rozwiązania dostosowane do potrzeb Twojej firmy. Tworzymy strony internetowe i
-        rozwiązania, które wspierają funkcjonowanie biznesu. Inwestujemy w rozwój i podążamy za nowoczesnymi
-        technologiami. Programowanie to nasza pasja, dlatego do każdego zlecenia podchodzimy w sposób indywidualny
-        skupiając się na potrzebach Klienta. Zapraszamy do współpracy!
-      </div>
+      <v-row class="header my-5 py-2 px-2"><h1>Kim jesteśmy ?</h1>
+      </v-row>
+      <p>
+        <span class="title">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
+        Tworzymy <span class="subtitle-1">strony internetowe</span> i
+        rozwiązania, które wspierają <span class="subtitle-1">funkcjonowanie biznesu</span>. </p>
+      <p>Inwestujemy w rozwój i podążamy za nowoczesnymi technologiami.</p>
+      <p>Programowanie to nasza pasja, dlatego do każdego zlecenia podchodzimy w sposób indywidualny
+        skupiając się na potrzebach Klienta.</p>
+      <p class="title">Zapraszamy do współpracy!</p>
+
     </v-row>
-    <v-row>
-      <v-card class="my-1" width="100vw" color="pink darken-2" dark><h2 class="px-2 py-3">Co nas wyróżnia?</h2></v-card>
+    <v-row class="py-4">
+      <v-divider color="crimson"></v-divider>
     </v-row>
     <v-row class="d-flex justify-space-between">
       <v-card id="card" v-for="item in items" :key="item.id" width="350px" class="mx-auto my-2">
@@ -23,15 +27,20 @@
           <v-card-text>{{ item.text }}</v-card-text>
         </v-img>
       </v-card>
+    </v-row>
+    <v-row class="py-4">
+      <v-divider color="crimson"></v-divider>
+    </v-row>
+    <v-row>
 
     </v-row>
-
   </v-container>
 </template>
 <script>
 
 export default {
   name: "home-main-content",
+  transition: 'bounce',
   data: () => {
     return ({
       items: [
@@ -70,6 +79,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+
+.header {
+  display: block;
+  border-bottom: solid 1px crimson;
+}
 
 </style>

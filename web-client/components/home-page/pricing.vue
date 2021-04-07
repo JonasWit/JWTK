@@ -1,16 +1,9 @@
 ﻿<template>
   <v-container>
     <v-row>
-      <v-row class="d-flex justify-space-between mb-2">
-        <div class="my-4 title" width="100vw" color="purple darken-1" dark>Sprawdź przykładowy cennik naszych
-          usług.
-          Aby
-          poznać szczegóły zapraszamy do
-          <nuxt-link to="/home-contact">kontaktu.</nuxt-link>
-        </div>
-      </v-row>
+
       <v-row>
-        <v-card v-for="item in items" :key="item.id" width="380px" class="mx-auto my-8" elevation="10">
+        <v-card v-for="item in items" :key="item.id" width="380px" class="mx-auto my-8" elevation="15">
           <v-img :src="item.img" class="white--text align-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                  height="120px">
             <v-card-text class="text-center font-weight-medium headline">{{ item.title }}</v-card-text>
