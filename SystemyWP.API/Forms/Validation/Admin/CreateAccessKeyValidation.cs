@@ -7,7 +7,7 @@ namespace SystemyWP.API.Forms.Validation.Admin
     {
         public CreateAccessKeyValidation()
         {
-            RuleFor(x => x.KeyName).NotEmpty();
+            RuleFor(x => x.KeyName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.ExpireDate).NotEmpty();
         }
     }
