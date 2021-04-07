@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms;
+using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
@@ -23,7 +24,8 @@ namespace SystemyWP.API.Controllers
             [FromServices] AppDbContext context)
         {
             var legalAppRelatedDataCount = await context.LegalAppClients
-                .GroupBy(x => x.DataAccessKey)
+                .Include(x => x.AccessKey)
+                .GroupBy(x => x.AccessKey.Name)
                 .Select(x => new
                 {
                     KeyName = x.Key,
@@ -101,12 +103,14 @@ namespace SystemyWP.API.Controllers
             }
 
             var relatedLegalAppData = context.LegalAppClients
-                .Count(x => x.DataAccessKey.Equals(keyToDelete.Name));
+                .Include(x => x.AccessKey)
+                .Count(x => x.AccessKey.Name.Equals(keyToDelete.Name));
 
             if (relatedLegalAppData > 0)
             {
                 context.LegalAppClients.RemoveRange(context.LegalAppClients
-                    .Where(x => x.DataAccessKey.Equals(keyToDelete.Name)));
+                    .Include(x => x.AccessKey)
+                    .Where(x => x.AccessKey.Name.Equals(keyToDelete.Name)));
             }
 
             context.AccessKeys.Remove(keyToDelete);

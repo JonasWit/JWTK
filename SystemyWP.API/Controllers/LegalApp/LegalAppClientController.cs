@@ -23,7 +23,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("client/{clientId}")]
-        public ActionResult<object> CreateClient(
+        public ActionResult<object> GetClient(
             [FromServices] AppDbContext context,
             int clientId)
         {
@@ -31,44 +31,35 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(UserId));
 
-            if (user?.AccessKey is null)
-            {
-                return BadRequest("Brak klucza!");
-            }
+            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
 
+            //Get data as Admin
             if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
                 Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
             {
                 var result = context.LegalAppClients
-                    .Include(x =>
-                        x.LegalAppCases)
                     .Where(x =>
-                        x.DataAccessKey.Equals(user.AccessKey.Name))
+                        x.AccessKey.Name.Equals(user.AccessKey.Name))
                     .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
                 return Ok(result);
             }
 
+            //Get data as User
             if (Role.Equals(SystemyWPConstants.Roles.Client))
             {
-                //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
-
                 var result = context.LegalAppClients
-                    .Include(x =>
-                        x.LegalAppCases)
+                    .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.DataAccessKey.Equals(user.AccessKey.Name) &&
+                        x.AccessKey.Name.Equals(user.AccessKey.Name) &&
                         context.DataAccesses.Where(x => x.UserId.Equals(UserId))
                             .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
                     .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
-                if (result is null)
-                {
-                    return StatusCode(403);
-                }
+                if (result is null) return StatusCode(403);
 
                 return Ok(result);
             }
@@ -77,54 +68,53 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("clients")]
-        public ActionResult<IEnumerable<object>> ListClients([FromServices] AppDbContext context)
+        public ActionResult<IEnumerable<object>> GetClientsData([FromServices] AppDbContext context)
         {
             var user = context.Users
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(UserId));
 
-            if (user?.AccessKey is null)
-            {
-                return BadRequest("Brak klucza!");
-            }
+            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
 
             var result = new List<object>();
 
+            //Get data as Admin
             if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
                 Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
             {
                 result.AddRange(context.LegalAppClients
-                    .Include(x =>
-                        x.LegalAppCases)
+                    .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.DataAccessKey.Equals(user.AccessKey.Name))
+                        x.AccessKey.Name.Equals(user.AccessKey.Name))
                     .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
 
                 return Ok(result);
             }
 
+            //Get data as User
             if (Role.Equals(SystemyWPConstants.Roles.Client))
             {
                 //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
 
                 result.AddRange(context.LegalAppClients
-                    .Include(x =>
-                        x.LegalAppCases)
+                    .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.DataAccessKey.Equals(user.AccessKey.Name) &&
+                        x.AccessKey.Name.Equals(user.AccessKey.Name) &&
                         context.DataAccesses.Where(x => x.UserId.Equals(UserId))
                             .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
                     .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
-                
+
                 return Ok(result);
             }
 
             return BadRequest("Brak dostępu!");
         }
         
+        
+
         [HttpGet("admin/flat")]
         [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
         public async Task<ActionResult<IEnumerable<object>>> GetClientsAndCasesForAccess(
@@ -136,11 +126,12 @@ namespace SystemyWP.API.Controllers.LegalApp
                     .Where(x => x.Id.Equals(UserId))
                     .Include(x => x.AccessKey)
                     .FirstOrDefaultAsync();
-                
+
                 var result = await context.LegalAppClients
-                    .Where(x => 
-                        x.DataAccessKey.Equals(user.AccessKey.Name))
-                    .Include(x => 
+                    .Include(x => x.AccessKey)
+                    .Where(x =>
+                        x.AccessKey.Name.Equals(user.AccessKey.Name))
+                    .Include(x =>
                         x.LegalAppCases)
                     .Select(LegalAppClientProjections.MinimalProjection)
                     .ToListAsync();

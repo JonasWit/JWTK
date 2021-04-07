@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using SystemyWP.API.Forms.Admin;
+using FluentValidation;
 
-namespace SystemyWP.API.Forms.Validation
+namespace SystemyWP.API.Forms.Validation.Admin
 {
     public class InviteClientFromValidation: AbstractValidator<InviteClientForm>
     {

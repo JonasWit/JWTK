@@ -23,11 +23,11 @@ namespace SystemyWP.API.Services.PortalLoggerService
             {
                 LogType = logType,
                 Description = description,
-                UserId = userId,
                 UserEmail = userEmail,
                 Endpoint = endpoint,
                 ExceptionMessage = ex is not null ? ex.Message : null,
                 ExceptionStackTrace = ex is not null ? ex.StackTrace : null,
+                CreatedBy = userId,
             });
             await _context.SaveChangesAsync();
         }

@@ -78,8 +78,13 @@ namespace SystemyWP.Data
             modelBuilder.Entity<AccessKey>()
                 .HasMany(c => c.Users)
                 .WithOne(e => e.AccessKey)
-                .OnDelete(DeleteBehavior.NoAction);     
-            
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AccessKey>()
+                .HasMany(x => x.LegalAppClients)
+                .WithOne(x => x.AccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+
             #endregion
             
             modelBuilder.Entity<ContactDetails>()

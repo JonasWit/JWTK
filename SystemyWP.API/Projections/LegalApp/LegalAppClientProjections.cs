@@ -11,7 +11,6 @@ namespace SystemyWP.API.Projections.LegalApp
         public static Expression<Func<LegalAppClient, object>> FlatProjection =>
             legalAppClient => new
             {
-                legalAppClient.DataAccessKey,
                 legalAppClient.Created,
                 legalAppClient.CreatedBy,
                 legalAppClient.Updated,
@@ -27,7 +26,6 @@ namespace SystemyWP.API.Projections.LegalApp
             legalAppClient => new
             {
                 legalAppClient.Id,
-                legalAppClient.DataAccessKey,
                 legalAppClient.Name,
                 Cases = legalAppClient.LegalAppCases
                     .AsQueryable()

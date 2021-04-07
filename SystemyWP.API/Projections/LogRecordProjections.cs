@@ -14,7 +14,7 @@ namespace SystemyWP.API.Projections
                 ExceptionMessage  = string.IsNullOrEmpty(log.ExceptionMessage) ? null : log.ExceptionMessage,
                 ExceptionStackTrace = string.IsNullOrEmpty(log.ExceptionStackTrace) ? null : log.ExceptionStackTrace,
                 LogType = log.LogType.ToString(),
-                log.UserId,
+                UserId = log.CreatedBy,
                 log.Created,
                 log.Id,
                 log.UserEmail

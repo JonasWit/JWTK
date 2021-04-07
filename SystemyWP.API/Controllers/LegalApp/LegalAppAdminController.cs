@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms;
+using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -108,7 +109,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                     {
                         RestrictedType = RestrictedType.LegalAppClient,
                         ItemId = allowedClient,
-                        UserId = user.Id
+                        UserId = user.Id,
+                        CreatedBy = UserId
                     });
                 }
 
@@ -120,7 +122,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                         ItemId = allowedCase,
                         UserId = user.Id,
                         CreatedBy = UserId,
-                        UpdatedBy = UserId
                     });
                 }
 
@@ -168,8 +169,9 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 var clients = context.LegalAppClients
                     .Include(x => x.LegalAppCases)
+                    .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.DataAccessKey.Equals(requester.AccessKey.Name))
+                        x.AccessKey.Name.Equals(requester.AccessKey.Name))
                     .ToList();
 
                 foreach (var client in clients)
@@ -180,7 +182,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                         ItemId = client.Id,
                         UserId = user.Id,
                         CreatedBy = UserId,
-                        UpdatedBy = UserId
                     });
 
                     foreach (var cs in client.LegalAppCases)
@@ -191,7 +192,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                             ItemId = cs.Id,
                             UserId = user.Id,
                             CreatedBy = UserId,
-                            UpdatedBy = UserId
                         });
                     }
                 }
@@ -270,7 +270,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .ToList();
             
             var appData = context.LegalAppClients
-                .Where(x => x.DataAccessKey.Equals(accessKey.Name))
+                .Include(x => x.AccessKey)
+                .Where(x => x.AccessKey.Name.Equals(accessKey.Name))
                 .Select(x => new
                 {
                     x.Id,

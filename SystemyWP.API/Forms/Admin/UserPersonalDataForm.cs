@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms
+﻿namespace SystemyWP.API.Forms.Admin
 {
     //todo: add fluent validation
     public class UserPersonalDataForm : UserIdForm

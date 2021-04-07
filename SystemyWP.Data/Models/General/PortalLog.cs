@@ -13,8 +13,6 @@ namespace SystemyWP.Data.Models.General
         public string ExceptionMessage { get; set; }   
         public string ExceptionStackTrace { get; set; }
         [Required]
-        public string UserId { get; set; }
-        [Required]
         public string UserEmail { get; set; }
     }
 }

@@ -81,7 +81,7 @@ namespace SystemyWP.API
             {
                 var newClient = new LegalAppClient
                 {
-                    DataAccessKey = "access-key-1",
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1")),
                     Name = $"#{i}# Test Client",
                     Active = true,
                     CreatedBy = "portaladmin1",
@@ -125,7 +125,7 @@ namespace SystemyWP.API
                 
                 if (i < 10)
                 {
-                    newClient.DataAccessKey = "access-key-1";
+                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"));
                     newClient.CreatedBy = "system";
                     context.Add(newClient);
                     continue;
@@ -133,7 +133,7 @@ namespace SystemyWP.API
                 
                 if (i < 30)
                 {
-                    newClient.DataAccessKey = "access-key-2";
+                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"));
                     newClient.CreatedBy = "system";
                     context.Add(newClient);
                     continue;
@@ -141,7 +141,7 @@ namespace SystemyWP.API
                 
                 if (i < 50)
                 {
-                    newClient.DataAccessKey = "access-key-3";
+                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-3"));
                     newClient.CreatedBy = "system";
                     context.Add(newClient);  
                 }
