@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms.LegalApp;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -112,8 +114,31 @@ namespace SystemyWP.API.Controllers.LegalApp
 
             return BadRequest("Brak dostępu!");
         }
-        
-        
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateClient(
+            [FromBody] CreateClientForm form,
+            [FromServices] AppDbContext context)
+        {
+            var user = await context.Users
+                .Include(x => x.AccessKey)
+                .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+            
+            if (user?.AccessKey.Id != form.AccessKeyId)
+            {
+                return BadRequest("Klucz dostępu nie pasuje!");
+            }
+
+            context.Add(new LegalAppClient
+            {
+                AccessKey = user.AccessKey,
+                Name = form.Name,
+                CreatedBy = UserId,
+                UpdatedBy = UserId
+            });
+
+            return Ok();
+        }
 
         [HttpGet("admin/flat")]
         [Authorize(SystemyWPConstants.Policies.ClientAdmin)]

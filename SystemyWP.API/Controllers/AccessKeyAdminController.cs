@@ -62,7 +62,9 @@ namespace SystemyWP.API.Controllers
             context.Add(new AccessKey
             {
                 Name = form.KeyName,
-                ExpireDate = form.ExpireDate
+                ExpireDate = form.ExpireDate,
+                CreatedBy = UserId,
+                UpdatedBy = UserId
             });
 
             await context.SaveChangesAsync();
@@ -84,6 +86,7 @@ namespace SystemyWP.API.Controllers
 
             keyToUpdate.Name = form.NewKeyName;
             keyToUpdate.ExpireDate = form.ExpireDate;
+            keyToUpdate.UpdatedBy = UserId;
 
             context.Update(keyToUpdate);
             await context.SaveChangesAsync();

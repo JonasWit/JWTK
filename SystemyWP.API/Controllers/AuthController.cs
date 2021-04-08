@@ -21,8 +21,7 @@ namespace SystemyWP.API.Controllers
         [HttpGet("logout")]
         public async Task<IActionResult> Logout(
             [FromServices] SignInManager<IdentityUser> signInManager,
-            [FromServices] IWebHostEnvironment env,
-            [FromServices] PortalLogger logger)
+            [FromServices] IWebHostEnvironment env)
         {
             await signInManager.SignOutAsync();
             return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
@@ -32,7 +31,6 @@ namespace SystemyWP.API.Controllers
         public async Task<IActionResult> Delete(
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,
-            [FromServices] PortalLogger logger,
             [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
@@ -54,7 +52,8 @@ namespace SystemyWP.API.Controllers
             }
             catch (Exception e)
             {
-                await logger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
         }

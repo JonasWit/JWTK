@@ -6,7 +6,7 @@ using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.Data.Models.General
 {
-    public class AccessKey : BaseModel<int>
+    public class AccessKey : TrackedModel<int>
     {
         [MaxLength(50)] [Required] public string Name { get; set; }
         public DateTime ExpireDate { get; set; }

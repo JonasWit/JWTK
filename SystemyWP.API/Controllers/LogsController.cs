@@ -35,6 +35,21 @@ namespace SystemyWP.API.Controllers
                 .Select(LogRecordProjection.Projection)
                 .ToListAsync();
 
+        [HttpPost("logs/delete/{id}")]
+        public IActionResult DeleteLogRecord(
+            [FromServices] AppDbContext context, 
+            long id)
+        {
+            var logRecord = context.PortalLogs.FirstOrDefault(x => x.Id == id);
+
+            if (logRecord is not null)
+            {
+                //todo: do this
+            }
+
+            return Ok();
+        }
+
         [HttpGet("logs/split/dates/")]
         public async Task<List<object>> ListLogRecords([FromServices] AppDbContext context, string from, string to,
             int cursor, int take, bool access, bool exception, bool admin, bool personalData, bool issue)
