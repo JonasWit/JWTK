@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.BaseClases
@@ -9,10 +10,12 @@ namespace SystemyWP.API.Controllers.BaseClases
     public class ApiController : ControllerBase
     {
         protected readonly PortalLogger _portalLogger;
+        protected readonly AppDbContext _context;
 
-        public ApiController(PortalLogger portalLogger)
+        public ApiController(PortalLogger portalLogger, AppDbContext context)
         {
             _portalLogger = portalLogger;
+            _context = context;
         }
 
         protected string UserId => GetClaim(ClaimTypes.NameIdentifier);

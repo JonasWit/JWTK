@@ -1,8 +1,6 @@
 ﻿<template>
   <div>
-    <padmin-edit-access-key-form-dialog v-if="showKeyDialog" :selected-key="selectedKey"
-                                        v-on:action-completed="keyDialogClosed"/>
-    <padmin-create-access-key-component v-on:action-completed="keyAdded"/>
+    <padmin-create-access-key-component v-on:action-completed="refreshData"/>
     <v-list>
       <v-list-item v-for="keyItem in keysList" :key="keyItem.id" class="mb-2">
         <v-list-item-content>
@@ -19,10 +17,8 @@
         <v-spacer/>
         <v-list-item-content>
           <div class="d-flex justify-end">
-            <v-btn class="mx-3" icon @click.stop="keyDialogOpen(keyItem)">
-              <v-icon medium color="warning">mdi-pencil</v-icon>
-            </v-btn>
-            <padmin-delete-access-key-dialog :selected-key="keyItem" v-on:action-completed="refreshAfterKeyDelete"/>
+            <padmin-edit-access-key-form-dialog :selected-key="keyItem" v-on:action-completed="refreshData"/>
+            <padmin-delete-access-key-dialog :selected-key="keyItem" v-on:action-completed="refreshData"/>
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -50,9 +46,9 @@ export default {
     loading: false,
     searchResult: "",
     selectedKey: null,
-    showKeyDialog: false,
   }),
   beforeMount() {
+    console.log('access keys panel mounted');
     this.getAccessKeys();
   },
   computed: {
@@ -93,27 +89,10 @@ export default {
       return "error--text";
 
     },
-    refreshAfterKeyDelete() {
+    refreshData() {
       this.getAccessKeys();
       this.getUsers();
     },
-    keyDialogOpen(keyItem) {
-      this.selectedKey = keyItem;
-      this.showKeyDialog = true;
-    },
-    keyDialogClosed() {
-      this.showKeyDialog = false;
-      this.selectedKey = null;
-      this.searchResult = "";
-      this.getAccessKeys();
-      this.getUsers();
-    },
-    keyAdded() {
-      this.selectedKey = null;
-      this.searchResult = "";
-      this.getAccessKeys();
-      this.getUsers();
-    }
   }
 };
 </script>

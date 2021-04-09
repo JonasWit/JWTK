@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
@@ -22,13 +21,13 @@ namespace SystemyWP.API.Controllers.LegalApp
     [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
     public class LegalAppAdminController : ApiController
     {
-        public LegalAppAdminController(PortalLogger portalLogger) : base(portalLogger)
+        public LegalAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
 
+
         [HttpGet("related-users")]
-        public async Task<ActionResult<IEnumerable<object>>> GetRelatedUsers(
-            [FromServices] AppDbContext context,
+        public async Task<IActionResult> GetRelatedUsers(
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var result = new List<object>();
@@ -36,14 +35,14 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 //Get current admin who made request
-                var adminUser = context.Users
+                var adminUser = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
                 if (adminUser is null) throw new Exception("Error!");
 
                 //Get related users with the same data access key
-                var relatedUsers = context.Users
+                var relatedUsers = _context.Users
                     .Include(x => x.AccessKey)
                     .Where(x => x.AccessKey.Name.Equals(adminUser.AccessKey.Name))
                     .Include(x => x.DataAccess)
@@ -54,7 +53,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 foreach (var relatedUser in relatedUsers)
                 {
                     var userRecord = await userManager.FindByIdAsync(relatedUser.Id);
-                    var role = (await userManager.GetClaimsAsync(userRecord) as List<Claim>)
+                    var role = (await userManager.GetClaimsAsync(userRecord) as List<Claim>)?
                         .FirstOrDefault(x => x.Type.Equals(SystemyWPConstants.Claims.Role))?
                         .Value;
                     result.Add(UserProjections
@@ -72,17 +71,15 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpPost("update-legal-app-data-access")]
-        public async Task<IActionResult> UpdateLegalAppDataAccess(
-            [FromBody] LegalAppUpdateUserAccessForm form,
-            [FromServices] AppDbContext context)
+        public async Task<IActionResult> UpdateLegalAppDataAccess([FromBody] LegalAppUpdateUserAccessForm form)
         {
             try
             {
-                var requester = context.Users
+                var requester = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
-                var user = context.Users
+                var user = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
@@ -90,42 +87,33 @@ namespace SystemyWP.API.Controllers.LegalApp
                     user is null ||
                     requester.AccessKey is null ||
                     user.AccessKey is null)
-                {
                     return BadRequest();
-                }
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
-                {
-                    return BadRequest();
-                }
+                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
 
-                context.DataAccesses.RemoveRange(
-                    context.DataAccesses
+                _context.DataAccesses.RemoveRange(
+                    _context.DataAccesses
                         .Where(x => x.UserId.Equals(user.Id)));
 
                 foreach (var allowedClient in form.AllowedClients)
-                {
-                    context.Add(new DataAccess
+                    _context.Add(new DataAccess
                     {
                         RestrictedType = RestrictedType.LegalAppClient,
                         ItemId = allowedClient,
                         UserId = user.Id,
                         CreatedBy = UserId
                     });
-                }
 
                 foreach (var allowedCase in form.AllowedCases)
-                {
-                    context.Add(new DataAccess
+                    _context.Add(new DataAccess
                     {
                         RestrictedType = RestrictedType.LegalAppCase,
                         ItemId = allowedCase,
                         UserId = user.Id,
-                        CreatedBy = UserId,
+                        CreatedBy = UserId
                     });
-                }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -136,17 +124,15 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpPost("full-legal-app-data-access")]
-        public async Task<IActionResult> GrantFullDataAccess(
-            [FromBody] LegalAppUpdateUserAccessForm form,
-            [FromServices] AppDbContext context)
+        public async Task<IActionResult> GrantFullDataAccess([FromBody] LegalAppUpdateUserAccessForm form)
         {
             try
             {
-                var requester = context.Users
+                var requester = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
-                var user = context.Users
+                var user = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
@@ -154,20 +140,15 @@ namespace SystemyWP.API.Controllers.LegalApp
                     user is null ||
                     requester.AccessKey is null ||
                     user.AccessKey is null)
-                {
                     return BadRequest();
-                }
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
-                {
-                    return BadRequest();
-                }
+                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
 
-                context.DataAccesses.RemoveRange(
-                    context.DataAccesses
+                _context.DataAccesses.RemoveRange(
+                    _context.DataAccesses
                         .Where(x => x.UserId.Equals(user.Id)));
 
-                var clients = context.LegalAppClients
+                var clients = _context.LegalAppClients
                     .Include(x => x.LegalAppCases)
                     .Include(x => x.AccessKey)
                     .Where(x =>
@@ -176,27 +157,25 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 foreach (var client in clients)
                 {
-                    context.Add(new DataAccess
+                    _context.Add(new DataAccess
                     {
                         RestrictedType = RestrictedType.LegalAppClient,
                         ItemId = client.Id,
                         UserId = user.Id,
-                        CreatedBy = UserId,
+                        CreatedBy = UserId
                     });
 
                     foreach (var cs in client.LegalAppCases)
-                    {
-                        context.Add(new DataAccess
+                        _context.Add(new DataAccess
                         {
                             RestrictedType = RestrictedType.LegalAppCase,
                             ItemId = cs.Id,
                             UserId = user.Id,
-                            CreatedBy = UserId,
+                            CreatedBy = UserId
                         });
-                    }
                 }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -207,17 +186,15 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpPost("revoke-legal-app-data-access")]
-        public async Task<IActionResult> RevokeAllDataAccess(
-            [FromBody] LegalAppUpdateUserAccessForm form,
-            [FromServices] AppDbContext context)
+        public async Task<IActionResult> RevokeAllDataAccess([FromBody] LegalAppUpdateUserAccessForm form)
         {
             try
             {
-                var requester = context.Users
+                var requester = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
-                var user = context.Users
+                var user = _context.Users
                     .Include(x => x.AccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
@@ -225,20 +202,15 @@ namespace SystemyWP.API.Controllers.LegalApp
                     user is null ||
                     requester.AccessKey is null ||
                     user.AccessKey is null)
-                {
                     return BadRequest();
-                }
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name))
-                {
-                    return BadRequest();
-                }
+                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
 
-                context.DataAccesses.RemoveRange(
-                    context.DataAccesses
+                _context.DataAccesses.RemoveRange(
+                    _context.DataAccesses
                         .Where(x => x.UserId.Equals(user.Id)));
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -247,29 +219,24 @@ namespace SystemyWP.API.Controllers.LegalApp
 
             return Ok();
         }
-        
+
         [HttpGet("legal-app-summary")]
-        public async Task<ActionResult<AppSummaryViewModel>> GetLegalAppSummary(
-            [FromServices] AppDbContext context,
-            [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GetLegalAppSummary([FromServices] UserManager<IdentityUser> userManager)
         {
             var result = new AppSummaryViewModel();
 
-            var accessKey = await context.AccessKeys
+            var accessKey = await _context.AccessKeys
                 .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id.Equals(UserId)));
 
-            if (accessKey is null)
-            {
-                return BadRequest();
-            }
-            
-            var relatedUsers = context.Users
+            if (accessKey is null) return BadRequest();
+
+            var relatedUsers = _context.Users
                 .Include(x => x.AccessKey)
                 .Where(x => x.AccessKey.Name.Equals(accessKey.Name))
                 .ToList();
-            
-            var appData = context.LegalAppClients
+
+            var appData = _context.LegalAppClients
                 .Include(x => x.AccessKey)
                 .Where(x => x.AccessKey.Name.Equals(accessKey.Name))
                 .Select(x => new
@@ -282,10 +249,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             result.ClientsCount = appData.Count;
             result.CasesCount = appData.Sum(x => x.Count);
             result.UsersCount = relatedUsers.Count;
-            
-            
-            
-
 
             return Ok();
         }

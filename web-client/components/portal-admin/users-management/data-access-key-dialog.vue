@@ -77,7 +77,6 @@ export default {
   },
   fetch() {
     this.loading = true;
-    this.getAccessKeys();
     if (this.selectedUser.dataAccessKey) {
       this.form.dataAccessKey = this.selectedUser.dataAccessKey;
     }

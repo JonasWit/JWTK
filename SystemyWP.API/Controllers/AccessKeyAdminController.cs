@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -19,11 +18,14 @@ namespace SystemyWP.API.Controllers
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
     public class AccessKeyAdminController : ApiController
     {
-        [HttpGet("access-keys")]
-        public async Task<ActionResult<IEnumerable<object>>> ListAccessKeys(
-            [FromServices] AppDbContext context)
+        public AccessKeyAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
-            var legalAppRelatedDataCount = await context.LegalAppClients
+        }
+
+        [HttpGet("access-keys")]
+        public async Task<ActionResult<IEnumerable<object>>> ListAccessKeys()
+        {
+            var legalAppRelatedDataCount = await _context.LegalAppClients
                 .Include(x => x.AccessKey)
                 .GroupBy(x => x.AccessKey.Name)
                 .Select(x => new
@@ -33,16 +35,16 @@ namespace SystemyWP.API.Controllers
                 })
                 .ToListAsync();
 
-            var results = context.AccessKeys
+            var results = _context.AccessKeys
                 .Include(x => x.Users)
                 .AsEnumerable()
                 .Select(x => AccessKeyProjection
                     .FullProjection(
-                        legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name)) ? 
-                            legalAppRelatedDataCount
+                        legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name))
+                            ? legalAppRelatedDataCount
                                 .FirstOrDefault(y => y.KeyName.Equals(x.Name))
                                 .Count
-                        : 0)
+                            : 0)
                     .Compile()
                     .Invoke(x))
                 .ToList();
@@ -50,16 +52,12 @@ namespace SystemyWP.API.Controllers
         }
 
         [HttpPost("access-key/create")]
-        public async Task<IActionResult> CreateAccessKey(
-            [FromServices] AppDbContext context,
-            [FromBody] AccessKeyForm form)
+        public async Task<IActionResult> CreateAccessKey([FromBody] AccessKeyForm form)
         {
-            if (context.AccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
-            {
+            if (_context.AccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
                 return BadRequest("Key with this name already exists!");
-            }
 
-            context.Add(new AccessKey
+            _context.Add(new AccessKey
             {
                 Name = form.KeyName,
                 ExpireDate = form.ExpireDate,
@@ -67,112 +65,85 @@ namespace SystemyWP.API.Controllers
                 UpdatedBy = UserId
             });
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut("access-key/update")]
-        public async Task<IActionResult> UpdateAccessKey(
-            [FromServices] AppDbContext context,
-            [FromBody] EditAccessKeyForm form)
+        public async Task<IActionResult> UpdateAccessKey([FromBody] EditAccessKeyForm form)
         {
-            var keyToUpdate = context.AccessKeys
+            var keyToUpdate = _context.AccessKeys
                 .FirstOrDefault(x => x.Name.ToLower().Equals(form.OldKeyName.ToLower()));
 
-            if (keyToUpdate is null)
-            {
-                return BadRequest("Key with this name not exists!");
-            }
+            if (keyToUpdate is null) return BadRequest("Key with this name not exists!");
 
             keyToUpdate.Name = form.NewKeyName;
             keyToUpdate.ExpireDate = form.ExpireDate;
             keyToUpdate.UpdatedBy = UserId;
 
-            context.Update(keyToUpdate);
-            await context.SaveChangesAsync();
+            _context.Update(keyToUpdate);
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
-        [HttpDelete("access-key/{id}")]
-        public async Task<IActionResult> DeleteAccessKey(
-            [FromServices] AppDbContext context, int id)
+        [HttpDelete("access-key/delete/{id}")]
+        public async Task<IActionResult> DeleteAccessKey(int id)
         {
-            var keyToDelete = context.AccessKeys
+            var keyToDelete = _context.AccessKeys
                 .FirstOrDefault(x => x.Id == id);
 
-            if (keyToDelete is null)
-            {
-                return BadRequest("Key with this id does not exists!");
-            }
+            if (keyToDelete is null) return BadRequest("Key with this id does not exists!");
 
-            var relatedLegalAppData = context.LegalAppClients
+            var relatedLegalAppData = _context.LegalAppClients
                 .Include(x => x.AccessKey)
                 .Count(x => x.AccessKey.Name.Equals(keyToDelete.Name));
 
             if (relatedLegalAppData > 0)
-            {
-                context.LegalAppClients.RemoveRange(context.LegalAppClients
+                _context.LegalAppClients.RemoveRange(_context.LegalAppClients
                     .Include(x => x.AccessKey)
                     .Where(x => x.AccessKey.Name.Equals(keyToDelete.Name)));
-            }
 
-            context.AccessKeys.Remove(keyToDelete);
-            await context.SaveChangesAsync();
+            _context.AccessKeys.Remove(keyToDelete);
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPost("user/grant/access-key")]
         public async Task<IActionResult> GrantDataAccessKey(
-            [FromServices] AppDbContext context,
             [FromBody] GrantDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var user = await userManager.FindByIdAsync(form.UserId);
-            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
-            if (user is null || userProfile is null)
-            {
-                return BadRequest("There is no user with this ID!");
-            }
-            
-            var accessKey = context.AccessKeys
+            if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
+
+            var accessKey = _context.AccessKeys
                 .FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
 
-            if (accessKey is null)
-            {
-                return BadRequest("Key not found!");          
-            }
+            if (accessKey is null) return BadRequest("Key not found!");
 
             accessKey.Users.Add(userProfile);
-            context.Users.Update(userProfile);
+            _context.Users.Update(userProfile);
 
-            var result = await context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
 
             if (result > 0)
-            {
                 return Ok($"Data Access Key {form.DataAccessKey} Added!");
-            }
-            else
-            {
-                return BadRequest("Error when adding the Claim!");
-            }
+            return BadRequest("Error when adding the Claim!");
         }
 
         [HttpPost("user/revoke/access-key")]
         public async Task<IActionResult> RevokeDataAccessKey(
             [FromBody] RevokeDataAccessKeyForm form,
-            [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var user = await userManager.FindByIdAsync(form.UserId);
-            var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
-            if (user is null || userProfile is null)
-            {
-                return BadRequest("There is no user with this ID!");
-            }
+            if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
 
-            var assignedKey = context.AccessKeys
+            var assignedKey = _context.AccessKeys
                 .Include(x => x.Users)
                 .FirstOrDefault(x => x.Users.Any(x => x.Id.Equals(user.Id)));
 
@@ -180,13 +151,10 @@ namespace SystemyWP.API.Controllers
             {
                 assignedKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
 
-                context.Update(assignedKey);
-                var result = await context.SaveChangesAsync();
+                _context.Update(assignedKey);
+                var result = await _context.SaveChangesAsync();
 
-                if (result > 0)
-                {
-                    return Ok($"Data Access Key Removed!");
-                }
+                if (result > 0) return Ok("Data Access Key Removed!");
             }
             else
             {
@@ -194,10 +162,6 @@ namespace SystemyWP.API.Controllers
             }
 
             return BadRequest("Error when removing the access key!");
-        }
-
-        public AccessKeyAdminController(PortalLogger portalLogger) : base(portalLogger)
-        {
         }
     }
 }

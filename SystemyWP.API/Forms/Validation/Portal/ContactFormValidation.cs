@@ -1,8 +1,7 @@
-﻿using SystemyWP.API.Forms.Admin;
-using SystemyWP.API.Forms.Portal;
+﻿using SystemyWP.API.Forms.Portal;
 using FluentValidation;
 
-namespace SystemyWP.API.Forms.Validation.Admin
+namespace SystemyWP.API.Forms.Validation.Portal
 {
     public class ContactFormValidation: AbstractValidator<ContactForm>
     {

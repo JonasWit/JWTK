@@ -17,6 +17,9 @@ namespace SystemyWP.API.Controllers
     [Authorize]
     public class AuthController : ApiController
     {
+        public AuthController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        {
+        }
 
         [HttpGet("logout")]
         public async Task<IActionResult> Logout(
@@ -26,12 +29,11 @@ namespace SystemyWP.API.Controllers
             await signInManager.SignOutAsync();
             return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
         }
-        
+
         [HttpGet("delete")]
         public async Task<IActionResult> Delete(
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,
-            [FromServices] AppDbContext context,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try
@@ -40,14 +42,11 @@ namespace SystemyWP.API.Controllers
                 var user = await userManager.FindByIdAsync(UserId);
                 await userManager.UpdateSecurityStampAsync(user);
 
-                var userProfile = context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
 
-                if (userProfile is not null)
-                {
-                    context.Remove(userProfile);
-                }
-                
-                await context.SaveChangesAsync();
+                if (userProfile is not null) _context.Remove(userProfile);
+
+                await _context.SaveChangesAsync();
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
             catch (Exception e)
@@ -56,10 +55,6 @@ namespace SystemyWP.API.Controllers
                     .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
-        }
-
-        public AuthController(PortalLogger portalLogger) : base(portalLogger)
-        {
         }
     }
 }

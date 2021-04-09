@@ -45,7 +45,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$delete(`/api/portal-admin/key-admin/access-key/${this.selectedKey.id}`)
+      return this.$axios.$delete(`/api/portal-admin/key-admin/access-key/delete/${this.selectedKey.id}`)
         .catch((e) => {
         }).finally(() => {
           this.loading = false;

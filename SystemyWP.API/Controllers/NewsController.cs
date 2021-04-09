@@ -2,15 +2,15 @@
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers
 {
-    [Route("/api/portal-admin/user-admin")]
+    [Route("/api/news")]
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
-    public class ClientAdminController : ApiController
+    public class NewsController : ApiController
     {
-        public ClientAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public NewsController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
     }

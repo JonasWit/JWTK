@@ -33,11 +33,11 @@ namespace SystemyWP.Data.Models.General
         [ProtectedPersonalData]
         public string PostCode { get; set; }
         [ProtectedPersonalData]
-        public string NIP { get; set; }
+        public string Nip { get; set; }
         [ProtectedPersonalData]
-        public string REGON { get; set; }
+        public string Regon { get; set; }
         [ProtectedPersonalData]
-        public string KRS { get; set; }
+        public string Krs { get; set; }
         
         public DateTime? LastLogin  { get; set; }  
 

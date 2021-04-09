@@ -4,18 +4,16 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Portal;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.Data;
 using SystemyWP.Data.Enums;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace SystemyWP.API.Controllers
 {
     [Route("/api/portal/contact")]
     public class ContactController : ApiController
     {
-        public ContactController(PortalLogger portalLogger) : base(portalLogger)
+        public ContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
 

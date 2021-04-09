@@ -28,6 +28,7 @@ export const actions = {
   getUsers({commit}) {
     return this.$axios.$get("/api/portal-admin/user-admin/users")
       .then((users) => {
+        console.log('get users called');
         commit('updateUsersList', {users});
       })
       .catch(() => {
@@ -36,6 +37,7 @@ export const actions = {
   getAccessKeys({commit}) {
     return this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((keys) => {
+        console.log('get access keys called');
         commit('updateAccessKeysList', {keys});
       })
       .catch(() => {

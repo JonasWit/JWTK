@@ -1,5 +1,11 @@
 ﻿<template>
-  <v-dialog persistent width="700" :value="selectedKey">
+  <v-dialog v-model="dialog" persistent width="700">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+        <v-icon medium color="warning">mdi-pencil</v-icon>
+      </v-btn>
+    </template>
+
     <v-card>
       <v-card-title class="justify-center">Access Key Management</v-card-title>
       <v-divider></v-divider>
@@ -27,7 +33,7 @@
       <v-card-actions>
         <v-btn text color="warning" @click="editKey">Update Key</v-btn>
         <v-spacer/>
-        <v-btn text color="success" @click="cancelDialog">Cancel</v-btn>
+        <v-btn text color="success" @click="dialog = false">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -39,7 +45,7 @@ import {mapState} from "vuex";
 export default {
   name: "edit-access-key-form-dialog",
   data: () => ({
-    dialog: null,
+    dialog: false,
     loading: false,
     form: {
       keyName: "",
@@ -91,10 +97,6 @@ export default {
           this.loading = false;
           this.$emit('action-completed');
         });
-    },
-    cancelDialog() {
-      this.dialog = false;
-      this.$emit('action-completed');
     },
   }
 };

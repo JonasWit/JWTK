@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +16,10 @@ namespace SystemyWP.API.Controllers
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
     public class PortalAdminController : ApiController
     {
+        public PortalAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        {
+        }
+
         [HttpGet("clients")]
         public async Task<IActionResult> ListClients(
             [FromServices] UserManager<IdentityUser> userManager)
@@ -26,7 +30,7 @@ namespace SystemyWP.API.Controllers
             return Ok(users.Select(x => new
             {
                 x.Id,
-                x.Email,
+                x.Email
             }));
         }
 
@@ -63,16 +67,12 @@ namespace SystemyWP.API.Controllers
             {
                 email = form.Email,
                 returnUrl = form.ReturnUrl,
-                code,
-            }, protocol: HttpContext.Request.Scheme);
+                code
+            }, HttpContext.Request.Scheme);
 
             await emailClient.SendClientInvite(form.Email, link);
 
             return Ok(link);
-        }
-
-        public PortalAdminController(PortalLogger portalLogger) : base(portalLogger)
-        {
         }
     }
 }

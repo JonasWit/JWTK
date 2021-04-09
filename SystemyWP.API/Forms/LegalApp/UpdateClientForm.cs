@@ -1,6 +1,6 @@
 ﻿namespace SystemyWP.API.Forms.LegalApp
 {
-    public class CreateClientForm
+    public class UpdateClientForm
     {
         public string Name { get; set; }
     }

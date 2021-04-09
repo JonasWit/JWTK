@@ -8,7 +8,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCase : TrackedModel<long>
     {
-        public bool Active { get; set; } = true;
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }

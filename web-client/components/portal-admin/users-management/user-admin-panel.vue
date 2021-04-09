@@ -111,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    ...mapActions('admin-panel-store', ['getUsers']),
     formatDate(date) {
       return formatDate(date);
     },

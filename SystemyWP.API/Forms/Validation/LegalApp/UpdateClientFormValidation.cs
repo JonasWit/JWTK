@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace SystemyWP.API.Forms.Validation.LegalApp
 {
-    public class CreateClientFormValidation: AbstractValidator<CreateClientForm>
+    public class UpdateClientFormValidation: AbstractValidator<UpdateClientForm>
     {
-        public CreateClientFormValidation()
+        public UpdateClientFormValidation()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         }

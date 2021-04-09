@@ -27,9 +27,9 @@ namespace SystemyWP.API.Projections
                 user.AddressCorrespondence,
                 user.PostCode,
                 user.CompanyFullName,
-                user.KRS,
-                user.NIP,
-                user.REGON,
+                KRS = user.Krs,
+                NIP = user.Nip,
+                REGON = user.Regon,
                 user.LastLogin
             };
         
@@ -52,9 +52,9 @@ namespace SystemyWP.API.Projections
                 user.AddressCorrespondence,
                 user.PostCode,
                 user.CompanyFullName,
-                user.KRS,
-                user.NIP,
-                user.REGON,
+                KRS = user.Krs,
+                NIP = user.Nip,
+                REGON = user.Regon,
                 user.LastLogin,
                 DataAccess = user.DataAccess
                     .AsQueryable()

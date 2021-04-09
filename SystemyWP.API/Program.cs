@@ -177,7 +177,8 @@ namespace SystemyWP.API
                     Name = $"access-key-{i}",
                     ExpireDate = DateTime.UtcNow.AddDays(i),
                     Created = DateTime.UtcNow,
-                    CreatedBy = "system"
+                    CreatedBy = "system",
+                    UpdatedBy = "system",
                 });
             }
 
