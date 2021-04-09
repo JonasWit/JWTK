@@ -98,14 +98,6 @@ export default {
   data: () => ({
     lightTheme: false
   }),
-  fetch() {
-    if (process.env.NODE_ENV === 'development') {
-      console.log("###DEBUG MODE###");
-    } else {
-      console.log = () => {
-      };
-    }
-  },
   beforeMount() {
     const themeCookie = getCookie("custom-color-theme");
     if (themeCookie) {

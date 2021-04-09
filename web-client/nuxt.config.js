@@ -133,6 +133,13 @@ const config = {
   build: {
     extend(config, ctx) {
     },
+    terser: {
+      terserOptions: {
+        compress: {
+          drop_console: true
+        }
+      }
+    }
   }
 };
 
