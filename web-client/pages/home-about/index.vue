@@ -40,7 +40,7 @@
 
 export default {
   name: "home-main-content",
-  transition: 'bounce',
+  transition: 'slide-bottom',
   data: () => {
     return ({
       items: [

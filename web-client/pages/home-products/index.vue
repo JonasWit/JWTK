@@ -31,7 +31,7 @@
       <v-divider color="crimson"></v-divider>
     </v-row>
     <v-row>
-      <p>Zapraszamy do zapoznania się z przykładowym cennikiem usług.</p>
+      <p>Zapraszamy do kontaktu, aby poznać wycenę usług.</p>
     </v-row>
     <pricing/>
   </v-container>
