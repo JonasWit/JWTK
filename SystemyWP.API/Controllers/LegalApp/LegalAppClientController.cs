@@ -26,14 +26,11 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("client/{clientId}")]
-        public IActionResult GetClient(
+        public async Task<IActionResult> GetClient(
             int clientId)
         {
-            var user = _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefault(x => x.Id.Equals(UserId));
-
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
+            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+            if (check.AccessKey is null) return StatusCode(403);
 
             //Get data as Admin
             if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
@@ -41,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             {
                 var result = _context.LegalAppClients
                     .Include(x => x.AccessKey)
-                    .Where(x => x.AccessKey.Id == user.AccessKey.Id)
+                    .Where(x => x.AccessKey.Id == check.AccessKey.Id)
                     .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
@@ -51,18 +48,21 @@ namespace SystemyWP.API.Controllers.LegalApp
             //Get data as User
             if (Role.Equals(SystemyWPConstants.Roles.Client))
             {
-                var result = _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .Where(x => x.AccessKey.Id == user.AccessKey.Id &&
-                                _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
-                                    .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
-                                              y.ItemId == x.Id))
-                    .Select(LegalAppClientProjections.FlatProjection)
-                    .FirstOrDefault();
+                if (check.AccessData)
+                {
+                    var result = _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id &&
+                                    x.Id == clientId)
+                        .Select(LegalAppClientProjections.FlatProjection)
+                        .FirstOrDefault();
 
-                if (result is null) return StatusCode(403);
-
-                return Ok(result);
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
             }
 
             return BadRequest("Wystąpił błąd!");
@@ -75,8 +75,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.AccessKey)
                 .FirstOrDefault(x => x.Id.Equals(UserId));
 
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
-
+            if (user?.AccessKey is null) return StatusCode(403);
             var result = new List<object>();
 
             //Get data as Admin
@@ -86,7 +85,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 result.AddRange(_context.LegalAppClients
                     .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.AccessKey.Name.Equals(user.AccessKey.Name))
+                        x.AccessKey.Id == user.AccessKey.Id)
                     .Select(LegalAppClientProjections.FlatProjection)
                     .ToList());
 
@@ -96,13 +95,11 @@ namespace SystemyWP.API.Controllers.LegalApp
             //Get data as User
             if (Role.Equals(SystemyWPConstants.Roles.Client))
             {
-                //var allowedData = context.DataAccesses.Where(x => x.UserId.Equals(UserId));
-
                 result.AddRange(_context.LegalAppClients
                     .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.AccessKey.Name.Equals(user.AccessKey.Name) &&
-                        _context.DataAccesses.Where(x => x.UserId.Equals(UserId))
+                        x.AccessKey.Id == user.AccessKey.Id &&
+                        _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
                             .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                       y.ItemId == x.Id))
                     .Select(LegalAppClientProjections.FlatProjection)
@@ -111,7 +108,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return Ok(result);
             }
 
-            return BadRequest("Brak dostępu!");
+            return StatusCode(403);
         }
 
         [HttpPost("create")]
@@ -121,14 +118,35 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.AccessKey)
                 .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
 
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
-            _context.Add(new LegalAppClient
+            if (user?.AccessKey is null) return StatusCode(403);
+
+            try
             {
-                AccessKey = user.AccessKey,
-                Name = form.Name,
-                CreatedBy = UserId,
-                UpdatedBy = UserId
-            });
+                var newEntity = new LegalAppClient
+                {
+                    AccessKey = user.AccessKey,
+                    Name = form.Name,
+                    CreatedBy = UserId,
+                    UpdatedBy = UserId
+                };
+
+                _context.Add(newEntity);
+                _context.Add(new DataAccess
+                {
+                    UserId = UserId,
+                    ItemId = newEntity.Id,
+                    RestrictedType = RestrictedType.LegalAppClient,
+                    CreatedBy = UserId
+                });
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(500);
+            }
 
             return Ok();
         }
@@ -136,20 +154,41 @@ namespace SystemyWP.API.Controllers.LegalApp
         [HttpPut("update/{clientId}")]
         public async Task<IActionResult> UpdateClient(long clientId, [FromBody] CreateClientForm form)
         {
-            var user = await _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+            if (check.AccessKey is null) return BadRequest(403);
 
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
+            //Act as Admin
+            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            {
+                var entity = await _context.LegalAppClients
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                if (entity is null) return BadRequest("Klient nie istnieje!");
 
-            var entity = await _context.LegalAppClients
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == user.AccessKey.Id);
-            if (entity is null) return BadRequest("Klient nie istnieje!");
+                entity.UpdatedBy = UserId;
+                entity.Updated = DateTime.UtcNow;
+                entity.Name = form.Name;
+            }
 
-            entity.UpdatedBy = UserId;
-            entity.Updated = DateTime.UtcNow;
-            entity.Name = form.Name;
+            //Act as User
+            if (Role.Equals(SystemyWPConstants.Roles.Client))
+            {
+                if (check.AccessData)
+                {
+                    var entity = await _context.LegalAppClients
+                        .FirstOrDefaultAsync(x => x.Id == clientId);
+                    if (entity is null) return BadRequest("Klient nie istnieje!");
+
+                    entity.UpdatedBy = UserId;
+                    entity.Updated = DateTime.UtcNow;
+                    entity.Name = form.Name;
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
+            }
 
             await _context.SaveChangesAsync();
             return Ok();
@@ -158,18 +197,38 @@ namespace SystemyWP.API.Controllers.LegalApp
         [HttpPut("archive/{clientId}")]
         public async Task<IActionResult> ArchiveClient(long clientId)
         {
-            var user = await _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+            if (check.AccessKey is null) return BadRequest("Brak klucza!");
 
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
+            //Act as Admin
+            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            {
+                var entity = await _context.LegalAppClients
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefaultAsync(x => x.Id == clientId
+                                              && x.AccessKey.Id == check.AccessKey.Id);
+                if (entity is null) return BadRequest("Klient nie istnieje!");
+                entity.Active = !entity.Active;
+            }
 
-            var entity = await _context.LegalAppClients
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == user.AccessKey.Id);
-            if (entity is null) return BadRequest("Klient nie istnieje!");
-
-            entity.Active = !entity.Active;
+            //Act as User
+            if (Role.Equals(SystemyWPConstants.Roles.Client))
+            {
+                if (check.AccessData)
+                {
+                    var entity = await _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefaultAsync(x => x.Id == clientId
+                                                  && x.AccessKey.Id == check.AccessKey.Id);
+                    if (entity is null) return BadRequest("Klient nie istnieje!");
+                    entity.Active = !entity.Active;
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
+            }
 
             await _context.SaveChangesAsync();
             return Ok();
@@ -178,18 +237,40 @@ namespace SystemyWP.API.Controllers.LegalApp
         [HttpPut("delete/{clientId}")]
         public async Task<IActionResult> DeleteClient(long clientId)
         {
-            var user = await _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+            if (check.AccessKey is null) return BadRequest("Brak klucza!");
+            
+            //Act as Admin
+            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            {
+                var entity = await _context.LegalAppClients
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefaultAsync(x => x.Id == clientId
+                                              && x.AccessKey.Id == check.AccessKey.Id);
+                if (entity is null) return BadRequest("Klient nie istnieje!");
 
-            if (user?.AccessKey is null) return BadRequest("Brak klucza!");
+                _context.Remove(entity);
+            }
 
-            var entity = await _context.LegalAppClients
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == user.AccessKey.Id);
-            if (entity is null) return BadRequest("Klient nie istnieje!");
+            //Act as User
+            if (Role.Equals(SystemyWPConstants.Roles.Client))
+            {
+                if (check.AccessData)
+                {
+                    var entity = await _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefaultAsync(x => x.Id == clientId
+                                                  && x.AccessKey.Id == check.AccessKey.Id);
+                    if (entity is null) return BadRequest("Klient nie istnieje!");
 
-            entity.Active = !entity.Active;
+                    _context.Remove(entity);
+                }
+                else
+                {
+                    return StatusCode(403);
+                }
+            }
 
             await _context.SaveChangesAsync();
             return Ok();
