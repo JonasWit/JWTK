@@ -48,7 +48,7 @@ namespace SystemyWP.API.Controllers.BaseClases
                                      x.ItemId == itemId);
             if (access is null) return new CheckResult {AccessData = false, AccessKey = user.AccessKey};
             
-            return new CheckResult {AccessData = false, AccessKey = user.AccessKey};
+            return new CheckResult {AccessData = true, AccessKey = user.AccessKey};
         }
 
         private string GetClaim(string claimType) => User.Claims

@@ -249,7 +249,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                     .FirstOrDefaultAsync(x => x.Id == clientId
                                               && x.AccessKey.Id == check.AccessKey.Id);
                 if (entity is null) return BadRequest("Klient nie istnieje!");
-
                 _context.Remove(entity);
             }
 
@@ -263,7 +262,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .FirstOrDefaultAsync(x => x.Id == clientId
                                                   && x.AccessKey.Id == check.AccessKey.Id);
                     if (entity is null) return BadRequest("Klient nie istnieje!");
-
                     _context.Remove(entity);
                 }
                 else
