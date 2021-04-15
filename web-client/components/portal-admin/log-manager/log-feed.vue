@@ -94,8 +94,6 @@ export default {
   computed: {
     query() {
       if (this.searchConditionsProvided) {
-
-
         return `/dates?from=${this.minDate}&to=${this.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}&exception=${this.exception}&admin=${this.admin}&personalData=${this.personalData}&issue=${this.issue}`;
       } else {
         return `?cursor=${this.cursor}&take=10`;
