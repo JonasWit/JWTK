@@ -6,6 +6,7 @@ using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.PortalLoggerService;
 using SystemyWP.Data;
+using Amazon.S3.Model.Internal.MarshallTransformations;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
