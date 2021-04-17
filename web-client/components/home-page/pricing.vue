@@ -36,7 +36,6 @@ export default {
 
   data: () => {
     return ({
-      img: `${require('~/assets/images/home-prizing.jpg')}`,
       items: [
         {
           id: 1,

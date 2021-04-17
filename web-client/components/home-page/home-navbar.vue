@@ -1,10 +1,14 @@
 ﻿<template>
   <v-row class="ml-2">
+
+
     <v-list selectable width="100%" class="nav-list d-flex ">
+      <v-app-bar-nav-icon color="secondary"></v-app-bar-nav-icon>
       <v-list-item v-for="item in items" :key="item.id">
         <nuxt-link class="nav-item" :to="item.route">{{ item.name }}</nuxt-link>
       </v-list-item>
     </v-list>
+
   </v-row>
 </template>
 

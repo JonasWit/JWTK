@@ -13,10 +13,10 @@
                   label="Wyrażam zgodę na przetwarzanie moich danych osobowych i akceptuję Politykę prywatności"
                   required :rules="validation.checkboxRules" color="success"></v-checkbox>
 
-      <v-btn :disabled="!valid" @click="submit" class="mr-4 mt-3" color="accent">
+      <v-btn :disabled="!valid" @click="submit" class="mr-4 mt-3" color="success">
         Wyślij
       </v-btn>
-      <v-btn class="mt-3" @click="reset" color="error">
+      <v-btn class="mt-3" @click="reset" color="primary">
         Wyczyść
       </v-btn>
     </v-form>
