@@ -54,16 +54,32 @@ export default {
   }),
   methods: {
     submit() {
-      if (this.$refs.form.validate()) {
+      if (!this.$refs.form.validate()) return;
 
-      }
+      if (this.loading) return;
+      this.loading = true;
 
+      const payload = {
+        name: this.name,
+        email: this.email,
+        phone: this.phone
+      };
+
+      return this.$axios.$post("/api/portal/contact/request", payload)
+        .catch((e) => {
+          console.log('error - contact form', e)
+        }).finally(() => {
+          this.loading = false;
+        });
     },
     reset() {
       this.name = '',
         this.email = '',
         this.phone = '',
         this.checkbox = false;
+
+      // this.$refs.createDataAccessKeyForm.reset();
+      // this.$refs.createDataAccessKeyForm.resetValidation();
     }
   }
 }
