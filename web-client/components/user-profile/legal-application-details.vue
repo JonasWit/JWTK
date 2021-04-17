@@ -20,9 +20,8 @@
 
 <script>
 
-import LegalAppAccesses
-  from "@/components/user-profile/legal-app-access-details-components/legal-app-user-manager-panel";
-import LegalAppData from "@/components/user-profile/legal-app-access-details-components/legal-app-data-manager-panel";
+import LegalAppAccesses from "@/components/user-profile/legal-app-access-details/legal-app-user-manager-panel";
+import LegalAppData from "@/components/user-profile/legal-app-access-details/legal-app-data-manager-panel";
 
 export default {
   name: "legal-application-details",
