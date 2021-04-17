@@ -69,7 +69,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("clients")]
-        public IActionResult GetClientsData()
+        public IActionResult GetClients()
         {
             var user = _context.Users
                 .Include(x => x.AccessKey)

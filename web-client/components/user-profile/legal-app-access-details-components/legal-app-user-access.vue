@@ -225,6 +225,7 @@ export default {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         })
         .finally(() => {
+          //this.selectedUser = this.normalUsers.find(x => x.id === payload.userId);
           this.loading = false;
         });
     },
