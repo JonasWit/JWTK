@@ -5,21 +5,21 @@
     <p>Nasz adres email to: <a href="mailto:biuro@systemywp.pl">biuro@systemywp.pl</a></p>
     <p>Możesz również zostawić nam swój numer telefonu, a oddzwonimy w ciągu 24 godzin.</p>
 
-    <form ref="form">
+    <v-form ref="contactForm" v-model="validation.valid">
       <v-text-field v-model="name" label="Imię" required :rules="validation.nameRules"></v-text-field>
       <v-text-field v-model="email" label="E-mail" :rules="validation.emailRules"></v-text-field>
       <v-text-field v-model="phone" label="Nr kontaktowy" required :rules="validation.phoneRules"></v-text-field>
       <v-checkbox v-model="checkbox"
                   label="Wyrażam zgodę na przetwarzanie moich danych osobowych i akceptuję Politykę prywatności"
-                  required :rules="validation.checkboxRules"></v-checkbox>
+                  required :rules="validation.checkboxRules" color="success"></v-checkbox>
 
-      <v-btn class="mr-4 mt-3" @click.stop.prevent="submit">
+      <v-btn :disabled="!valid" @click="submit" class="mr-4 mt-3" color="accent">
         Wyślij
       </v-btn>
-      <v-btn class="mt-3" @click="reset">
+      <v-btn class="mt-3" @click="reset" color="error">
         Wyczyść
       </v-btn>
-    </form>
+    </v-form>
 
   </v-container>
 </template>
@@ -33,19 +33,19 @@ export default {
     email: "",
     phone: "",
     checkbox: false,
+    valid: true,
     validation: {
+
       nameRules: [
         v => !!v || 'Imię jest wymagane',
-        v => v.length >= 3 || 'Minimalna liczba znaków to 3.',
-        v => v.length <= 20 || 'Malsymalna liczba znaków to 20.',
-
+        v => (v?.length >= 3 && v?.length <= 20) || 'Imię musi mieć conajmniej 3 znaki i nie więcej niż 20 znaków.',
       ],
       emailRules: [
         v => !!v || 'E-mail jest wymagany.',
         v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Format adresu e-mail jest niepoprawny.'],
       phoneRules: [
-        v => /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(v) || 'Podaj numer telefonu w formacie +48 676 676 676.',
-        v => v.length >= 9 || 'Minimalna liczba znaków to 10 '],
+        v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
+        v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '],
       checkboxRules: [
         v => !!v || 'Proszę wyrazić zgodę, aby kontynuować.'
       ],
@@ -54,8 +54,8 @@ export default {
   }),
   methods: {
     submit() {
-      if (!this.$refs.form.validate()) return;
-
+      if (!this.$refs.contactForm.validate()) return;
+      console.warn("Sending contact form");
       if (this.loading) return;
       this.loading = true;
 
@@ -66,18 +66,21 @@ export default {
       };
 
       return this.$axios.$post("/api/portal/contact/request", payload)
+        .then((result) => {
+          console.log("SUCCESS!", result);
+          this.$notifier.showSuccessMessage("Forma wysłana pomyślnie!");
+          this.loading = false;
+          this.$refs.contactForm.reset();
+        })
         .catch((e) => {
-          console.log('error - contact form', e)
+          console.log('error - contact form', e);
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie.");
         }).finally(() => {
           this.loading = false;
         });
     },
     reset() {
-      this.name = '',
-        this.email = '',
-        this.phone = '',
-        this.checkbox = false;
-
+      this.$refs.contactForm.reset();
       // this.$refs.createDataAccessKeyForm.reset();
       // this.$refs.createDataAccessKeyForm.resetValidation();
     }

@@ -142,6 +142,7 @@ export default {
 </script>
 <style>
 
+
 container, app, main {
   padding: 0 !important;
   margin: 65px 0 0 0 !important;

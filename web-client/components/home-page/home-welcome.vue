@@ -7,10 +7,10 @@
       <h2>Tworzymy strony internetowe i aplikacje webowe</h2>
       <div class="d-flex justify-space-between">
         <nuxt-link to="/home-products" class="text-decoration-none">
-          <v-btn class="my-3" depressed color="error">Sprawdź ofertę</v-btn>
+          <v-btn class="my-3" depressed color="primary">Sprawdź ofertę</v-btn>
         </nuxt-link>
         <nuxt-link to="/home-contact" class="text-decoration-none">
-          <v-btn class="my-3" depressed color="error">Kontakt</v-btn>
+          <v-btn class="my-3" depressed color="secondary">Kontakt</v-btn>
         </nuxt-link>
       </div>
     </div>
