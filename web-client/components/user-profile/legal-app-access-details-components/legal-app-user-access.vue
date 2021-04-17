@@ -41,8 +41,16 @@
               </div>
               <div>
                 <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
-                            item-key="key" item-text="displayText" :selection-type="selectionType" selectable
-                            return-object></v-treeview>
+                            item-key="key" :selection-type="selectionType" selectable return-object>
+                  <template v-slot:label="{ item, open }">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">{{ item.displayText }}</span>
+                      </template>
+                      <span>{{ item.name }}</span>
+                    </v-tooltip>
+                  </template>
+                </v-treeview>
               </div>
             </div>
             <div class="px-4" v-else>
@@ -169,10 +177,8 @@ export default {
       this.getUsersAndClients();
     },
     getUsersAndClients() {
-      this.loading = true;
       this.getRelatedUsers();
       this.getClients();
-      this.loading = false;
     },
     updateAccess() {
       this.loading = true;
@@ -197,6 +203,9 @@ export default {
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
     grantFullAccess() {
@@ -214,6 +223,10 @@ export default {
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        })
+        .finally(() => {
+          //this.selectedUser = this.normalUsers.find(x => x.id === payload.userId);
+          this.loading = false;
         });
     },
     revokeAllAccesses() {
@@ -231,6 +244,9 @@ export default {
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        })
+        .finally(() => {
+          this.loading = false;
         });
     }
   }

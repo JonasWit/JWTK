@@ -26,26 +26,6 @@
             <v-card-subtitle>Statystyki i informacje o powiązanym użytkowniku
             </v-card-subtitle>
             <div class="my-3" v-if="selectedUser">
-              <v-simple-table class="mb-3" dense>
-                <template v-slot:default>
-                  <thead>
-                  <tr>
-                    <th class="text-left">Dostęp</th>
-                    <th class="text-left">Ilość</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>Klienci</td>
-                    <td>{{ countAllowedClients }}</td>
-                  </tr>
-                  <tr>
-                    <td>Sprawy</td>
-                    <td>{{ countAllowedCases }}</td>
-                  </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
               <div v-if="selectedUser.lastLogin">
                 <v-card-text>
                   <div class="subtitle-1">

@@ -1,6 +1,5 @@
 ﻿namespace SystemyWP.API.Forms.Admin
 {
-    //todo: add fluent validation
     public class UserPersonalDataForm : UserIdForm
     {
         public string PhoneNumber { get; set; }
