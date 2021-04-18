@@ -74,8 +74,8 @@ namespace SystemyWP.API
                 app.UseExceptionHandler("/Error");
             }
             
-            app.UseCors(NuxtJsApp);
             app.UseRouting();
+            app.UseCors(NuxtJsApp);
             app.UseAuthentication();
             app.UseAuthorization();
 
