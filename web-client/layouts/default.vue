@@ -11,9 +11,7 @@
         <span class="d-flex d-md-none">SWP</span>
       </nuxt-link>
       <home-navbar/>
-
-
-      <v-spacer/>
+      <v-spacer></v-spacer>
       <div class="mr-5">
         <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="lightTheme"/>
       </div>

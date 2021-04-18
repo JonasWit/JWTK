@@ -112,7 +112,7 @@ const config = {
           primary: '#B41946',
           secondary: '#6F8AB7',
           accent: '#06D6A0',
-          anchor: '#8c9eff',
+          anchor: '#ececea',
 
           error: '#F24333',
           info: '#3E8989',
@@ -125,7 +125,7 @@ const config = {
           primary: '#B41946',
           secondary: '#6F8AB7',
           accent: '#06D6A0',
-          anchor: '#8c9eff',
+          anchor: '#000210',
 
           error: '#F24333',
           info: '#3E8989',

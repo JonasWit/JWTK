@@ -1,6 +1,7 @@
 <template>
   <div>
-    <video id="video" :src="video" style="min-height: 100vh; width: 100%; object-fit: cover" autoplay="true" loop="true"
+    <video v-if="darkTheme" id="video" :src="video" style="min-height: 100vh; width: 100%; object-fit: cover"
+           autoplay="true" loop="true"
            muted></video>
     <div style="position:absolute; top: 10%; z-index: 1; padding: 25px; color: #FAFAFA">
       <h1>Witaj na stronie Systemy Wspomagania Pracy</h1>
@@ -23,8 +24,14 @@ export default {
   name: "home-welcome",
 
   data: () => ({
-    video: `${require('~/assets/images/home-page-video.mp4')}`
+    video: `${require('~/assets/images/home-page-video.mp4')}`,
+    darkTheme: true
   }),
+  beforeMount() {
+    console.warn('theme check vide component first load', this.$vuetify.theme)
+    this.darkTheme = this.$vuetify.theme.isDark;
+  },
+  computed: {}
 
 };
 </script>

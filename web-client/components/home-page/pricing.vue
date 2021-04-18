@@ -3,7 +3,7 @@
     <v-row>
 
       <v-row>
-        <v-card v-for="item in items" :key="item.id" width="380px" class="mx-auto my-8" elevation="15">
+        <v-card v-for="item in items" :key="item.id" width="340px" class="mx-auto my-8" elevation="15">
           <v-img :src="item.img" class="white--text align-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                  height="120px">
             <v-card-text class="text-center font-weight-medium headline">{{ item.title }}</v-card-text>
@@ -81,7 +81,7 @@ export default {
 <style scoped>
 .price {
   position: absolute;
-  left: 60px;
+  left: 50px;
   background-color: crimson;
 }
 
