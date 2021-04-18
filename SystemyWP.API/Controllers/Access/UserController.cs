@@ -20,7 +20,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Access
 {
     [Route("api/users")]
     [Authorize]

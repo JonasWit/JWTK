@@ -11,6 +11,7 @@ using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace SystemyWP.API.Controllers.LegalApp
     [Route("/api/legal-app-clients")]
     [Authorize(SystemyWPConstants.Policies.Client)]
     [Authorize(SystemyWPConstants.Policies.LegalAppAccess)]
-    public class LegalAppClientController : ApiController
+    public class LegalAppClientController : LegalAppApiController
     {
         public LegalAppClientController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
@@ -29,99 +30,120 @@ namespace SystemyWP.API.Controllers.LegalApp
         public async Task<IActionResult> GetClient(
             int clientId)
         {
-            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-            if (check.AccessKey is null) return StatusCode(403);
-
-            //Get data as Admin
-            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            try
             {
-                var result = _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .Where(x => x.AccessKey.Id == check.AccessKey.Id)
-                    .Select(LegalAppClientProjections.FlatProjection)
-                    .FirstOrDefault();
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-                return Ok(result);
-            }
-
-            //Get data as User
-            if (Role.Equals(SystemyWPConstants.Roles.Client))
-            {
-                if (check.AccessData)
+                //Get data as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
                 {
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id &&
-                                    x.Id == clientId)
-                        .Select(LegalAppClientProjections.FlatProjection)
+                        .Include(x => x.Contacts)
+                        .Include(x => x.LegalAppClientNotes)
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                        .Select(LegalAppClientProjections.FullProjection)
                         .FirstOrDefault();
 
                     return Ok(result);
                 }
-                else
-                {
-                    return StatusCode(403);
-                }
-            }
 
-            return BadRequest("Wystąpił błąd!");
+                //Get data as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    if (check.DataAccessAllowed)
+                    {
+                        var result = _context.LegalAppClients
+                            .Include(x => x.AccessKey)
+                            .Include(x => x.Contacts)
+                            .Include(x => x.LegalAppClientNotes)
+                            .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                            .Select(LegalAppClientProjections.FullProjection)
+                            .FirstOrDefault();
+
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status403Forbidden);
+                    }
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("clients")]
-        public IActionResult GetClients()
+        public async Task<IActionResult> GetClients()
         {
-            var user = _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefault(x => x.Id.Equals(UserId));
-
-            if (user?.AccessKey is null) return StatusCode(403);
-            var result = new List<object>();
-
-            //Get data as Admin
-            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            try
             {
-                result.AddRange(_context.LegalAppClients
+                var user = _context.Users
                     .Include(x => x.AccessKey)
-                    .Where(x =>
-                        x.AccessKey.Id == user.AccessKey.Id)
-                    .Select(LegalAppClientProjections.FlatProjection)
-                    .ToList());
+                    .FirstOrDefault(x => x.Id.Equals(UserId));
 
-                return Ok(result);
+                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var result = new List<object>();
+
+                //Get data as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                {
+                    result.AddRange(_context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x =>
+                            x.AccessKey.Id == user.AccessKey.Id)
+                        .Select(LegalAppClientProjections.FlatProjection)
+                        .ToList());
+
+                    return Ok(result);
+                }
+
+                //Get data as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    result.AddRange(_context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x =>
+                            x.AccessKey.Id == user.AccessKey.Id &&
+                            _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
+                                .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
+                                          y.ItemId == x.Id))
+                        .Select(LegalAppClientProjections.FlatProjection)
+                        .ToList());
+
+                    return Ok(result);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
-
-            //Get data as User
-            if (Role.Equals(SystemyWPConstants.Roles.Client))
+            catch (Exception e)
             {
-                result.AddRange(_context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .Where(x =>
-                        x.AccessKey.Id == user.AccessKey.Id &&
-                        _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
-                            .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
-                                      y.ItemId == x.Id))
-                    .Select(LegalAppClientProjections.FlatProjection)
-                    .ToList());
-
-                return Ok(result);
-            }
-
-            return StatusCode(403);
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }  
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateClient([FromBody] CreateClientForm form)
         {
-            var user = await _context.Users
-                .Include(x => x.AccessKey)
-                .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
-
-            if (user?.AccessKey is null) return StatusCode(403);
-
             try
             {
+                var user = await _context.Users
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+
+                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                
                 var newEntity = new LegalAppClient
                 {
                     AccessKey = user.AccessKey,
@@ -131,91 +153,94 @@ namespace SystemyWP.API.Controllers.LegalApp
                 };
 
                 _context.Add(newEntity);
-                _context.Add(new DataAccess
-                {
-                    UserId = UserId,
-                    ItemId = newEntity.Id,
-                    RestrictedType = RestrictedType.LegalAppClient,
-                    CreatedBy = UserId
-                });
 
+                //Act as normal as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    _context.Add(new DataAccess
+                    {
+                        UserId = UserId,
+                        ItemId = newEntity.Id,
+                        RestrictedType = RestrictedType.LegalAppClient,
+                        CreatedBy = UserId
+                    });
+                }
+                
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
                 await _portalLogger
                     .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return StatusCode(500);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-
-            return Ok();
         }
 
         [HttpPut("update/{clientId}")]
         public async Task<IActionResult> UpdateClient(long clientId, [FromBody] CreateClientForm form)
         {
-            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-            if (check.AccessKey is null) return BadRequest(403);
-
-            //Act as Admin
-            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            try
             {
-                var entity = await _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-                if (entity is null) return BadRequest("Klient nie istnieje!");
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-                entity.UpdatedBy = UserId;
-                entity.Updated = DateTime.UtcNow;
-                entity.Name = form.Name;
-            }
-
-            //Act as User
-            if (Role.Equals(SystemyWPConstants.Roles.Client))
-            {
-                if (check.AccessData)
+                //Act as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
-                        .FirstOrDefaultAsync(x => x.Id == clientId);
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefaultAsync(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
                     if (entity is null) return BadRequest("Klient nie istnieje!");
 
                     entity.UpdatedBy = UserId;
                     entity.Updated = DateTime.UtcNow;
                     entity.Name = form.Name;
+                    
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                else
-                {
-                    return StatusCode(403);
-                }
-            }
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                //Act as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    if (check.DataAccessAllowed)
+                    {
+                        var entity = await _context.LegalAppClients
+                            .FirstOrDefaultAsync(x => x.Id == clientId);
+                        if (entity is null) return BadRequest("Klient nie istnieje!");
+
+                        entity.UpdatedBy = UserId;
+                        entity.Updated = DateTime.UtcNow;
+                        entity.Name = form.Name;
+                        
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPut("archive/{clientId}")]
         public async Task<IActionResult> ArchiveClient(long clientId)
         {
-            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-            if (check.AccessKey is null) return BadRequest("Brak klucza!");
-
-            //Act as Admin
-            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            try
             {
-                var entity = await _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefaultAsync(x => x.Id == clientId
-                                              && x.AccessKey.Id == check.AccessKey.Id);
-                if (entity is null) return BadRequest("Klient nie istnieje!");
-                entity.Active = !entity.Active;
-            }
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-            //Act as User
-            if (Role.Equals(SystemyWPConstants.Roles.Client))
-            {
-                if (check.AccessData)
+                //Act as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -223,55 +248,86 @@ namespace SystemyWP.API.Controllers.LegalApp
                                                   && x.AccessKey.Id == check.AccessKey.Id);
                     if (entity is null) return BadRequest("Klient nie istnieje!");
                     entity.Active = !entity.Active;
+                    
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                else
-                {
-                    return StatusCode(403);
-                }
-            }
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                //Act as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    if (check.DataAccessAllowed)
+                    {
+                        var entity = await _context.LegalAppClients
+                            .Include(x => x.AccessKey)
+                            .FirstOrDefaultAsync(x => x.Id == clientId
+                                                      && x.AccessKey.Id == check.AccessKey.Id);
+                        if (entity is null) return BadRequest("Klient nie istnieje!");
+                        entity.Active = !entity.Active;
+                        
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
+                }
+                
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPut("delete/{clientId}")]
         public async Task<IActionResult> DeleteClient(long clientId)
         {
-            var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-            if (check.AccessKey is null) return BadRequest("Brak klucza!");
-            
-            //Act as Admin
-            if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+            try
             {
-                var entity = await _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefaultAsync(x => x.Id == clientId
-                                              && x.AccessKey.Id == check.AccessKey.Id);
-                if (entity is null) return BadRequest("Klient nie istnieje!");
-                _context.Remove(entity);
-            }
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-            //Act as User
-            if (Role.Equals(SystemyWPConstants.Roles.Client))
-            {
-                if (check.AccessData)
+                //Act as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
                         .Include(x => x.AccessKey)
                         .FirstOrDefaultAsync(x => x.Id == clientId
                                                   && x.AccessKey.Id == check.AccessKey.Id);
-                    if (entity is null) return BadRequest("Klient nie istnieje!");
+                    if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
+                    
                     _context.Remove(entity);
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                else
-                {
-                    return StatusCode(403);
-                }
-            }
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                //Act as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    if (check.DataAccessAllowed)
+                    {
+                        var entity = await _context.LegalAppClients
+                            .Include(x => x.AccessKey)
+                            .FirstOrDefaultAsync(x => x.Id == clientId
+                                                      && x.AccessKey.Id == check.AccessKey.Id);
+                        if (entity is null) return BadRequest("Klient nie istnieje!");
+                        
+                        _context.Remove(entity);
+                        await _context.SaveChangesAsync();
+                        return Ok();
+                    }
+                }
+                
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("admin/flat")]
@@ -300,7 +356,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             {
                 await _portalLogger
                     .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

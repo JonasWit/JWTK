@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Access
 {
     [Route("api/auth")]
     [Authorize]

@@ -4,7 +4,7 @@ using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/news")]
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]

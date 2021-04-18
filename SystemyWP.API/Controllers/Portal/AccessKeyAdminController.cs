@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/key-admin")]
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]

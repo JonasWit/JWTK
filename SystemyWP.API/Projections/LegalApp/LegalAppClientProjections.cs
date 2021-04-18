@@ -18,7 +18,21 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.Id,
                 legalAppClient.Active,
                 legalAppClient.Name,
-                legalAppClient.Contacts
+            };
+        
+        public static Func<LegalAppClient, object> CreateFull => FullProjection.Compile();
+        public static Expression<Func<LegalAppClient, object>> FullProjection =>
+            legalAppClient => new
+            {
+                legalAppClient.Created,
+                legalAppClient.CreatedBy,
+                legalAppClient.Updated,
+                legalAppClient.UpdatedBy,
+                legalAppClient.Id,
+                legalAppClient.Active,
+                legalAppClient.Name,
+                legalAppClient.Contacts,
+                legalAppClient.LegalAppClientNotes
             };
         
         public static Func<LegalAppClient, object> CreateMinimal => MinimalProjection.Compile();

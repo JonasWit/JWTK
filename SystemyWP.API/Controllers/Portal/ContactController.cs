@@ -8,7 +8,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal/contact")]
     public class ContactController : ApiController

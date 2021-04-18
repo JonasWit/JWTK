@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.General;
+﻿using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
 {

@@ -9,7 +9,7 @@ using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/log-admin")]
     [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
