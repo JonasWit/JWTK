@@ -4,7 +4,7 @@
       <cookie-consent/>
     </client-only>
     <snackbar/>
-    <v-app-bar app color="">
+    <v-app-bar app>
 
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>
@@ -142,6 +142,14 @@ export default {
 </script>
 <style>
 
+.theme--dark.v-application {
+  background-color: #000000 !important;
+}
+
+.theme--light.v-application {
+  background-color: #FCFCFC !important;
+}
+
 
 container, app, main {
   padding: 0 !important;
@@ -179,5 +187,6 @@ container, app, main {
   opacity: 0;
   transform: translate3d(0, 15px, 0);
 }
+
 
 </style>

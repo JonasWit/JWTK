@@ -102,28 +102,34 @@ const config = {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     theme: {
+      options: {
+        customProperties: true
+      },
       dark: true,
       themes: {
         dark: {
-          primary: '#1976D2',
-          secondary: '#424242',
-          accent: '#82B1FF',
-          error: '#FF5252',
-          info: '#2196F3',
-          success: '#4CAF50',
+
+          primary: '#B41946',
+          secondary: '#6F8AB7',
+          accent: '#06D6A0',
+          anchor: '#8c9eff',
+
+          error: '#F24333',
+          info: '#3E8989',
+          success: '#2CDA9D',
           warning: '#FFC107',
 
         },
         light: {
-          bg: '#f1e7d0',
-          primary: '#1976D2',
-          secondary: colors.teal.lighten3,
-          accent: colors.teal.accent4,
-          tool: '#0000FF',
 
-          error: '#FF5252',
-          info: '#2196F3',
-          success: '#4CAF50',
+          primary: '#B41946',
+          secondary: '#6F8AB7',
+          accent: '#06D6A0',
+          anchor: '#8c9eff',
+
+          error: '#F24333',
+          info: '#3E8989',
+          success: '#4B8F8C',
           warning: '#FFC107',
         }
       },
