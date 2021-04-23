@@ -1,7 +1,18 @@
 ﻿<template>
   <v-dialog v-model="dialog" persistent width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn text :color="buttonColor" v-bind="attrs" v-on="on">{{ buttonText }}</v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn v-if="!icon" text :color="buttonColor" v-on="{ ...tooltip, ...dialog }">{{
+              buttonText
+            }}
+          </v-btn>
+          <v-btn v-else icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium :color="buttonColor">{{ icon }}</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ tooltipMessage }}</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="justify-center">{{ title }}</v-card-title>
@@ -32,6 +43,16 @@ export default {
       required: true,
       type: String,
       default: "No message!"
+    },
+    tooltipMessage: {
+      required: false,
+      type: String,
+      default: "No Tooltip!"
+    },
+    icon: {
+      required: false,
+      type: String,
+      default: ""
     },
     buttonColor: {
       required: false,

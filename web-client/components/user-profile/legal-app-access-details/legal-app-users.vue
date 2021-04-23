@@ -1,66 +1,71 @@
-﻿<template xmlns="">
+﻿<template>
   <div>
     <v-row v-if="!loading">
-      <v-col class="d-flex align-start" cols="12" md="6">
+      <v-col class="d-flex justify-start" cols="12">
         <div>
           <v-card elevation="0">
-            <v-card-title class="mb-2">Uzytkownicy</v-card-title>
+            <v-card-title class="pb-0">Powiązani</v-card-title>
+            <v-card-title class="pt-0 mb-2">Użytkownicy</v-card-title>
             <v-card-subtitle>Jako Administrator możesz zarządzać dostępem do danych dla poszczególnych użytkowników
             </v-card-subtitle>
-            <v-select class="px-4" no-data-text="Brak danych" clearable
-                      :item-text="item => item.username +' - '+ item.email" v-model="selectedUser" :items="normalUsers"
-                      filled label="Wybierz Uzytkownika" return-object></v-select>
-            <div class="d-flex flex-column">
-              <v-btn class="mb-1" text color="success" @click="reset">Odśwież</v-btn>
-            </div>
-            <div class="d-flex flex-column" v-if="this.selectedUser && this.treeViewData.length > 0">
-              <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
-                                           button-text="Zapisz Zmiany"
-                                           message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
-              <default-confirmation-dialog v-on:action-confirmed="grantFullAccess" title="Pełny Dostęp"
-                                           button-text="Nadaj Pełny Dostęp"
-                                           message="Uzytkownik otrzyma dostęp do wszyskich danych Klientów i Spraw, które są obecnie wprowadzone w aplikacji!"/>
-              <default-confirmation-dialog button-color="error" v-on:action-confirmed="revokeAllAccesses"
-                                           title="Obierz Dostęp" button-text="Obierz dostęp"
-                                           message="Użytkownikowi zostanią odebrane waszystkie dostępy do danych, które obecnie posiada!"/>
-            </div>
+            <v-list style="max-height: 300px" class="overflow-y-auto">
+              <v-list-item-group v-model="selectedUser" return-object>
+                <v-list-item v-for="(user, i) in relatedUsers" :key="i" :value="user">
+                  <user-header :image-url="user.image" :username="user.username" :role="user.role" :link="false"
+                               size="36"/>
+                  <v-spacer/>
+                  <div v-if="selectedUser && selectedUser.id === user.id">
+                    <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
+                                                 icon="mdi-content-save-edit-outline"
+                                                 tooltip-message="Zapisz zmiany dostępów" button-text="Zapisz Zmiany"
+                                                 message="Czy na pewno chcesz zmienić zakres dostępu tego użytkownika?"/>
+
+                    <default-confirmation-dialog button-color="error" v-on:action-confirmed="revokeAllAccesses"
+                                                 icon="mdi-lock-minus-outline"
+                                                 tooltip-message="Odbierz wszystkie dostępy do danych"
+                                                 title="Obierz Dostęp" button-text="Obierz dostęp"
+                                                 message="Użytkownikowi zostanią odebrane waszystkie dostępy do danych, które obecnie posiada!"/>
+                    <default-confirmation-dialog v-on:action-confirmed="grantFullAccess" title="Pełny Dostęp"
+                                                 button-color="error" tooltip-message="Nadaj pełny dostęp do danych"
+                                                 icon="mdi-lock-open-plus-outline" button-text="Nadaj Pełny Dostęp"
+                                                 message="Uzytkownik otrzyma dostęp do wszyskich danych Klientów i Spraw, które są obecnie wprowadzone w aplikacji!"/>
+                    <default-confirmation-dialog v-on:action-confirmed="testMethod" title="Usunięcie powiązania"
+                                                 button-color="error" tooltip-message="Usuń użytkownika z grupy"
+                                                 icon="mdi-account-off-outline" button-text="Nadaj Pełny Dostęp"
+                                                 message="Użytkownik nie będzie mógł mieć dostępu do żadnych danych, ponowne dopięcie uzytkownika może nastąpić jedynie po kontakcie z administratorem portalu!"/>
+                  </div>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </v-card>
         </div>
       </v-col>
-      <v-col class="d-flex align-start" cols="12" md="6">
+      <v-col class="d-flex justify-start" cols="12">
         <div>
           <v-card elevation="0">
             <v-card-title class="mb-2">Dostęp do danych</v-card-title>
-            <v-card-subtitle>Określ do których Klientów i Spraw użytkownik zwyczajny będzie miał dostęp
+            <v-card-subtitle v-if="selectedUser">Określ do których Klientów i Spraw użytkownik będzie miał dostęp
+            </v-card-subtitle>
+            <v-card-subtitle v-else>Wybierz użytkownika z listy powyżej by zmodyfikować jego dostępy
             </v-card-subtitle>
             <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
-              <div>
-                <v-card-actions class="pt-0">
-
-                </v-card-actions>
-              </div>
-              <div>
-                <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
-                            item-key="key" :selection-type="selectionType" selectable return-object>
-                  <template v-slot:label="{ item, open }">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <span v-bind="attrs" v-on="on">{{ item.displayText }}</span>
-                      </template>
-                      <span>{{ item.name }}</span>
-                    </v-tooltip>
-                  </template>
-                </v-treeview>
-              </div>
-            </div>
-            <div class="px-4" v-else>
-              <p class="success--text">Wybierz Użytkownika by zmienić jego dostęp do danych </p>
+              <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
+                          item-key="key" :selection-type="selectionType" selectable return-object>
+                <template v-slot:label="{ item, open }">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">{{ item.displayText }}</span>
+                    </template>
+                    <span>{{ item.name }}</span>
+                  </v-tooltip>
+                </template>
+              </v-treeview>
             </div>
           </v-card>
         </div>
       </v-col>
     </v-row>
-    <v-row v-else>
+    <v-row v-else justify="space-around">
       <v-col class="d-flex justify-center align-center mt-2" cols="12">
         <v-progress-circular :size="50" :width="7" indeterminate/>
       </v-col>
@@ -69,24 +74,26 @@
 </template>
 
 <script>
-
 import {mapActions, mapGetters} from "vuex";
-import {LegalAppDataAccessItems} from "@/data/enums";
+import UserHeader from "@/components/user-header";
 import DefaultConfirmationDialog from "@/components/default-confirmation-dialog";
+import {LegalAppDataAccessItems} from "@/data/enums";
+import {formatDate} from "@/data/date-extensions";
 
 export default {
-  name: "legal-app-user-access",
-  components: {DefaultConfirmationDialog},
+  name: "legal-app-users",
+  components: {UserHeader, DefaultConfirmationDialog},
   data: () => ({
-    displayTextSize: 20,
-    loading: false,
     selectedUser: null,
+    loading: false,
+    displayTextSize: 20,
     treeViewData: [],
     treeViewSelection: [],
     selectionType: 'independent',
   }),
   watch: {
     selectedUser(selection) {
+      this.loading = true;
       console.warn('selected user:', selection);
       if (selection) {
         this.treeViewSelection = [];
@@ -118,6 +125,7 @@ export default {
           }
         }
       }
+      this.loading = false;
     },
     treeViewSelection(selection) {
       if (this.selectedUser) {
@@ -148,7 +156,15 @@ export default {
     this.loading = false;
   },
   computed: {
-    ...mapGetters('profile-panel-legal-app-store', ['relatedUsers', 'normalUsers']),
+    ...mapGetters('profile-panel-legal-app-store', ['relatedUsers']),
+    countAllowedClients() {
+      if (!this.selectedUser) return 0;
+      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT).length;
+    },
+    countAllowedCases() {
+      if (!this.selectedUser) return 0;
+      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CASE).length;
+    }
   },
   methods: {
     ...mapActions('popup', ['success']),
@@ -249,7 +265,13 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    }
+    },
+    testMethod() {
+      console.warn('test', 'test');
+    },
+    formatDate(date) {
+      return formatDate(date);
+    },
   }
 };
 </script>
