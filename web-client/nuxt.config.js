@@ -1,4 +1,3 @@
-import colors from 'vuetify/es5/util/colors';
 import * as fs from "fs";
 import path from 'path';
 
@@ -125,7 +124,7 @@ const config = {
           primary: '#B41946',
           secondary: '#6F8AB7',
           accent: '#06D6A0',
-          anchor: '#000210',
+          anchor: '#000409',
 
           error: '#F24333',
           info: '#3E8989',
