@@ -188,5 +188,9 @@ container, app, main {
   transform: translate3d(0, 15px, 0);
 }
 
+/*.container {*/
+/*  max-width: 100vw;*/
+/*  padding: 0px;*/
+/*}*/
 
 </style>
