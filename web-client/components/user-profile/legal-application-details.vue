@@ -20,7 +20,6 @@
 
 <script>
 
-import LegalAppAccesses from "@/components/user-profile/legal-app-access-details/legal-app-user-manager-panel";
 import LegalAppData from "@/components/user-profile/legal-app-access-details/legal-app-data-manager-panel";
 import LegalAppUsers from "@/components/user-profile/legal-app-access-details/legal-app-users";
 
@@ -29,9 +28,8 @@ export default {
   data: () => ({
     legalAppTab: 0,
     legalAppTabs: [
-      {title: "Dostępy", component: LegalAppAccesses},
-      {title: "Dane", component: LegalAppData},
       {title: "Użytkownicy", component: LegalAppUsers},
+      {title: "Dane", component: LegalAppData},
     ]
   }),
   methods: {}

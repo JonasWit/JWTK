@@ -14,7 +14,7 @@
                   <user-header :image-url="user.image" :username="user.username" :role="user.role" :link="false"
                                size="36"/>
                   <v-spacer/>
-                  <div v-if="selectedUser && selectedUser.id === user.id">
+                  <div v-if="selectedUser && selectedUser.id === user.id && standardUsetCheck">
                     <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
                                                  icon="mdi-content-save-edit-outline"
                                                  tooltip-message="Zapisz zmiany dostępów" button-text="Zapisz Zmiany"
@@ -42,13 +42,15 @@
       </v-col>
       <v-col class="d-flex justify-start" cols="12">
         <div>
-          <v-card elevation="0">
+          <v-card elevation="0" v-if="selectedUser">
             <v-card-title class="mb-2">Dostęp do danych</v-card-title>
-            <v-card-subtitle v-if="selectedUser">Określ do których Klientów i Spraw użytkownik będzie miał dostęp
+            <v-card-subtitle v-if="selectedUser && !standardUsetCheck">Administrator ma automatyczny dostę do wszystkich
+              danych.
             </v-card-subtitle>
-            <v-card-subtitle v-else>Wybierz użytkownika z listy powyżej by zmodyfikować jego dostępy
+            <v-card-subtitle v-else>Określ do których Klientów i Spraw użytkownik
+              będzie miał dostęp.
             </v-card-subtitle>
-            <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0">
+            <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0 && standardUsetCheck">
               <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
                           item-key="key" :selection-type="selectionType" selectable return-object>
                 <template v-slot:label="{ item, open }">
@@ -77,7 +79,7 @@
 import {mapActions, mapGetters} from "vuex";
 import UserHeader from "@/components/user-header";
 import DefaultConfirmationDialog from "@/components/default-confirmation-dialog";
-import {LegalAppDataAccessItems} from "@/data/enums";
+import {LegalAppDataAccessItems, ROLES} from "@/data/enums";
 import {formatDate} from "@/data/date-extensions";
 
 export default {
@@ -153,6 +155,7 @@ export default {
   beforeMount() {
     this.loading = true;
     this.getClients();
+    this.getRelatedUsers();
     this.loading = false;
   },
   computed: {
@@ -160,6 +163,13 @@ export default {
     countAllowedClients() {
       if (!this.selectedUser) return 0;
       return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT).length;
+    },
+    standardUsetCheck() {
+      if (this.selectedUser.role !== ROLES.CLIENT_ADMIN &&
+        this.selectedUser.role !== ROLES.PORTAL_ADMIN &&
+        this.selectedUser.role !== ROLES.INVITED) {
+        return true;
+      }
     },
     countAllowedCases() {
       if (!this.selectedUser) return 0;
