@@ -44,7 +44,8 @@ const config = {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/axios',
-    '~/plugins/notifier'
+    '~/plugins/notifier',
+    '~/plugins/bus-client.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

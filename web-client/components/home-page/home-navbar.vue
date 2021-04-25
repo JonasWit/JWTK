@@ -7,14 +7,14 @@
       </v-list-item>
     </v-list>
 
-    <v-navigation-drawer app v-model="drawer" absolute temporary :src="img">
+    <v-navigation-drawer app v-model="drawer" absolute temporary>
       <v-list nav dense>
-        <v-list-item-group v-model="group" active-class="text--accent">
+        <v-list-item-group v-model="group">
           <v-list-item v-for="item in items" :key="item.id">
             <v-list-item-icon>
-              <v-icon color="#FCFCFC">{{ item.icon }}</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-            <nuxt-link class="nav-item" style="color: #FCFCFC" :to="item.route">
+            <nuxt-link class="nav-item" :to="item.route">
               {{ item.name }}
             </nuxt-link>
           </v-list-item>
@@ -31,7 +31,6 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    img: `${require('~/assets/images/background.jpg')}`,
     items: [
       {
         id: '1',
@@ -64,7 +63,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .nav-list {
   background: transparent !important;

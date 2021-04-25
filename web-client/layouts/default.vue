@@ -85,10 +85,11 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookie, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
+
 
 export default {
   name: "default",
@@ -127,6 +128,7 @@ export default {
           }
         }
       }
+      this.$bus.$emit('theme-switched', this.$vuetify.theme.dark)
     }
   },
   computed: {
