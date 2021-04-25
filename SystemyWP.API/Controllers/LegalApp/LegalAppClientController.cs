@@ -80,9 +80,9 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
-        [HttpGet("clients")]
-        public async Task<IActionResult> GetClients()
+        
+        [HttpGet("clients/basic-list")]
+        public async Task<IActionResult> GetClientsBasicList()
         {
             try
             {
@@ -101,6 +101,61 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Include(x => x.AccessKey)
                         .Where(x =>
                             x.AccessKey.Id == user.AccessKey.Id)
+                        .Select(LegalAppClientProjections.BasicProjection)
+                        .ToList());
+
+                    return Ok(result);
+                }
+
+                //Get data as User
+                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                {
+                    result.AddRange(_context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x =>
+                            x.AccessKey.Id == user.AccessKey.Id &&
+                            _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
+                                .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
+                                          y.ItemId == x.Id))
+                        .Select(LegalAppClientProjections.BasicProjection)
+                        .ToList());
+
+                    return Ok(result);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }  
+        }
+
+        [HttpGet("clients")]
+        public async Task<IActionResult> GetClients(int cursor, int take)
+        {
+            try
+            {
+                var user = _context.Users
+                    .Include(x => x.AccessKey)
+                    .FirstOrDefault(x => x.Id.Equals(UserId));
+
+                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var result = new List<object>();
+
+                //Get data as Admin
+                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                {
+                    result.AddRange(_context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x =>
+                            x.AccessKey.Id == user.AccessKey.Id)
+                        .OrderByDescending(x => x.Name)
+                        .Skip(cursor)
+                        .Take(take)
                         .Select(LegalAppClientProjections.FlatProjection)
                         .ToList());
 
@@ -117,6 +172,9 @@ namespace SystemyWP.API.Controllers.LegalApp
                             _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
                                 .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                           y.ItemId == x.Id))
+                        .OrderByDescending(x => x.Name)
+                        .Skip(cursor)
+                        .Take(take)
                         .Select(LegalAppClientProjections.FlatProjection)
                         .ToList());
 
