@@ -27,8 +27,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("client/{clientId}")]
-        public async Task<IActionResult> GetClient(
-            int clientId)
+        public async Task<IActionResult> GetClient(int clientId)
         {
             try
             {
@@ -130,7 +129,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 await _portalLogger
                     .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }  
+            }
         }
 
         [HttpGet("clients")]
