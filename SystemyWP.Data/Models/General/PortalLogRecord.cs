@@ -4,7 +4,7 @@ using SystemyWP.Data.Models.Abstractions;
 
 namespace SystemyWP.Data.Models.General
 {
-    public class PortalLog : BaseModel<long>
+    public class PortalLogRecord : BaseModel<long>
     {
         [Required]
         public LogType LogType { get; set; }

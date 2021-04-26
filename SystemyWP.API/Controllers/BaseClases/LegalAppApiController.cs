@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;

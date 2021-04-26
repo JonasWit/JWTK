@@ -54,6 +54,10 @@ const config = {
       path: '~/components/',
     },
     {
+      path: '~/components/generic-components',
+      prefix: 'generic'
+    },
+    {
       path: '~/components/auth/',
     },
     {
@@ -84,11 +88,11 @@ const config = {
       prefix: 'padmin'
     },
     {
-      path: '~/components/logal-app',
+      path: '~/components/legal-app',
       prefix: 'legalapp'
     },
     {
-      path: '~/components/logal-app/clients',
+      path: '~/components/legal-app/clients',
       prefix: 'legalapp'
     },
   ],

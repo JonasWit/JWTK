@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "log-item-details",
+  name: "portal-log-item-details",
   props: {
     logItem: {
       type: Object,

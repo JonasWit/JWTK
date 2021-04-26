@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.LegalApp;
 using SystemyWP.API.Projections.LegalApp;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;

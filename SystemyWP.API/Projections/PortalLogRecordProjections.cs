@@ -4,10 +4,10 @@ using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Projections
 {
-    public static class LogRecordProjection
+    public static class PortalLogRecordProjections
     {
-        public static Func<PortalLog, object> Create => Projection.Compile();
-        public static Expression<Func<PortalLog, object>> Projection =>
+        public static Func<PortalLogRecord, object> Create => StandardProjection.Compile();
+        public static Expression<Func<PortalLogRecord, object>> StandardProjection =>
             log => new
             {
                 log.Description,

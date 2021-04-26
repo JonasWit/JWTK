@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Services.Email;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

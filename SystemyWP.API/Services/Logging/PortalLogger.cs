@@ -5,7 +5,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 
-namespace SystemyWP.API.Services.PortalLoggerService
+namespace SystemyWP.API.Services.Logging
 {
     [TransientService]
     public class PortalLogger
@@ -19,7 +19,7 @@ namespace SystemyWP.API.Services.PortalLoggerService
 
         public async Task Log(LogType logType, string endpoint, string userId, string userEmail, string description = "", Exception ex = null)
         {
-            _context.PortalLogs.Add(new PortalLog
+            _context.PortalLogs.Add(new PortalLogRecord
             {
                 LogType = logType,
                 Description = description,

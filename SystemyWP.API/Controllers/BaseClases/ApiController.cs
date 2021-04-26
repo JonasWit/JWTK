@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Mvc;
 

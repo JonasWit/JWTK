@@ -30,7 +30,6 @@
 
     <ItemGroup>
       <Folder Include="CustomExtensions" />
-      <Folder Include="Services\Cleaners" />
     </ItemGroup>
 
 </Project>

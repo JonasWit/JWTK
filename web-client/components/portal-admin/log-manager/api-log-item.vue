@@ -1,29 +1,24 @@
 ﻿<template>
   <v-list-item :key="`log-record-${logItem.id}`">
     <v-list-item-icon class="mx-0">
-      <padmin-log-item-details :log-item="logItem"/>
+      <padmin-api-log-item-details :log-item="logItem"/>
     </v-list-item-icon>
     <v-list-item-content>
-      <v-list-item-title>{{ logItem.description }}</v-list-item-title>
-      <v-list-item-subtitle :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-list-item-subtitle>
+      <v-list-item-subtitle :class="getTypeColor(logItem.logLevel)">{{ logItem.logLevel }}</v-list-item-subtitle>
+      <v-list-item-subtitle>{{ logItem.state }}</v-list-item-subtitle>
     </v-list-item-content>
     <v-spacer/>
     <v-list-item-content>
       <v-list-item-subtitle>Created: {{ logItem.created }}</v-list-item-subtitle>
-      <v-list-item-subtitle v-if="logItem.description" class="py-0">Details: {{
-          logItem.description
-        }}
-      </v-list-item-subtitle>
-      <v-list-item-subtitle class="py-0">User Email: {{ logItem.userEmail }}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
 </template>
 
 <script>
-import {LOG_TYPES} from "@/data/enums";
+import {SERVER_LOG_TYPES} from "@/data/enums";
 
 export default {
-  name: "log-item",
+  name: "api-log-item",
   props: {
     logItem: {
       type: Object,
@@ -32,9 +27,9 @@ export default {
   },
   methods: {
     getTypeColor(type) {
-      if (type === LOG_TYPES.ISSUE) {
+      if (type === SERVER_LOG_TYPES.WARNING) {
         return "warning--text";
-      } else if (type === LOG_TYPES.EXCEPTION) {
+      } else if (type === SERVER_LOG_TYPES.CRITICAL) {
         return "error--text";
       } else {
         return "success--text";
