@@ -64,10 +64,6 @@ const config = {
       prefix: 'prof'
     },
     {
-      path: '~/components/logal-app',
-      prefix: 'legalapp'
-    },
-    {
       path: '~/components/user-profile/legal-app-access-details',
       prefix: 'prof'
     },
@@ -87,7 +83,14 @@ const config = {
       path: '~/components/portal-admin/log-manager',
       prefix: 'padmin'
     },
-
+    {
+      path: '~/components/logal-app',
+      prefix: 'legalapp'
+    },
+    {
+      path: '~/components/logal-app/clients',
+      prefix: 'legalapp'
+    },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
