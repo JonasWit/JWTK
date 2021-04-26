@@ -64,6 +64,10 @@ const config = {
       prefix: 'prof'
     },
     {
+      path: '~/components/logal-app',
+      prefix: 'legalapp'
+    },
+    {
       path: '~/components/user-profile/legal-app-access-details',
       prefix: 'prof'
     },
