@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/user-admin")]
-    [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class UserAdminController : ApiController
     {
         public UserAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -37,7 +37,7 @@ namespace SystemyWP.API.Controllers.Portal
 
                 var accessKey = _context.AccessKeys
                     .Include(x => x.Users)
-                    .Where(x => x.Users.Any(x => x.Id.Equals(identityUser.Id)))
+                    .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
                     .Select(AccessKeyProjection.Projection)
                     .FirstOrDefault();
 
@@ -47,13 +47,13 @@ namespace SystemyWP.API.Controllers.Portal
                     Username = identityUser.UserName,
                     Email = identityUser.Email,
                     LegalAppAllowed = userClaims
-                        .Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess)),
+                        .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess)),
                     Image = _context.Users
                         .FirstOrDefault(x => x.Id.Equals(identityUser.Id))?.Image,
                     DataAccessKey = accessKey,
                     Role = userClaims
                         .FirstOrDefault(x =>
-                            x.Type.Equals(SystemyWPConstants.Claims.Role))?.Value,
+                            x.Type.Equals(SystemyWpConstants.Claims.Role))?.Value,
                     Locked = identityUser.LockoutEnd is not null,
                     EmailConfirmed = identityUser.EmailConfirmed
                 });
@@ -100,7 +100,7 @@ namespace SystemyWP.API.Controllers.Portal
         {
             var user = await userManager.FindByIdAsync(form.UserId);
             var userClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
-            var roleClaim = userClaims?.FirstOrDefault(x => x.Type.Equals(SystemyWPConstants.Claims.Role));
+            var roleClaim = userClaims?.FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role));
 
             if (!form.Role.Equals(roleClaim?.Value, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -111,17 +111,17 @@ namespace SystemyWP.API.Controllers.Portal
                     if (roleRemoveResult.Succeeded)
                     {
                         if (form.Role.Equals(
-                            SystemyWPConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
+                            SystemyWpConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
                         {
                             var addToRoleResult =
-                                await userManager.AddClaimAsync(user, SystemyWPConstants.Claims.ClientClaim);
+                                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim);
                             if (addToRoleResult.Succeeded) return Ok();
                         }
                         else if (form.Role.Equals(
-                            SystemyWPConstants.Roles.ClientAdmin, StringComparison.InvariantCultureIgnoreCase))
+                            SystemyWpConstants.Roles.ClientAdmin, StringComparison.InvariantCultureIgnoreCase))
                         {
                             var addToRoleResult =
-                                await userManager.AddClaimAsync(user, SystemyWPConstants.Claims.ClientAdminClaim);
+                                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientAdminClaim);
                             if (addToRoleResult.Succeeded) return Ok();
                         }
                         else
@@ -164,12 +164,12 @@ namespace SystemyWP.API.Controllers.Portal
 
             if (user is null || legalAppClaim is null) return BadRequest("User not found!");
 
-            if (legalAppClaim.Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess) &&
-                                       x.Value.Equals(SystemyWPConstants.Apps.LegalApp)))
+            if (legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                       x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                 return BadRequest("User already have access!");
 
             var result = await userManager
-                .AddClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);
+                .AddClaimAsync(user, SystemyWpConstants.Claims.LegalAppAccessClaim);
 
             if (result.Succeeded) return Ok("Claim Added!");
 
@@ -186,12 +186,12 @@ namespace SystemyWP.API.Controllers.Portal
 
             if (user is null || legalAppClaim is null) return BadRequest("User not found!");
 
-            if (!legalAppClaim.Any(x => x.Type.Equals(SystemyWPConstants.Claims.AppAccess) &&
-                                        x.Value.Equals(SystemyWPConstants.Apps.LegalApp)))
+            if (!legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                        x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                 return BadRequest("User already does not have access!");
 
             var result = await userManager
-                .RemoveClaimAsync(user, SystemyWPConstants.Claims.LegalAppAccessClaim);
+                .RemoveClaimAsync(user, SystemyWpConstants.Claims.LegalAppAccessClaim);
 
             if (result.Succeeded) return Ok("Claim Removed!");
 

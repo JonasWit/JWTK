@@ -34,7 +34,6 @@ namespace SystemyWP.API.Services.Storage
         public async Task<string> DeleteFile(string fileUrl)
         {
             using var client = Client;
-            var path = ObjectRootUrl(Path.GetFileName(fileUrl));
 
             var request = new DeleteObjectRequest
             {

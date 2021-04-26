@@ -18,8 +18,8 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-clients")]
-    [Authorize(SystemyWPConstants.Policies.Client)]
-    [Authorize(SystemyWPConstants.Policies.LegalAppAccess)]
+    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppClientController : LegalAppApiController
     {
         public LegalAppClientController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -35,8 +35,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 //Get data as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -50,7 +50,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Get data as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     if (check.DataAccessAllowed)
                     {
@@ -93,8 +93,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 var result = new List<object>();
 
                 //Get data as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     result.AddRange(_context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -107,7 +107,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Get data as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     result.AddRange(_context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -145,8 +145,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 var result = new List<object>();
 
                 //Get data as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     result.AddRange(_context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -162,7 +162,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Get data as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     result.AddRange(_context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -212,7 +212,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 _context.Add(newEntity);
 
                 //Act as normal as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     _context.Add(new DataAccess
                     {
@@ -243,8 +243,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 //Act as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -260,7 +260,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Act as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     if (check.DataAccessAllowed)
                     {
@@ -296,8 +296,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 //Act as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -311,7 +311,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Act as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     if (check.DataAccessAllowed)
                     {
@@ -346,8 +346,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 //Act as Admin
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var entity = await _context.LegalAppClients
                         .Include(x => x.AccessKey)
@@ -361,7 +361,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Act as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     if (check.DataAccessAllowed)
                     {
@@ -388,7 +388,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("admin/flat")]
-        [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
+        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
         public async Task<IActionResult> GetClientsAndCasesForAccess()
         {
             try

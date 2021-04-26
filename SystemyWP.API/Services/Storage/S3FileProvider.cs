@@ -14,7 +14,7 @@ namespace SystemyWP.API.Services.Storage
         
         public Task<string> SaveProfileImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWPConstants.Files.GenerateProfileFileName();
+            var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
             return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
         }
 

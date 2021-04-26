@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.CustomExtensions;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.PortalLoggerService;
@@ -35,11 +33,7 @@ namespace SystemyWP.API.Controllers.Access
         {
             try
             {
-                var testExc = new Exception("TEST exception");
-                testExc.SetStackTrace(new StackTrace());
                 await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Loggin in");
-                await _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail,
-                    "Test Exception", testExc);
 
                 var userId = UserId;
                 if (string.IsNullOrEmpty(userId)) return BadRequest();
@@ -99,9 +93,9 @@ namespace SystemyWP.API.Controllers.Access
             userProfile.PhoneNumber = form.PhoneNumber;
             userProfile.PostCode = form.PostCode;
             userProfile.CompanyFullName = form.CompanyFullName;
-            userProfile.Krs = form.KRS;
-            userProfile.Nip = form.NIP;
-            userProfile.Regon = form.REGON;
+            userProfile.Krs = form.Krs;
+            userProfile.Nip = form.Nip;
+            userProfile.Regon = form.Regon;
 
             await _context.SaveChangesAsync();
             return Ok();

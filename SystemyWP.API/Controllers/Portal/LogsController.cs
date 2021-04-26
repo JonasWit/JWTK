@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/log-admin")]
-    [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class LogsController : ApiController
     {
         public LogsController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

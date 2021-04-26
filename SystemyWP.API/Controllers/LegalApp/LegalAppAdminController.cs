@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-admin")]
-    [Authorize(SystemyWPConstants.Policies.ClientAdmin)]
+    [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
     public class LegalAppAdminController : ApiController
     {
         public LegalAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -54,7 +54,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var userRecord = await userManager.FindByIdAsync(relatedUser.Id);
                     var role = (await userManager.GetClaimsAsync(userRecord) as List<Claim>)?
-                        .FirstOrDefault(x => x.Type.Equals(SystemyWPConstants.Claims.Role))?
+                        .FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role))?
                         .Value;
                     result.Add(UserProjections
                         .RelatedUserProjection(userRecord.UserName, userRecord.Email, role)

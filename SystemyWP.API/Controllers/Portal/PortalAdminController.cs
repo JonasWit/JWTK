@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin")]
-    [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class PortalAdminController : ApiController
     {
         public PortalAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -25,7 +25,7 @@ namespace SystemyWP.API.Controllers.Portal
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var users = await userManager.GetUsersForClaimAsync(
-                SystemyWPConstants.Claims.ClientClaim);
+                SystemyWpConstants.Claims.ClientClaim);
 
             return Ok(users.Select(x => new
             {
@@ -60,7 +60,7 @@ namespace SystemyWP.API.Controllers.Portal
                 return BadRequest(errorResponse);
             }
 
-            await userManager.AddClaimAsync(client, SystemyWPConstants.Claims.InvitedClaim);
+            await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
             var code = await userManager.GeneratePasswordResetTokenAsync(client);
 
             var link = Url.Page("/Account/Client", "Get", new

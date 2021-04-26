@@ -12,8 +12,8 @@
         public string Vivodership { get; set; }
         public string Country { get; set; }
         public string PostCode { get; set; }
-        public string NIP { get; set; }
-        public string REGON { get; set; }
-        public string KRS { get; set; }
+        public string Nip { get; set; }
+        public string Regon { get; set; }
+        public string Krs { get; set; }
     }
 }
