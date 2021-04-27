@@ -16,10 +16,10 @@
         <div class="my-4 subtitle-1">
           Level: {{ logItem.logLevel }}
         </div>
-        <div class="my-4 subtitle-1">
+        <div v-if="logItem.state" class="my-4 subtitle-1">
           State: {{ logItem.state }}
         </div>
-        <div class="my-4 subtitle-1">
+        <div v-if="logItem.eventName" class="my-4 subtitle-1">
           Event: {{ logItem.eventName }}
         </div>
         <div v-if="logItem.exceptionMessage" class="my-4 subtitle-1">

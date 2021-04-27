@@ -1,10 +1,12 @@
 ﻿<template>
-  <div></div>
+  <div>
+    search here
+  </div>
 </template>
 
 <script>
 export default {
-  name: "client-list-item"
+  name: "clients-search"
 };
 </script>
 

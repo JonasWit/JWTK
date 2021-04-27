@@ -5,14 +5,14 @@
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-list-item-title>
-    </v-list-item-content>
-    <v-spacer/>
-    <v-list-item-content>
-      <v-list-item-subtitle>Created: {{ logItem.created }}</v-list-item-subtitle>
       <v-list-item-subtitle v-if="logItem.description" class="py-0">Details: {{
           logItem.description
         }}
       </v-list-item-subtitle>
+    </v-list-item-content>
+    <v-spacer/>
+    <v-list-item-content>
+      <v-list-item-subtitle>Created: {{ logItem.created }}</v-list-item-subtitle>
       <v-list-item-subtitle class="py-0">User Email: {{ logItem.userEmail }}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
