@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.BaseClases
@@ -22,6 +25,11 @@ namespace SystemyWP.API.Controllers.BaseClases
         protected string Username => GetClaim(ClaimTypes.Name);
         protected string UserEmail => GetClaim(ClaimTypes.Email);
         protected string Role => GetClaim(SystemyWpConstants.Claims.Role);
+
+        protected Task LogException(Exception ex)
+        {
+            return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.");        
+        }
         
         private string GetClaim(string claimType) => User.Claims
             .FirstOrDefault(x => x.Type.Equals(claimType))?.Value;

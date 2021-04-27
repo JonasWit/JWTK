@@ -14,18 +14,23 @@
       </v-card-title>
       <v-card-text class="my-1">
         <div class="my-4 subtitle-1">
+          Created: {{ logItem.created }}
+        </div>
+        <div class="my-4 subtitle-1">
           User: {{ logItem.userEmail }}
+        </div>
+        <div class="my-4 subtitle-1">
+          EndPoint: {{ logItem.endpoint }}
         </div>
         <div class="my-4 subtitle-1">
           Description: {{ logItem.description }}
         </div>
         <div v-if="logItem.exceptionMessage" class="my-4 subtitle-1">
-          Exception: {{ logItem.exceptionMessage }}
+          Exception Message: {{ logItem.exceptionMessage }}
         </div>
         <div v-if="logItem.exceptionStackTrace" class="my-4 subtitle-1">
-          Exception: {{ logItem.exceptionStackTrace }}
+          Stack Trace: {{ logItem.exceptionStackTrace }}
         </div>
-
       </v-card-text>
       <v-divider></v-divider>
     </v-card>

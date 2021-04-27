@@ -71,7 +71,7 @@ namespace SystemyWP.API.Controllers.Access
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                await LogException(e);
                 return BadRequest();
             }
         }
@@ -131,25 +131,33 @@ namespace SystemyWP.API.Controllers.Access
             IFormFile image,
             [FromServices] IFileProvider fileManager)
         {
-            if (image is null) return BadRequest();
-
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-            if (user is null) return NoContent();
-
-            if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteProfileImageAsync(user.Image);
-
-            await using (var stream = new MemoryStream())
-            using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
+            try
             {
-                imageProcessor.Mutate(x => x.Resize(120, 120));
-                var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
-                var saveImage = fileManager.SaveProfileImageAsync(stream);
-                await Task.WhenAll(processImage, saveImage);
-                user.Image = await saveImage;
-            }
+                if (image is null) return BadRequest();
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+                if (user is null) return NoContent();
+
+                if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteProfileImageAsync(user.Image);
+
+                await using (var stream = new MemoryStream())
+                using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
+                {
+                    imageProcessor.Mutate(x => x.Resize(120, 120));
+                    var processImage = imageProcessor.SaveAsync(stream, new JpegEncoder());
+                    var saveImage = fileManager.SaveProfileImageAsync(stream);
+                    await Task.WhenAll(processImage, saveImage);
+                    user.Image = await saveImage;
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost("personal-data/delete-account")]
