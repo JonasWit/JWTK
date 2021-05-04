@@ -23,7 +23,7 @@
 import {mapState} from "vuex";
 
 export default {
-  middleware: ["client"],
+  middleware: ["client", "authenticated"],
   data: () => ({}),
   computed: {
     ...mapState("auth", ["profile"]),
