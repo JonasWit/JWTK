@@ -22,7 +22,6 @@
           </template>
         </v-autocomplete>
 
-
         <div v-scroll="onScroll">
           <v-list>
             <legalapp-client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
