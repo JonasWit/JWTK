@@ -76,7 +76,7 @@ namespace SystemyWP.API
             var adminUser = userManager.FindByNameAsync("portaladmin1");
             var random = new Random();
 
-            for (var i = 0; i < 50; i++)
+            for (var i = 0; i < 500; i++)
             {
                 var newClient = new LegalAppClient
                 {
@@ -122,7 +122,7 @@ namespace SystemyWP.API
                     }
                 }
                 
-                if (i < 10)
+                if (i < 100)
                 {
                     newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-1"));
                     newClient.CreatedBy = "system";
@@ -130,7 +130,7 @@ namespace SystemyWP.API
                     continue;
                 }
                 
-                if (i < 30)
+                if (i < 300)
                 {
                     newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-2"));
                     newClient.CreatedBy = "system";
@@ -138,7 +138,7 @@ namespace SystemyWP.API
                     continue;
                 }
                 
-                if (i < 50)
+                if (i < 500)
                 {
                     newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key-3"));
                     newClient.CreatedBy = "system";

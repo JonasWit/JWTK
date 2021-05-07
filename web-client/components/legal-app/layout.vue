@@ -1,12 +1,16 @@
 ﻿<template>
   <div>
-    search here
+
+    <slot name="content">
+
+
+    </slot>
   </div>
 </template>
 
 <script>
 export default {
-  name: "clients-search"
+  name: "layout"
 };
 </script>
 
