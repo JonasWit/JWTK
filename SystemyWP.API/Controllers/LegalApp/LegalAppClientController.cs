@@ -41,9 +41,9 @@ namespace SystemyWP.API.Controllers.LegalApp
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
                         .Include(x => x.Contacts)
-                        .Include(x => x.LegalAppClientNotes)
                         .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
-                        .Select(LegalAppClientProjections.FullProjection)
+                        .Select(LegalAppClientProjections.FlatDetailedProjection)
+                        .AsSingleQuery()
                         .FirstOrDefault();
 
                     return Ok(result);
@@ -57,11 +57,61 @@ namespace SystemyWP.API.Controllers.LegalApp
                         var result = _context.LegalAppClients
                             .Include(x => x.AccessKey)
                             .Include(x => x.Contacts)
-                            .Include(x => x.LegalAppClientNotes)
                             .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
-                            .Select(LegalAppClientProjections.FullProjection)
+                            .Select(LegalAppClientProjections.FlatDetailedProjection)
+                            .AsSingleQuery()
                             .FirstOrDefault();
 
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status403Forbidden);
+                    }
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpGet("client/basic/{clientId}")]
+        public async Task<IActionResult> GetClientBasic(int clientId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                //Get data as Admin
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
+                {
+                    var result = _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                        .Select(LegalAppClientProjections.FlatLimitedProjection)
+                        .FirstOrDefault();
+                    
+                    return Ok(result);
+                }
+
+                //Get data as User
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
+                {
+                    if (check.DataAccessAllowed)
+                    {
+                        var result = _context.LegalAppClients
+                            .Include(x => x.AccessKey)
+                            .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                            .Select(LegalAppClientProjections.FlatLimitedProjection)
+                            .FirstOrDefault();
+                        
                         return Ok(result);
                     }
                     else
@@ -152,10 +202,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Include(x => x.AccessKey)
                         .Where(x =>
                             x.AccessKey.Id == user.AccessKey.Id)
-                        .OrderByDescending(x => x.Name)
+                        .OrderBy(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
-                        .Select(LegalAppClientProjections.FlatProjection)
+                        .Select(LegalAppClientProjections.FlatLimitedProjection)
                         .ToList());
 
                     return Ok(result);
@@ -168,13 +218,14 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Include(x => x.AccessKey)
                         .Where(x =>
                             x.AccessKey.Id == user.AccessKey.Id &&
-                            _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
-                                .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
-                                          y.ItemId == x.Id))
-                        .OrderByDescending(x => x.Name)
+                            _context.DataAccesses
+                                .Where(y => y.UserId.Equals(UserId))
+                                .Any(y => 
+                                    y.RestrictedType == RestrictedType.LegalAppClient && y.ItemId == x.Id))
+                        .OrderBy(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
-                        .Select(LegalAppClientProjections.FlatProjection)
+                        .Select(LegalAppClientProjections.FlatLimitedProjection)
                         .ToList());
 
                     return Ok(result);
