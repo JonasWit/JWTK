@@ -42,7 +42,7 @@ namespace SystemyWP.API.Controllers.Portal
                     .FullProjection(
                         legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name))
                             ? legalAppRelatedDataCount
-                                .FirstOrDefault(y => y.KeyName.Equals(x.Name))
+                                .First(y => y.KeyName.Equals(x.Name))
                                 .Count
                             : 0)
                     .Compile()

@@ -3,10 +3,12 @@ using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {
+    [Authorize]
     public class LegalAppApiController : ApiController
     {
         public LegalAppApiController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
