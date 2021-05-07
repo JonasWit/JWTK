@@ -21,7 +21,7 @@ namespace SystemyWP.API.Services.Storage
         
         public async Task<string> SaveProfileImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWPConstants.Files.GenerateProfileFileName();
+            var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
             await SaveFile(fileStream, fileName);
             return $"{_settings.ImageUrl}/{fileName}";
         }

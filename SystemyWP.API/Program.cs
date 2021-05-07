@@ -60,8 +60,8 @@ namespace SystemyWP.API
                     .GetAwaiter()
                     .GetResult();
                 userManager
-                    .AddClaimAsync(admin, new Claim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.PortalAdmin))
+                    .AddClaimAsync(admin, new Claim(SystemyWpConstants.Claims.Role,
+                        SystemyWpConstants.Roles.PortalAdmin))
                     .GetAwaiter()
                     .GetResult();
             }
@@ -196,8 +196,8 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(clientAdmin, new[]
                     {
-                        SystemyWPConstants.Claims.ClientAdminClaim,
-                        SystemyWPConstants.Claims.LegalAppAccessClaim
+                        SystemyWpConstants.Claims.ClientAdminClaim,
+                        SystemyWpConstants.Claims.LegalAppAccessClaim
                     })
                     .GetAwaiter()
                     .GetResult();
@@ -255,8 +255,8 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(testClient, new[]
                     {
-                        SystemyWPConstants.Claims.ClientClaim,
-                        SystemyWPConstants.Claims.LegalAppAccessClaim
+                        SystemyWpConstants.Claims.ClientClaim,
+                        SystemyWpConstants.Claims.LegalAppAccessClaim
                     })
                     .GetAwaiter()
                     .GetResult();
@@ -292,8 +292,8 @@ namespace SystemyWP.API
             userManager
                 .AddClaimsAsync(portalAdmin, new[]
                 {
-                    SystemyWPConstants.Claims.LegalAppAccessClaim,
-                    SystemyWPConstants.Claims.PortalAdminClaim
+                    SystemyWpConstants.Claims.LegalAppAccessClaim,
+                    SystemyWpConstants.Claims.PortalAdminClaim
                 })
                 .GetAwaiter()
                 .GetResult();
@@ -316,8 +316,8 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(portalAdmin, new[]
                     {
-                        SystemyWPConstants.Claims.LegalAppAccessClaim,
-                        SystemyWPConstants.Claims.PortalAdminClaim
+                        SystemyWpConstants.Claims.LegalAppAccessClaim,
+                        SystemyWpConstants.Claims.PortalAdminClaim
                     })
                     .GetAwaiter()
                     .GetResult();

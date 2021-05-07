@@ -18,7 +18,8 @@
 <script>
 import UsersAdminPanel from "@/components/portal-admin/users-management/user-admin-panel";
 import AccessKeysPanel from "@/components/portal-admin/access-keys/access-keys-admin-panel";
-import LogManagerPanel from "@/components/portal-admin/log-manager/log-manager-panel";
+import LogManagerPanel from "@/components/portal-admin/log-manager/portal-log-manager-panel";
+import LogAppPanel from "@/components/portal-admin/log-manager/api-log-manager-panel";
 
 export default {
   middleware: ["portal-admin"],
@@ -27,7 +28,8 @@ export default {
     tabs: [
       {title: "Users", component: UsersAdminPanel},
       {title: "Access Keys", component: AccessKeysPanel},
-      {title: "Logs", component: LogManagerPanel},
+      {title: "Portal Logs", component: LogManagerPanel},
+      {title: "App Logs", component: LogAppPanel},
     ]
   })
 };

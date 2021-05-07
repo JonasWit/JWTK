@@ -54,6 +54,10 @@ const config = {
       path: '~/components/',
     },
     {
+      path: '~/components/generic-components',
+      prefix: 'generic'
+    },
+    {
       path: '~/components/auth/',
     },
     {
@@ -83,7 +87,14 @@ const config = {
       path: '~/components/portal-admin/log-manager',
       prefix: 'padmin'
     },
-
+    {
+      path: '~/components/legal-app',
+      prefix: 'legalapp'
+    },
+    {
+      path: '~/components/legal-app/clients',
+      prefix: 'legalapp'
+    },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

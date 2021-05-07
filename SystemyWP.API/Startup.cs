@@ -4,6 +4,7 @@ using System.Reflection;
 using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace SystemyWP.API
 {
@@ -61,8 +63,12 @@ namespace SystemyWP.API
                 .AllowCredentials()));
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
+            loggerFactory.AddProvider(new AppLoggerProvider(
+                    serviceProvider.GetRequiredService<AppDbContext>()));
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -172,27 +178,27 @@ namespace SystemyWP.API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(SystemyWPConstants.Policies.Client, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.Client, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.Client,
-                        SystemyWPConstants.Roles.PortalAdmin,
-                        SystemyWPConstants.Roles.ClientAdmin));
+                    .RequireClaim(SystemyWpConstants.Claims.Role,
+                        SystemyWpConstants.Roles.Client,
+                        SystemyWpConstants.Roles.PortalAdmin,
+                        SystemyWpConstants.Roles.ClientAdmin));
 
-                options.AddPolicy(SystemyWPConstants.Policies.ClientAdmin, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.ClientAdmin, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.PortalAdmin,
-                        SystemyWPConstants.Roles.ClientAdmin));
+                    .RequireClaim(SystemyWpConstants.Claims.Role,
+                        SystemyWpConstants.Roles.PortalAdmin,
+                        SystemyWpConstants.Roles.ClientAdmin));
 
-                options.AddPolicy(SystemyWPConstants.Policies.PortalAdmin, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.PortalAdmin, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.Role,
-                        SystemyWPConstants.Roles.PortalAdmin));
+                    .RequireClaim(SystemyWpConstants.Claims.Role,
+                        SystemyWpConstants.Roles.PortalAdmin));
 
-                options.AddPolicy(SystemyWPConstants.Policies.LegalAppAccess, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.LegalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWPConstants.Claims.AppAccess));
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess));
             });
         }
     }

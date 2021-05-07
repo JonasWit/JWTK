@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/log-admin")]
-    [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class LogsController : ApiController
     {
         public LogsController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -20,21 +21,21 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpGet("logs")]
-        public IEnumerable<object> ListLogRecords()
+        public IEnumerable<object> ListPortalLogRecords()
         {
             return _context.PortalLogs
-                .Select(LogRecordProjection.Projection)
+                .Select(PortalLogRecordProjections.StandardProjection)
                 .ToList();
         }
 
         [HttpGet("logs/split")]
-        public IEnumerable<object> ListLogRecords(int cursor, int take)
+        public IEnumerable<object> ListPortalLogRecords(int cursor, int take)
         {
             return _context.PortalLogs
                 .OrderByDescending(x => x.Created)
                 .Skip(cursor)
                 .Take(take)
-                .Select(LogRecordProjection.Projection)
+                .Select(PortalLogRecordProjections.StandardProjection)
                 .ToList();
         }
 
@@ -51,8 +52,8 @@ namespace SystemyWP.API.Controllers.Portal
             return Ok();
         }
 
-        [HttpGet("logs/split/dates/")]
-        public IEnumerable<object> ListLogRecords(string from, string to,
+        [HttpGet("logs/split/dates")]
+        public IEnumerable<object> ListPortalLogRecords(string from, string to,
             int cursor, int take, bool access, bool exception, bool admin, bool personalData, bool issue)
         {
             if (DateTime.TryParse(from, out var fromDate) &&
@@ -68,7 +69,51 @@ namespace SystemyWP.API.Controllers.Portal
                     .OrderByDescending(x => x.Created)
                     .Skip(cursor)
                     .Take(take)
-                    .Select(LogRecordProjection.Projection)
+                    .Select(PortalLogRecordProjections.StandardProjection)
+                    .ToList();
+            return new List<object>();
+        }
+        
+        [HttpGet("logs/server")]
+        public IEnumerable<object> ListServerLogRecords()
+        {
+            return _context.PortalLogs
+                .Select(PortalLogRecordProjections.StandardProjection)
+                .ToList();
+        }
+
+        [HttpGet("logs/server/split")]
+        public IEnumerable<object> ListServerLogRecords(int cursor, int take)
+        {
+            return _context.ApiLogs
+                .OrderByDescending(x => x.Created)
+                .Skip(cursor)
+                .Take(take)
+                .Select(ApiLogRecordProjections.StandardProjection)
+                .ToList();
+        }
+        
+        [HttpGet("logs/server/split/dates/")]
+        public IEnumerable<object> ListPortalLogRecords(string from, string to,
+            int cursor, int take, bool information, bool critical, bool debug, bool error, bool none, bool trace,
+            bool warning)
+        {
+            if (DateTime.TryParse(from, out var fromDate) &&
+                DateTime.TryParse(to, out var toDate))
+                return _context.ApiLogs
+                    .Where(x =>
+                        x.Created >= fromDate && x.Created <= toDate.AddDays(1) &&
+                        (x.LogLevel == LogLevel.Information && information ||
+                         x.LogLevel == LogLevel.Critical && critical ||
+                         x.LogLevel == LogLevel.Debug && debug ||
+                         x.LogLevel == LogLevel.Error && error ||
+                         x.LogLevel == LogLevel.None && none ||
+                         x.LogLevel == LogLevel.Trace && trace ||
+                         x.LogLevel == LogLevel.Warning && warning))
+                    .OrderByDescending(x => x.Created)
+                    .Skip(cursor)
+                    .Take(take)
+                    .Select(ApiLogRecordProjections.StandardProjection)
                     .ToList();
             return new List<object>();
         }

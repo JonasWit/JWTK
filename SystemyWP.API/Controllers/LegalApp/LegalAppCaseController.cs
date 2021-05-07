@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections.LegalApp;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
@@ -15,8 +15,8 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-cases")]
-    [Authorize(SystemyWPConstants.Policies.Client)]
-    [Authorize(SystemyWPConstants.Policies.LegalAppAccess)]
+    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppCaseController : LegalAppApiController
     {
         public LegalAppCaseController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -31,8 +31,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
                 if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-                if (Role.Equals(SystemyWPConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWPConstants.Roles.PortalAdmin))
+                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var cases = _context.LegalAppCases
                         .Include(x => x.LegalAppClient)
@@ -49,7 +49,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 //Get data as User
-                if (Role.Equals(SystemyWPConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     if (check.DataAccessAllowed)
                     {

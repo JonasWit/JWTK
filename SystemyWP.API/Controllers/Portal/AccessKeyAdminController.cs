@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
-using SystemyWP.API.Services.PortalLoggerService;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/key-admin")]
-    [Authorize(SystemyWPConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class AccessKeyAdminController : ApiController
     {
         public AccessKeyAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -42,7 +42,7 @@ namespace SystemyWP.API.Controllers.Portal
                     .FullProjection(
                         legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name))
                             ? legalAppRelatedDataCount
-                                .FirstOrDefault(y => y.KeyName.Equals(x.Name))
+                                .First(y => y.KeyName.Equals(x.Name))
                                 .Count
                             : 0)
                     .Compile()
@@ -145,7 +145,7 @@ namespace SystemyWP.API.Controllers.Portal
 
             var assignedKey = _context.AccessKeys
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Users.Any(x => x.Id.Equals(user.Id)));
+                .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
             if (assignedKey is not null)
             {

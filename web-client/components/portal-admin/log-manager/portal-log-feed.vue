@@ -27,7 +27,7 @@
 
     <div v-scroll="onScroll">
       <v-list>
-        <padmin-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+        <padmin-portal-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
       </v-list>
     </div>
   </div>
@@ -36,7 +36,7 @@
 <script>
 
 export default {
-  name: "log-feed",
+  name: "portal-log-feed",
   props: {
     loadLogs: {
       type: Function,
