@@ -142,19 +142,16 @@ export default {
 </script>
 <style>
 
+.container {
+  padding: 0px;
+}
+
 .theme--dark.v-application {
   background-color: #000000 !important;
 }
 
 .theme--light.v-application {
   background-color: #FCFCFC !important;
-}
-
-
-container, app, main {
-  padding: 0 !important;
-  margin: 65px 0 0 0 !important;
-  width: 100vw !important;
 }
 
 .page-enter-active,
@@ -188,9 +185,5 @@ container, app, main {
   transform: translate3d(0, 15px, 0);
 }
 
-/*.container {*/
-/*  max-width: 100vw;*/
-/*  padding: 0px;*/
-/*}*/
 
 </style>

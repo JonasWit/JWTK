@@ -3,11 +3,11 @@
     <v-row class="my-4">
       <v-row class="header my-5 py-2 px-2"><h1>Nasza oferta</h1>
       </v-row>
-      <div class="py-3">
+      <v-row class="py-3">
         <p>Tworzymy zarówno <span class="title">statyczne strony internetowe jak również aplikacje webowe.</span></p>
         <p>Zamów u nas stronę lub aplikację a
           my zajmiemy się jej stowrzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym przejmować!</p>
-      </div>
+      </v-row>
     </v-row>
 
     <v-row class="my-3">
