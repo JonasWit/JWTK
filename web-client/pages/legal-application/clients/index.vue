@@ -5,8 +5,6 @@
         <navigation-drawer/>
       </v-col>
       <v-col cols="9">
-
-
         <v-card
           class="mx-auto"
           max-width="344"
