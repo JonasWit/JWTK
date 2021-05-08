@@ -1,4 +1,4 @@
-﻿namespace Systemywp.Api.Forms.LegalApp
+﻿namespace SystemyWP.API.Forms.LegalApp
 {
     public class UpdateClientForm
     {

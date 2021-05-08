@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Systemywp.Data.Models.Abstractions.LegalAppAbstractions;
+using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
 
-namespace Systemywp.Data.Models.LegalAppModels.Reminders
+namespace SystemyWP.Data.Models.LegalAppModels.Reminders
 {
     public class LegalAppReminder : ReminderBaseModel<long>
     {

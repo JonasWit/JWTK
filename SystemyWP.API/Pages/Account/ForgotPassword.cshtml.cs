@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
-using Systemywp.Api.Services.Email;
-using Systemywp.Api.Utilities;
+using SystemyWP.API.Services.Email;
+using SystemyWP.API.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Systemywp.Api.Pages.Account
+namespace SystemyWP.API.Pages.Account
 {
     [AllowAnonymous]
     public class ForgotPassword : PageModel

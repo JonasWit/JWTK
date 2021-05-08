@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Systemywp.Data.Enums;
-using Systemywp.Data.Models.Abstractions;
+using SystemyWP.Data.Enums;
+using SystemyWP.Data.Models.Abstractions;
 
-namespace Systemywp.Data.Models.General
+namespace SystemyWP.Data.Models.General
 {
     public class PortalLogRecord : BaseModel<long>
     {

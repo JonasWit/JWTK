@@ -1,10 +1,10 @@
-﻿using Systemywp.Api.Controllers.BaseClases;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
+﻿using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Systemywp.Api.Controllers.Portal
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/news")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]

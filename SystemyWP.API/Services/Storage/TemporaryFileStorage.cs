@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Systemywp.Api.Settings;
+using SystemyWP.API.Settings;
 using Microsoft.Extensions.Options;
 
-namespace Systemywp.Api.Services.Storage
+namespace SystemyWP.API.Services.Storage
 {
     public class TemporaryFileStorage
     {

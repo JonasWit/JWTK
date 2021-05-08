@@ -1,11 +1,11 @@
-﻿using Systemywp.Data.DataAccessModifiers;
-using Systemywp.Data.Models.General;
-using Systemywp.Data.Models.LegalAppModels.Cases;
-using Systemywp.Data.Models.LegalAppModels.Clients;
-using Systemywp.Data.Models.LegalAppModels.Reminders;
+﻿using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using Microsoft.EntityFrameworkCore;
 
-namespace Systemywp.Data
+namespace SystemyWP.Data
 {
     public class AppDbContext: DbContext
     {

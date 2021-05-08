@@ -1,9 +1,9 @@
 ﻿// ReSharper disable once CheckNamespace
 
 using System;
-using Systemywp.Api;
-using Systemywp.Api.Services.Storage;
-using Systemywp.Api.Settings;
+using SystemyWP.API;
+using SystemyWP.API.Services.Storage;
+using SystemyWP.API.Settings;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection

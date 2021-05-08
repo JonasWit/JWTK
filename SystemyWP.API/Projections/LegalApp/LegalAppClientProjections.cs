@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Systemywp.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 
-namespace Systemywp.Api.Projections.LegalApp
+namespace SystemyWP.API.Projections.LegalApp
 {
     public class LegalAppClientProjections
     {

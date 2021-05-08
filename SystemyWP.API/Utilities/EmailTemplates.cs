@@ -1,4 +1,4 @@
-﻿namespace Systemywp.Api.Utilities
+﻿namespace SystemyWP.API.Utilities
 {
     public static class EmailTemplates
     {

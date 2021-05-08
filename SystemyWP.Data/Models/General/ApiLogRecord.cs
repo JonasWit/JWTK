@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 
-namespace Systemywp.Data.Models.General
+namespace SystemyWP.Data.Models.General
 {
     public class ApiLogRecord
     {

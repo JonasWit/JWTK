@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Systemywp.Api.CustomAttributes
+namespace SystemyWP.API.CustomAttributes
 {
     public class TransientService : Attribute { }
     public class ScopedService : Attribute { }

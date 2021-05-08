@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Systemywp.Api.Services.Storage
+namespace SystemyWP.API.Services.Storage
 {
     public interface IS3Client
     {

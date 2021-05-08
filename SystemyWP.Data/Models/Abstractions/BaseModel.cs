@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Systemywp.Data.Models.Abstractions
+namespace SystemyWP.Data.Models.Abstractions
 {
     public abstract class BaseModel<TKey>
     {

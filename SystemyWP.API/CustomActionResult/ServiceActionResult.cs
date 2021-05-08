@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Systemywp.Api.CustomActionResult
+namespace SystemyWP.API.CustomActionResult
 {
     public class ServiceActionResult
     {

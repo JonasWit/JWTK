@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Systemywp.Api.Pages.Account
+namespace SystemyWP.API.Pages.Account
 {
     [AllowAnonymous]
     public class ResetPassword : PageModel

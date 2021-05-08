@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Systemywp.Api;
+using SystemyWP.API;
 
-namespace Systemywp.Api.IdentityMigrations
+namespace SystemyWP.API.IdentityMigrations
 {
     [DbContext(typeof(ApiIdentityDbContext))]
     partial class ApiIdentityDbContextModelSnapshot : ModelSnapshot

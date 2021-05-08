@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Systemywp.Api.Localization
+namespace SystemyWP.API.Localization
 {
     public class PolishIdentityErrorDescriber : IdentityErrorDescriber
     {

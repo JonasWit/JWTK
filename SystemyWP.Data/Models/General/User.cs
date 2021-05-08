@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Systemywp.Data.DataAccessModifiers;
-using Systemywp.Data.Models.Abstractions;
+using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
-namespace Systemywp.Data.Models.General
+namespace SystemyWP.Data.Models.General
 {
     public class User : BaseModel<string>
     {

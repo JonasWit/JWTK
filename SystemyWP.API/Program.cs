@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
-using Systemywp.Data;
-using Systemywp.Data.Models.General;
-using Systemywp.Data.Models.LegalAppModels.Cases;
-using Systemywp.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data;
+using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Systemywp.Api
+namespace SystemyWP.API
 {
     public class Program
     {

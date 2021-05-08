@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Systemywp.Api.CustomAttributes;
-using Systemywp.Api.Localization;
-using Systemywp.Api.Services.Email;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
+using SystemyWP.API.CustomAttributes;
+using SystemyWP.API.Localization;
+using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Systemywp.Api
+namespace SystemyWP.API
 {
     public class Startup
     {
@@ -138,8 +138,8 @@ namespace Systemywp.Api
                         options.Password.RequireLowercase = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequireNonAlphanumeric = false;
-                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                        options.Lockout.MaxFailedAccessAttempts = 3;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                        options.Lockout.MaxFailedAccessAttempts = 2;
                         options.Lockout.AllowedForNewUsers = true;
                     }
                     else

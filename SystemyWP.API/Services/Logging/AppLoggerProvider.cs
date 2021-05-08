@@ -1,7 +1,7 @@
-﻿using Systemywp.Data;
+﻿using SystemyWP.Data;
 using Microsoft.Extensions.Logging;
 
-namespace Systemywp.Api.Services.Logging
+namespace SystemyWP.API.Services.Logging
 {
     public class AppLoggerProvider : ILoggerProvider
     {

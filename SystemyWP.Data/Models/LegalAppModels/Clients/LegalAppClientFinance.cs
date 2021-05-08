@@ -1,7 +1,7 @@
-﻿using Systemywp.Data.Models.Abstractions;
-using Systemywp.Data.Models.General;
+﻿using SystemyWP.Data.Models.Abstractions;
+using SystemyWP.Data.Models.General;
 
-namespace Systemywp.Data.Models.LegalAppModels.Clients
+namespace SystemyWP.Data.Models.LegalAppModels.Clients
 {
     public class LegalAppClientFinance : BaseModel<long>
     {

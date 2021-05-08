@@ -1,7 +1,7 @@
-﻿using Systemywp.Api.Forms.LegalApp;
+﻿using SystemyWP.API.Forms.LegalApp;
 using FluentValidation;
 
-namespace Systemywp.Api.Forms.Validation.LegalApp
+namespace SystemyWP.API.Forms.Validation.LegalApp
 {
     public class UpdateClientFormValidation: AbstractValidator<UpdateClientForm>
     {

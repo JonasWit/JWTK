@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Systemywp.Api.Pages.Account
+namespace SystemyWP.API.Pages.Account
 {
     public class Lockout : PageModel
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Systemywp.Api.Forms.Admin
+namespace SystemyWP.API.Forms.Admin
 {
     public class EditAccessKeyForm
     {

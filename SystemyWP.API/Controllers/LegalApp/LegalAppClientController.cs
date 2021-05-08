@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Systemywp.Api.Controllers.BaseClases;
-using Systemywp.Api.Forms.LegalApp;
-using Systemywp.Api.Projections.LegalApp;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
-using Systemywp.Data.DataAccessModifiers;
-using Systemywp.Data.Enums;
-using Systemywp.Data.Models.LegalAppModels.Clients;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms.LegalApp;
+using SystemyWP.API.Projections.LegalApp;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
+using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Enums;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Systemywp.Api.Controllers.LegalApp
+namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-clients")]
     [Authorize(SystemyWpConstants.Policies.Client)]

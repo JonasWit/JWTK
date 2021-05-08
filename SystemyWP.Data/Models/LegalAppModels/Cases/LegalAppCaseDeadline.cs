@@ -1,6 +1,6 @@
-﻿using Systemywp.Data.Models.Abstractions.LegalAppAbstractions;
+﻿using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
 
-namespace Systemywp.Data.Models.LegalAppModels.Cases
+namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCaseDeadline : DeadlineBaseModel<long>
     {

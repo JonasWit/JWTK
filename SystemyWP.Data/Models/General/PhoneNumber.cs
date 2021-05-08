@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Systemywp.Data.Models.Abstractions;
+using SystemyWP.Data.Models.Abstractions;
 
-namespace Systemywp.Data.Models.General
+namespace SystemyWP.Data.Models.General
 {
     public class PhoneNumber : BaseModel<long>
     {

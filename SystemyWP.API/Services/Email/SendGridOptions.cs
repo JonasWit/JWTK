@@ -1,4 +1,4 @@
-﻿namespace Systemywp.Api.Services.Email
+﻿namespace SystemyWP.API.Services.Email
 {
     public class SendGridOptions
     {

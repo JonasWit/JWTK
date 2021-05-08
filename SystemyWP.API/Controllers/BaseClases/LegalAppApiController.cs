@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
-using Systemywp.Data.DataAccessModifiers;
-using Systemywp.Data.Models.General;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
+using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Systemywp.Api.Controllers.BaseClases
+namespace SystemyWP.API.Controllers.BaseClases
 {
     [Authorize]
     public class LegalAppApiController : ApiController

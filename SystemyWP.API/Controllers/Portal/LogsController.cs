@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Systemywp.Api.Controllers.BaseClases;
-using Systemywp.Api.Projections;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
-using Systemywp.Data.Enums;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Projections;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Systemywp.Api.Controllers.Portal
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin/log-admin")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Systemywp.Api.Controllers.BaseClases;
-using Systemywp.Api.Forms.Admin;
-using Systemywp.Api.Services.Email;
-using Systemywp.Api.Services.Logging;
-using Systemywp.Data;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms.Admin;
+using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Systemywp.Api.Controllers.Portal
+namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/portal-admin")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]

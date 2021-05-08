@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Systemywp.Api.Pages
+namespace SystemyWP.API.Pages
 {
     public class Error : PageModel
     {

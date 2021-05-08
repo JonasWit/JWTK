@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Systemywp.Data.DataAccessModifiers;
+using SystemyWP.Data.DataAccessModifiers;
 
-namespace Systemywp.Api.Projections
+namespace SystemyWP.API.Projections
 {
     public class DataAccessProjections
     {

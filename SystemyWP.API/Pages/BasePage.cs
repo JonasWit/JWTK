@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Systemywp.Api.Pages
+namespace SystemyWP.API.Pages
 {
     public class BasePage : PageModel
     {
