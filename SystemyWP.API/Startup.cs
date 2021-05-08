@@ -96,7 +96,7 @@ namespace SystemyWP.API
             var transientServiceType = typeof(TransientService);
             var scopedServiceType = typeof(ScopedService);
 
-            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes;
+            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes.ToList();
 
             var transientServices = appDefinedTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
@@ -138,14 +138,14 @@ namespace SystemyWP.API
                         options.Password.RequireLowercase = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequireNonAlphanumeric = false;
-                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                        options.Lockout.MaxFailedAccessAttempts = 3;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                        options.Lockout.MaxFailedAccessAttempts = 2;
                         options.Lockout.AllowedForNewUsers = true;
                     }
                     else
                     {
                         options.Password.RequireDigit = true;
-                        options.Password.RequiredLength = 12;
+                        options.Password.RequiredLength = 16;
                         options.Password.RequireLowercase = true;
                         options.Password.RequireUppercase = true;
                         options.Password.RequireNonAlphanumeric = true;

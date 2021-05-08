@@ -7,8 +7,8 @@ namespace SystemyWP.API.Projections.LegalApp
 {
     public class LegalAppClientProjections
     {
-        public static Func<LegalAppClient, object> CreateFlatLimited => FlatLimitedProjection.Compile();
-        public static Expression<Func<LegalAppClient, object>> FlatLimitedProjection =>
+        public static Func<LegalAppClient, object> CreateFlat => FlatProjection.Compile();
+        public static Expression<Func<LegalAppClient, object>> FlatProjection =>
             legalAppClient => new
             {
                 legalAppClient.Created,
@@ -19,28 +19,7 @@ namespace SystemyWP.API.Projections.LegalApp
                 legalAppClient.Active,
                 legalAppClient.Name,
             };
-        
-        public static Func<LegalAppClient, object> CreateFlatDetailed => FlatDetailedProjection.Compile();
-        public static Expression<Func<LegalAppClient, object>> FlatDetailedProjection =>
-            legalAppClient => new
-            {
-                legalAppClient.Created,
-                legalAppClient.CreatedBy,
-                legalAppClient.Updated,
-                legalAppClient.UpdatedBy,
-                legalAppClient.Id,
-                legalAppClient.Active,
-                legalAppClient.Name,
-                Cases = legalAppClient.LegalAppCases
-                    .AsQueryable()
-                    .Select(LegalAppCaseProjections.MinimalProjection)
-                    .ToList(),
-                Contacts = legalAppClient.Contacts
-                    .AsQueryable()
-                    .Select(LegalAppContactProjections.BasicProjection)
-                    .ToList()
-            };
-        
+
         public static Func<LegalAppClient, object> CreateBasic => BasicProjection.Compile();
         public static Expression<Func<LegalAppClient, object>> BasicProjection =>
             legalAppClient => new
