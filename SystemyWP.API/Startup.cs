@@ -145,7 +145,7 @@ namespace Systemywp.Api
                     else
                     {
                         options.Password.RequireDigit = true;
-                        options.Password.RequiredLength = 12;
+                        options.Password.RequiredLength = 16;
                         options.Password.RequireLowercase = true;
                         options.Password.RequireUppercase = true;
                         options.Password.RequireNonAlphanumeric = true;

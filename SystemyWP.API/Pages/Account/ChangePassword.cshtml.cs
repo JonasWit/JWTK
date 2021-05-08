@@ -37,7 +37,7 @@ namespace Systemywp.Api.Pages.Account
 
             [Required(ErrorMessage = "Hasło jest wymagane!")]
             [DataType(DataType.Password)]
-            [StringLength(25, ErrorMessage = "Hasło musi mieć od 12 do 25 znaków", MinimumLength = 12)]
+            [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             [Display(Name = "Hasło")]
