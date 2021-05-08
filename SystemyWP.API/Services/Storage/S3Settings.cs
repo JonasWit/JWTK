@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Services.Storage
+﻿namespace Systemywp.Api.Services.Storage
 {
     public class S3Settings
     {

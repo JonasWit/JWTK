@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms.Portal;
-using SystemyWP.API.Services.Email;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.Enums;
+using Systemywp.Api.Controllers.BaseClases;
+using Systemywp.Api.Forms.Portal;
+using Systemywp.Api.Services.Email;
+using Systemywp.Api.Services.Logging;
+using Systemywp.Data;
+using Systemywp.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers.Portal
+namespace Systemywp.Api.Controllers.Portal
 {
     [Route("/api/portal/contact")]
     public class ContactController : ApiController

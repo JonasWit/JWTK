@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
+﻿namespace Systemywp.Api.Projections.LegalApp.LegalAppAdmin
 {
     public class AppSummaryViewModel
     {

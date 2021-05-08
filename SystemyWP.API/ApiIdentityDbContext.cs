@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API
+namespace Systemywp.Api
 {
     public class ApiIdentityDbContext : IdentityDbContext, IDataProtectionKeyContext
     {

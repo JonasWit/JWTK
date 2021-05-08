@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.Data.DataAccessModifiers
+﻿namespace Systemywp.Data.DataAccessModifiers
 {
     public enum RestrictedType
     {

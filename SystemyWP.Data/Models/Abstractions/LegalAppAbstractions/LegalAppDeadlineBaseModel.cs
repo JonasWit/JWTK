@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
+namespace Systemywp.Data.Models.Abstractions.LegalAppAbstractions
 {
     public class DeadlineBaseModel<TKey> : TrackedModel<TKey>
     {

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.Enums;
+using Systemywp.Api.Services.Logging;
+using Systemywp.Data;
+using Systemywp.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers.BaseClases
+namespace Systemywp.Api.Controllers.BaseClases
 {
     [ApiController]
     public class ApiController : ControllerBase

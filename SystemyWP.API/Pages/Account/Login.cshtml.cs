@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
-namespace SystemyWP.API.Pages.Account
+namespace Systemywp.Api.Pages.Account
 {
     public class Login : BasePage
     {

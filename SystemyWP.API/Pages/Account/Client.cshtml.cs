@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Pages.Account
+namespace Systemywp.Api.Pages.Account
 {
     public class Client : BasePage
     {

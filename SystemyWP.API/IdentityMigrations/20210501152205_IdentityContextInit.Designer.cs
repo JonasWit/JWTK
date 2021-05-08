@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using SystemyWP.API;
+using Systemywp.Api;
 
-namespace SystemyWP.API.IdentityMigrations
+namespace Systemywp.Api.IdentityMigrations
 {
     [DbContext(typeof(ApiIdentityDbContext))]
     [Migration("20210501152205_IdentityContextInit")]

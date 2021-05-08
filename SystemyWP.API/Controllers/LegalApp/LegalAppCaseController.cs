@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Projections.LegalApp;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
+using Systemywp.Api.Controllers.BaseClases;
+using Systemywp.Api.Projections.LegalApp;
+using Systemywp.Api.Services.Logging;
+using Systemywp.Data;
+using Systemywp.Data.DataAccessModifiers;
+using Systemywp.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.LegalApp
+namespace Systemywp.Api.Controllers.LegalApp
 {
     [Route("/api/legal-app-cases")]
     [Authorize(SystemyWpConstants.Policies.Client)]
@@ -37,8 +37,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                     var cases = _context.LegalAppCases
                         .Include(x => x.LegalAppClient)
                         .ThenInclude(x => x.AccessKey)
-                        .Where(x => x.LegalAppClient.Id == clientId && 
-                                    x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .Where(x => 
+                            x.LegalAppClient.Id == clientId && x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
                         .OrderByDescending(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
@@ -60,8 +60,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                                         x.LegalAppClient.Id == clientId &&
                                         x.LegalAppClient.AccessKey.Id == check.AccessKey.Id &&
                                         _context.DataAccesses
-                                            .Where(y => y.UserId.Equals(UserId) &&
-                                                        y.RestrictedType == RestrictedType.LegalAppCase)
+                                            .Where(y => y.UserId.Equals(UserId) && y.RestrictedType == RestrictedType.LegalAppCase)
                                                 .Any(y => y.ItemId == x.Id))
                             .OrderByDescending(x => x.Name)
                             .Skip(cursor)

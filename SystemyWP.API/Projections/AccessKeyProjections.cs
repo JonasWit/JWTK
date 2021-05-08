@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using SystemyWP.Data.Models.General;
+using Systemywp.Data.Models.General;
 
-namespace SystemyWP.API.Projections
+namespace Systemywp.Api.Projections
 {
     public static class AccessKeyProjection
     {

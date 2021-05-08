@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace SystemyWP.API
+namespace Systemywp.Api
 {
     public class SystemyWpConstants
     {

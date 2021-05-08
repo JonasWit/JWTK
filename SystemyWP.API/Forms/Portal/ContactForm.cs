@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms.Portal
+﻿namespace Systemywp.Api.Forms.Portal
 {
     public class ContactForm
     {

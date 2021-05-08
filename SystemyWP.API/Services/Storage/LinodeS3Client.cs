@@ -4,7 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Extensions.Options;
 
-namespace SystemyWP.API.Services.Storage
+namespace Systemywp.Api.Services.Storage
 {
     class LinodeS3Client : IS3Client
     {

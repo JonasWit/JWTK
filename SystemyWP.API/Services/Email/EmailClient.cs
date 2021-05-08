@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace SystemyWP.API.Services.Email
+namespace Systemywp.Api.Services.Email
 {
     public class EmailClient
     {

@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms.LegalApp
+﻿namespace Systemywp.Api.Forms.LegalApp
 {
     public class CreateClientForm
     {

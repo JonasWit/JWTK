@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.Data.Enums
+﻿namespace Systemywp.Data.Enums
 {
     public enum LogType
     {

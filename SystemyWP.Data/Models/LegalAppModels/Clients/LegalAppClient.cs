@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
-using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
+using Systemywp.Data.Models.Abstractions.LegalAppAbstractions;
+using Systemywp.Data.Models.General;
+using Systemywp.Data.Models.LegalAppModels.Cases;
 
-namespace SystemyWP.Data.Models.LegalAppModels.Clients
+namespace Systemywp.Data.Models.LegalAppModels.Clients
 {
     public class LegalAppClient : LegalAppProtectedDataBaseModel<long>
     {

@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Settings
+﻿namespace Systemywp.Api.Settings
 {
     public enum FileType
     {

@@ -1,9 +1,9 @@
 ﻿using System;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
+using Systemywp.Data;
+using Systemywp.Data.Models.General;
 using Microsoft.Extensions.Logging;
 
-namespace SystemyWP.API.Services.Logging
+namespace Systemywp.Api.Services.Logging
 {
     public class DbLogger : ILogger
     {

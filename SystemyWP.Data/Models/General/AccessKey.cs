@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.LegalAppModels.Clients;
+using Systemywp.Data.Models.Abstractions;
+using Systemywp.Data.Models.LegalAppModels.Clients;
 
-namespace SystemyWP.Data.Models.General
+namespace Systemywp.Data.Models.General
 {
     public class AccessKey : TrackedModel<int>
     {

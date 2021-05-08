@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
+using Systemywp.Data.Models.Abstractions;
 
-namespace SystemyWP.Data.Models.General
+namespace Systemywp.Data.Models.General
 {
     public class ContactDetails : BaseModel<long>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SystemyWP.API.Pages.Account
+namespace Systemywp.Api.Pages.Account
 {
     [AllowAnonymous]
     public class ForgotPasswordConfirmation : PageModel

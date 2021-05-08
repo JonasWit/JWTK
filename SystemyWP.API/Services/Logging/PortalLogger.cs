@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SystemyWP.API.CustomAttributes;
-using SystemyWP.Data;
-using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.General;
+using Systemywp.Api.CustomAttributes;
+using Systemywp.Data;
+using Systemywp.Data.Enums;
+using Systemywp.Data.Models.General;
 
-namespace SystemyWP.API.Services.Logging
+namespace Systemywp.Api.Services.Logging
 {
     [TransientService]
     public class PortalLogger

@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.General;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Systemywp.Api.Services.Logging;
+using Systemywp.Data;
+using Systemywp.Data.DataAccessModifiers;
+using Systemywp.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.BaseClases
+namespace Systemywp.Api.Controllers.BaseClases
 {
     [Authorize]
     public class LegalAppApiController : ApiController
@@ -29,12 +30,34 @@ namespace SystemyWP.API.Controllers.BaseClases
                 .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
             if (user?.AccessKey is null) return new CheckResult {DataAccessAllowed = false};
 
-            //Check DataAccess Table
-            var access = await _context.DataAccesses
-                .FirstOrDefaultAsync(x => x.UserId.Equals(UserId) &&
-                                          x.RestrictedType == restrictedType &&
-                                          x.ItemId == itemId);
-            if (access is null) return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
+            //Logic for Admins
+            if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+                Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
+            {
+                return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
+            }
+            
+            //Logic for ordinary Users
+            if (Role.Equals(SystemyWpConstants.Roles.Client))
+            {
+                //Check DataAccess Table
+                var access = await _context.DataAccesses
+                    .AnyAsync(x => x.UserId.Equals(UserId) &&
+                                   x.RestrictedType == restrictedType &&
+                                   x.ItemId == itemId);
+
+                if (access) return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
+            }         
+            
+            return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
+        }
+        protected async Task<CheckResult> CheckAccess()
+        {
+            //Get Users Data Key
+            var user = await _context.Users
+                .Include(x => x.AccessKey)
+                .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+            if (user?.AccessKey is null) return new CheckResult {DataAccessAllowed = false};
             
             return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
         }

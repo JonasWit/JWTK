@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels.Clients;
+using Systemywp.Data.Models.Abstractions;
+using Systemywp.Data.Models.General;
+using Systemywp.Data.Models.LegalAppModels.Clients;
 
-namespace SystemyWP.Data.Models.LegalAppModels.Cases
+namespace Systemywp.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCase : TrackedModel<long>
     {

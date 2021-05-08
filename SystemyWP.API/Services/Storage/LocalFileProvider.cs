@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using SystemyWP.API.Settings;
+using Systemywp.Api.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace SystemyWP.API.Services.Storage
+namespace Systemywp.Api.Services.Storage
 {
     class LocalFileProvider : IFileProvider
     {

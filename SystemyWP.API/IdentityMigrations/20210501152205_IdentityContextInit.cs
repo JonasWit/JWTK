@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace SystemyWP.API.IdentityMigrations
+namespace Systemywp.Api.IdentityMigrations
 {
     public partial class IdentityContextInit : Migration
     {

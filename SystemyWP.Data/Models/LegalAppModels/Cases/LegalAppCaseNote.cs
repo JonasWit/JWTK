@@ -1,6 +1,6 @@
-﻿using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
+﻿using Systemywp.Data.Models.Abstractions.LegalAppAbstractions;
 
-namespace SystemyWP.Data.Models.LegalAppModels.Cases
+namespace Systemywp.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCaseNote : NoteBaseModel<long>
     {

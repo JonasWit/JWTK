@@ -1,6 +1,6 @@
-﻿using SystemyWP.Data.Models.General;
+﻿using Systemywp.Data.Models.General;
 
-namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
+namespace Systemywp.Data.Models.Abstractions.LegalAppAbstractions
 {
     public class LegalAppProtectedDataBaseModel<TKey> : TrackedModel<TKey>
     {

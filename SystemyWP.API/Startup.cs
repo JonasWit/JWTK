@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using SystemyWP.API.CustomAttributes;
-using SystemyWP.API.Localization;
-using SystemyWP.API.Services.Email;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
+using Systemywp.Api.CustomAttributes;
+using Systemywp.Api.Localization;
+using Systemywp.Api.Services.Email;
+using Systemywp.Api.Services.Logging;
+using Systemywp.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SystemyWP.API
+namespace Systemywp.Api
 {
     public class Startup
     {
@@ -96,7 +96,7 @@ namespace SystemyWP.API
             var transientServiceType = typeof(TransientService);
             var scopedServiceType = typeof(ScopedService);
 
-            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes;
+            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes.ToList();
 
             var transientServices = appDefinedTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);

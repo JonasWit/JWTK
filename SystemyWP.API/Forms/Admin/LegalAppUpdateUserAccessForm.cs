@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SystemyWP.API.Forms.Admin
+namespace Systemywp.Api.Forms.Admin
 {
     public class LegalAppUpdateUserAccessForm
     {

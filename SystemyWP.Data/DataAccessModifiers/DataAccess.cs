@@ -1,7 +1,7 @@
-﻿using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.General;
+﻿using Systemywp.Data.Models.Abstractions;
+using Systemywp.Data.Models.General;
 
-namespace SystemyWP.Data.DataAccessModifiers
+namespace Systemywp.Data.DataAccessModifiers
 {
     public class DataAccess : BaseModel<long>
     {
