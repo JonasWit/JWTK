@@ -1,11 +1,8 @@
 ﻿<template>
-
-  <!--  <nuxt-link :to="`/${}/details`">-->
-  <v-list-item link nuxt :to="`/legal-application/clients/${clientItem.id}/details`"
+  <v-list-item link nuxt :to="`/legal-application/clients/${clientItem.id}/c-details`"
                :key="`ci-record-${clientItem.id}`">
     <div> TEST: {{ clientItem.name }}</div>
   </v-list-item>
-  <!--  </nuxt-link>-->
 
 </template>
 

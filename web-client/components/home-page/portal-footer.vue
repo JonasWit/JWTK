@@ -1,15 +1,15 @@
 ﻿<template>
   <v-footer padless>
-    <v-row justify="center" no-gutters>
+    <v-row no-gutters class="d-flex justify-center ma-2 pa-3">
 
-      <div class="btn-link my-2 pr-2 pl-2" v-for="link in links" :key="link.id" text rounded>
+      <div class="btn-link pa-2" v-for="link in links" :key="link.id" text rounded>
         <nuxt-link class="link" text :to="link.route">{{ link.name }}
         </nuxt-link>
       </div>
 
-      <v-col class="pa-5 text-center" cols="12">
+      <div class="pa-2">
         {{ new Date().getFullYear() }} — <strong>SystemyWp</strong>
-      </v-col>
+      </div>
     </v-row>
   </v-footer>
 </template>

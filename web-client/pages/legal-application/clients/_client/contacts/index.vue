@@ -1,10 +1,10 @@
 <template>
-  <p>TEST</p>
+  <h1> LIst of contacts</h1>
 </template>
 
 <script>
 export default {
-  name: "details"
+  name: "index"
 }
 </script>
 

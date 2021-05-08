@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <legalapp-layout>
     <template v-slot:content>
       <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
@@ -18,42 +17,6 @@
       </div>
     </template>
   </legalapp-layout>
-=======
-  <!--  <legalapp-layout>-->
-  <!--    <template v-slot:content>-->
-
-  <!--    </template>-->
-  <!--  </legalapp-layout>-->
-
-
-  <v-container fluid>
-    <v-row no-gutters>
-      <v-col cols="2">
-        <legalapp-navigation-drawer/>
-      </v-col>
-      <v-col cols="9">
-        <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
-                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
-                        :filter="searchFilter">
-          <template v-slot:item="{item ,on , attrs}">
-            <v-list-item v-on="on" :attrs="attrs">
-              <v-list-item-content>{{ item.name }}</v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-autocomplete>
-
-        <div v-scroll="onScroll">
-          <v-list>
-            <legalapp-client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
-          </v-list>
-        </div>
-
-
-      </v-col>
-
-    </v-row>
-  </v-container>
->>>>>>> 4597d6968aaa3bd249672130862fe5d4e051c2ff
 </template>
 
 <script>

@@ -16,7 +16,7 @@ export const legalappRoute = {
     },
     {
       id: '3',
-      route: '/legal-application/reminders',
+      route: '/legal-application/clients/reminders',
       name: 'Przypomnienia',
       icon: 'mdi-calendar',
       text: 'Sprawdź lub dodaj nowe przypomnienia'
@@ -35,6 +35,7 @@ export const legalappRoute = {
       icon: 'mdi-archive',
       text: 'Zajrzyj do zarchiwzowanych spraw lub klinetów'
     },
+
 
   ],
 
