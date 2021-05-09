@@ -1,7 +1,7 @@
 <template>
   <legalapp-layout>
-    <template v-slot:content>
-      <h1>CLIENT NAME PLACEHOLDER</h1>
+    <template v-slot:content v-if="client">
+      <h1 class="ma-3">{{ client.name }}</h1>
       <v-row>
         <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
           <v-col>
@@ -18,8 +18,6 @@
           </v-col>
         </div>
       </v-row>
-
-
     </template>
   </legalapp-layout>
 
@@ -33,51 +31,55 @@ export default {
   name: "c-details",
   middleware: ['legal-app-permission', 'client', 'authenticated'],
   data: () => ({
-    items: [
-
-      {
-        id: '1',
-        route: `/legal-application/clients/placeholder/contacts`,
-        name: 'Kontakty',
-        text: 'Lista kontaktów dla Klienta',
-      },
-      {
-        id: '2',
-        route: `/legal-application/clients/placeholder/cases`,
-        name: 'Sprawy',
-        text: 'Zarządzaj sprawami klienta',
-
-      },
-      {
-        id: '3',
-        route: `/legal-application/clients/placeholder/reminders`,
-        name: 'Przypomnienia',
-        text: 'Sprawdź przypomnienia dla Klienta'
-      },
-      {
-        id: '4',
-        route: `/legal-application/clients/placeholder/notes`,
-        name: 'Notatki',
-        text: 'Zarządzaj notatkami'
-      },
-      {
-        id: '5',
-        route: `/legal-application/clients/placeholder/financials`,
-        name: 'Rozliczenia',
-        text: 'Zarządzaj rozliczeniami'
-      },
-
-    ],
+    client: null,
   }),
-
-
   fetch() {
-    console.warn(this.$route.params.client);
-    this.items.forEach(x => x.route = x.route.replace("placeholder", this.$route.params.client));
-    console.warn(this.$route.params.client);
-    console.warn(this.items);
+    this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`)
+      .then(resp => {
+        this.client = resp
+      })
 
-  }
+  },
+
+  async asyncData({params}) {
+
+    return {
+      items: [
+        {
+          id: '1',
+          route: `/legal-application/clients/${params.client}/contacts`,
+          name: 'Kontakty',
+          text: 'Lista kontaktów dla Klienta',
+        },
+        {
+          id: '2',
+          route: `/legal-application/clients/${params.client}/cases`,
+          name: 'Sprawy',
+          text: 'Zarządzaj sprawami klienta',
+
+        },
+        {
+          id: '3',
+          route: `/legal-application/clients/${params.client}/reminders`,
+          name: 'Przypomnienia',
+          text: 'Sprawdź przypomnienia dla Klienta'
+        },
+        {
+          id: '4',
+          route: `/legal-application/clients/${params.client}/notes`,
+          name: 'Notatki',
+          text: 'Zarządzaj notatkami'
+        },
+        {
+          id: '5',
+          route: `/legal-application/clients/${params.client}/financials`,
+          name: 'Rozliczenia',
+          text: 'Zarządzaj rozliczeniami'
+        },
+
+      ],
+    }
+  },
 
 }
 ;
