@@ -184,7 +184,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                     CreatedBy = UserId,
                     UpdatedBy = UserId
                 };
-
                 _context.Add(newEntity);
 
                 //Act as normal as User
@@ -198,7 +197,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                         CreatedBy = UserId
                     });
                 }
-                
                 await _context.SaveChangesAsync();
                 return Ok();
             }

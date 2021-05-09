@@ -36,7 +36,6 @@ namespace SystemyWP.API.Controllers.BaseClases
             {
                 return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
             }
-            
             //Logic for ordinary Users
             if (Role.Equals(SystemyWpConstants.Roles.Client))
             {
@@ -47,8 +46,7 @@ namespace SystemyWP.API.Controllers.BaseClases
                                    x.ItemId == itemId);
 
                 if (access) return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
-            }         
-            
+            }
             return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
         }
         protected async Task<CheckResult> CheckAccess()

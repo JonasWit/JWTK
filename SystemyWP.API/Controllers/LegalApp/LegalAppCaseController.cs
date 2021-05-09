@@ -38,8 +38,9 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Include(x => x.LegalAppClient)
                         .ThenInclude(x => x.AccessKey)
                         .Where(x => 
-                            x.LegalAppClient.Id == clientId && x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
-                        .OrderByDescending(x => x.Name)
+                            x.LegalAppClient.Id == clientId && 
+                            x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .OrderBy(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
                         .Select(LegalAppCaseProjections.MinimalProjection)
@@ -60,9 +61,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                                         x.LegalAppClient.Id == clientId &&
                                         x.LegalAppClient.AccessKey.Id == check.AccessKey.Id &&
                                         _context.DataAccesses
-                                            .Where(y => y.UserId.Equals(UserId) && y.RestrictedType == RestrictedType.LegalAppCase)
+                                            .Where(y => y.UserId.Equals(UserId) && 
+                                                        y.RestrictedType == RestrictedType.LegalAppCase)
                                                 .Any(y => y.ItemId == x.Id))
-                            .OrderByDescending(x => x.Name)
+                            .OrderBy(x => x.Name)
                             .Skip(cursor)
                             .Take(take)
                             .Select(LegalAppCaseProjections.MinimalProjection)

@@ -92,7 +92,6 @@ namespace SystemyWP.API
 
         private void AddUtilities(IServiceCollection services)
         {
-            
             var transientServiceType = typeof(TransientService);
             var scopedServiceType = typeof(ScopedService);
 
@@ -107,7 +106,6 @@ namespace SystemyWP.API
             foreach (var service in transientServices)
                 services.AddTransient(service);
             
-
             foreach (var service in scopedServices)
                 services.AddScoped(service);
         }
