@@ -137,6 +137,7 @@ export default {
       this.none = true;
       this.trace = true;
       this.warning = true;
+      this.finished = false;
       this.handleLogs();
     },
     refresh() {

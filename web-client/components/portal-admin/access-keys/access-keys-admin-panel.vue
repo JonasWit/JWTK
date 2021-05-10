@@ -1,27 +1,30 @@
 ﻿<template>
   <div>
-    <padmin-create-access-key-component v-on:action-completed="refreshData"/>
+    <padmin-create-access-key-component/>
     <v-list>
-      <v-list-item v-for="keyItem in keysList" :key="keyItem.id" class="mb-2">
-        <v-list-item-content>
-          <v-list-item-title>Key Name: {{ keyItem.name }}</v-list-item-title>
-          <v-list-item-subtitle :class="colorDates(keyItem.expireDate)">Expiration Date: {{
-              formatDate(keyItem.expireDate)
-            }}
-          </v-list-item-subtitle>
-          <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
-          </v-list-item-subtitle>
-          <v-list-item-subtitle>Related Legal App Data: {{ keyItem.relatedLegalAppClients }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-        <v-spacer/>
-        <v-list-item-content>
-          <div class="d-flex justify-end">
-            <padmin-edit-access-key-form-dialog :selected-key="keyItem" v-on:action-completed="refreshData"/>
-            <padmin-delete-access-key-dialog :selected-key="keyItem" v-on:action-completed="refreshData"/>
-          </div>
-        </v-list-item-content>
-      </v-list-item>
+      <template v-for="(keyItem, index) in keysList">
+        <v-list-item :key="`key-${keyItem.id}`">
+          <v-list-item-content>
+            <v-list-item-title>Key Name: {{ keyItem.name }}</v-list-item-title>
+            <v-list-item-subtitle :class="colorDates(keyItem.expireDate)">Expiration Date: {{
+                formatDate(keyItem.expireDate)
+              }}
+            </v-list-item-subtitle>
+            <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
+            </v-list-item-subtitle>
+            <v-list-item-subtitle>Related Legal App Data: {{ keyItem.relatedLegalAppClients }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          <v-spacer/>
+          <v-list-item-content>
+            <div class="d-flex justify-end">
+              <padmin-edit-access-key-form-dialog :selected-key="keyItem"/>
+              <padmin-delete-access-key-dialog :selected-key="keyItem"/>
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider v-if="index < keysList.length - 1" :key="index"></v-divider>
+      </template>
     </v-list>
   </div>
 
@@ -38,17 +41,16 @@ const searchItemFactory = (id, exp) => ({
   text: id
 });
 
-
 export default {
   name: "access-keys-admin-panel",
+  fetchOnServer: false,
   data: () => ({
     activeKeys: [],
     loading: false,
     searchResult: "",
     selectedKey: null,
   }),
-  beforeMount() {
-    console.log('access keys panel mounted');
+  fetch() {
     this.getAccessKeys();
   },
   computed: {
@@ -69,7 +71,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
+    ...mapActions('admin-panel-store', ['getAccessKeys']),
     formatDate(date) {
       return formatDate(date);
     },
@@ -87,11 +89,6 @@ export default {
         return "error--text";
       }
       return "error--text";
-
-    },
-    refreshData() {
-      this.getAccessKeys();
-      this.getUsers();
     },
   }
 };

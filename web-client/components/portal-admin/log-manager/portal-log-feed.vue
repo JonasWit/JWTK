@@ -131,6 +131,7 @@ export default {
       this.admin = true;
       this.personalData = true;
       this.issue = true;
+      this.finished = false;
       this.handleLogs();
     },
     refresh() {

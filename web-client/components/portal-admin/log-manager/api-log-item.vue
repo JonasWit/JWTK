@@ -29,7 +29,7 @@ export default {
     getTypeColor(type) {
       if (type === SERVER_LOG_TYPES.WARNING) {
         return "warning--text";
-      } else if (type === SERVER_LOG_TYPES.CRITICAL) {
+      } else if (type === SERVER_LOG_TYPES.CRITICAL || type === SERVER_LOG_TYPES.ERROR) {
         return "error--text";
       } else {
         return "success--text";

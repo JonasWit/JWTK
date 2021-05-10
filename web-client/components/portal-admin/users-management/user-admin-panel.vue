@@ -9,7 +9,6 @@
         </v-text-field>
       </v-form>
     </div>
-
     <div class="mb-4">
       <v-autocomplete clearable v-model="searchResult" placeholder="Start typing to Search" dense hide-details
                       append-icon="" prepend-inner-icon="mdi-magnify" :items="userItems" :filter="searchFilter">
@@ -22,41 +21,39 @@
         </template>
       </v-autocomplete>
     </div>
-
     <v-list>
-      <v-list-item v-for="user in usersList" :key="user.id" class="mb-2">
-        <v-list-item-content>
-          <v-list-item-title>User Name: {{ user.username }}</v-list-item-title>
-          <v-list-item-title>Email: {{ user.email }}</v-list-item-title>
-          <v-list-item-subtitle>Role: {{ user.role }}</v-list-item-subtitle>
-          <v-list-item-subtitle class="success--text" v-if="user.legalAppAllowed">Legal App: Allowed
-          </v-list-item-subtitle>
-          <v-list-item-subtitle class="error--text" v-else>Legal App: Forbidden</v-list-item-subtitle>
-
-          <div v-if="user.dataAccessKey">
-            <v-list-item-subtitle class="success--text">Data Access Key: {{ user.dataAccessKey.name }}
+      <template v-for="(user, index) in usersList">
+        <v-list-item :key="user.id">
+          <v-list-item-content>
+            <v-list-item-title>User Name: {{ user.username }}</v-list-item-title>
+            <v-list-item-title>Email: {{ user.email }}</v-list-item-title>
+            <v-list-item-subtitle>Role: {{ user.role }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="success--text" v-if="user.legalAppAllowed">Legal App: Allowed
             </v-list-item-subtitle>
-            <v-list-item-subtitle class="success--text">Expiration:
-              {{ formatDate(user.dataAccessKey.expireDate) }}
-            </v-list-item-subtitle>
-          </div>
-          <v-list-item-subtitle class="error--text" v-else>No Data Access Key</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-spacer/>
-        <v-list-item-content>
-          <div class="d-flex justify-end">
+            <v-list-item-subtitle class="error--text" v-else>Legal App: Forbidden</v-list-item-subtitle>
 
-            <padmin-data-access-key-dialog :selected-user="user"/>
-            <padmin-lock-user-dialog :selected-user="user"/>
-            <padmin-roles-management-dialog :selected-user="user"/>
-            <padmin-applications-access-dialog :selected-user="user"/>
-
-            <v-btn class="mx-3" icon @click.stop="appsDialogOpen(user)">
-              <v-icon medium color="error">mdi-delete</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item-content>
-      </v-list-item>
+            <div v-if="user.dataAccessKey">
+              <v-list-item-subtitle class="success--text">Data Access Key: {{ user.dataAccessKey.name }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle class="success--text">Expiration:
+                {{ formatDate(user.dataAccessKey.expireDate) }}
+              </v-list-item-subtitle>
+            </div>
+            <v-list-item-subtitle class="error--text" v-else>No Data Access Key</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-spacer/>
+          <v-list-item-content>
+            <div class="d-flex justify-end">
+              <padmin-data-access-key-dialog :selected-user="user"/>
+              <padmin-lock-user-dialog :selected-user="user"/>
+              <padmin-roles-management-dialog :selected-user="user"/>
+              <padmin-applications-access-dialog :selected-user="user"/>
+              <padmin-delete-user-dialog :selected-user="user"/>
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider v-if="index < usersList.length - 1" :key="index"></v-divider>
+      </template>
     </v-list>
   </div>
 </template>

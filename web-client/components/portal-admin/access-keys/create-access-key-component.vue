@@ -1,14 +1,12 @@
 ﻿<template>
   <div>
     <v-form ref="createDataAccessKeyForm" v-model="validation.valid">
-
-      <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
-                    required></v-text-field>
+      <v-text-field v-model="form.keyName" :rules="validation.key" label="Key String" required></v-text-field>
       <v-menu ref="menu" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
               :return-value.sync="form.expireDate">
         <template v-slot:activator="{ on, attrs }">
-          <v-text-field class="ma-3" :rules="validation.expireDate" readonly v-bind="attrs" v-on="on"
-                        v-model="form.expireDate" label="Expire Date" prepend-icon="mdi-calendar"></v-text-field>
+          <v-text-field :rules="validation.expireDate" readonly v-bind="attrs" v-on="on" v-model="form.expireDate"
+                        label="Expire Date" prepend-icon="mdi-calendar"></v-text-field>
         </template>
         <v-date-picker :min="todayDate" v-model="form.expireDate" no-title scrollable>
           <v-spacer></v-spacer>
@@ -30,7 +28,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "create-access-key-component",
@@ -53,6 +51,7 @@ export default {
   }),
   computed: {
     ...mapState('admin-panel-store', ['accessKeys']),
+    ...mapActions('admin-panel-store', ['getAccessKeys']),
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
@@ -69,11 +68,14 @@ export default {
       };
 
       return this.$axios.$post("/api/portal-admin/key-admin/access-key/create", payload)
+        .then(() => {
+          this.resetForm();
+          this.getAccessKeys();
+        })
         .catch((e) => {
         }).finally(() => {
           this.loading = false;
-          this.resetForm();
-          this.$emit('action-completed');
+          this.dialog = false;
         });
     },
     resetForm() {

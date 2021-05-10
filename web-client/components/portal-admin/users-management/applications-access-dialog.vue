@@ -1,7 +1,7 @@
 ﻿<template>
   <v-dialog v-model="dialog" :value="selectedUser" persistent width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+      <v-btn class="mx-2" icon v-bind="attrs" v-on="on">
         <v-icon medium color="success">mdi-application-cog</v-icon>
       </v-btn>
     </template>

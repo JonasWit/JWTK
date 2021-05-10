@@ -48,8 +48,8 @@ export default {
       return this.$axios.$delete(`/api/portal-admin/key-admin/access-key/delete/${this.selectedKey.id}`)
         .catch((e) => {
         }).finally(() => {
+          this.getAccessKeys();
           this.loading = false;
-          this.$emit('action-completed');
           this.dialog = false;
         });
     }

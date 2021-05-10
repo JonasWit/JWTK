@@ -1,37 +1,37 @@
 ﻿<template>
-  <v-card>
-    <v-toolbar>
-      <v-tabs v-model="tab" centered>
-        <v-tab v-for="(t, i) in tabs" :key="`portal-admin-tab-${i}`">
-          {{ t.title }}
-        </v-tab>
-      </v-tabs>
-    </v-toolbar>
-    <v-tabs-items v-model="tab">
-      <v-tab-item v-for="(t, i) in tabs" :key="`portal-admin-tab-body-${i}`">
-        <component class="ma-3" :is="t.component"/>
-      </v-tab-item>
-    </v-tabs-items>
-  </v-card>
+  <v-container>
+    <v-row>
+      <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
+        <v-col>
+          <v-hover v-slot="{ hover }">
+            <nuxt-link class="nav-item" :to="item.route">
+              <v-card class="mx-auto" width="340" outlined :elevation="hover ? 12 : 2">
+                <v-row class="d-flex ma-3" align="center">
+                  <v-icon>{{ item.icon }}</v-icon>
+                  <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
+                </v-row>
+                <v-card-text class="font-weight-light">{{ item.text }}</v-card-text>
+              </v-card>
+            </nuxt-link>
+          </v-hover>
+        </v-col>
+      </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import UsersAdminPanel from "@/components/portal-admin/users-management/user-admin-panel";
-import AccessKeysPanel from "@/components/portal-admin/access-keys/access-keys-admin-panel";
-import LogManagerPanel from "@/components/portal-admin/log-manager/portal-log-manager-panel";
-import LogAppPanel from "@/components/portal-admin/log-manager/api-log-manager-panel";
+import {portalAdminRoutes} from "@/data/portal-admin-navigation";
 
 export default {
   middleware: ["portal-admin"],
+  name: "index",
   data: () => ({
-    tab: 0,
-    tabs: [
-      {title: "Users", component: UsersAdminPanel},
-      {title: "Access Keys", component: AccessKeysPanel},
-      {title: "Portal Logs", component: LogManagerPanel},
-      {title: "App Logs", component: LogAppPanel},
-    ]
-  })
+    items: []
+  }),
+  created() {
+    this.items = portalAdminRoutes.items;
+  }
 };
 </script>
 

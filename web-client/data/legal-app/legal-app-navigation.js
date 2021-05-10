@@ -35,8 +35,5 @@ export const legalappRoute = {
       icon: 'mdi-archive',
       text: 'Zajrzyj do zarchiwzowanych spraw lub klinetów'
     },
-
-
   ],
-
 };

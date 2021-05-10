@@ -6,7 +6,7 @@
       </v-btn>
     </template>
 
-    <v-card>
+    <v-card v-if="!loading">
       <v-card-title class="justify-center">Access Key Management</v-card-title>
       <v-divider></v-divider>
       <v-form ref="editDataAccessKeyForm" v-model="validation.valid">
@@ -30,20 +30,24 @@
           </v-date-picker>
         </v-menu>
       </v-form>
-      <v-card-actions>
+      <v-card-actions v-if="!loading">
         <v-btn text color="warning" @click="editKey">Update Key</v-btn>
         <v-spacer/>
         <v-btn text color="success" @click="dialog = false">Cancel</v-btn>
       </v-card-actions>
     </v-card>
+    <v-card v-else>
+      <p>Loading...</p>
+    </v-card>
   </v-dialog>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "edit-access-key-form-dialog",
+  fetchOnServer: false,
   data: () => ({
     dialog: false,
     loading: false,
@@ -75,11 +79,12 @@ export default {
       default: null
     },
   },
-  mounted() {
+  fetch() {
     this.form.keyName = this.selectedKey.name;
     this.form.expireDate = this.selectedKey.expireDate.substr(0, 10);
   },
   methods: {
+    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
     editKey() {
       if (!this.$refs.editDataAccessKeyForm.validate()) return;
       if (this.loading) return;
@@ -94,8 +99,9 @@ export default {
       return this.$axios.$put("/api/portal-admin/key-admin/access-key/update", payload)
         .catch((e) => {
         }).finally(() => {
+          this.getAccessKeys();
           this.loading = false;
-          this.$emit('action-completed');
+          this.dialog = false;
         });
     },
   }
