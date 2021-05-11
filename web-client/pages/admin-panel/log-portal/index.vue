@@ -1,12 +1,16 @@
 ﻿<template>
   <div class="ma-3">
-    <padmin-back-to-main/>
-    <padmin-portal-log-manager-panel/>
+    <back-to-main/>
+    <portal-log-manager-panel/>
   </div>
 </template>
 
 <script>
+import BackToMain from "@/components/portal-admin/back-to-main";
+import PortalLogManagerPanel from "@/components/portal-admin/log-manager/portal-log-manager-panel";
+
 export default {
+  components: {PortalLogManagerPanel, BackToMain},
   middleware: ["portal-admin"],
   name: "index"
 };

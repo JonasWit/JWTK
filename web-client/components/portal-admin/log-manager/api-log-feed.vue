@@ -147,10 +147,8 @@ export default {
     },
     handleLogs() {
       this.loading = true;
-      console.log('query', this.query);
       this.loadLogs(this.query)
         .then(logs => {
-          console.log('logs', logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {

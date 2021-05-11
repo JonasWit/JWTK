@@ -43,13 +43,7 @@ export default {
     cursor: 0
   }),
   async fetch() {
-    await this.$axios.$get("/api/legal-app-clients/clients/basic-list")
-      .then((clientsToSearch) => {
-        console.warn('client to search', clientsToSearch);
-        this.clientSearchItems = clientsToSearch;
-      })
-      .catch(() => {
-      });
+    this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
   },
   created() {
     this.handleFeed();

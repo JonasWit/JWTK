@@ -29,7 +29,7 @@ export default {
   data: () => ({
     items: []
   }),
-  created() {
+  fetch() {
     this.items = portalAdminRoutes.items;
   }
 };
