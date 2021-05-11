@@ -95,12 +95,13 @@ namespace SystemyWP.API
             var transientServiceType = typeof(TransientService);
             var scopedServiceType = typeof(ScopedService);
 
-            var appDefinedTypes = transientServiceType.Assembly.DefinedTypes.ToList();
+            var appDefinedTransientTypes = transientServiceType.Assembly.DefinedTypes.ToList();
+            var appDefinedScopedTypes = scopedServiceType.Assembly.DefinedTypes.ToList();
 
-            var transientServices = appDefinedTypes
+            var transientServices = appDefinedTransientTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
 
-            var scopedServices = appDefinedTypes
+            var scopedServices = appDefinedScopedTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
 
             foreach (var service in transientServices)

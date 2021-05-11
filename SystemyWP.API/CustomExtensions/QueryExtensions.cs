@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SystemyWP.API.Projections.LegalApp;
-using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.General;
-using Microsoft.EntityFrameworkCore;
-
-namespace SystemyWP.API.CustomExtensions
+﻿namespace SystemyWP.API.CustomExtensions
 {
     public static class QueryExtensions
     {
