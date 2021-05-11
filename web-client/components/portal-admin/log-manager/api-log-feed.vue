@@ -29,7 +29,7 @@
 
     <div v-scroll="onScroll">
       <v-list>
-        <padmin-api-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+        <api-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
       </v-list>
     </div>
   </div>
@@ -37,8 +37,11 @@
 
 <script>
 
+import ApiLogItem from "@/components/portal-admin/log-manager/api-log-item";
+
 export default {
   name: "api-log-feed",
+  components: {ApiLogItem},
   data: () => ({
     dates: [],
     minDate: "",
@@ -142,10 +145,12 @@ export default {
       this.handleLogs();
     },
     handleLogs() {
+      if (this.loading) return;
+      this.loading = true;
+
       console.warn('handle logs fired', this.query);
       return this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`)
         .then(logs => {
-          console.warn('logs downloaded', logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {
@@ -157,7 +162,10 @@ export default {
             this.cursor += 10;
           }
         })
-        .finally(() => this.loading = false);
+        .finally(() => {
+          this.loading = false;
+          console.warn('fetched data', this.logs.length);
+        });
     }
   }
 };

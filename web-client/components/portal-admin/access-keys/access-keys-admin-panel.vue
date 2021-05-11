@@ -1,6 +1,6 @@
 ﻿<template>
   <div>
-    <padmin-create-access-key-component/>
+    <create-access-key-component/>
     <v-list>
       <template v-for="(keyItem, index) in keysList">
         <v-list-item :key="`key-${keyItem.id}`">
@@ -18,8 +18,8 @@
           <v-spacer/>
           <v-list-item-content>
             <div class="d-flex justify-end">
-              <padmin-edit-access-key-form-dialog :selected-key="keyItem"/>
-              <padmin-delete-access-key-dialog :selected-key="keyItem"/>
+              <edit-access-key-form-dialog :selected-key="keyItem"/>
+              <delete-access-key-dialog :selected-key="keyItem"/>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -27,12 +27,14 @@
       </template>
     </v-list>
   </div>
-
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
 import {addDays, formatDate} from "@/data/date-extensions";
+import CreateAccessKeyComponent from "@/components/portal-admin/access-keys/create-access-key-component";
+import EditAccessKeyFormDialog from "@/components/portal-admin/access-keys/edit-access-key-form-dialog";
+import DeleteAccessKeyDialog from "@/components/portal-admin/access-keys/delete-access-key-dialog";
 
 const searchItemFactory = (id, exp) => ({
   id,
@@ -43,6 +45,7 @@ const searchItemFactory = (id, exp) => ({
 
 export default {
   name: "access-keys-admin-panel",
+  components: {DeleteAccessKeyDialog, EditAccessKeyFormDialog, CreateAccessKeyComponent},
   fetchOnServer: false,
   data: () => ({
     activeKeys: [],

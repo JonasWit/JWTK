@@ -1,7 +1,7 @@
 ﻿<template>
   <v-list-item :key="`log-record-${logItem.id}`">
     <v-list-item-icon class="mx-0">
-      <padmin-api-log-item-details :log-item="logItem"/>
+      <api-log-item-details :log-item="logItem"/>
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-subtitle :class="getTypeColor(logItem.logLevel)">{{ logItem.logLevel }}</v-list-item-subtitle>
@@ -16,9 +16,11 @@
 
 <script>
 import {SERVER_LOG_TYPES} from "@/data/enums";
+import ApiLogItemDetails from "@/components/portal-admin/log-manager/api-log-item-details";
 
 export default {
   name: "api-log-item",
+  components: {ApiLogItemDetails},
   props: {
     logItem: {
       type: Object,

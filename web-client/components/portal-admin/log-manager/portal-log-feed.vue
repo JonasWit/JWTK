@@ -136,8 +136,10 @@ export default {
       this.$nuxt.refresh();
     },
     handleLogs() {
-      console.warn('handle logs fired', this.query);
+      if (this.loading) return;
+      this.loading = true;
 
+      console.warn('handle logs fired', this.query);
       return this.$axios.$get(`/api/portal-admin/log-admin/logs/split${this.query}`)
         .then(logs => {
           console.log('logs', logs);
