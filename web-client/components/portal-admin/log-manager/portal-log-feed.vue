@@ -37,12 +37,6 @@
 
 export default {
   name: "portal-log-feed",
-  props: {
-    loadLogs: {
-      type: Function,
-      required: true
-    }
-  },
   data: () => ({
     dates: [],
     minDate: "",
@@ -58,8 +52,9 @@ export default {
     finished: false,
     loading: false,
   }),
-  created() {
-    this.handleLogs();
+  fetch() {
+    console.warn('fetch fired');
+    return this.handleLogs();
   },
   watch: {
     dates(dates) {
@@ -137,18 +132,23 @@ export default {
     refresh() {
       this.cursor = 0;
       this.logs = [];
-      this.handleLogs();
+      this.finished = false;
+      this.$nuxt.refresh();
     },
     handleLogs() {
-      this.loading = true;
-      console.log('query', this.query);
-      this.loadLogs(this.query)
+      console.warn('handle logs fired', this.query);
+
+      return this.$axios.$get(`/api/portal-admin/log-admin/logs/split${this.query}`)
         .then(logs => {
           console.log('logs', logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {
-            logs.forEach(x => this.logs.push(x));
+            logs.forEach(x => {
+              if (!this.logs.some(y => y.id === x.id)) {
+                this.logs.push(x);
+              }
+            });
             this.cursor += 10;
           }
         })

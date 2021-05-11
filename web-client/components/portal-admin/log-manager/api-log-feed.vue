@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <v-form ref="minLogDateForm">
-      <v-row v-if="!loading">
+      <v-row>
         <v-col class="d-flex justify-center" cols="12" md="6">
           <v-date-picker :no-title="true" v-model="dates" range></v-date-picker>
         </v-col>
@@ -39,12 +39,6 @@
 
 export default {
   name: "api-log-feed",
-  props: {
-    loadLogs: {
-      type: Function,
-      required: true
-    }
-  },
   data: () => ({
     dates: [],
     minDate: "",
@@ -62,8 +56,9 @@ export default {
     finished: false,
     loading: false,
   }),
-  created() {
-    this.handleLogs();
+  fetch() {
+    console.warn('fetch fired');
+    return this.handleLogs();
   },
   watch: {
     dates(dates) {
@@ -108,11 +103,17 @@ export default {
     },
   },
   methods: {
+    refresh() {
+      this.cursor = 0;
+      this.logs = [];
+      this.finished = false;
+      this.$nuxt.refresh();
+    },
     onScroll() {
       if (this.finished || this.loading) return;
       const loadMore = document.body.offsetHeight - (window.pageYOffset + window.innerHeight) < 500;
       if (loadMore) {
-        this.handleLogs();
+        return this.handleLogs();
       }
     },
     search() {
@@ -140,19 +141,19 @@ export default {
       this.finished = false;
       this.handleLogs();
     },
-    refresh() {
-      this.cursor = 0;
-      this.logs = [];
-      this.handleLogs();
-    },
     handleLogs() {
-      this.loading = true;
-      this.loadLogs(this.query)
+      console.warn('handle logs fired', this.query);
+      return this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`)
         .then(logs => {
+          console.warn('logs downloaded', logs);
           if (logs.length === 0) {
             this.finished = true;
           } else {
-            logs.forEach(x => this.logs.push(x));
+            logs.forEach(x => {
+              if (!this.logs.some(y => y.id === x.id)) {
+                this.logs.push(x);
+              }
+            });
             this.cursor += 10;
           }
         })
