@@ -113,13 +113,12 @@ namespace SystemyWP.API.Controllers.LegalApp
                     });
 
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-            return Ok();
         }
 
         [HttpPost("full-legal-app-data-access")]
@@ -210,13 +209,12 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Where(x => x.UserId.Equals(user.Id)));
 
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-            return Ok();
         }
 
         [HttpGet("legal-app-summary")]

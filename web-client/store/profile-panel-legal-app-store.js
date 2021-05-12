@@ -1,6 +1,7 @@
 ﻿const initState = () => ({
   relatedUsers: [],
   legalAppSummary: null,
+  clients: []
 });
 
 export const state = initState;
@@ -19,6 +20,9 @@ export const mutations = {
   updateRelatedUsersList(state, {relatedUsers}) {
     state.relatedUsers = relatedUsers;
   },
+  updateClientsList(state, {clients}) {
+    state.clients = clients;
+  },
   updateLegalAppSummary(state, {summary}) {
     state.legalAppSummary = summary;
   },
@@ -28,18 +32,28 @@ export const mutations = {
 };
 
 export const actions = {
-  getRelatedUsers({commit}) {
-    return this.$axios.$get("/api/legal-app-admin/related-users")
-      .then((relatedUsers) => {
-        relatedUsers.forEach(x => {
-          if (x.lastLogin) {
-            x.lastLogin = new Date(x.lastLogin);
-          }
-        });
-        commit('updateRelatedUsersList', {relatedUsers});
-      })
-      .catch(() => {
-      });
+  async getClients({commit}) {
+    let response = await this.$axios.$get("/api/legal-app-clients/admin/flat");
+
+    let clients = response.map(client => ({...client, key: `client-${client.id}`}));
+    clients.forEach(client => {
+      client.displayText = `${client.name.substring(0, this.displayTextSize)}...`;
+      client.cases = client.cases.map(c => ({
+        ...c, key: `case-${c.id}`,
+        displayText: `${c.name.substring(0, this.displayTextSize)}...`
+      }));
+    });
+    commit('updateClientsList', {clients});
+  },
+  async getRelatedUsers({commit}) {
+    let relatedUsers = await this.$axios.$get("/api/legal-app-admin/related-users");
+
+    relatedUsers.forEach(x => {
+      if (x.lastLogin) {
+        x.lastLogin = new Date(x.lastLogin);
+      }
+    });
+    commit('updateRelatedUsersList', {relatedUsers});
   },
   getSummary({commit}) {
     return this.$axios.$get("/api/legal-app-admin/legal-app-summary")

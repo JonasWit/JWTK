@@ -44,14 +44,15 @@
         <div>
           <v-card elevation="0" v-if="selectedUser">
             <v-card-title class="mb-2">Dostęp do danych</v-card-title>
-            <v-card-subtitle v-if="selectedUser && !standardUsetCheck">Administrator ma automatyczny dostę do wszystkich
+            <v-card-subtitle v-if="selectedUser && !standardUsetCheck">Administrator ma automatyczny dostęp do
+              wszystkich
               danych.
             </v-card-subtitle>
             <v-card-subtitle v-else>Określ do których Klientów i Spraw użytkownik
               będzie miał dostęp.
             </v-card-subtitle>
-            <div class="my-3" v-if="this.selectedUser && this.treeViewData.length > 0 && standardUsetCheck">
-              <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="treeViewData"
+            <div class="my-3" v-if="this.selectedUser && this.clients.length > 0 && standardUsetCheck">
+              <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="clients"
                           item-key="key" :selection-type="selectionType" selectable return-object>
                 <template v-slot:label="{ item, open }">
                   <v-tooltip bottom>
@@ -76,7 +77,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import UserHeader from "@/components/user-header";
 import DefaultConfirmationDialog from "@/components/default-confirmation-dialog";
 import {LegalAppDataAccessItems, ROLES} from "@/data/enums";
@@ -89,7 +90,6 @@ export default {
     selectedUser: null,
     loading: false,
     displayTextSize: 20,
-    treeViewData: [],
     treeViewSelection: [],
     selectionType: 'independent',
   }),
@@ -99,7 +99,7 @@ export default {
       console.warn('selected user:', selection);
       if (selection) {
         this.treeViewSelection = [];
-        if (this.treeViewData.length > 0) {
+        if (this.clients.length > 0) {
           if (selection.dataAccess) {
             if (selection.dataAccess.length > 0) {
               const casesToSelect = selection.dataAccess
@@ -109,7 +109,7 @@ export default {
 
               let itemsToPush = [];
 
-              this.treeViewData.forEach(cl => {
+              this.clients.forEach(cl => {
                 cl.cases.forEach(cs => {
                   if (casesToSelect.some(z => z.itemId === cs.id)) {
                     itemsToPush.push(cs);
@@ -117,7 +117,7 @@ export default {
                 });
               });
 
-              this.treeViewData.forEach(cl => {
+              this.clients.forEach(cl => {
                 if (clientsToSelect.some(z => z.itemId === cl.id)) {
                   itemsToPush.push(cl);
                 }
@@ -138,7 +138,7 @@ export default {
           .filter(cs => !clients.some(cl => cl.cases.some(c => c.id === cs.id)));
         if (casesWithoutClient.length > 0) {
           let clientsToPush = casesWithoutClient.map(caseWithoutClient => {
-            return this.treeViewData
+            return this.clients
               .filter(item => item.key.includes('client'))
               .find(cl => cl.cases.some(cs => cs.id === caseWithoutClient.id));
           });
@@ -147,23 +147,13 @@ export default {
       }
     }
   },
-  fetch() {
-    this.loading = true;
-    this.getClients();
-    this.loading = false;
-  },
-  beforeMount() {
-    this.loading = true;
-    this.getClients();
-    this.getRelatedUsers();
-    this.loading = false;
+  async fetch() {
+    await this.getRelatedUsers();
+    await this.getClients();
   },
   computed: {
     ...mapGetters('profile-panel-legal-app-store', ['relatedUsers']),
-    countAllowedClients() {
-      if (!this.selectedUser) return 0;
-      return this.selectedUser.dataAccess.filter(x => x.restrictedType === LegalAppDataAccessItems.CLIENT).length;
-    },
+    ...mapState('profile-panel-legal-app-store', ['clients']),
     standardUsetCheck() {
       if (this.selectedUser.role !== ROLES.CLIENT_ADMIN &&
         this.selectedUser.role !== ROLES.PORTAL_ADMIN &&
@@ -178,34 +168,10 @@ export default {
   },
   methods: {
     ...mapActions('popup', ['success']),
-    ...mapActions('profile-panel-legal-app-store', ['getRelatedUsers']),
-    getClients() {
-      this.loading = true;
-      return this.$axios.$get("/api/legal-app-clients/admin/flat")
-        .then((clients) => {
-          let response = clients.map(client => ({...client, key: `client-${client.id}`}));
-          response.forEach(client => {
-            client.displayText = `${client.name.substring(0, this.displayTextSize)}...`;
-            client.cases = client.cases.map(c => ({
-              ...c, key: `case-${c.id}`,
-              displayText: `${c.name.substring(0, this.displayTextSize)}...`
-            }));
-          });
-          this.treeViewData = response;
-        })
-        .catch(() => {
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    },
+    ...mapActions('profile-panel-legal-app-store', ['getRelatedUsers', 'getClients']),
     reset() {
       Object.assign(this.$data, this.$options.data.call(this));
-      this.getUsersAndClients();
-    },
-    getUsersAndClients() {
-      this.getRelatedUsers();
-      this.getClients();
+      this.$fetch();
     },
     updateAccess() {
       this.loading = true;
@@ -222,11 +188,12 @@ export default {
         allowedCases: accessToCases,
         allowedClients: accessToClients
       };
+
       return this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
           Object.assign(this.$data, this.$options.data.call(this));
-          this.getUsersAndClients();
+          this.$fetch();
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
@@ -245,14 +212,13 @@ export default {
       return this.$axios.$post("/api/legal-app-admin/full-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
-          Object.assign(this.$data, this.$options.data.call(this));
-          this.getUsersAndClients();
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         })
         .finally(() => {
-          //this.selectedUser = this.normalUsers.find(x => x.id === payload.userId);
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.$fetch();
           this.loading = false;
         });
     },
@@ -266,13 +232,13 @@ export default {
       return this.$axios.$post("/api/legal-app-admin/revoke-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
-          Object.assign(this.$data, this.$options.data.call(this));
-          this.getUsersAndClients();
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         })
         .finally(() => {
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.$fetch();
           this.loading = false;
         });
     },
