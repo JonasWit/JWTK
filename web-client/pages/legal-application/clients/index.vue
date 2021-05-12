@@ -1,20 +1,51 @@
 <template>
   <legalapp-layout>
     <template v-slot:content>
-      <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
-                      hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
-                      :filter="searchFilter">
-        <template v-slot:item="{item ,on , attrs}">
-          <v-list-item v-on="on" :attrs="attrs">
-            <v-list-item-content>{{ item.name }}</v-list-item-content>
-          </v-list-item>
+      <v-snackbar :color="snackbar.color" v-model="snackbar.show" :timeout="timeout">
+        <span>{{ snackbar.message }}</span>
+        <v-btn text @click="snackbar = false">Zamknij</v-btn>
+      </v-snackbar>
+
+      <v-toolbar extended>
+        <v-toolbar-title class="mr-3">
+          Lista Klientów
+        </v-toolbar-title>
+
+        <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
+                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
+                        :filter="searchFilter">
+          <template v-slot:item="{item ,on , attrs}">
+            <v-list-item v-on="on" :attrs="attrs">
+              <v-list-item-content>{{ item.name }}</v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-autocomplete>
+        <template v-slot:extension>
+          <v-btn fab color="primary" left absolute @click="dialog = !dialog">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </template>
-      </v-autocomplete>
+      </v-toolbar>
       <div v-scroll="onScroll">
         <v-list>
           <legalapp-client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
         </v-list>
       </div>
+      <v-dialog v-model="dialog" max-width="500px">
+        <v-form ref="addNewClientForm" v-model="validation.valid">
+          <v-card-text>
+            <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"
+                          required></v-text-field>
+            <small class="grey--text">* Hint text here</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="handleSubmit()">
+              Dodaj
+            </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-dialog>
     </template>
   </legalapp-layout>
 </template>
@@ -40,8 +71,27 @@ export default {
     finished: false,
     loading: false,
     searchConditionsProvided: false,
-    cursor: 0
+    cursor: 0,
+    dialog: false,
+    form: {
+      name: "",
+
+    },
+    validation: {
+      valid: false,
+      name: [
+        v => !!v || "Nazwa jest wymagana!",
+        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
+      ],
+    },
+    snackbar: {
+      show: false,
+      message: null,
+      color: null
+    },
+    timeout: 4000,
   }),
+
   async fetch() {
     this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
   },
@@ -111,7 +161,44 @@ export default {
           }
         })
         .finally(() => this.loading = false);
-    }
+    },
+    handleSubmit() {
+      if (!this.$refs.addNewClientForm.validate()) return;
+      if (this.loading) return;
+      this.loading = true;
+
+      const client = {
+        name: this.form.name,
+      };
+      return this.$axios.$post("/api/legal-app-clients/create", client)
+        .then(() => {
+          this.resetForm();
+          this.snackbar = {
+            message: `Nowy klient ${this.form.name} został dodany pomyślnie!`,
+            color: 'success',
+            show: true
+          }
+        })
+        .catch((e) => {
+          this.snackbar = {
+            message: 'Wystąpił błąd. Spróbuj ponownie.',
+            color: 'error',
+            show: true
+
+          }
+        }).finally(() => {
+          this.$nuxt.refresh();
+          this.loading = false;
+          this.dialog = false;
+
+        });
+
+
+    },
+    resetForm() {
+      this.$refs.createDataAccessKeyForm.reset();
+      this.$refs.createDataAccessKeyForm.resetValidation();
+    },
   }
 };
 </script>

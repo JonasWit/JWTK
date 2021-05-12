@@ -50,4 +50,8 @@ export default {
 .nav-item {
   text-decoration: none;
 }
+
+.v-card {
+  position: fixed;
+}
 </style>
