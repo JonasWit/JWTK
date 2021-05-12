@@ -1,11 +1,7 @@
 <template>
   <legalapp-layout>
     <template v-slot:content>
-      <v-snackbar :color="snackbar.color" v-model="snackbar.show" :timeout="timeout">
-        <span>{{ snackbar.message }}</span>
-        <v-btn text @click="snackbar = false">Zamknij</v-btn>
-      </v-snackbar>
-
+      <snackbar/>
       <v-toolbar extended>
         <v-toolbar-title class="mr-3">
           Lista Klientów
@@ -31,21 +27,8 @@
           <legalapp-client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
         </v-list>
       </div>
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-form ref="addNewClientForm" v-model="validation.valid">
-          <v-card-text>
-            <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"
-                          required></v-text-field>
-            <small class="grey--text">* Hint text here</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="handleSubmit()">
-              Dodaj
-            </v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-dialog>
+      <client-create-dialog/>
+
     </template>
   </legalapp-layout>
 </template>
@@ -53,6 +36,7 @@
 <script>
 import NavigationDrawer from "@/components/legal-app/navigation-drawer";
 import {hasOccurrences} from "@/data/functions";
+import ClientCreateDialog from "@/components/legal-app/clients/dialogs/client-create-dialog";
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -63,7 +47,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {NavigationDrawer},
+  components: {ClientCreateDialog, NavigationDrawer},
   data: () => ({
     searchResult: "",
     clientSearchItems: [],
@@ -72,24 +56,8 @@ export default {
     loading: false,
     searchConditionsProvided: false,
     cursor: 0,
-    dialog: false,
-    form: {
-      name: "",
 
-    },
-    validation: {
-      valid: false,
-      name: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
-    },
-    snackbar: {
-      show: false,
-      message: null,
-      color: null
-    },
-    timeout: 4000,
+
   }),
 
   async fetch() {
@@ -162,45 +130,7 @@ export default {
         })
         .finally(() => this.loading = false);
     },
-    handleSubmit() {
-      if (!this.$refs.addNewClientForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
 
-      const client = {
-        name: this.form.name,
-      };
-      return this.$axios.$post("/api/legal-app-clients/create", client)
-        .then((resp) => {
-          console.warn('create client response', resp);
-          this.resetForm();
-          this.snackbar = {
-            message: `Nowy klient ${this.form.name} został dodany pomyślnie!`,
-            color: 'success',
-            show: true
-          };
-        })
-        .catch((e) => {
-          console.warn('create client error', e);
-          this.snackbar = {
-            message: 'Wystąpił błąd. Spróbuj ponownie.',
-            color: 'error',
-            show: true
-
-          };
-        }).finally(() => {
-          this.$nuxt.refresh();
-          this.loading = false;
-          this.dialog = false;
-
-        });
-
-
-    },
-    resetForm() {
-      this.$refs.createDataAccessKeyForm.reset();
-      this.$refs.createDataAccessKeyForm.resetValidation();
-    },
   }
 };
 </script>
