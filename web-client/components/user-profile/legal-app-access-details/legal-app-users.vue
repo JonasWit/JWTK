@@ -14,7 +14,7 @@
                   <user-header :image-url="user.image" :username="user.username" :role="user.role" :link="false"
                                size="36"/>
                   <v-spacer/>
-                  <div v-if="selectedUser && selectedUser.id === user.id && standardUsetCheck">
+                  <div v-if="selectedUser && selectedUser.id === user.id && standardUserCheck">
                     <default-confirmation-dialog v-on:action-confirmed="updateAccess" title="Zmiana Dostępów"
                                                  icon="mdi-content-save-edit-outline"
                                                  tooltip-message="Zapisz zmiany dostępów" button-text="Zapisz Zmiany"
@@ -44,14 +44,14 @@
         <div>
           <v-card elevation="0" v-if="selectedUser">
             <v-card-title class="mb-2">Dostęp do danych</v-card-title>
-            <v-card-subtitle v-if="selectedUser && !standardUsetCheck">Administrator ma automatyczny dostęp do
+            <v-card-subtitle v-if="selectedUser && !standardUserCheck">Administrator ma automatyczny dostęp do
               wszystkich
               danych.
             </v-card-subtitle>
             <v-card-subtitle v-else>Określ do których Klientów i Spraw użytkownik
               będzie miał dostęp.
             </v-card-subtitle>
-            <div class="my-3" v-if="this.selectedUser && this.clients.length > 0 && standardUsetCheck">
+            <div class="my-3" v-if="this.selectedUser && this.clients.length > 0 && standardUserCheck">
               <v-treeview color="warning" item-children="cases" v-model="treeViewSelection" :items="clients"
                           item-key="key" :selection-type="selectionType" selectable return-object>
                 <template v-slot:label="{ item, open }">
@@ -153,7 +153,7 @@ export default {
   computed: {
     ...mapGetters('profile-panel-legal-app-store', ['relatedUsers']),
     ...mapState('profile-panel-legal-app-store', ['clients']),
-    standardUsetCheck() {
+    standardUserCheck() {
       if (this.selectedUser.role !== ROLES.CLIENT_ADMIN &&
         this.selectedUser.role !== ROLES.PORTAL_ADMIN &&
         this.selectedUser.role !== ROLES.INVITED) {
