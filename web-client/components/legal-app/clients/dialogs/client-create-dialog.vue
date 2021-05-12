@@ -1,5 +1,10 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
+        <v-icon medium color="success">mdi-plus</v-icon>
+      </v-btn>
+    </template>
     <v-form ref="addNewClientForm" v-model="validation.valid">
       <v-card-text>
         <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"

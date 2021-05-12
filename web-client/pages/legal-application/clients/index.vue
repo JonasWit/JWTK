@@ -17,9 +17,8 @@
           </template>
         </v-autocomplete>
         <template v-slot:extension>
-          <v-btn fab color="primary" left absolute @click="dialog = !dialog">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
+          <client-create-dialog/>
+
         </template>
       </v-toolbar>
       <div v-scroll="onScroll">
@@ -27,7 +26,7 @@
           <legalapp-client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
         </v-list>
       </div>
-      <client-create-dialog/>
+
 
     </template>
   </legalapp-layout>
