@@ -36,6 +36,7 @@
 import NavigationDrawer from "@/components/legal-app/navigation-drawer";
 import {hasOccurrences} from "@/data/functions";
 import ClientCreateDialog from "@/components/legal-app/clients/dialogs/client-create-dialog";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -49,18 +50,15 @@ export default {
   components: {ClientCreateDialog, NavigationDrawer},
   data: () => ({
     searchResult: "",
-    clientSearchItems: [],
     clientList: [],
     finished: false,
     loading: false,
     searchConditionsProvided: false,
     cursor: 0,
-
-
   }),
 
   async fetch() {
-    this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
+    await this.fetchClients();
   },
   created() {
     this.handleFeed();
@@ -88,10 +86,8 @@ export default {
     }
   },
   computed: {
-    clientItems() {
-      return []
-        .concat(this.clientSearchItems.map(x => searchItemFactory(x.name, x.id)));
-    },
+    ...mapState('legal-app-clients-list-store', ['clientSearchItems']),
+    ...mapGetters('legal-app-clients-list-store', ['clientItems']),
     query() {
       if (this.searchConditionsProvided) {
         this.cursor = 0;
@@ -103,6 +99,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions('legal-app-clients-list-store', ['fetchClients']),
+
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
