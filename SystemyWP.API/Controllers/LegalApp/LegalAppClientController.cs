@@ -198,7 +198,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     });
                 }
                 await _context.SaveChangesAsync();
-                return Ok(newEntity);
+                return Ok(LegalAppClientProjections.CreateFlat(newEntity));
             }
             catch (Exception e)
             {

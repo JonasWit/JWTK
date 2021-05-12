@@ -96,7 +96,6 @@ export default {
   watch: {
     selectedUser(selection) {
       this.loading = true;
-      console.warn('selected user:', selection);
       if (selection) {
         this.treeViewSelection = [];
         if (this.clients.length > 0) {
@@ -192,13 +191,13 @@ export default {
       return this.$axios.$post("/api/legal-app-admin/update-legal-app-data-access", payload)
         .then(() => {
           this.$notifier.showSuccessMessage("Zmieniono dotępy!");
-          Object.assign(this.$data, this.$options.data.call(this));
-          this.$fetch();
         })
         .catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         })
         .finally(() => {
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.$fetch();
           this.loading = false;
         });
     },

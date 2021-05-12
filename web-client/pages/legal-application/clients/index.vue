@@ -171,21 +171,23 @@ export default {
         name: this.form.name,
       };
       return this.$axios.$post("/api/legal-app-clients/create", client)
-        .then(() => {
+        .then((resp) => {
+          console.warn('create client response', resp);
           this.resetForm();
           this.snackbar = {
             message: `Nowy klient ${this.form.name} został dodany pomyślnie!`,
             color: 'success',
             show: true
-          }
+          };
         })
         .catch((e) => {
+          console.warn('create client error', e);
           this.snackbar = {
             message: 'Wystąpił błąd. Spróbuj ponownie.',
             color: 'error',
             show: true
 
-          }
+          };
         }).finally(() => {
           this.$nuxt.refresh();
           this.loading = false;
