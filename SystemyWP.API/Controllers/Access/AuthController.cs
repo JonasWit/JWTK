@@ -7,6 +7,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -36,14 +37,17 @@ namespace SystemyWP.API.Controllers.Access
             [FromServices] IWebHostEnvironment env,
             [FromServices] UserManager<IdentityUser> userManager)
         {
+            var uId = UserId;
+            
             try
             {
-                await signInManager.SignOutAsync();
-                var user = await userManager.FindByIdAsync(UserId);
+                var user = await userManager.FindByIdAsync(uId);
+                
                 await userManager.UpdateSecurityStampAsync(user);
+                await signInManager.SignOutAsync();
+                await userManager.DeleteAsync(user);
 
-                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(uId));
                 if (userProfile is not null) _context.Remove(userProfile);
 
                 await _context.SaveChangesAsync();
@@ -52,8 +56,8 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, uId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

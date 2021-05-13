@@ -19,12 +19,12 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "account-remove",
   methods: {
-    deleteAccount() {
-
-    }
+    ...mapActions('auth', ['deleteAccount'])
   }
 };
 
