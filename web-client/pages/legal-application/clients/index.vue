@@ -12,7 +12,7 @@
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
-              <v-list-item-content>{{ item.name }}</v-list-item-content>
+              <v-list-item-content>{{ item.id }}{{ item.name }}</v-list-item-content>
             </v-list-item>
           </template>
         </v-autocomplete>
@@ -37,13 +37,6 @@ import NavigationDrawer from "@/components/legal-app/navigation-drawer";
 import {hasOccurrences} from "@/data/functions";
 import ClientCreateDialog from "@/components/legal-app/clients/dialogs/client-create-dialog";
 import {mapActions, mapGetters, mapState} from "vuex";
-
-const searchItemFactory = (name, id) => ({
-  id,
-  name,
-  searchIndex: (name).toLowerCase(),
-  text: name
-});
 
 export default {
   name: "index",
@@ -99,7 +92,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('legal-app-clients-list-store', ['fetchClients']),
+    ...mapActions('legal-app-store', ['fetchClients']),
 
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
@@ -127,6 +120,7 @@ export default {
         })
         .finally(() => this.loading = false);
     },
+
 
   }
 };

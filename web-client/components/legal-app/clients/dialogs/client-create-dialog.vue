@@ -18,12 +18,17 @@
         </v-btn>
       </v-card-actions>
     </v-form>
+    <snackbar/>
   </v-dialog>
+
 </template>
 
 <script>
+import Snackbar from "@/components/snackbar";
+
 export default {
   name: "client-create-dialog",
+  components: {Snackbar},
   data: () => ({
     dialog: false,
     form: {
@@ -49,19 +54,18 @@ export default {
         name: this.form.name,
       };
       return this.$axios.$post("/api/legal-app-clients/create", client)
-        .then((resp) => {
-          console.warn('create client response', resp);
+        .then((client) => {
           this.resetForm();
+          this.$nuxt.refresh();
           this.$notifier.showSuccessMessage("Klient dodany pomyślnie!");
+
         })
         .catch((e) => {
           console.warn('create client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-          this.$nuxt.refresh();
           this.loading = false;
           this.dialog = false;
-
         });
 
 
@@ -70,6 +74,8 @@ export default {
       this.$refs.addNewClientForm.reset();
       this.$refs.addNewClientForm.resetValidation();
     },
+
+
   }
 
 

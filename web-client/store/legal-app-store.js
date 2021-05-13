@@ -1,6 +1,6 @@
 ﻿const initState = () => ({
-  clientsList: [],
   clientSearchItems: [],
+  clientList: [],
 });
 
 // Clients list - create autocomplete
@@ -14,9 +14,6 @@ const searchItemFactory = (name, id) => ({
 export const state = initState;
 
 export const getters = {
-  clientsList(state) {
-    return state.clientsList;
-  },
 
 // Clients list - create autocomplete
   clientItems(state) {
@@ -26,9 +23,6 @@ export const getters = {
 };
 
 export const mutations = {
-  updateClientsList(state, {list}) {
-    state.clientsList = list;
-  },
 // Clients list - create autocomplete
   updateClientSearchItems(state, {clientSearchItems}) {
     state.clientSearchItems = clientSearchItems;
@@ -46,11 +40,19 @@ export const actions = {
       })
       .catch(() => {
       });
+
   },
   // Clients list - gets basic list of all clients
   async fetchClients({commit}) {
-    let clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
-    commit('updateClientSearchItems', {clientSearchItems});
+    try {
+      let clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
+      commit('updateClientSearchItems', {clientSearchItems});
+    } catch (error) {
+      console.error(error);
+    }
+
 
   },
+
+
 };
