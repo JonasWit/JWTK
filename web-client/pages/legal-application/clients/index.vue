@@ -86,8 +86,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('legal-app-clients-list-store', ['clientSearchItems']),
-    ...mapGetters('legal-app-clients-list-store', ['clientItems']),
+    ...mapState('legal-app-store', ['clientSearchItems']),
+    ...mapGetters('legal-app-store', ['clientItems']),
     query() {
       if (this.searchConditionsProvided) {
         this.cursor = 0;
