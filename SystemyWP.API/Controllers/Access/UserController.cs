@@ -155,17 +155,10 @@ namespace SystemyWP.API.Controllers.Access
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
-
-        [HttpPost("personal-data/delete-account")]
-        public IActionResult DeleteAccount()
-        {
-            //todo: do this
-
-            return Ok();
         }
     }
 }

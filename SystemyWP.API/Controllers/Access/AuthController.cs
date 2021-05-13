@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.Logging;
+using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -34,26 +36,32 @@ namespace SystemyWP.API.Controllers.Access
         public async Task<IActionResult> Delete(
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,
-            [FromServices] UserManager<IdentityUser> userManager)
+            [FromServices] UserManager<IdentityUser> userManager,
+            [FromServices] IFileProvider fileManager)
         {
+            var uId = UserId;
             try
             {
-                await signInManager.SignOutAsync();
-                var user = await userManager.FindByIdAsync(UserId);
+                var user = await userManager.FindByIdAsync(uId);
+                
                 await userManager.UpdateSecurityStampAsync(user);
-
-                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-
+                await signInManager.SignOutAsync();
+                
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(uId));
+                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
+                
                 if (userProfile is not null) _context.Remove(userProfile);
-
                 await _context.SaveChangesAsync();
+                
+                await userManager.DeleteAsync(user);
+                
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
             catch (Exception e)
             {
                 await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, uId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

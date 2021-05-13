@@ -38,13 +38,16 @@ export const mutations = {
   saveProfile(state, {profile}) {
     state.profile = profile;
   },
+  reset(state) {
+    Object.assign(state, initState());
+  },
 };
 
 export const actions = {
   initialize({commit}) {
     return this.$axios.$get('/api/users/me')
       .then((profile) => {
-        console.log(profile);
+        console.warn(profile);
         commit('saveProfile', {profile},
         );
       })
@@ -63,8 +66,14 @@ export const actions = {
     const returnUrl = encodeURIComponent(location.href);
     window.location = `${this.$config.auth.changePassPath}?returnUrl=${returnUrl}`;
   },
-  logout() {
+  logout({commit}) {
     if (process.server) return;
+    commit('reset');
     window.location = this.$config.auth.logoutPath;
   },
+  deleteAccount({commit}) {
+    if (process.server) return;
+    commit('reset');
+    window.location = this.$config.auth.deletePath;
+  }
 };
