@@ -6,6 +6,7 @@
 
   $axios.onError(error => {
     if (error.response && error.response.status && error.response.data) {
+      console.warn('Axios Error:', error);
       const {status, data} = error.response;
       if ((status | 0) === 400) {
         store.dispatch('axios-manager/error', data);

@@ -151,8 +151,8 @@ export default {
     await this.getClients();
   },
   computed: {
-    ...mapGetters('profile-panel-legal-app-store', ['relatedUsers']),
-    ...mapState('profile-panel-legal-app-store', ['clients']),
+    ...mapGetters('profile-panel-store', ['relatedUsers']),
+    ...mapState('profile-panel-store', ['clients']),
     standardUserCheck() {
       if (this.selectedUser.role !== ROLES.CLIENT_ADMIN &&
         this.selectedUser.role !== ROLES.PORTAL_ADMIN &&
@@ -167,7 +167,7 @@ export default {
   },
   methods: {
     ...mapActions('popup', ['success']),
-    ...mapActions('profile-panel-legal-app-store', ['getRelatedUsers', 'getClients']),
+    ...mapActions('profile-panel-store', ['getRelatedUsers', 'getClients']),
     reset() {
       Object.assign(this.$data, this.$options.data.call(this));
       this.$fetch();

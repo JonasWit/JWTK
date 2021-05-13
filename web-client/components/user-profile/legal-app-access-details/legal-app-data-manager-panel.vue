@@ -13,7 +13,7 @@ export default {
     this.getSummary();
   },
   methods: {
-    ...mapActions('profile-panel-legal-app-store', ['getSummary'])
+    ...mapActions('profile-panel-store', ['getSummary'])
   }
 };
 </script>

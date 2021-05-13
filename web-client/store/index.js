@@ -10,6 +10,7 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({dispatch}) {
+    console.warn('vuex initialized');
     await dispatch("auth/initialize");
   },
 };
