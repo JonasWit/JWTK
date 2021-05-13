@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.Logging;
+using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -35,22 +36,25 @@ namespace SystemyWP.API.Controllers.Access
         public async Task<IActionResult> Delete(
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env,
-            [FromServices] UserManager<IdentityUser> userManager)
+            [FromServices] UserManager<IdentityUser> userManager,
+            [FromServices] IFileProvider fileManager)
         {
             var uId = UserId;
-            
             try
             {
                 var user = await userManager.FindByIdAsync(uId);
                 
                 await userManager.UpdateSecurityStampAsync(user);
                 await signInManager.SignOutAsync();
-                await userManager.DeleteAsync(user);
-
+                
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(uId));
+                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
+                
                 if (userProfile is not null) _context.Remove(userProfile);
-
                 await _context.SaveChangesAsync();
+                
+                await userManager.DeleteAsync(user);
+                
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
             catch (Exception e)

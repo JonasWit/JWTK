@@ -47,7 +47,7 @@ export const actions = {
   initialize({commit}) {
     return this.$axios.$get('/api/users/me')
       .then((profile) => {
-        console.log(profile);
+        console.warn(profile);
         commit('saveProfile', {profile},
         );
       })
@@ -73,7 +73,7 @@ export const actions = {
   },
   deleteAccount({commit}) {
     if (process.server) return;
-    window.location = this.$config.auth.deletePath;
     commit('reset');
+    window.location = this.$config.auth.deletePath;
   }
 };
