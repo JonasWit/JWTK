@@ -1,19 +1,12 @@
 <template>
   <v-dialog v-model="dialog" :value="selectedClient" persistent width="500">
-    <template v-slot:activator="{ on, attrs }" #activator="{ on: dialog }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn icon v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="warning">mdi-delete</v-icon>
-          </v-btn>
-        </template>
-        <span>Usuń klienta</span>
-      </v-tooltip>
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn class="mx-2" icon v-bind="attrs" v-on="on">
+        <v-icon medium color="warning">mdi-delete</v-icon>
+      </v-btn>
     </template>
-
-
     <v-card>
-      <v-card-title class="justify-center">Usuń klienta</v-card-title>
+      <v-card-title class="justify-center">Usuń Klienta</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn color="error" text @click="deleteClient">
@@ -27,12 +20,16 @@
 
       </v-card-actions>
     </v-card>
+    <snackbar/>
   </v-dialog>
 </template>
 
 <script>
+import Snackbar from "@/components/snackbar";
+
 export default {
   name: "delete-client-dialog",
+  components: {Snackbar},
   props: {
     selectedClient: {
       required: true,
@@ -46,9 +43,24 @@ export default {
     form: {
       userId: ""
     },
+
   }),
   methods: {
-    deleteClient() {
+    deleteClient(selectedClient) {
+      this.$axios.$delete(`/api/legal-app-clients/client/${this.selectedClient.id}`)
+        .then((selectedClient) => {
+          this.$nuxt.refresh();
+          this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
+          console.warn(selectedClient, 'Dane usunietego klienta')
+
+        })
+        .catch((e) => {
+          console.warn('delete client error', e);
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        }).finally(() => {
+        this.dialog = false;
+      });
+
 
     }
   }

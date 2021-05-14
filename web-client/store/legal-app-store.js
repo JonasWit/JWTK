@@ -50,9 +50,9 @@ export const actions = {
     } catch (error) {
       console.error(error);
     }
-
-
   },
+
+  // Clients list - gets individual client
 
 
 };
