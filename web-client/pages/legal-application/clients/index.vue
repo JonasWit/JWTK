@@ -17,6 +17,7 @@
           </template>
         </v-autocomplete>
         <template v-slot:extension>
+
           <client-create-dialog/>
 
         </template>
@@ -34,94 +35,39 @@
 
 <script>
 import NavigationDrawer from "@/components/legal-app/navigation-drawer";
-import {hasOccurrences} from "@/data/functions";
 import ClientCreateDialog from "@/components/legal-app/clients/dialogs/client-create-dialog";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 
 export default {
   name: "index",
   components: {ClientCreateDialog, NavigationDrawer},
-  data: () => ({
-    searchResult: "",
-    clientList: [],
-    finished: false,
-    loading: false,
-    searchConditionsProvided: false,
-    cursor: 0,
-  }),
-
   async fetch() {
-    await this.fetchClients();
-  },
-  created() {
-    this.handleFeed();
+    this.reset();
+    await this.$store.dispatch('legal-app-client-store/fetchClients')
+    await this.$store.dispatch('legal-app-client-store/handleFeed')
   },
   watch: {
     searchResult(searchResult) {
-      if (this.searchResult) {
-        console.warn('search result:', this.searchResult);
-        this.loading = true;
+      console.warn('watcher fired')
+      this.handleSearchResult()
 
-        this.$axios.$get(`/api/legal-app-clients/client/${this.searchResult.id}`)
-          .then(clientFound => {
-            if (clientFound) {
-              this.clientList = [];
-              this.clientList.push(clientFound);
-              this.cursor = 0;
-              this.finished = false;
-            }
-          })
-          .finally(() => this.loading = false);
-      } else {
-        this.clientList = [];
-        this.handleFeed();
-      }
     }
   },
   computed: {
-    ...mapState('legal-app-store', ['clientSearchItems']),
-    ...mapGetters('legal-app-store', ['clientItems']),
-    query() {
-      if (this.searchConditionsProvided) {
-        this.cursor = 0;
-        this.clientList = [];
-        this.showSelectedClient();
-      } else {
-        return `cursor=${this.cursor}&take=10`;
+    ...mapState('legal-app-client-store', ['clientAutocompleteSearchResult', 'clientList']),
+    ...mapGetters('legal-app-client-store', ['clientItems', 'query']),
+    searchResult: {
+      get() {
+        return this.clientAutocompleteSearchResult
+      },
+      set(value) {
+        this.updateClientAutocompleteSearchResult({value})
       }
     },
   },
   methods: {
-    ...mapActions('legal-app-store', ['fetchClients']),
-
-    searchFilter(item, queryText, itemText) {
-      return hasOccurrences(item.searchIndex, queryText);
-    },
-    onScroll() {
-      if (this.finished || this.loading || this.searchResult) return;
-      const loadMore = document.body.offsetHeight - (window.pageYOffset + window.innerHeight) < 500;
-      if (loadMore) {
-        this.handleFeed();
-      }
-    },
-    handleFeed() {
-      console.warn('query!', this.query);
-      this.loading = true;
-
-      this.$axios.$get(`/api/legal-app-clients/clients?${this.query}`)
-        .then(clientsFeed => {
-          console.warn('clients form API for feed', clientsFeed);
-          if (clientsFeed.length === 0) {
-            this.finished = true;
-          } else {
-            clientsFeed.forEach(x => this.clientList.push(x));
-            this.cursor += 10;
-          }
-        })
-        .finally(() => this.loading = false);
-    },
-
-
+    ...mapMutations('legal-app-client-store', ['updateClientAutocompleteSearchResult', 'reset']),
+    ...mapActions('legal-app-client-store', ['fetchClients', 'searchFilter', 'onScroll', 'handleFeed', 'handleSearchResult']),
   }
 };
 </script>

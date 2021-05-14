@@ -47,9 +47,8 @@ export default {
   }),
   methods: {
     deleteClient(selectedClient) {
-      this.$axios.$delete(`/api/legal-app-clients/client/${this.selectedClient.id}`)
+      this.$axios.$delete(`/api/legal-app-clients/delete/${this.selectedClient.id}`)
         .then((selectedClient) => {
-          this.$nuxt.refresh();
           this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
           console.warn(selectedClient, 'Dane usunietego klienta')
 
@@ -58,6 +57,7 @@ export default {
           console.warn('delete client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
+        // this.$bus.$emit('action-confirmed');
         this.dialog = false;
       });
 
