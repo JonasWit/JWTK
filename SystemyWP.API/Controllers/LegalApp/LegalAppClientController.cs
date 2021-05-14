@@ -273,7 +273,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
 
-        [HttpPut("delete/{clientId}")]
+        [HttpDelete("delete/{clientId}")]
         public async Task<IActionResult> DeleteClient(long clientId)
         {
             try
