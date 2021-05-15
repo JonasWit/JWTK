@@ -28,6 +28,7 @@
 
 import DeleteClientDialog from "@/components/legal-app/clients/dialogs/delete-client-dialog";
 
+
 export default {
   name: "client-list-item",
   components: {DeleteClientDialog},
