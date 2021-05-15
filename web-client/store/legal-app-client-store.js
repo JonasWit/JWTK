@@ -1,5 +1,5 @@
 ﻿const initState = () => ({
-  deletedClient: null,
+  clientForAction: null,
 });
 
 export const state = initState;
@@ -7,9 +7,9 @@ export const state = initState;
 export const getters = {};
 
 export const mutations = {
-  setDeletedClient(state, client) {
+  setClientForAction(state, client) {
     console.warn('mutation done', client)
-    state.deletedClient = client
+    state.clientForAction = client
   }
 };
 

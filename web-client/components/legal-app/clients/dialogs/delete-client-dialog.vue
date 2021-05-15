@@ -23,17 +23,14 @@
 
       </v-card-actions>
     </v-card>
-    <snackbar/>
   </v-dialog>
 </template>
 
 <script>
-import Snackbar from "@/components/snackbar";
 import {mapMutations} from "vuex";
 
 export default {
   name: "delete-client-dialog",
-  components: {Snackbar},
   props: {
     selectedClient: {
       required: true,
@@ -50,7 +47,7 @@ export default {
 
   }),
   methods: {
-    ...mapMutations('legal-app-client-store', ['setDeletedClient']),
+    ...mapMutations('legal-app-client-store', ['setClientForAction']),
     deleteClient() {
       this.$axios.$delete(`/api/legal-app-clients/delete/${this.selectedClient.id}`)
         .then((selectedClient) => {
@@ -62,7 +59,7 @@ export default {
           console.warn('delete client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-        this.setDeletedClient(this.selectedClient)
+        this.setClientForAction(this.selectedClient)
         this.dialog = false;
       });
 

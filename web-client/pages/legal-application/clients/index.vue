@@ -88,7 +88,7 @@ export default {
       }
     },
 
-    deletedClient() {
+    clientForAction() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
       this.$nuxt.refresh()
       console.warn('Client list refreshed after client deletion')
@@ -96,7 +96,7 @@ export default {
   },
 
   computed: {
-    ...mapState('legal-app-client-store', ['deletedClient']),
+    ...mapState('legal-app-client-store', ['clientForAction']),
     clientItems() {
       return []
         .concat(this.clientSearchItems.map(x => searchItemFactory(x.name, x.id)));

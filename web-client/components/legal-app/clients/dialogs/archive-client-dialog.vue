@@ -24,15 +24,15 @@
 
       </v-card-actions>
     </v-card>
-    <snackbar/>
   </v-dialog>
 </template>
 
 <script>
-import Snackbar from "@/components/snackbar";
+
+import {mapMutations} from "vuex";
 
 export default {
-  name: "archive-client-dialog", components: {Snackbar},
+  name: "archive-client-dialog",
   props: {
     selectedClient: {
       required: true,
@@ -49,6 +49,7 @@ export default {
 
   }),
   methods: {
+    ...mapMutations('legal-app-client-store', ['setClientForAction']),
     archiveClient() {
       this.$axios.$put(`/api/legal-app-clients/archive/${this.selectedClient.id}`)
         .then(() => {
@@ -61,7 +62,7 @@ export default {
           console.warn('archive client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-
+        this.setClientForAction(this.selectedClient)
         this.dialog = false;
       });
 

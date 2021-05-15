@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Welcome from "@/components/systemyWP-page/welcome";
+import Welcome from "@/components/home-page/home-welcome";
 
 export default {
   components: {Welcome}
