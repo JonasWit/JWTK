@@ -6,17 +6,21 @@
       </v-btn>
     </template>
     <v-form ref="addNewClientForm" v-model="validation.valid">
-      <v-card-text>
-        <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"
-                      required></v-text-field>
-        <small class="grey--text">* Hint text here</small>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text color="primary" @click="handleSubmit()">
-          Dodaj
-        </v-btn>
-      </v-card-actions>
+      <v-card>
+        <v-card-text>
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"
+                        required></v-text-field>
+          <small class="grey--text">* Hint text here</small>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn text color="primary" @click="handleSubmit()">
+            Dodaj
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-form>
     <snackbar/>
   </v-dialog>
@@ -54,9 +58,11 @@ export default {
         name: this.form.name,
       };
       return this.$axios.$post("/api/legal-app-clients/create", client)
-        .then((client) => {
+        .then(() => {
           this.resetForm();
-          this.$nuxt.refresh();
+          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
+          this.$nuxt.refresh()
+          console.warn('Client list refreshed after client creation', client)
           this.$notifier.showSuccessMessage("Klient dodany pomyślnie!");
 
         })

@@ -2,17 +2,18 @@
   <v-dialog v-model="dialog" :value="selectedClient" persistent width="500">
     <template v-slot:activator="{ on, attrs }">
       <v-btn class="mx-2" icon v-bind="attrs" v-on="on">
-        <v-icon medium color="error">mdi-delete</v-icon>
+        <v-icon medium color="warning">mdi-archive-arrow-down</v-icon>
       </v-btn>
     </template>
     <v-card>
-      <v-card-title class="justify-center">Usuń Klienta</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz wszystkie dane klienta. Odzyskanie dostępu będzie niemożliwe.
+      <v-card-title class="justify-center">Archiwizuj Klienta</v-card-title>
+      <v-card-subtitle>Potwierdzając operację dodasz do archiwum klienta i wszystkie jego dane. Dostęp do danych będzie
+        możliwy w Archiwum.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="error" text @click="deleteClient">
+        <v-btn color="error" text @click="archiveClient">
           Potwierdź
         </v-btn>
         <v-spacer/>
@@ -29,11 +30,9 @@
 
 <script>
 import Snackbar from "@/components/snackbar";
-import {mapMutations} from "vuex";
 
 export default {
-  name: "delete-client-dialog",
-  components: {Snackbar},
+  name: "archive-client-dialog", components: {Snackbar},
   props: {
     selectedClient: {
       required: true,
@@ -50,19 +49,19 @@ export default {
 
   }),
   methods: {
-    ...mapMutations('legal-app-client-store', ['setDeletedClient']),
-    deleteClient() {
-      this.$axios.$delete(`/api/legal-app-clients/delete/${this.selectedClient.id}`)
-        .then((selectedClient) => {
-          this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
-          console.warn(selectedClient, 'Client deleted successfully')
+    archiveClient() {
+      this.$axios.$put(`/api/legal-app-clients/archive/${this.selectedClient.id}`)
+        .then(() => {
+          this.$notifier.showSuccessMessage("Klient został pomyślnie dodany do archiwum!");
+          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
+          this.$nuxt.refresh()
 
         })
         .catch((e) => {
-          console.warn('delete client error', e);
+          console.warn('archive client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-        this.setDeletedClient(this.selectedClient)
+
         this.dialog = false;
       });
 

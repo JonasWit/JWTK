@@ -1,12 +1,13 @@
 <template>
   <div>
-    <home-welcome/>
+    <welcome/>
   </div>
 </template>
 
 <script>
+import Welcome from "@/components/systemyWP-page/welcome";
 
 export default {
-  components: {}
+  components: {Welcome}
 };
 </script>
