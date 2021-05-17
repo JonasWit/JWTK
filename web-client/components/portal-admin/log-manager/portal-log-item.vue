@@ -1,7 +1,7 @@
 ﻿<template>
   <v-list-item :key="`log-record-${logItem.id}`">
     <v-list-item-icon class="mx-0">
-      <padmin-portal-log-item-details :log-item="logItem"/>
+      <portal-log-item-details :log-item="logItem"/>
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title :class="getTypeColor(logItem.logType)">{{ logItem.logType }}</v-list-item-title>
@@ -20,9 +20,11 @@
 
 <script>
 import {PORTAL_LOG_TYPES} from "@/data/enums";
+import PortalLogItemDetails from "@/components/portal-admin/log-manager/portal-log-item-details";
 
 export default {
   name: "portal-log-item",
+  components: {PortalLogItemDetails},
   props: {
     logItem: {
       type: Object,

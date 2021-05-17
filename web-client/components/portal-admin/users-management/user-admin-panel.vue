@@ -44,11 +44,11 @@
           <v-spacer/>
           <v-list-item-content>
             <div class="d-flex justify-end">
-              <padmin-data-access-key-dialog :selected-user="user"/>
-              <padmin-lock-user-dialog :selected-user="user"/>
-              <padmin-roles-management-dialog :selected-user="user"/>
-              <padmin-applications-access-dialog :selected-user="user"/>
-              <padmin-delete-user-dialog :selected-user="user"/>
+              <data-access-key-dialog :selected-user="user"/>
+              <lock-user-dialog :selected-user="user"/>
+              <roles-management-dialog :selected-user="user"/>
+              <applications-access-dialog :selected-user="user"/>
+              <delete-user-dialog :selected-user="user"/>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -62,6 +62,11 @@
 import {mapActions, mapState} from "vuex";
 import {hasOccurrences} from "@/data/functions";
 import {formatDate} from "@/data/date-extensions";
+import DataAccessKeyDialog from "@/components/portal-admin/users-management/data-access-key-dialog";
+import LockUserDialog from "@/components/portal-admin/users-management/lock-user-dialog";
+import RolesManagementDialog from "@/components/portal-admin/users-management/roles-management-dialog";
+import ApplicationsAccessDialog from "@/components/portal-admin/users-management/applications-access-dialog";
+import DeleteUserDialog from "@/components/portal-admin/users-management/delete-user-dialog";
 
 const initState = () => ({
   showDataAccessKeyDialog: false,
@@ -87,6 +92,7 @@ const searchItemFactory = (name, email) => ({
 
 export default {
   name: "user-admin-panel",
+  components: {DeleteUserDialog, ApplicationsAccessDialog, RolesManagementDialog, LockUserDialog, DataAccessKeyDialog},
   data: initState,
   beforeMount() {
     this.loading = true;
