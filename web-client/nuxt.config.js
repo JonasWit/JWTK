@@ -65,30 +65,6 @@ const config = {
       path: '~/components/home-page/',
     },
     {
-      path: '~/components/user-profile',
-      prefix: 'prof'
-    },
-    {
-      path: '~/components/user-profile/legal-app-access-details',
-      prefix: 'prof'
-    },
-    {
-      path: '~/components/portal-admin/',
-      prefix: 'padmin'
-    },
-    {
-      path: '~/components/portal-admin/access-keys',
-      prefix: 'padmin'
-    },
-    {
-      path: '~/components/portal-admin/users-management',
-      prefix: 'padmin'
-    },
-    {
-      path: '~/components/portal-admin/log-manager',
-      prefix: 'padmin'
-    },
-    {
       path: '~/components/legal-app',
       prefix: 'legalapp'
     },

@@ -27,7 +27,7 @@
 
     <div v-scroll="onScroll">
       <v-list>
-        <padmin-portal-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
+        <portal-log-item :log-item="l" v-for="l in logs" :key="`log-item-${l.id}`"/>
       </v-list>
     </div>
   </div>
@@ -35,8 +35,10 @@
 
 <script>
 
+import PortalLogItem from "@/components/portal-admin/log-manager/portal-log-item";
 export default {
   name: "portal-log-feed",
+  components: {PortalLogItem},
   data: () => ({
     dates: [],
     minDate: "",
