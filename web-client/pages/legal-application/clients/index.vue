@@ -2,10 +2,11 @@
   <layout>
     <template v-slot:content>
 
-      <v-toolbar extended>
+      <v-toolbar prominent>
         <v-toolbar-title class="mr-3">
           Lista Klientów
         </v-toolbar-title>
+
 
         <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
                         hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
@@ -17,7 +18,7 @@
           </template>
         </v-autocomplete>
         <template v-slot:extension>
-          <client-create-dialog/>
+          <add-client-dialog/>
 
         </template>
       </v-toolbar>
@@ -33,7 +34,7 @@
 <script>
 
 import NavigationDrawer from "@/components/legal-app/navigation-drawer";
-import ClientCreateDialog from "@/components/legal-app/clients/dialogs/client-create-dialog";
+import AddClientDialog from "@/components/legal-app/clients/dialogs/add-client-dialog";
 import {hasOccurrences} from "@/data/functions";
 import {mapState} from "vuex";
 import Layout from "@/components/legal-app/layout";
@@ -49,7 +50,8 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {ClientListItem, Layout, ClientCreateDialog, NavigationDrawer},
+  components: {AddClientDialog, ClientListItem, Layout, NavigationDrawer},
+  middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
     searchResult: "",
@@ -63,8 +65,8 @@ export default {
 
   async fetch() {
     this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
-    this.handleFeed();
-    console.warn('fetched clients', this.clientList)
+    await this.handleFeed();
+    console.warn('fetched clients')
   },
 
   watch: {
@@ -91,7 +93,7 @@ export default {
     clientForAction() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
       this.$nuxt.refresh()
-      console.warn('Client list refreshed after client deletion')
+      console.warn('Client list refreshed', this.cursor)
     }
   },
 
@@ -106,7 +108,6 @@ export default {
       if (this.searchConditionsProvided) {
         this.cursor = 0;
         this.clientList = [];
-        this.showSelectedClient();
       } else {
         return `cursor=${this.cursor}&take=10`;
       }
@@ -128,8 +129,13 @@ export default {
     }
     ,
     handleFeed() {
-      this.$axios.$get(`/api/legal-app-clients/clients?${this.query}`)
+      if (this.loading) return;
+      this.loading = true;
+
+      return this.$axios.$get(`/api/legal-app-clients/clients?${this.query}`)
         .then(clientsFeed => {
+          console.warn('query feed', this.query)
+          console.warn('query feed', clientsFeed)
           if (clientsFeed.length === 0) {
             this.finished = true;
           } else {
@@ -137,9 +143,13 @@ export default {
             this.cursor += 10;
           }
         })
-        .finally(() => this.loading = false);
-    }
-    ,
+        .catch(e => {
+          console.warn('ERROR', e)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
 
 
   }

@@ -6,7 +6,7 @@ namespace SystemyWP.Data.Models.General
 {
     public class ContactDetails : BaseModel<long>
     {
-        [MaxLength(100)]
+        [MaxLength(300)]
         public string Comment { get; set; }
         
         [Required]

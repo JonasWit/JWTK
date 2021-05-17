@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.LegalApp;
+using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Projections.LegalApp;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
@@ -182,8 +183,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     AccessKey = user.AccessKey,
                     Name = form.Name,
-                    CreatedBy = UserId,
-                    UpdatedBy = UserId
+                    CreatedBy = UserEmail,
+                    UpdatedBy = UserEmail
                 };
                 _context.Add(newEntity);
 
@@ -195,7 +196,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         UserId = UserId,
                         ItemId = newEntity.Id,
                         RestrictedType = RestrictedType.LegalAppClient,
-                        CreatedBy = UserId
+                        CreatedBy = UserEmail
                     });
                 }
                 await _context.SaveChangesAsync();
@@ -225,7 +226,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                             x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
                     if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
                     
-                    entity.UpdatedBy = UserId;
+                    entity.UpdatedBy = UserEmail;
                     entity.Updated = DateTime.UtcNow;
                     entity.Name = form.Name;
                     
@@ -260,6 +261,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                     if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
                     
                     entity.Active = !entity.Active;
+                    entity.UpdatedBy = UserEmail;
+                    entity.Updated = DateTime.UtcNow;
                     
                     await _context.SaveChangesAsync();
                     return Ok();
