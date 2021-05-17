@@ -27,8 +27,10 @@
           <client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
         </v-list>
       </div>
+      <button-to-go-up/>
     </template>
   </layout>
+
 </template>
 
 <script>
@@ -39,6 +41,7 @@ import {hasOccurrences} from "@/data/functions";
 import {mapState} from "vuex";
 import Layout from "@/components/legal-app/layout";
 import ClientListItem from "@/components/legal-app/clients/client-list-item";
+import ButtonToGoUp from "@/components/legal-app/button-to-go-up";
 
 
 const searchItemFactory = (name, id) => ({
@@ -50,7 +53,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {AddClientDialog, ClientListItem, Layout, NavigationDrawer},
+  components: {ButtonToGoUp, AddClientDialog, ClientListItem, Layout, NavigationDrawer},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
