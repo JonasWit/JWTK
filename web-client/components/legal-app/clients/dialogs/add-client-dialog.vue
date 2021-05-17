@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn class="mx-3" icon v-bind="attrs" v-on="on">
-        <v-icon medium color="success">mdi-plus</v-icon>
-      </v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="success">mdi-account-plus</v-icon>
+          </v-btn>
+        </template>
+        <span>Dodaj klienta</span>
+      </v-tooltip>
     </template>
     <v-form ref="addNewClientForm" v-model="validation.valid">
       <v-card>
@@ -22,17 +27,14 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <snackbar/>
   </v-dialog>
 
 </template>
 
 <script>
-import Snackbar from "@/components/snackbar";
 
 export default {
-  name: "client-create-dialog",
-  components: {Snackbar},
+  name: "add-client-dialog",
   data: () => ({
     dialog: false,
     form: {
