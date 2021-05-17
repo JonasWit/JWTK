@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.General;
 
-namespace SystemyWP.API.Projections.LegalApp
+namespace SystemyWP.API.Projections.LegalApp.Contacts
 {
     public class LegalAppContactProjections
     {

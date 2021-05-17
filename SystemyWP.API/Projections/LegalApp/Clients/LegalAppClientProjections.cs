@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 
-namespace SystemyWP.API.Projections.LegalApp
+namespace SystemyWP.API.Projections.LegalApp.Clients
 {
     public class LegalAppClientProjections
     {

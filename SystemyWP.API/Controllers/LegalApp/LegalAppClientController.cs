@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.LegalApp;
 using SystemyWP.API.Projections.LegalApp;
+using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
@@ -209,7 +210,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpPut("update/{clientId}")]
-        public async Task<IActionResult> UpdateClient(long clientId, [FromBody] CreateClientForm form)
+        public async Task<IActionResult> UpdateClient(long clientId, [FromBody] UpdateClientForm form)
         {
             try
             {
