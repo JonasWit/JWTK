@@ -2,9 +2,9 @@
   <v-container fluid>
     <v-row no-gutters>
       <v-col cols="2">
-        <legalapp-navigation-drawer/>
+        <navigation-drawer/>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="9" class="mt-4">
         <slot name="content">
         </slot>
       </v-col>
@@ -12,8 +12,11 @@
   </v-container>
 </template>
 <script>
+import NavigationDrawer from "@/components/legal-app/navigation-drawer";
+
 export default {
-  name: "layout"
+  name: "layout",
+  components: {NavigationDrawer}
 };
 </script>
 

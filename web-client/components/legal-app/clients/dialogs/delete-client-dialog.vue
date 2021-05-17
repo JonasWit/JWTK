@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" :value="selectedClient" persistent width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn class="mx-2" icon v-bind="attrs" v-on="on">
-        <v-icon medium color="error">mdi-delete</v-icon>
-      </v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn class="mx-2" icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="error">mdi-delete</v-icon>
+          </v-btn>
+        </template>
+        <span>Usuń klienta</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="justify-center">Usuń Klienta</v-card-title>
