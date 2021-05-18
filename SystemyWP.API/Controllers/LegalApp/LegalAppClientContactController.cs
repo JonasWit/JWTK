@@ -20,10 +20,11 @@ namespace SystemyWP.API.Controllers.LegalApp
     [Authorize(SystemyWpConstants.Policies.Client)]
     public class LegalAppClientContactController : LegalAppApiController
     {
-        public LegalAppClientContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public LegalAppClientContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
+            context)
         {
         }
-        
+
         [HttpPost("client/{clientId}/contact/create")]
         public async Task<IActionResult> CreateContact(int clientId, [FromBody] CreateContactForm createContactForm)
         {
@@ -42,13 +43,15 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                     if (result is null) return BadRequest();
 
-                        result.Contacts.Add(new ContactDetails
+                    var newContact = new ContactDetails
                     {
+                        CreatedBy = UserEmail,
                         Name = createContactForm.Name,
                         Comment = createContactForm.Comment
-                    });
-                    
-                    return Ok(result);
+                    };
+
+                    result.Contacts.Add(newContact);
+                    return Ok(newContact);
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -60,7 +63,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpGet("client/{clientId}/contacts")]
         public async Task<IActionResult> GetContacts(long clientId)
         {
@@ -81,7 +84,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     var result = client.Contacts
                         .Select(LegalAppContactProjections.CreateBasic)
                         .ToList();
-                    
+
                     return Ok(result);
                 }
 
@@ -94,7 +97,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpGet("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> GetContact(long clientId, long contactId)
         {
@@ -111,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
                     if (client is null || client.Contacts.Count == 0) return BadRequest();
-                    
+
                     return Ok(client.Contacts.First());
                 }
 
@@ -124,7 +127,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpDelete("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> DeleteContact(long clientId, long contactId)
         {
@@ -140,8 +143,9 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
                         .FirstOrDefault();
-                    
-                    if (result is null || result.Contacts.Count == 0) return StatusCode(StatusCodes.Status500InternalServerError);
+
+                    if (result is null || result.Contacts.Count == 0)
+                        return StatusCode(StatusCodes.Status500InternalServerError);
 
                     _context.Remove(result.Contacts.First());
                     await _context.SaveChangesAsync();
@@ -157,9 +161,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPut("client/{clientId}/contact/{contactId}")]
-        public async Task<IActionResult> UpdateContact(long clientId, long contactId, [FromBody] UpdateContactForm updateContactForm)
+        public async Task<IActionResult> UpdateContact(long clientId, long contactId,
+            [FromBody] UpdateContactForm updateContactForm)
         {
             try
             {
@@ -173,7 +178,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
                         .FirstOrDefault();
-                    
+
                     if (client is null || client.Contacts.Count == 0) return BadRequest();
 
                     var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
@@ -181,7 +186,7 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                     contact.Name = updateContactForm.Name;
                     contact.Comment = updateContactForm.Comment;
-                    
+
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -195,12 +200,5 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
-        
-        
-        
-        
-        
-        
     }
 }
