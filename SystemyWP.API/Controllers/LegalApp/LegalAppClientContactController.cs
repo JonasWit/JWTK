@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Forms.LegalApp.Contact;
-using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Projections.LegalApp.Contacts;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;

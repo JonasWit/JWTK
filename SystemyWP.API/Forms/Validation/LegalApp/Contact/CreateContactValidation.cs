@@ -1,5 +1,4 @@
-﻿using SystemyWP.API.Forms.LegalApp.Client;
-using SystemyWP.API.Forms.LegalApp.Contact;
+﻿using SystemyWP.API.Forms.LegalApp.Contact;
 using FluentValidation;
 
 namespace SystemyWP.API.Forms.Validation.LegalApp.Contact
