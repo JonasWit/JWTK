@@ -17,7 +17,6 @@
         </v-autocomplete>
         <template v-slot:extension>
           <add-contact-dialog/>
-
         </template>
       </v-toolbar>
 
