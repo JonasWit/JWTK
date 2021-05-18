@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Forms.LegalApp.Contact;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Projections.LegalApp.Contacts;
@@ -19,7 +20,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-client-contacts")]
     [Authorize(SystemyWpConstants.Policies.Client)]
-    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppClientContactController : LegalAppApiController
     {
         public LegalAppClientContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -75,11 +75,6 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var client = _context.LegalAppClients
                         .Include(x => x.Contacts)
-                        .ThenInclude(x => x.Emails)
-                        .Include(x => x.Contacts)
-                        .ThenInclude(x => x.PhoneNumbers)
-                        .Include(x => x.Contacts)
-                        .ThenInclude(x => x.PhysicalAddresses)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
@@ -90,6 +85,36 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .ToList();
                     
                     return Ok(result);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpGet("client/{clientId}/contact/{contactId}")]
+        public async Task<IActionResult> GetContact(long clientId, long contactId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    
+                    return Ok(client.Contacts.First());
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -121,6 +146,44 @@ namespace SystemyWP.API.Controllers.LegalApp
                     if (result is null || result.Contacts.Count == 0) return StatusCode(StatusCodes.Status500InternalServerError);
 
                     _context.Remove(result.Contacts.First());
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpPut("client/{clientId}/contact/{contactId}")]
+        public async Task<IActionResult> UpdateContact(long clientId, long contactId, [FromBody] UpdateContactForm updateContactForm)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .FirstOrDefault();
+                    
+                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+
+                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
+                    if (contact is null) return BadRequest();
+
+                    contact.Name = updateContactForm.Name;
+                    contact.Comment = updateContactForm.Comment;
+                    
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
