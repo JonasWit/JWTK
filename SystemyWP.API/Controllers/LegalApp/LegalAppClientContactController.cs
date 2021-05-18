@@ -160,6 +160,84 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
         
+        [HttpPost("client/{clientId}/contact/{contactId}/emails")]
+        public async Task<IActionResult> CreateContactEmail(long clientId, long contactId, [FromBody] CreateContactEmailFrom createContactEmailFrom)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+
+                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
+                    if (contact is null) return BadRequest();
+                    
+                    var newEmail = new EmailAddress
+                    {
+                        CreatedBy = UserEmail,
+                        Comment = createContactEmailFrom.Comment,
+                        Email = createContactEmailFrom.Email
+                    };
+                    
+                    contact.Emails.Add(newEmail);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpDelete("client/{clientId}/contact/{contactId}/email/{emailId}")]
+        public async Task<IActionResult> DeleteContactEmail(long clientId, long contactId, long emailId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                            .ThenInclude(y => y.Emails)
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+
+                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
+                    if (contact is null) return BadRequest();
+
+                    contact.Emails.RemoveAll(x => x.Id == emailId);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
         [HttpGet("client/{clientId}/contact/{contactId}/phone-numbers")]
         public async Task<IActionResult> GetContactPhoneNumbers(long clientId, long contactId)
         {

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace SystemyWP.API.Forms.Validation.LegalApp.Contact
 {
-    public class CreateContactValidation: AbstractValidator<CreateContactForm>
+    public class CreateContactValidation : AbstractValidator<CreateContactForm>
     {
         public CreateContactValidation()
         {
