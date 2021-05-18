@@ -17,7 +17,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-cases")]
     [Authorize(SystemyWpConstants.Policies.Client)]
-    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppCaseController : LegalAppApiController
     {
         public LegalAppCaseController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

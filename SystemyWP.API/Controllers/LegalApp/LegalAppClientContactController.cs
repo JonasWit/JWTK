@@ -20,7 +20,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-client-contacts")]
     [Authorize(SystemyWpConstants.Policies.Client)]
-    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppClientContactController : LegalAppApiController
     {
         public LegalAppClientContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -86,6 +85,36 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .ToList();
                     
                     return Ok(result);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpGet("client/{clientId}/contact/{contactId}")]
+        public async Task<IActionResult> GetContact(long clientId, long contactId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    
+                    return Ok(client.Contacts.First());
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);

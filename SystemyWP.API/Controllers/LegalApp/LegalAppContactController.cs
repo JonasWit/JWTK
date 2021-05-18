@@ -8,7 +8,6 @@ namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-contacts")]
     [Authorize(SystemyWpConstants.Policies.Client)]
-    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppContactController : LegalAppApiController
     {
         public LegalAppContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

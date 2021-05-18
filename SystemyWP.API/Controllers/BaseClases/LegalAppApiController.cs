@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.BaseClases
 {
     [Authorize]
+    [Authorize(SystemyWpConstants.Policies.LegalAppAccess)]
     public class LegalAppApiController : ApiController
     {
         public LegalAppApiController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
