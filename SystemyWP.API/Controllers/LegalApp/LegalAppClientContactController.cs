@@ -51,6 +51,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     };
 
                     result.Contacts.Add(newContact);
+                    await _context.SaveChangesAsync();
                     return Ok(newContact);
                 }
 
