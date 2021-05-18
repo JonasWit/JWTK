@@ -6,8 +6,6 @@
         <v-toolbar-title class="mr-3">
           Lista Klientów
         </v-toolbar-title>
-
-
         <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
                         hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
                         :filter="searchFilter">
@@ -105,8 +103,7 @@ export default {
     clientItems() {
       return []
         .concat(this.clientSearchItems.map(x => searchItemFactory(x.name, x.id)));
-    }
-    ,
+    },
     query() {
       if (this.searchConditionsProvided) {
         this.cursor = 0;
