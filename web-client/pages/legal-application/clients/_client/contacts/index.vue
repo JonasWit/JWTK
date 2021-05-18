@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar prominent>
+      <v-toolbar prominent class="my-3">
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
         </v-toolbar-title>
@@ -19,19 +19,23 @@
           <add-contact-dialog/>
         </template>
       </v-toolbar>
-
       <v-expansion-panels focusable>
-
         <v-expansion-panel v-for="item in contactList" :key="item.id">
-          <v-expansion-panel-header>{{ item.name }}</v-expansion-panel-header>
-          <v-expansion-panel-content>Dodano: {{ item.created }} Detale: {{ item.comment }}
-            <delete-contact-dialog :selected-contact="item"/>
+          <v-expansion-panel-header>
+            <v-row>
+              <v-col>{{ item.name }}</v-col>
+              <v-col>Dodano: {{ item.created }}</v-col>
+              <v-col>Detale: {{ item.comment }}</v-col>
+              <v-col>
+                <delete-contact-dialog :selected-contact="item"/>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <contact-list-details/>
           </v-expansion-panel-content>
-
         </v-expansion-panel>
-
       </v-expansion-panels>
-
     </template>
   </layout>
 </template>
@@ -41,6 +45,7 @@ import Layout from "@/components/legal-app/layout";
 import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contact-dialog";
 import {hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
+import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 
 
 const searchItemFactory = (name, id) => ({
@@ -52,7 +57,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {DeleteContactDialog, AddContactDialog, Layout},
+  components: {ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({

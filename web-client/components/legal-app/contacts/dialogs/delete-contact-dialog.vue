@@ -7,7 +7,7 @@
             <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
-        <span>Usuń klienta</span>
+        <span>Usuń Kontakt</span>
       </v-tooltip>
     </template>
     <v-card>
@@ -21,11 +21,9 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -50,21 +48,22 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['setContactForAction']),
     deleteContact() {
-      // console.warn('selected contact', this.selectedContact.id)
       this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}`)
-      console.warn('selected contact', this.selectedContact.id)
-      //   .then((selectedContact) => {
-      //     this.$notifier.showSuccessMessage("Wybrany kontakt został usunięty pomyślnie!");
-      //     console.warn(selectedContact, 'Selected Contact deleted successfully')
-      //
-      //   }).catch(() => {
-      //   console.warn('delete contact error', e);
-      //   this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-      //
-      // }).finally(() => {
-      //   this.setContactForAction(this.selectedContact)
-      //   this.dialog = false;
-      // })
+
+        .then((selectedContact) => {
+          this.$notifier.showSuccessMessage("Wybrany kontakt został usunięty pomyślnie!");
+          console.warn(selectedContact, 'Selected Contact deleted successfully')
+          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
+          this.$nuxt.refresh()
+
+        }).catch((e) => {
+        console.warn('delete contact error', e);
+        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+
+      }).finally(() => {
+        this.setContactForAction(this.selectedContact)
+        this.dialog = false;
+      })
 
 
     }
