@@ -103,6 +103,25 @@ namespace SystemyWP.API
                             CreatedBy = "system"
                         });
                     }
+                    
+                    for (var em = 0; em < random.Next(0, 10); em++)
+                    {
+                        contact.PhoneNumbers.Add(new PhoneNumber
+                        {
+                            Comment = $"TEST PhoneNumber address {c}--{em}",
+                            Number = $"{em}-{c}-{em}",
+                            CreatedBy = "system"
+                        });
+                    }
+                    
+                    for (var em = 0; em < random.Next(0, 10); em++)
+                    {
+                        contact.PhysicalAddresses.Add(new PhysicalAddress
+                        {
+                            Comment = $"TEST Physical address - {em}",
+                            CreatedBy = "system"
+                        });
+                    }
                     newClient.Contacts.Add(contact);
                 }
                 
