@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <Folder Include="Scripts" />
+      <Folder Include="Services\Repositories" />
     </ItemGroup>
 
 </Project>
