@@ -7,7 +7,7 @@
         </v-toolbar-title>
 
         <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
-                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
+                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="contactItems"
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
@@ -24,7 +24,9 @@
 
         <v-expansion-panel v-for="item in contactList" :key="item.id">
           <v-expansion-panel-header>{{ item.name }}</v-expansion-panel-header>
-          <v-expansion-panel-content>{{ item.created }} {{ item.comment }}</v-expansion-panel-content>
+          <v-expansion-panel-content>Dodano: {{ item.created }} Detale: {{ item.comment }}
+            <delete-contact-dialog :selected-contact="item"/>
+          </v-expansion-panel-content>
 
         </v-expansion-panel>
 
@@ -38,6 +40,8 @@
 import Layout from "@/components/legal-app/layout";
 import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contact-dialog";
 import {hasOccurrences} from "@/data/functions";
+import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
+
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -48,7 +52,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {AddContactDialog, Layout},
+  components: {DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -79,7 +83,7 @@ export default {
     },
   },
   computed: {
-    clientItems() {
+    contactItems() {
       return []
         .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));
     },

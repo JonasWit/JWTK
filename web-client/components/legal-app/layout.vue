@@ -4,7 +4,7 @@
       <v-col cols="2">
         <navigation-drawer/>
       </v-col>
-      <v-col cols="9" class="mt-4">
+      <v-col cols="9" class="my-5">
         <slot name="content">
         </slot>
       </v-col>
