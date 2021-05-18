@@ -141,7 +141,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                         .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .FirstOrDefault();
 
