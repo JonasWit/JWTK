@@ -64,7 +64,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
         
         [HttpGet("client/{clientId}/contacts")]
-        public async Task<IActionResult> GetContacts(int clientId)
+        public async Task<IActionResult> GetContacts(long clientId)
         {
             try
             {
@@ -73,16 +73,20 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 if (check.DataAccessAllowed)
                 {
-                    var result = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
+                    var client = _context.LegalAppClients
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.Emails)
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.PhoneNumbers)
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.PhysicalAddresses)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
-                        .Select(x => LegalAppContactProjections.BasicProjection)
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null) return BadRequest();
+
+                    var result = client.Contacts
+                        .Select(LegalAppContactProjections.CreateBasic)
                         .ToList();
                     
                     return Ok(result);
