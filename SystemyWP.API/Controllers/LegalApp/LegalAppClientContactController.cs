@@ -75,13 +75,13 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.Emails)
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.PhoneNumbers)
                         .Include(x => x.Contacts)
                         .ThenInclude(x => x.PhysicalAddresses)
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .Select(x => LegalAppContactProjections.BasicProjection)
                         .ToList();
                     
