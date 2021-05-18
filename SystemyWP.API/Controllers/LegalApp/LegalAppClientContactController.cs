@@ -141,12 +141,12 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var result = _context.LegalAppClients
                         .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
                         .FirstOrDefault();
 
                     if (result is null || result.Contacts.Count == 0)
-                        return StatusCode(StatusCodes.Status500InternalServerError);
+                        return BadRequest();
 
                     _context.Remove(result.Contacts.First());
                     await _context.SaveChangesAsync();
