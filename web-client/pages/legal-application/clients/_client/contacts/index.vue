@@ -1,36 +1,98 @@
 <template>
   <layout>
-    <h1> LIst of contacts</h1>
-    <v-card tile>
-      <v-list-item>
+    <template v-slot:content>
+      <v-toolbar prominent>
+        <v-toolbar-title class="mr-3">
+          Lista Kontaktów
+        </v-toolbar-title>
 
-      </v-list-item>
-    </v-card>
+        <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
+                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
+                        :filter="searchFilter">
+          <template v-slot:item="{item ,on , attrs}">
+            <v-list-item v-on="on" :attrs="attrs">
+              <v-list-item-content>{{ item.name }}</v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-autocomplete>
+        <template v-slot:extension>
+          <add-contact-dialog/>
+
+        </template>
+      </v-toolbar>
+
+      <v-expansion-panels focusable>
+
+        <v-expansion-panel v-for="item in contactList" :key="item.id">
+          <v-expansion-panel-header>{{ item.name }}</v-expansion-panel-header>
+          <v-expansion-panel-content>{{ item.created }} {{ item.comment }}</v-expansion-panel-content>
+
+        </v-expansion-panel>
+
+      </v-expansion-panels>
+
+    </template>
   </layout>
 </template>
 
 <script>
 import Layout from "@/components/legal-app/layout";
+import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contact-dialog";
+import {hasOccurrences} from "@/data/functions";
+
+const searchItemFactory = (name, id) => ({
+  id,
+  name,
+  searchIndex: (name).toLowerCase(),
+  text: name
+});
 
 export default {
   name: "index",
-  components: {Layout},
+  components: {AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
-
   data: () => ({
-    searchResult: "",
+    contactItemsFromFetch: [],
     contactList: [],
-    contactSearchItems: [],
+    searchResult: "",
     finished: false,
     loading: false,
+
 
   }),
 
   async fetch() {
-    this.contactSearchItems = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`)
-    console.warn('clients contacts search results', this.contactSearchItems)
+    this.contactItemsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`)
+    console.warn('clients contacts search results', this.contactItemsFromFetch)
+    this.contactList = this.contactItemsFromFetch
+
+  },
+
+  watch: {
+    searchResult() {
+      if (this.searchResult) {
+        this.contactList = []
+        this.contactList.push(this.contactItemsFromFetch.find(contactItem => contactItem.id === this.searchResult.id));
+      } else {
+        this.contactList = this.contactItemsFromFetch
+      }
+    },
+  },
+  computed: {
+    clientItems() {
+      return []
+        .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));
+    },
+  },
+  methods: {
+    searchFilter(item, queryText) {
+      return hasOccurrences(item.searchIndex, queryText);
+    }
+    ,
   }
+
+
 }
 </script>
 

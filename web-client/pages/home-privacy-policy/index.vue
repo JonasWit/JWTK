@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1>Polityka prywatności</h1>
-    <h2>Wstęp</h2>
+    <h2>I. Wstęp</h2>
     <p>Prywatność Użytkowników korzystających z naszych usług jest dla nas bardzo ważna, dlatego dokładamy wszelkich
       starań, aby należycie ją chronić i respektować prawa w tym zakresie. W tym celu za pomocą niniejszej polityki
       prywatności opisujemy zasady przetwarzania przez nas Twoich danych
@@ -50,7 +50,7 @@
       </li>
     </ol>
 
-    <h2>Cele przetwarzania danych osobowych</h2>
+    <h2>II. Cele przetwarzania danych osobowych</h2>
     <ol type="1">
       <li>
         Nadrzędnym celem przetwarzania Twoich danych osobowych jest realizacja usług świadczonych drogą elektroniczną, w
@@ -131,6 +131,98 @@
       </li>
     </ol>
     <p>Przetwarzanie danych do momentu cofnięcia przez Ciebie zgody pozostaje zgodne z prawem.</p>
+    <h2>III. Jakie dane przetwarzamy oraz w jaki sposób je pozyskujemy</h2>
+    <p>Dane osobowe i informacje możemy pozyskać poprzez:</p>
+    <ol type="1">
+      <li>Dobrowolne ich podanie i zarazem niezbędne do prawidłowego korzystania z serwisu:</li>
+      <dol type="a">
+        <li>
+          Imię - kiedy wypełniasz formularz ofertowy w naszym serwisie,
+        </li>
+        <li>
+          Adres e-mail – kiedy wypełniasz formularz ofertowy w naszym serwisie lub/i
+        </li>
+        <li>
+          Numer telefonu – kiedy wypełniasz formularz ofertowy w naszym serwisie,
+        </li>
+
+      </dol>
+      <li>Poniższe dane mogą zostać wprowadzone, zmienione lub usunięte przez Ciebie w dowolnym momencie po rejestracji
+        konta. Dane te wymagane są, jeśli zamierzasz zakupić licencję na którąś z usług oferowanych w ramach portalu.
+        <ol type="a">
+          <li>
+            Twoje imię i nazwisko - w celu wystawienia faktury za usługę
+          </li>
+          <li>
+            Numer telefonu (opcjonalnie) - w celu kontaktu bezpośredniego, jeśli zajdzie potrzeba
+          </li>
+          <li>
+            Nazwa Firmy - w celu wystawienia faktury za usługę
+          </li>
+          <li>
+            Adres Twój lub Firmy - w celu wystawienia faktury za usługę
+          </li>
+          <li>
+            Adres Korespondencyjny - jeśli inny niż adres z punktu e)
+          </li>
+          <li>
+            Dane rejestrowe firmy tj. nazwę, nr NIP, nr REGON i adres – wyłącznie w przypadku zakupienia usługi i
+            konieczności wystawienia faktury na osobę prawną lub działalność gospodarczą - podanie tej informacji jest
+            konieczne do prawidłowej realizacji usług świadczonych przez Administratora,
+          </li>
+          <li>
+            Wszelkie inne dane – w momencie, kiedy zdecydujesz się dobrowolnie je podać w serwisie. Zalecamy zachowanie
+            ostrożności w nadmiernym ujawnianiu własnych danych osobowych i zachowaniu szczególnego bezpieczeństwa w tym
+            zakresie.
+            <p style="color: crimson">W trakcie korzystania z usług portalu Użytkownik, w ramach korzystania z
+              zakupionej usługi może podać,
+              dla własnych potrzeb oraz w celu pełnego korzystania z usługi: Imiona, Nazwiska, Sygnatury Spraw, Adresy,
+              Adresy E-Mail, Numery Telefonów - Administratorem w odniesieniu do danych osobowych klientów czy
+              pracowników jest osoba korzystająca z serwisu.</p>
+          </li>
+        </ol>
+      </li>
+      <li>
+        Poprzez pliki cookies – więcej na ten temat w pkt. IX poniżej.
+      </li>
+
+    </ol>
+    <h2>IV. Jak długo przechowujemy Twoje dane?</h2>
+    <ol type="1">
+      <li>
+        Wszystkie dane osobowe wynikające z rejestracji w serwisie są przechowywane przez cały czas posiadania konta. Po
+        usunięciu konta długość okresu przechowywania przez nas Twoich danych osobowych zależy od celu przetwarzania
+        oraz przepisów, które stanowią podstawę prawną przetwarzania. Twoje dane będziemy przechowywać:
+        <ol type="a">
+          <li>
+            Gdy podstawą przetwarzania jest umowa (postanowienia regulaminu) – tak długo jak jest to niezbędne do
+            realizacji postanowień, a po tym czasie do momentu przedawnienia roszczeń z tytułu umowy.
+          </li>
+          <li>
+            Gdy podstawą przetwarzania jest zgoda – do momentu jej odwołania, a po odwołaniu zgody przez okres
+            przedawnienia roszczeń jakie może podnosić Administrator i jakie mogą być podnoszone wobec niego.
+          </li>
+          <li>
+            Gdy podstawą przetwarzania jest ciążący na Administratorze obowiązek prawny – przez okres wynikający z
+            przepisów regulujących obowiązek przetwarzania przez nas tych danych,
+          </li>
+          <li>
+            Gdy podstawą przetwarzania jest prawnie uzasadniony interes, np. zapobieganie oszustwom i wyłudzeniom –
+            przez okres umożliwiający realizację tego interesu lub do momentu zgłoszenia sprzeciwu wobec przetwarzania,
+          </li>
+          <li>
+            O ile wynika to z odrębnych przepisów prawa np. Ustawy o rachunkowości lub ordynacji podatkowej dane osobowe
+            będą przechowywane przez okres wymagany wzmiankowanymi przepisami w celu umożliwienia wymagań prawnych
+            tychże przepisów,
+          </li>
+          <li>
+            Dane osobowe z plików cookie są przechowywane przez czas odpowiadający cyklowi życia plików cookie lub do
+            czasu ich usunięcia przez Ciebie.
+          </li>
+
+        </ol>
+      </li>
+    </ol>
   </v-container>
 </template>
 
