@@ -345,6 +345,8 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                     contact.Name = updateContactForm.Name;
                     contact.Comment = updateContactForm.Comment;
+                    contact.Surname = updateContactForm.Surname;
+                    contact.Title = updateContactForm.Title;
 
                     await _context.SaveChangesAsync();
                     return Ok();
