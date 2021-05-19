@@ -8,12 +8,12 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCase : TrackedModel<long>
     {
-        [MaxLength(50)]
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
         [MaxLength(200)]
         public string Signature { get; set; }
-        [MaxLength(1000)]   
+        [MaxLength(1000)]
         public string Description { get; set; }
         
         public List<LegalAppCaseNote> LegalAppCaseNotes { get; set; } = 

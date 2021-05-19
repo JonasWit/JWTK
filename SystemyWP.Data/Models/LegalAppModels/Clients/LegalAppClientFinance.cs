@@ -9,7 +9,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
 
         public int Hours { get; set; }
         public int Minutes { get; set; }  
-        public decimal Amount { get; set; }    
+        public decimal Amount { get; set; } 
         
         public LegalAppClient LegalAppClient { get; set; }
     }

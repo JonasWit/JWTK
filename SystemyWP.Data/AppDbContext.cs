@@ -1,5 +1,6 @@
 ﻿using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.General.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
@@ -42,9 +43,9 @@ namespace SystemyWP.Data
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
         
         //Case Tree
-        public DbSet<LegalAppCase> LegalAppCases { get; set; }    
+        public DbSet<LegalAppCase> LegalAppCases { get; set; }
         public DbSet<LegalAppCaseNote> LegalAppCaseNotes { get; set; }
-        public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; } 
+        public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; }
         
         #endregion
         

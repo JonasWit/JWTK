@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
+using SystemyWP.Data.Models.General.Contact;
 
 namespace SystemyWP.Data.Models.General
 {

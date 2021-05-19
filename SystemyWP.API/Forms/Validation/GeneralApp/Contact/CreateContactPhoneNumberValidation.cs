@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace SystemyWP.API.Forms.Validation.GeneralApp.Contact
 {
-    public class CreateContactEmailValidation : AbstractValidator<CreateContactEmailFrom>
+    public class CreateContactPhoneNumberValidation : AbstractValidator<CreateContactPhoneNumberForm>
     {
-        public CreateContactEmailValidation()
+        public CreateContactPhoneNumberValidation()
         {
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(100);
+            RuleFor(x => x.Number).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Comment).MaximumLength(100);
         }
     }

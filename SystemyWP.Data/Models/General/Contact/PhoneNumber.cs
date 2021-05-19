@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
 
-namespace SystemyWP.Data.Models.General
+namespace SystemyWP.Data.Models.General.Contact
 {
-    public class EmailAddress : BaseModel<long>
+    public class PhoneNumber : BaseModel<long>
     {
         [MaxLength(100)]
         public string Comment { get; set; }
         [Required]
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string Number { get; set; }
     }
 }

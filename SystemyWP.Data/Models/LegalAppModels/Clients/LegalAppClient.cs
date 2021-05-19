@@ -8,8 +8,8 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
 {
     public class LegalAppClient : LegalAppProtectedDataBaseModel<long>
     {
-        [Required] 
-        [MaxLength(50)] 
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         public List<LegalAppCase> LegalAppCases { get; set; } = new List<LegalAppCase>();

@@ -9,6 +9,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.General.Contact;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -99,7 +100,6 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
         
-
         [HttpGet("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> GetContact(long clientId, long contactId)
         {
@@ -138,7 +138,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
+        
         [HttpPost("client/{clientId}/contact/{contactId}/emails")]
         public async Task<IActionResult> CreateContactEmail(long clientId, long contactId, [FromBody] CreateContactEmailFrom createContactEmailFrom)
         {
@@ -225,8 +225,8 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
         
-        [HttpGet("client/{clientId}/contact/{contactId}/phone-numbers")]
-        public async Task<IActionResult> GetContactPhoneNumbers(long clientId, long contactId)
+        [HttpPost("client/{clientId}/contact/{contactId}/phone-number")]
+        public async Task<IActionResult> CreateContactPhoneNumber(long clientId, long contactId, [FromBody] CreateContactPhoneNumberForm createContactPhoneNumberForm)
         {
             try
             {
@@ -236,14 +236,26 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(contact => contact.PhoneNumbers)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    if (client is null) return BadRequest();
 
-                    return Ok(client.Contacts.First());
+                    var contact = _context.Contacts
+                        .Include(x => x.Emails)
+                        .FirstOrDefault(x => x.Id == contactId);
+                    
+                    if (contact is null) return BadRequest();
+                    var newPhone = new PhoneNumber()
+                    {
+                        CreatedBy = UserEmail,
+                        Number = createContactPhoneNumberForm.Number,
+                        Comment = createContactPhoneNumberForm.Comment
+                    };
+                    
+                    contact.PhoneNumbers.Add(newPhone);
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -256,8 +268,8 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
         }
         
-        [HttpGet("client/{clientId}/contact/{contactId}/addresses")]
-        public async Task<IActionResult> GetContactAddresses(long clientId, long contactId)
+        [HttpDelete("client/{clientId}/contact/{contactId}/phone-number/{itemId}")]
+        public async Task<IActionResult> DeleteContactPhoneNumber(long clientId, long contactId, long itemId)
         {
             try
             {
@@ -268,13 +280,25 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var client = _context.LegalAppClients
                         .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(contact => contact.PhysicalAddresses)
+                            .ThenInclude(x => x.PhoneNumbers.Where(y => y.Id == itemId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    if (client is null ||
+                        client.Contacts.Count == 0 ||
+                        !client.Contacts.Any(x => x.PhoneNumbers.Any(y => y.Id == itemId)))
+                    {
+                        return BadRequest();
+                    }
 
-                    return Ok(client.Contacts.First());
+                    var entityToRemove = _context.PhoneNumbers
+                        .FirstOrDefault(x => x.Id == itemId);
+
+                    if (entityToRemove is null) return BadRequest();
+
+                    _context.Remove(entityToRemove);
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -286,7 +310,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
+        
         [HttpDelete("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> DeleteContact(long clientId, long contactId)
         {

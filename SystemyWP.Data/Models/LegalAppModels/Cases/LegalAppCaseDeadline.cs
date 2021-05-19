@@ -4,6 +4,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Cases
 {
     public class LegalAppCaseDeadline : DeadlineBaseModel<long>
     {
-        public LegalAppCase LegalAppCase { get; set; }     
+        public LegalAppCase LegalAppCase { get; set; }
     }
 }

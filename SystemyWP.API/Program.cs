@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.General.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Hosting;
