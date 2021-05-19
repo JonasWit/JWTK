@@ -23,12 +23,12 @@
         <v-expansion-panel v-for="item in contactList" :key="item.id">
           <v-expansion-panel-header>
             <v-row>
-              <v-col>{{ item.name }}</v-col>
+              <v-col>{{ item.title }}</v-col>
               <v-col>Dodano: {{ item.created }}</v-col>
-              <v-col>Detale: {{ item.comment }}</v-col>
-              <v-col>
-                <delete-contact-dialog :selected-contact="item"/>
-              </v-col>
+              <v-col>Komentarz: {{ item.comment }}</v-col>
+              <!--              <v-col>-->
+              <!--                <delete-contact-dialog :selected-contact="item"/>-->
+              <!--              </v-col>-->
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -74,7 +74,6 @@ export default {
     this.contactItemsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`)
     console.warn('clients contacts search results', this.contactItemsFromFetch)
     this.contactList = this.contactItemsFromFetch
-
   },
 
   watch: {
