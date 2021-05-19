@@ -150,15 +150,16 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    if (client is null) return BadRequest();
 
-                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
-                    if (contact is null) return BadRequest();
+                    var contact = _context.Contacts
+                        .Include(x => x.Emails)
+                        .FirstOrDefault(x => x.Id == contactId);
                     
+                    if (contact is null) return BadRequest();
                     var newEmail = new EmailAddress
                     {
                         CreatedBy = UserEmail,
@@ -193,16 +194,23 @@ namespace SystemyWP.API.Controllers.LegalApp
                 {
                     var client = _context.LegalAppClients
                         .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(y => y.Emails)
+                            .ThenInclude(x => x.Emails.Where(y => y.Id == emailId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    if (client is null ||
+                        client.Contacts.Count == 0 ||
+                        !client.Contacts.Any(x => x.Emails.Any(y => y.Id == emailId)))
+                    {
+                        return BadRequest();
+                    }
 
-                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
-                    if (contact is null) return BadRequest();
+                    var entityToRemove = _context.EmailAddresses
+                        .FirstOrDefault(x => x.Id == emailId);
 
-                    contact.Emails.RemoveAll(x => x.Id == emailId);
+                    if (entityToRemove is null) return BadRequest();
+
+                    _context.Remove(entityToRemove);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
