@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms.LegalApp.Contact
+﻿namespace SystemyWP.API.Forms.GeneralApp.Contact
 {
     public class CreateContactEmailFrom
     {

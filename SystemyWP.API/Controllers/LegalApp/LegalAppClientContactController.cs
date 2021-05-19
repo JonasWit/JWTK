@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms.LegalApp.Contact;
-using SystemyWP.API.Projections.LegalApp.Contacts;
+using SystemyWP.API.Forms.GeneralApp.Contact;
+using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
@@ -83,7 +83,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     if (client is null) return BadRequest();
 
                     var result = client.Contacts
-                        .Select(LegalAppContactProjections.CreateBasic)
+                        .Select(ContactProjections.CreateBasic)
                         .ToList();
 
                     return Ok(result);

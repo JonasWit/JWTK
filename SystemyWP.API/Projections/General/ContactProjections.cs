@@ -2,9 +2,9 @@
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.General;
 
-namespace SystemyWP.API.Projections.LegalApp.Contacts
+namespace SystemyWP.API.Projections.General
 {
-    public class LegalAppContactProjections
+    public class ContactProjections
     {
         public static Func<ContactDetails, object> CreateFull => FullProjection.Compile();
         public static Expression<Func<ContactDetails, object>> FullProjection =>
@@ -14,7 +14,9 @@ namespace SystemyWP.API.Projections.LegalApp.Contacts
                 contactDetails.CreatedBy,
                 contactDetails.Id,
                 contactDetails.Active,
+                contactDetails.Title,
                 contactDetails.Name,
+                contactDetails.Surname,
                 contactDetails.Emails,
                 contactDetails.PhoneNumbers,
                 contactDetails.PhysicalAddresses,
@@ -28,7 +30,9 @@ namespace SystemyWP.API.Projections.LegalApp.Contacts
                 contactDetails.Created,
                 contactDetails.CreatedBy,
                 contactDetails.Id,
+                contactDetails.Title,
                 contactDetails.Name,
+                contactDetails.Surname,
                 contactDetails.Comment
             };
     }

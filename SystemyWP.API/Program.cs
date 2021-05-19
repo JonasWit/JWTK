@@ -26,14 +26,14 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                // DevIdentitySeed(host);
-                // DevDataSeedLegalApp(host);
+                DevIdentitySeed(host);
+                DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
                 ProdAdminSeed(host);
             }
-
+            
             host.Run();
         }
 
