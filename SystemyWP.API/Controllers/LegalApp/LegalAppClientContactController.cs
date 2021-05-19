@@ -147,7 +147,7 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                     if (client is null || client.Contacts.Count == 0) return BadRequest();
 
-                    return Ok(client.Contacts.First());
+                    return Ok(client.Contacts.First().Emails.AsQueryable().Select(EmailProjection.FullProjection).ToList());
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
