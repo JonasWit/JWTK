@@ -98,6 +98,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        
 
         [HttpGet("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> GetContact(long clientId, long contactId)
@@ -110,13 +111,22 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
+                    if (client is null) return BadRequest();
 
-                    return Ok(client.Contacts.First());
+                    var contact = _context.Contacts
+                        .Include(x => x.Emails)
+                        .Include(x => x.PhoneNumbers)
+                        .Include(x => x.PhysicalAddresses)
+                        .Where(x => x.Id == contactId)
+                        .Select(ContactProjections.BasicProjection)
+                        .FirstOrDefault();
+                    
+                    if (contact is null) return BadRequest();
+                    
+                    return Ok(contact);
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -128,38 +138,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
-        [HttpGet("client/{clientId}/contact/{contactId}/emails")]
-        public async Task<IActionResult> GetContactEmails(long clientId, long contactId)
-        {
-            try
-            {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
-                if (check.DataAccessAllowed)
-                {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(contact => contact.Emails)
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
-
-                    return Ok(client.Contacts.First().Emails.AsQueryable().Select(EmailProjection.FullProjection).ToList());
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-            catch (Exception e)
-            {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-        
         [HttpPost("client/{clientId}/contact/{contactId}/emails")]
         public async Task<IActionResult> CreateContactEmail(long clientId, long contactId, [FromBody] CreateContactEmailFrom createContactEmailFrom)
         {
