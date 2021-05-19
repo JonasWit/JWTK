@@ -110,7 +110,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
@@ -140,7 +140,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                             .ThenInclude(contact => contact.Emails)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
@@ -171,7 +171,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
 
@@ -213,7 +213,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                             .ThenInclude(y => y.Emails)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
@@ -249,7 +249,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                             .ThenInclude(contact => contact.PhoneNumbers)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
@@ -280,7 +280,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
                             .ThenInclude(contact => contact.PhysicalAddresses)
                         .Include(x => x.AccessKey)
                         .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
