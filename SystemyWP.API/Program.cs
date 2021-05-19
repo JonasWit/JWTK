@@ -92,6 +92,7 @@ namespace SystemyWP.API
                     var contact = new ContactDetails();
                     contact.Comment = $"Comment for Contact {i} -- {c}";
                     contact.Name = $"Contact {i} -- {c}";
+                    contact.Title =  $"Title {i} -- {c}";
                     contact.CreatedBy = "system";
                     
                     for (var em = 0; em < random.Next(0, 10); em++)
@@ -118,6 +119,7 @@ namespace SystemyWP.API
                     {
                         contact.PhysicalAddresses.Add(new PhysicalAddress
                         {
+                            Street =  $"Street - Physical address - {em}",
                             Comment = $"TEST Physical address - {em}",
                             CreatedBy = "system"
                         });
