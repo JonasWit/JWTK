@@ -32,7 +32,7 @@
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <contact-list-details/>
+            <contact-list-details :selected-contact="item"/>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
