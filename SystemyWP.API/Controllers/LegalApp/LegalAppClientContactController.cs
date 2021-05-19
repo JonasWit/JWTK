@@ -121,7 +121,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .Include(x => x.PhoneNumbers)
                         .Include(x => x.PhysicalAddresses)
                         .Where(x => x.Id == contactId)
-                        .Select(ContactProjections.BasicProjection)
+                        .Select(ContactProjections.FullProjection)
                         .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
