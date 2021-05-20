@@ -18,31 +18,9 @@ namespace SystemyWP.API.Projections.General
                 contactDetails.Title,
                 contactDetails.Name,
                 contactDetails.Surname,
-                Emails = contactDetails.Emails.AsQueryable().Select(x => new
-                {
-                    x.Email,
-                    x.Comment,
-                    x.Id,
-                    x.CreatedBy
-                }).ToList(),
-                PhoneNumbers = contactDetails.PhoneNumbers.AsQueryable().Select(x => new
-                {
-                    x.Comment,
-                    x.Id,
-                    x.Number,
-                    x.CreatedBy
-                }).ToList(),
-                PhysicalAddresses = contactDetails.PhysicalAddresses.AsQueryable().Select(x => new
-                {
-                    x.Comment,
-                    x.Id,
-                    x.Building,
-                    x.City,
-                    x.Country,
-                    x.Street,
-                    x.PostCode,
-                    x.CreatedBy
-                }).ToList(),
+                contactDetails.Emails,
+                contactDetails.PhoneNumbers,
+                contactDetails.PhysicalAddresses,
                 contactDetails.Comment
             };
         
