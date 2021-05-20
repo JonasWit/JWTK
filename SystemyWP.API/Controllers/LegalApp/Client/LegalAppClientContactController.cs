@@ -332,6 +332,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         Building = createPhysicalAddressForm.Building,
                         Comment = createPhysicalAddressForm.Comment,
                         Country = createPhysicalAddressForm.Country,
+                        City = createPhysicalAddressForm.City,
                         Street = createPhysicalAddressForm.Street,
                         PostCode = createPhysicalAddressForm.PostCode
                     };
