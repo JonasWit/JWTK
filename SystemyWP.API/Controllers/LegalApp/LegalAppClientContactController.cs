@@ -352,12 +352,48 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
         
         
-        
-        
-        
-        
-        
-        
+        [HttpDelete("client/{clientId}/contact/{contactId}/address/{itemId}")]
+        public async Task<IActionResult> DeleteContactPhysicalAddress(long clientId, long contactId, long itemId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
+                        .ThenInclude(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null ||
+                        client.Contacts.Count == 0 ||
+                        !client.Contacts.Any(x => x.PhysicalAddresses.Any(y => y.Id == itemId)))
+                    {
+                        return BadRequest();
+                    }
+
+                    var entityToRemove = _context.PhysicalAddresses
+                        .FirstOrDefault(x => x.Id == itemId);
+
+                    if (entityToRemove is null) return BadRequest();
+
+                    _context.Remove(entityToRemove);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await LogException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpDelete("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> DeleteContact(long clientId, long contactId)
         {

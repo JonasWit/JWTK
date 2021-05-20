@@ -143,7 +143,8 @@ namespace SystemyWP.API
                         financeRecord.Amount = random.Next(0, 1000);
                         financeRecord.Hours = random.Next(0, 500);   
                         financeRecord.Minutes = random.Next(1, 59);
-                        
+
+                        financeRecord.Name = $"TEST -- {em}";
                         financeRecord.EventDate = DateTime.UtcNow.AddDays(em * -1);
 
                         financeRecord.CreatedBy = "system";
