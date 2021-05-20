@@ -45,6 +45,9 @@
           <v-row>
             <v-col>{{ item.number }}</v-col>
             <v-col>{{ item.comment }}</v-col>
+            <v-col>
+              <delete-phone-number-dialog :selected-phone-number="item" :selected-contact="selectedContact"/>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-card>
@@ -80,10 +83,11 @@ import AddEmailDialog from "~/components/legal-app/contacts/dialogs/add-email-di
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import DeleteEmailDialog from "@/components/legal-app/contacts/dialogs/delete-email-dialog";
 import AddPhoneNumbersDialog from "@/components/legal-app/contacts/dialogs/add-phone-numbers-dialog";
+import DeletePhoneNumberDialog from "@/components/legal-app/contacts/dialogs/delete-phone-number-dialog";
 
 export default {
   name: "contact-list-details",
-  components: {AddPhoneNumbersDialog, DeleteEmailDialog, AddEmailDialog, DeleteContactDialog},
+  components: {DeletePhoneNumberDialog, AddPhoneNumbersDialog, DeleteEmailDialog, AddEmailDialog, DeleteContactDialog},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
   props: {
     selectedContact: {
