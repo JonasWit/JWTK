@@ -11,10 +11,10 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-
+        
         public List<LegalAppCase> LegalAppCases { get; set; } = new List<LegalAppCase>();
         public List<ContactDetails> Contacts { get; set; } = new List<ContactDetails>();
-        public List<LegalAppClientFinance> LegalAppClientFinances { get; set; } = new List<LegalAppClientFinance>();
+        public List<LegalAppClientWorkRecord> LegalAppClientWorkRecord { get; set; } = new List<LegalAppClientWorkRecord>();
         public List<LegalAppClientNote> LegalAppClientNotes { get; set; } = new List<LegalAppClientNote>();
     }
 }

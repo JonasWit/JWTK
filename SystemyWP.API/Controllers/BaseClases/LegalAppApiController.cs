@@ -18,6 +18,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         
         public class CheckResult
         {
+            public bool AdminUser { get; set; }
             public bool DataAccessAllowed { get; set; }
             public AccessKey AccessKey { get; set; }
         }
@@ -34,7 +35,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
                 Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
             {
-                return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
+                return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = true};
             }
             //Logic for ordinary Users
             if (Role.Equals(SystemyWpConstants.Roles.Client))
@@ -45,7 +46,7 @@ namespace SystemyWP.API.Controllers.BaseClases
                                    x.RestrictedType == restrictedType &&
                                    x.ItemId == itemId);
 
-                if (access) return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
+                if (access) return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = false};
             }
             return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
         }

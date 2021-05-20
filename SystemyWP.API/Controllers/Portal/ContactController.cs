@@ -32,15 +32,14 @@ namespace SystemyWP.API.Controllers.Portal
                     contactForm.Email,
                     "Contact Request",
                     $"Name: {contactForm.Name}, Email: {contactForm.Email}, Phone: {contactForm.Phone}");
+                
+                return Ok();
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.PersonalData, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                Console.WriteLine(e);
+                await LogException(e);
+                return BadRequest(); 
             }
-
-            return Ok();
         }
     }
 }

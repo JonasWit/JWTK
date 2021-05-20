@@ -60,8 +60,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -94,8 +93,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -134,8 +132,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -177,8 +174,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -220,8 +216,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -263,8 +258,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -306,14 +300,13 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
         
         
-        [HttpPost("client/{clientId}/contact/{contactId}/phone-number")]
+        [HttpPost("client/{clientId}/contact/{contactId}/address")]
         public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId, [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
         {
             try
@@ -353,30 +346,10 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         
