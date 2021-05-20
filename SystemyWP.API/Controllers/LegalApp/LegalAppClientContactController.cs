@@ -117,11 +117,12 @@ namespace SystemyWP.API.Controllers.LegalApp
                     if (client is null) return BadRequest();
 
                     var contact = _context.Contacts
+                        .Where(x => x.Id == contactId)
                         .Include(x => x.Emails)
                         .Include(x => x.PhoneNumbers)
                         .Include(x => x.PhysicalAddresses)
-                        .Where(x => x.Id == contactId)
                         .Select(ContactProjections.FullProjection)
+                        .AsSingleQuery()
                         .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
@@ -242,7 +243,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     if (client is null) return BadRequest();
 
                     var contact = _context.Contacts
-                        .Include(x => x.Emails)
+                        .Include(x => x.PhoneNumbers)
                         .FirstOrDefault(x => x.Id == contactId);
                     
                     if (contact is null) return BadRequest();
@@ -310,6 +311,79 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        
+        
+        [HttpPost("client/{clientId}/contact/{contactId}/phone-number")]
+        public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId, [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var client = _context.LegalAppClients
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+
+                    if (client is null) return BadRequest();
+
+                    var contact = _context.Contacts
+                        .Include(x => x.PhysicalAddresses)
+                        .FirstOrDefault(x => x.Id == contactId);
+                    
+                    if (contact is null) return BadRequest();
+                    var newEntity = new PhysicalAddress()
+                    {
+                        CreatedBy = UserEmail,
+                        Building = createPhysicalAddressForm.Building,
+                        Comment = createPhysicalAddressForm.Comment,
+                        Country = createPhysicalAddressForm.Country,
+                        Street = createPhysicalAddressForm.Street,
+                        PostCode = createPhysicalAddressForm.PostCode
+                    };
+                    
+                    contact.PhysicalAddresses.Add(newEntity);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await _portalLogger
+                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         [HttpDelete("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> DeleteContact(long clientId, long contactId)
