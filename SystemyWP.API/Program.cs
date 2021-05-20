@@ -8,6 +8,7 @@ using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +28,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                // DevIdentitySeed(host);
-                // DevDataSeedLegalApp(host);
+                DevIdentitySeed(host);
+                DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
@@ -73,9 +74,18 @@ namespace SystemyWP.API
             using var scope = host.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-            var adminUser = userManager.FindByNameAsync("portaladmin1");
+            
             var random = new Random();
+
+            var adminUsers = userManager
+                .GetUsersForClaimAsync(SystemyWpConstants.Claims.ClientAdminClaim)
+                .GetAwaiter()
+                .GetResult();
+            var profiles = context.Users
+                .Include(x => x.AccessKey)
+                .AsEnumerable()
+                .Where(x => adminUsers.Any(y => y.Id == x.Id) && x.AccessKey != null)
+                .ToList();
 
             for (var i = 0; i < 500; i++)
             {
@@ -88,7 +98,7 @@ namespace SystemyWP.API
                     UpdatedBy = "portaladmin1"
                 };
                 
-                for (var c = 0; c < random.Next(0, 10); c++)
+                for (var c = 0; c < random.Next(0, 60); c++)
                 {
                     var contact = new ContactDetails();
                     contact.Comment = $"Comment for Contact {i} -- {c}";
@@ -96,7 +106,7 @@ namespace SystemyWP.API
                     contact.Title =  $"Title {i} -- {c}";
                     contact.CreatedBy = "system";
                     
-                    for (var em = 0; em < random.Next(0, 10); em++)
+                    for (var em = 0; em < random.Next(0, 60); em++)
                     {
                         contact.Emails.Add(new EmailAddress
                         {
@@ -106,7 +116,7 @@ namespace SystemyWP.API
                         });
                     }
                     
-                    for (var em = 0; em < random.Next(0, 10); em++)
+                    for (var em = 0; em < random.Next(0, 60); em++)
                     {
                         contact.PhoneNumbers.Add(new PhoneNumber
                         {
@@ -116,7 +126,7 @@ namespace SystemyWP.API
                         });
                     }
                     
-                    for (var em = 0; em < random.Next(0, 10); em++)
+                    for (var em = 0; em < random.Next(0, 60); em++)
                     {
                         contact.PhysicalAddresses.Add(new PhysicalAddress
                         {
@@ -126,6 +136,26 @@ namespace SystemyWP.API
                         });
                     }
                     newClient.Contacts.Add(contact);
+                    
+                    for (var em = 0; em < random.Next(1, 60); em++)
+                    {
+                        var financeRecord = new LegalAppClientWorkRecord();
+                        financeRecord.Amount = random.Next(0, 1000);
+                        financeRecord.Hours = random.Next(0, 500);   
+                        financeRecord.Minutes = random.Next(1, 59);
+                        
+                        financeRecord.EventDate = DateTime.UtcNow.AddDays(em * -1);
+
+                        financeRecord.CreatedBy = "system";
+                        financeRecord.UserId = profiles[random.Next(0, profiles.Count)]?.Id;
+                        financeRecord.UserEmail = userManager
+                            .FindByIdAsync(financeRecord.UserId)?
+                            .GetAwaiter()
+                            .GetResult()
+                            .Email;
+                        
+                        newClient.LegalAppClientWorkRecord.Add(financeRecord);
+                    }
                 }
                 
                 if (i % 2 == 0)

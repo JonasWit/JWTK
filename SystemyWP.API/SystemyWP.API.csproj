@@ -29,7 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Projections\LegalApp\Contacts" />
       <Folder Include="Scripts" />
       <Folder Include="Services\Repositories" />
     </ItemGroup>

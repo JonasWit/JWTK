@@ -12,5 +12,6 @@ namespace SystemyWP.Data.Models.General
         public DateTime ExpireDate { get; set; }
         public List<User> Users { get; set; } = new List<User>();
         public List<LegalAppClient> LegalAppClients { get; set; } = new List<LegalAppClient>();
+        public List<BillingDetails> BillingDetails { get; set; } = new List<BillingDetails>();
     }
 }

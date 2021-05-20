@@ -65,6 +65,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
+                await LogException(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -117,6 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
+                await LogException(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -174,13 +176,13 @@ namespace SystemyWP.API.Controllers.LegalApp
                 }
 
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception ex)
             {
+                await LogException(ex);
                 return BadRequest(ex.Message);
             }
-
-            return Ok();
         }
 
         [HttpPost("revoke-legal-app-data-access")]
@@ -213,6 +215,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
+                await LogException(ex);
                 return BadRequest(ex.Message);
             }
         }

@@ -39,7 +39,7 @@ namespace SystemyWP.Data
         
         //Client Tree
         public DbSet<LegalAppClient> LegalAppClients { get; set; }
-        public DbSet<LegalAppClientFinance> LegalAppClientFinances { get; set; }
+        public DbSet<LegalAppClientWorkRecord> LegalAppClientFinances { get; set; }
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
         
         //Case Tree
@@ -69,6 +69,15 @@ namespace SystemyWP.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
+
+            #region Access Key Specific
+
+            modelBuilder.Entity<AccessKey>()
+                .HasMany(x => x.BillingDetails)
+                .WithOne(x => x.AccessKey)
+                .OnDelete(DeleteBehavior.Cascade);      
+
+            #endregion
     
             #region Access Specific
 
@@ -88,7 +97,9 @@ namespace SystemyWP.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
-            
+
+            #region Legal App Specific
+
             modelBuilder.Entity<ContactDetails>()
                 .HasOne<LegalAppClient>()
                 .WithMany(x => x.Contacts)
@@ -111,7 +122,7 @@ namespace SystemyWP.Data
                 .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.LegalAppClientFinances)
+                .HasMany(c => c.LegalAppClientWorkRecord)
                 .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -124,10 +135,9 @@ namespace SystemyWP.Data
                 .HasMany(c => c.LegalAppCaseDeadlines)
                 .WithOne(e => e.LegalAppCase)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            //Client Finance Relations
-            modelBuilder.Entity<LegalAppClientFinance>()
-                .HasOne(x => x.User);
+            
+            #endregion
+            
         }
     }
 }

@@ -77,8 +77,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await LogException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
