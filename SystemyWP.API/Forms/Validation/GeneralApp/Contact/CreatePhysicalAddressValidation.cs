@@ -10,6 +10,7 @@ namespace SystemyWP.API.Forms.Validation.GeneralApp.Contact
             RuleFor(x => x.Building).MaximumLength(50);
             RuleFor(x => x.Comment).MaximumLength(100);
             RuleFor(x => x.Country).MaximumLength(75);
+            RuleFor(x => x.City).MaximumLength(75);
             RuleFor(x => x.Street).MaximumLength(200);
             RuleFor(x => x.PostCode).MaximumLength(50);
         }

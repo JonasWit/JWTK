@@ -9,6 +9,8 @@ namespace SystemyWP.Data.Models.General.Contact
         public string Comment { get; set; }
         [MaxLength(75)]
         public string Country { get; set; }
+        [MaxLength(75)]
+        public string City { get; set; }
         [Required]
         [MaxLength(200)]
         public string Street { get; set; }
