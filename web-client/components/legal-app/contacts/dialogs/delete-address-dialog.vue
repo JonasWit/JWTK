@@ -7,17 +7,17 @@
             <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
-        <span>Usuń adres email</span>
+        <span>Usuń adres</span>
       </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="justify-center">Usuń adres email</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz wybrany adres email. Odzyskanie danych będzie niemożliwe.
+      <v-card-title class="justify-center">Usuń adres</v-card-title>
+      <v-card-subtitle>Potwierdzając operację usuniesz wybrany adres. Odzyskanie danych będzie niemożliwe.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="error" text @click="deleteEmail">
+        <v-btn color="error" text @click="deleteAddress">
           Potwierdź
         </v-btn>
         <v-spacer/>
@@ -30,8 +30,49 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
-  name: "delete-address-dialog"
+  name: "delete-address-dialog",
+  props: {
+    selectedContact: {
+      required: true,
+      type: Object,
+      default: null
+    },
+    selectedAddress: {
+      required: true,
+      type: Object,
+      default: null
+    }
+  },
+  data: () => ({
+    dialog: false,
+  }),
+
+  methods: {
+    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
+
+    deleteAddress() {
+      console.warn(this.selectedAddress, 'selectedAddress props')
+      console.warn(this.selectedContact, 'Selected contact props')
+      this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/address/${this.selectedAddress.id}`)
+        .then((selectedAddress) => {
+          this.$notifier.showSuccessMessage("Wybrany email usunięty pomyślnie!");
+
+          console.warn(selectedAddress, 'selected email deleted successfully')
+        }).catch((e) => {
+        console.warn('delete email error', e);
+        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      }).finally(() => {
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        this.getContactDetailsFromFetch({clientId, contactId})
+        this.dialog = false;
+      })
+    }
+
+  }
 }
 </script>
 
