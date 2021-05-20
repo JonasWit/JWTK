@@ -2,6 +2,7 @@
   clientForAction: null,
   contactForAction: null,
 
+
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: [],
   emailsList: [],

@@ -30,10 +30,18 @@
 </template>
 
 <script>
+
+import {mapActions} from "vuex";
+
 export default {
   name: "delete-email-dialog",
   props: {
     selectedContact: {
+      required: true,
+      type: Object,
+      default: null
+    },
+    selectedEmail: {
       required: true,
       type: Object,
       default: null
@@ -42,6 +50,31 @@ export default {
   data: () => ({
     dialog: false,
   }),
+
+  methods: {
+    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
+
+    deleteEmail() {
+      console.warn(this.selectedEmail, 'Selected email props')
+      console.warn(this.selectedContact, 'Selected contact props')
+      this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/email/${this.selectedEmail.id}`)
+        .then((selectedEmail) => {
+          this.$notifier.showSuccessMessage("Wybrany email usunięty pomyślnie!");
+
+          console.warn(selectedEmail, 'selected email deleted successfully')
+        }).catch((e) => {
+        console.warn('delete email error', e);
+        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      }).finally(() => {
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        this.getContactDetailsFromFetch({clientId, contactId})
+        this.dialog = false;
+      })
+    }
+
+  }
+
 
 }
 </script>

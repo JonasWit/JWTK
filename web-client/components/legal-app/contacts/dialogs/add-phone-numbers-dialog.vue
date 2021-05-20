@@ -7,13 +7,13 @@
             <v-icon small color="success">mdi-plus</v-icon>
           </v-btn>
         </template>
-        <span>Dodaj adres email</span>
+        <span>Dodaj numer telefonu</span>
       </v-tooltip>
     </template>
-    <v-form ref="addNewEmailForm" v-model="validation.valid">
+    <v-form ref="addNewPhoneNumberForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.email" :rules="validation.email" label="Dodaj adres email"
+          <v-text-field v-model="form.email" :rules="validation.number" label="Dodaj numer telefonu"
                         required></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy"
                         required></v-text-field>
@@ -23,7 +23,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text color="primary" @click="saveNewEmail()">
+          <v-btn text color="primary" @click="saveNewPhoneNumber()">
             Dodaj
           </v-btn>
         </v-card-actions>
@@ -33,11 +33,10 @@
 </template>
 
 <script>
-
 import {mapActions} from "vuex";
 
 export default {
-  name: "add-email-dialog",
+  name: "add-phone-numbers-dialog",
   props: {
     selectedContact: {
       required: true,
@@ -47,17 +46,17 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loading: false,
     form: {
-      name: "",
+      number: "",
       comment: "",
 
     },
-    loading: false,
     validation: {
       valid: false,
-      email: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
+      number: [
+        v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
+        v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '
       ],
       comment: [
         v => !!v || "Nazwa jest wymagana!",
@@ -65,29 +64,27 @@ export default {
       ],
     },
   }),
-
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
-    saveNewEmail() {
-      if (!this.$refs.addNewEmailForm.validate()) return;
+    saveNewPhoneNumber() {
+      if (!this.$refs.addNewPhoneNumberForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
 
-      const email = {
+      const phone = {
         comment: this.form.comment,
-        email: this.form.email,
+        number: this.form.number,
       };
 
-      return this.$axios.$post(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/emails`, email)
+      return this.$axios.$post(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/phone-number`, phone)
         .then(() => {
           this.resetForm();
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-
           let clientId = this.$route.params.client;
           let contactId = this.selectedContact.id;
           this.getContactDetailsFromFetch({clientId, contactId})
 
-          this.$notifier.showSuccessMessage("Adres email dodany pomyślnie!");
+          this.$notifier.showSuccessMessage("Numer telefonu dodany pomyślnie!");
         }).catch(() => {
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
@@ -97,13 +94,13 @@ export default {
 
     },
     resetForm() {
-      this.$refs.addNewEmailForm.reset();
-      this.$refs.addNewEmailForm.resetValidation();
+      this.$refs.addNewPhoneNumberForm.reset();
+      this.$refs.addNewPhoneNumberForm.resetValidation();
     },
+
   }
+
 }
-
-
 </script>
 
 <style scoped>
