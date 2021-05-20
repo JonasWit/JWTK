@@ -55,7 +55,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest();  
             }
         }
@@ -81,7 +81,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest();  
             }
         }
@@ -106,7 +106,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest(); 
             }
         }
@@ -136,7 +136,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest(); 
             }
         }
@@ -169,7 +169,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest("Error when adding the Claim!");   
             }
         }
@@ -207,7 +207,7 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return BadRequest();  
             }
         }

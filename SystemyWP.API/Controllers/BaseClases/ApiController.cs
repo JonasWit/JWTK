@@ -26,7 +26,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         protected string UserEmail => GetClaim(ClaimTypes.Email);
         protected string Role => GetClaim(SystemyWpConstants.Claims.Role);
 
-        protected Task LogException(Exception ex)
+        protected Task HandleException(Exception ex)
         {
             return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.");        
         }

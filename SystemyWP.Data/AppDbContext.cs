@@ -122,7 +122,7 @@ namespace SystemyWP.Data
                 .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.LegalAppClientWorkRecord)
+                .HasMany(c => c.LegalAppClientWorkRecords)
                 .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
 

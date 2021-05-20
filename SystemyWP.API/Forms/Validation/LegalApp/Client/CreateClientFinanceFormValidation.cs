@@ -7,9 +7,13 @@ namespace SystemyWP.API.Forms.Validation.LegalApp.Client
     {
         public CreateClientFinanceFormValidation()
         {
-            RuleFor(x => x.Amount);
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Description).MaximumLength(300);
             RuleFor(x => x.Hours);
+            RuleFor(x => x.Minutes);
             RuleFor(x => x.Amount);
+            RuleFor(x => x.Rate);
+            RuleFor(x => x.EventDate).NotEmpty();
         }
     }
 }

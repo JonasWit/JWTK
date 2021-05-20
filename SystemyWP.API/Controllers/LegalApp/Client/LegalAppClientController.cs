@@ -8,14 +8,13 @@ using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.LegalApp
+namespace SystemyWP.API.Controllers.LegalApp.Client
 {
     [Route("/api/legal-app-clients")]
     [Authorize(SystemyWpConstants.Policies.Client)]
@@ -48,7 +47,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -99,7 +98,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -157,7 +156,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }  
         }
@@ -198,7 +197,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -231,7 +230,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -264,7 +263,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -294,7 +293,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -323,7 +322,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

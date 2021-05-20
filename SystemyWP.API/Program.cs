@@ -28,8 +28,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                DevIdentitySeed(host);
-                DevDataSeedLegalApp(host);
+                // DevIdentitySeed(host);
+                // DevDataSeedLegalApp(host);
             }
             else if (env.IsProduction())
             {
@@ -155,7 +155,7 @@ namespace SystemyWP.API
                             .GetResult()
                             .Email;
                         
-                        newClient.LegalAppClientWorkRecord.Add(financeRecord);
+                        newClient.LegalAppClientWorkRecords.Add(financeRecord);
                     }
                 }
                 

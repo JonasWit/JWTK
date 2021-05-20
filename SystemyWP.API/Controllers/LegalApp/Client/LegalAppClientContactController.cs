@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.LegalApp
+namespace SystemyWP.API.Controllers.LegalApp.Client
 {
     [Route("/api/legal-app-client-contacts")]
     [Authorize(SystemyWpConstants.Policies.Client)]
@@ -60,7 +60,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -93,7 +93,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -132,7 +132,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -174,7 +174,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -216,7 +216,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -258,7 +258,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -300,11 +300,10 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
         
         [HttpPost("client/{clientId}/contact/{contactId}/address")]
         public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId, [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
@@ -346,11 +345,10 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
         
         [HttpDelete("client/{clientId}/contact/{contactId}/address/{itemId}")]
         public async Task<IActionResult> DeleteContactPhysicalAddress(long clientId, long contactId, long itemId)
@@ -389,7 +387,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

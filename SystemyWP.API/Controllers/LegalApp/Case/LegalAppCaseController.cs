@@ -6,13 +6,12 @@ using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.LegalApp
+namespace SystemyWP.API.Controllers.LegalApp.Case
 {
     [Route("/api/legal-app-cases")]
     [Authorize(SystemyWpConstants.Policies.Client)]
@@ -77,7 +76,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception e)
             {
-                await LogException(e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

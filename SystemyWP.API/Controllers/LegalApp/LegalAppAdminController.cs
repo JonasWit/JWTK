@@ -65,7 +65,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await LogException(ex);
+                await HandleException(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -118,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await LogException(ex);
+                await HandleException(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -180,7 +180,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await LogException(ex);
+                await HandleException(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -215,7 +215,7 @@ namespace SystemyWP.API.Controllers.LegalApp
             }
             catch (Exception ex)
             {
-                await LogException(ex);
+                await HandleException(ex);
                 return BadRequest(ex.Message);
             }
         }
