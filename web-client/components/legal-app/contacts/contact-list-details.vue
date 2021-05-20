@@ -1,17 +1,18 @@
 <template>
   <v-tabs vertical>
-    <v-tab>
+    <v-tab class="d-flex justify-space-between">
       <v-icon left>
         mdi-email
       </v-icon>
       Email
       <add-email-dialog :selected-contact="selectedContact"/>
     </v-tab>
-    <v-tab>
+    <v-tab class="d-flex justify-space-between">
       <v-icon left>
         mdi-phone
       </v-icon>
       Telefony
+      <add-phone-numbers-dialog :selected-contact="selectedContact"/>
     </v-tab>
     <v-tab>
       <v-icon left>
@@ -29,9 +30,11 @@
       <v-card flat>
         <v-card-text v-for="item in emailsList" :key="item.id">
           <v-row>
-
             <v-col>{{ item.email }}</v-col>
             <v-col>{{ item.comment }}</v-col>
+            <v-col>
+              <delete-email-dialog :selected-email="item" :selected-contact="selectedContact"/>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-card>
@@ -75,17 +78,21 @@
 import DeleteContactDialog from "~/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import AddEmailDialog from "~/components/legal-app/contacts/dialogs/add-email-dialog";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import DeleteEmailDialog from "@/components/legal-app/contacts/dialogs/delete-email-dialog";
+import AddPhoneNumbersDialog from "@/components/legal-app/contacts/dialogs/add-phone-numbers-dialog";
 
 export default {
   name: "contact-list-details",
-  components: {AddEmailDialog, DeleteContactDialog},
+  components: {AddPhoneNumbersDialog, DeleteEmailDialog, AddEmailDialog, DeleteContactDialog},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
   props: {
     selectedContact: {
       required: true,
       type: Object,
       default: null
-    }
+    },
+
+
   },
 
   async fetch() {
@@ -93,6 +100,7 @@ export default {
     let contactId = this.selectedContact.id;
     this.getContactDetailsFromFetch({clientId, contactId})
     console.warn('contact-list-details -- fetch from store completed', this.contactDetailsFromFetch)
+
   },
   computed: {
     ...mapState('legal-app-client-store', ['emailsList', 'phoneNumbersList', 'addressesList']),
