@@ -1,5 +1,4 @@
-﻿using System;
-using SystemyWP.Data.DataAccessModifiers;
+﻿using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.General.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
@@ -28,7 +27,7 @@ namespace SystemyWP.Data
         public DbSet<DataAccess> DataAccesses { get; set; }
         public DbSet<ContactDetails> Contacts { get; set; }
         public DbSet<EmailAddress> EmailAddresses { get; set; }       
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; }     
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<PhysicalAddress> PhysicalAddresses { get; set; }
         
         #endregion

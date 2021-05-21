@@ -4,7 +4,6 @@ using System.Reflection;
 using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
-using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;

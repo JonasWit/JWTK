@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.General.Contact;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
-using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.Data.Models.General
 {
