@@ -41,8 +41,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                             .Include(x =>
                                 x.LegalAppClientWorkRecords.Where(y =>
                                     y.Created >= fromDate && y.Created <= toDate))
-                            .Include(x => x.AccessKey)
-                            .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                            .FirstOrDefault(x => x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
 
                         if (client is null) return BadRequest();
 
@@ -75,8 +74,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                            .Include(x => x.AccessKey)
-                            .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                        .FirstOrDefault(x => x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
 
                         if (client is null) return BadRequest();
 
@@ -116,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .Where(x => x.LegalAppClient.AccessKeyId == check.AccessKey.Id)
                         .FirstOrDefault(x => x.Id == workRecordId);
 
                     if (entity is null) return BadRequest();
@@ -153,7 +151,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .Where(x => x.LegalAppClient.AccessKeyId == check.AccessKey.Id)
                         .FirstOrDefault(x => x.Id == workRecordId);
 
                     if (entity is null) return BadRequest();
