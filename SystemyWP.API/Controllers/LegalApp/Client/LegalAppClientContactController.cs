@@ -37,8 +37,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var result = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                        .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts)
                         .FirstOrDefault();
 
@@ -75,18 +74,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.Contacts)
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null) return BadRequest();
-
-                    var result = client.Contacts
-                        .Select(ContactProjections.CreateBasic)
+                    var entities = _context.Contacts
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id)
                         .ToList();
 
-                    return Ok(result);
+                    return Ok(entities);
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -108,23 +101,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null) return BadRequest();
-
                     var contact = _context.Contacts
-                        .Where(x => x.Id == contactId)
-                        .Include(x => x.Emails)
-                        .Include(x => x.PhoneNumbers)
-                        .Include(x => x.PhysicalAddresses)
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
                         .Select(ContactProjections.FullProjection)
                         .AsSingleQuery()
                         .FirstOrDefault();
-                    
+
                     if (contact is null) return BadRequest();
-                    
                     return Ok(contact);
                 }
 
@@ -147,15 +132,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null) return BadRequest();
-
                     var contact = _context.Contacts
                         .Include(x => x.Emails)
-                        .FirstOrDefault(x => x.Id == contactId);
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
                     var newEmail = new EmailAddress
@@ -179,8 +161,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
         
-        [HttpDelete("client/{clientId}/contact/{contactId}/email/{emailId}")]
-        public async Task<IActionResult> DeleteContactEmail(long clientId, long contactId, long emailId)
+        [HttpDelete("client/{clientId}/contact/{contactId}/email/{itemId}")]
+        public async Task<IActionResult> DeleteContactEmail(long clientId, long contactId, long itemId)
         {
             try
             {
@@ -189,22 +171,16 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(x => x.Emails.Where(y => y.Id == emailId))
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                    var contact = _context.Contacts
+                        .Include(x => x.Emails.Where(y => y.Id == itemId))
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
 
-                    if (client is null ||
-                        client.Contacts.Count == 0 ||
-                        !client.Contacts.Any(x => x.Emails.Any(y => y.Id == emailId)))
-                    {
-                        return BadRequest();
-                    }
-
-                    var entityToRemove = _context.EmailAddresses
-                        .FirstOrDefault(x => x.Id == emailId);
-
+                    if (contact is null || contact.Emails.Count == 0) return BadRequest();
+                    
+                    var entityToRemove = contact.Emails.FirstOrDefault(x => x.Id == itemId);
                     if (entityToRemove is null) return BadRequest();
 
                     _context.Remove(entityToRemove);
@@ -231,15 +207,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null) return BadRequest();
-
                     var contact = _context.Contacts
-                        .Include(x => x.PhoneNumbers)
-                        .FirstOrDefault(x => x.Id == contactId);
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
                     var newPhone = new PhoneNumber()
@@ -273,22 +245,16 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                            .ThenInclude(x => x.PhoneNumbers.Where(y => y.Id == itemId))
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                    var contact = _context.Contacts
+                        .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
 
-                    if (client is null ||
-                        client.Contacts.Count == 0 ||
-                        !client.Contacts.Any(x => x.PhoneNumbers.Any(y => y.Id == itemId)))
-                    {
-                        return BadRequest();
-                    }
-
-                    var entityToRemove = _context.PhoneNumbers
-                        .FirstOrDefault(x => x.Id == itemId);
-
+                    if (contact is null || contact.PhoneNumbers.Count == 0) return BadRequest();
+                    
+                    var entityToRemove = contact.PhoneNumbers.FirstOrDefault(x => x.Id == itemId);
                     if (entityToRemove is null) return BadRequest();
 
                     _context.Remove(entityToRemove);
@@ -315,15 +281,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
-
-                    if (client is null) return BadRequest();
-
                     var contact = _context.Contacts
                         .Include(x => x.PhysicalAddresses)
-                        .FirstOrDefault(x => x.Id == contactId);
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
                     var newEntity = new PhysicalAddress()
@@ -361,22 +324,16 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                        .ThenInclude(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
-                        .Include(x => x.AccessKey)
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                    var contact = _context.Contacts
+                        .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
+                        .FirstOrDefault();
 
-                    if (client is null ||
-                        client.Contacts.Count == 0 ||
-                        !client.Contacts.Any(x => x.PhysicalAddresses.Any(y => y.Id == itemId)))
-                    {
-                        return BadRequest();
-                    }
-
-                    var entityToRemove = _context.PhysicalAddresses
-                        .FirstOrDefault(x => x.Id == itemId);
-
+                    if (contact is null || contact.PhysicalAddresses.Count == 0) return BadRequest();
+                    
+                    var entityToRemove = contact.PhysicalAddresses.FirstOrDefault(x => x.Id == itemId);
                     if (entityToRemove is null) return BadRequest();
 
                     _context.Remove(entityToRemove);
@@ -403,16 +360,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var result = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .Include(x => x.Contacts.Where(y => y.Id == contactId))
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                    var contact = _context.Contacts
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
                         .FirstOrDefault();
 
-                    if (result is null || result.Contacts.Count == 0)
-                        return BadRequest();
+                    if (contact is null) return BadRequest();
 
-                    _context.Remove(result.Contacts.First());
+                    _context.Remove(contact);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -438,15 +394,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var client = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
-                        .Include(x => x.Contacts.FirstOrDefault(y => y.Id == contactId))
+                    var contact = _context.Contacts
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == contactId)
                         .FirstOrDefault();
-
-                    if (client is null || client.Contacts.Count == 0) return BadRequest();
-
-                    var contact = client.Contacts.FirstOrDefault(x => x.Id == contactId);
+                    
                     if (contact is null) return BadRequest();
 
                     contact.Name = updateContactForm.Name;

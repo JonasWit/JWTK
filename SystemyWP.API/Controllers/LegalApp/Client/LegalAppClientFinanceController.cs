@@ -65,7 +65,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
         
         [HttpPost("client/{clientId}/finance-records")]
-        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] CreateClientFinanceForm createClientFinanceForm)
+        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] CreateClientWorkForm createClientWorkForm)
         {
             try
             {
@@ -82,10 +82,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                         var newEntity = new LegalAppClientWorkRecord
                         {
-                            Amount = createClientFinanceForm.Amount,
-                            Name = createClientFinanceForm.Name,
-                            Rate = createClientFinanceForm.Rate,
-                            EventDate = createClientFinanceForm.EventDate,
+                            Amount = createClientWorkForm.Amount,
+                            Name = createClientWorkForm.Name,
+                            Rate = createClientWorkForm.Rate,
+                            EventDate = createClientWorkForm.EventDate,
                             UserEmail = UserEmail,
                             UserId = UserId,
                             CreatedBy = UserEmail,
@@ -94,6 +94,72 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         client.LegalAppClientWorkRecords.Add(newEntity);
                         await _context.SaveChangesAsync();
                         return Ok(client);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpPut("client/{clientId}/finance-record/{workRecordId}")]
+        public async Task<IActionResult> UpdateFinanceRecord(long clientId, long workRecordId, [FromBody] UpdateClientWorkForm updateClientWorkForm)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var entity = _context.LegalAppClientWorkRecords
+                        .Where(x => x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .FirstOrDefault(x => x.Id == workRecordId);
+
+                    if (entity is null) return BadRequest();
+
+                    entity.Amount = updateClientWorkForm.Amount;
+                    entity.Name = updateClientWorkForm.Name;
+                    entity.Rate = updateClientWorkForm.Rate;
+                    entity.EventDate = updateClientWorkForm.EventDate;
+                    entity.UserEmail = UserEmail;
+                    entity.UserId = UserId;
+                    entity.CreatedBy = UserEmail;
+                    
+                    await _context.SaveChangesAsync();
+                    return Ok(entity);
+                }
+
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
+        [HttpDelete("client/{clientId}/finance-record/{workRecordId}")]
+        public async Task<IActionResult> DeleteFinanceRecord(long clientId, long workRecordId)
+        {
+            try
+            {
+                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+
+                if (check.DataAccessAllowed)
+                {
+                    var entity = _context.LegalAppClientWorkRecords
+                        .Where(x => x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                        .FirstOrDefault(x => x.Id == workRecordId);
+
+                    if (entity is null) return BadRequest();
+                    
+                    _context.Remove(entity);
+                    return Ok();
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);

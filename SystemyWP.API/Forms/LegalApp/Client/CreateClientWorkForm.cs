@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.LegalApp.Client
 {
-    public class CreateClientFinanceForm
+    public class CreateClientWorkForm
     {
         public string Name { get; set; }
         public int Hours { get; set; }

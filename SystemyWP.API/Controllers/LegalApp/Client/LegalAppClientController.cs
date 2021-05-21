@@ -35,8 +35,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var result = _context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Id == check.AccessKey.Id && x.Id == clientId)
+                        .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
                         .Select(LegalAppClientProjections.FlatProjection)
                         .FirstOrDefault();
                     
@@ -69,9 +68,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .Where(x =>
-                            x.AccessKey.Id == user.AccessKey.Id && x.Active)
+                            x.AccessKeyId == user.AccessKey.Id && x.Active)
                         .Select(LegalAppClientProjections.BasicProjection)
                         .ToList());
 
@@ -82,9 +80,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .Where(x =>
-                            x.AccessKey.Id == user.AccessKey.Id && x.Active &&
+                            x.AccessKeyId == user.AccessKey.Id && x.Active &&
                             _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
                                 .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                           y.ItemId == x.Id))
@@ -120,9 +117,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .Where(x =>
-                            x.AccessKey.Id == user.AccessKey.Id && x.Active)
+                            x.AccessKeyId == user.AccessKey.Id && x.Active)
                         .OrderBy(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
@@ -136,9 +132,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .Where(x =>
-                            x.AccessKey.Id == user.AccessKey.Id && x.Active && 
+                            x.AccessKeyId == user.AccessKey.Id && x.Active && 
                             _context.DataAccesses
                                 .Where(y => y.UserId.Equals(UserId))
                                 .Any(y => 
@@ -213,9 +208,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = await _context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .FirstOrDefaultAsync(x => 
-                            x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
                     if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
                     
                     entity.UpdatedBy = UserEmail;
@@ -246,9 +240,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = await _context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .FirstOrDefaultAsync(x => 
-                            x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
                     if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
                     
                     entity.Active = !entity.Active;
@@ -279,9 +272,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = await _context.LegalAppClients
-                        .Include(x => x.AccessKey)
                         .FirstOrDefaultAsync(x => 
-                            x.Id == clientId && x.AccessKey.Id == check.AccessKey.Id);
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
                     if (entity is null) return StatusCode(StatusCodes.Status403Forbidden);
                     
                     _context.Remove(entity);
@@ -310,9 +302,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .FirstOrDefaultAsync();
 
                 var result = await _context.LegalAppClients
-                    .Include(x => x.AccessKey)
                     .Where(x =>
-                        x.AccessKey.Id == user.AccessKey.Id)
+                        x.AccessKeyId== user.AccessKey.Id)
                     .Include(x =>
                         x.LegalAppCases)
                     .Select(LegalAppClientProjections.MinimalProjection)

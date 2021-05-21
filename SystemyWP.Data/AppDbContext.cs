@@ -1,4 +1,5 @@
-﻿using SystemyWP.Data.DataAccessModifiers;
+﻿using System;
+using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.General.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
@@ -39,7 +40,7 @@ namespace SystemyWP.Data
         
         //Client Tree
         public DbSet<LegalAppClient> LegalAppClients { get; set; }
-        public DbSet<LegalAppClientWorkRecord> LegalAppClientFinances { get; set; }
+        public DbSet<LegalAppClientWorkRecord> LegalAppClientWorkRecords { get; set; }
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
         
         //Case Tree

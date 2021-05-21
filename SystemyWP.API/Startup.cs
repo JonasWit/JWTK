@@ -41,8 +41,9 @@ namespace SystemyWP.API
             // services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(_configuration.GetConnectionString("Default")));
-
+                options.UseNpgsql(_configuration.GetConnectionString("Default"))
+                    .EnableSensitiveDataLogging());
+       
             AddIdentity(services);
 
             services.AddControllers()
@@ -65,9 +66,9 @@ namespace SystemyWP.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
-            loggerFactory.AddProvider(new AppLoggerProvider(
-                    serviceProvider.GetRequiredService<AppDbContext>()));
+            // var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
+            // loggerFactory.AddProvider(new AppLoggerProvider(
+            //         serviceProvider.GetRequiredService<AppDbContext>()));
             
             if (env.IsDevelopment())
             {
