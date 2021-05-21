@@ -23,7 +23,7 @@
                         required></v-text-field>
           <v-text-field v-model="form.postCode" label="Kod pocztowy"
                         required></v-text-field>
-          <v-text-field v-model="form.country" label="Kod pocztowy"
+          <v-text-field v-model="form.country" label="Państwo"
                         required></v-text-field>
           <small class="grey--text">* Hint text here</small>
         </v-card-text>
