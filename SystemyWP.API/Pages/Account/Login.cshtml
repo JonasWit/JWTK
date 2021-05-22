@@ -8,15 +8,14 @@
 
 <form method="post">
     <input type="hidden" asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl">
-    <div>
+    <div class="flex-dialog">
         <label>Nazwa Użytkowika</label>
         <input asp-for="Form.Username"/>
-        <span asp-validation-for="Form.Username"></span>
-    </div>
-    <div>
+        <span class="val-text" asp-validation-for="Form.Username"></span>
+
         <label>Hasło</label>
         <input asp-for="Form.Password"/>
-        <span asp-validation-for="Form.Password"></span>
+        <span class="val-text" asp-validation-for="Form.Password"></span>
     </div>
     @if (Model.CustomErrors.Count > 0)
     {
@@ -28,12 +27,11 @@
         </div>
     }
     <div >
-        <button type="submit">Zaloguj</button>
+        <button class="button" type="submit">Zaloguj</button>
     </div>
     <hr>
-    <div >
-        <p>
-            <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
-        </p>
-    </div>
+    <div class="flex-links">
+      <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
+      <a id="forgot-password" asp-page="./Client">Nie masz konta? Zarejestruj się</a>
+     </div>
 </form>

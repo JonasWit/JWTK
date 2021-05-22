@@ -10,6 +10,7 @@
               <nuxt-link class="nav-item" :to="item.route">
                 <v-card class="mx-auto" width="340" outlined :elevation="hover ? 12 : 2">
                   <v-row class="d-flex ma-3" align="center">
+                    <v-icon>{{ item.icon }}</v-icon>
                     <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
                   </v-row>
                   <v-card-text class="font-weight-light">{{ item.text }}</v-card-text>
@@ -55,31 +56,36 @@ export default {
           route: `/legal-application/clients/${params.client}/contacts`,
           name: 'Kontakty',
           text: 'Lista kontaktów dla Klienta',
+          icon: 'mdi-card-account-mail-outline'
         },
         {
           id: '2',
           route: `/legal-application/clients/${params.client}/cases`,
           name: 'Sprawy',
           text: 'Zarządzaj sprawami klienta',
+          icon: 'mdi-briefcase-account-outline'
 
         },
         {
           id: '3',
           route: `/legal-application/clients/${params.client}/reminders`,
           name: 'Przypomnienia',
-          text: 'Sprawdź przypomnienia dla Klienta'
+          text: 'Sprawdź przypomnienia dla Klienta',
+          icon: 'mdi-calendar-clock'
         },
         {
           id: '4',
           route: `/legal-application/clients/${params.client}/notes`,
           name: 'Notatki',
-          text: 'Zarządzaj notatkami'
+          text: 'Zarządzaj notatkami',
+          icon: 'mdi-book-open-outline'
         },
         {
           id: '5',
           route: `/legal-application/clients/${params.client}/financials`,
           name: 'Rozliczenia',
-          text: 'Zarządzaj rozliczeniami'
+          text: 'Zarządzaj rozliczeniami',
+          icon: 'mdi-calculator-variant-outline'
         },
 
       ],
@@ -92,5 +98,14 @@ export default {
 </script>
 
 <style scoped>
+
+.nav-item {
+  text-decoration: none;
+}
+
+.v-card {
+  border-left: 3px solid var(--v-primary-base);
+
+}
 
 </style>

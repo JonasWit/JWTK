@@ -55,6 +55,7 @@ export default {
   components: {AppBreadcrumbs, ButtonToGoUp, AddClientDialog, ClientListItem, Layout, NavigationDrawer},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
+
   data: () => ({
     searchResult: "",
     clientList: [],
@@ -63,7 +64,9 @@ export default {
     loading: false,
     searchConditionsProvided: false,
     cursor: 0,
+
   }),
+
 
   async fetch() {
     this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");

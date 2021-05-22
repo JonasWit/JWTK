@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="" />
     <style>
     * {
-        font-family: "Roboto", sans-serif !important;
+        font-family: Tahoma, Verdana, sans-serif !important;
         box-sizing: border-box;
     }
         body {
@@ -16,7 +16,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #212121;
+            background: rgb(2,0,36);
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(3,3,3,1) 35%, rgba(155,238,255,1) 100%);
+            overflow: hidden;
         }
         
         .title {
@@ -28,13 +30,13 @@
         form {
             display:  flex;
             flex-direction: column;
-             background-color: #fff;
+             background-color: #f0f0f0;
              padding: 1.5rem 2rem;
-             max-width: 300px;
+             max-width: 350px;
              width: 100%;
              margin: 0 1rem;
              border-radius: 8px;
-             box-shadow: 0 1px 4px 1px #FAFAFA;
+
         }
         
         .field {
@@ -47,6 +49,7 @@
         .field > label {
             font-size: 14px;
             font-weight: bold;
+
         }
         
         .field > input {
@@ -96,7 +99,91 @@
         .field > a {
             text-decoration: none;
         }
-          
+
+        .flex-dialog {
+        display: flex;
+        flex-direction: column;
+
+        }
+
+        .flex-dialog label {
+        margin: 6px 0px;
+        font-weight: bold;
+        }
+
+        .flex-dialog input {
+        margin: 2px 0px;
+        height: 35px;
+        }
+
+        .button {
+        margin: 5px 0px;
+        width: 100%;
+        height: 35px;
+        padding: 10px;
+        background-color: #2CDA9D;
+        border: none;
+        font-weight: bold;
+        font-size: 15px;
+        color: #fff;
+        }
+
+        .button:hover {
+        opacity: 0.6;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .flex-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        }
+
+            .flex-links a {
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px auto;
+            color: #000;
+            }
+                .flex-links a:hover {
+                cursor: pointer;
+                color: #6F8AB7;
+                }
+
+        .val-text {
+        color: #F24333;
+        margin: 3px 0px;
+        }
+
+        .confirmation-card {
+        background-color: #f0f0f0;
+        padding: 1.5rem 2rem;
+        max-width: 450px;
+        width: 100%;
+        margin: 0 1rem;
+        border-radius: 8px;
+        }
+
+        .lock {
+        color: #F24333;
+        text-align: center;
+        }
+
+        .log-link {
+        text-decoration: none;
+        padding: 10px;
+        margin: 5px auto;
+        color: #000;
+         }
+           .log-link:hover {
+            cursor: pointer;
+            color: #6F8AB7;
+            }
+
+
+
+
     </style>
 </head>
 <body>
