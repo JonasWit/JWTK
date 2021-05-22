@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn raised class="mx-2" v-on="{ ...tooltip, ...dialog }">
+          <v-btn class="mx-2 option-btn" x-large v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
@@ -72,6 +72,8 @@ export default {
 
 </script>
 
-<style scoped>
-
+<style>
+.option-btn {
+  width: 150px;
+}
 </style>

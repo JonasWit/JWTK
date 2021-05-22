@@ -1,10 +1,10 @@
 ﻿<template>
   <v-card tile>
     <v-list-item>
-      <v-list-item-title> Nazwa: {{ clientItem.name }}</v-list-item-title>
+      <v-list-item-title> Nazwa: {{ clientItem.title }}</v-list-item-title>
+      <v-list-item-title> Imię i nazwisko: {{ clientItem.name }} {{ clientItem.surname }}</v-list-item-title>
+      <v-list-item-subtitle>Komentarz: {{ clientItem.comment }}</v-list-item-subtitle>
       <v-list-item-subtitle>Dodano: {{ clientItem.created }}</v-list-item-subtitle>
-      <v-list-item-subtitle>Dodano: {{ clientItem.createdBy }}</v-list-item-subtitle>
-
       <v-list-item-icon class="mx-2">
         <delete-client-dialog :selected-client="clientItem"/>
       </v-list-item-icon>

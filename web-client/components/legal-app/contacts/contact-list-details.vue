@@ -21,8 +21,8 @@
       Adresy
       <add-address-dialog :selected-contact="selectedContact"/>
     </v-tab>
-    <v-tab>
-      <v-icon left>
+    <v-tab class="d-flex justify-start">
+      <v-icon left class="mr-4">
         mdi-cog-outline
       </v-icon>
       Opcje
@@ -73,8 +73,18 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text>
-          <v-row>
-            <delete-contact-dialog :selected-contact="selectedContact"/>
+          <v-row class="mt-4">
+            Opcje umożliwiają zarządzanie wybranym kontaktem.
+            W tym miejscu możesz usunąć lub edytować kontakt.
+            Wybierz odpowiednią opcję.
+          </v-row>
+          <v-row class="my-5">
+            <v-col>
+              <delete-contact-dialog :selected-contact="selectedContact"/>
+            </v-col>
+            <v-col>
+              <edit-contact-dialog :selected-contact="selectedContact"/>
+            </v-col>
 
           </v-row>
         </v-card-text>
@@ -94,10 +104,12 @@ import AddPhoneNumbersDialog from "@/components/legal-app/contacts/dialogs/add-p
 import DeletePhoneNumberDialog from "@/components/legal-app/contacts/dialogs/delete-phone-number-dialog";
 import AddAddressDialog from "@/components/legal-app/contacts/dialogs/add-address-dialog";
 import DeleteAddressDialog from "@/components/legal-app/contacts/dialogs/delete-address-dialog";
+import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
 
 export default {
   name: "contact-list-details",
   components: {
+    EditContactDialog,
     DeleteAddressDialog,
     AddAddressDialog,
     DeletePhoneNumberDialog, AddPhoneNumbersDialog, DeleteEmailDialog, AddEmailDialog, DeleteContactDialog

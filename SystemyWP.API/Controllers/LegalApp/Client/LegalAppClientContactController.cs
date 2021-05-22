@@ -47,7 +47,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     {
                         CreatedBy = UserEmail,
                         Name = createContactForm.Name,
-                        Comment = createContactForm.Comment
+                        Comment = createContactForm.Comment,
+                        Surname = createContactForm.Surname,
+                        Title = createContactForm.Title
                     };
 
                     result.Contacts.Add(newContact);

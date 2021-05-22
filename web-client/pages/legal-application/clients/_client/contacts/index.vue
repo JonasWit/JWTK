@@ -1,6 +1,8 @@
 <template>
   <layout>
+
     <template v-slot:content>
+      <app-breadcrumbs/>
       <v-toolbar prominent class="my-3">
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
@@ -23,12 +25,10 @@
         <v-expansion-panel v-for="item in contactList" :key="item.id">
           <v-expansion-panel-header>
             <v-row>
-              <v-col>{{ item.title }}</v-col>
-              <v-col>Dodano: {{ item.created }}</v-col>
+              <v-col> Nazwa: {{ item.title }}</v-col>
+              <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
               <v-col>Komentarz: {{ item.comment }}</v-col>
-              <!--              <v-col>-->
-              <!--                <delete-contact-dialog :selected-contact="item"/>-->
-              <!--              </v-col>-->
+              <v-col>Dodano: {{ item.created }}</v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -46,6 +46,7 @@ import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contac
 import {hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
+import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 
 
 const searchItemFactory = (name, id) => ({
@@ -57,7 +58,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
+  components: {AppBreadcrumbs, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
