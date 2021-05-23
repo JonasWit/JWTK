@@ -57,9 +57,12 @@ const searchItemFactory = (name, id) => ({
 });
 
 export default {
+  meta: {
+    pageName: 'Kontakty'
+  },
   name: "index",
   components: {AppBreadcrumbs, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
 
   data: () => ({
     contactItemsFromFetch: [],

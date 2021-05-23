@@ -15,16 +15,32 @@
 
 <script>
 
+import {mapMutations, mapState} from "vuex";
+
 export default {
   name: "app-breadcrumbs",
   computed: {
-
+    ...mapState('breadcrumbs-store', ['pageName']),
 
     crumbs() {
+
+
+      // const crumbs = []
+      // const pageName = this.pageName
+      //
+      //
+      // if (pageName !== null) {
+      //   crumbs.push(pageName)
+      //   console.warn(crumbs, 'lista crumbsów')
+      //
+      // }
+
 
       const fullPath = this.$route.fullPath
       const params = fullPath.substring(1).split('/')
       const crumbs = []
+      const pageName = this.pageName
+
 
       let path = ''
 
@@ -34,7 +50,8 @@ export default {
 
         if (match.name !== null) {
           crumbs.push(match)
-          console.warn(crumbs, 'lista crumbsów')
+          console.warn('Match', match)
+
         }
       })
 
@@ -42,7 +59,9 @@ export default {
     }
 
   },
-  methods: {}
+  methods: {
+    ...mapMutations('breadcrumbs-store', ['setMetaTag'])
+  }
 }
 </script>
 
