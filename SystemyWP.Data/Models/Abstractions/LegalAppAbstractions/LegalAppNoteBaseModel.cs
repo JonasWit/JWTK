@@ -6,7 +6,7 @@ namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
     {
         [MaxLength(100)]
         [Required]
-        public string Name { get; set; }
+        public string Title { get; set; }
         [MaxLength(1000)]
         public string Message { get; set; }
     }

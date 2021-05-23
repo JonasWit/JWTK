@@ -55,10 +55,6 @@ const config = {
       path: '~/components/',
     },
     {
-      path: '~/components/generic-components',
-      prefix: 'generic'
-    },
-    {
       path: '~/components/auth/',
     },
     {

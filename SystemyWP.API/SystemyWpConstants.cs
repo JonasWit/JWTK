@@ -12,12 +12,7 @@ namespace SystemyWP.API
             public const string PortalAdmin = nameof(PortalAdmin);
             public const string LegalAppAccess = nameof(LegalAppAccess);
         }
-
-        // public struct IdentityResources
-        // {
-        //     public const string RoleScope = "role";
-        // }
-
+        
         public struct Claims
         {
             public const string Role = "Role";

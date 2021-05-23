@@ -39,14 +39,12 @@ namespace SystemyWP.API.Controllers.Access
                 if (string.IsNullOrEmpty(userId)) return BadRequest();
 
                 var user = await _context.Users
+                    .Include(x => x.AccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
                 if (user is not null)
                 {
                     user.LastLogin = DateTime.UtcNow;
-                    user.AccessKey = _context.AccessKeys
-                        .Include(x => x.Users)
-                        .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
                     await _context.SaveChangesAsync();
                     return Ok(UserProjections

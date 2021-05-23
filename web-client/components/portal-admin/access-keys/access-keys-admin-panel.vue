@@ -1,31 +1,23 @@
 ﻿<template>
   <div>
     <create-access-key-component/>
-    <v-list>
-      <template v-for="(keyItem, index) in keysList">
-        <v-list-item :key="`key-${keyItem.id}`">
-          <v-list-item-content>
-            <v-list-item-title>Key Name: {{ keyItem.name }}</v-list-item-title>
-            <v-list-item-subtitle :class="colorDates(keyItem.expireDate)">Expiration Date: {{
-                formatDate(keyItem.expireDate)
-              }}
-            </v-list-item-subtitle>
-            <v-list-item-subtitle>Assigned Users: {{ keyItem.assignedUsers }}
-            </v-list-item-subtitle>
-            <v-list-item-subtitle>Related Legal App Data: {{ keyItem.relatedLegalAppClients }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-          <v-spacer/>
-          <v-list-item-content>
-            <div class="d-flex justify-end">
-              <edit-access-key-form-dialog :selected-key="keyItem"/>
-              <delete-access-key-dialog :selected-key="keyItem"/>
-            </div>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider v-if="index < keysList.length - 1" :key="index"></v-divider>
-      </template>
-    </v-list>
+    <v-expansion-panels focusable>
+      <v-expansion-panel v-for="(keyItem, index) in keysList" :key="`key-index-${index}`">
+        <v-expansion-panel-header :class="colorDates(keyItem.expireDate)">{{ keyItem.name }} Expires:
+          {{ formatDate(keyItem.expireDate) }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-chip v-for="user in keyItem.assignedUsers" class="ma-2" small>
+            {{ user.email }}
+          </v-chip>
+          <div class="d-flex justify-end">
+            <edit-access-key-form-dialog :selected-key="keyItem"/>
+            <delete-access-key-dialog :selected-key="keyItem"/>
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
   </div>
 </template>
 
@@ -55,9 +47,10 @@ export default {
   }),
   fetch() {
     this.getAccessKeys();
+    this.getUsers();
   },
   computed: {
-    ...mapState('admin-panel-store', ['accessKeys']),
+    ...mapState('admin-panel-store', ['accessKeys', 'users']),
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
@@ -67,6 +60,11 @@ export default {
     },
     keysList() {
       if (!this.searchResult) {
+        this.accessKeys.forEach(ak => {
+          ak.assignedUsers = this.users.filter(user => user.dataAccessKey.id === ak.id);
+        });
+
+        console.log('result', this.accessKeys);
         return this.accessKeys;
       } else {
         return this.accessKeys.filter(x => x.name === this.searchResult);
@@ -74,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys']),
+    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
     formatDate(date) {
       return formatDate(date);
     },

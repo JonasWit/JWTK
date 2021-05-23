@@ -40,8 +40,11 @@ namespace SystemyWP.API
             // services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(_configuration.GetConnectionString("Default"))
-                    .EnableSensitiveDataLogging());
+                options.UseNpgsql(_configuration.GetConnectionString("Default")));
+            
+            // services.AddDbContext<AppDbContext>(options =>
+            //     options.UseNpgsql(_configuration.GetConnectionString("Default"))
+            //         .EnableSensitiveDataLogging());
        
             AddIdentity(services);
 

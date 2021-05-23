@@ -77,10 +77,12 @@ export default {
   },
   fetch() {
     this.loading = true;
+    this.activeKeys = this.accessKeys.map(x => x.name);
+
     if (this.selectedUser.dataAccessKey) {
       this.form.dataAccessKey = this.selectedUser.dataAccessKey;
     }
-    this.activeKeys = this.accessKeys.map(x => x.name);
+
     this.loading = false;
   },
   computed: {
