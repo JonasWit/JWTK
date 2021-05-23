@@ -37,19 +37,22 @@
     </v-card-text>
     <v-divider class="my-2"/>
     <v-card-actions class="pt-0">
-      <prof-personal-data-edit-dialog v-on:action-completed="initialize"/>
+      <personal-data-edit-dialog v-on:action-completed="initialize"/>
       <v-btn text @click="downloadPersonalData">Pobierz</v-btn>
       <v-spacer/>
-      <prof-confirm-personal-data-delete v-on:action-completed=""/>
+      <confirm-personal-data-delete v-on:action-completed=""/>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
+import ConfirmPersonalDataDelete from "@/components/user-profile/confirm-personal-data-delete";
+import PersonalDataEditDialog from "@/components/user-profile/personal-data-edit-dialog";
 
 export default {
   name: "personal-data",
+  components: {PersonalDataEditDialog, ConfirmPersonalDataDelete},
   data: () => ({
     loading: false,
   }),

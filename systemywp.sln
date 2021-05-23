@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API", "SystemyWP.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.Data", "SystemyWP.Data\SystemyWP.Data.csproj", "{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.Integration.Tests", "SystemyWP.Integration.Tests\SystemyWP.Integration.Tests.csproj", "{5BB0CCF4-C819-483B-9AE2-B52A6F3DE884}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BB0CCF4-C819-483B-9AE2-B52A6F3DE884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BB0CCF4-C819-483B-9AE2-B52A6F3DE884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BB0CCF4-C819-483B-9AE2-B52A6F3DE884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BB0CCF4-C819-483B-9AE2-B52A6F3DE884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

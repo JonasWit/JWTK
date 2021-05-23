@@ -7,7 +7,7 @@ namespace SystemyWP.API.Forms.Validation.GeneralApp.Contact
     {
         public CreateContactEmailValidation()
         {
-            RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(100);
+            RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(256);
             RuleFor(x => x.Comment).MaximumLength(100);
         }
     }

@@ -1,18 +1,18 @@
 ﻿<template>
   <div>
     <div v-if="authenticated">
-      <prof-main-header class="mb-4"/>
+      <main-header class="mb-4"/>
       <div>
         <div>
-          <prof-personal-data/>
+          <personal-data/>
         </div>
         <if-auth>
           <template v-slot:allowed="{portalAdmin, legalAppAllowed, client, clientAdmin}">
             <div v-if="legalAppAllowed && (portalAdmin || clientAdmin)" class="mt-4">
-              <prof-legal-application-details v-if="profile.legalAppAllowed"/>
+              <legal-application-details v-if="profile.legalAppAllowed"/>
             </div>
             <div>
-              <prof-account-remove/>
+              <account-remove/>
             </div>
           </template>
         </if-auth>
@@ -23,8 +23,14 @@
 
 <script>
 import {mapGetters, mapState} from "vuex";
+import LegalApplicationDetails from "@/components/user-profile/legal-application-details";
+import MainHeader from "@/components/user-profile/main-header";
+import PersonalData from "@/components/user-profile/personal-data";
+import AccountRemove from "@/components/user-profile/account-remove";
+import IfAuth from "@/components/auth/if-auth";
 
 export default {
+  components: {IfAuth, AccountRemove, PersonalData, MainHeader, LegalApplicationDetails},
   middleware: ["client", "authenticated"],
   data: () => ({}),
   computed: {

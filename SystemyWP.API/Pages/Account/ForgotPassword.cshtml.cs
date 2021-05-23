@@ -15,12 +15,10 @@ namespace SystemyWP.API.Pages.Account
     public class ForgotPassword : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly EmailClient _emailSender;
 
-        public ForgotPassword(UserManager<IdentityUser> userManager, EmailClient emailSender)
+        public ForgotPassword(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
         }
 
         [BindProperty]
@@ -33,7 +31,7 @@ namespace SystemyWP.API.Pages.Account
             public string Email { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromServices] EmailClient emailSender)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +50,7 @@ namespace SystemyWP.API.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
+                await emailSender.SendEmailAsync(
                     Input.Email,
                     "Reset Password", EmailTemplates.CreatePasswordResetTempalte(callbackUrl));
                 return RedirectToPage("./ForgotPasswordConfirmation");

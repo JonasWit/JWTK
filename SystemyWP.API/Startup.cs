@@ -52,7 +52,7 @@ namespace SystemyWP.API
             services.AddRazorPages();
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
             
-            AddUtilities(services);
+            AddMarkedServices(services);
 
             services.AddScoped<EmailClient>();
             services.AddFileServices(_configuration);
@@ -78,6 +78,12 @@ namespace SystemyWP.API
                 app.UseExceptionHandler("/Error");
             }
             
+            app.UseCookiePolicy(
+                new CookiePolicyOptions
+                {
+                    Secure = CookieSecurePolicy.Always,
+                });
+            
             app.UseRouting();
             app.UseCors(NuxtJsApp);
             app.UseAuthentication();
@@ -90,25 +96,29 @@ namespace SystemyWP.API
             });
         }
 
-        private void AddUtilities(IServiceCollection services)
+        private void AddMarkedServices(IServiceCollection services)
         {
             var transientServiceType = typeof(TransientService);
             var scopedServiceType = typeof(ScopedService);
+            var singletonServiceType = typeof(SingletonService);
 
             var appDefinedTransientTypes = transientServiceType.Assembly.DefinedTypes.ToList();
             var appDefinedScopedTypes = scopedServiceType.Assembly.DefinedTypes.ToList();
+            var appDefinedSingletonTypes = singletonServiceType.Assembly.DefinedTypes.ToList();
 
             var transientServices = appDefinedTransientTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
-
             var scopedServices = appDefinedScopedTypes
                 .Where(x => x.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
+            var singletonServices = appDefinedSingletonTypes
+                .Where(x => x.GetTypeInfo().GetCustomAttribute<SingletonService>() != null);
 
             foreach (var service in transientServices)
                 services.AddTransient(service);
-            
             foreach (var service in scopedServices)
                 services.AddScoped(service);
+            foreach (var service in singletonServices)
+                services.AddSingleton(service);
         }
 
         private void AddIdentity(IServiceCollection services)

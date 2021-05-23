@@ -8,7 +8,7 @@ namespace SystemyWP.Data.Models.General.Contact
         [MaxLength(100)]
         public string Comment { get; set; }
         [Required]
-        [MaxLength(100)]
+        [MaxLength(256)]
         public string Email { get; set; }
     }
 }

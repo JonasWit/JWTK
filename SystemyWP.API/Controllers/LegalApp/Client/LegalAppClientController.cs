@@ -166,7 +166,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
 
                 if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                
+
                 var newEntity = new LegalAppClient
                 {
                     AccessKey = user.AccessKey,
