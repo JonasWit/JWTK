@@ -40,16 +40,7 @@ namespace SystemyWP.API.Controllers.Portal
 
                 var results = _context.AccessKeys
                     .Include(x => x.Users)
-                    .AsEnumerable()
-                    .Select(x => AccessKeyProjection
-                        .FullProjection(
-                            legalAppRelatedDataCount.Any(y => y.KeyName.Equals(x.Name))
-                                ? legalAppRelatedDataCount
-                                    .First(y => y.KeyName.Equals(x.Name))
-                                    .Count
-                                : 0, x.Users)
-                        .Compile()
-                        .Invoke(x))
+                    .Select(AccessKeyProjection.FullProjection())
                     .ToList();
                 return Ok(results);
             }

@@ -9,16 +9,13 @@ namespace SystemyWP.API.Projections
 {
     public static class AccessKeyProjection
     {
-        public static Expression<Func<AccessKey, object>> FullProjection(int relatedLegalAppClients, List<User> users) =>
+        public static Expression<Func<AccessKey, object>> FullProjection() =>
             key => new
             {
                 key.Id,
                 key.Name,
                 key.ExpireDate,
-                assignedUsers = key.Users.AsQueryable().Count(),
                 assignedUsersDetials = key.Users.Select(x => x.Id).ToList(),
-                relatedLegalAppClients,
-                Users = users.AsQueryable().Select(x => x.Id).ToList()
             };
         
         public static Func<AccessKey, object> Create => Projection.Compile();

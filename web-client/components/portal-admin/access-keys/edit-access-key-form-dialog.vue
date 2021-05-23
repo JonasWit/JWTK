@@ -5,12 +5,10 @@
         <v-icon medium color="warning">mdi-pencil</v-icon>
       </v-btn>
     </template>
-
     <v-card v-if="!loading">
       <v-card-title class="justify-center">Access Key Management</v-card-title>
       <v-divider></v-divider>
       <v-form ref="editDataAccessKeyForm" v-model="validation.valid">
-
         <v-text-field class="ma-3" v-model="form.keyName" :rules="validation.key" label="Key String"
                       required></v-text-field>
         <v-menu ref="menu" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
@@ -21,9 +19,6 @@
           </template>
           <v-date-picker :min="todayDate" v-model="form.expireDate" no-title scrollable>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="menu = false">
-              Cancel
-            </v-btn>
             <v-btn text color="primary" @click="$refs.menu.save(form.expireDate)">
               OK
             </v-btn>

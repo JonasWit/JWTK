@@ -5,7 +5,6 @@
         <v-icon medium color="error">mdi-delete</v-icon>
       </v-btn>
     </template>
-
     <v-card>
       <v-card-title class="justify-center">Delete Access Key</v-card-title>
       <v-divider/>

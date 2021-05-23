@@ -36,5 +36,12 @@ export default {
 </script>
 
 <style scoped>
+.nav-item {
+  text-decoration: none;
+}
 
+.v-card {
+  border-left: 3px solid var(--v-primary-base);
+
+}
 </style>
