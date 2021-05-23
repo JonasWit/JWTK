@@ -33,7 +33,6 @@
 
 <script>
 
-import NavigationDrawer from "@/components/legal-app/navigation-drawer";
 import AddClientDialog from "@/components/legal-app/clients/dialogs/add-client-dialog";
 import {hasOccurrences} from "@/data/functions";
 import {mapState} from "vuex";
@@ -52,7 +51,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {AppBreadcrumbs, ButtonToGoUp, AddClientDialog, ClientListItem, Layout, NavigationDrawer},
+  components: {AppBreadcrumbs, ButtonToGoUp, AddClientDialog, ClientListItem, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
 

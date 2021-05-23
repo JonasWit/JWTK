@@ -15,11 +15,13 @@
 
 <script>
 
-
 export default {
   name: "app-breadcrumbs",
   computed: {
+
+
     crumbs() {
+
       const fullPath = this.$route.fullPath
       const params = fullPath.substring(1).split('/')
       const crumbs = []
@@ -31,7 +33,6 @@ export default {
         const match = this.$router.match(path)
 
         if (match.name !== null) {
-          console.log(`path:  ${path}`)
           crumbs.push(match)
           console.warn(crumbs, 'lista crumbsów')
         }
@@ -40,7 +41,8 @@ export default {
       return crumbs
     }
 
-  }
+  },
+  methods: {}
 }
 </script>
 
