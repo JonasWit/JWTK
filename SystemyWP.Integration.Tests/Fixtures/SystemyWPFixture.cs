@@ -22,11 +22,7 @@ namespace SystemyWP.Integration.Tests.Fixtures
                 //     .AddScheme<AuthenticationSchemeOptions, UnauthorizedAuthMock>(TestConstants.AuthenticationSchemes.UnauthorizedTest, _ => { });
                 
                 services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
-                
-                services.AddControllers()
-                    .AddFluentValidation(x =>
-                        x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
-                
+
                 DbContextUtils.SeedDatabase(services.BuildServiceProvider());
             });
         }

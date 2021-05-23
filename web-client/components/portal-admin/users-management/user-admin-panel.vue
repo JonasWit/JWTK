@@ -134,12 +134,18 @@ export default {
 
       this.inviteRequest(data);
       this.loading = false;
+    },
+    inviteRequest(data) {
+      return this.$axios.$post("/api/portal-admin/clients", data)
+        .then(r => {
+          this.$notifier.showSuccessMessage("User Invited!");
+        })
+        .catch((e) => {
+          this.$notifier.showSuccessMessage(`${e}`);
+        })
+        .finally(this.getUsers());
     }
   },
-  inviteRequest(data) {
-    return this.$axios.$post("/api/portal-admin/clients", data)
-      .finally(this.getUsers());
-  }
 };
 </script>
 

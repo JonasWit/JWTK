@@ -251,7 +251,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
-
+            
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)

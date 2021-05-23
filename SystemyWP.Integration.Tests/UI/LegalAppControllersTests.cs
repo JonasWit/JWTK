@@ -27,7 +27,7 @@ namespace SystemyWP.Integration.Tests.UI
         }
 
         [Fact]
-        public async Task GetBasicClientsListForClientAdmin()
+        public async Task GetBasicClientsList()
         {
             var client = _factory.CreateClient();
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestConstants.AuthenticationSchemes.ClientAdminTest);
@@ -39,7 +39,7 @@ namespace SystemyWP.Integration.Tests.UI
         }
         
         [Fact]
-        public async Task GetClientsListForClientAdmin()
+        public async Task GetClientsList()
         {
             var client = _factory.CreateClient();
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestConstants.AuthenticationSchemes.UnauthorizedTest);
@@ -51,7 +51,7 @@ namespace SystemyWP.Integration.Tests.UI
         }
         
         [Fact]
-        public async Task CreateClientForClientAdmin()
+        public async Task CreateClient()
         {
             var client = _factory.CreateClient();
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestConstants.AuthenticationSchemes.ClientAdminTest);
@@ -68,12 +68,24 @@ namespace SystemyWP.Integration.Tests.UI
         }
         
         [Fact]
-        public async Task GetClientForClientAdmin()
+        public async Task GetClient()
         {
             var client = _factory.CreateClient();
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestConstants.AuthenticationSchemes.ClientAdminTest);
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/api/legal-app-clients/client/1");
+            var response = await client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task ArchiveClient()
+        {
+            var client = _factory.CreateClient();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(TestConstants.AuthenticationSchemes.ClientAdminTest);
+
+            var request = new HttpRequestMessage(HttpMethod.Put, "/api/legal-app-clients/archive/1");
             var response = await client.SendAsync(request);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

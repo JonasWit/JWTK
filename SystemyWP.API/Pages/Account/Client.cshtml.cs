@@ -7,29 +7,31 @@ namespace SystemyWP.API.Pages.Account
 {
     public class Client : BasePage
     {
-        [BindProperty] public ModeratorRegisterForm Form { get; set; } 
+        [BindProperty] public RegisterForm Form { get; set; } 
         
-        public class ModeratorRegisterForm
+        public class RegisterForm
         {
             [Required] 
             public string ReturnUrl { get; set; }
-            [Required]
+            
+            [Required(ErrorMessage = "Pole jest wymagane")]
             [DataType(DataType.EmailAddress, ErrorMessage = "Niepoprawny adres email")]
             public string Email { get; set; }
+            
             public string Code { get; set; }
-            [Required]
+            
+            [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(20, ErrorMessage = "Nazwa użytkownika może mieć maksymalnie 20 znaków")]
-            [RegularExpression(@"[A-Za-z0-9._-]", 
-                ErrorMessage = "Niepoprawna nazwa użytkownika")]
             public string Username { get; set; }
-            [Required]
+            
+            [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 12 do 25 znaków", MinimumLength = 12)]
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
             
-            [Required]
+            [Required(ErrorMessage = "Pole jest wymagane")]
             [DataType(DataType.Password)]
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
@@ -37,7 +39,7 @@ namespace SystemyWP.API.Pages.Account
         
         public void OnGet(string returnUrl, string code, string email)
         {
-            Form = new ModeratorRegisterForm
+            Form = new RegisterForm
             {
                 Email = email,
                 Code = code,
@@ -70,11 +72,11 @@ namespace SystemyWP.API.Pages.Account
             {
                 user.UserName = Form.Username;
                 user.EmailConfirmed = true;
-                
+
                 await userManager.UpdateAsync(user);
                 
-                await userManager.RemoveFromRoleAsync(user, SystemyWpConstants.Roles.Invited);
-                await userManager.AddToRoleAsync(user, SystemyWpConstants.Roles.Client);   
+                await userManager.RemoveClaimAsync(user, SystemyWpConstants.Claims.InvitedClaim);
+                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim); 
                 
                 await signInManager.SignInAsync(user, true);
                 return Redirect(Form.ReturnUrl);
