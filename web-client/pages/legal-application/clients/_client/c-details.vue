@@ -33,9 +33,12 @@ import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 import Layout from "@/components/legal-app/layout";
 
 export default {
+  meta: {
+    pageName: 'Klient'
+  },
   name: "c-details",
   components: {Layout, AppBreadcrumbs},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
   data: () => ({
     client: null,
   }),
