@@ -47,7 +47,7 @@ namespace SystemyWP.API.Controllers.Portal
                                 ? legalAppRelatedDataCount
                                     .First(y => y.KeyName.Equals(x.Name))
                                     .Count
-                                : 0)
+                                : 0, x.Users)
                         .Compile()
                         .Invoke(x))
                     .ToList();

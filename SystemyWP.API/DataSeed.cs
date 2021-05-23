@@ -53,7 +53,7 @@ namespace SystemyWP.API
             {
                 var newClient = new LegalAppClient
                 {
-                    Name = $"#{i}# Test Client",
+                    Name = $"Test Client - {i}",
                     Active = true,
                     CreatedBy = "portaladmin1",
                     UpdatedBy = "portaladmin1"
@@ -62,7 +62,7 @@ namespace SystemyWP.API
                 for (var c = 0; c < random.Next(0, 60); c++)
                 {
                     var contact = new ContactDetails();
-                    contact.Comment = $"Comment for Contact {i} -- {c}";
+                    contact.Comment = $"Comment for Contact {c}";
                     contact.Name = $"Contact {i} -- {c}";
                     contact.Title = $"Title {i} -- {c}";
                     contact.CreatedBy = "system";

@@ -51,12 +51,12 @@ export default {
   }),
   computed: {
     ...mapState('admin-panel-store', ['accessKeys']),
-    ...mapActions('admin-panel-store', ['getAccessKeys']),
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
   },
   methods: {
+    ...mapActions('admin-panel-store', ['getAccessKeys']),
     addKey() {
       if (!this.$refs.createDataAccessKeyForm.validate()) return;
       if (this.loading) return;
@@ -71,8 +71,11 @@ export default {
         .then(() => {
           this.resetForm();
           this.getAccessKeys();
+          this.$notifier.showSuccessMessage("New key added!");
         })
         .catch((e) => {
+          console.error(e);
+          this.$notifier.showSuccessMessage(`Issue! ${e}`);
         }).finally(() => {
           this.loading = false;
           this.dialog = false;
