@@ -1,23 +1,31 @@
 <template>
   <v-container>
     <v-row class="my-4">
-      <v-row class="header my-5 py-2 px-2"><h1>Kim jesteśmy ?</h1>
-      </v-row>
-      <p>
-        <span class="title">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
-        Tworzymy <span class="subtitle-1">strony internetowe</span> i
-        rozwiązania, które wspierają <span class="subtitle-1">funkcjonowanie biznesu</span>. </p>
-      <p>Inwestujemy w rozwój i podążamy za nowoczesnymi technologiami.</p>
-      <p>Programowanie to nasza pasja, dlatego do każdego zlecenia podchodzimy w sposób indywidualny
-        skupiając się na potrzebach Klienta.</p>
-      <p class="title">Zapraszamy do współpracy!</p>
-
+      <div class="mx-4">
+        <h1>O Nas</h1>
+      </div>
     </v-row>
     <v-row class="py-4">
       <v-divider color="crimson"></v-divider>
     </v-row>
+    <v-card class="main-section">
+      <p class="mx-4">
+        <span class="title">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
+        Tworzymy <span class="subtitle-1">strony internetowe</span> i
+        rozwiązania, które wspierają <span class="subtitle-1">funkcjonowanie biznesu</span>.
+      </p>
+      <p class="mx-4">Inwestujemy w rozwój i podążamy za nowoczesnymi technologiami.</p>
+      <p class="mx-4">Programowanie to nasza pasja, dlatego do każdego zlecenia podchodzimy w sposób indywidualny
+        skupiając się na potrzebach Klienta.
+      </p>
+      <v-card-title>Zapraszamy do współpracy!</v-card-title>
+    </v-card>
+
+    <v-row class="py-4">
+      <v-divider color="crimson"></v-divider>
+    </v-row>
     <v-row class="d-flex justify-space-between">
-      <v-card id="card" v-for="item in items" :key="item.id" width="350px" class="mx-auto my-2">
+      <v-card id="card" v-for="item in items" :key="item.id" max-width="350px" class="mx-auto my-2">
         <v-img :src="item.img" class="white--text align-center" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                height="100%">
           <v-row align="center" justify="space-around" class="my-2">
@@ -30,9 +38,6 @@
     </v-row>
     <v-row class="py-4">
       <v-divider color="crimson"></v-divider>
-    </v-row>
-    <v-row>
-
     </v-row>
   </v-container>
 </template>
@@ -81,9 +86,10 @@ export default {
 
 <style>
 
-.header {
-  display: block;
-  border-bottom: solid 1px crimson;
+
+.main-section {
+  border: none;
+  background-color: transparent !important;
 }
 
 </style>

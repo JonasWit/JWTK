@@ -5,7 +5,7 @@
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <v-breadcrumbs v-for="(crumb, index) in crumbs" :key="index">
-        <nuxt-link :to="crumb.path" class="crumb-link">
+        <nuxt-link :to="crumb" class="crumb-link">
           {{ crumb.name }} /
         </nuxt-link>
       </v-breadcrumbs>
@@ -20,43 +20,24 @@ import {mapMutations, mapState} from "vuex";
 export default {
   name: "app-breadcrumbs",
   computed: {
-    ...mapState('breadcrumbs-store', ['pageName']),
+    ...mapState('breadcrumbs-store', ['metaArray']),
 
     crumbs() {
-
-
-      // const crumbs = []
-      // const pageName = this.pageName
-      //
-      //
-      // if (pageName !== null) {
-      //   crumbs.push(pageName)
-      //   console.warn(crumbs, 'lista crumbsów')
-      //
-      // }
-
-
       const fullPath = this.$route.fullPath
       const params = fullPath.substring(1).split('/')
       const crumbs = []
-      const pageName = this.pageName
-
-
       let path = ''
-
       params.forEach((param) => {
         path = `${path}/${param}`
         const match = this.$router.match(path)
-
         if (match.name !== null) {
           crumbs.push(match)
-          console.warn('Match', match)
-
+          console.warn(crumbs, 'lista crumbsów')
         }
       })
-
       return crumbs
     }
+
 
   },
   methods: {
