@@ -1,15 +1,19 @@
 ﻿<template>
   <v-container>
     <v-row class="my-4">
-      <v-row class="header my-5 py-2 px-2"><h1>Nasza oferta</h1>
-      </v-row>
-      <v-row class="py-3">
-        <p>Tworzymy zarówno <span class="title">statyczne strony internetowe jak również aplikacje webowe.</span></p>
-        <p>Zamów u nas stronę lub aplikację a
-          my zajmiemy się jej stowrzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym przejmować!</p>
-      </v-row>
+      <div class="mx-4">
+        <h1>Nasza oferta</h1>
+      </div>
     </v-row>
-
+    <v-row class="py-4">
+      <v-divider color="crimson"></v-divider>
+    </v-row>
+    <v-card class="main-section">
+      <p class="mx-4">Tworzymy zarówno <span
+        class="title">statyczne strony internetowe jak również aplikacje webowe.</span></p>
+      <p class="mx-4">Zamów u nas stronę lub aplikację a my zajmiemy się jej stowrzeniem i utrzymywaniem jej przy życiu.
+        Nie będziesz musiał się niczym przejmować!</p>
+    </v-card>
     <v-row class="my-3">
       <v-divider color="crimson"></v-divider>
     </v-row>
@@ -30,9 +34,11 @@
     <v-row class="my-5">
       <v-divider color="crimson"></v-divider>
     </v-row>
-    <v-row>
-      <p>Zapraszamy do kontaktu, aby poznać wycenę usług.</p>
-    </v-row>
+
+    <v-card class="main-section">
+      <p class="mx-4">Zapraszamy do kontaktu, aby poznać wycenę usług.</p>
+    </v-card>
+
     <pricing/>
   </v-container>
 </template>

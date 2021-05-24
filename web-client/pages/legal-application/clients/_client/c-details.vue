@@ -29,15 +29,15 @@
 <script>
 
 
-import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 import Layout from "@/components/legal-app/layout";
+import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 
 export default {
   meta: {
     pageName: 'Klient'
   },
   name: "c-details",
-  components: {Layout, AppBreadcrumbs},
+  components: {AppBreadcrumbs, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
   data: () => ({
     client: null,

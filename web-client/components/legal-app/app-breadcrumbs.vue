@@ -33,7 +33,6 @@ export default {
         if (match.name !== null) {
           crumbs.push(match)
           console.warn(crumbs, 'lista crumbsów')
-
         }
       })
       return crumbs
