@@ -148,7 +148,6 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      console.warn('handle logs fired', this.query);
       return this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`)
         .then(logs => {
           if (logs.length === 0) {
@@ -164,7 +163,6 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          console.warn('fetched data', this.logs.length);
         });
     }
   }
