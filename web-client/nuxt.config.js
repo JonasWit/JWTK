@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import path from 'path';
+import colors from 'vuetify/es5/util/colors';
 
 const config = {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -92,29 +93,26 @@ const config = {
       dark: true,
       themes: {
         dark: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
 
-          primary: '#B41946',
-          secondary: '#6F8AB7',
-          accent: '#06D6A0',
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3,
           anchor: '#ececea',
-
-          error: '#F24333',
-          info: '#3E8989',
-          success: '#2CDA9D',
-          warning: '#FFC107',
-
         },
         light: {
+          primary: '#1976D2',
+          secondary: colors.teal.lighten3,
+          accent: colors.teal.accent4,
 
-          primary: '#B41946',
-          secondary: '#6F8AB7',
-          accent: '#06D6A0',
-          anchor: '#000409',
-
-          error: '#F24333',
-          info: '#3E8989',
-          success: '#4B8F8C',
+          error: '#FF5252',
+          info: '#2196F3',
+          success: '#4CAF50',
           warning: '#FFC107',
+          anchor: '#000409',
         }
       },
     }

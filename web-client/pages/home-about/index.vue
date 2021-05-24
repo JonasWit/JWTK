@@ -87,9 +87,4 @@ export default {
 <style>
 
 
-.main-section {
-  border: none;
-  background-color: transparent !important;
-}
-
 </style>
