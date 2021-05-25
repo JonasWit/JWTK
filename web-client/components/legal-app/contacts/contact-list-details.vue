@@ -4,10 +4,8 @@
       <v-icon left>
         mdi-email
       </v-icon>
-      <v-list-item class="hidden-sm-and-down">Email</v-list-item>
-      <v-list-item>
-        <add-email-dialog :selected-contact="selectedContact"/>
-      </v-list-item>
+      Email
+      <add-email-dialog :selected-contact="selectedContact"/>
     </v-tab>
     <v-tab class="d-flex justify-space-between">
       <v-icon left>
@@ -32,7 +30,7 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in emailsList" :key="item.id">
-          <v-row class="d-flex">
+          <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
             <v-col>Adres email: {{ item.email }}</v-col>
             <v-col>
@@ -45,7 +43,7 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in phoneNumbersList" :key="item.id">
-          <v-row class="d-flex">
+          <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
             <v-col>Numer telefonu: {{ item.number }}</v-col>
             <v-col>
@@ -58,12 +56,10 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in addressesList" :key="item.id">
-          <v-row class="d-flex">
+          <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
-            <v-col>Ulica: {{ item.street }}</v-col>
-            <v-col>Nr: {{ item.building }}</v-col>
-            <v-col>Miasto: {{ item.city }}</v-col>
-            <v-col>Kod: {{ item.postCode }}</v-col>
+            <v-col>Ulica i Nr: {{ item.street }} {{ item.building }}</v-col>
+            <v-col>Miasto i kod: {{ item.city }} {{ item.postCode }}</v-col>
             <v-col>Państwo: {{ item.country }}</v-col>
             <v-col>
               <delete-address-dialog :selected-address="item" :selected-contact="selectedContact"/>
