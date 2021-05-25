@@ -1,6 +1,6 @@
 ﻿<template>
-  <v-container>
-    <h1>Zainteresowała Cię nasza oferta?</h1>
+  <v-container class="mx-4">
+    <h1 class="my-2">Zainteresowała Cię nasza oferta?</h1>
     <p class="font-weight-bold">Zapraszamy do kontaktu!</p>
     <p>Nasz adres email to: <a href="mailto:biuro@systemywp.pl">biuro@systemywp.pl</a></p>
     <p>Możesz również zostawić nam swój numer telefonu, a oddzwonimy w ciągu 24 godzin.</p>

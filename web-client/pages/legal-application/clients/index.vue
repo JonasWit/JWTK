@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template v-slot:content>
-      <app-breadcrumbs/>
+
       <v-toolbar prominent>
         <v-toolbar-title class="mr-3">
           Lista Klientów
@@ -39,7 +39,6 @@ import {mapState} from "vuex";
 import Layout from "@/components/legal-app/layout";
 import ClientListItem from "@/components/legal-app/clients/client-list-item";
 import ButtonToGoUp from "@/components/legal-app/button-to-go-up";
-import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 
 
 const searchItemFactory = (name, id) => ({
@@ -54,7 +53,7 @@ export default {
     pageName: 'Lista Klientów'
   },
   name: "index",
-  components: {AppBreadcrumbs, ButtonToGoUp, AddClientDialog, ClientListItem, Layout},
+  components: {ButtonToGoUp, AddClientDialog, ClientListItem, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
 
 

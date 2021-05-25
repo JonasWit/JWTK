@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template v-slot:content v-if="client">
-      <app-breadcrumbs/>
+
       <h1 class="ma-3">{{ client.name }}</h1>
       <v-row>
         <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
@@ -30,14 +30,14 @@
 
 
 import Layout from "@/components/legal-app/layout";
-import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
+
 
 export default {
   meta: {
     pageName: 'Klient'
   },
   name: "c-details",
-  components: {AppBreadcrumbs, Layout},
+  components: {Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
   data: () => ({
     client: null,

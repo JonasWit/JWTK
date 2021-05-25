@@ -1,7 +1,10 @@
 ﻿<template>
-  <v-container>
+  <v-container fluid>
     <v-row no-gutters>
-      <v-col class="my-5">
+      <v-col cols="2">
+        <navigation-drawer/>
+      </v-col>
+      <v-col cols="9" class="my-5">
         <slot name="content">
         </slot>
       </v-col>
@@ -11,9 +14,11 @@
 <script>
 
 
+import NavigationDrawer from "./navigation-drawer";
+
 export default {
   name: "layout",
-
+  components: {NavigationDrawer},
 };
 </script>
 

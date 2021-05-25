@@ -1,8 +1,6 @@
 <template>
   <layout>
-
     <template v-slot:content>
-      <app-breadcrumbs/>
       <v-toolbar prominent class="my-3">
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
@@ -46,7 +44,6 @@ import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contac
 import {hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
-import AppBreadcrumbs from "@/components/legal-app/app-breadcrumbs";
 
 
 const searchItemFactory = (name, id) => ({
@@ -61,7 +58,7 @@ export default {
     pageName: 'Kontakty'
   },
   name: "index",
-  components: {AppBreadcrumbs, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
+  components: {ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
 
   data: () => ({
