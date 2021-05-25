@@ -23,13 +23,13 @@ namespace SystemyWP.Integration.Tests.Mocks
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, "test@test.com"),
+                new Claim(ClaimTypes.Email, "clientadmin0@test.com"),
                 SystemyWpConstants.Claims.ClientAdminClaim,
                 SystemyWpConstants.Claims.LegalAppAccessClaim
             };
-            var identity = new ClaimsIdentity(claims, "CA-Test");
+            var identity = new ClaimsIdentity(claims, SystemyWpConstants.Roles.ClientAdmin);
             var principal = new ClaimsPrincipal(new[] {identity});
-            var ticket = new AuthenticationTicket(principal, "CA-Test");
+            var ticket = new AuthenticationTicket(principal, SystemyWpConstants.Roles.ClientAdmin);
             return Task.FromResult(AuthenticateResult.Success(ticket));
         }
     }

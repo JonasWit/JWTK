@@ -50,6 +50,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             }
             return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
         }
+        
         protected async Task<CheckResult> CheckAccess()
         {
             //Get Users Data Key

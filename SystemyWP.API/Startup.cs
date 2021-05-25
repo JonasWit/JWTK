@@ -41,11 +41,11 @@ namespace SystemyWP.API
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
-            
+
             // services.AddDbContext<AppDbContext>(options =>
             //     options.UseNpgsql(_configuration.GetConnectionString("Default"))
             //         .EnableSensitiveDataLogging());
-       
+
             AddIdentity(services);
 
             services.AddControllers()
@@ -54,7 +54,7 @@ namespace SystemyWP.API
 
             services.AddRazorPages();
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
-            
+
             AddMarkedServices(services);
 
             services.AddScoped<EmailClient>();
@@ -71,7 +71,7 @@ namespace SystemyWP.API
             // var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
             // loggerFactory.AddProvider(new AppLoggerProvider(
             //         serviceProvider.GetRequiredService<AppDbContext>()));
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,13 +80,13 @@ namespace SystemyWP.API
             {
                 app.UseExceptionHandler("/Error");
             }
-            
+
             app.UseCookiePolicy(
                 new CookiePolicyOptions
                 {
                     Secure = CookieSecurePolicy.Always,
                 });
-            
+
             app.UseRouting();
             app.UseCors(NuxtJsApp);
             app.UseAuthentication();
@@ -169,7 +169,7 @@ namespace SystemyWP.API
                 .AddErrorDescriber<PolishIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.Configure<DataProtectionTokenProviderOptions>(o =>
                 o.TokenLifespan = TimeSpan.FromHours(3));
 
