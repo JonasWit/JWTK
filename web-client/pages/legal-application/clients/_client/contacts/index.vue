@@ -1,11 +1,10 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar prominent class="my-3">
+      <v-toolbar class="my-3">
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
         </v-toolbar-title>
-
         <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
                         hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="contactItems"
                         :filter="searchFilter">
@@ -25,8 +24,8 @@
             <v-row>
               <v-col> Nazwa: {{ item.title }}</v-col>
               <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
-              <v-col>Komentarz: {{ item.comment }}</v-col>
-              <v-col>Dodano: {{ item.created }}</v-col>
+              <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
+              <v-col class="hidden-sm-and-down">Dodano: {{ item.created }}</v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -72,18 +71,18 @@ export default {
   }),
 
   async fetch() {
-    this.contactItemsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`)
-    console.warn('clients contacts search results', this.contactItemsFromFetch)
-    this.contactList = this.contactItemsFromFetch
+    this.contactItemsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`);
+    console.warn('clients contacts search results', this.contactItemsFromFetch);
+    this.contactList = this.contactItemsFromFetch;
   },
 
   watch: {
     searchResult() {
       if (this.searchResult) {
-        this.contactList = []
+        this.contactList = [];
         this.contactList.push(this.contactItemsFromFetch.find(contactItem => contactItem.id === this.searchResult.id));
       } else {
-        this.contactList = this.contactItemsFromFetch
+        this.contactList = this.contactItemsFromFetch;
       }
     },
   },
@@ -101,7 +100,7 @@ export default {
   }
 
 
-}
+};
 </script>
 
 <style scoped>

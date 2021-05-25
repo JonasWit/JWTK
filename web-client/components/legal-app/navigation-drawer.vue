@@ -1,41 +1,32 @@
 <template>
-  <v-card height="100vh">
-    <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" permanent width="100%">
-      <v-list-item>
-        <v-list-item-title class="title">
-          Twoja Kancelaria
-        </v-list-item-title>
-        <v-btn icon @click.stop="mini = !mini">
+  <v-card>
+    <v-list dense nav v-for="item in items" :key="item.id">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <nuxt-link class="nav-item" :to="item.route">
+            <!--            <v-list-item >-->
+            <!--              <v-list-item-content>-->
+            <!--                <v-list-item-title>{{ item.name }}</v-list-item-title>-->
+            <!--              </v-list-item-content>-->
+            <v-list-item-icon link v-bind="attrs" v-on="on">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <!--            </v-list-item>-->
+          </nuxt-link>
+
+        </template>
+        <span>{{ item.name }}</span>
+      </v-tooltip>
+    </v-list>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn color="success" icon v-bind="attrs" v-on="on" @click="$router.back()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <template v-slot:activator="{ on: drawer, attrs }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-
-            <v-list dense nav v-for="item in items" :key="item.id" v-bind="attrs"
-                    v-on="{ ...tooltip, ...drawer }">
-              <nuxt-link class="nav-item" :to="item.route">
-                <v-list-item link>
-                  <v-list-item-icon>
-                    <v-icon>{{ item.icon }}</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.name }}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </nuxt-link>
-            </v-list>
-          </template>
-          <span>{{ item.name }}</span>
-        </v-tooltip>
       </template>
-
-    </v-navigation-drawer>
+      <span>Powrót do poprzedniej strony</span>
+    </v-tooltip>
   </v-card>
 </template>
 
@@ -45,27 +36,29 @@ import {legalappRoute} from "@/data/legal-app/legal-app-navigation";
 export default {
   name: "navigation-drawer",
   data: () => ({
-    drawer: true,
     items: [],
-    mini: true
   }),
   created() {
     this.items = legalappRoute.items;
   }
-}
+};
 </script>
 
 <style scoped>
+.v-list {
+  background-color: transparent !important;
+}
+
 .nav-item {
   text-decoration: none;
+
 }
 
 .v-card {
   position: fixed;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.highlighted {
-  background-color: #B41946;
-
-}
 </style>

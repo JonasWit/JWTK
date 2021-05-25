@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-2" icon v-on="{ ...tooltip, ...dialog }">
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="warning">mdi-archive-arrow-down</v-icon>
           </v-btn>
         </template>
@@ -60,21 +60,21 @@ export default {
         .then(() => {
           this.$notifier.showSuccessMessage("Klient został pomyślnie dodany do archiwum!");
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          this.$nuxt.refresh()
+          this.$nuxt.refresh();
 
         })
         .catch((e) => {
           console.warn('archive client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-        this.setClientForAction(this.selectedClient)
+        this.setClientForAction(this.selectedClient);
         this.dialog = false;
       });
 
 
     }
   }
-}
+};
 </script>
 
 <style scoped>

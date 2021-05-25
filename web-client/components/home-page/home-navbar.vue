@@ -40,20 +40,20 @@ export default {
       },
       {
         id: '2',
-        route: '/home-about',
+        route: '/portal-web/about',
         name: 'O Nas',
         icon: 'mdi-account-group'
       },
       {
         id: '3',
-        route: '/home-products',
+        route: '/portal-web/offer',
         name: 'Oferta',
         icon: 'mdi-tag',
       },
 
       {
         id: '4',
-        route: '/home-contact',
+        route: '/portal-web/contact',
         name: 'Kontakt',
         icon: 'mdi-card-account-mail-outline'
       },

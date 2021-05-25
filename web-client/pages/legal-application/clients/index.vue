@@ -1,13 +1,12 @@
 <template>
   <layout>
     <template v-slot:content>
-
-      <v-toolbar prominent>
+      <v-toolbar>
         <v-toolbar-title class="mr-3">
           Lista Klientów
         </v-toolbar-title>
-        <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
-                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="clientItems"
+        <v-autocomplete return-object clearable dense hide-details append-icon="" v-model="searchResult"
+                        placeholder="Wpisz nazwę klienta" prepend-inner-icon="mdi-magnify" :items="clientItems"
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
@@ -17,13 +16,10 @@
         </v-autocomplete>
         <template v-slot:extension>
           <add-client-dialog/>
-
         </template>
       </v-toolbar>
-      <div v-scroll="onScroll">
-        <v-list>
-          <client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
-        </v-list>
+      <div v-scroll="onScroll" class="my-6">
+        <client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
       </div>
       <button-to-go-up/>
     </template>
@@ -72,7 +68,7 @@ export default {
   async fetch() {
     this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
     await this.handleFeed();
-    console.warn('fetched clients')
+    console.warn('fetched clients');
   },
 
   watch: {
@@ -98,8 +94,8 @@ export default {
 
     clientForAction() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-      this.$nuxt.refresh()
-      console.warn('Client list refreshed', this.cursor)
+      this.$nuxt.refresh();
+      console.warn('Client list refreshed', this.cursor);
     }
   },
 
@@ -139,8 +135,8 @@ export default {
 
       return this.$axios.$get(`/api/legal-app-clients/clients?${this.query}`)
         .then(clientsFeed => {
-          console.warn('query feed', this.query)
-          console.warn('query feed', clientsFeed)
+          console.warn('query feed', this.query);
+          console.warn('query feed', clientsFeed);
           if (clientsFeed.length === 0) {
             this.finished = true;
           } else {
@@ -149,16 +145,16 @@ export default {
           }
         })
         .catch(e => {
-          console.warn('ERROR', e)
+          console.warn('ERROR', e);
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
 
 
   }
-}
+};
 
 
 </script>

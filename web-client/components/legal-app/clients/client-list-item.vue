@@ -1,24 +1,34 @@
 ﻿<template>
   <v-card tile>
-    <v-list-item>
-      <v-list-item-title> Nazwa: {{ clientItem.title }}</v-list-item-title>
-      <v-list-item-title> Imię i nazwisko: {{ clientItem.name }} {{ clientItem.surname }}</v-list-item-title>
-      <v-list-item-subtitle>Komentarz: {{ clientItem.comment }}</v-list-item-subtitle>
-      <v-list-item-subtitle>Dodano: {{ clientItem.created }}</v-list-item-subtitle>
-      <v-list-item-icon class="mx-2">
-        <delete-client-dialog :selected-client="clientItem"/>
-      </v-list-item-icon>
-      <v-list-item-icon class="mx-2">
-        <archive-client-dialog :selected-client="clientItem"/>
-      </v-list-item-icon>
-      <v-list-item-icon class="mx-2">
-        <edit-client-name-dialog :selected-client="clientItem"/>
-      </v-list-item-icon>
-      <v-list-item-icon class="ml-3">
-        <go-to-client-panel :client-item="clientItem"/>
-      </v-list-item-icon>
-
-    </v-list-item>
+    <v-row>
+      <v-col class="mx-2">
+        <v-list class="d-flex justify-space-between">
+          <v-list-item-content>
+            <v-list-item-subtitle> Nazwa: {{ clientItem.title }}</v-list-item-subtitle>
+            <v-list-item-subtitle> Imię i nazwisko: {{ clientItem.name }} {{
+                clientItem.surname
+              }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list>
+      </v-col>
+      <v-col class="mx-2">
+        <v-list class="d-flex justify-space-between">
+          <v-list-item-content>
+            <v-list-item-subtitle>Komentarz: {{ clientItem.comment }}</v-list-item-subtitle>
+            <v-list-item-subtitle>Dodano: {{ clientItem.created }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list>
+      </v-col>
+      <v-col class="mx-2">
+        <v-list class="d-flex justify-space-between">
+          <delete-client-dialog :selected-client="clientItem"/>
+          <archive-client-dialog :selected-client="clientItem"/>
+          <edit-client-name-dialog :selected-client="clientItem"/>
+          <go-to-client-panel :client-item="clientItem"/>
+        </v-list>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 

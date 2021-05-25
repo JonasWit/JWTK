@@ -27,22 +27,22 @@ export default {
       },
       {
         id: '',
-        route: '/home-privacy-policy',
+        route: '/portal-web/privacy-policy',
         name: 'Polityka Prywatności'
       },
       {
         id: '3',
-        route: '/home-statute',
+        route: '/portal-web/statute',
         name: 'Regulamin'
       },
       {
         id: '4',
-        route: '/home-contact',
+        route: '/portal-web/contact',
         name: 'Kontakt'
       },
       {
         id: '5',
-        route: '/home-sources',
+        route: '/portal-web/sources',
         name: 'Źródła'
       },
 

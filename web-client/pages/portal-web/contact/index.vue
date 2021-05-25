@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-container class="mx-4">
+  <v-container class="ma-md-auto ma-sm-4 ma-sx-2">
     <h1 class="my-2">Zainteresowała Cię nasza oferta?</h1>
     <p class="font-weight-bold">Zapraszamy do kontaktu!</p>
     <p>Nasz adres email to: <a href="mailto:biuro@systemywp.pl">biuro@systemywp.pl</a></p>

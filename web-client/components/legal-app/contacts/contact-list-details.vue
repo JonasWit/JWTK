@@ -1,11 +1,13 @@
 <template>
   <v-tabs vertical>
-    <v-tab class="d-flex justify-space-between">
+    <v-tab class="d-flex justify-space-between" icons-and-text>
       <v-icon left>
         mdi-email
       </v-icon>
-      Email
-      <add-email-dialog :selected-contact="selectedContact"/>
+      <v-list-item class="hidden-sm-and-down">Email</v-list-item>
+      <v-list-item>
+        <add-email-dialog :selected-contact="selectedContact"/>
+      </v-list-item>
     </v-tab>
     <v-tab class="d-flex justify-space-between">
       <v-icon left>
@@ -30,7 +32,7 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in emailsList" :key="item.id">
-          <v-row>
+          <v-row class="d-flex">
             <v-col>Nazwa: {{ item.comment }}</v-col>
             <v-col>Adres email: {{ item.email }}</v-col>
             <v-col>
@@ -43,7 +45,7 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in phoneNumbersList" :key="item.id">
-          <v-row>
+          <v-row class="d-flex">
             <v-col>Nazwa: {{ item.comment }}</v-col>
             <v-col>Numer telefonu: {{ item.number }}</v-col>
             <v-col>
@@ -56,7 +58,7 @@
     <v-tab-item>
       <v-card flat>
         <v-card-text v-for="item in addressesList" :key="item.id">
-          <v-row>
+          <v-row class="d-flex">
             <v-col>Nazwa: {{ item.comment }}</v-col>
             <v-col>Ulica: {{ item.street }}</v-col>
             <v-col>Nr: {{ item.building }}</v-col>
@@ -78,7 +80,7 @@
             W tym miejscu możesz usunąć lub edytować kontakt.
             Wybierz odpowiednią opcję.
           </v-row>
-          <v-row class="my-5">
+          <v-row class="my-5 d-flex">
             <v-col>
               <delete-contact-dialog :selected-contact="selectedContact"/>
             </v-col>
@@ -128,8 +130,8 @@ export default {
   async fetch() {
     let clientId = this.$route.params.client;
     let contactId = this.selectedContact.id;
-    this.getContactDetailsFromFetch({clientId, contactId})
-    console.warn('contact-list-details -- fetch from store completed', this.contactDetailsFromFetch)
+    this.getContactDetailsFromFetch({clientId, contactId});
+    console.warn('contact-list-details -- fetch from store completed', this.contactDetailsFromFetch);
 
   },
   computed: {
@@ -141,7 +143,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch'])
 
   }
-}
+};
 </script>
 
 <style scoped>

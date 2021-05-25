@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
+          <v-btn fab v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="success">mdi-account-plus</v-icon>
           </v-btn>
         </template>
@@ -63,8 +63,8 @@ export default {
         .then(() => {
           this.resetForm();
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          this.$nuxt.refresh()
-          console.warn('Client list refreshed after client creation', client)
+          this.$nuxt.refresh();
+          console.warn('Client list refreshed after client creation', client);
           this.$notifier.showSuccessMessage("Klient dodany pomyślnie!");
 
         })
@@ -87,7 +87,7 @@ export default {
   }
 
 
-}
+};
 </script>
 
 <style scoped>

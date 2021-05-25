@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-3" icon v-on="{ ...tooltip, ...dialog }">
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="success">mdi-file-document-edit</v-icon>
           </v-btn>
         </template>
@@ -13,9 +13,7 @@
     <v-form ref="editClientNameForm">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="client.name" label="Edytuj nazwę Klienta"
-                        required>
-          </v-text-field>
+          <v-text-field v-model="client.name" label="Edytuj nazwę Klienta" required></v-text-field>
           <small class="grey--text">* Hint text here</small>
         </v-card-text>
         <v-divider></v-divider>
@@ -64,26 +62,26 @@ export default {
 
       const payload = {
         name: this.client.name,
-      }
+      };
 
       this.$axios.$put(`/api/legal-app-clients/update/${this.selectedClient.id}`, payload)
         .then((selectedClient) => {
           this.$notifier.showSuccessMessage("Nazwa klienta updatowana pomyślnie!");
-          console.warn(selectedClient, 'Client name updated successfully')
+          console.warn(selectedClient, 'Client name updated successfully');
 
         })
         .catch((e) => {
           console.warn('client name change error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-        this.setClientForAction(this.selectedClient)
+        this.setClientForAction(this.selectedClient);
         this.dialog = false;
       });
 
     },
 
   }
-}
+};
 </script>
 
 <style scoped>

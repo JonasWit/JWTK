@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-2" icon v-on="{ ...tooltip, ...dialog }">
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
@@ -57,21 +57,21 @@ export default {
       this.$axios.$delete(`/api/legal-app-clients/delete/${this.selectedClient.id}`)
         .then((selectedClient) => {
           this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
-          console.warn(selectedClient, 'Client deleted successfully')
+          console.warn(selectedClient, 'Client deleted successfully');
 
         })
         .catch((e) => {
           console.warn('delete client error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-        this.setClientForAction(this.selectedClient)
+        this.setClientForAction(this.selectedClient);
         this.dialog = false;
       });
 
 
     }
   }
-}
+};
 </script>
 
 <style scoped>
