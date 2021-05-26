@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" :value="selectedClient" persistent width="500">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
-      <v-tooltip bottom>
+      <v-tooltip bottom :disabled="tooltipVisible">
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
           <v-btn icon v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="warning">mdi-archive-arrow-down</v-icon>
@@ -47,6 +47,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    tooltipVisible: false,
     loading: false,
     form: {
       userId: ""
@@ -69,6 +70,7 @@ export default {
         }).finally(() => {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
+        this.tooltipVisible = true;
       });
 
 

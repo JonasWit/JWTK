@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Projections.LegalApp.Clients;
+using SystemyWP.API.Repositories.LegalApp;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
@@ -25,176 +26,224 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpGet("client/{clientId}")]
-        public async Task<IActionResult> GetClient(int clientId)
+        public async Task<IActionResult> GetClient(int clientId, [FromServices] LegalAppClientRepository legalAppClientRepository)
         {
-            try
+            var result = await legalAppClientRepository.GetClient(User, clientId);
+            
+            switch (result.StatusCode)
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var result = _context.LegalAppClients
-                        .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
-                        .Select(LegalAppClientProjections.FlatProjection)
-                        .FirstOrDefault();
-                    
-                    return Ok(result);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+                case StatusCodes.Status200OK:
+                    return Ok(result.Result);
+                case StatusCodes.Status403Forbidden:
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+            }     
+            
+            // try
+            // {
+            //     var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+            //     if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+            //
+            //     if (check.DataAccessAllowed)
+            //     {
+            //         var result = _context.LegalAppClients
+            //             .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
+            //             .Select(LegalAppClientProjections.FlatProjection)
+            //             .FirstOrDefault();
+            //         
+            //         return Ok(result);
+            //     }
+            //
+            //     return StatusCode(StatusCodes.Status403Forbidden);
+            // }
+            // catch (Exception e)
+            // {
+            //     await HandleException(e);
+            //     return StatusCode(StatusCodes.Status500InternalServerError);
+            // }
         }
         
         [HttpGet("clients/basic-list")]
-        public async Task<IActionResult> GetClientsBasicList()
+        public async Task<IActionResult> GetClientsBasicList([FromServices] LegalAppClientRepository legalAppClientRepository)
         {
-            try
+            var result = await legalAppClientRepository.GetClientsBasicList(User);
+            
+            switch (result.StatusCode)
             {
-                var user = _context.Users
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefault(x => x.Id.Equals(UserId));
-
-                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                var result = new List<object>();
-
-                //Get data as Admin
-                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
-                {
-                    result.AddRange(_context.LegalAppClients
-                        .Where(x =>
-                            x.AccessKeyId == user.AccessKey.Id && x.Active)
-                        .Select(LegalAppClientProjections.BasicProjection)
-                        .ToList());
-
-                    return Ok(result);
-                }
-
-                //Get data as User
-                if (Role.Equals(SystemyWpConstants.Roles.Client))
-                {
-                    result.AddRange(_context.LegalAppClients
-                        .Where(x =>
-                            x.AccessKeyId == user.AccessKey.Id && x.Active &&
-                            _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
-                                .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
-                                          y.ItemId == x.Id))
-                        .Select(LegalAppClientProjections.BasicProjection)
-                        .ToList());
-
-                    return Ok(result);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                case StatusCodes.Status200OK:
+                    return Ok(result.Result);
+                case StatusCodes.Status403Forbidden:
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            
+            // try
+            // {
+            //     var user = _context.Users
+            //         .Include(x => x.AccessKey)
+            //         .FirstOrDefault(x => x.Id.Equals(UserId));
+            //
+            //     if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+            //     var result = new List<object>();
+            //
+            //     //Get data as Admin
+            //     if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+            //         Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
+            //     {
+            //         result.AddRange(_context.LegalAppClients
+            //             .Where(x =>
+            //                 x.AccessKeyId == user.AccessKey.Id && x.Active)
+            //             .Select(LegalAppClientProjections.BasicProjection)
+            //             .ToList());
+            //
+            //         return Ok(result);
+            //     }
+            //
+            //     //Get data as User
+            //     if (Role.Equals(SystemyWpConstants.Roles.Client))
+            //     {
+            //         result.AddRange(_context.LegalAppClients
+            //             .Where(x =>
+            //                 x.AccessKeyId == user.AccessKey.Id && x.Active &&
+            //                 _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
+            //                     .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
+            //                               y.ItemId == x.Id))
+            //             .Select(LegalAppClientProjections.BasicProjection)
+            //             .ToList());
+            //
+            //         return Ok(result);
+            //     }
+            //
+            //     return StatusCode(StatusCodes.Status403Forbidden);
+            // }
+            // catch (Exception e)
+            // {
+            //     await HandleException(e);
+            //     return StatusCode(StatusCodes.Status500InternalServerError);
+            // }
         }
 
         [HttpGet("clients")]
-        public async Task<IActionResult> GetClients(int cursor, int take)
+        public async Task<IActionResult> GetClients(int cursor, int take, [FromServices] LegalAppClientRepository legalAppClientRepository)
         {
-            try
+            var result = await legalAppClientRepository.GetClients(User, cursor, take);
+            
+            switch (result.StatusCode)
             {
-                var user = _context.Users
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefault(x => x.Id.Equals(UserId));
-
-                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                var result = new List<object>();
-
-                //Get data as Admin
-                if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
-                    Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
-                {
-                    result.AddRange(_context.LegalAppClients
-                        .Where(x =>
-                            x.AccessKeyId == user.AccessKey.Id && x.Active)
-                        .OrderBy(x => x.Name)
-                        .Skip(cursor)
-                        .Take(take)
-                        .Select(LegalAppClientProjections.FlatProjection)
-                        .ToList());
-
-                    return Ok(result);
-                }
-
-                //Get data as User
-                if (Role.Equals(SystemyWpConstants.Roles.Client))
-                {
-                    result.AddRange(_context.LegalAppClients
-                        .Where(x =>
-                            x.AccessKeyId == user.AccessKey.Id && x.Active && 
-                            _context.DataAccesses
-                                .Where(y => y.UserId.Equals(UserId))
-                                .Any(y => 
-                                    y.RestrictedType == RestrictedType.LegalAppClient && y.ItemId == x.Id))
-                        .OrderBy(x => x.Name)
-                        .Skip(cursor)
-                        .Take(take)
-                        .Select(LegalAppClientProjections.FlatProjection)
-                        .ToList());
-
-                    return Ok(result);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                case StatusCodes.Status200OK:
+                    return Ok(result.Result);
+                case StatusCodes.Status403Forbidden:
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }  
+            
+            // try
+            // {
+            //     var user = _context.Users
+            //         .Include(x => x.AccessKey)
+            //         .FirstOrDefault(x => x.Id.Equals(UserId));
+            //
+            //     if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+            //     var result = new List<object>();
+            //
+            //     //Get data as Admin
+            //     if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
+            //         Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
+            //     {
+            //         result.AddRange(_context.LegalAppClients
+            //             .Where(x =>
+            //                 x.AccessKeyId == user.AccessKey.Id && x.Active)
+            //             .OrderBy(x => x.Name)
+            //             .Skip(cursor)
+            //             .Take(take)
+            //             .Select(LegalAppClientProjections.FlatProjection)
+            //             .ToList());
+            //
+            //         return Ok(result);
+            //     }
+            //
+            //     //Get data as User
+            //     if (Role.Equals(SystemyWpConstants.Roles.Client))
+            //     {
+            //         result.AddRange(_context.LegalAppClients
+            //             .Where(x =>
+            //                 x.AccessKeyId == user.AccessKey.Id && x.Active && 
+            //                 _context.DataAccesses
+            //                     .Where(y => y.UserId.Equals(UserId))
+            //                     .Any(y => 
+            //                         y.RestrictedType == RestrictedType.LegalAppClient && y.ItemId == x.Id))
+            //             .OrderBy(x => x.Name)
+            //             .Skip(cursor)
+            //             .Take(take)
+            //             .Select(LegalAppClientProjections.FlatProjection)
+            //             .ToList());
+            //
+            //         return Ok(result);
+            //     }
+            //
+            //     return StatusCode(StatusCodes.Status403Forbidden);
+            // }
+            // catch (Exception e)
+            // {
+            //     await HandleException(e);
+            //     return StatusCode(StatusCodes.Status500InternalServerError);
+            // }  
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateClient([FromBody] CreateClientForm form)
+        public async Task<IActionResult> CreateClient([FromBody] CreateClientForm form, [FromServices] LegalAppClientRepository legalAppClientRepository)
         {
-            try
+            var result = await legalAppClientRepository.CreateClient(User, form);
+            
+            switch (result.StatusCode)
             {
-                var user = await _context.Users
-                    .Include(x => x.AccessKey)
-                    .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
-
-                if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                var newEntity = new LegalAppClient
-                {
-                    AccessKey = user.AccessKey,
-                    Name = form.Name,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail
-                };
-                _context.Add(newEntity);
-
-                //Act as normal as User
-                if (Role.Equals(SystemyWpConstants.Roles.Client))
-                {
-                    _context.Add(new DataAccess
-                    {
-                        UserId = UserId,
-                        ItemId = newEntity.Id,
-                        RestrictedType = RestrictedType.LegalAppClient,
-                        CreatedBy = UserEmail
-                    });
-                }
-                await _context.SaveChangesAsync();
-                return Ok(LegalAppClientProjections.CreateFlat(newEntity));
+                case StatusCodes.Status200OK:
+                    return Ok();
+                case StatusCodes.Status403Forbidden:
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+
+            // try
+            // {
+            //     var user = await _context.Users
+            //         .Include(x => x.AccessKey)
+            //         .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+            //
+            //     if (user?.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+            //
+            //     var newEntity = new LegalAppClient
+            //     {
+            //         AccessKey = user.AccessKey,
+            //         Name = form.Name,
+            //         CreatedBy = UserEmail,
+            //         UpdatedBy = UserEmail
+            //     };
+            //     _context.Add(newEntity);
+            //
+            //     //Act as normal as User
+            //     if (Role.Equals(SystemyWpConstants.Roles.Client))
+            //     {
+            //         _context.Add(new DataAccess
+            //         {
+            //             UserId = UserId,
+            //             ItemId = newEntity.Id,
+            //             RestrictedType = RestrictedType.LegalAppClient,
+            //             CreatedBy = UserEmail
+            //         });
+            //     }
+            //     await _context.SaveChangesAsync();
+            //     return Ok(LegalAppClientProjections.CreateFlat(newEntity));
+            // }
+            // catch (Exception e)
+            // {
+            //     await HandleException(e);
+            //     return StatusCode(StatusCodes.Status500InternalServerError);
+            // }
         }
 
         [HttpPut("update/{clientId}")]
