@@ -5,70 +5,90 @@
         <v-toolbar-title class="mr-3">
           Financials
         </v-toolbar-title>
+        <add-new-work-record/>
       </v-toolbar>
-      <v-card tile>
-        <v-row>
-          <v-col class="mx-2">
-            <v-list class="d-flex justify-space-between">
-              <v-list-item-content>
-                <v-list-item-subtitle></v-list-item-subtitle>
-                <v-list-item-subtitle>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list>
-          </v-col>
-          <v-col class="mx-2">
-            <v-list class="d-flex justify-space-between">
-              <v-list-item-content>
-                <v-list-item-subtitle></v-list-item-subtitle>
-                <v-list-item-subtitle></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list>
-          </v-col>
-          <v-col class="mx-2">
-            <v-list class="d-flex justify-md-end justify-sm-space-between">
-              <v-list-item>delete</v-list-item>
-              <v-list-item>edit</v-list-item>
-            </v-list>
-          </v-col>
-        </v-row>
-      </v-card>
+      <v-col>
+        <v-dialog ref="dialog" v-model="modal" :return-value.sync="dates" persistent width="290px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field v-model="dateRangeText" label="Wybierz zakres dat" prepend-icon="mdi-calendar" readonly
+                          v-bind="attrs"
+                          v-on="on"></v-text-field>
+
+          </template>
+          <v-date-picker v-model="dates" range scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="modal = false">
+              Anuluj
+            </v-btn>
+            <v-btn text color="primary" @click="saveDates">
+              Zapisz
+            </v-btn>
+          </v-date-picker>
+        </v-dialog>
+      </v-col>
+
+      <v-expansion-panels focusable>
+        <v-expansion-panel v-for="item in financialRecords" :key="item.id">
+          <v-expansion-panel-header>
+            <v-row>
+              <v-col>
+                <v-col> Nazwa: {{ item.name }}</v-col>
+                <v-col> Created: {{ formatDate(item.created) }}</v-col>
+                <v-col> Created by: {{ item.createdBy }}</v-col>
+              </v-col>
+              <v-col>
+                <v-col class="hidden-sm-and-down">Amount:</v-col>
+                <v-col class="hidden-sm-and-down">Rate: {{ item.rate }}</v-col>
+                <v-col class="hidden-sm-and-down">Hours: {{ item.hours }}</v-col>
+                <v-col class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-col>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+
     </template>
   </layout>
 </template>
 
 <script>
 import Layout from "../../../../../components/legal-app/layout";
+import {formatDate} from "@/data/date-extensions";
+import AddNewWorkRecord from "../../../../../components/legal-app/financials/add-new-work-record";
+
 
 export default {
   name: "index",
-  components: {Layout},
+  components: {AddNewWorkRecord, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
-    listOfRecordedWork: [],
-    dates: [],
-    minDate: "",
-    maxDate: "",
-    searchConditionsProvided: false,
-    finished: false,
-    loading: false,
-  }),
+      financialRecords: [],
+      loading: false,
+      dates: [],
+      fromDate: "",
+      toDate: "",
+      modal: false,
+      searchConditionsProvided: false,
+    }
+  ),
 
   async fetch() {
-    console.warn('fetch fired');
     return this.handleLogs();
+    console.warn('Finansowy rekord', this.financialRecords)
   },
-
   watch: {
     dates(dates) {
       if (dates.length === 0) {
-        this.minDate = new Date();
-        this.maxDate = new Date();
+        this.fromDate = new Date();
+        this.toDate = new Date();
       }
       if (dates.length === 1) {
-        this.minDate = dates[0];
-        this.maxDate = dates[0];
+        this.fromDate = dates[0];
+        this.toDate = dates[0];
       }
       if (dates.length === 2) {
         let fromDate = dates[0].replace(/-/g, "");
@@ -78,58 +98,71 @@ export default {
         let secondDateInt = parseInt(toDate);
 
         if (firstDateInt > secondDateInt) {
-          this.minDate = dates[1];
-          this.maxDate = dates[0];
+          this.fromDate = dates[1];
+          this.toDate = dates[0];
         } else {
-          this.minDate = dates[0];
-          this.maxDate = dates[1];
+          this.fromDate = dates[0];
+          this.toDate = dates[1];
         }
       }
 
-      console.log('fromDate', this.minDate);
-      console.log('toDate', this.maxDate);
+      console.log('fromDate', this.fromDate);
+      console.log('toDate', this.toDate);
     }
   },
+
   computed: {
+
+    dateRangeText() {
+      return this.dates.join(' - ')
+
+    },
+
     query() {
-      if (this.searchConditionsProvided) {
-        return `/dates?from=${this.minDate}&to=${this.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}&exception=${this.exception}&admin=${this.admin}&personalData=${this.personalData}&issue=${this.issue}`;
-      } else {
-        return `?cursor=${this.cursor}&take=10`;
-      }
+
+      let fromDate = `2020-05-02`
+      let toDate = `2021-10-01`
+      return `?from=${fromDate}&to=${toDate}`;
+
+
     },
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
-  },
+
+  }
+  ,
 
   methods: {
     handleLogs() {
       if (this.loading) return;
       this.loading = true;
 
+
       console.warn('handle logs fired', this.query);
       return this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
-        .then(logs => {
-          console.log('logs', logs);
-          if (logs.length === 0) {
-            this.finished = true;
-          } else {
-            logs.forEach(x => {
-              if (!this.logs.some(y => y.id === x.id)) {
-                this.logs.push(x);
-              }
-            });
-            this.cursor += 10;
-          }
+        .then(financialRecords => {
+          console.log('financialRecords', financialRecords);
+          this.financialRecords = financialRecords
         })
         .finally(() => this.loading = false);
+
+    },
+    formatDate(date) {
+      return formatDate(date);
+    },
+
+    saveDates(dates) {
+      // this.handleLogs();
+      // this.loading = false;
+      // console.warn('dates saved', this.dates)
+      // console.warn('filtered records', this.financialRecords)
+
+
     }
 
-
-  },
-
-
+  }
+  ,
 }
 </script>
 
