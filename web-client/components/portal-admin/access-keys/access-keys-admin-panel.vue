@@ -7,7 +7,7 @@
           {{ formatDate(keyItem.expireDate) }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-chip v-for="user in keyItem.assignedUsers" class="ma-2" small>
+          <v-chip v-for="(user, index) in keyItem.assignedUsers" class="ma-2" small :key="`chip-key-index-${index}`">
             {{ user.email }}
           </v-chip>
           <div class="d-flex justify-end">
