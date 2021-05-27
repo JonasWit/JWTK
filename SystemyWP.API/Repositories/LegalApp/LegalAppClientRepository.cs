@@ -12,21 +12,18 @@ using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Repositories.LegalApp
 {
     public class LegalAppClientRepository : LegalAppRepositoryBase
     {
-        private readonly UsersRepository _usersRepository;
-
-        public LegalAppClientRepository(AppDbContext context, PortalLogger logger, UsersRepository usersRepository) :
+        public LegalAppClientRepository(AppDbContext context, PortalLogger logger) :
             base(context, logger)
         {
-            _usersRepository = usersRepository;
         }
 
-        public async Task<RepositoryActionResult<IEnumerable<object>>> GetClientsBasicList(
-            ClaimsPrincipal claimsPrincipal)
+        public async Task<RepositoryActionResult<IEnumerable<object>>> GetClientsBasicList(ClaimsPrincipal claimsPrincipal)
         {
             try
             {
@@ -42,7 +39,7 @@ namespace SystemyWP.API.Repositories.LegalApp
                 if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
-                    result.AddRange(Context.LegalAppClients
+                    result.AddRange(_context.LegalAppClients
                         .Where(x =>
                             x.AccessKeyId == check.AccessKey.Id && x.Active)
                         .Select(LegalAppClientProjections.BasicProjection)
@@ -58,10 +55,10 @@ namespace SystemyWP.API.Repositories.LegalApp
                 //Get data as User
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
-                    result.AddRange(Context.LegalAppClients
+                    result.AddRange(_context.LegalAppClients
                         .Where(x =>
                             x.AccessKeyId == check.AccessKey.Id && x.Active &&
-                            Context.DataAccesses.Where(y => y.UserId.Equals(UserId))
+                            _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
                                 .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                           y.ItemId == x.Id))
                         .Select(LegalAppClientProjections.BasicProjection)
@@ -96,7 +93,7 @@ namespace SystemyWP.API.Repositories.LegalApp
 
                 if (check.DataAccessAllowed)
                 {
-                    var result = Context.LegalAppClients
+                    var result = _context.LegalAppClients
                         .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
                         .Select(LegalAppClientProjections.FlatProjection)
                         .FirstOrDefault();
@@ -133,7 +130,7 @@ namespace SystemyWP.API.Repositories.LegalApp
                 if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
-                    result.AddRange(Context.LegalAppClients
+                    result.AddRange(_context.LegalAppClients
                         .Where(x =>
                             x.AccessKeyId == check.AccessKey.Id && x.Active)
                         .OrderBy(x => x.Name)
@@ -152,10 +149,10 @@ namespace SystemyWP.API.Repositories.LegalApp
                 //Get data as User
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
-                    result.AddRange(Context.LegalAppClients
+                    result.AddRange(_context.LegalAppClients
                         .Where(x =>
                             x.AccessKeyId == check.AccessKey.Id && x.Active && 
-                            Context.DataAccesses
+                            _context.DataAccesses
                                 .Where(y => y.UserId.Equals(UserId))
                                 .Any(y => 
                                     y.RestrictedType == RestrictedType.LegalAppClient && y.ItemId == x.Id))
@@ -198,12 +195,12 @@ namespace SystemyWP.API.Repositories.LegalApp
                     CreatedBy = UserEmail,
                     UpdatedBy = UserEmail
                 };
-                Context.Add(newEntity);
+                _context.Add(newEntity);
 
                 //Act as normal as User
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
-                    Context.Add(new DataAccess
+                    _context.Add(new DataAccess
                     {
                         UserId = UserId,
                         ItemId = newEntity.Id,
@@ -211,13 +208,151 @@ namespace SystemyWP.API.Repositories.LegalApp
                         CreatedBy = UserEmail
                     });
                 }
-                await Context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return new RepositoryActionResult {StatusCode = StatusCodes.Status200OK};
             }
             catch (Exception e)
             {
                 await HandleException(e, "Legal app client - getting clients", "Exception in Legal App Repository");
                 return new RepositoryActionResult
+                    {StatusCode = StatusCodes.Status500InternalServerError};
+            }
+        }
+        
+        public async Task<RepositoryActionResult> UpdateClient(ClaimsPrincipal claimsPrincipal, long clientId, UpdateClientForm form)
+        {
+            try
+            {
+                CurrentClaimsPrincipal = claimsPrincipal;
+                var check = await CheckAccess();
+                if (check.AccessKey is null)
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+
+                if (check.DataAccessAllowed)
+                {
+                    var entity = await _context.LegalAppClients
+                        .FirstOrDefaultAsync(x => 
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
+                    if (entity is null) return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+                    
+                    entity.UpdatedBy = UserEmail;
+                    entity.Updated = DateTime.UtcNow;
+                    entity.Name = form.Name;
+                    
+                    await _context.SaveChangesAsync();
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status200OK};
+                }
+
+                return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+            }
+            catch (Exception e)
+            {
+                await HandleException(e, "Legal app client - getting clients", "Exception in Legal App Repository");
+                return new RepositoryActionResult
+                    {StatusCode = StatusCodes.Status500InternalServerError};
+            }
+        }
+
+        public async Task<RepositoryActionResult> ArchiveClient(ClaimsPrincipal claimsPrincipal, long clientId)
+        {
+            try
+            {
+                CurrentClaimsPrincipal = claimsPrincipal;
+                var check = await CheckAccess();
+                if (check.AccessKey is null)
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+
+                if (check.DataAccessAllowed)
+                {
+                    var entity = await _context.LegalAppClients
+                        .FirstOrDefaultAsync(x => 
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
+                    if (entity is null) return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+                    
+                    entity.Active = !entity.Active;
+                    entity.UpdatedBy = UserEmail;
+                    entity.Updated = DateTime.UtcNow;
+
+                    await _context.SaveChangesAsync();
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status200OK};
+                }
+
+                return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+            }
+            catch (Exception e)
+            {
+                await HandleException(e, "Legal app client - getting clients", "Exception in Legal App Repository");
+                return new RepositoryActionResult
+                    {StatusCode = StatusCodes.Status500InternalServerError};
+            }
+        }
+        
+        public async Task<RepositoryActionResult> DeleteClient(ClaimsPrincipal claimsPrincipal, long clientId)
+        {
+            try
+            {
+                CurrentClaimsPrincipal = claimsPrincipal;
+                var check = await CheckAccess();
+                if (check.AccessKey is null)
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+
+                if (check.DataAccessAllowed)
+                {
+                    var entity = await _context.LegalAppClients
+                        .FirstOrDefaultAsync(x => 
+                            x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
+                    if (entity is null) return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+                    
+                    _context.Remove(entity);
+
+                    await _context.SaveChangesAsync();
+                    return new RepositoryActionResult {StatusCode = StatusCodes.Status200OK};
+                }
+
+                return new RepositoryActionResult {StatusCode = StatusCodes.Status403Forbidden};
+            }
+            catch (Exception e)
+            {
+                await HandleException(e, "Legal app client - getting clients", "Exception in Legal App Repository");
+                return new RepositoryActionResult
+                    {StatusCode = StatusCodes.Status500InternalServerError};
+            }
+        }
+
+        public async Task<RepositoryActionResult<IEnumerable<object>>> GetClientsAndCasesForAccess(ClaimsPrincipal claimsPrincipal)
+        {
+            try
+            {
+                CurrentClaimsPrincipal = claimsPrincipal;
+                var check = await CheckAccess();
+                if (check.AccessKey is null)
+                    return new RepositoryActionResult<IEnumerable<object>> {StatusCode = StatusCodes.Status403Forbidden};
+
+                if (check.DataAccessAllowed)
+                {
+                    var user = await _context.Users
+                        .Where(x => x.Id.Equals(UserId))
+                        .Include(x => x.AccessKey)
+                        .FirstOrDefaultAsync();
+
+                    var result = await _context.LegalAppClients
+                        .Where(x =>
+                            x.AccessKeyId== user.AccessKey.Id)
+                        .Include(x =>
+                            x.LegalAppCases)
+                        .Select(LegalAppClientProjections.MinimalProjection)
+                        .ToListAsync();
+
+                    await _context.SaveChangesAsync();
+                    return new RepositoryActionResult<IEnumerable<object>> {StatusCode = StatusCodes.Status200OK, Result = result};
+                }
+
+                return new RepositoryActionResult<IEnumerable<object>> {StatusCode = StatusCodes.Status403Forbidden};
+            }
+            catch (Exception e)
+            {
+                await HandleException(e, "Legal app client - getting clients", "Exception in Legal App Repository");
+                return new RepositoryActionResult<IEnumerable<object>>
                     {StatusCode = StatusCodes.Status500InternalServerError};
             }
         }

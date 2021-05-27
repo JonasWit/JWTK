@@ -15,13 +15,13 @@ namespace SystemyWP.API.Repositories.Base
     [TransientService]
     public class RepositoryBase
     {
-        protected readonly AppDbContext Context;
-        protected readonly PortalLogger Logger;
+        protected readonly AppDbContext _context;
+        protected readonly PortalLogger _logger;
 
         public RepositoryBase(AppDbContext context, PortalLogger logger)
         {
-            Context = context;
-            Logger = logger;
+            _context = context;
+            _logger = logger;
         }
 
         protected ClaimsPrincipal CurrentClaimsPrincipal;
@@ -36,7 +36,7 @@ namespace SystemyWP.API.Repositories.Base
 
         protected Task HandleException(Exception ex, string endpoint, string description)
         {
-            return Logger.Log(LogType.Exception, endpoint, UserId, UserEmail, description, ex);
+            return _logger.Log(LogType.Exception, endpoint, UserId, UserEmail, description, ex);
         }
 
         public class CheckResult
@@ -49,7 +49,7 @@ namespace SystemyWP.API.Repositories.Base
         protected async Task<CheckResult> CheckAccess(RestrictedType restrictedType, long itemId)
         {
             //Get Users Data Key
-            var user = await Context.Users
+            var user = await _context.Users
                 .Include(x => x.AccessKey)
                 .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
             if (user?.AccessKey is null) return new CheckResult {DataAccessAllowed = false};
@@ -65,7 +65,7 @@ namespace SystemyWP.API.Repositories.Base
             if (Role.Equals(SystemyWpConstants.Roles.Client))
             {
                 //Check DataAccess Table
-                var access = await Context.DataAccesses
+                var access = await _context.DataAccesses
                     .AnyAsync(x => x.UserId.Equals(UserId) &&
                                    x.RestrictedType == restrictedType &&
                                    x.ItemId == itemId);
@@ -80,7 +80,7 @@ namespace SystemyWP.API.Repositories.Base
         protected async Task<CheckResult> CheckAccess()
         {
             //Get Users Data Key
-            var user = await Context.Users
+            var user = await _context.Users
                 .Include(x => x.AccessKey)
                 .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
             if (user?.AccessKey is null) return new CheckResult {DataAccessAllowed = false};

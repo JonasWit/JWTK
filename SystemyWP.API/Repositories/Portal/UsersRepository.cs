@@ -13,7 +13,7 @@ namespace SystemyWP.API.Repositories.Portal
         {
         }
 
-        public User GetUserProfile(string id) => Context.Users
+        public User GetUserProfile(string id) => _context.Users
             .Include(x => x.AccessKey)
             .FirstOrDefault(x => x.Id.Equals(id));
     }
