@@ -91,7 +91,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                         client.LegalAppClientWorkRecords.Add(newEntity);
                         await _context.SaveChangesAsync();
-                        return Ok(client);
+                        return Ok();
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
