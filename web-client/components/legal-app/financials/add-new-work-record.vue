@@ -10,16 +10,16 @@
         <span>Zarejestruj nowy czas</span>
       </v-tooltip>
     </template>
-    <v-form ref="addNewWorkForm">
+    <v-form ref="createClientWorkForm">
       <v-card>
         <v-card-text>
           <v-text-field v-model="form.name" label="Dodaj nazwę"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
-          <v-text-field v-model="form.hours" label="Dodaj godziny"
+          <v-text-field v-model.number="form.hours" label="Dodaj godziny" type="number"
           ></v-text-field>
-          <v-text-field v-model="form.minutes" label="Dodaj minuty"></v-text-field>
-          <v-text-field v-model="form.rate" label="Dodaj stawkę"></v-text-field>
+          <v-text-field v-model.number="form.minutes" label="Dodaj minuty" type="number"></v-text-field>
+          <v-text-field v-model.number="form.rate" label="Dodaj stawkę" type="number"></v-text-field>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -84,10 +84,11 @@ export default {
 
       return this.$axios.$post(`/api/legal-app-client-finance/client/${this.$route.params.client}/finance-records`, workRecord)
         .then((workRecord) => {
+          console.warn('Nowy work rekord', workRecord)
           this.resetForm();
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
           this.$nuxt.refresh();
-          console.warn('Nowy work rekord', workRecord)
+
           this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
 
 

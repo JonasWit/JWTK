@@ -120,8 +120,8 @@ export default {
 
     query() {
 
-      let fromDate = `2020-05-02`
-      let toDate = `2021-10-01`
+      let fromDate = `2020-12-02`
+      let toDate = `2021-05-31`
       return `?from=${fromDate}&to=${toDate}`;
 
 
