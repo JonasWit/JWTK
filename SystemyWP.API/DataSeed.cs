@@ -34,137 +34,101 @@ namespace SystemyWP.API
                     .GetResult();
             }
         }
-        
-        public static void DevDataSeedLegalApp(AppDbContext context, UserManager<IdentityUser> userManager)
+
+        public static void DevDataSeedLegalApp(AppDbContext context, string userId, AccessKey accessKey)
         {
             var random = new Random();
 
-            var adminUsers = userManager
-                .GetUsersForClaimAsync(SystemyWpConstants.Claims.ClientAdminClaim)
-                .GetAwaiter()
-                .GetResult();
-            var profiles = context.Users
-                .Include(x => x.AccessKey)
-                .AsEnumerable()
-                .Where(x => adminUsers.Any(y => y.Id == x.Id) && x.AccessKey != null)
-                .ToList();
-
-            for (var i = 0; i < 500; i++)
+            for (var clientNumber = 0; clientNumber < 100; clientNumber++)
             {
                 var newClient = new LegalAppClient
                 {
-                    Name = $"Test Client - {i}",
+                    AccessKey = accessKey,
+                    Name = $"Test Client - {clientNumber}",
                     Active = true,
-                    CreatedBy = "portaladmin1",
-                    UpdatedBy = "portaladmin1"
+                    CreatedBy = "system",
+                    UpdatedBy = "system"
                 };
 
-                for (var c = 0; c < random.Next(0, 60); c++)
+                for (var contactDetailsNumber = 0; contactDetailsNumber < 20; contactDetailsNumber++)
                 {
                     var contact = new ContactDetails();
-                    contact.Comment = $"Comment for Contact {c}";
-                    contact.Name = $"Contact {i} -- {c}";
-                    contact.Title = $"Title {i} -- {c}";
+                    contact.Comment = $"Comment for Contact {contactDetailsNumber}";
+                    contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber}";
+                    contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";
                     contact.CreatedBy = "system";
 
-                    for (var em = 0; em < random.Next(0, 60); em++)
+                    for (var contactEmailNumber = 0; contactEmailNumber < 20; contactEmailNumber++)
                     {
                         contact.Emails.Add(new EmailAddress
                         {
-                            Comment = $"TEST Email address {c}--{em}",
-                            Email = $"{c}@{em}.com",
+                            Comment = $"TEST Email address {contactDetailsNumber}--{contactEmailNumber}",
+                            Email = $"{contactDetailsNumber}@{contactEmailNumber}.com",
                             CreatedBy = "system"
                         });
                     }
 
-                    for (var em = 0; em < random.Next(0, 60); em++)
+                    for (var contactPhone = 0; contactPhone < 10; contactPhone++)
                     {
                         contact.PhoneNumbers.Add(new PhoneNumber
                         {
-                            Comment = $"TEST PhoneNumber address {c}--{em}",
-                            Number = $"{em}-{c}-{em}",
+                            Comment = $"TEST PhoneNumber address {contactDetailsNumber}--{contactPhone}",
+                            Number = $"{contactPhone}-{contactDetailsNumber}-{contactPhone}",
                             CreatedBy = "system"
                         });
                     }
 
-                    for (var em = 0; em < random.Next(0, 60); em++)
+                    for (var contactAddress = 0; contactAddress < 10; contactAddress++)
                     {
                         contact.PhysicalAddresses.Add(new PhysicalAddress
                         {
-                            Street = $"Street - Physical address - {em}",
-                            Comment = $"TEST Physical address - {em}",
+                            Street = $"Street - Physical address - {contactAddress}",
+                            Comment = $"TEST Physical address - {contactAddress}",
                             CreatedBy = "system"
                         });
                     }
 
                     newClient.Contacts.Add(contact);
+                }
 
-                    for (var em = 0; em < random.Next(1, 60); em++)
+                // Seed workflow
+                for (var workflowNumber = 0; workflowNumber < 30; workflowNumber++)
+                {
+                    var financeRecord = new LegalAppClientWorkRecord();
+                    financeRecord.Amount = random.Next(0, 1000);
+                    financeRecord.Rate = random.Next(15, 500);
+                    financeRecord.Hours = random.Next(0, 500);
+                    financeRecord.Minutes = random.Next(1, 59);
+
+                    financeRecord.Name = $"TEST -- {workflowNumber}";
+                    financeRecord.EventDate = DateTime.UtcNow.AddDays(workflowNumber * -1);
+
+                    financeRecord.CreatedBy = "system";
+                    financeRecord.UserId = userId;
+                    financeRecord.UserEmail = "test@test.pl";
+
+                    newClient.LegalAppClientWorkRecords.Add(financeRecord);
+                }
+
+                for (var caseNumber = 0; caseNumber < 60; caseNumber++)
+                {
+                    newClient.LegalAppCases.Add(new LegalAppCase
                     {
-                        var financeRecord = new LegalAppClientWorkRecord();
-                        financeRecord.Amount = random.Next(0, 1000);
-                        financeRecord.Hours = random.Next(0, 500);
-                        financeRecord.Minutes = random.Next(1, 59);
-
-                        financeRecord.Name = $"TEST -- {em}";
-                        financeRecord.EventDate = DateTime.UtcNow.AddDays(em * -1);
-
-                        financeRecord.CreatedBy = "system";
-                        financeRecord.UserId = profiles[random.Next(0, profiles.Count)]?.Id;
-                        financeRecord.UserEmail = userManager
-                            .FindByIdAsync(financeRecord.UserId)?
-                            .GetAwaiter()
-                            .GetResult()
-                            .Email;
-
-                        newClient.LegalAppClientWorkRecords.Add(financeRecord);
-                    }
+                        Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
+                        Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
+                        Description =
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        CreatedBy = "system",
+                        UpdatedBy = "system"
+                    });
                 }
 
-                if (i % 2 == 0)
-                {
-                    for (var j = 0; j < random.Next(0, 20); j++)
-                    {
-                        newClient.LegalAppCases.Add(new LegalAppCase
-                        {
-                            Name = $"Test Case - {j} - Lorem ipsum dolor sit amet",
-                            Signature = $"XYZ-{j}-XYZ-{j}",
-                            Description =
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                            CreatedBy = "system",
-                            UpdatedBy = "system"
-                        });
-                    }
-                }
-
-                if (i < 100)
-                {
-                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Overdue"));
-                    newClient.CreatedBy = "system";
-                    context.Add(newClient);
-                    continue;
-                }
-
-                if (i < 300)
-                {
-                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 1"));
-                    newClient.CreatedBy = "system";
-                    context.Add(newClient);
-                    continue;
-                }
-
-                if (i < 500)
-                {
-                    newClient.AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 2"));
-                    newClient.CreatedBy = "system";
-                    context.Add(newClient);
-                }
+                newClient.CreatedBy = "system";
+                context.Add(newClient);
             }
-
-            context.SaveChanges();
         }
 
-        public static void DevIdentitySeed(AppDbContext context, ApiIdentityDbContext identityContext,
+        public static void DevSeed(AppDbContext context, ApiIdentityDbContext identityContext,
             UserManager<IdentityUser> userManager)
         {
             identityContext.Database.EnsureDeleted();
@@ -174,205 +138,17 @@ namespace SystemyWP.API
                 (RelationalDatabaseCreator) context.Database.GetService<IDatabaseCreator>();
             databaseCreator.CreateTables();
 
-            #region Seed Keys
-
-            context.AccessKeys.Add(new AccessKey
-            {
-                Name = $"access-key Overdue",
-                ExpireDate = DateTime.UtcNow.AddDays(-4),
-                Created = DateTime.UtcNow,
-                CreatedBy = "system",
-                UpdatedBy = "system",
-            });
-
-            context.AccessKeys.Add(new AccessKey
-            {
-                Name = $"access-key Active-Empty",
-                ExpireDate = DateTime.UtcNow.AddDays(1),
-                Created = DateTime.UtcNow,
-                CreatedBy = "system",
-                UpdatedBy = "system",
-            });
-
-            context.AccessKeys.Add(new AccessKey
-            {
-                Name = $"access-key Active 1",
-                ExpireDate = DateTime.UtcNow.AddDays(2),
-                Created = DateTime.UtcNow,
-                CreatedBy = "system",
-                UpdatedBy = "system",
-            });
-
-            context.AccessKeys.Add(new AccessKey
-            {
-                Name = $"access-key Active 2",
-                ExpireDate = DateTime.UtcNow.AddDays(3),
-                Created = DateTime.UtcNow,
-                CreatedBy = "system",
-                UpdatedBy = "system",
-            });
-
-            context.SaveChanges();
-
-            #endregion
-
-            //Seed Client Admins
-            for (var i = 0; i < 8; i++)
-            {
-                var clientAdmin = new IdentityUser($"clientadmin{i}")
-                {
-                    Email = $"clientadmin{i}@test.com",
-                    LockoutEnabled = true,
-                    EmailConfirmed = true
-                };
-                userManager.CreateAsync(clientAdmin, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(clientAdmin, new[]
-                    {
-                        SystemyWpConstants.Claims.ClientAdminClaim,
-                        SystemyWpConstants.Claims.LegalAppAccessClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                if (i <= 1)
-                {
-                    var userRecord = new User
-                    {
-                        Id = clientAdmin.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Overdue")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 3)
-                {
-                    var userRecord = new User
-                    {
-                        Id = clientAdmin.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active-Empty")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 5)
-                {
-                    var userRecord = new User
-                    {
-                        Id = clientAdmin.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 1")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 7)
-                {
-                    var userRecord = new User
-                    {
-                        Id = clientAdmin.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 2")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-            }
-
-            //Seed Clients
-            for (var i = 0; i < 16; i++)
-            {
-                var testClient = new IdentityUser($"client{i}")
-                {
-                    Email = $"client{i}@test.com",
-                    LockoutEnabled = true,
-                    EmailConfirmed = true
-                };
-                userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(testClient, new[]
-                    {
-                        SystemyWpConstants.Claims.ClientClaim,
-                        SystemyWpConstants.Claims.LegalAppAccessClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                if (i <= 3)
-                {
-                    var userRecord = new User
-                    {
-                        Id = testClient.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Overdue")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 6)
-                {
-                    var userRecord = new User
-                    {
-                        Id = testClient.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active-Empty")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 9)
-                {
-                    var userRecord = new User
-                    {
-                        Id = testClient.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 1")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-                else if (i <= 15)
-                {
-                    var userRecord = new User
-                    {
-                        Id = testClient.Id,
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 2")),
-                        CreatedBy = "system"
-                    };
-                    context.Add(userRecord);
-                }
-            }
-
             //Seed Portal Admins
-
-            var portalAdmin = new IdentityUser($"pat")
-            {
-                Email = $"witek.j87@gmail.com",
-                EmailConfirmed = true
-            };
-
-            userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
-            userManager
-                .AddClaimsAsync(portalAdmin, new[]
-                {
-                    SystemyWpConstants.Claims.LegalAppAccessClaim,
-                    SystemyWpConstants.Claims.PortalAdminClaim
-                })
-                .GetAwaiter()
-                .GetResult();
-
-            context.Add(new User
-            {
-                AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 2")),
-                Id = portalAdmin.Id,
-                CreatedBy = "system"
-            });
-
             for (var i = 1; i < 2; i++)
             {
-                portalAdmin = new IdentityUser($"portaladmin{i}")
+                var testPortalAdmin = new IdentityUser($"portaladmin{i}")
                 {
                     Email = $"portaladmin{i}@test.com",
                     EmailConfirmed = true
                 };
-                userManager.CreateAsync(portalAdmin, "password").GetAwaiter().GetResult();
+                userManager.CreateAsync(testPortalAdmin, "password").GetAwaiter().GetResult();
                 userManager
-                    .AddClaimsAsync(portalAdmin, new[]
+                    .AddClaimsAsync(testPortalAdmin, new[]
                     {
                         SystemyWpConstants.Claims.LegalAppAccessClaim,
                         SystemyWpConstants.Claims.PortalAdminClaim
@@ -382,13 +158,78 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
-                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Name.Equals("access-key Active 2")),
-                    Id = portalAdmin.Id,
+                    Id = testPortalAdmin.Id,
                     CreatedBy = "system"
                 });
             }
 
-            context.SaveChanges();
+            //Seed Client Admins
+            for (var adminNumber = -2; adminNumber < 3; adminNumber++)
+            {
+                var key = new AccessKey
+                {
+                    Name = $"access-key for {adminNumber}",
+                    ExpireDate = DateTime.UtcNow.AddDays(adminNumber),
+                    Created = DateTime.UtcNow,
+                    CreatedBy = "system",
+                    UpdatedBy = "system",
+                };
+                context.AccessKeys.Add(key);
+                context.SaveChanges();
+
+                var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
+                {
+                    Email = $"clientadmin{adminNumber}@test.com",
+                    LockoutEnabled = true,
+                    EmailConfirmed = true
+                };
+                userManager.CreateAsync(testClientAdmin, "password").GetAwaiter().GetResult();
+                userManager
+                    .AddClaimsAsync(testClientAdmin, new[]
+                    {
+                        SystemyWpConstants.Claims.ClientAdminClaim,
+                        SystemyWpConstants.Claims.LegalAppAccessClaim
+                    })
+                    .GetAwaiter()
+                    .GetResult();
+
+                context.Add(new User
+                {
+                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                    Id = testClientAdmin.Id,
+                    CreatedBy = "system"
+                });
+
+                //Seed Clients
+                for (var userNumber = 0; userNumber < 6; userNumber++)
+                {
+                    var testClient = new IdentityUser($"client{userNumber}{adminNumber}")
+                    {
+                        Email = $"client{userNumber}{adminNumber}@test.com",
+                        LockoutEnabled = true,
+                        EmailConfirmed = true
+                    };
+                    userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
+                    userManager
+                        .AddClaimsAsync(testClient, new[]
+                        {
+                            SystemyWpConstants.Claims.ClientClaim,
+                            SystemyWpConstants.Claims.LegalAppAccessClaim
+                        })
+                        .GetAwaiter()
+                        .GetResult();
+
+                    context.Add(new User
+                    {
+                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                        Id = testClient.Id,
+                        CreatedBy = "system"
+                    });
+                }
+
+                DevDataSeedLegalApp(context, testClientAdmin.Id, key);
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -16,8 +16,7 @@ namespace SystemyWP.Integration.Tests.Infrastructure
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
                 var identityContext = scope.ServiceProvider.GetRequiredService<ApiIdentityDbContext>();
                 
-                DataSeed.DevIdentitySeed(context, identityContext, userManager);
-                DataSeed.DevDataSeedLegalApp(context, userManager);
+                DataSeed.DevSeed(context, identityContext, userManager);
             }
         }
     }

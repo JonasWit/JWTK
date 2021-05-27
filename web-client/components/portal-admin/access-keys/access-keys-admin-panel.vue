@@ -61,10 +61,8 @@ export default {
     keysList() {
       if (!this.searchResult) {
         this.accessKeys.forEach(ak => {
-          ak.assignedUsers = this.users.filter(user => user.dataAccessKey.id === ak.id);
+          ak.assignedUsers = this.users?.filter(user => user?.dataAccessKey?.id === ak.id);
         });
-
-        console.log('result', this.accessKeys);
         return this.accessKeys;
       } else {
         return this.accessKeys.filter(x => x.name === this.searchResult);

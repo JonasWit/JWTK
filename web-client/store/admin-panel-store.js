@@ -28,7 +28,7 @@ export const actions = {
   getUsers({commit}) {
     return this.$axios.$get("/api/portal-admin/user-admin/users")
       .then((users) => {
-        console.warn('GET Users Call', users);
+        console.warn('getUsers from store', users);
         commit('updateUsersList', {users});
       })
       .catch(() => {
@@ -37,7 +37,7 @@ export const actions = {
   getAccessKeys({commit}) {
     return this.$axios.$get("/api/portal-admin/key-admin/access-keys")
       .then((keys) => {
-        console.warn('GET Access Keys Call', keys);
+        console.warn('getAccessKeys from store', keys);
         commit('updateAccessKeysList', {keys});
       })
       .catch(() => {

@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "delete-access-key-dialog",
   props: {
@@ -40,6 +42,7 @@ export default {
     loading: false
   }),
   methods: {
+    ...mapActions('admin-panel-store', ['getAccessKeys']),
     deleteKey() {
       if (this.loading) return;
       this.loading = true;
