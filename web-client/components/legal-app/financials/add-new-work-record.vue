@@ -82,7 +82,7 @@ export default {
         eventDate: this.form.eventDate
       };
 
-      return this.$axios.$post(`/api/legal-app-client-finance/client/${this.$route.params.client}/finance-records`, workRecord)
+      return this.$axios.$post(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records`, workRecord)
         .then((workRecord) => {
           console.warn('Nowy work rekord', workRecord)
           this.resetForm();
