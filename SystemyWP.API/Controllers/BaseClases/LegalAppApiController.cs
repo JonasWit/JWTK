@@ -15,7 +15,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         public LegalAppApiController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
-        
+
         public class CheckResult
         {
             public bool AdminUser { get; set; }
@@ -37,6 +37,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             {
                 return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = true};
             }
+
             //Logic for ordinary Users
             if (Role.Equals(SystemyWpConstants.Roles.Client))
             {
@@ -46,11 +47,13 @@ namespace SystemyWP.API.Controllers.BaseClases
                                    x.RestrictedType == restrictedType &&
                                    x.ItemId == itemId);
 
-                if (access) return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = false};
+                if (access)
+                    return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = false};
             }
+
             return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};
         }
-        
+
         protected async Task<CheckResult> CheckAccess()
         {
             //Get Users Data Key
@@ -58,7 +61,7 @@ namespace SystemyWP.API.Controllers.BaseClases
                 .Include(x => x.AccessKey)
                 .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
             if (user?.AccessKey is null) return new CheckResult {DataAccessAllowed = false};
-            
+
             return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey};
         }
     }

@@ -4,7 +4,8 @@
     {
         public struct Emails
         {
-            public const string ClientAdminEmail = "clientadmin-2@test.com";
+            public const string ClientAdminEmail = "clientadmin2@test.com";
+            public const string ClientEmail = "client12@test.com";
         }
     }
 }
