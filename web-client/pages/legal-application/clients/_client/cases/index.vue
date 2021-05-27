@@ -1,10 +1,21 @@
 <template>
-  <h1>List of cases</h1>
+  <layout>
+    <template v-slot:content>
+      <v-toolbar class="my-3">
+        <v-toolbar-title class="mr-3">
+          Lista spraw
+        </v-toolbar-title>
+      </v-toolbar>
+    </template>
+  </layout>
 </template>
 
 <script>
+import Layout from "../../../../../components/legal-app/layout";
+
 export default {
-  name: "index"
+  name: "index",
+  components: {Layout}
 }
 </script>
 

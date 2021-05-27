@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style scoped>
-.index-card:hover {
-  opacity: 0.7;
-}
+
 
 </style>

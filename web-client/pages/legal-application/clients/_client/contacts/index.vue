@@ -22,10 +22,14 @@
         <v-expansion-panel v-for="item in contactList" :key="item.id">
           <v-expansion-panel-header>
             <v-row>
-              <v-col> Nazwa: {{ item.title }}</v-col>
-              <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
-              <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
-              <v-col class="hidden-sm-and-down">Dodano: {{ item.created }}</v-col>
+              <v-col>
+                <v-col> Nazwa: {{ item.title }}</v-col>
+                <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
+              </v-col>
+              <v-col>
+                <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
+                <v-col class="hidden-sm-and-down">Dodano: {{ item.created }}</v-col>
+              </v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>

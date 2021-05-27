@@ -8,7 +8,7 @@
           <v-col>
             <v-hover v-slot="{ hover }">
               <nuxt-link class="nav-item" :to="item.route">
-                <v-card class="mx-auto" width="340" outlined :elevation="hover ? 12 : 2">
+                <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
                   <v-row class="d-flex ma-3" align="center">
                     <v-icon>{{ item.icon }}</v-icon>
                     <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
@@ -54,22 +54,16 @@ export default {
 
     return {
       items: [
+
         {
           id: '1',
-          route: '/legal-application/',
-          name: 'Home',
-          icon: `mdi-home`,
-          text: 'Strona główna'
-        },
-        {
-          id: '2',
           route: `/legal-application/clients/${params.client}/contacts`,
           name: 'Kontakty',
           text: 'Lista kontaktów dla Klienta',
           icon: 'mdi-card-account-mail-outline'
         },
         {
-          id: '3',
+          id: '2',
           route: `/legal-application/clients/${params.client}/cases`,
           name: 'Sprawy',
           text: 'Zarządzaj sprawami klienta',
@@ -77,21 +71,21 @@ export default {
 
         },
         {
-          id: '4',
+          id: '3',
           route: `/legal-application/clients/${params.client}/reminders`,
           name: 'Przypomnienia',
           text: 'Sprawdź przypomnienia dla Klienta',
           icon: 'mdi-calendar-clock'
         },
         {
-          id: '5',
+          id: '4',
           route: `/legal-application/clients/${params.client}/notes`,
           name: 'Notatki',
           text: 'Zarządzaj notatkami',
           icon: 'mdi-book-open-outline'
         },
         {
-          id: '6',
+          id: '5',
           route: `/legal-application/clients/${params.client}/financials`,
           name: 'Rozliczenia',
           text: 'Zarządzaj rozliczeniami',
@@ -108,14 +102,5 @@ export default {
 </script>
 
 <style scoped>
-
-.nav-item {
-  text-decoration: none;
-}
-
-.v-card {
-  border-left: 3px solid var(--v-primary-base);
-
-}
 
 </style>

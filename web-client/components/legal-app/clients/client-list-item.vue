@@ -21,7 +21,7 @@
         </v-list>
       </v-col>
       <v-col class="mx-2">
-        <v-list class="d-flex justify-space-between">
+        <v-list class="d-flex justify-md-end justify-sm-space-between">
           <delete-client-dialog :selected-client="clientItem"/>
           <archive-client-dialog :selected-client="clientItem"/>
           <edit-client-name-dialog :selected-client="clientItem"/>

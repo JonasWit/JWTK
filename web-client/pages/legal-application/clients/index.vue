@@ -50,7 +50,7 @@ export default {
   },
   name: "index",
   components: {ButtonToGoUp, AddClientDialog, ClientListItem, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
+  middleware: ['legal-app-permission', 'client', 'authenticated'],
 
 
   data: () => ({
