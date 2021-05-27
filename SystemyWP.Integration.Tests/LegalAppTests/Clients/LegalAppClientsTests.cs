@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace SystemyWP.Integration.Tests.LegalAppTests
+namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
 {
     public class LegalAppClientsTests : IClassFixture<AppInstance>
     {
