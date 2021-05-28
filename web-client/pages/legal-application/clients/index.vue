@@ -45,9 +45,6 @@ const searchItemFactory = (name, id) => ({
 });
 
 export default {
-  meta: {
-    pageName: 'Lista Klientów'
-  },
   name: "index",
   components: {ButtonToGoUp, AddClientDialog, ClientListItem, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],

@@ -45,6 +45,7 @@
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
+            <delete-work-record :selected-financial-record="item"/>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -57,13 +58,14 @@
 <script>
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
-import AddNewWorkRecord from "../../../../../components/legal-app/financials/add-new-work-record";
 import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
+import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
+import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
 
 
 export default {
   name: "index",
-  components: {ButtonToGoUp, AddNewWorkRecord, Layout},
+  components: {DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -79,7 +81,7 @@ export default {
 
   async fetch() {
     return this.handleLogs();
-    console.warn('Finansowy rekord', this.financialRecords)
+
   },
   watch: {
     dates(dates) {

@@ -33,12 +33,9 @@ import Layout from "@/components/legal-app/layout";
 
 
 export default {
-  meta: {
-    pageName: 'Klient'
-  },
   name: "c-details",
   components: {Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
+  middleware: ['legal-app-permission', 'client', 'authenticated'],
   data: () => ({
     client: null,
   }),

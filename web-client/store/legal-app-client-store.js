@@ -1,13 +1,14 @@
 ﻿const initState = () => ({
   clientForAction: null,
   contactForAction: null,
-
+  FinancialRecordForAction: null,
 
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: [],
   emailsList: [],
   phoneNumbersList: [],
   addressesList: [],
+
 
 });
 
@@ -40,12 +41,17 @@ export const mutations = {
     console.warn('mutation done for contact', contact)
   },
 
+  setFinancialRecordForAction(state, financialRecord) {
+    state.FinancialRecordForAction = financialRecord
+  },
   //Contact-details and add-email dialogs
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
     console.warn('mutation done for updateContactDetailsList', contactDetailsFromFetch)
     state.contactDetailsFromFetch = contactDetailsFromFetch
 
-  }
+  },
+
+
 };
 
 export const actions = {
@@ -57,7 +63,6 @@ export const actions = {
       })
       .catch(() => {
       });
-  }
-
+  },
 
 };

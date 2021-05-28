@@ -24,10 +24,7 @@
 import {legalappRoute} from "@/data/legal-app/legal-app-navigation";
 
 export default {
-  meta: {
-    pageName: 'Home'
-  },
-  middleware: ['legal-app-permission', 'client', 'authenticated', 'meta-reader'],
+  middleware: ['legal-app-permission', 'client', 'authenticated'],
   data: () => ({
     items: []
   }),
