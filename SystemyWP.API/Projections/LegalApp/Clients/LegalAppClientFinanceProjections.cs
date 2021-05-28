@@ -6,8 +6,8 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
 {
     public class LegalAppClientFinanceProjections
     {
-        public static Func<LegalAppClientWorkRecord, object> CreateBasic => BasicProjection.Compile();
-        public static Expression<Func<LegalAppClientWorkRecord, object>> BasicProjection =>
+        public static Func<LegalAppClientWorkRecord, object> Create => Projection.Compile();
+        public static Expression<Func<LegalAppClientWorkRecord, object>> Projection =>
             legalAppClientFinance => new
             {
                 legalAppClientFinance.Created,
@@ -22,6 +22,7 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClientFinance.Rate,
                 legalAppClientFinance.EventDate,
                 legalAppClientFinance.UserEmail,
+                legalAppClientFinance.Vat
             };
     }
 }

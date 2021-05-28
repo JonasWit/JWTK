@@ -7,6 +7,7 @@ namespace SystemyWP.API.Forms.LegalApp.Client
         public string Name { get; set; }
         public int Hours { get; set; }
         public int Minutes { get; set; }  
+        public int Vat { get; set; }  
         public decimal Amount { get; set; } 
         public decimal Rate { get; set; }
         public string Description { get; set; }

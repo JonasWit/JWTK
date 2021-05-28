@@ -110,6 +110,7 @@ namespace SystemyWP.API
                     financeRecord.Rate = random.Next(15, 500);
                     financeRecord.Hours = random.Next(0, 500);
                     financeRecord.Minutes = random.Next(1, 59);
+                    financeRecord.Vat = random.Next(0, 23);
 
                     financeRecord.Name = $"TEST -- {workflowNumber}";
                     financeRecord.EventDate = DateTime.UtcNow.AddDays(workflowNumber * -1);

@@ -22,6 +22,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
 
         public int Hours { get; set; }
         public int Minutes { get; set; }
+        public int Vat { get; set; }
         public decimal Rate { get; set; }
 
         public decimal Amount { get; set; }

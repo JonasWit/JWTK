@@ -46,7 +46,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         if (client is null) return BadRequest();
 
                         var result = client.LegalAppClientWorkRecords
-                            .Select(LegalAppClientFinanceProjections.CreateBasic)
+                            .Select(LegalAppClientFinanceProjections.Create)
                             .ToList();
 
                         return Ok(result);
@@ -64,7 +64,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
         
         [HttpPost("client/{clientId}/finance-records")]
-        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] ClientWorkForm createClientWorkForm)
+        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] ClientWorkForm clientWorkForm)
         {
             try
             {
@@ -80,12 +80,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                         var newEntity = new LegalAppClientWorkRecord
                         {
-                            Amount = createClientWorkForm.Amount,
-                            Name = createClientWorkForm.Name,
-                            Rate = createClientWorkForm.Rate,
-                            Hours = createClientWorkForm.Hours,
-                            Minutes = createClientWorkForm.Minutes,
-                            EventDate = createClientWorkForm.EventDate,
+                            Amount = clientWorkForm.Amount,
+                            Name = clientWorkForm.Name,
+                            Rate = clientWorkForm.Rate,
+                            Hours = clientWorkForm.Hours,
+                            Minutes = clientWorkForm.Minutes,
+                            EventDate = clientWorkForm.EventDate,
+                            Vat = clientWorkForm.Vat,
                             UserEmail = UserEmail,
                             UserId = UserId,
                             CreatedBy = UserEmail,
@@ -128,6 +129,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     entity.UserEmail = UserEmail;
                     entity.UserId = UserId;
                     entity.CreatedBy = UserEmail;
+                    entity.Vat = clientWorkForm.Vat;
                     
                     await _context.SaveChangesAsync();
                     return Ok(entity);
