@@ -83,6 +83,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                             Amount = createClientWorkForm.Amount,
                             Name = createClientWorkForm.Name,
                             Rate = createClientWorkForm.Rate,
+                            Hours = createClientWorkForm.Hours,
+                            Minutes = createClientWorkForm.Minutes,
                             EventDate = createClientWorkForm.EventDate,
                             UserEmail = UserEmail,
                             UserId = UserId,
