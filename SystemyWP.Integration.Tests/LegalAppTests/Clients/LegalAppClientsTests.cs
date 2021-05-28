@@ -7,6 +7,7 @@ using SystemyWP.API;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -43,7 +44,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                     SystemyWpConstants.Claims.LegalAppAccessClaim,
                     SystemyWpConstants.Claims.ClientAdminClaim
                 )
-                .CreateClient(new()
+                .CreateClient(new WebApplicationFactoryClientOptions()
                 {
                     AllowAutoRedirect = false,
                 });
@@ -77,7 +78,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                     SystemyWpConstants.Claims.LegalAppAccessClaim,
                     SystemyWpConstants.Claims.ClientAdminClaim
                 )
-                .CreateClient(new()
+                .CreateClient(new WebApplicationFactoryClientOptions()
                 {
                     AllowAutoRedirect = false,
                 });
@@ -109,7 +110,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                     SystemyWpConstants.Claims.LegalAppAccessClaim,
                     SystemyWpConstants.Claims.ClientClaim
                 )
-                .CreateClient(new()
+                .CreateClient(new WebApplicationFactoryClientOptions()
                 {
                     AllowAutoRedirect = false,
                 });
@@ -121,7 +122,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                     new Claim(ClaimTypes.Email, user.Email),
                     SystemyWpConstants.Claims.ClientClaim
                 )
-                .CreateClient(new()
+                .CreateClient(new WebApplicationFactoryClientOptions()
                 {
                     AllowAutoRedirect = false,
                 });
