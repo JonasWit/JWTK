@@ -84,7 +84,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                 });
 
             var result = await client.GetAsync("/api/legal-app-clients/client/300");
-
+            
             result.StatusCode.Should().Be(StatusCodes.Status204NoContent);
         }
 
