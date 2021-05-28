@@ -3,12 +3,13 @@ using FluentValidation;
 
 namespace SystemyWP.API.Forms.Validation.LegalApp.Client
 {
-    public class CreateClientWorkFormValidation : AbstractValidator<CreateClientWorkForm>
+    public class ClientWorkFormValidation : AbstractValidator<ClientWorkForm>
     {
-        public CreateClientWorkFormValidation()
+        public ClientWorkFormValidation()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Description).MaximumLength(300);
+            RuleFor(x => x.Hours);
             RuleFor(x => x.Hours);
             RuleFor(x => x.Minutes);
             RuleFor(x => x.Amount);

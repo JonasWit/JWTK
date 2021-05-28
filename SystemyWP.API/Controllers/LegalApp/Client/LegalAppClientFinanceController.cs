@@ -64,7 +64,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
         
         [HttpPost("client/{clientId}/finance-records")]
-        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] CreateClientWorkForm createClientWorkForm)
+        public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] ClientWorkForm createClientWorkForm)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
         
         [HttpPut("client/{clientId}/finance-record/{workRecordId}")]
-        public async Task<IActionResult> UpdateFinanceRecord(long clientId, long workRecordId, [FromBody] UpdateClientWorkForm updateClientWorkForm)
+        public async Task<IActionResult> UpdateFinanceRecord(long clientId, long workRecordId, [FromBody] ClientWorkForm clientWorkForm)
         {
             try
             {
@@ -119,10 +119,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                     if (entity is null) return BadRequest();
 
-                    entity.Amount = updateClientWorkForm.Amount;
-                    entity.Name = updateClientWorkForm.Name;
-                    entity.Rate = updateClientWorkForm.Rate;
-                    entity.EventDate = updateClientWorkForm.EventDate;
+                    entity.Amount = clientWorkForm.Amount;
+                    entity.Name = clientWorkForm.Name;
+                    entity.Rate = clientWorkForm.Rate;
+                    entity.EventDate = clientWorkForm.EventDate;
                     entity.UserEmail = UserEmail;
                     entity.UserId = UserId;
                     entity.CreatedBy = UserEmail;

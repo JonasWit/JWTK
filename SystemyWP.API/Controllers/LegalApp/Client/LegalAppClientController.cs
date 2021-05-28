@@ -162,7 +162,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateClient([FromBody] CreateClientForm form)
+        public async Task<IActionResult> CreateClient([FromBody] ClientForm form)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPut("update/{clientId}")]
-        public async Task<IActionResult> UpdateClient(long clientId, [FromBody] UpdateClientForm form)
+        public async Task<IActionResult> UpdateClient(long clientId, [FromBody] ClientForm form)
         {
             try
             {

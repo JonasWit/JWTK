@@ -43,12 +43,15 @@ namespace SystemyWP.API.Controllers.BaseClases
             {
                 //Check DataAccess Table
                 var access = await _context.DataAccesses
-                    .AnyAsync(x => x.UserId.Equals(UserId) &&
-                                   x.RestrictedType == restrictedType &&
-                                   x.ItemId == itemId);
+                    .AnyAsync(x => 
+                        x.UserId.Equals(UserId) &&
+                        x.RestrictedType == restrictedType &&
+                        x.ItemId == itemId);
 
                 if (access)
+                {
                     return new CheckResult {DataAccessAllowed = true, AccessKey = user.AccessKey, AdminUser = false};
+                }
             }
 
             return new CheckResult {DataAccessAllowed = false, AccessKey = user.AccessKey};

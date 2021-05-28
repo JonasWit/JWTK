@@ -43,7 +43,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                     if (result is null) return BadRequest();
 
-                    var newContact = new ContactDetails
+                    var newEntity = new ContactDetails
                     {
                         CreatedBy = UserEmail,
                         Name = createContactForm.Name,
@@ -52,9 +52,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         Title = createContactForm.Title
                     };
 
-                    result.Contacts.Add(newContact);
+                    result.Contacts.Add(newEntity);
                     await _context.SaveChangesAsync();
-                    return Ok(newContact);
+                    return Ok(newEntity);
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -78,7 +78,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     var entities = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id)
+                            .FirstOrDefault(y => y.Id == clientId && 
+                                                 y.AccessKeyId == check.AccessKey.Id).Id)
+                        .Select(ContactProjections.FullProjection)
                         .ToList();
 
                     return Ok(entities);
