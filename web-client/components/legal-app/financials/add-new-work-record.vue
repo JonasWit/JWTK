@@ -16,9 +16,8 @@
           <v-text-field v-model="form.name" label="Dodaj nazwę"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
-          <v-text-field v-model.number="form.hours" label="Dodaj godziny" type="number"
-          ></v-text-field>
-          <v-text-field v-model.number="form.minutes" label="Dodaj minuty" type="number"></v-text-field>
+          <v-text-field v-model="form.hours" label="Dodaj godziny"></v-text-field>
+          <v-text-field v-model="form.minutes" label="Dodaj minuty"></v-text-field>
           <v-text-field v-model.number="form.rate" label="Dodaj stawkę" type="number"></v-text-field>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
@@ -70,22 +69,48 @@ export default {
     date: new Date().toISOString().substr(0, 10),
 
   }),
+
+  // computed: {
+  //
+  //   hoursSpent() {
+  //     if (!this.form.hours) {
+  //       return parseInt(this.form.hours)
+  //     } else {
+  //       return this.form.hours
+  //     }
+  //   },
+  //
+  //   minutesSpent() {
+  //     return parseInt(this.form.minutes)
+  //   }
+  // },
+
   methods: {
     handleSubmit() {
+
+      let hoursSpent = parseInt(this.form.hours)
+      let minutesSpent = parseInt(this.form.minutes)
+
+      console.warn('parseInt godziny', hoursSpent)
+      console.warn('parseInt minuty', minutesSpent)
+
 
       const workRecord = {
         name: this.form.name,
         description: this.form.description,
-        hours: this.form.hours,
-        minutes: this.form.minutes,
+        hours: hoursSpent,
+        minutes: minutesSpent,
         rate: this.form.rate,
         eventDate: this.form.eventDate
       };
 
+      console.warn('Nowy work rekord: godziny', this.hours)
+      console.warn('Nowy work rekord: minuty', this.hours)
+
       return this.$axios.$post(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records`, workRecord)
         .then((workRecord) => {
-          console.warn('Nowy work rekord', workRecord)
-          this.resetForm();
+
+
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
           this.$nuxt.refresh();
 
