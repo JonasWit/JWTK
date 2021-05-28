@@ -16,9 +16,9 @@
           <v-text-field v-model="form.name" label="Dodaj nazwę"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
-          <v-text-field v-model="form.hours" label="Dodaj godziny"></v-text-field>
-          <v-text-field v-model="form.minutes" label="Dodaj minuty"></v-text-field>
-          <v-text-field v-model.number="form.rate" label="Dodaj stawkę" type="number"></v-text-field>
+          <v-text-field v-model="form.hours" label="Dodaj liczbę godzin"></v-text-field>
+          <v-text-field v-model="form.minutes" label="Dodaj liczbę minut"></v-text-field>
+          <v-text-field v-model="form.rate" label="Dodaj stawkę godzinową"></v-text-field>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -35,8 +35,6 @@
               </v-btn>
             </v-date-picker>
           </v-dialog>
-
-
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -52,6 +50,8 @@
 </template>
 
 <script>
+import {mapActions, mapMutations} from "vuex";
+
 export default {
   name: "add-new-work-record",
   data: () => ({
@@ -70,53 +70,51 @@ export default {
 
   }),
 
-  // computed: {
-  //
-  //   hoursSpent() {
-  //     if (!this.form.hours) {
-  //       return parseInt(this.form.hours)
-  //     } else {
-  //       return this.form.hours
-  //     }
-  //   },
-  //
-  //   minutesSpent() {
-  //     return parseInt(this.form.minutes)
-  //   }
-  // },
+  computed: {
+
+    hoursSpent() {
+      return parseInt(this.form.hours);
+    },
+
+    minutesSpent() {
+      return (parseInt(this.form.minutes) / 60);
+    },
+
+    givenRate() {
+      return (parseInt(this.form.rate));
+    },
+
+    calculatedAmount() {
+      return Math.round((this.hoursSpent + this.minutesSpent) * this.givenRate).toFixed(2);
+    }
+
+  },
+
 
   methods: {
+    ...mapMutations('legal-app-client-store', ['updateListOfRecordedWork']),
+    ...mapActions('legal-app-client-store', ['getListOfRecordedWork']),
+
     handleSubmit() {
-
-      let hoursSpent = parseInt(this.form.hours)
-      let minutesSpent = parseInt(this.form.minutes)
-
-      console.warn('parseInt godziny', hoursSpent)
-      console.warn('parseInt minuty', minutesSpent)
-
 
       const workRecord = {
         name: this.form.name,
         description: this.form.description,
-        hours: hoursSpent,
-        minutes: minutesSpent,
+        hours: this.hoursSpent,
+        minutes: this.minutesSpent,
         rate: this.form.rate,
-        eventDate: this.form.eventDate
+        eventDate: this.form.eventDate,
+        amount: this.calculatedAmount
       };
 
-      console.warn('Nowy work rekord: godziny', this.hours)
-      console.warn('Nowy work rekord: minuty', this.hours)
+      console.warn('Nowy work rekord: godziny', workRecord)
+
 
       return this.$axios.$post(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records`, workRecord)
-        .then((workRecord) => {
-
-
+        .then(() => {
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
           this.$nuxt.refresh();
-
           this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
-
-
         })
         .catch((e) => {
           console.warn('create work record error', e);

@@ -37,7 +37,7 @@
                 <v-col> Created by: {{ item.createdBy }}</v-col>
               </v-col>
               <v-col>
-                <v-col class="hidden-sm-and-down">Amount:</v-col>
+                <v-col class="hidden-sm-and-down">Amount: {{ item.amount }}</v-col>
                 <v-col class="hidden-sm-and-down">Rate: {{ item.rate }}</v-col>
                 <v-col class="hidden-sm-and-down">Hours: {{ item.hours }}</v-col>
                 <v-col class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-col>
@@ -49,7 +49,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
 
-
+      <button-to-go-up/>
     </template>
   </layout>
 </template>
@@ -58,11 +58,12 @@
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
 import AddNewWorkRecord from "../../../../../components/legal-app/financials/add-new-work-record";
+import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 
 
 export default {
   name: "index",
-  components: {AddNewWorkRecord, Layout},
+  components: {ButtonToGoUp, AddNewWorkRecord, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -137,7 +138,6 @@ export default {
     handleLogs() {
       if (this.loading) return;
       this.loading = true;
-
 
       console.warn('handle logs fired', this.query);
       return this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
