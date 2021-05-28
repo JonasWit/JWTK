@@ -56,6 +56,38 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
         }
 
         [Fact]
+        public async Task LegalAppClients_GetClient_UnauthorizedClientAdmin()
+        {
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            var user = userManager
+                .GetUsersForClaimAsync(SystemyWpConstants.Claims.ClientAdminClaim)
+                .GetAwaiter()
+                .GetResult()
+                .First(x =>
+                    x.Email.Equals(TestsConstants.Emails.ClientAdminEmail,
+                        StringComparison.InvariantCultureIgnoreCase));
+
+            var client = _instance
+                .AuthenticatedInstance(
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    SystemyWpConstants.Claims.LegalAppAccessClaim,
+                    SystemyWpConstants.Claims.ClientAdminClaim
+                )
+                .CreateClient(new()
+                {
+                    AllowAutoRedirect = false,
+                });
+
+            var result = await client.GetAsync("/api/legal-app-clients/client/300");
+
+            result.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+        }
+
+        [Fact]
         public async Task LegalAppClients_GetBasicClientsList_UnauthorizedClient()
         {
             var scope = _instance.Services.CreateScope();
@@ -101,14 +133,9 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                 await clientWithoutLegalAppClaim.GetAsync("/api/legal-app-clients/clients/basic-list");
 
             resultWithAppClaim.StatusCode.Should().Be(StatusCodes.Status200OK);
-            var resultWithAppClaimContent =
-                await resultWithAppClaim.Content.ReadFromJsonAsync<object[]>();
-            resultWithAppClaimContent.Should().HaveCount(0);
+            (await resultWithAppClaim.Content.ReadFromJsonAsync<object[]>()).Should().HaveCount(0);
 
             resultWithoutLegalAppClaim.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            var resultWithoutLegalAppClaimContent =
-                await resultWithoutLegalAppClaim.Content.ReadAsStreamAsync();
-            resultWithAppClaimContent.Should().BeEmpty();
         }
     }
 }
