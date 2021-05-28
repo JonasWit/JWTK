@@ -10,19 +10,22 @@
         <span>Zarejestruj nowy czas</span>
       </v-tooltip>
     </template>
-    <v-form ref="createClientWorkForm">
+    <v-form ref="createClientWorkForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
           <v-text-field v-model="form.name" label="Dodaj nazwę"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
-          <v-text-field v-model="form.hours" label="Dodaj liczbę godzin"></v-text-field>
-          <v-text-field v-model="form.minutes" label="Dodaj liczbę minut"></v-text-field>
-          <v-text-field v-model="form.rate" label="Dodaj stawkę godzinową"></v-text-field>
+          <v-text-field v-model="form.hours" required :rules="validation.numberOnly"
+                        label="Dodaj liczbę godzin"></v-text-field>
+          <v-text-field v-model="form.minutes" required :rules="validation.numberOnly"
+                        label="Dodaj liczbę minut"></v-text-field>
+          <v-text-field v-model="form.rate" required :rules="validation.numberOnly"
+                        label="Dodaj stawkę godzinową"></v-text-field>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="form.eventDate" label="Wybierz datę" prepend-icon="mdi-calendar" readonly
+              <v-text-field v-model="form.eventDate" required label="Wybierz datę" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="date" scrollable>
@@ -38,8 +41,11 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="resetForm()">
+            Wyczyść
 
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-btn text color="primary" @click="handleSubmit()">
             Dodaj
           </v-btn>
@@ -50,7 +56,6 @@
 </template>
 
 <script>
-import {mapActions, mapMutations} from "vuex";
 
 export default {
   name: "add-new-work-record",
@@ -67,6 +72,12 @@ export default {
     },
     modal: false,
     date: new Date().toISOString().substr(0, 10),
+    validation: {
+      valid: false,
+      numberOnly: [
+        v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+      ],
+    },
 
   }),
 
@@ -77,7 +88,7 @@ export default {
     },
 
     minutesSpent() {
-      return (parseInt(this.form.minutes) / 60);
+      return parseInt(this.form.minutes);
     },
 
     givenRate() {
@@ -85,17 +96,18 @@ export default {
     },
 
     calculatedAmount() {
-      return Math.round((this.hoursSpent + this.minutesSpent) * this.givenRate).toFixed(2);
+      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate).toFixed(2);
     }
 
   },
 
 
   methods: {
-    ...mapMutations('legal-app-client-store', ['updateListOfRecordedWork']),
-    ...mapActions('legal-app-client-store', ['getListOfRecordedWork']),
-
     handleSubmit() {
+
+      if (!this.$refs.createClientWorkForm.validate()) return;
+      if (this.loading) return;
+      this.loading = true;
 
       const workRecord = {
         name: this.form.name,
@@ -107,11 +119,12 @@ export default {
         amount: this.calculatedAmount
       };
 
-      console.warn('Nowy work rekord: godziny', workRecord)
+      console.warn('Nowy work rekord', workRecord)
 
 
       return this.$axios.$post(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records`, workRecord)
         .then(() => {
+          this.resetForm()
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
           this.$nuxt.refresh();
           this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
@@ -124,7 +137,11 @@ export default {
           this.dialog = false;
 
         });
-    }
+    },
+    resetForm() {
+      this.$refs.createClientWorkForm.reset();
+      this.$refs.createClientWorkForm.resetValidation();
+    },
   }
 
 
