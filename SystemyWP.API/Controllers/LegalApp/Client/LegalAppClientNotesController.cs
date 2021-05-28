@@ -168,9 +168,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     var entity = _context.LegalAppClientNotes
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                                        .FirstOrDefault(y => y.Id == clientId &&
-                                                             y.AccessKeyId == check.AccessKey.Id).Id &&
-                                    x.Id == noteId)
+                            .FirstOrDefault(y => y.Id == clientId &&
+                            y.AccessKeyId == check.AccessKey.Id).Id &&
+                            x.Id == noteId)
                         .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
@@ -204,7 +204,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     var entity = _context.LegalAppClientNotes
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && 
+                            .FirstOrDefault(y => y.Id == clientId &&
                             y.AccessKeyId == check.AccessKey.Id).Id && x.Id == contactId)
                         .FirstOrDefault();
 
@@ -224,7 +224,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPut("archive/{clientId}/note/{noteId}")]
         public async Task<IActionResult> ArchiveNote(long clientId, long noteId)
         {
@@ -237,19 +237,19 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     var entity = _context.LegalAppClientNotes
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                                        .FirstOrDefault(y => y.Id == clientId &&
-                                                             y.AccessKeyId == check.AccessKey.Id).Id &&
-                                    x.Id == noteId)
+                            .FirstOrDefault(y => y.Id == clientId &&
+                                y.AccessKeyId == check.AccessKey.Id).Id &&
+                                x.Id == noteId)
                         .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
 
                     entity.Active = !entity.Active;
-                    
+
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
-            
+
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
