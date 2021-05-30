@@ -36,7 +36,7 @@ namespace SystemyWP.API.Controllers.Portal
                 var userClaims = await userManager.GetClaimsAsync(identityUser) as List<Claim>
                                  ?? new List<Claim>();
 
-                var accessKey = _context.AccessKeys
+                var accessKey = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
                     .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
                     .Select(LegalAppAccessKeyProjection.Projection)

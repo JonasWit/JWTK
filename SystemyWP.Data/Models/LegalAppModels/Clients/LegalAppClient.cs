@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.Abstractions.LegalAppAbstractions;
-using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Contact;

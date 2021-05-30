@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SystemyWP.API.Forms.LegalApp.Access
+namespace SystemyWP.API.Forms.GeneralApp.Access
 {
-    public class LegalAppAccessKeyForm
+    public class CreateAccessKeyForm
     {
         public string KeyName { get; set; }     
         public DateTime ExpireDate { get; set; }  

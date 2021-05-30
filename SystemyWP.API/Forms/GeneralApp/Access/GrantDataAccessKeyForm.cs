@@ -1,6 +1,6 @@
-﻿namespace SystemyWP.API.Forms.LegalApp.Access
+﻿namespace SystemyWP.API.Forms.GeneralApp.Access
 {
-    public class LegalAppGrantDataAccessKeyForm
+    public class GrantDataAccessKeyForm
     {
         public string DataAccessKey { get; set; }
         public string UserId { get; set; }

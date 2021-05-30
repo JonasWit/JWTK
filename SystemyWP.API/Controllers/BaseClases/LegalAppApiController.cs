@@ -2,7 +2,6 @@
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;

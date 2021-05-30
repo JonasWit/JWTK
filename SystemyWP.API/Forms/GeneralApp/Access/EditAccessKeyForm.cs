@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SystemyWP.API.Forms.LegalApp.Access
+namespace SystemyWP.API.Forms.GeneralApp.Access
 {
-    public class LegalAppEditAccessKeyForm
+    public class EditAccessKeyForm
     {
         public string OldKeyName { get; set; }  
         public string NewKeyName { get; set; }     

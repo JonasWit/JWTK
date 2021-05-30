@@ -225,7 +225,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         {
             var result = new AppSummaryViewModel();
 
-            var accessKey = await _context.AccessKeys
+            var accessKey = await _context.LegalAppAccessKeys
                 .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id.Equals(UserId)));
 

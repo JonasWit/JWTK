@@ -8,7 +8,6 @@ using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +75,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var entities = _context.Contacts
+                    var entities = _context.LegalAppContacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && 
                                                  y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
@@ -105,7 +104,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
@@ -136,7 +135,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Include(x => x.Emails)
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
@@ -175,7 +174,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Include(x => x.Emails.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
@@ -211,7 +210,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
@@ -249,7 +248,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
@@ -285,7 +284,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Include(x => x.PhysicalAddresses)
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
@@ -328,7 +327,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
@@ -364,7 +363,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
@@ -398,7 +397,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (check.DataAccessAllowed)
                 {
-                    var contact = _context.Contacts
+                    var contact = _context.LegalAppContacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)

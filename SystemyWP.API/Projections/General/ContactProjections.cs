@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
 
 namespace SystemyWP.API.Projections.General

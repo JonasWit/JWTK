@@ -36,8 +36,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var result = _context.LegalAppClients
-                        .Include(x => x.LegalAppAccessKey)
-                        .Where(x => x.LegalAppAccessKey.Id == check.LegalAppAccessKey.Id && x.Id == clientId)
+                        .Where(x => x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id && x.Id == clientId)
                         .Select(LegalAppClientProjections.FlatProjection)
                         .FirstOrDefault();
                     
@@ -70,9 +69,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.LegalAppAccessKey)
                         .Where(x =>
-                            x.LegalAppAccessKey.Id == user.LegalAppAccessKey.Id)
+                            x.LegalAppAccessKeyId == user.LegalAppAccessKey.Id)
                         .Select(LegalAppClientProjections.BasicProjection)
                         .ToList());
 
@@ -83,9 +81,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (Role.Equals(SystemyWpConstants.Roles.Client))
                 {
                     result.AddRange(_context.LegalAppClients
-                        .Include(x => x.LegalAppAccessKey)
                         .Where(x =>
-                            x.LegalAppAccessKey.Id == user.LegalAppAccessKey.Id &&
+                            x.LegalAppAccessKeyId == user.LegalAppAccessKey.Id &&
                             _context.DataAccesses.Where(y => y.UserId.Equals(UserId))
                                 .Any(y => y.RestrictedType == RestrictedType.LegalAppClient &&
                                           y.ItemId == x.Id))

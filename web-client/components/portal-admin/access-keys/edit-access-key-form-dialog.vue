@@ -91,7 +91,7 @@ export default {
         expireDate: this.form.expireDate,
       };
 
-      return this.$axios.$put("/api/portal-admin/key-admin/access-key/update", payload)
+      return this.$axios.$put(`/api/portal-admin/key-admin/access-key/update/${this.selectedKey.id}`, payload)
         .catch((e) => {
         }).finally(() => {
           this.getAccessKeys();

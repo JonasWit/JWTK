@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.LegalApp.Access.Validation
+namespace SystemyWP.API.Forms.GeneralApp.Access.Validation
 {
-    public class LegalAppEditAccessKeyValidation: AbstractValidator<LegalAppEditAccessKeyForm>
+    public class EditAccessKeyValidation: AbstractValidator<EditAccessKeyForm>
     {
-        public LegalAppEditAccessKeyValidation()
+        public EditAccessKeyValidation()
         {
             RuleFor(x => x.NewKeyName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.OldKeyName).NotEmpty().MaximumLength(50);

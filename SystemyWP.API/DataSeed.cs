@@ -8,7 +8,6 @@ using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -192,7 +191,7 @@ namespace SystemyWP.API
                     CreatedBy = "system",
                     UpdatedBy = "system",
                 };
-                context.AccessKeys.Add(key);
+                context.LegalAppAccessKeys.Add(key);
                 context.SaveChanges();
 
                 var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
@@ -213,7 +212,7 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
-                    LegalAppAccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                    LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
                     Id = testClientAdmin.Id,
                     CreatedBy = "system"
                 });
@@ -239,7 +238,7 @@ namespace SystemyWP.API
 
                     context.Add(new User
                     {
-                        LegalAppAccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                        LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });

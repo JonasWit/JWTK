@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms.Admin;
-using SystemyWP.API.Forms.LegalApp.Access;
-using SystemyWP.API.Projections;
+using SystemyWP.API.Forms.GeneralApp.Access;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
@@ -40,7 +38,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                     })
                     .ToListAsync();
 
-                var results = _context.AccessKeys
+                var results = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
                     .Select(LegalAppAccessKeyProjection.FullProjection())
                     .ToList();
@@ -54,11 +52,11 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPost("access-key/create")]
-        public async Task<IActionResult> CreateAccessKey([FromBody] LegalAppAccessKeyForm form)
+        public async Task<IActionResult> CreateAccessKey([FromBody] CreateAccessKeyForm form)
         {
             try
             {
-                if (_context.AccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
+                if (_context.LegalAppAccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
                     return BadRequest("Key with this name already exists!");
 
                 _context.Add(new LegalAppAccessKey
@@ -79,13 +77,13 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             }
         }
 
-        [HttpPut("access-key/update")]
-        public async Task<IActionResult> UpdateAccessKey([FromBody] LegalAppEditAccessKeyForm form)
+        [HttpPut("access-key/update/{id}")]
+        public async Task<IActionResult> UpdateAccessKey(int keyId, [FromBody] EditAccessKeyForm form)
         {
             try
             {
-                var keyToUpdate = _context.AccessKeys
-                    .FirstOrDefault(x => x.Name.ToLower().Equals(form.OldKeyName.ToLower()));
+                var keyToUpdate = _context.LegalAppAccessKeys
+                    .FirstOrDefault(x => x.Id == keyId);
 
                 if (keyToUpdate is null) return BadRequest("Key with this name not exists!");
 
@@ -109,7 +107,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         {
             try
             {
-                var keyToDelete = _context.AccessKeys
+                var keyToDelete = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == id);
 
                 if (keyToDelete is null) return BadRequest("Key with this id does not exists!");
@@ -123,7 +121,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                         .Include(x => x.LegalAppAccessKey)
                         .Where(x => x.LegalAppAccessKey.Name.Equals(keyToDelete.Name)));
 
-                _context.AccessKeys.Remove(keyToDelete);
+                _context.LegalAppAccessKeys.Remove(keyToDelete);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -136,7 +134,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
         [HttpPost("user/grant/access-key")]
         public async Task<IActionResult> GrantDataAccessKey(
-            [FromBody] LegalAppGrantDataAccessKeyForm form,
+            [FromBody] GrantDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try
@@ -146,7 +144,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
                 if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
 
-                var accessKey = _context.AccessKeys
+                var accessKey = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
 
                 if (accessKey is null) return BadRequest("Key not found!");
@@ -169,7 +167,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
         [HttpPost("user/revoke/access-key")]
         public async Task<IActionResult> RevokeDataAccessKey(
-            [FromBody] LegalAppRevokeDataAccessKeyForm form,
+            [FromBody] RevokeDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try
@@ -179,7 +177,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
                 if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
 
-                var assignedKey = _context.AccessKeys
+                var assignedKey = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
