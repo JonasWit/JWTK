@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 
@@ -15,7 +16,7 @@ namespace SystemyWP.API.Projections
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                DataAccessKey = user.LegalAppAccessKey == null ? null : LegalAppAccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
                 LegalAppAllowed = legalAppAllowed,
                 user.PhoneNumber,
                 user.Address,
@@ -41,7 +42,7 @@ namespace SystemyWP.API.Projections
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                DataAccessKey = user.LegalAppAccessKey == null ? null : LegalAppAccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
                 user.PhoneNumber,
                 user.Address,
                 user.City,

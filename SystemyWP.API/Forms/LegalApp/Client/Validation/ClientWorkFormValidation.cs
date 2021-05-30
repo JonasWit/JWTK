@@ -1,7 +1,6 @@
-﻿using SystemyWP.API.Forms.LegalApp.Client;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.Validation.LegalApp.Client
+namespace SystemyWP.API.Forms.LegalApp.Client.Validation
 {
     public class ClientWorkFormValidation : AbstractValidator<ClientWorkForm>
     {

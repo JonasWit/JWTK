@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
+using SystemyWP.API.Forms.LegalApp.Access;
 using SystemyWP.API.Projections;
+using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Access;
@@ -40,7 +42,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
                 var results = _context.AccessKeys
                     .Include(x => x.Users)
-                    .Select(AccessKeyProjection.FullProjection())
+                    .Select(LegalAppAccessKeyProjection.FullProjection())
                     .ToList();
                 return Ok(results);
             }
@@ -52,7 +54,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPost("access-key/create")]
-        public async Task<IActionResult> CreateAccessKey([FromBody] AccessKeyForm form)
+        public async Task<IActionResult> CreateAccessKey([FromBody] LegalAppAccessKeyForm form)
         {
             try
             {
@@ -78,7 +80,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPut("access-key/update")]
-        public async Task<IActionResult> UpdateAccessKey([FromBody] EditAccessKeyForm form)
+        public async Task<IActionResult> UpdateAccessKey([FromBody] LegalAppEditAccessKeyForm form)
         {
             try
             {
@@ -134,7 +136,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
         [HttpPost("user/grant/access-key")]
         public async Task<IActionResult> GrantDataAccessKey(
-            [FromBody] GrantDataAccessKeyForm form,
+            [FromBody] LegalAppGrantDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try
@@ -167,7 +169,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
         [HttpPost("user/revoke/access-key")]
         public async Task<IActionResult> RevokeDataAccessKey(
-            [FromBody] RevokeDataAccessKeyForm form,
+            [FromBody] LegalAppRevokeDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)
         {
             try

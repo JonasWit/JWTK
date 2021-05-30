@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
+using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +39,7 @@ namespace SystemyWP.API.Controllers.Portal
                 var accessKey = _context.AccessKeys
                     .Include(x => x.Users)
                     .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
-                    .Select(AccessKeyProjection.Projection)
+                    .Select(LegalAppAccessKeyProjection.Projection)
                     .FirstOrDefault();
 
                 result.Add(new UserProjections.UserViewModel

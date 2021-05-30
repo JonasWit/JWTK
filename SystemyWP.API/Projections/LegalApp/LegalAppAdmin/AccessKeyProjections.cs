@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 
-namespace SystemyWP.API.Projections
+namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
 {
-    public static class AccessKeyProjection
+    public static class LegalAppAccessKeyProjection
     {
         public static Expression<Func<LegalAppAccessKey, object>> FullProjection() =>
             key => new

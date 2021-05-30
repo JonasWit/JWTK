@@ -1,7 +1,6 @@
-﻿using SystemyWP.API.Forms.GeneralApp.Contact;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.Validation.GeneralApp.Contact
+namespace SystemyWP.API.Forms.GeneralApp.Contact.Validation
 {
     public class UpdateContactValidation: AbstractValidator<UpdateContactForm>
     {
