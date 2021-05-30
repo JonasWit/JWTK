@@ -44,7 +44,7 @@
           <v-spacer/>
           <v-list-item-content>
             <div class="d-flex justify-end">
-              <data-access-key-dialog :selected-user="user"/>
+              <!--              <data-access-key-dialog :selected-user="user"/>-->
               <lock-user-dialog :selected-user="user"/>
               <roles-management-dialog :selected-user="user"/>
               <applications-access-dialog :selected-user="user"/>

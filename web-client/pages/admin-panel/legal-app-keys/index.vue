@@ -1,5 +1,5 @@
 ﻿<template>
-
+  <p>Legal app keys</p>
 </template>
 
 <script>

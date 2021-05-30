@@ -9,6 +9,7 @@ using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpGet("access-keys")]
-        public async Task<ActionResult<IEnumerable<object>>> ListAccessKeys()
+        public async Task<IActionResult> ListAccessKeys()
         {
             try
             {
@@ -37,7 +38,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();  
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
