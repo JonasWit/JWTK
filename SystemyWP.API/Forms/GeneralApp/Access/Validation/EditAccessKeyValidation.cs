@@ -7,7 +7,6 @@ namespace SystemyWP.API.Forms.GeneralApp.Access.Validation
         public EditAccessKeyValidation()
         {
             RuleFor(x => x.NewKeyName).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.OldKeyName).NotEmpty().MaximumLength(50);
             RuleFor(x => x.ExpireDate).NotEmpty();
         }
     }

@@ -87,7 +87,6 @@ export default {
 
       const payload = {
         newKeyName: this.form.keyName,
-        oldKeyName: this.selectedKey.name,
         expireDate: this.form.expireDate,
       };
 
