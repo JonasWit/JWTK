@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 {
-    [Route("/api/portal-admin/key-admin")]
+    [Route("/api/portal-admin/key-admin/legal-app")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class LegalAppAccessKeyController : ApiController
     {
@@ -28,16 +28,6 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         {
             try
             {
-                var legalAppRelatedDataCount = await _context.LegalAppClients
-                    .Include(x => x.LegalAppAccessKey)
-                    .GroupBy(x => x.LegalAppAccessKey.Name)
-                    .Select(x => new
-                    {
-                        KeyName = x.Key,
-                        Count = x.Select(y => y.Id).Distinct().Count()
-                    })
-                    .ToListAsync();
-
                 var results = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
                     .Select(LegalAppAccessKeyProjection.FullProjection())

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.LegalAppModels.Access;
+using SystemyWP.Data.Models.MedicalAppModels.Access;
 using Microsoft.AspNetCore.Identity;
 
 namespace SystemyWP.Data.Models.General
@@ -12,6 +13,7 @@ namespace SystemyWP.Data.Models.General
         public string Image { get; set; }
 
         public LegalAppAccessKey LegalAppAccessKey { get; set; }
+        public MedicalAccessKey MedicalAccessKey { get; set; }
 
         [ProtectedPersonalData]
         public string PhoneNumber { get; set; }

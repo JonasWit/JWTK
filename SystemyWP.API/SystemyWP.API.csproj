@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Controllers\Portal\MedicalAppManagement" />
         <Folder Include="Scripts" />
     </ItemGroup>
 

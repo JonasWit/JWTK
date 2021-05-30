@@ -1,10 +1,13 @@
-﻿using SystemyWP.Data.DataAccessModifiers;
+﻿using SystemyWP.Data.ContextBuilders;
+using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
+using SystemyWP.Data.Models.MedicalAppModels.Access;
+using SystemyWP.Data.Models.MedicalAppModels.Patients;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.Data
@@ -53,28 +56,20 @@ namespace SystemyWP.Data
         public DbSet<LegalAppCaseDeadline> LegalAppCaseDeadlines { get; set; }
         
         #endregion
+
+        #region Medical App
+        
+        //Access
+        public DbSet<MedicalAccessKey> MedicalAccessKeys { get; set; }
+        
+        public DbSet<MedicalAppPatient> MedicalAppPatients { get; set; }      
+        
+        
+
+        #endregion
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Legal App Contacts Specific
-
-            modelBuilder.Entity<LegalAppEmailAddress>()
-                .HasOne<LegalAppContactDetails>()
-                .WithMany(x => x.Emails)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<LegalAppPhoneNumber>()
-                .HasOne<LegalAppContactDetails>()
-                .WithMany(x => x.PhoneNumbers)
-                .OnDelete(DeleteBehavior.Cascade);  
-            
-            modelBuilder.Entity<LegalAppPhysicalAddress>()
-                .HasOne<LegalAppContactDetails>()
-                .WithMany(x => x.PhysicalAddresses)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
             #region Access Specific
 
             modelBuilder.Entity<User>()
@@ -84,53 +79,8 @@ namespace SystemyWP.Data
 
             #endregion
 
-            #region Legal App Specific
-            
-            //Access setup
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(c => c.Users)
-                .WithOne(e => e.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(x => x.LegalAppClients)
-                .WithOne(x => x.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            //Contacts setup
-            modelBuilder.Entity<LegalAppContactDetails>()
-                .HasOne<LegalAppClient>()
-                .WithMany(x => x.Contacts)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            //Client setup
-            modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.LegalAppCases)
-                .WithOne(e => e.LegalAppClient)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.LegalAppClientNotes)
-                .WithOne(e => e.LegalAppClient)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<LegalAppClient>()
-                .HasMany(c => c.LegalAppClientWorkRecords)
-                .WithOne(e => e.LegalAppClient)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            //Case setup
-            modelBuilder.Entity<LegalAppCase>()
-                .HasMany(c => c.LegalAppCaseNotes)
-                .WithOne(e => e.LegalAppCase)
-                .OnDelete(DeleteBehavior.Cascade); 
-            
-            modelBuilder.Entity<LegalAppCase>()
-                .HasMany(c => c.LegalAppCaseDeadlines)
-                .WithOne(e => e.LegalAppCase)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            #endregion
+            modelBuilder.ConfigureLegalApp();
+            modelBuilder.ConfigureMedicalApp();
             
         }
     }
