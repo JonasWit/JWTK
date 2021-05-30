@@ -3,9 +3,17 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   middleware: ["portal-admin"],
-  name: "index"
+  name: "index",
+  async fetch() {
+    await this.getAccessKeys();
+  },
+  methods: {
+    ...mapActions('portal-admin-access-keys-store', ['getAccessKeys']),
+  }
 };
 </script>
 
