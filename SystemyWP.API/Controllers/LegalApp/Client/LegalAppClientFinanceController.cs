@@ -30,7 +30,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
@@ -41,7 +41,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                             .Include(x =>
                                 x.LegalAppClientWorkRecords.Where(y =>
                                     y.Created >= fromDate && y.Created <= toDate))
-                            .FirstOrDefault(x => x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
+                            .FirstOrDefault(x => x.Id == clientId && x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
 
                         if (client is null) return BadRequest();
 
@@ -69,12 +69,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .FirstOrDefault(x => x.Id == clientId && x.AccessKeyId == check.AccessKey.Id);
+                        .FirstOrDefault(x => x.Id == clientId && x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
 
                         if (client is null) return BadRequest();
 
@@ -112,13 +112,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClient.AccessKeyId == check.AccessKey.Id)
-                        .FirstOrDefault(x => x.Id == workRecordId);
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                                        .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                                    x.Id == workRecordId)
+                        .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
 
@@ -150,17 +152,20 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClient.AccessKeyId == check.AccessKey.Id)
-                        .FirstOrDefault(x => x.Id == workRecordId);
+                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                                        .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                                    x.Id == workRecordId)
+                        .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
                     
                     _context.Remove(entity);
+                    await _context.SaveChangesAsync();
                     return Ok();
                 }
 

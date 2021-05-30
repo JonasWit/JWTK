@@ -1,8 +1,9 @@
 ﻿using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.General.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data.Models.LegalAppModels.Contact;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace SystemyWP.Data
         #region Portal
 
         public DbSet<User> Users { get; set; }
-        public DbSet<AccessKey> AccessKeys { get; set; }
+        public DbSet<LegalAppAccessKey> AccessKeys { get; set; }
         public DbSet<PortalLogRecord> PortalLogs { get; set; }
         public DbSet<ApiLogRecord> ApiLogs { get; set; }     
         
@@ -25,10 +26,10 @@ namespace SystemyWP.Data
 
         //Access
         public DbSet<DataAccess> DataAccesses { get; set; }
-        public DbSet<ContactDetails> Contacts { get; set; }
-        public DbSet<EmailAddress> EmailAddresses { get; set; }       
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
-        public DbSet<PhysicalAddress> PhysicalAddresses { get; set; }
+        public DbSet<LegalAppContactDetails> Contacts { get; set; }
+        public DbSet<LegalAppEmailAddress> EmailAddresses { get; set; }       
+        public DbSet<LegalAppPhoneNumber> PhoneNumbers { get; set; }
+        public DbSet<LegalAppPhysicalAddress> PhysicalAddresses { get; set; }
         
         #endregion
         
@@ -51,34 +52,25 @@ namespace SystemyWP.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Applications Specific
+            #region Legal App Contacts Specific
 
-            modelBuilder.Entity<EmailAddress>()
-                .HasOne<ContactDetails>()
+            modelBuilder.Entity<LegalAppEmailAddress>()
+                .HasOne<LegalAppContactDetails>()
                 .WithMany(x => x.Emails)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PhoneNumber>()
-                .HasOne<ContactDetails>()
+            modelBuilder.Entity<LegalAppPhoneNumber>()
+                .HasOne<LegalAppContactDetails>()
                 .WithMany(x => x.PhoneNumbers)
                 .OnDelete(DeleteBehavior.Cascade);  
             
-            modelBuilder.Entity<PhysicalAddress>()
-                .HasOne<ContactDetails>()
+            modelBuilder.Entity<LegalAppPhysicalAddress>()
+                .HasOne<LegalAppContactDetails>()
                 .WithMany(x => x.PhysicalAddresses)
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
-            #region Access Key Specific
-
-            modelBuilder.Entity<AccessKey>()
-                .HasMany(x => x.BillingDetails)
-                .WithOne(x => x.AccessKey)
-                .OnDelete(DeleteBehavior.Cascade);      
-
-            #endregion
-    
             #region Access Specific
 
             modelBuilder.Entity<User>()
@@ -86,30 +78,25 @@ namespace SystemyWP.Data
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<AccessKey>()
+            modelBuilder.Entity<LegalAppAccessKey>()
                 .HasMany(c => c.Users)
-                .WithOne(e => e.AccessKey)
+                .WithOne(e => e.LegalAppAccessKey)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<AccessKey>()
+            modelBuilder.Entity<LegalAppAccessKey>()
                 .HasMany(x => x.LegalAppClients)
-                .WithOne(x => x.AccessKey)
+                .WithOne(x => x.LegalAppAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
             #region Legal App Specific
 
-            modelBuilder.Entity<ContactDetails>()
+            modelBuilder.Entity<LegalAppContactDetails>()
                 .HasOne<LegalAppClient>()
                 .WithMany(x => x.Contacts)
                 .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<ContactDetails>()
-                .HasOne<LegalAppCase>()
-                .WithMany(x => x.Contacts)
-                .OnDelete(DeleteBehavior.Cascade);
-            
+
             //Client relations
             modelBuilder.Entity<LegalAppClient>()
                 .HasMany(c => c.LegalAppCases)
@@ -126,6 +113,7 @@ namespace SystemyWP.Data
                 .WithOne(e => e.LegalAppClient)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //Case relations
             modelBuilder.Entity<LegalAppCase>()
                 .HasMany(c => c.LegalAppCaseNotes)
                 .WithOne(e => e.LegalAppCase)

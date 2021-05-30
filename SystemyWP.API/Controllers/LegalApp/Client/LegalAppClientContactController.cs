@@ -9,7 +9,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.General.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Contact;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,18 +32,18 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var result = _context.LegalAppClients
-                        .Where(x => x.AccessKeyId == check.AccessKey.Id && x.Id == clientId)
+                        .Where(x => x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id && x.Id == clientId)
                         .Include(x => x.Contacts)
                         .FirstOrDefault();
 
                     if (result is null) return BadRequest();
 
-                    var newEntity = new ContactDetails
+                    var newEntity = new LegalAppContactDetails
                     {
                         CreatedBy = UserEmail,
                         Name = createContactForm.Name,
@@ -72,14 +72,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var entities = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
                             .FirstOrDefault(y => y.Id == clientId && 
-                                                 y.AccessKeyId == check.AccessKey.Id).Id)
+                                                 y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
                         .Select(ContactProjections.FullProjection)
                         .ToList();
 
@@ -101,13 +101,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .Select(ContactProjections.FullProjection)
                         .AsSingleQuery()
@@ -132,19 +132,19 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Include(x => x.Emails)
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
-                    var newEmail = new EmailAddress
+                    var newEmail = new LegalAppEmailAddress
                     {
                         CreatedBy = UserEmail,
                         Comment = createContactEmailFrom.Comment,
@@ -171,14 +171,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Include(x => x.Emails.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
 
@@ -207,18 +207,18 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
-                    var newPhone = new PhoneNumber()
+                    var newPhone = new LegalAppPhoneNumber()
                     {
                         CreatedBy = UserEmail,
                         Number = createContactPhoneNumberForm.Number,
@@ -245,14 +245,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
 
@@ -281,19 +281,19 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Include(x => x.PhysicalAddresses)
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
                     
                     if (contact is null) return BadRequest();
-                    var newEntity = new PhysicalAddress()
+                    var newEntity = new LegalAppPhysicalAddress()
                     {
                         CreatedBy = UserEmail,
                         Building = createPhysicalAddressForm.Building,
@@ -324,14 +324,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
 
@@ -360,13 +360,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
 
@@ -394,13 +394,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (check.DataAccessAllowed)
                 {
                     var contact = _context.Contacts
                         .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.AccessKeyId == check.AccessKey.Id).Id &&
+                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                                 x.Id == contactId)
                         .FirstOrDefault();
                     

@@ -5,6 +5,8 @@ namespace SystemyWP.Data.Models.LegalAppModels.Reminders
 {
     public class LegalAppReminder : ReminderBaseModel<long>
     {
-        [MaxLength(50)] [Required] public string Name { get; set; }
+        [Required] 
+        [MaxLength(100)] 
+        public string Name { get; set; }
     }
 }

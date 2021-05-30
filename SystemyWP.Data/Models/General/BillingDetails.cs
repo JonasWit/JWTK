@@ -6,8 +6,6 @@ namespace SystemyWP.Data.Models.General
     {
         public string OfficialName { get; set; }
         public string Nip { get; set; }   
-        public string Address { get; set; }  
-         
-        public AccessKey AccessKey { get; set; }
+        public string Address { get; set; }
     }
 }

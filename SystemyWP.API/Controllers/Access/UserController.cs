@@ -39,7 +39,7 @@ namespace SystemyWP.API.Controllers.Access
                 if (string.IsNullOrEmpty(userId)) return BadRequest();
 
                 var user = await _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
                 if (user is not null)

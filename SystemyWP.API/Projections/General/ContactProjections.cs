@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.LegalAppModels.Contact;
 
 namespace SystemyWP.API.Projections.General
 {
     public class ContactProjections
     {
-        public static Func<ContactDetails, object> CreateFull => FullProjection.Compile();
-        public static Expression<Func<ContactDetails, object>> FullProjection =>
+        public static Func<LegalAppContactDetails, object> CreateFull => FullProjection.Compile();
+        public static Expression<Func<LegalAppContactDetails, object>> FullProjection =>
             contactDetails => new
             {
                 contactDetails.Created,
@@ -46,8 +47,8 @@ namespace SystemyWP.API.Projections.General
                 contactDetails.Comment
             };
         
-        public static Func<ContactDetails, object> CreateBasic => BasicProjection.Compile();
-        public static Expression<Func<ContactDetails, object>> BasicProjection =>
+        public static Func<LegalAppContactDetails, object> CreateBasic => BasicProjection.Compile();
+        public static Expression<Func<LegalAppContactDetails, object>> BasicProjection =>
             contactDetails => new
             {
                 contactDetails.Created,

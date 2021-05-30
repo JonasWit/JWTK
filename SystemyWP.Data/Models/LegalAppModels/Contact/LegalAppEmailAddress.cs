@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
 
-namespace SystemyWP.Data.Models.General.Contact
+namespace SystemyWP.Data.Models.LegalAppModels.Contact
 {
-    public class EmailAddress : BaseModel<long>
+    public class LegalAppEmailAddress : BaseModel<long>
     {
         [MaxLength(100)]
         public string Comment { get; set; }

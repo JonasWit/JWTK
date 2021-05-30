@@ -6,17 +6,6 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
 {
     public class LegalAppCaseProjections
     {
-        public static Func<LegalAppCase, object> CreateMinimal => MinimalProjection.Compile();
-        public static Expression<Func<LegalAppCase, object>> MinimalProjection =>
-            legalAppCase => new
-            {
-                legalAppCase.Id,
-                legalAppCase.Name,
-                legalAppCase.Signature,
-                legalAppCase.Updated,
-                legalAppCase.UpdatedBy
-            };
-        
         public static Func<LegalAppCase, object> CreateBasic => BasicProjection.Compile();
         public static Expression<Func<LegalAppCase, object>> BasicProjection =>
             legalAppCase => new
@@ -26,8 +15,8 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.Signature,
             };
         
-        public static Func<LegalAppCase, object> CreateFull => FullProjection.Compile();
-        public static Expression<Func<LegalAppCase, object>> FullProjection =>
+        public static Func<LegalAppCase, object> Create => Projection.Compile();
+        public static Expression<Func<LegalAppCase, object>> Projection =>
             legalAppCase => new
             {
                 legalAppCase.Id,
@@ -38,9 +27,6 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.UpdatedBy,
                 legalAppCase.Created,
                 legalAppCase.CreatedBy,
-                legalAppCase.Contacts,
-                legalAppCase.LegalAppCaseDeadlines,
-                legalAppCase.LegalAppCaseNotes
             };
     }
 }

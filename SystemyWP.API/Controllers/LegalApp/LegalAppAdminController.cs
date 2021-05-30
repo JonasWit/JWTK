@@ -35,15 +35,15 @@ namespace SystemyWP.API.Controllers.LegalApp
             {
                 //Get current admin who made request
                 var adminUser = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
                 if (adminUser is null) throw new Exception("Error!");
 
                 //Get related users with the same data access key
                 var relatedUsers = _context.Users
-                    .Include(x => x.AccessKey)
-                    .Where(x => x.AccessKey.Name.Equals(adminUser.AccessKey.Name))
+                    .Include(x => x.LegalAppAccessKey)
+                    .Where(x => x.LegalAppAccessKey.Name.Equals(adminUser.LegalAppAccessKey.Name))
                     .Include(x => x.DataAccess)
                     .ToList();
 
@@ -76,20 +76,20 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var requester = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
                 var user = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
                 if (requester is null ||
                     user is null ||
-                    requester.AccessKey is null ||
-                    user.AccessKey is null)
+                    requester.LegalAppAccessKey is null ||
+                    user.LegalAppAccessKey is null)
                     return BadRequest();
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
+                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
 
                 _context.DataAccesses.RemoveRange(
                     _context.DataAccesses
@@ -129,20 +129,20 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var requester = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
                 var user = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
                 if (requester is null ||
                     user is null ||
-                    requester.AccessKey is null ||
-                    user.AccessKey is null)
+                    requester.LegalAppAccessKey is null ||
+                    user.LegalAppAccessKey is null)
                     return BadRequest();
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
+                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
 
                 _context.DataAccesses.RemoveRange(
                     _context.DataAccesses
@@ -150,9 +150,9 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 var clients = _context.LegalAppClients
                     .Include(x => x.LegalAppCases)
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .Where(x =>
-                        x.AccessKey.Name.Equals(requester.AccessKey.Name))
+                        x.LegalAppAccessKey.Name.Equals(requester.LegalAppAccessKey.Name))
                     .ToList();
 
                 foreach (var client in clients)
@@ -191,20 +191,20 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var requester = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
 
                 var user = _context.Users
-                    .Include(x => x.AccessKey)
+                    .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
 
                 if (requester is null ||
                     user is null ||
-                    requester.AccessKey is null ||
-                    user.AccessKey is null)
+                    requester.LegalAppAccessKey is null ||
+                    user.LegalAppAccessKey is null)
                     return BadRequest();
 
-                if (!requester.AccessKey.Name.Equals(user.AccessKey.Name)) return BadRequest();
+                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
 
                 _context.DataAccesses.RemoveRange(
                     _context.DataAccesses
@@ -232,13 +232,13 @@ namespace SystemyWP.API.Controllers.LegalApp
             if (accessKey is null) return BadRequest();
 
             var relatedUsers = _context.Users
-                .Include(x => x.AccessKey)
-                .Where(x => x.AccessKey.Name.Equals(accessKey.Name))
+                .Include(x => x.LegalAppAccessKey)
+                .Where(x => x.LegalAppAccessKey.Name.Equals(accessKey.Name))
                 .ToList();
 
             var appData = _context.LegalAppClients
-                .Include(x => x.AccessKey)
-                .Where(x => x.AccessKey.Name.Equals(accessKey.Name))
+                .Include(x => x.LegalAppAccessKey)
+                .Where(x => x.LegalAppAccessKey.Name.Equals(accessKey.Name))
                 .Select(x => new
                 {
                     x.Id,

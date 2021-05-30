@@ -27,21 +27,21 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
             try
             {
                 var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.AccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
                     Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
                 {
                     var cases = _context.LegalAppCases
                         .Include(x => x.LegalAppClient)
-                        .ThenInclude(x => x.AccessKey)
+                        .ThenInclude(x => x.LegalAppAccessKey)
                         .Where(x => 
                             x.LegalAppClient.Id == clientId && 
-                            x.LegalAppClient.AccessKey.Id == check.AccessKey.Id)
+                            x.LegalAppClient.LegalAppAccessKey.Id == check.LegalAppAccessKey.Id)
                         .OrderBy(x => x.Name)
                         .Skip(cursor)
                         .Take(take)
-                        .Select(LegalAppCaseProjections.MinimalProjection)
+                        .Select(LegalAppCaseProjections.Projection)
                         .ToList();
 
                     return Ok(cases);
@@ -54,10 +54,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                     {
                         var cases = _context.LegalAppCases
                             .Include(x => x.LegalAppClient)
-                            .ThenInclude(x => x.AccessKey)
+                            .ThenInclude(x => x.LegalAppAccessKey)
                             .Where(x => 
                                         x.LegalAppClient.Id == clientId &&
-                                        x.LegalAppClient.AccessKey.Id == check.AccessKey.Id &&
+                                        x.LegalAppClient.LegalAppAccessKey.Id == check.LegalAppAccessKey.Id &&
                                         _context.DataAccesses
                                             .Where(y => y.UserId.Equals(UserId) && 
                                                         y.RestrictedType == RestrictedType.LegalAppCase)
@@ -65,7 +65,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                             .OrderBy(x => x.Name)
                             .Skip(cursor)
                             .Take(take)
-                            .Select(LegalAppCaseProjections.MinimalProjection)
+                            .Select(LegalAppCaseProjections.Projection)
                             .ToList();
 
                         return Ok(cases);

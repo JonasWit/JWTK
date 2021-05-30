@@ -3,9 +3,10 @@ using System.Linq;
 using System.Security.Claims;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.General.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
+using SystemyWP.Data.Models.LegalAppModels.Contact;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -35,7 +36,7 @@ namespace SystemyWP.API
             }
         }
 
-        public static void DevDataSeedLegalApp(AppDbContext context, string userId, AccessKey accessKey)
+        public static void DevDataSeedLegalApp(AppDbContext context, string userId, LegalAppAccessKey legalAppAccessKey)
         {
             var random = new Random();
 
@@ -43,7 +44,7 @@ namespace SystemyWP.API
             {
                 var newClient = new LegalAppClient
                 {
-                    AccessKey = accessKey,
+                    LegalAppAccessKey = legalAppAccessKey,
                     Name = $"Test Client - {clientNumber}",
                     Active = true,
                     CreatedBy = "system",
@@ -56,14 +57,15 @@ namespace SystemyWP.API
                     {
                         CreatedBy = "system",
                         Title = $"Note Title {clientNoteNumber}",
-                        Message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                        Message =
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                     });
                 }
 
                 // Seed contact details
                 for (var contactDetailsNumber = 0; contactDetailsNumber < 20; contactDetailsNumber++)
                 {
-                    var contact = new ContactDetails();
+                    var contact = new LegalAppContactDetails();
                     contact.Comment = $"Comment for Contact {contactDetailsNumber}";
                     contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber}";
                     contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";
@@ -71,7 +73,7 @@ namespace SystemyWP.API
 
                     for (var contactEmailNumber = 0; contactEmailNumber < 20; contactEmailNumber++)
                     {
-                        contact.Emails.Add(new EmailAddress
+                        contact.Emails.Add(new LegalAppEmailAddress
                         {
                             Comment = $"TEST Email address {contactDetailsNumber}--{contactEmailNumber}",
                             Email = $"{contactDetailsNumber}@{contactEmailNumber}.com",
@@ -81,7 +83,7 @@ namespace SystemyWP.API
 
                     for (var contactPhone = 0; contactPhone < 10; contactPhone++)
                     {
-                        contact.PhoneNumbers.Add(new PhoneNumber
+                        contact.PhoneNumbers.Add(new LegalAppPhoneNumber
                         {
                             Comment = $"TEST PhoneNumber address {contactDetailsNumber}--{contactPhone}",
                             Number = $"{contactPhone}-{contactDetailsNumber}-{contactPhone}",
@@ -91,7 +93,7 @@ namespace SystemyWP.API
 
                     for (var contactAddress = 0; contactAddress < 10; contactAddress++)
                     {
-                        contact.PhysicalAddresses.Add(new PhysicalAddress
+                        contact.PhysicalAddresses.Add(new LegalAppPhysicalAddress
                         {
                             Street = $"Street - Physical address - {contactAddress}",
                             Comment = $"TEST Physical address - {contactAddress}",
@@ -122,17 +124,21 @@ namespace SystemyWP.API
                     newClient.LegalAppClientWorkRecords.Add(financeRecord);
                 }
 
-                for (var caseNumber = 0; caseNumber < 60; caseNumber++)
+                for (int groupNumber = 0; groupNumber < 3; groupNumber++)
                 {
-                    newClient.LegalAppCases.Add(new LegalAppCase
+                    for (var caseNumber = 0; caseNumber < 60; caseNumber++)
                     {
-                        Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
-                        Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
-                        Description =
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                        CreatedBy = "system",
-                        UpdatedBy = "system"
-                    });
+                        newClient.LegalAppCases.Add(new LegalAppCase
+                        {
+                            Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
+                            Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
+                            Group = $"Group number {groupNumber}",
+                            Description =
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            CreatedBy = "system",
+                            UpdatedBy = "system"
+                        });
+                    }
                 }
 
                 newClient.CreatedBy = "system";
@@ -178,7 +184,7 @@ namespace SystemyWP.API
             //Seed Client Admins
             for (var adminNumber = -2; adminNumber < 3; adminNumber++)
             {
-                var key = new AccessKey
+                var key = new LegalAppAccessKey
                 {
                     Name = $"access-key for {adminNumber}",
                     ExpireDate = DateTime.UtcNow.AddDays(adminNumber),
@@ -207,7 +213,7 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
-                    AccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                    LegalAppAccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
                     Id = testClientAdmin.Id,
                     CreatedBy = "system"
                 });
@@ -233,7 +239,7 @@ namespace SystemyWP.API
 
                     context.Add(new User
                     {
-                        AccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                        LegalAppAccessKey = context.AccessKeys.FirstOrDefault(x => x.Id == key.Id),
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });

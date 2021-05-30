@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
+using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 
-namespace SystemyWP.Data.Models.General
+namespace SystemyWP.Data.Models.LegalAppModels.Access
 {
-    public class AccessKey : TrackedModel<int>
+    public class LegalAppAccessKey : TrackedModel<int>
     {
         [MaxLength(50)] [Required] public string Name { get; set; }
         public DateTime ExpireDate { get; set; }
         public List<User> Users { get; set; } = new List<User>();
         public List<LegalAppClient> LegalAppClients { get; set; } = new List<LegalAppClient>();
-        public List<BillingDetails> BillingDetails { get; set; } = new List<BillingDetails>();
     }
 }

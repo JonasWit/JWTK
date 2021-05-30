@@ -20,8 +20,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                //var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //DataSeed.DevSeed(context, identityContext, userManager);
+                // var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                // DataSeed.DevSeed(context, identityContext, userManager);
             }
             else if (env.IsProduction())
             {

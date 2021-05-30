@@ -38,7 +38,7 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 Cases = legalAppClient.LegalAppCases
                     .AsQueryable()
                     .Where(x => x.Active)
-                    .Select(LegalAppCaseProjections.MinimalProjection)
+                    .Select(LegalAppCaseProjections.BasicProjection)
                     .ToList()
             };
     }

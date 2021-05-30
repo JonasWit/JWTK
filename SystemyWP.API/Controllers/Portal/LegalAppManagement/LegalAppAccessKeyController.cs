@@ -7,19 +7,19 @@ using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.LegalAppModels.Access;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Controllers.Portal
+namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 {
     [Route("/api/portal-admin/key-admin")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
-    public class AccessKeyController : ApiController
+    public class LegalAppAccessKeyController : ApiController
     {
-        public AccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public LegalAppAccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
 
@@ -29,8 +29,8 @@ namespace SystemyWP.API.Controllers.Portal
             try
             {
                 var legalAppRelatedDataCount = await _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .GroupBy(x => x.AccessKey.Name)
+                    .Include(x => x.LegalAppAccessKey)
+                    .GroupBy(x => x.LegalAppAccessKey.Name)
                     .Select(x => new
                     {
                         KeyName = x.Key,
@@ -59,7 +59,7 @@ namespace SystemyWP.API.Controllers.Portal
                 if (_context.AccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
                     return BadRequest("Key with this name already exists!");
 
-                _context.Add(new AccessKey
+                _context.Add(new LegalAppAccessKey
                 {
                     Name = form.KeyName,
                     ExpireDate = form.ExpireDate,
@@ -113,13 +113,13 @@ namespace SystemyWP.API.Controllers.Portal
                 if (keyToDelete is null) return BadRequest("Key with this id does not exists!");
 
                 var relatedLegalAppData = _context.LegalAppClients
-                    .Include(x => x.AccessKey)
-                    .Count(x => x.AccessKey.Name.Equals(keyToDelete.Name));
+                    .Include(x => x.LegalAppAccessKey)
+                    .Count(x => x.LegalAppAccessKey.Name.Equals(keyToDelete.Name));
 
                 if (relatedLegalAppData > 0)
                     _context.LegalAppClients.RemoveRange(_context.LegalAppClients
-                        .Include(x => x.AccessKey)
-                        .Where(x => x.AccessKey.Name.Equals(keyToDelete.Name)));
+                        .Include(x => x.LegalAppAccessKey)
+                        .Where(x => x.LegalAppAccessKey.Name.Equals(keyToDelete.Name)));
 
                 _context.AccessKeys.Remove(keyToDelete);
                 await _context.SaveChangesAsync();
