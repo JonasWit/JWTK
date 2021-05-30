@@ -27,29 +27,36 @@
         </v-dialog>
       </v-col>
 
-      <v-expansion-panels focusable>
-        <v-expansion-panel v-for="item in financialRecords" :key="item.id">
-          <v-expansion-panel-header>
-            <v-row>
-              <v-col>
-                <v-col> Nazwa: {{ item.name }}</v-col>
-                <v-col> Created: {{ formatDate(item.created) }}</v-col>
-                <v-col> Created by: {{ item.createdBy }}</v-col>
-              </v-col>
-              <v-col>
-                <v-col class="hidden-sm-and-down">Amount: {{ item.amount }}</v-col>
-                <v-col class="hidden-sm-and-down">Rate: {{ item.rate }}</v-col>
-                <v-col class="hidden-sm-and-down">Hours: {{ item.hours }}</v-col>
-                <v-col class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-col>
-              </v-col>
-            </v-row>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <delete-work-record :selected-financial-record="item"/>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+      <v-card v-for="item in financialRecords" :key="item.id">
+        <v-row>
+          <v-col class="mx-2">
+            <v-list class="d-flex justify-space-between">
+              <v-list-item-content>
+                <v-list-item-subtitle> Nazwa: {{ item.name }}</v-list-item-subtitle>
+                <v-list-item-subtitle> Created: {{ formatDate(item.created) }}</v-list-item-subtitle>
+                <v-list-item-subtitle> Created by: {{ item.createdBy }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list>
+          </v-col>
+          <v-col class="mx-2">
+            <v-list class="d-flex justify-space-between">
+              <v-list-item-content>
+                <v-list-item-subtitle class="hidden-sm-and-down">Amount: {{ item.amount }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="hidden-sm-and-down">Rate: {{ item.rate }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="hidden-sm-and-down">Hours: {{ item.hours }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list>
+          </v-col>
+          <v-col class="mx-2">
+            <v-list class="d-flex justify-space-between">
 
+              <delete-work-record :selected-financial-record="item"/>
+
+            </v-list>
+          </v-col>
+        </v-row>
+      </v-card>
       <button-to-go-up/>
     </template>
   </layout>

@@ -152,6 +152,7 @@ export default {
         .then(logs => {
           if (logs.length === 0) {
             this.finished = true;
+            console.warn('api-log-feed-query dates', this.query)
           } else {
             logs.forEach(x => {
               if (!this.logs.some(y => y.id === x.id)) {

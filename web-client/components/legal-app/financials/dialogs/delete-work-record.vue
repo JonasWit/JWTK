@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 
 export default {
   name: "delete-work-record",
@@ -47,19 +47,34 @@ export default {
     dialog: false,
     loading: false,
   }),
+  computed: {
+    query() {
+
+      let fromDate = `2020-12-02`
+      let toDate = `2021-05-31`
+      return `?from=${fromDate}&to=${toDate}`;
+
+
+    },
+  },
   methods: {
     ...mapMutations('legal-app-client-store', ['setFinancialRecordForAction']),
+    ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
     deleteFinancialRecord() {
+      console.warn('Rekord do usunięcia', this.selectedFinancialRecord)
+
       return this.$axios.$delete(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.selectedFinancialRecord.id}`)
-        .then((selectedFinancialRecord) => {
+        .then(() => {
           this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
-          console.warn('selectedFinancialRecord deleted successfully', selectedFinancialRecord);
+          console.warn('selectedFinancialRecord deleted successfully', this.selectedFinancialRecord);
         })
         .catch((e) => {
           console.warn('delete selectedFinancialRecord error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
         }).finally(() => {
-          this.setFinancialRecordForAction(this.selectedFinancialRecord);
+          let clientId = this.$route.params.client;
+          let query = this.query;
+          this.getFinancialRecordsFromFetch({clientId, query})
           this.dialog = false;
         });
     }

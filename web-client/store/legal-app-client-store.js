@@ -1,7 +1,7 @@
 ﻿const initState = () => ({
   clientForAction: null,
   contactForAction: null,
-  FinancialRecordForAction: null,
+
 
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: [],
@@ -9,7 +9,9 @@
   phoneNumbersList: [],
   addressesList: [],
 
-
+  //Financials records
+  FinancialRecordForAction: null,
+  financialRecordsFromFetch: []
 });
 
 export const state = initState;
@@ -40,7 +42,7 @@ export const mutations = {
   setContactForAction(state, contact) {
     console.warn('mutation done for contact', contact)
   },
-
+//Financials records
   setFinancialRecordForAction(state, financialRecord) {
     state.FinancialRecordForAction = financialRecord
   },
@@ -50,6 +52,11 @@ export const mutations = {
     state.contactDetailsFromFetch = contactDetailsFromFetch
 
   },
+//Financials records
+  updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
+    console.warn('mutation done for updateFinancialRecordsFromFetch', financialRecordsFromFetch)
+    state.financialRecordsFromFetch = financialRecordsFromFetch
+  }
 
 
 };
@@ -63,6 +70,17 @@ export const actions = {
       })
       .catch(() => {
       });
+  },
+//Financials records
+  getFinancialRecordsFromFetch({commit}, {clientId, query}) {
+    return this.$axios.$get(`/api/legal-app-clients-finance/client/${clientId}/finance-records${query}`)
+      .then((financialRecordsFromFetch) => {
+        console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch)
+        commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch})
+
+      }).catch((e) => {
+        console.warn('error in getFinancialRecordsFromFetch', e)
+      })
   },
 
 };
