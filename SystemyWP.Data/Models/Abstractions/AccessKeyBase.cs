@@ -11,6 +11,6 @@ namespace SystemyWP.Data.Models.Abstractions
         [MaxLength(50)] 
         public string Name { get; set; }
         public DateTime ExpireDate { get; set; }
-        public List<User> Users { get; set; } = new List<User>();
+        public List<User> Users { get; set; } = new();
     }
 }
