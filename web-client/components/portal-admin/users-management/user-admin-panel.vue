@@ -62,7 +62,7 @@
 import {mapActions, mapState} from "vuex";
 import {hasOccurrences} from "@/data/functions";
 import {formatDate} from "@/data/date-extensions";
-import DataAccessKeyDialog from "@/components/portal-admin/users-management/data-access-key-dialog";
+// import DataAccessKeyDialog from "@/components/portal-admin/users-management/data-access-key-dialog";
 import LockUserDialog from "@/components/portal-admin/users-management/lock-user-dialog";
 import RolesManagementDialog from "@/components/portal-admin/users-management/roles-management-dialog";
 import ApplicationsAccessDialog from "@/components/portal-admin/users-management/applications-access-dialog";
@@ -92,7 +92,7 @@ const searchItemFactory = (name, email) => ({
 
 export default {
   name: "user-admin-panel",
-  components: {DeleteUserDialog, ApplicationsAccessDialog, RolesManagementDialog, LockUserDialog, DataAccessKeyDialog},
+  components: {DeleteUserDialog, ApplicationsAccessDialog, RolesManagementDialog, LockUserDialog},
   data: initState,
   beforeMount() {
     this.loading = true;

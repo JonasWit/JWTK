@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "delete-user-dialog",
   props: {
@@ -41,8 +43,23 @@ export default {
     },
   }),
   methods: {
-    deleteUser() {
+    ...mapActions('admin-panel-store', ['getUsers']),
+    async deleteUser() {
+      if (this.loading) return;
+      this.loading = true;
 
+      this.form.userId = this.selectedUser.id;
+
+      try {
+        let response = await this.$axios.$post(`/api/portal-admin/user-admin/user/delete`, this.form);
+        console.warn("Delete log response", response);
+      } catch (error) {
+        console.error("deleteUser - Error", error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     }
   }
 };

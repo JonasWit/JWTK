@@ -20,7 +20,8 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class LegalAppAccessKeyController : ApiController
     {
-        public LegalAppAccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public LegalAppAccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
+            context)
         {
         }
 
@@ -64,7 +65,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();  
+                return BadRequest();
             }
         }
 
@@ -89,7 +90,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest(); 
+                return BadRequest();
             }
         }
 
@@ -119,7 +120,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest(); 
+                return BadRequest();
             }
         }
 
@@ -147,12 +148,12 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
                 if (result > 0)
                     return Ok($"Data Access Key {form.DataAccessKey} Added!");
-                return BadRequest("Error when adding the Claim!");   
+                return BadRequest("Error when adding the Claim!");
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest("Error when adding the Claim!");   
+                return BadRequest("Error when adding the Claim!");
             }
         }
 
@@ -182,15 +183,14 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                     if (result > 0) return Ok("Data Access Key Removed!");
                     return BadRequest();
                 }
-                else
-                {
-                    return BadRequest("Key not found!");
-                }
+
+
+                return BadRequest("Key not found!");
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();  
+                return BadRequest();
             }
         }
     }

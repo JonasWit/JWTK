@@ -40,7 +40,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         var client = _context.LegalAppClients
                             .Include(x =>
                                 x.LegalAppClientWorkRecords.Where(y =>
-                                    y.Created >= fromDate && y.Created <= toDate))
+                                    y.EventDate >= fromDate && y.EventDate <= toDate))
                             .FirstOrDefault(x => x.Id == clientId && x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
 
                         if (client is null) return BadRequest();

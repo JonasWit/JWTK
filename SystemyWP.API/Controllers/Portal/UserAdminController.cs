@@ -10,10 +10,12 @@ using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace SystemyWP.API.Controllers.Portal
 {
@@ -144,7 +146,7 @@ namespace SystemyWP.API.Controllers.Portal
                 if (form.Role.Equals(SystemyWpConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult = await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim);
-                    if (addToRoleResult.Succeeded) 
+                    if (addToRoleResult.Succeeded)
                         return Ok();
                 }
                 else if (form.Role.Equals(SystemyWpConstants.Roles.ClientAdmin,
@@ -152,7 +154,7 @@ namespace SystemyWP.API.Controllers.Portal
                 {
                     var addToRoleResult =
                         await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientAdminClaim);
-                    if (addToRoleResult.Succeeded) 
+                    if (addToRoleResult.Succeeded)
                         return Ok();
                 }
 
@@ -166,10 +168,38 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpPost("user/delete")]
-        public IActionResult DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser([FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager,
+            [FromServices] SignInManager<IdentityUser> signInManager,
+            [FromServices] IWebHostEnvironment env)
         {
-            //todo: do this
-            return Ok();
+            try
+            {
+                var user = await userManager.FindByIdAsync(form.UserId);
+                if (user is null) return BadRequest();
+                
+                var lockResult = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(+25));
+                var logoutResult = await userManager.UpdateSecurityStampAsync(user);
+
+                if (lockResult.Succeeded && 
+                    logoutResult.Succeeded)
+                {
+                    var userProfile = await _context.Users
+                        .FirstOrDefaultAsync(x => x.Id == form.UserId);
+
+                    _context.Remove(userProfile);
+                    await userManager.DeleteAsync(user);
+
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost("user/grant/legal-app")]
