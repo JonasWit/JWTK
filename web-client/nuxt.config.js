@@ -118,6 +118,11 @@ const config = {
     }
   },
 
+  loading: {
+    color: 'crimson',
+    height: '5px'
+  },
+
   build: {
     extend(config, ctx) {
     },
