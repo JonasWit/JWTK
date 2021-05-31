@@ -4,17 +4,10 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <nuxt-link class="nav-item" :to="item.route">
-            <!--            <v-list-item >-->
-            <!--              <v-list-item-content>-->
-            <!--                <v-list-item-title>{{ item.name }}</v-list-item-title>-->
-            <!--              </v-list-item-content>-->
             <v-list-item-icon link v-bind="attrs" v-on="on">
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-
-            <!--            </v-list-item>-->
           </nuxt-link>
-
         </template>
         <span>{{ item.name }}</span>
       </v-tooltip>

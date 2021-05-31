@@ -7,32 +7,57 @@
         </v-toolbar-title>
         <add-new-work-record/>
       </v-toolbar>
-      <v-col>
-        <v-dialog ref="dialog" v-model="modal" :return-value.sync="dates" persistent width="290px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field v-model="dateRangeText" label="Wybierz zakres dat" prepend-icon="mdi-calendar" readonly
-                          v-bind="attrs"
-                          v-on="on"></v-text-field>
-
-          </template>
-          <v-date-picker v-model="dates" range scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="modal = false">
-              Anuluj
-            </v-btn>
-            <v-btn text color="primary" @click="saveDates">
-              Zapisz
-            </v-btn>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-
+      <v-row class="d-flex align-center my-3 ">
+        <v-col cols="12" md="5">
+          <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
+            </template>
+            <v-date-picker v-model="dateFrom" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modalFrom = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogFrom.save(dateFrom)">
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent
+                    width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
+            </template>
+            <v-date-picker v-model="dateTo" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modalTo = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogTo.save(dateTo)">
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-btn depressed color="primary" @click="searchFinancialRecords">
+            Wyszukaj
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-card v-for="item in financialRecords" :key="item.id">
         <v-row>
           <v-col class="mx-2">
             <v-list class="d-flex justify-space-between">
               <v-list-item-content>
                 <v-list-item-subtitle> Nazwa: {{ item.name }}</v-list-item-subtitle>
+                <v-list-item-subtitle> Data zdarzenia: {{ formatDate(item.eventDate) }}</v-list-item-subtitle>
                 <v-list-item-subtitle> Created: {{ formatDate(item.created) }}</v-list-item-subtitle>
                 <v-list-item-subtitle> Created by: {{ item.createdBy }}</v-list-item-subtitle>
               </v-list-item-content>
@@ -42,6 +67,7 @@
             <v-list class="d-flex justify-space-between">
               <v-list-item-content>
                 <v-list-item-subtitle class="hidden-sm-and-down">Amount: {{ item.amount }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="hidden-sm-and-down">VAT: {{ item.vat }}</v-list-item-subtitle>
                 <v-list-item-subtitle class="hidden-sm-and-down">Rate: {{ item.rate }}</v-list-item-subtitle>
                 <v-list-item-subtitle class="hidden-sm-and-down">Hours: {{ item.hours }}</v-list-item-subtitle>
                 <v-list-item-subtitle class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-list-item-subtitle>
@@ -55,6 +81,7 @@
 
             </v-list>
           </v-col>
+
         </v-row>
       </v-card>
       <button-to-go-up/>
@@ -69,7 +96,6 @@ import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
 import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
 
-
 export default {
   name: "index",
   components: {DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
@@ -78,100 +104,53 @@ export default {
   data: () => ({
       financialRecords: [],
       loading: false,
-      dates: [],
-      fromDate: "",
-      toDate: "",
-      modal: false,
-      searchConditionsProvided: false,
+      dateFrom: new Date().toISOString().substr(0, 10),
+      dateTo: null,
+      modalFrom: false,
+      modalTo: false,
     }
   ),
 
+
   async fetch() {
-    return this.handleLogs();
-
-  },
-  watch: {
-    dates(dates) {
-      if (dates.length === 0) {
-        this.fromDate = new Date();
-        this.toDate = new Date();
-      }
-      if (dates.length === 1) {
-        this.fromDate = dates[0];
-        this.toDate = dates[0];
-      }
-      if (dates.length === 2) {
-        let fromDate = dates[0].replace(/-/g, "");
-        let toDate = dates[1].replace(/-/g, "");
-
-        let firstDateInt = parseInt(fromDate);
-        let secondDateInt = parseInt(toDate);
-
-        if (firstDateInt > secondDateInt) {
-          this.fromDate = dates[1];
-          this.toDate = dates[0];
-        } else {
-          this.fromDate = dates[0];
-          this.toDate = dates[1];
-        }
-      }
-
-      console.log('fromDate', this.fromDate);
-      console.log('toDate', this.toDate);
-    }
+    return this.searchFinancialRecords();
   },
 
   computed: {
 
-    dateRangeText() {
-      return this.dates.join(' - ')
-
-    },
-
     query() {
-
-      let fromDate = `2020-12-02`
-      let toDate = `2021-05-31`
+      let convertedDate = new Date(this.dateTo)
+      convertedDate.setDate(convertedDate.getDate() + 1)
+      convertedDate = convertedDate.toISOString().substr(0, 10)
+      let fromDate = this.dateFrom
+      let toDate = convertedDate
       return `?from=${fromDate}&to=${toDate}`;
-
-
     },
-    todayDate() {
-      return new Date().toISOString().substr(0, 10);
-    },
-
-  }
-  ,
+  },
 
   methods: {
-    handleLogs() {
+    async searchFinancialRecords() {
       if (this.loading) return;
       this.loading = true;
-
       console.warn('handle logs fired', this.query);
-      return this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
-        .then(financialRecords => {
-          console.log('financialRecords', financialRecords);
-          this.financialRecords = financialRecords
-        })
-        .finally(() => this.loading = false);
 
+
+      try {
+        let financialRecords = await this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
+        console.log('financialRecords', financialRecords);
+        this.financialRecords = financialRecords
+      } catch (e) {
+        console.warn('Error during financial records fetch', e);
+      } finally {
+        this.loading = false;
+      }
     },
     formatDate(date) {
       return formatDate(date);
     },
 
-    saveDates(dates) {
-      // this.handleLogs();
-      // this.loading = false;
-      // console.warn('dates saved', this.dates)
-      // console.warn('filtered records', this.financialRecords)
 
-
-    }
-
-  }
-  ,
+  },
 }
 </script>
 
