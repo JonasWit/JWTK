@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 import {mapActions} from "vuex";
 
 export default {
@@ -43,7 +44,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
+    ...mapActions('portal-admin-store', ['getUsers']),
     async deleteUser() {
       if (this.loading) return;
       this.loading = true;
@@ -56,7 +57,7 @@ export default {
       } catch (error) {
         console.error("deleteUser - Error", error);
       } finally {
-        this.getUsers();
+        await this.getUsers();
         this.loading = false;
         this.dialog = false;
       }

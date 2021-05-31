@@ -42,18 +42,20 @@ export default {
     loading: false
   }),
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys']),
-    deleteKey() {
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    async deleteKey() {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$delete(`/api/portal-admin/key-admin/access-key/delete/${this.selectedKey.id}`)
-        .catch((e) => {
-        }).finally(() => {
-          this.getAccessKeys();
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$delete(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/delete/${this.selectedKey.id}`);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.getLegalAppAccessKeys();
+        this.loading = false;
+        this.dialog = false;
+      }
     }
   }
 };

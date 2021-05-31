@@ -44,24 +44,24 @@ export default {
   }),
   computed: {},
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
-    switchRole(role) {
+    ...mapActions('portal-admin-store', ['getUsers']),
+    async switchRole(role) {
       if (role === this.selectedUser.role) return;
-
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$post("/api/portal-admin/user-admin/user/change-role", {
-        userId: this.selectedUser.id,
-        role: role
-      })
-        .catch((e) => {
-          console.log(e);
-        }).finally(() => {
-          this.loading = false;
-          this.getUsers();
-          this.dialog = false;
+      try {
+        await this.$axios.$post("/api/portal-admin/user-admin/user/change-role", {
+          userId: this.selectedUser.id,
+          role: role
         });
+      } catch (error) {
+        console.error('switchRole - Error', error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
   }
 };

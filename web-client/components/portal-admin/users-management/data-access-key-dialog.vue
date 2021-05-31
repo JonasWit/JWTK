@@ -94,29 +94,29 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-      console.log('user id', this.form.userId);
-      return this.$axios.$post("/api/portal-admin/key-admin/user/grant/access-key", this.form)
-        .catch((e) => {
-        }).finally(() => {
-          this.getUsers();
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$post("/api/portal-admin/key-admin/user/grant/access-key", this.form);
+      } catch (error) {
+        console.error('grantAccessKey - Error', error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
     async revokeAccessKey() {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-      console.log('user id', this.form.userId);
-      return this.$axios.$post("/api/portal-admin/key-admin/user/revoke/access-key", this.form)
-        .catch((e) => {
-        }).finally(() => {
-          this.getUsers();
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$post("/api/portal-admin/key-admin/user/revoke/access-key", this.form);
+      } catch (error) {
+        console.error('revokeAccessKey - Error', error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
   },
 };

@@ -28,7 +28,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             //Get Users Data Key
             var user = await _context.Users
                 .Include(x => x.LegalAppAccessKey)
-                .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+                .FirstOrDefaultAsync(x => x.Id == UserId);
             if (user?.LegalAppAccessKey is null) return new CheckResult {DataAccessAllowed = false};
 
             //Logic for Admins
@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.BaseClases
                 //Check DataAccess Table
                 var access = await _context.DataAccesses
                     .AnyAsync(x => 
-                        x.UserId.Equals(UserId) &&
+                        x.UserId == UserId &&
                         x.RestrictedType == restrictedType &&
                         x.ItemId == itemId);
 
@@ -62,7 +62,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             //Get Users Data Key
             var user = await _context.Users
                 .Include(x => x.LegalAppAccessKey)
-                .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+                .FirstOrDefaultAsync(x => x.Id == UserId);
             if (user?.LegalAppAccessKey is null) return new CheckResult {DataAccessAllowed = false};
 
             return new CheckResult {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey};

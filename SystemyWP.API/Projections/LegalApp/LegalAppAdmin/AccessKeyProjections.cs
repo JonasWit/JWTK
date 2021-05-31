@@ -1,33 +1,24 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 
 namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
 {
-    public static class LegalAppAccessKeyProjection
+    public static class AccessKeyProjection
     {
-        public static Expression<Func<LegalAppAccessKey, object>> FullProjection() =>
+        public static Expression<Func<AccessKeyBase<int>, object>> FullProjection() =>
             key => new
             {
                 key.Id,
                 key.Name,
                 key.ExpireDate,
-                assignedUsersDetials = key.Users.Select(x => x.Id).ToList(),
+                key.Users
             };
-        
-        public static Func<LegalAppAccessKey, object> Create => Projection.Compile();
-        public static Expression<Func<LegalAppAccessKey, object>> Projection =>
-            key => new
-            {
-                key.Id,
-                key.Name,
-                key.ExpireDate,
-                assignedUsers = key.Users.AsQueryable().Count()
-            };
-        
-        public static Func<LegalAppAccessKey, object> CreateFlat => FlatProjection.Compile();
-        public static Expression<Func<LegalAppAccessKey, object>> FlatProjection =>
+
+        public static Func<AccessKeyBase<int>, object> CreateFlat => FlatProjection.Compile();
+        public static Expression<Func<AccessKeyBase<int>, object>> FlatProjection =>
             key => new
             {
                 key.Id,

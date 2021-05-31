@@ -7,7 +7,7 @@
           <personal-data/>
         </div>
         <if-auth>
-          <template v-slot:allowed="{portalAdmin, legalAppAllowed, client, clientAdmin}">
+          <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin}">
             <div v-if="legalAppAllowed && (portalAdmin || clientAdmin)" class="mt-4">
               <legal-application-details v-if="profile.legalAppAllowed"/>
             </div>

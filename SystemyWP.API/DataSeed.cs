@@ -175,6 +175,7 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
+                    Email = testPortalAdmin.Email,
                     Id = testPortalAdmin.Id,
                     CreatedBy = "system"
                 });
@@ -212,6 +213,7 @@ namespace SystemyWP.API
 
                 context.Add(new User
                 {
+                    Email = testClientAdmin.Email,
                     LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
                     Id = testClientAdmin.Id,
                     CreatedBy = "system"
@@ -238,6 +240,7 @@ namespace SystemyWP.API
 
                     context.Add(new User
                     {
+                        Email = testClient.Email,
                         LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
                         Id = testClient.Id,
                         CreatedBy = "system"

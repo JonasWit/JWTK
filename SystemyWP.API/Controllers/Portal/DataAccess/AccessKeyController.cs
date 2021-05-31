@@ -21,14 +21,12 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
         {
         }
 
-        [HttpPost("user/revoke/access-key")]
-        public async Task<IActionResult> RevokeDataAccessKey(
-            [FromBody] RevokeDataAccessKeyForm form,
-            [FromServices] UserManager<IdentityUser> userManager)
+        [HttpPost("user/revoke/access-key/{userId}")]
+        public async Task<IActionResult> RevokeDataAccessKey(string userId, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
-                var user = await userManager.FindByIdAsync(form.UserId);
+                var user = await userManager.FindByIdAsync(userId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
                 if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");

@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.Portal
                     var accessKey = _context.LegalAppAccessKeys
                         .Include(x => x.Users)
                         .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
-                        .Select(LegalAppAccessKeyProjection.Projection)
+                        .Select(AccessKeyProjection.FullProjection())
                         .FirstOrDefault();
 
                     result.Add(new UserProjections.UserViewModel
@@ -56,7 +56,7 @@ namespace SystemyWP.API.Controllers.Portal
                             .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess)),
                         Image = _context.Users
                             .FirstOrDefault(x => x.Id.Equals(identityUser.Id))?.Image,
-                        DataAccessKey = accessKey,
+                        LegalAppDataAccessKey = accessKey,
                         Role = userClaims
                             .FirstOrDefault(x =>
                                 x.Type.Equals(SystemyWpConstants.Claims.Role))?.Value,
@@ -181,15 +181,18 @@ namespace SystemyWP.API.Controllers.Portal
                 var lockResult = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(+25));
                 var logoutResult = await userManager.UpdateSecurityStampAsync(user);
 
-                if (lockResult.Succeeded && 
-                    logoutResult.Succeeded)
+                if (lockResult.Succeeded && logoutResult.Succeeded)
                 {
                     var userProfile = await _context.Users
                         .FirstOrDefaultAsync(x => x.Id == form.UserId);
 
-                    _context.Remove(userProfile);
-                    await userManager.DeleteAsync(user);
+                    if (userProfile is not null)
+                    {
+                        _context.Remove(userProfile);
+                        await _context.SaveChangesAsync();
+                    }
 
+                    await userManager.DeleteAsync(user);
                     return Ok();
                 }
 

@@ -26,8 +26,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         }
 
         [HttpGet("related-users")]
-        public async Task<IActionResult> GetRelatedUsers(
-            [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GetRelatedUsers([FromServices] UserManager<IdentityUser> userManager)
         {
             var result = new List<object>();
 
@@ -36,14 +35,15 @@ namespace SystemyWP.API.Controllers.LegalApp
                 //Get current admin who made request
                 var adminUser = _context.Users
                     .Include(x => x.LegalAppAccessKey)
-                    .FirstOrDefault(x => x.Id.Equals(UserId));
+                    .FirstOrDefault(x => x.Id == UserId);
 
-                if (adminUser is null) throw new Exception("Error!");
+                if (adminUser is null) return BadRequest();
+                if (adminUser.LegalAppAccessKey is null) return Ok(result);
 
                 //Get related users with the same data access key
                 var relatedUsers = _context.Users
                     .Include(x => x.LegalAppAccessKey)
-                    .Where(x => x.LegalAppAccessKey.Name.Equals(adminUser.LegalAppAccessKey.Name))
+                    .Where(x => x.LegalAppAccessKey.Id == adminUser.LegalAppAccessKey.Id)
                     .Include(x => x.DataAccess)
                     .ToList();
 
@@ -56,7 +56,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                         .FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role))?
                         .Value;
                     result.Add(UserProjections
-                        .RelatedUserProjection(userRecord.UserName, userRecord.Email, role)
+                        .RelatedLegalAppUserProjection(userRecord.UserName, userRecord.Email, role)
                         .Compile()
                         .Invoke(relatedUser));
                 }

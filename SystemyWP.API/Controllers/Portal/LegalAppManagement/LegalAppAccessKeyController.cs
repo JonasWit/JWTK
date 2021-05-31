@@ -32,8 +32,9 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var results = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
-                    .Select(LegalAppAccessKeyProjection.FullProjection())
+                    .Select(AccessKeyProjection.FullProjection())
                     .ToList();
+                
                 return Ok(results);
             }
             catch (Exception e)
@@ -69,7 +70,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             }
         }
 
-        [HttpPut("access-key/update/{id}")]
+        [HttpPut("access-key/update/{keyId}")]
         public async Task<IActionResult> UpdateAccessKey(int keyId, [FromBody] EditAccessKeyForm form)
         {
             try
@@ -132,65 +133,26 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
-                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id == user.Id);
 
                 if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
 
                 var accessKey = _context.LegalAppAccessKeys
-                    .FirstOrDefault(x => x.Name.ToLower().Equals(form.DataAccessKey.ToLower()));
+                    .FirstOrDefault(x => x.Id == form.KeyId);
 
                 if (accessKey is null) return BadRequest("Key not found!");
 
                 accessKey.Users.Add(userProfile);
-                _context.Users.Update(userProfile);
-
                 var result = await _context.SaveChangesAsync();
 
                 if (result > 0)
-                    return Ok($"Data Access Key {form.DataAccessKey} Added!");
-                return BadRequest("Error when adding the Claim!");
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return BadRequest("Error when adding the Claim!");
-            }
-        }
-
-        [HttpPost("user/revoke/access-key")]
-        public async Task<IActionResult> RevokeDataAccessKey(
-            [FromBody] RevokeDataAccessKeyForm form,
-            [FromServices] UserManager<IdentityUser> userManager)
-        {
-            try
-            {
-                var user = await userManager.FindByIdAsync(form.UserId);
-                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
-
-                if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
-
-                var assignedKey = _context.LegalAppAccessKeys
-                    .Include(x => x.Users)
-                    .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
-
-                if (assignedKey is not null)
-                {
-                    assignedKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
-
-                    _context.Update(assignedKey);
-                    var result = await _context.SaveChangesAsync();
-
-                    if (result > 0) return Ok("Data Access Key Removed!");
-                    return BadRequest();
-                }
-
-
-                return BadRequest("Key not found!");
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
+                    return Ok();
                 return BadRequest();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return BadRequest("Error when adding the Claim!");
             }
         }
     }

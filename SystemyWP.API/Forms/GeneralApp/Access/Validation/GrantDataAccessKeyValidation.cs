@@ -7,7 +7,7 @@ namespace SystemyWP.API.Forms.GeneralApp.Access.Validation
         public GrantDataAccessKeyValidation()
         {
             RuleFor(x => x.UserId).NotEmpty();
-            RuleFor(x => x.DataAccessKey).NotEmpty().MaximumLength(50);
+            RuleFor(x => x.KeyId).NotEmpty();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<template>
-  <div>
+  <div class="ma-3">
     <v-form ref="createDataAccessKeyForm" v-model="validation.valid">
       <v-text-field v-model="form.keyName" :rules="validation.key" label="Key String" required></v-text-field>
       <v-menu ref="menu" transition="scale-transition" offset-y min-width="auto" :close-on-content-click="false"
@@ -25,10 +25,19 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+
+import {mapActions} from "vuex";
+import {dataAccessKeyRule, notEmptyRule} from "@/data/vuetify-validations";
 
 export default {
-  name: "create-access-key-component",
+  name: "create-access-key",
+  props: {
+    keyType: {
+      required: true,
+      type: String,
+      default: ""
+    }
+  },
   data: () => ({
     loading: false,
     form: {
@@ -37,24 +46,18 @@ export default {
     },
     validation: {
       valid: false,
-      key: [
-        v => !!v || "Key is required!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
-      expireDate: [
-        v => !!v || "Duration is required!",
-      ],
+      key: dataAccessKeyRule(),
+      expireDate: notEmptyRule('Date cannot be empty'),
     },
   }),
   computed: {
-    ...mapState('admin-panel-store', ['accessKeys']),
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys']),
-    addKey() {
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    async addKey() {
       if (!this.$refs.createDataAccessKeyForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -64,19 +67,16 @@ export default {
         expireDate: this.form.expireDate,
       };
 
-      return this.$axios.$post("/api/portal-admin/key-admin/access-key/create", payload)
-        .then(() => {
-          this.resetForm();
-          this.getAccessKeys();
-          this.$notifier.showSuccessMessage("New key added!");
-        })
-        .catch((e) => {
-          console.error(e);
-          this.$notifier.showSuccessMessage(`Issue! ${e}`);
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$post(`/api/portal-admin/key-admin/${this.keyType}/access-key/create`, payload);
+        this.resetForm();
+        this.$notifier.showSuccessMessage("New key added!");
+      } catch (error) {
+        this.$notifier.showSuccessMessage(`Issue! ${error}`);
+      } finally {
+        this.getLegalAppAccessKeys();
+        this.loading = false;
+      }
     },
     resetForm() {
       this.$refs.createDataAccessKeyForm.reset();

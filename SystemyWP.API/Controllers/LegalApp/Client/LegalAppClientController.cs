@@ -291,33 +291,5 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
-        [HttpGet("admin/flat")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
-        public async Task<IActionResult> GetClientsAndCasesForAccess()
-        {
-            try
-            {
-                var user = await _context.Users
-                    .Where(x => x.Id.Equals(UserId))
-                    .Include(x => x.LegalAppAccessKey)
-                    .FirstOrDefaultAsync();
-
-                var result = await _context.LegalAppClients
-                    .Where(x =>
-                        x.LegalAppAccessKeyId== user.LegalAppAccessKey.Id)
-                    .Include(x =>
-                        x.LegalAppCases)
-                    .Select(LegalAppClientProjections.MinimalProjection)
-                    .ToListAsync();
-
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
     }
 }

@@ -46,34 +46,35 @@ export default {
     },
   }),
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
-    lock() {
+    ...mapActions('portal-admin-store', ['getUsers']),
+    async lock() {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-
-      return this.$axios.$post("/api/portal-admin/user-admin/user/lock", this.form)
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-          this.getUsers();
-        });
+      try {
+        await this.$axios.$post("/api/portal-admin/user-admin/user/lock", this.form);
+      } catch (error) {
+        console.error('lock - Error', error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
-    unlock() {
+    async unlock() {
       if (this.loading) return;
       this.loading = true;
 
-      this.form.userId = this.selectedUser.id;
-
-      return this.$axios.$post("/api/portal-admin/user-admin/user/unlock", this.form)
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-          this.getUsers();
-        });
+      try {
+        this.form.userId = this.selectedUser.id;
+        await this.$axios.$post("/api/portal-admin/user-admin/user/unlock", this.form);
+      } catch (error) {
+        console.error('unlock - Error', error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
   }
 };

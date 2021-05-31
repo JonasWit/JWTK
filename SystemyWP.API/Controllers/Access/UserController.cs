@@ -48,13 +48,14 @@ namespace SystemyWP.API.Controllers.Access
 
                     await _context.SaveChangesAsync();
                     return Ok(UserProjections
-                        .UserProjection(Username, Role, LegalAppAllowed)
+                        .LegalAppUserProjection(Username, Role, LegalAppAllowed)
                         .Compile()
                         .Invoke(user));
                 }
 
                 var newUser = new User
                 {
+                    Email = UserEmail,
                     Id = UserId,
                     LastLogin = DateTime.UtcNow,
                     CreatedBy = UserEmail
@@ -64,7 +65,7 @@ namespace SystemyWP.API.Controllers.Access
                 await _context.SaveChangesAsync();
 
                 return Ok(UserProjections
-                    .UserProjection(Username, Role, LegalAppAllowed)
+                    .LegalAppUserProjection(Username, Role, LegalAppAllowed)
                     .Compile()
                     .Invoke(newUser));
             }

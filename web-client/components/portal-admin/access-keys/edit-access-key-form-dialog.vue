@@ -38,7 +38,8 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+
+import {mapActions} from "vuex";
 
 export default {
   name: "edit-access-key-form-dialog",
@@ -62,7 +63,6 @@ export default {
     },
   }),
   computed: {
-    ...mapState('admin-panel-store', ['accessKeys']),
     todayDate() {
       return new Date().toISOString().substr(0, 10);
     },
@@ -79,8 +79,8 @@ export default {
     this.form.expireDate = this.selectedKey.expireDate.substr(0, 10);
   },
   methods: {
-    ...mapActions('admin-panel-store', ['getAccessKeys', 'getUsers']),
-    editKey() {
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    async editKey() {
       if (!this.$refs.editDataAccessKeyForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -90,13 +90,15 @@ export default {
         expireDate: this.form.expireDate,
       };
 
-      return this.$axios.$put(`/api/portal-admin/key-admin/access-key/update/${this.selectedKey.id}`, payload)
-        .catch((e) => {
-        }).finally(() => {
-          this.getAccessKeys();
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$put(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/update/${this.selectedKey.id}`, payload);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.getLegalAppAccessKeys();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
   }
 };

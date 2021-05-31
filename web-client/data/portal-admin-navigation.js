@@ -10,14 +10,14 @@
     {
       id: '2',
       route: '/admin-panel/legal-app-keys',
-      name: 'Access Keys',
+      name: 'Legal App Keys',
       icon: `mdi-key-change`,
       text: 'Create, Update, Edit Access Keys',
     },
     {
       id: '3',
       route: '/admin-panel/medical-app-keys',
-      name: 'Access Keys',
+      name: 'Medical App Keys',
       icon: `mdi-key-change`,
       text: 'Create, Update, Edit Access Keys',
     },

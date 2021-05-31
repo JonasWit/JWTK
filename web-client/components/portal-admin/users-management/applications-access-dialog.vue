@@ -41,30 +41,34 @@ export default {
     loading: false,
   }),
   methods: {
-    ...mapActions('admin-panel-store', ['getUsers']),
+    ...mapActions('portal-admin-store', ['getUsers']),
     async grantLegalAppAccess() {
       if (this.loading) return;
       this.loading = true;
 
-      await this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id})
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.getUsers();
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id});
+      } catch (error) {
+        console.error("grantLegalAppAccess - Error", error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
     async revokeLegalAppAccess() {
       if (this.loading) return;
       this.loading = true;
 
-      await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id})
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.getUsers();
-          this.dialog = false;
-        });
+      try {
+        await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id});
+      } catch (error) {
+        console.error("revokeLegalAppAccess - Error", error);
+      } finally {
+        this.getUsers();
+        this.loading = false;
+        this.dialog = false;
+      }
     },
   },
 };

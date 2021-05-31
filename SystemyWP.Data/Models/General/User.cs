@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.LegalAppModels.Access;
@@ -12,6 +13,10 @@ namespace SystemyWP.Data.Models.General
     {
         public string Image { get; set; }
 
+        [Required]
+        [MaxLength(265)]
+        public string Email { get; set; }
+        
         public LegalAppAccessKey LegalAppAccessKey { get; set; }
         public MedicalAccessKey MedicalAccessKey { get; set; }
 

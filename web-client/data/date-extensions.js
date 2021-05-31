@@ -23,3 +23,19 @@ export function formatDate(date) {
   let options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
   return `${result.toLocaleDateString("pl-PL", options)} ${result.toLocaleTimeString("pl-PL")}`;
 }
+
+export const colorDate = (date) => {
+  let today = new Date();
+  const expireDate = Date.parse(date);
+
+  if (expireDate > addDays(today, 7)) {
+    return "success--text";
+  }
+  if (expireDate < addDays(today, 7) && expireDate > today) {
+    return "warning--text";
+  }
+  if (expireDate < today) {
+    return "error--text";
+  }
+  return "error--text";
+};

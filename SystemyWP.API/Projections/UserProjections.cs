@@ -9,14 +9,14 @@ namespace SystemyWP.API.Projections
 {
     public static class UserProjections
     {
-        public static Expression<Func<User, object>> UserProjection(string userName, string role, bool legalAppAllowed) =>
+        public static Expression<Func<User, object>> LegalAppUserProjection(string userName, string role, bool legalAppAllowed) =>
             user => new
             {
                 user.Id,
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = user.LegalAppAccessKey == null ? null : LegalAppAccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                LegalAppDataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
                 LegalAppAllowed = legalAppAllowed,
                 user.PhoneNumber,
                 user.Address,
@@ -34,7 +34,7 @@ namespace SystemyWP.API.Projections
                 user.LastLogin
             };
         
-        public static Expression<Func<User, object>> RelatedUserProjection(string userName, string email, string role) =>
+        public static Expression<Func<User, object>> RelatedLegalAppUserProjection(string userName, string email, string role) =>
             user => new
             {
                 user.Id,
@@ -42,7 +42,8 @@ namespace SystemyWP.API.Projections
                 Username = userName,
                 user.Image,
                 Role = role,
-                DataAccessKey = user.LegalAppAccessKey == null ? null : LegalAppAccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                LegalAppDataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                MedicalAppDataAccessKey = user.MedicalAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
                 user.PhoneNumber,
                 user.Address,
                 user.City,
@@ -71,14 +72,16 @@ namespace SystemyWP.API.Projections
             public string Id { get; set; }
             public string Email { get; set; }
             public string Username { get; set; }
-            public string Image { get; set; }           
+            public string Image { get; set; }          
             public string Role { get; set; }  
-            public bool EmailConfirmed { get; set; }  
-            public bool PolicyAccepted { get; set; }  
-            public bool RulesAccepted { get; set; }  
-            public object DataAccessKey { get; set; }
+            public bool EmailConfirmed { get; set; } 
+            public bool PolicyAccepted { get; set; } 
+            public bool RulesAccepted { get; set; } 
+            public object LegalAppDataAccessKey { get; set; }
+            public object MedicalAppDataAccessKey { get; set; }
             public bool  LegalAppAllowed { get; set; }
-            public bool Locked { get; set; }    
+            public bool  MedicalAppAllowed { get; set; }
+            public bool Locked { get; set; }
         }
     }
 }

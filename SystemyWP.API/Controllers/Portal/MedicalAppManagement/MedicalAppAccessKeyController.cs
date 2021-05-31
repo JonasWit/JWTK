@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.Portal.MedicalAppManagement
 {
-    [Route("/api/portal-admin/key-admin/legal-app")]
+    [Route("/api/portal-admin/key-admin/medical-app")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class MedicalAppAccessKeyController : ApiController
     {
