@@ -6,9 +6,9 @@ export const notEmptyRule = (message) => [
   v => !!v || message
 ];
 
-export const dataAccessKeyRule = () => [
-  v => !!v || "Key is required!",
-  v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
+export const notEmptyAndLimitedRule = (message, min, max) => [
+  v => !!v || message,
+  v => (v?.length >= min && v?.length <= max) || message,
 ];
 
 
