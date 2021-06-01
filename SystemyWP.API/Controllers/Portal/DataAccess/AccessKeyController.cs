@@ -39,8 +39,7 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
                     .Include(x => x.Users)
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
-                if (assignedLegalAppKey is not null ||
-                    assignedMedicalAppKey is not null)
+                if (assignedLegalAppKey is not null || assignedMedicalAppKey is not null)
                 {
                     assignedLegalAppKey?.Users.RemoveAll(x => x.Id.Equals(user.Id));
                     assignedMedicalAppKey?.Users.RemoveAll(x => x.Id.Equals(user.Id));

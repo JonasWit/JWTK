@@ -27,7 +27,7 @@
 <script>
 
 import {mapActions} from "vuex";
-import {dataAccessKeyRule, notEmptyRule} from "@/data/vuetify-validations";
+import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 
 export default {
   name: "create-access-key",
@@ -46,7 +46,7 @@ export default {
     },
     validation: {
       valid: false,
-      key: dataAccessKeyRule(),
+      key: notEmptyAndLimitedRule('Cannot be empty and must be between 10 and 50', 10, 50),
       expireDate: notEmptyRule('Date cannot be empty'),
     },
   }),
