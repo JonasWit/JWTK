@@ -33,6 +33,8 @@
 
 <script>
 
+import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+
 export default {
   name: "add-client-dialog",
   data: () => ({
@@ -43,10 +45,7 @@ export default {
     },
     validation: {
       valid: false,
-      name: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
+      name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
     },
 
   }),

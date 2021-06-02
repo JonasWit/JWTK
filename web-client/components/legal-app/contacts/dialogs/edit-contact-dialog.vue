@@ -41,6 +41,7 @@
 
 <script>
 import {mapMutations} from "vuex";
+import {lengthRule, notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
 
 export default {
   name: "edit-contact-dialog",
@@ -64,19 +65,10 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      name: [
-        v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 50!",
-      ],
-      surname: [
-        v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 50!",
-      ],
-      title: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 200!",
-      ],
-      comment: [
-        v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 200!",
-      ],
+      title: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      name: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
+      surname: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
+      comment: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 200!", 4, 200)
     },
 
   }),

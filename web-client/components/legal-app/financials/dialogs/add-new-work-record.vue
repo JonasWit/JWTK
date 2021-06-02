@@ -13,7 +13,7 @@
     <v-form ref="createClientWorkForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.name" label="Dodaj nazwę"></v-text-field>
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nazwę"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
           <v-text-field v-model="form.hours" required :rules="validation.numberOnly"
@@ -22,10 +22,13 @@
                         label="Dodaj liczbę minut"></v-text-field>
           <v-text-field v-model="form.rate" required :rules="validation.numberOnly"
                         label="Dodaj stawkę godzinową"></v-text-field>
+          <v-text-field v-model="form.vat" required :rules="validation.numberOnly"
+                        label="Dodaj stawkę VAT"></v-text-field>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="form.eventDate" required label="Wybierz datę" prepend-icon="mdi-calendar" readonly
+              <v-text-field v-model="form.eventDate" required label="Wybierz datę zdarzenia" prepend-icon="mdi-calendar"
+                            readonly
                             v-bind="attrs" v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="date" scrollable>
@@ -57,6 +60,8 @@
 
 <script>
 
+import {notEmptyAndLimitedRule, numberOnly} from "../../../../data/vuetify-validations";
+
 export default {
   name: "add-new-work-record",
   data: () => ({
@@ -68,15 +73,15 @@ export default {
       hours: "",
       minutes: "",
       rate: "",
-      eventDate: ""
+      eventDate: "",
+      vat: ""
     },
     modal: false,
     date: new Date().toISOString().substr(0, 10),
     validation: {
       valid: false,
-      numberOnly: [
-        v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
-      ],
+      numberOnly: numberOnly(),
+      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 10),
     },
 
   }),
@@ -95,8 +100,12 @@ export default {
       return (parseInt(this.form.rate));
     },
 
+    givenVat() {
+      return (parseInt(this.form.vat));
+    },
+
     calculatedAmount() {
-      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate).toFixed(2);
+      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * (this.givenRate + (this.givenRate * (this.givenVat / 100)))).toFixed(2);
     }
 
   },
@@ -116,7 +125,9 @@ export default {
         minutes: this.minutesSpent,
         rate: this.form.rate,
         eventDate: this.form.eventDate,
-        amount: this.calculatedAmount
+        vat: this.givenVat,
+        amount: this.calculatedAmount,
+
       };
 
       console.warn('Nowy work rekord', workRecord)

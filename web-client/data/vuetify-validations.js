@@ -1,5 +1,6 @@
-﻿export const emailRule = (message) => [
-  v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || message
+﻿export const emailRule = () => [
+  v => !!v || 'E-mail jest wymagany.',
+  v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Format adresu e-mail jest niepoprawny.'
 ];
 
 export const notEmptyRule = (message) => [
@@ -11,10 +12,16 @@ export const notEmptyAndLimitedRule = (message, min, max) => [
   v => (v?.length >= min && v?.length <= max) || message,
 ];
 
-export const nameLengthRule = () => [
-  v => !!v || "Nazwa nie może być pusta!",
-  v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 50!",
+export const numberOnly = () => [
+  v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+];
+
+export const lengthRule = (message, min, max) => [
+  v => (v?.length >= min && v?.length <= max) || message,
+
+];
+
+export const phoneNumberRule = () => [
+  v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
+  v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '
 ]
-
-
-

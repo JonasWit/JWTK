@@ -19,13 +19,13 @@
           ></v-text-field>
           <v-text-field v-model="workRecord.eventDate" label="Edytuj datę zdarzenia"
           ></v-text-field>
-          <v-text-field v-model="workRecord.hours" label="Edytuj godziny"
+          <v-text-field v-model="workRecord.hours" :rules=validation.numberOnly label="Edytuj godziny"
           ></v-text-field>
-          <v-text-field v-model="workRecord.minutes" label="Edytuj minuty"
+          <v-text-field v-model="workRecord.minutes" :rules=validation.numberOnly label="Edytuj minuty"
           ></v-text-field>
-          <v-text-field v-model="workRecord.rate" label="Edytuj stawkę godzinową"
+          <v-text-field v-model="workRecord.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"
           ></v-text-field>
-          <v-text-field v-model="workRecord.vat" label="Edytuj wartość VAT"
+          <v-text-field v-model="workRecord.vat" :rules=validation.numberOnly label="Edytuj wartość VAT"
           ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
@@ -46,7 +46,7 @@
 
 <script>
 
-import {nameLengthRule} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule, numberOnly} from "../../../../data/vuetify-validations";
 
 export default {
   name: "edit-work-record",
@@ -73,18 +73,19 @@ export default {
     },
     validation: {
       valid: false,
-      name: nameLengthRule(),
+      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 10),
+      numberOnly: numberOnly(),
 
     },
   }),
 
   fetch() {
-    console.warn('work record:', this.selectedFinancialRecord)
     this.workRecord = this.selectedFinancialRecord
 
   },
 
   methods: {
+
     async saveWorkRecordChange() {
       if (!this.$refs.editWorkRecordForm.validate()) return;
       if (this.loading) return;
@@ -101,10 +102,9 @@ export default {
         description: this.workRecord.description,
       }
       try {
-        console.warn('workRecord for put method:', workRecord)
-        return this.$axios.$put(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.workRecord.id}`, workRecord)
+        await this.$axios.$put(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.workRecord.id}`, workRecord)
         this.$nuxt.refresh();
-        this.$notifier.showSuccessMessage("Kontakt updatowany pomyślnie!");
+        this.$notifier.showSuccessMessage("Rekord zmieniony pomyślnie!");
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {

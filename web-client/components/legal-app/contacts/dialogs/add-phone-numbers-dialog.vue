@@ -34,6 +34,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {notEmptyAndLimitedRule, phoneNumberRule} from "../../../../data/vuetify-validations";
 
 export default {
   name: "add-phone-numbers-dialog",
@@ -54,14 +55,8 @@ export default {
     },
     validation: {
       valid: false,
-      number: [
-        v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
-        v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '
-      ],
-      comment: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
+      number: phoneNumberRule(),
+      comment: notEmptyAndLimitedRule("Nazwa jest wymagana. Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
     },
   }),
   methods: {

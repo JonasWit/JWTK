@@ -35,6 +35,7 @@
 <script>
 
 import {mapActions} from "vuex";
+import {emailRule, notEmptyAndLimitedRule, notEmptyRule} from "../../../../data/vuetify-validations";
 
 export default {
   name: "add-email-dialog",
@@ -55,14 +56,8 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      email: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
-      comment: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
+      email: emailRule("Proszę podać poprawny format adresu email."),
+      comment: notEmptyAndLimitedRule("Nazwa jest wymagana. Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
     },
   }),
 

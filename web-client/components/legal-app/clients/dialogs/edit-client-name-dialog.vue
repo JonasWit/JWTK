@@ -13,7 +13,8 @@
     <v-form ref="editClientNameForm">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="client.name" label="Edytuj nazwę Klienta" required></v-text-field>
+          <v-text-field v-model="client.name" :rules="validation.name" label="Edytuj nazwę Klienta"
+                        required></v-text-field>
           <small class="grey--text">* Hint text here</small>
         </v-card-text>
         <v-divider></v-divider>
@@ -34,6 +35,7 @@
 
 <script>
 import {mapMutations} from "vuex";
+import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
 
 export default {
   name: "edit-client-name-dialog",
@@ -51,7 +53,11 @@ export default {
       name: "",
 
     },
-
+    validation: {
+      valid: false,
+      name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+    },
+    loading: false,
   }),
   fetch() {
     this.client = this.selectedClient;
@@ -59,6 +65,10 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
     saveClientNameChange() {
+
+      if (!this.$refs.editClientNameForm.validate()) return;
+      if (this.loading) return;
+      this.loading = true;
 
       const payload = {
         name: this.client.name,

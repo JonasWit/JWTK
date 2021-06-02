@@ -14,7 +14,7 @@
     </v-list>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="success" icon v-bind="attrs" v-on="on" @click="$router.back()">
+        <v-btn color="error" fab small depressed v-bind="attrs" v-on="on" @click="$router.back()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </template>

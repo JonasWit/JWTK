@@ -57,38 +57,57 @@
         </v-col>
       </v-row>
       <v-card v-for="item in financialRecords" :key="item.id">
-        <v-row>
-          <v-col class="mx-2">
+        <v-row class="d-flex justify-space-between">
+          <v-col>
             <v-list class="d-flex justify-space-between">
-              <v-list-item-content>
-                <v-list-item-subtitle> Nazwa: {{ item.name }}</v-list-item-subtitle>
-                <v-list-item-subtitle> Data zdarzenia: {{ formatDate(item.eventDate) }}</v-list-item-subtitle>
-                <v-list-item-subtitle> Created: {{ formatDate(item.created) }}</v-list-item-subtitle>
-                <v-list-item-subtitle> Created by: {{ item.createdBy }}</v-list-item-subtitle>
-              </v-list-item-content>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title> Nazwa: {{ item.name }}</v-list-item-title>
+                  <v-list-item-title> Data zdarzenia: {{ formatDate(item.eventDate) }}</v-list-item-title>
+                  <v-list-item-subtitle> Created: {{ formatDate(item.created) }}</v-list-item-subtitle>
+                  <v-list-item-subtitle> Created by: {{ item.createdBy }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
             </v-list>
           </v-col>
-          <v-col class="mx-2">
+          <v-col>
             <v-list class="d-flex justify-space-between">
-              <v-list-item-content>
-                <v-list-item-subtitle class="hidden-sm-and-down">Amount: {{ item.amount }}</v-list-item-subtitle>
-                <v-list-item-subtitle class="hidden-sm-and-down">VAT: {{ item.vat }}</v-list-item-subtitle>
-                <v-list-item-subtitle class="hidden-sm-and-down">Rate: {{ item.rate }}</v-list-item-subtitle>
-                <v-list-item-subtitle class="hidden-sm-and-down">Hours: {{ item.hours }}</v-list-item-subtitle>
-                <v-list-item-subtitle class="hidden-sm-and-down">Minutes: {{ item.minutes }}</v-list-item-subtitle>
-              </v-list-item-content>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>Hours: {{ item.hours }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>Minutes: {{ item.minutes }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
             </v-list>
           </v-col>
-          <v-col class="mx-2">
+          <v-col>
+            <v-list class="d-flex justify-space-between">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>VAT: {{ item.vat }}</v-list-item-subtitle>
+                  <v-list-item-subtitle>Amount: {{ item.amount }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-col>
+
+          <v-col>
             <v-list class="d-flex justify-md-end justify-sm-space-between">
-              <delete-work-record :selected-financial-record="item"/>
-              <edit-work-record :selected-financial-record="item"/>
+              <v-list-item>
+                <delete-work-record :selected-financial-record="item"/>
+                <edit-work-record :selected-financial-record="item"/>
+              </v-list-item>
             </v-list>
           </v-col>
 
         </v-row>
       </v-card>
       <button-to-go-up/>
+      <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
+        Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
+      </v-alert>
     </template>
   </layout>
 </template>
@@ -113,6 +132,7 @@ export default {
       dateTo: null,
       modalFrom: false,
       modalTo: false,
+      alert: false,
     }
   ),
 
@@ -133,7 +153,12 @@ export default {
 
       let fromDate = convertedDateFrom;
       let toDate = convertedDateTo;
-      return `?from=${fromDate}&to=${toDate}`;
+
+      if (fromDate < toDate) {
+        return `?from=${fromDate}&to=${toDate}`;
+      } else {
+        this.alert = true;
+      }
     },
   },
 
@@ -142,7 +167,6 @@ export default {
       if (this.loading) return;
       this.loading = true;
       console.warn('handle logs fired', this.query);
-
 
       try {
         let financialRecords = await this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)

@@ -21,11 +21,11 @@
                         required></v-text-field>
           <v-text-field v-model="form.city" label="Miasto"
                         required></v-text-field>
-          <v-text-field v-model="form.postCode" label="Kod pocztowy"
+          <v-text-field v-model="form.postCode" label="Kod pocztowy*"
                         required></v-text-field>
           <v-text-field v-model="form.country" label="Państwo"
                         required></v-text-field>
-          <small class="grey--text">* Hint text here</small>
+          <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -42,6 +42,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
 
 export default {
   name: "add-address-dialog",
@@ -66,16 +67,8 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      street: [
-        v => !!v || "Nazwa ulicy jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
-
-      comment: [
-        v => !!v || "Nazwa jest wymagana!",
-        v => (v?.length >= 10 && v?.length <= 50) || "Between 10 and 50 characters!",
-      ],
-
+      street: notEmptyAndLimitedRule("Nazwa ulicy jest wymagana! Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      comment: notEmptyAndLimitedRule("Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50)
     },
   }),
 

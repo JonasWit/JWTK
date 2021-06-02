@@ -26,6 +26,8 @@
 
 <script>
 
+import {emailRule, notEmptyAndLimitedRule, notEmptyRule, phoneNumberRule} from "../../../data/vuetify-validations";
+
 export default {
   name: "home-contact",
   data: () => ({
@@ -36,20 +38,10 @@ export default {
     valid: true,
     validation: {
 
-      nameRules: [
-        v => !!v || 'Imię jest wymagane',
-        v => (v?.length >= 3 && v?.length <= 20) || 'Imię musi mieć conajmniej 3 znaki i nie więcej niż 20 znaków.',
-      ],
-      emailRules: [
-        v => !!v || 'E-mail jest wymagany.',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Format adresu e-mail jest niepoprawny.'],
-      phoneRules: [
-        v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
-        v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '],
-      checkboxRules: [
-        v => !!v || 'Proszę wyrazić zgodę, aby kontynuować.'
-      ],
-
+      nameRules: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      emailRules: emailRule(),
+      phoneRules: phoneNumberRule(),
+      checkboxRules: notEmptyRule("Proszę wyrazić zgodę, aby kontynuować")
     }
   }),
   methods: {

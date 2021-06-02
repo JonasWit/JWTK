@@ -101,7 +101,7 @@ const config = {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
-          anchor: '#ececea',
+
         },
         light: {
           primary: '#1976D2',
@@ -112,7 +112,7 @@ const config = {
           info: '#2196F3',
           success: '#4CAF50',
           warning: '#FFC107',
-          anchor: '#000409',
+
         }
       },
     }

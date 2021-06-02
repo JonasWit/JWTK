@@ -20,8 +20,8 @@ export function addYears(date, years) {
 
 export function formatDate(date) {
   let result = new Date(date);
-  let options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-  return `${result.toLocaleDateString("pl-PL", options)} ${result.toLocaleTimeString("pl-PL")}`;
+  let options = {year: 'numeric', month: 'long', day: 'numeric'};
+  return `${result.toLocaleDateString("pl-PL", options)}`;
 }
 
 export const colorDate = (date) => {
