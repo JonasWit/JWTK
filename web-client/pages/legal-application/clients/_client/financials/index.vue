@@ -8,7 +8,7 @@
         <add-new-work-record/>
       </v-toolbar>
       <v-row class="d-flex align-center my-3 ">
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="4">
           <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
@@ -26,7 +26,7 @@
             </v-date-picker>
           </v-dialog>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="4">
           <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent
                     width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -48,6 +48,11 @@
         <v-col cols="12" md="2">
           <v-btn depressed color="primary" @click="searchFinancialRecords">
             Wyszukaj
+          </v-btn>
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-btn depressed color="primary" @click="clearResults">
+            Wyczyść
           </v-btn>
         </v-col>
       </v-row>
@@ -75,10 +80,9 @@
             </v-list>
           </v-col>
           <v-col class="mx-2">
-            <v-list class="d-flex justify-space-between">
-
+            <v-list class="d-flex justify-md-end justify-sm-space-between">
               <delete-work-record :selected-financial-record="item"/>
-
+              <edit-work-record :selected-financial-record="item"/>
             </v-list>
           </v-col>
 
@@ -95,16 +99,17 @@ import {formatDate} from "@/data/date-extensions";
 import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
 import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
+import EditWorkRecord from "../../../../../components/legal-app/financials/dialogs/edit-work-record";
 
 export default {
   name: "index",
-  components: {DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
+  components: {EditWorkRecord, DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
       financialRecords: [],
       loading: false,
-      dateFrom: new Date().toISOString().substr(0, 10),
+      dateFrom: null,
       dateTo: null,
       modalFrom: false,
       modalTo: false,
@@ -119,11 +124,15 @@ export default {
   computed: {
 
     query() {
-      let convertedDate = new Date(this.dateTo)
-      convertedDate.setDate(convertedDate.getDate() + 1)
-      convertedDate = convertedDate.toISOString().substr(0, 10)
-      let fromDate = this.dateFrom
-      let toDate = convertedDate
+      let convertedDateTo = new Date(this.dateTo);
+      convertedDateTo.setDate(convertedDateTo.getDate() + 1);
+      convertedDateTo = convertedDateTo.toISOString().substr(0, 10);
+
+      let convertedDateFrom = new Date(this.dateFrom);
+      convertedDateFrom = convertedDateFrom.toISOString().substr(0, 10);
+
+      let fromDate = convertedDateFrom;
+      let toDate = convertedDateTo;
       return `?from=${fromDate}&to=${toDate}`;
     },
   },
@@ -147,6 +156,9 @@ export default {
     },
     formatDate(date) {
       return formatDate(date);
+    },
+    clearResults() {
+      Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
     },
 
 

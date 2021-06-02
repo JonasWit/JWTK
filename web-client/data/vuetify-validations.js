@@ -11,5 +11,10 @@ export const notEmptyAndLimitedRule = (message, min, max) => [
   v => (v?.length >= min && v?.length <= max) || message,
 ];
 
+export const nameLengthRule = () => [
+  v => !!v || "Nazwa nie może być pusta!",
+  v => (v?.length >= 4 && v?.length <= 50) || "Dopuszczalna liczba znaków pomiędzy 4 a 50!",
+]
+
 
 
