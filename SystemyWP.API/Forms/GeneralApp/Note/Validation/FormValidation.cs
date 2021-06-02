@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.LegalApp.Client.Validation
+namespace SystemyWP.API.Forms.GeneralApp.Note.Validation
 {
-    public class ClientNoteFormValidation: AbstractValidator<ClientNoteForm>
+    public class FormValidation: AbstractValidator<NoteForm>
     {
-        public ClientNoteFormValidation()
+        public FormValidation()
         {
             RuleFor(x => x.Title).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Message).MaximumLength(1000);

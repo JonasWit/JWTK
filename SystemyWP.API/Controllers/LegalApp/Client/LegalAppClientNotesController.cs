@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Forms.GeneralApp.Note;
 using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
@@ -117,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPost("client/{clientId}/create-note")]
-        public async Task<IActionResult> CreateNote(int clientId, [FromBody] ClientNoteForm form)
+        public async Task<IActionResult> CreateNote(int clientId, [FromBody] NoteForm form)
         {
             try
             {
@@ -156,7 +157,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPut("client/{clientId}/note/{noteId}")]
-        public async Task<IActionResult> UpdateNote(long clientId, long noteId, [FromBody] ClientNoteForm form)
+        public async Task<IActionResult> UpdateNote(long clientId, long noteId, [FromBody] NoteForm form)
         {
             try
             {

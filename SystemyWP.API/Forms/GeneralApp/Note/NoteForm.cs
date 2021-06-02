@@ -1,6 +1,6 @@
-﻿namespace SystemyWP.API.Forms.LegalApp.Client
+﻿namespace SystemyWP.API.Forms.GeneralApp.Note
 {
-    public class ClientNoteForm
+    public class NoteForm
     {
         public string Title { get; set; }
         public string Message { get; set; }
