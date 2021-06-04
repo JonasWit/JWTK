@@ -28,18 +28,5 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClient.Id,
                 legalAppClient.Name,
             };
-
-        public static Func<LegalAppClient, object> CreateMinimal => MinimalProjection.Compile();
-        public static Expression<Func<LegalAppClient, object>> MinimalProjection =>
-            legalAppClient => new
-            {
-                legalAppClient.Id,
-                legalAppClient.Name,
-                Cases = legalAppClient.LegalAppCases
-                    .AsQueryable()
-                    .Where(x => x.Active)
-                    .Select(LegalAppCaseProjections.BasicProjection)
-                    .ToList()
-            };
     }
 }

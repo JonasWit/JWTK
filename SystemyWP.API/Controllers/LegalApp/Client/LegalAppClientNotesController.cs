@@ -37,9 +37,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entities = _context.LegalAppClientNotes
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y =>
-                                y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
+                        .Where(x =>
+                            x.Active &&
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
                         .Select(LegalAppClientNoteProjections.BasicProjection)
                         .ToList();
 
@@ -66,9 +69,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entities = _context.LegalAppClientNotes
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y =>
-                                y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
+                        .Where(x =>
+                            x.Active &&
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
                         .OrderBy(x => x.Title)
                         .Skip(cursor)
                         .Take(take)
@@ -98,10 +104,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientNotes
-                        .Where(x => x.Id == noteId &&
-                                    x.LegalAppClientId == _context.LegalAppClients
-                                        .FirstOrDefault(y =>
-                                            y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
+                        .Where(x =>
+                            x.Active &&
+                            x.Id == noteId &&
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
                         .Select(LegalAppClientNoteProjections.BasicProjection)
                         .FirstOrDefault();
 
@@ -128,8 +137,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .Where(x => x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id && x.Id == clientId)
-                        .Include(x => x.Contacts)
+                        .Where(x =>
+                            x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id &&
+                            x.Id == clientId)
                         .FirstOrDefault();
 
                     if (client is null) return BadRequest();
@@ -150,8 +160,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -167,9 +176,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientNotes
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId &&
-                            y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                        .Where(x =>
+                            x.Active &&
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
                             x.Id == noteId)
                         .FirstOrDefault();
 
@@ -186,14 +198,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
-        [HttpDelete("client/{clientId}/contact/{contactId}")]
-        public async Task<IActionResult> DeleteNote(long clientId, long contactId)
+        [HttpDelete("client/{clientId}/note/{noteId}")]
+        public async Task<IActionResult> DeleteNote(long clientId, long noteId)
         {
             try
             {
@@ -203,49 +214,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientNotes
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId &&
-                            y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id && x.Id == contactId)
+                        .Where(x =>
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                            x.Id == noteId)
                         .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
 
                     _context.Remove(entity);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-            catch (Exception e)
-            {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpPut("archive/{clientId}/note/{noteId}")]
-        public async Task<IActionResult> ArchiveNote(long clientId, long noteId)
-        {
-            try
-            {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var entity = _context.LegalAppClientNotes
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId &&
-                                y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == noteId)
-                        .FirstOrDefault();
-
-                    if (entity is null) return BadRequest();
-
-                    entity.Active = !entity.Active;
-
                     await _context.SaveChangesAsync();
                     return Ok();
                 }

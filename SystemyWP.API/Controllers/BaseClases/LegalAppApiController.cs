@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using SystemyWP.API.Forms.LegalApp.Case;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
@@ -35,22 +37,24 @@ namespace SystemyWP.API.Controllers.BaseClases
             if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
                 Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
             {
-                return new CheckResult {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = true};
+                return new CheckResult
+                    {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = true};
             }
 
             //Logic for ordinary Users
             if (Role.Equals(SystemyWpConstants.Roles.Client))
             {
                 //Check DataAccess Table
-                var access = await _context.DataAccesses
-                    .AnyAsync(x => 
+                var accessTable = await _context.DataAccesses
+                    .AnyAsync(x =>
                         x.UserId == UserId &&
                         x.RestrictedType == restrictedType &&
                         x.ItemId == itemId);
 
-                if (access)
+                if (accessTable)
                 {
-                    return new CheckResult {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = false};
+                    return new CheckResult
+                        {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = false};
                 }
             }
 
