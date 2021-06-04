@@ -40,8 +40,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         var client = _context.LegalAppClients
                             .Include(x =>
                                 x.LegalAppClientWorkRecords.Where(y =>
+                                    x.Active &&
                                     y.EventDate >= fromDate && y.EventDate <= toDate))
-                            .FirstOrDefault(x => x.Id == clientId && x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
+                            .FirstOrDefault(x =>
+                                x.Id == clientId &&
+                                x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
 
                         if (client is null) return BadRequest();
 
@@ -51,6 +54,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                         return Ok(result);
                     }
+
                     return BadRequest();
                 }
 
@@ -62,7 +66,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPost("client/{clientId}/finance-records")]
         public async Task<IActionResult> CreateFinanceRecord(long clientId, [FromBody] ClientWorkForm clientWorkForm)
         {
@@ -74,27 +78,29 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var client = _context.LegalAppClients
-                        .FirstOrDefault(x => x.Id == clientId && x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
+                        .FirstOrDefault(x =>
+                            x.Id == clientId &&
+                            x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id);
 
-                        if (client is null) return BadRequest();
+                    if (client is null) return BadRequest();
 
-                        var newEntity = new LegalAppClientWorkRecord
-                        {
-                            Amount = clientWorkForm.Amount,
-                            Name = clientWorkForm.Name,
-                            Rate = clientWorkForm.Rate,
-                            Hours = clientWorkForm.Hours,
-                            Minutes = clientWorkForm.Minutes,
-                            EventDate = clientWorkForm.EventDate,
-                            Vat = clientWorkForm.Vat,
-                            UserEmail = UserEmail,
-                            UserId = UserId,
-                            CreatedBy = UserEmail,
-                        };
+                    var newEntity = new LegalAppClientWorkRecord
+                    {
+                        Amount = clientWorkForm.Amount,
+                        Name = clientWorkForm.Name,
+                        Rate = clientWorkForm.Rate,
+                        Hours = clientWorkForm.Hours,
+                        Minutes = clientWorkForm.Minutes,
+                        EventDate = clientWorkForm.EventDate,
+                        Vat = clientWorkForm.Vat,
+                        UserEmail = UserEmail,
+                        UserId = UserId,
+                        CreatedBy = UserEmail,
+                    };
 
-                        client.LegalAppClientWorkRecords.Add(newEntity);
-                        await _context.SaveChangesAsync();
-                        return Ok();
+                    client.LegalAppClientWorkRecords.Add(newEntity);
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
 
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -105,9 +111,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPut("client/{clientId}/finance-record/{workRecordId}")]
-        public async Task<IActionResult> UpdateFinanceRecord(long clientId, long workRecordId, [FromBody] ClientWorkForm clientWorkForm)
+        public async Task<IActionResult> UpdateFinanceRecord(long clientId, long workRecordId,
+            [FromBody] ClientWorkForm clientWorkForm)
         {
             try
             {
@@ -117,9 +124,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                                        .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                    x.Id == workRecordId)
+                        .Where(x =>
+                            x.Active &&
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                            x.Id == workRecordId)
                         .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
@@ -132,7 +143,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     entity.UserId = UserId;
                     entity.CreatedBy = UserEmail;
                     entity.Vat = clientWorkForm.Vat;
-                    
+
                     await _context.SaveChangesAsync();
                     return Ok(entity);
                 }
@@ -145,7 +156,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpDelete("client/{clientId}/finance-record/{workRecordId}")]
         public async Task<IActionResult> DeleteFinanceRecord(long clientId, long workRecordId)
         {
@@ -157,13 +168,16 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 if (check.DataAccessAllowed)
                 {
                     var entity = _context.LegalAppClientWorkRecords
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                                        .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                    x.Id == workRecordId)
+                        .Where(x =>
+                            x.LegalAppClientId == _context.LegalAppClients
+                                .FirstOrDefault(y =>
+                                    y.Id == clientId &&
+                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                            x.Id == workRecordId)
                         .FirstOrDefault();
 
                     if (entity is null) return BadRequest();
-                    
+
                     _context.Remove(entity);
                     await _context.SaveChangesAsync();
                     return Ok();

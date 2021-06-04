@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
@@ -16,6 +17,18 @@ namespace SystemyWP.API
 {
     public static class DataSeed
     {
+        private static string GenerateText(int len)
+        {
+            var builder = new StringBuilder();
+            var text =
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+            for (var i = 0; i < 6; i++)
+                builder.Append(text);
+
+            return builder.ToString().Substring(0, len);
+        }
+
         public static void ProdAdminSeed(ApiIdentityDbContext identityContext, UserManager<IdentityUser> userManager,
             IConfiguration config)
         {
@@ -39,6 +52,7 @@ namespace SystemyWP.API
         {
             var random = new Random();
 
+            // Seed Clients
             for (var clientNumber = 0; clientNumber < 100; clientNumber++)
             {
                 var newClient = new LegalAppClient
@@ -50,14 +64,14 @@ namespace SystemyWP.API
                     UpdatedBy = "system"
                 };
 
-                for (int clientNoteNumber = 0; clientNoteNumber < 50; clientNoteNumber++)
+                // Seed Client notes
+                for (var clientNoteNumber = 0; clientNoteNumber < 50; clientNoteNumber++)
                 {
                     newClient.LegalAppClientNotes.Add(new LegalAppClientNote
                     {
                         CreatedBy = "system",
                         Title = $"Note Title {clientNoteNumber}",
-                        Message =
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                        Message = GenerateText(random.Next(50, 1000))
                     });
                 }
 
@@ -123,7 +137,7 @@ namespace SystemyWP.API
                     newClient.LegalAppClientWorkRecords.Add(financeRecord);
                 }
 
-                for (int groupNumber = 0; groupNumber < 3; groupNumber++)
+                for (var groupNumber = 0; groupNumber < 3; groupNumber++)
                 {
                     for (var caseNumber = 0; caseNumber < 60; caseNumber++)
                     {
@@ -132,8 +146,7 @@ namespace SystemyWP.API
                             Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
                             Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
                             Group = $"Group number {groupNumber}",
-                            Description =
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            Description = GenerateText(random.Next(50, 1000)),
                             CreatedBy = "system",
                             UpdatedBy = "system"
                         });

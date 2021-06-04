@@ -13,6 +13,7 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.Id,
                 legalAppCase.Name,
                 legalAppCase.Signature,
+                legalAppCase.Group
             };
         
         public static Func<LegalAppCase, object> Create => Projection.Compile();
@@ -22,6 +23,7 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.Id,
                 legalAppCase.Name,
                 legalAppCase.Description,
+                legalAppCase.Group,
                 legalAppCase.Signature,
                 legalAppCase.Updated,
                 legalAppCase.UpdatedBy,
