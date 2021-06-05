@@ -47,7 +47,7 @@ const config = {
   plugins: [
     '~/plugins/axios',
     '~/plugins/notifier',
-    '~/plugins/bus-client.js'
+    '~/plugins/bus-client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
