@@ -56,34 +56,12 @@
           </v-btn>
         </v-col>
         <v-col cols="12" md="2">
-          <v-btn depressed color="primary" @click="generateReport">
+          <v-btn depressed color="primary" @click="downloadFile">
             Generuj raport
           </v-btn>
         </v-col>
       </v-row>
-      <client-only>
-        <vue-html2pdf :show-layout="false"
-                      :float-layout="true"
-                      :enable-download="true"
-                      :preview-modal="false"
-                      :paginate-elements-by-height="1400"
-                      filename="hee hee"
-                      :pdf-quality="2"
-                      :manual-pagination="false"
-                      pdf-format="a4"
-                      pdf-orientation="landscape"
-                      pdf-content-width="800px"
-                      @hasStartedGeneration="hasStartedGeneration()"
-                      @hasGenerated="hasGenerated($event)"
-                      ref="html2Pdf">
-          <section slot="pdf-content">
-            <invoice-template :selectedRecords="financialRecords"/>
-          </section>
-        </vue-html2pdf>
-      </client-only>
-
-
-      <v-card v-for="item in financialRecords" :key="item.id">
+      <v-card v-for="item in financialRecords" :key="item.id" id="invoice">
         <v-row class="d-flex justify-space-between">
           <v-col>
             <v-list class="d-flex justify-space-between">
@@ -147,14 +125,11 @@ import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
 import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
 import EditWorkRecord from "../../../../../components/legal-app/financials/dialogs/edit-work-record";
-import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
+import html2pdf from "html2pdf.js";
 
 export default {
   name: "index",
-  components: {
-    InvoiceTemplate,
-    EditWorkRecord, DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout,
-  },
+  components: {EditWorkRecord, DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
   data: () => ({
       financialRecords: [],
@@ -166,12 +141,8 @@ export default {
       alert: false,
     }
   ),
-  // async mounted() {
-  //   if (process.browser) {
-  //     const VueHtml2pdf = await import('vue-html2pdf')
-  //
-  //   }
-  // },
+
+
   async fetch() {
     return this.searchFinancialRecords();
   },
@@ -204,11 +175,9 @@ export default {
       console.warn('handle logs fired', this.query);
 
       try {
-        let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
-        console.warn('calling API', apiQuery);
-        let financialRecords = await this.$axios.$get(apiQuery);
+        let financialRecords = await this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
         console.log('financialRecords', financialRecords);
-        this.financialRecords = financialRecords;
+        this.financialRecords = financialRecords
       } catch (e) {
         console.warn('Error during financial records fetch', e);
       } finally {
@@ -222,9 +191,11 @@ export default {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
     },
 
-    generateReport() {
-      this.$refs.html2Pdf.generatePdf()
-    }
+    downloadFile() {
+      const element = document.getElementById('invoice');
+      html2pdf().from(element).save('my_document.pdf');
+
+    },
 
 
   },
