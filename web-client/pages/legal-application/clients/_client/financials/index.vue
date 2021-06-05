@@ -55,8 +55,13 @@
             Wyczyść
           </v-btn>
         </v-col>
+        <v-col cols="12" md="2">
+          <v-btn depressed color="primary" @click="downloadFile">
+            Generuj raport
+          </v-btn>
+        </v-col>
       </v-row>
-      <v-card v-for="item in financialRecords" :key="item.id">
+      <v-card v-for="item in financialRecords" :key="item.id" id="invoice">
         <v-row class="d-flex justify-space-between">
           <v-col>
             <v-list class="d-flex justify-space-between">
@@ -101,14 +106,15 @@
               </v-list-item>
             </v-list>
           </v-col>
-
         </v-row>
       </v-card>
+
       <button-to-go-up/>
       <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
         Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
       </v-alert>
     </template>
+
   </layout>
 </template>
 
@@ -119,12 +125,12 @@ import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
 import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
 import EditWorkRecord from "../../../../../components/legal-app/financials/dialogs/edit-work-record";
+import html2pdf from "html2pdf.js";
 
 export default {
   name: "index",
   components: {EditWorkRecord, DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
-
   data: () => ({
       financialRecords: [],
       loading: false,
@@ -183,6 +189,12 @@ export default {
     },
     clearResults() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
+    },
+
+    downloadFile() {
+      const element = document.getElementById('invoice');
+      html2pdf().from(element).save('my_document.pdf');
+
     },
 
 
