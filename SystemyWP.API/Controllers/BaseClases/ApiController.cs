@@ -28,7 +28,7 @@ namespace SystemyWP.API.Controllers.BaseClases
 
         protected Task HandleException(Exception ex)
         {
-            return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.");        
+            return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.", ex);
         }
         
         private string GetClaim(string claimType) => User.Claims

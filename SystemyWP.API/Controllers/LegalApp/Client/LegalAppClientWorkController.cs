@@ -40,7 +40,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         var client = _context.LegalAppClients
                             .Include(x =>
                                 x.LegalAppClientWorkRecords.Where(y =>
-                                    x.Active &&
+                                    y.Active &&
                                     y.EventDate >= fromDate && y.EventDate <= toDate))
                             .FirstOrDefault(x =>
                                 x.Id == clientId &&
