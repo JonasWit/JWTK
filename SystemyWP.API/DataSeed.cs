@@ -121,6 +121,7 @@ namespace SystemyWP.API
                 for (var workflowNumber = 0; workflowNumber < 30; workflowNumber++)
                 {
                     var financeRecord = new LegalAppClientWorkRecord();
+                    financeRecord.LawyerName = "Roman Giertch";
                     financeRecord.Amount = random.Next(0, 1000);
                     financeRecord.Rate = random.Next(15, 500);
                     financeRecord.Hours = random.Next(0, 500);
