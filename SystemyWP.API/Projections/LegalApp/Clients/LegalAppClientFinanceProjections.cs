@@ -15,6 +15,7 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClientFinance.Id,
                 legalAppClientFinance.Active,
                 legalAppClientFinance.Name,
+                legalAppClientFinance.LawyerName,
                 legalAppClientFinance.Amount,
                 legalAppClientFinance.Description,
                 legalAppClientFinance.Hours,

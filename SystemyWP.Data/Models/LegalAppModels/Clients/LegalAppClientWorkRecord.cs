@@ -12,6 +12,10 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
         public string UserEmail { get; set; }
         
         [Required]
+        [MaxLength(200)]
+        public string LawyerName { get; set; }
+
+        [Required]
         [MaxLength(100)]
         public string Name { get; set; }
         [MaxLength(300)]

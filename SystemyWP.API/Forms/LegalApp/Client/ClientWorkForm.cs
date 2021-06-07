@@ -4,6 +4,7 @@ namespace SystemyWP.API.Forms.LegalApp.Client
 {
     public class ClientWorkForm
     {
+        public string LawyerName { get; set; }
         public string Name { get; set; }
         public int Hours { get; set; }
         public int Minutes { get; set; }  

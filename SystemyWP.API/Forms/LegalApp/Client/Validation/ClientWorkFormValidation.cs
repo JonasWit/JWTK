@@ -7,6 +7,7 @@ namespace SystemyWP.API.Forms.LegalApp.Client.Validation
         public ClientWorkFormValidation()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.LawyerName).NotEmpty().MaximumLength(200);
             RuleFor(x => x.Description).MaximumLength(300);
             RuleFor(x => x.Hours);
             RuleFor(x => x.Minutes);
