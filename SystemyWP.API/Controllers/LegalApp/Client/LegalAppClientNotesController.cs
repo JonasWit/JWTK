@@ -2,18 +2,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
 using SystemyWP.API.Forms.GeneralApp.Note;
-using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp.Client
 {
@@ -31,25 +29,31 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var entities = _context.LegalAppClientNotes
-                        .Where(x =>
-                            x.Active &&
-                            x.LegalAppClientId == _context.LegalAppClients
-                                .FirstOrDefault(y =>
-                                    y.Id == clientId &&
-                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                        .Select(LegalAppClientNoteProjections.BasicProjection)
-                        .ToList();
-
-                    return Ok(entities);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var notes = _context.LegalAppClientNotes
+                    .GetAllowedNotes(UserId, Role, clientId, _context)
+                    .Select(LegalAppClientNoteProjections.BasicProjection)   
+                    .ToList();
+                
+                return Ok(notes);
+                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                //
+                // if (check.DataAccessAllowed)
+                // {
+                //     var entities = _context.LegalAppClientNotes
+                //         .Where(x =>
+                //             x.Active &&
+                //             x.LegalAppClientId == _context.LegalAppClients
+                //                 .FirstOrDefault(y =>
+                //                     y.Id == clientId &&
+                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
+                //         .Select(LegalAppClientNoteProjections.BasicProjection)
+                //         .ToList();
+                //
+                //     return Ok(entities);
+                // }
+                //
+                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {
@@ -63,28 +67,38 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var entities = _context.LegalAppClientNotes
-                        .Where(x =>
-                            x.Active &&
-                            x.LegalAppClientId == _context.LegalAppClients
-                                .FirstOrDefault(y =>
-                                    y.Id == clientId &&
-                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                        .OrderBy(x => x.Title)
-                        .Skip(cursor)
-                        .Take(take)
-                        .Select(LegalAppClientNoteProjections.BasicProjection)
-                        .ToList();
-
-                    return Ok(entities);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var notes = _context.LegalAppClientNotes
+                    .GetAllowedNotes(UserId, Role, clientId, _context)
+                    .OrderBy(x => x.Title)
+                    .Skip(cursor)
+                    .Take(take)
+                    .Select(LegalAppClientNoteProjections.FullProjection)   
+                    .ToList();
+                
+                return Ok(notes);
+                
+                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                //
+                // if (check.DataAccessAllowed)
+                // {
+                //     var entities = _context.LegalAppClientNotes
+                //         .Where(x =>
+                //             x.Active &&
+                //             x.LegalAppClientId == _context.LegalAppClients
+                //                 .FirstOrDefault(y =>
+                //                     y.Id == clientId &&
+                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
+                //         .OrderBy(x => x.Title)
+                //         .Skip(cursor)
+                //         .Take(take)
+                //         .Select(LegalAppClientNoteProjections.BasicProjection)
+                //         .ToList();
+                //
+                //     return Ok(entities);
+                // }
+                //
+                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {
@@ -98,26 +112,24 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var notes = _context.LegalAppClientNotes
+                    .GetAllowedNote(UserId, Role, clientId, noteId, _context)
+                    .Select(LegalAppClientNoteProjections.FullProjection)   
+                    .FirstOrDefault();        
+                
+                return Ok(notes);
+                
+                //
+                // var entity = _context.LegalAppClientNotes
+                //     .Where(x =>
+                //         x.Active &&
+                //         x.Id == noteId &&
+                //         x.LegalAppClientId == _context.LegalAppClients
+                //             .GetAllowedClient(UserId, Role, clientId, _context, true)
+                //             .FirstOrDefault().Id)
+                //     .Select(LegalAppClientNoteProjections.BasicProjection)
+                //     .FirstOrDefault();
 
-                if (check.DataAccessAllowed)
-                {
-                    var entity = _context.LegalAppClientNotes
-                        .Where(x =>
-                            x.Active &&
-                            x.Id == noteId &&
-                            x.LegalAppClientId == _context.LegalAppClients
-                                .FirstOrDefault(y =>
-                                    y.Id == clientId &&
-                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                        .Select(LegalAppClientNoteProjections.BasicProjection)
-                        .FirstOrDefault();
-
-                    return Ok(entity);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {
@@ -131,32 +143,22 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var client = _context.LegalAppClients
+                    .GetAllowedClient(UserId, Role, clientId, _context)
+                    .FirstOrDefault();
 
-                if (check.DataAccessAllowed)
+                if (client is null) return BadRequest();
+
+                var newEntity = new LegalAppClientNote
                 {
-                    var client = _context.LegalAppClients
-                        .Where(x =>
-                            x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id &&
-                            x.Id == clientId)
-                        .FirstOrDefault();
+                    CreatedBy = UserEmail,
+                    Title = form.Title,
+                    Message = form.Message
+                };
 
-                    if (client is null) return BadRequest();
-
-                    var newEntity = new LegalAppClientNote
-                    {
-                        CreatedBy = UserEmail,
-                        Title = form.Title,
-                        Message = form.Message
-                    };
-
-                    client.LegalAppClientNotes.Add(newEntity);
-                    await _context.SaveChangesAsync();
-                    return Ok(newEntity);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                client.LegalAppClientNotes.Add(newEntity);
+                await _context.SaveChangesAsync();
+                return Ok(newEntity);
             }
             catch (Exception e)
             {
@@ -170,31 +172,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var note = _context.LegalAppClientNotes
+                    .GetAllowedNote(UserId, Role, clientId, noteId, _context)
+                    .FirstOrDefault();
 
-                if (check.DataAccessAllowed)
-                {
-                    var entity = _context.LegalAppClientNotes
-                        .Where(x =>
-                            x.Active &&
-                            x.LegalAppClientId == _context.LegalAppClients
-                                .FirstOrDefault(y =>
-                                    y.Id == clientId &&
-                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                            x.Id == noteId)
-                        .FirstOrDefault();
+                if (note is null) return BadRequest();
 
-                    if (entity is null) return BadRequest();
+                note.Title = form.Title;
+                note.Message = form.Message;
 
-                    entity.Title = form.Title;
-                    entity.Message = form.Message;
-
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -208,28 +196,38 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var note = _context.LegalAppClientNotes
+                    .GetAllowedNote(UserId, Role, clientId, noteId, _context)
+                    .FirstOrDefault();
 
-                if (check.DataAccessAllowed)
-                {
-                    var entity = _context.LegalAppClientNotes
-                        .Where(x =>
-                            x.LegalAppClientId == _context.LegalAppClients
-                                .FirstOrDefault(y =>
-                                    y.Id == clientId &&
-                                    y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                            x.Id == noteId)
-                        .FirstOrDefault();
-
-                    if (entity is null) return BadRequest();
-
-                    _context.Remove(entity);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                if (note is null) return BadRequest();
+                
+                _context.Remove(note);
+                await _context.SaveChangesAsync();
+                return Ok();
+                
+                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                //
+                // if (check.DataAccessAllowed)
+                // {
+                //     var entity = _context.LegalAppClientNotes
+                //         .Where(x =>
+                //             x.LegalAppClientId == _context.LegalAppClients
+                //                 .FirstOrDefault(y =>
+                //                     y.Id == clientId &&
+                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
+                //             x.Id == noteId)
+                //         .FirstOrDefault();
+                //
+                //     if (entity is null) return BadRequest();
+                //
+                //     _context.Remove(entity);
+                //     await _context.SaveChangesAsync();
+                //     return Ok();
+                // }
+                //
+                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {

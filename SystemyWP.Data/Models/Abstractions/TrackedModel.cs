@@ -6,7 +6,7 @@ namespace SystemyWP.Data.Models.Abstractions
     public abstract class TrackedModel<TKey> : BaseModel<TKey>
     {
         [Required]
-        [MaxLength(200)]
+        [MaxLength(256)]
         public string UpdatedBy { get; set; }
         
         [Required]

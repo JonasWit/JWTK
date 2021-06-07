@@ -20,7 +20,25 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClient.Active,
                 legalAppClient.Name,
             };
-
+        
+        public static Func<LegalAppClient, object> Create => Projection.Compile();
+        public static Expression<Func<LegalAppClient, object>> Projection =>
+            legalAppClient => new
+            {
+                legalAppClient.Created,
+                legalAppClient.CreatedBy,
+                legalAppClient.Updated,
+                legalAppClient.UpdatedBy,
+                legalAppClient.Id,
+                legalAppClient.Active,
+                legalAppClient.Name,
+                Cases = legalAppClient.LegalAppCases
+                    .AsQueryable()
+                    .Where(x => x.Active)
+                    .Select(LegalAppCaseProjections.BasicProjection)
+                    .ToList()
+            };     
+        
         public static Func<LegalAppClient, object> CreateBasic => BasicProjection.Compile();
         public static Expression<Func<LegalAppClient, object>> BasicProjection =>
             legalAppClient => new

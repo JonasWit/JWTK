@@ -11,6 +11,6 @@ namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
         [Required]
         public DateTime Start { get; set; } = DateTime.UtcNow;
         [Required]
-        public DateTime End { get; set; } = DateTime.UtcNow;
+        public DateTime End { get; set; } = DateTime.UtcNow.AddMinutes(15);
     }
 }

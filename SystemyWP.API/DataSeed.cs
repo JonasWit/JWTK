@@ -142,7 +142,7 @@ namespace SystemyWP.API
                 {
                     for (var caseNumber = 0; caseNumber < 60; caseNumber++)
                     {
-                        newClient.LegalAppCases.Add(new LegalAppCase
+                        var newCase = new LegalAppCase
                         {
                             Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
                             Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
@@ -150,7 +150,19 @@ namespace SystemyWP.API
                             Description = GenerateText(random.Next(50, 1000)),
                             CreatedBy = "system",
                             UpdatedBy = "system"
-                        });
+                        };
+
+                        for (var i = -10; i < 20; i++)
+                        {
+                            newCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
+                            {
+                                Message = $"Deadline {i}",
+                                CreatedBy = "system",
+                                Deadline = DateTime.UtcNow.AddDays(i)
+                            });
+                        }
+                        
+                        newClient.LegalAppCases.Add(newCase);
                     }
                 }
 

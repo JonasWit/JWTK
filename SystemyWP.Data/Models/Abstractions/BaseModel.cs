@@ -9,7 +9,7 @@ namespace SystemyWP.Data.Models.Abstractions
         public bool Active { get; set; } = true;
         
         [Required]
-        [MaxLength(200)]
+        [MaxLength(256)]
         public string CreatedBy { get; set; }
         
         [Required]

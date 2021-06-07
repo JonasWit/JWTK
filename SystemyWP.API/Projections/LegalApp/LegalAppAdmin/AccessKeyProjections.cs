@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.LegalAppModels.Access;
 
 namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
 {

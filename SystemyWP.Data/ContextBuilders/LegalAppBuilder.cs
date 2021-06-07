@@ -31,7 +31,7 @@ namespace SystemyWP.Data.ContextBuilders
             
             #region Legal App Specific
             
-            //Access setup
+            //Access Key setup
             modelBuilder.Entity<LegalAppAccessKey>()
                 .HasMany(c => c.Users)
                 .WithOne(e => e.LegalAppAccessKey)
@@ -39,6 +39,11 @@ namespace SystemyWP.Data.ContextBuilders
 
             modelBuilder.Entity<LegalAppAccessKey>()
                 .HasMany(x => x.LegalAppClients)
+                .WithOne(x => x.LegalAppAccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<LegalAppAccessKey>()
+                .HasMany(x => x.LegalAppReminders)
                 .WithOne(x => x.LegalAppAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
             

@@ -43,18 +43,19 @@ namespace SystemyWP.API.Controllers.Access
             try
             {
                 var user = await userManager.FindByIdAsync(uId);
-                
+
                 await userManager.UpdateSecurityStampAsync(user);
                 await signInManager.SignOutAsync();
-                
+
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(uId));
-                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
-                
+                if (!string.IsNullOrEmpty(userProfile?.Image))
+                    await fileManager.DeleteProfileImageAsync(userProfile.Image);
+
                 if (userProfile is not null) _context.Remove(userProfile);
                 await _context.SaveChangesAsync();
-                
+
                 await userManager.DeleteAsync(user);
-                
+
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
             catch (Exception e)

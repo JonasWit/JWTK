@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
 {
-    public class DeadlineBaseModel<TKey> : TrackedModel<TKey>
+    public class DeadlineBaseModel<TKey> : BaseModel<TKey>
     {
         [Required]
         [MaxLength(200)]
