@@ -25,6 +25,7 @@ namespace SystemyWP.API.Controllers.LegalApp
         {
         }
 
+        // todo: make endpoint for better way of getting related users
         [HttpGet("related-users")]
         public async Task<IActionResult> GetRelatedUsers([FromServices] UserManager<IdentityUser> userManager)
         {
