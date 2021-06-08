@@ -48,6 +48,7 @@ const config = {
     '~/plugins/axios',
     '~/plugins/notifier',
     '~/plugins/bus-client.js',
+    {src: '@/plugins/vue-html2pdf', mode: 'client'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
