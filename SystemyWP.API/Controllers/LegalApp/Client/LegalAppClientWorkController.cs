@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
 using SystemyWP.API.Forms.LegalApp.Client;
+using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.LegalApp.Client
 {
-    [Route("/api/legal-app-clients-finance")]
+    [Route("/api/legal-app-clients-work")]
     [Authorize(SystemyWpConstants.Policies.Client)]
     public class LegalAppClientWorkController : LegalAppApiController
     {
@@ -22,7 +23,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
         }
 
-        [HttpGet("client/{clientId}/finance-records")]
+        [HttpGet("client/{clientId}/work-records")]
         public async Task<IActionResult> GetWorkRecords(long clientId, string from, string to)
         {
             try
@@ -32,6 +33,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     var result = _context.LegalAppClientWorkRecords
                         .GetAllowedWorkRecords(UserId, Role, clientId, fromDate, toDate, _context)
+                        .Select(LegalAppClientWorkProjections.Projection)
                         .ToList();
                     
                     return Ok(result);  
@@ -46,7 +48,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/finance-records")]
+        [HttpPost("client/{clientId}/work-records")]
         public async Task<IActionResult> CreateWorkRecord(long clientId, [FromBody] ClientWorkForm form)
         {
             try
@@ -83,7 +85,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPut("client/{clientId}/finance-record/{workRecordId}")]
+        [HttpPut("client/{clientId}/work-record/{workRecordId}")]
         public async Task<IActionResult> UpdateWorkRecord(long clientId, long workRecordId,
             [FromBody] ClientWorkForm form)
         {
@@ -115,7 +117,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpDelete("client/{clientId}/finance-record/{workRecordId}")]
+        [HttpDelete("client/{clientId}/work-record/{workRecordId}")]
         public async Task<IActionResult> DeleteWorkRecord(long clientId, long workRecordId)
         {
             try

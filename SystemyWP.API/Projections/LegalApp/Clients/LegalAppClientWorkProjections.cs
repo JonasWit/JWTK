@@ -4,7 +4,7 @@ using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.API.Projections.LegalApp.Clients
 {
-    public class LegalAppClientFinanceProjections
+    public class LegalAppClientWorkProjections
     {
         public static Func<LegalAppClientWorkRecord, object> Create => Projection.Compile();
         public static Expression<Func<LegalAppClientWorkRecord, object>> Projection =>
