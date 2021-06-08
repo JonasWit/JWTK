@@ -2,7 +2,7 @@
 
 namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
 {
-    public class NoteBaseModel<TKey> : BaseModel<TKey>
+    public class NoteBaseModel<TKey> : TrackedModel<TKey>
     {
         [MaxLength(100)]
         [Required]

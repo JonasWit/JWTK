@@ -7,7 +7,6 @@ using SystemyWP.API.Forms.GeneralApp.Note;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,25 +34,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .ToList();
                 
                 return Ok(notes);
-                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                //
-                // if (check.DataAccessAllowed)
-                // {
-                //     var entities = _context.LegalAppClientNotes
-                //         .Where(x =>
-                //             x.Active &&
-                //             x.LegalAppClientId == _context.LegalAppClients
-                //                 .FirstOrDefault(y =>
-                //                     y.Id == clientId &&
-                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                //         .Select(LegalAppClientNoteProjections.BasicProjection)
-                //         .ToList();
-                //
-                //     return Ok(entities);
-                // }
-                //
-                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {
@@ -62,74 +42,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpGet("client/{clientId}/notes")]
-        public async Task<IActionResult> GetNotes(long clientId, int cursor, int take)
-        {
-            try
-            {
-                var notes = _context.LegalAppClientNotes
-                    .GetAllowedNotes(UserId, Role, clientId, _context)
-                    .OrderBy(x => x.Title)
-                    .Skip(cursor)
-                    .Take(take)
-                    .Select(LegalAppClientNoteProjections.FullProjection)   
-                    .ToList();
-                
-                return Ok(notes);
-                
-                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                //
-                // if (check.DataAccessAllowed)
-                // {
-                //     var entities = _context.LegalAppClientNotes
-                //         .Where(x =>
-                //             x.Active &&
-                //             x.LegalAppClientId == _context.LegalAppClients
-                //                 .FirstOrDefault(y =>
-                //                     y.Id == clientId &&
-                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                //         .OrderBy(x => x.Title)
-                //         .Skip(cursor)
-                //         .Take(take)
-                //         .Select(LegalAppClientNoteProjections.BasicProjection)
-                //         .ToList();
-                //
-                //     return Ok(entities);
-                // }
-                //
-                // return StatusCode(StatusCodes.Status403Forbidden);
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet("client/{clientId}/notes/{noteId}")]
+        [HttpGet("client/{clientId}/note/{noteId}")]
         public async Task<IActionResult> GetNote(long clientId, long noteId)
         {
             try
             {
                 var notes = _context.LegalAppClientNotes
                     .GetAllowedNote(UserId, Role, clientId, noteId, _context)
-                    .Select(LegalAppClientNoteProjections.FullProjection)   
+                    .Select(LegalAppClientNoteProjections.Projection)   
                     .FirstOrDefault();        
                 
                 return Ok(notes);
-                
-                //
-                // var entity = _context.LegalAppClientNotes
-                //     .Where(x =>
-                //         x.Active &&
-                //         x.Id == noteId &&
-                //         x.LegalAppClientId == _context.LegalAppClients
-                //             .GetAllowedClient(UserId, Role, clientId, _context, true)
-                //             .FirstOrDefault().Id)
-                //     .Select(LegalAppClientNoteProjections.BasicProjection)
-                //     .FirstOrDefault();
-
             }
             catch (Exception e)
             {
@@ -138,7 +61,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/create-note")]
+        [HttpPost("client/{clientId}/note/create")]
         public async Task<IActionResult> CreateNote(int clientId, [FromBody] NoteForm form)
         {
             try
@@ -205,29 +128,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 _context.Remove(note);
                 await _context.SaveChangesAsync();
                 return Ok();
-                
-                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-                //
-                // if (check.DataAccessAllowed)
-                // {
-                //     var entity = _context.LegalAppClientNotes
-                //         .Where(x =>
-                //             x.LegalAppClientId == _context.LegalAppClients
-                //                 .FirstOrDefault(y =>
-                //                     y.Id == clientId &&
-                //                     y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                //             x.Id == noteId)
-                //         .FirstOrDefault();
-                //
-                //     if (entity is null) return BadRequest();
-                //
-                //     _context.Remove(entity);
-                //     await _context.SaveChangesAsync();
-                //     return Ok();
-                // }
-                //
-                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {

@@ -8,6 +8,7 @@ using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -53,7 +54,7 @@ namespace SystemyWP.API
             var random = new Random();
 
             // Seed Clients
-            for (var clientNumber = 0; clientNumber < 100; clientNumber++)
+            for (var clientNumber = 0; clientNumber < 50; clientNumber++)
             {
                 var newClient = new LegalAppClient
                 {
@@ -65,12 +66,13 @@ namespace SystemyWP.API
                 };
 
                 // Seed Client notes
-                for (var clientNoteNumber = 0; clientNoteNumber < 50; clientNoteNumber++)
+                for (var clientNoteNumber = 0; clientNoteNumber < 25; clientNoteNumber++)
                 {
                     newClient.LegalAppClientNotes.Add(new LegalAppClientNote
                     {
+                        UpdatedBy = "system",
                         CreatedBy = "system",
-                        Title = $"Note Title {clientNoteNumber}",
+                        Title = $"Note Title {clientNoteNumber} Key: {legalAppAccessKey.Name}",
                         Message = GenerateText(random.Next(50, 1000))
                     });
                 }
@@ -80,7 +82,7 @@ namespace SystemyWP.API
                 {
                     var contact = new LegalAppContactDetails();
                     contact.Comment = $"Comment for Contact {contactDetailsNumber}";
-                    contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber}";
+                    contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber} Key: {legalAppAccessKey.Name}";
                     contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";
                     contact.CreatedBy = "system";
 
@@ -128,7 +130,7 @@ namespace SystemyWP.API
                     financeRecord.Minutes = random.Next(1, 59);
                     financeRecord.Vat = random.Next(0, 23);
 
-                    financeRecord.Name = $"TEST -- {workflowNumber}";
+                    financeRecord.Name = $"TEST -- {workflowNumber} Key: {legalAppAccessKey.Name}";
                     financeRecord.EventDate = DateTime.UtcNow.AddDays(workflowNumber * -1);
 
                     financeRecord.CreatedBy = "system";
@@ -138,13 +140,13 @@ namespace SystemyWP.API
                     newClient.LegalAppClientWorkRecords.Add(financeRecord);
                 }
 
-                for (var groupNumber = 0; groupNumber < 3; groupNumber++)
+                for (var groupNumber = 0; groupNumber < 5; groupNumber++)
                 {
-                    for (var caseNumber = 0; caseNumber < 60; caseNumber++)
+                    for (var caseNumber = 0; caseNumber < 10; caseNumber++)
                     {
                         var newCase = new LegalAppCase
                         {
-                            Name = $"Test Case - {caseNumber} - Lorem ipsum dolor sit amet",
+                            Name = $"Test Case - {caseNumber} - Key: {legalAppAccessKey.Name}",
                             Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
                             Group = $"Group number {groupNumber}",
                             Description = GenerateText(random.Next(50, 1000)),
@@ -156,9 +158,20 @@ namespace SystemyWP.API
                         {
                             newCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
                             {
-                                Message = $"Deadline {i}",
+                                Message = $"Deadline {i} Key: {legalAppAccessKey.Name}",
                                 CreatedBy = "system",
                                 Deadline = DateTime.UtcNow.AddDays(i)
+                            });
+                        }
+                        
+                        for (var i = 0; i < 30; i++)
+                        {
+                            newCase.LegalAppCaseNotes.Add(new LegalAppCaseNote
+                            {
+                                Title = $"Note {i} Key: {legalAppAccessKey.Name}",
+                                Message = GenerateText(random.Next(50, 1000)),
+                                UpdatedBy = "system",
+                                CreatedBy = "system",
                             });
                         }
                         
@@ -176,6 +189,8 @@ namespace SystemyWP.API
         {
             identityContext.Database.EnsureDeleted();
             identityContext.Database.EnsureCreated();
+            
+            var random = new Random();
 
             var databaseCreator =
                 (RelationalDatabaseCreator) context.Database.GetService<IDatabaseCreator>();
@@ -245,6 +260,23 @@ namespace SystemyWP.API
                     CreatedBy = "system"
                 });
 
+                // Seed Reminders
+                for (var i = -20; i < 20; i++)
+                {
+                    var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
+                    context.Add(new LegalAppReminder
+                    {
+                        AuthorId = testClientAdmin.Id,
+                        Name = $"Test reminder from {testClientAdmin.Email} for Key: {accKey?.Name}",
+                        LegalAppAccessKey = accKey,
+                        UpdatedBy = "system",
+                        CreatedBy = "system",
+                        Message = $"Generated message",
+                        Start = DateTime.UtcNow.AddDays(i),
+                        End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
+                    });
+                }
+ 
                 //Seed Clients
                 for (var userNumber = 0; userNumber < 6; userNumber++)
                 {
@@ -271,6 +303,23 @@ namespace SystemyWP.API
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });
+                    
+                    // Seed Reminders
+                    for (var i = -20; i < 20; i++)
+                    {
+                        var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
+                        context.Add(new LegalAppReminder
+                        {
+                            AuthorId = testClient.Id,
+                            Name = $"Test reminder from {testClient.Email} for Key: {accKey?.Name}",
+                            LegalAppAccessKey = accKey,
+                            UpdatedBy = "system",
+                            CreatedBy = "system",
+                            Message = $"Generated message",
+                            Start = DateTime.UtcNow.AddDays(i),
+                            End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
+                        });
+                    }
                 }
 
                 DevDataSeedLegalApp(context, testClientAdmin.Id, key);

@@ -6,12 +6,14 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
 {
     public class LegalAppClientNoteProjections
     {
-        public static Func<LegalAppClientNote, object> CreateFull => FullProjection.Compile();
-        public static Expression<Func<LegalAppClientNote, object>> FullProjection =>
+        public static Func<LegalAppClientNote, object> Create => Projection.Compile();
+        public static Expression<Func<LegalAppClientNote, object>> Projection =>
             legalAppClientNote => new
             {
                 legalAppClientNote.Created,
                 legalAppClientNote.CreatedBy,
+                legalAppClientNote.UpdatedBy,
+                legalAppClientNote.Updated,
                 legalAppClientNote.Title,
                 legalAppClientNote.Id,
                 legalAppClientNote.Message,
@@ -23,6 +25,8 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
             {
                 legalAppClientNote.Created,
                 legalAppClientNote.CreatedBy,
+                legalAppClientNote.UpdatedBy,
+                legalAppClientNote.Updated,
                 legalAppClientNote.Title,
                 legalAppClientNote.Id,
             };

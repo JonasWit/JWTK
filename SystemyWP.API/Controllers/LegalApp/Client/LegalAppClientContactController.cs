@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
 using SystemyWP.API.Forms.GeneralApp.Contact;
 using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Contact;
 using Microsoft.AspNetCore.Authorization;
@@ -30,33 +30,23 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var result = _context.LegalAppClients
+                    .GetAllowedClient(UserId, Role, clientId, _context, true)
+                    .FirstOrDefault();
+                if (result is null) return BadRequest();
 
-                if (check.DataAccessAllowed)
+                var newEntity = new LegalAppContactDetails
                 {
-                    var result = _context.LegalAppClients
-                        .Where(x => x.LegalAppAccessKeyId == check.LegalAppAccessKey.Id && x.Id == clientId)
-                        .Include(x => x.Contacts)
-                        .FirstOrDefault();
+                    CreatedBy = UserEmail,
+                    Name = createContactForm.Name,
+                    Comment = createContactForm.Comment,
+                    Surname = createContactForm.Surname,
+                    Title = createContactForm.Title
+                };
 
-                    if (result is null) return BadRequest();
-
-                    var newEntity = new LegalAppContactDetails
-                    {
-                        CreatedBy = UserEmail,
-                        Name = createContactForm.Name,
-                        Comment = createContactForm.Comment,
-                        Surname = createContactForm.Surname,
-                        Title = createContactForm.Title
-                    };
-
-                    result.Contacts.Add(newEntity);
-                    await _context.SaveChangesAsync();
-                    return Ok(newEntity);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                result.Contacts.Add(newEntity);
+                await _context.SaveChangesAsync();
+                return Ok(newEntity);
             }
             catch (Exception e)
             {
@@ -70,22 +60,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var entities = _context.LegalAppContacts
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && 
-                                                 y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id)
-                        .Select(ContactProjections.FullProjection)
-                        .ToList();
-
-                    return Ok(entities);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var result = _context.LegalAppContacts
+                    .GetAllowedContacts(UserId, Role, clientId, _context)
+                    .Select(ContactProjections.FullProjection)
+                    .ToList();
+                
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -93,30 +73,19 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpGet("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> GetContact(long clientId, long contactId)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .Select(ContactProjections.FullProjection)
-                        .AsSingleQuery()
-                        .FirstOrDefault();
-
-                    if (contact is null) return BadRequest();
-                    return Ok(contact);
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var result = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .Select(ContactProjections.FullProjection)
+                    .FirstOrDefault();       
+                
+                if (result is null) return BadRequest();
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -124,38 +93,29 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPost("client/{clientId}/contact/{contactId}/emails")]
-        public async Task<IActionResult> CreateContactEmail(long clientId, long contactId, [FromBody] CreateContactEmailFrom createContactEmailFrom)
+        public async Task<IActionResult> CreateContactEmail(long clientId, long contactId,
+            [FromBody] CreateContactEmailFrom createContactEmailFrom)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
+                var result = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .FirstOrDefault();       
+                
+                if (result is null) return BadRequest();
+                
+                var newEmail = new LegalAppEmailAddress
                 {
-                    var contact = _context.LegalAppContacts
-                        .Include(x => x.Emails)
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-                    
-                    if (contact is null) return BadRequest();
-                    var newEmail = new LegalAppEmailAddress
-                    {
-                        CreatedBy = UserEmail,
-                        Comment = createContactEmailFrom.Comment,
-                        Email = createContactEmailFrom.Email
-                    };
-                    
-                    contact.Emails.Add(newEmail);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
+                    CreatedBy = UserEmail,
+                    Comment = createContactEmailFrom.Comment,
+                    Email = createContactEmailFrom.Email
+                };
 
-                return StatusCode(StatusCodes.Status403Forbidden);
+                result.Emails.Add(newEmail);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -163,35 +123,23 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpDelete("client/{clientId}/contact/{contactId}/email/{itemId}")]
         public async Task<IActionResult> DeleteContactEmail(long clientId, long contactId, long itemId)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var entityToRemove = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .Include(x => x.Emails.Where(y => y.Id == itemId))
+                    .Select(x => x.Emails.FirstOrDefault())
+                    .FirstOrDefault();       
+                
+                if (entityToRemove is null) return BadRequest();
 
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Include(x => x.Emails.Where(y => y.Id == itemId))
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-
-                    if (contact is null || contact.Emails.Count == 0) return BadRequest();
-                    
-                    var entityToRemove = contact.Emails.FirstOrDefault(x => x.Id == itemId);
-                    if (entityToRemove is null) return BadRequest();
-
-                    _context.Remove(entityToRemove);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                _context.Remove(entityToRemove);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -199,37 +147,29 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPost("client/{clientId}/contact/{contactId}/phone-number")]
-        public async Task<IActionResult> CreateContactPhoneNumber(long clientId, long contactId, [FromBody] CreateContactPhoneNumberForm createContactPhoneNumberForm)
+        public async Task<IActionResult> CreateContactPhoneNumber(long clientId, long contactId,
+            [FromBody] CreateContactPhoneNumberForm createContactPhoneNumberForm)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
+                var legalAppContactDetails = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .FirstOrDefault();   
+                
+                if (legalAppContactDetails is null) return BadRequest(); 
+                
+                var newPhone = new LegalAppPhoneNumber()
                 {
-                    var contact = _context.LegalAppContacts
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-                    
-                    if (contact is null) return BadRequest();
-                    var newPhone = new LegalAppPhoneNumber()
-                    {
-                        CreatedBy = UserEmail,
-                        Number = createContactPhoneNumberForm.Number,
-                        Comment = createContactPhoneNumberForm.Comment
-                    };
-                    
-                    contact.PhoneNumbers.Add(newPhone);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
+                    CreatedBy = UserEmail,
+                    Number = createContactPhoneNumberForm.Number,
+                    Comment = createContactPhoneNumberForm.Comment
+                };
 
-                return StatusCode(StatusCodes.Status403Forbidden);
+                legalAppContactDetails.PhoneNumbers.Add(newPhone);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -237,35 +177,23 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpDelete("client/{clientId}/contact/{contactId}/phone-number/{itemId}")]
         public async Task<IActionResult> DeleteContactPhoneNumber(long clientId, long contactId, long itemId)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-
-                    if (contact is null || contact.PhoneNumbers.Count == 0) return BadRequest();
-                    
-                    var entityToRemove = contact.PhoneNumbers.FirstOrDefault(x => x.Id == itemId);
-                    if (entityToRemove is null) return BadRequest();
-
-                    _context.Remove(entityToRemove);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var legalAppPhoneNumber = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
+                    .Select(x => x.PhoneNumbers.FirstOrDefault())
+                    .FirstOrDefault();       
+                
+                if (legalAppPhoneNumber is null) return BadRequest(); 
+                
+                _context.Remove(legalAppPhoneNumber);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -273,42 +201,33 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpPost("client/{clientId}/contact/{contactId}/address")]
-        public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId, [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
+        public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId,
+            [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
+                var contact = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .FirstOrDefault();   
+                
+                if (contact is null) return BadRequest(); 
+                
+                var newEntity = new LegalAppPhysicalAddress()
                 {
-                    var contact = _context.LegalAppContacts
-                        .Include(x => x.PhysicalAddresses)
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-                    
-                    if (contact is null) return BadRequest();
-                    var newEntity = new LegalAppPhysicalAddress()
-                    {
-                        CreatedBy = UserEmail,
-                        Building = createPhysicalAddressForm.Building,
-                        Comment = createPhysicalAddressForm.Comment,
-                        Country = createPhysicalAddressForm.Country,
-                        City = createPhysicalAddressForm.City,
-                        Street = createPhysicalAddressForm.Street,
-                        PostCode = createPhysicalAddressForm.PostCode
-                    };
-                    
-                    contact.PhysicalAddresses.Add(newEntity);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
+                    CreatedBy = UserEmail,
+                    Building = createPhysicalAddressForm.Building,
+                    Comment = createPhysicalAddressForm.Comment,
+                    Country = createPhysicalAddressForm.Country,
+                    City = createPhysicalAddressForm.City,
+                    Street = createPhysicalAddressForm.Street,
+                    PostCode = createPhysicalAddressForm.PostCode
+                };
 
-                return StatusCode(StatusCodes.Status403Forbidden);
+                contact.PhysicalAddresses.Add(newEntity);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -316,35 +235,23 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
+
         [HttpDelete("client/{clientId}/contact/{contactId}/address/{itemId}")]
         public async Task<IActionResult> DeleteContactPhysicalAddress(long clientId, long contactId, long itemId)
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-
-                    if (contact is null || contact.PhysicalAddresses.Count == 0) return BadRequest();
-                    
-                    var entityToRemove = contact.PhysicalAddresses.FirstOrDefault(x => x.Id == itemId);
-                    if (entityToRemove is null) return BadRequest();
-
-                    _context.Remove(entityToRemove);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var legalAppPhysicalAddress = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
+                    .Select(x => x.PhysicalAddresses.FirstOrDefault())
+                    .FirstOrDefault();       
+                
+                if (legalAppPhysicalAddress is null) return BadRequest();
+                
+                _context.Remove(legalAppPhysicalAddress);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -358,25 +265,37 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
-
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-
-                    if (contact is null) return BadRequest();
-
-                    _context.Remove(contact);
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var contact = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .FirstOrDefault();       
+                
+                if (contact is null) return BadRequest();
+                
+                _context.Remove(contact);
+                await _context.SaveChangesAsync();
+                return Ok();
+ 
+                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                //
+                // if (check.DataAccessAllowed)
+                // {
+                //     var contact = _context.LegalAppContacts
+                //         .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                //                         .FirstOrDefault(y =>
+                //                             y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id)
+                //                         .Id &&
+                //                     x.Id == contactId)
+                //         .FirstOrDefault();
+                //
+                //     if (contact is null) return BadRequest();
+                //
+                //     _context.Remove(contact);
+                //     await _context.SaveChangesAsync();
+                //     return Ok();
+                // }
+                //
+                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {
@@ -392,29 +311,45 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
-                if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                var contact = _context.LegalAppContacts
+                    .GetAllowedContact(UserId, Role, clientId, contactId, _context)
+                    .FirstOrDefault();       
+                
+                if (contact is null) return BadRequest();
+                
+                contact.Name = updateContactForm.Name;
+                contact.Comment = updateContactForm.Comment;
+                contact.Surname = updateContactForm.Surname;
+                contact.Title = updateContactForm.Title;
 
-                if (check.DataAccessAllowed)
-                {
-                    var contact = _context.LegalAppContacts
-                        .Where(x => x.LegalAppClientId == _context.LegalAppClients
-                            .FirstOrDefault(y => y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id).Id &&
-                                x.Id == contactId)
-                        .FirstOrDefault();
-                    
-                    if (contact is null) return BadRequest();
-
-                    contact.Name = updateContactForm.Name;
-                    contact.Comment = updateContactForm.Comment;
-                    contact.Surname = updateContactForm.Surname;
-                    contact.Title = updateContactForm.Title;
-
-                    await _context.SaveChangesAsync();
-                    return Ok();
-                }
-
-                return StatusCode(StatusCodes.Status403Forbidden);
+                await _context.SaveChangesAsync();
+                return Ok();  
+                
+                // var check = await CheckAccess(RestrictedType.LegalAppClient, clientId);
+                // if (check.LegalAppAccessKey is null) return StatusCode(StatusCodes.Status403Forbidden);
+                //
+                // if (check.DataAccessAllowed)
+                // {
+                //     var contact = _context.LegalAppContacts
+                //         .Where(x => x.LegalAppClientId == _context.LegalAppClients
+                //                         .FirstOrDefault(y =>
+                //                             y.Id == clientId && y.LegalAppAccessKeyId == check.LegalAppAccessKey.Id)
+                //                         .Id &&
+                //                     x.Id == contactId)
+                //         .FirstOrDefault();
+                //
+                //     if (contact is null) return BadRequest();
+                //
+                //     contact.Name = updateContactForm.Name;
+                //     contact.Comment = updateContactForm.Comment;
+                //     contact.Surname = updateContactForm.Surname;
+                //     contact.Title = updateContactForm.Title;
+                //
+                //     await _context.SaveChangesAsync();
+                //     return Ok();
+                // }
+                //
+                // return StatusCode(StatusCodes.Status403Forbidden);
             }
             catch (Exception e)
             {

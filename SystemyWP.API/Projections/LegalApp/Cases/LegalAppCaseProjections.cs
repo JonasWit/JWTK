@@ -30,6 +30,10 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.UpdatedBy,
                 legalAppCase.Created,
                 legalAppCase.CreatedBy,
+                Notes = legalAppCase.LegalAppCaseNotes
+                    .AsQueryable()
+                    .Select(LegalAppCaseNoteProjections.BasicProjection)
+                    .ToList(),
                 Deadlines = legalAppCase.LegalAppCaseDeadlines
                     .AsQueryable()
                     .Select(LegalAppCaseDeadlineProjections.Projection)

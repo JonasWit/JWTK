@@ -4,6 +4,7 @@ using System.Reflection;
 using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -62,16 +63,15 @@ namespace SystemyWP.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            // var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
-            // loggerFactory.AddProvider(new AppLoggerProvider(
-            //         serviceProvider.GetRequiredService<AppDbContext>()));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
+                var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
+                loggerFactory.AddProvider(new AppLoggerProvider(
+                        serviceProvider.GetRequiredService<AppDbContext>()));
                 app.UseExceptionHandler("/Error");
             }
 
