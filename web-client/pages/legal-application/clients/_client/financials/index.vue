@@ -204,9 +204,11 @@ export default {
       console.warn('handle logs fired', this.query);
 
       try {
-        let financialRecords = await this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
+        let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
+        console.warn('calling API', apiQuery);
+        let financialRecords = await this.$axios.$get(apiQuery);
         console.log('financialRecords', financialRecords);
-        this.financialRecords = financialRecords
+        this.financialRecords = financialRecords;
       } catch (e) {
         console.warn('Error during financial records fetch', e);
       } finally {
