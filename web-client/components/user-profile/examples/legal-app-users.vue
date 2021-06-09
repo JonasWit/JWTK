@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <v-row v-if="!loading">
-      <v-col class="d-flex justify-start" cols="12">
+      <v-col class="d-flex justify-center" cols="12">
         <div>
           <v-card elevation="0">
             <v-card-title class="pb-0">Powiązani</v-card-title>
