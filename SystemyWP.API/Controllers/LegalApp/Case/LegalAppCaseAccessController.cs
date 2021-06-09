@@ -151,8 +151,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
 
+                var currentAllowed = _context.DataAccesses
+                    .Where(x => 
+                        x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == caseId)
+                    .ToList();
+
                 var result = await CreateUsersOutput(users, userManager);
-                result.RemoveAll(x => !x.Role.Equals(SystemyWpConstants.Roles.Client));
+                result.RemoveAll(x =>
+                    !x.Role.Equals(SystemyWpConstants.Roles.Client) &&
+                    currentAllowed.Any(y => y.UserId == x.Id));
 
                 return Ok(result);
             }
