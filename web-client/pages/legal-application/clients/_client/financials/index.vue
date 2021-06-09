@@ -1,6 +1,44 @@
 <template>
   <layout>
+
+
     <template v-slot:content>
+      <v-card>
+        <v-tabs
+          v-model="tab"
+          background-color="deep-purple accent-4"
+          centered
+          dark
+          icons-and-text
+        >
+          <v-tabs-slider></v-tabs-slider>
+
+          <v-tab href="#tab-1">
+            Rejestruj czas
+            <v-icon>mdi-clock</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-2">
+            Moje rozliczenia
+            <v-icon>mdi-clipboard-text-search</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-3">
+            Generuj raport
+            <v-icon>mdi-file-chart</v-icon>
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>text</v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-card>
+
+
       <v-toolbar class="my-3">
         <v-toolbar-title class="mr-3">
           Financials
@@ -164,14 +202,10 @@ export default {
       modalFrom: false,
       modalTo: false,
       alert: false,
+      tab: null,
     }
   ),
-  // async mounted() {
-  //   if (process.browser) {
-  //     const VueHtml2pdf = await import('vue-html2pdf')
-  //
-  //   }
-  // },
+
   async fetch() {
     return this.searchFinancialRecords();
   },
@@ -204,7 +238,9 @@ export default {
       console.warn('handle logs fired', this.query);
 
       try {
-        let financialRecords = await this.$axios.$get(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records${this.query}`)
+        let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
+        console.warn('call from API', apiQuery)
+        let financialRecords = await this.$axios.$get(apiQuery);
         console.log('financialRecords', financialRecords);
         this.financialRecords = financialRecords
       } catch (e) {
