@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels.Reminders;
-
-namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Access
+﻿namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Access
 {
     public static class LegalAppUsersExtensions
     {

@@ -17,6 +17,10 @@ namespace SystemyWP.Data.Models.General
         [MaxLength(265)]
         public string Email { get; set; }
         
+        [Required]
+        [MaxLength(265)]
+        public string Username { get; set; }
+        
         public LegalAppAccessKey LegalAppAccessKey { get; set; }
         public MedicalAccessKey MedicalAccessKey { get; set; }
 

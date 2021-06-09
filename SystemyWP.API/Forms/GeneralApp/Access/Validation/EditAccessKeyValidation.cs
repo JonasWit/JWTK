@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.GeneralApp.Access.Validation
 {
-    public class EditAccessKeyValidation: AbstractValidator<EditAccessKeyForm>
+    public class EditAccessKeyValidation : AbstractValidator<EditAccessKeyForm>
     {
         public EditAccessKeyValidation()
         {

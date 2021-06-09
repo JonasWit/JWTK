@@ -9,6 +9,23 @@ namespace SystemyWP.API.Projections
 {
     public static class UserProjections
     {
+        public static Expression<Func<User, object>> BasicUserProjection =>
+            user => new
+            {
+                user.Username,
+                user.Id,
+                user.Email,
+            };
+        
+        public static Expression<Func<User, object>> BasicUserProjectionWithRole(string role) =>
+            user => new
+            {
+                user.Username,
+                user.Id,
+                user.Email,
+                Role = role
+            };
+        
         public static Expression<Func<User, object>> LegalAppUserProjection(string userName, string role, bool legalAppAllowed) =>
             user => new
             {
@@ -73,7 +90,7 @@ namespace SystemyWP.API.Projections
             public string Email { get; set; }
             public string Username { get; set; }
             public string Image { get; set; }          
-            public string Role { get; set; }  
+            public string Role { get; set; }
             public bool EmailConfirmed { get; set; } 
             public bool PolicyAccepted { get; set; } 
             public bool RulesAccepted { get; set; } 

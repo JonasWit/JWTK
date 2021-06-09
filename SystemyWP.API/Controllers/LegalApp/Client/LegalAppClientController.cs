@@ -43,28 +43,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        
-        [HttpGet("client/{clientId}/allowed-users")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
-        public async Task<IActionResult> GetClientAllowedUsers(int clientId)
-        {
-            try
-            {
-             
-
-                
-                
-                
-                
-                
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
 
         [HttpGet("clients/basic-list")]
         public async Task<IActionResult> GetClientsBasicList()
@@ -98,7 +76,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Take(take)
                     .Select(LegalAppClientProjections.FlatProjection)
                     .ToList();
-                
+
                 return Ok(result);
             }
             catch (Exception e)
@@ -160,7 +138,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .FirstOrDefault();
 
                 if (result is null) return BadRequest();
-                
+
                 result.UpdatedBy = UserEmail;
                 result.Updated = DateTime.UtcNow;
                 result.Name = form.Name;
@@ -183,12 +161,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var result = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                
+
                 if (result is null) return BadRequest();
-                
+
                 result.Active = !result.Active;
                 result.UpdatedBy = UserEmail;
                 result.Updated = DateTime.UtcNow;
+
+                _context.RemoveRange(
+                    _context.DataAccesses
+                        .Where(x =>
+                            x.RestrictedType == RestrictedType.LegalAppClient && x.ItemId == clientId));
 
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -208,9 +191,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var result = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                
+
                 if (result is null) return BadRequest();
-                
+
                 _context.Remove(result);
                 await _context.SaveChangesAsync();
                 return Ok();

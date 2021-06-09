@@ -1,6 +1,13 @@
-﻿using SystemyWP.API.Services.Logging;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.API.ViewModels.General;
 using SystemyWP.Data;
+using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {
@@ -12,58 +19,25 @@ namespace SystemyWP.API.Controllers.BaseClases
         {
         }
 
-        // public class CheckResult
-        // {
-        //     public bool AdminUser { get; set; }
-        //     public bool DataAccessAllowed { get; set; }
-        //     public LegalAppAccessKey LegalAppAccessKey { get; set; }
-        // }
+        protected async Task<List<UserBasic>> CreateUsersOutput(List<User> users, UserManager<IdentityUser> userManager)
+        {
+            var output = new List<UserBasic>();
 
-        // protected async Task<CheckResult> CheckAccess(RestrictedType restrictedType, long itemId)
-        // {
-        //     //Get Users Data Key
-        //     var user = await _context.Users
-        //         .Include(x => x.LegalAppAccessKey)
-        //         .FirstOrDefaultAsync(x => x.Id == UserId);
-        //     if (user?.LegalAppAccessKey is null) return new CheckResult {DataAccessAllowed = false};
-        //
-        //     //Logic for Admins
-        //     if (Role.Equals(SystemyWpConstants.Roles.ClientAdmin) ||
-        //         Role.Equals(SystemyWpConstants.Roles.PortalAdmin))
-        //     {
-        //         return new CheckResult
-        //             {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = true};
-        //     }
-        //
-        //     //Logic for ordinary Users
-        //     if (Role.Equals(SystemyWpConstants.Roles.Client))
-        //     {
-        //         //Check DataAccess Table
-        //         var accessTable = await _context.DataAccesses
-        //             .AnyAsync(x =>
-        //                 x.UserId == UserId &&
-        //                 x.RestrictedType == restrictedType &&
-        //                 x.ItemId == itemId);
-        //
-        //         if (accessTable)
-        //         {
-        //             return new CheckResult
-        //                 {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey, AdminUser = false};
-        //         }
-        //     }
-        //
-        //     return new CheckResult {DataAccessAllowed = false, LegalAppAccessKey = user.LegalAppAccessKey};
-        // }
-        //
-        // protected async Task<CheckResult> CheckAccess()
-        // {
-        //     //Get Users Data Key
-        //     var user = await _context.Users
-        //         .Include(x => x.LegalAppAccessKey)
-        //         .FirstOrDefaultAsync(x => x.Id == UserId);
-        //     if (user?.LegalAppAccessKey is null) return new CheckResult {DataAccessAllowed = false};
-        //
-        //     return new CheckResult {DataAccessAllowed = true, LegalAppAccessKey = user.LegalAppAccessKey};
-        // }
+            foreach (var user in users)
+            {
+                var userClaims = await userManager.GetClaimsAsync(await userManager.FindByIdAsync(user.Id)) as List<Claim> ?? new List<Claim>();
+                var role = userClaims.FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role))?.Value;
+                output.Add(new UserBasic
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                    Username = user.Username,
+                    Role = role
+                });
+            }
+
+            return output;
+        }
+        
     }
 }

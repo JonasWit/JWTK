@@ -173,7 +173,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                 entity.Active = !entity.Active;
                 entity.UpdatedBy = UserEmail;
                 entity.Updated = DateTime.UtcNow;
-
+                
+                _context.RemoveRange(
+                    _context.DataAccesses
+                        .Where(x =>
+                            x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == clientId));
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }
