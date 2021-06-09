@@ -1,20 +1,12 @@
 <template>
   <layout>
-
-
     <template v-slot:content>
       <v-card>
-        <v-tabs
-          v-model="tab"
-          background-color="deep-purple accent-4"
-          centered
-          dark
-          icons-and-text
-        >
+        <v-tabs v-model="tab" background-color="deep-purple accent-4" centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tab-1">
-            Rejestruj czas
+            Dodaj nowe rozliczenie
             <v-icon>mdi-clock</v-icon>
           </v-tab>
 
@@ -30,149 +22,27 @@
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-          <v-tab-item>
+          <v-tab-item :value="'tab-1'">
             <v-card flat>
-              <v-card-text>text</v-card-text>
+              <add-new-work-record/>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item :value="'tab-2'">
+            <v-card flat>
+              <my-work-records-search/>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item :value="'tab-3'">
+            <v-card flat>
+              <generate-invoice/>
             </v-card>
           </v-tab-item>
         </v-tabs-items>
       </v-card>
 
 
-      <v-toolbar class="my-3">
-        <v-toolbar-title class="mr-3">
-          Financials
-        </v-toolbar-title>
-        <add-new-work-record/>
-      </v-toolbar>
-      <v-row class="d-flex align-center my-3 ">
-        <v-col cols="12" md="4">
-          <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
-                            v-bind="attrs"
-                            v-on="on"></v-text-field>
-            </template>
-            <v-date-picker v-model="dateFrom" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modalFrom = false">
-                Cancel
-              </v-btn>
-              <v-btn text color="primary" @click="$refs.dialogFrom.save(dateFrom)">
-                OK
-              </v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent
-                    width="290px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
-                            v-bind="attrs"
-                            v-on="on"></v-text-field>
-            </template>
-            <v-date-picker v-model="dateTo" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modalTo = false">
-                Cancel
-              </v-btn>
-              <v-btn text color="primary" @click="$refs.dialogTo.save(dateTo)">
-                OK
-              </v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-btn depressed color="primary" @click="searchFinancialRecords">
-            Wyszukaj
-          </v-btn>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-btn depressed color="primary" @click="clearResults">
-            Wyczyść
-          </v-btn>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-btn depressed color="primary" @click="generateReport">
-            Generuj raport
-          </v-btn>
-        </v-col>
-      </v-row>
-      <client-only>
-        <vue-html2pdf :show-layout="false"
-                      :float-layout="true"
-                      :enable-download="true"
-                      :preview-modal="false"
-                      :paginate-elements-by-height="1400"
-                      filename="hee hee"
-                      :pdf-quality="2"
-                      :manual-pagination="false"
-                      pdf-format="a4"
-                      pdf-orientation="landscape"
-                      pdf-content-width="800px"
-                      @hasStartedGeneration="hasStartedGeneration()"
-                      @hasGenerated="hasGenerated($event)"
-                      ref="html2Pdf">
-          <section slot="pdf-content">
-            <invoice-template :selectedRecords="financialRecords"/>
-          </section>
-        </vue-html2pdf>
-      </client-only>
-
-
-      <v-card v-for="item in financialRecords" :key="item.id">
-        <v-row class="d-flex justify-space-between">
-          <v-col>
-            <v-list class="d-flex justify-space-between">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title> Nazwa: {{ item.name }}</v-list-item-title>
-                  <v-list-item-title> Data zdarzenia: {{ formatDate(item.eventDate) }}</v-list-item-title>
-                  <v-list-item-subtitle> Created: {{ formatDate(item.created) }}</v-list-item-subtitle>
-                  <v-list-item-subtitle> Created by: {{ item.createdBy }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
-          <v-col>
-            <v-list class="d-flex justify-space-between">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Hours: {{ item.hours }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Minutes: {{ item.minutes }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
-          <v-col>
-            <v-list class="d-flex justify-space-between">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>VAT: {{ item.vat }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Amount: {{ item.amount }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
-
-          <v-col>
-            <v-list class="d-flex justify-md-end justify-sm-space-between">
-              <v-list-item>
-                <delete-work-record :selected-financial-record="item"/>
-                <edit-work-record :selected-financial-record="item"/>
-              </v-list-item>
-            </v-list>
-          </v-col>
-        </v-row>
-      </v-card>
-
       <button-to-go-up/>
-      <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
-        Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
-      </v-alert>
+
     </template>
 
   </layout>
@@ -182,16 +52,20 @@
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
 import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
-import AddNewWorkRecord from "../../../../../components/legal-app/financials/dialogs/add-new-work-record";
-import DeleteWorkRecord from "../../../../../components/legal-app/financials/dialogs/delete-work-record";
-import EditWorkRecord from "../../../../../components/legal-app/financials/dialogs/edit-work-record";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
+import AddNewWorkRecord from "@/components/legal-app/financials/dialogs/add-new-work-record";
+import GenerateInvoice from "@/components/legal-app/financials/generate-invoice";
+import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-records-search";
 
 export default {
   name: "index",
   components: {
+    MyWorkRecordsSearch,
+    GenerateInvoice,
+    AddNewWorkRecord,
     InvoiceTemplate,
-    EditWorkRecord, DeleteWorkRecord, AddNewWorkRecord, ButtonToGoUp, Layout,
+    ButtonToGoUp,
+    Layout,
   },
   middleware: ['legal-app-permission', 'client', 'authenticated'],
   data: () => ({
@@ -255,10 +129,6 @@ export default {
     clearResults() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
     },
-
-    generateReport() {
-      this.$refs.html2Pdf.generatePdf()
-    }
 
 
   },
