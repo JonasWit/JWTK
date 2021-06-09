@@ -1,6 +1,4 @@
-﻿using System;
-using SystemyWP.API.Forms.LegalApp.Client;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace SystemyWP.API.Forms.LegalApp.Reminders.Validation
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
 
 namespace SystemyWP.API.Projections.LegalApp.Reminders

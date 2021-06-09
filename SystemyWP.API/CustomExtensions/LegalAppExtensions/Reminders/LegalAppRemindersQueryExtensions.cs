@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
 
 namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders

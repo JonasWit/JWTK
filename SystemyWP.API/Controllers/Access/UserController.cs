@@ -55,6 +55,7 @@ namespace SystemyWP.API.Controllers.Access
 
                 var newUser = new User
                 {
+                    Username = Username,
                     Email = UserEmail,
                     Id = UserId,
                     LastLogin = DateTime.UtcNow,

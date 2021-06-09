@@ -30,7 +30,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         {
             return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.", ex);
         }
-        
+ 
         private string GetClaim(string claimType) => User.Claims
             .FirstOrDefault(x => x.Type.Equals(claimType))?.Value;
 
