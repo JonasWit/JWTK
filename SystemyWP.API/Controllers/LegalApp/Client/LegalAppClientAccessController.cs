@@ -156,7 +156,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 var result = await CreateUsersOutput(users, userManager);
                 result.RemoveAll(x =>
-                    !x.Role.Equals(SystemyWpConstants.Roles.Client) &&
+                    !x.Role.Equals(SystemyWpConstants.Roles.Client) ||
                     currentAllowed.Any(y => y.UserId == x.Id));
 
                 return Ok(result);
