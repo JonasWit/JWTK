@@ -93,7 +93,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var user = await _context.Users
                     .Include(x => x.LegalAppAccessKey)
-                    .FirstOrDefaultAsync(x => x.Id.ToLower().Equals(UserId.ToLower()));
+                    .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
                 if (user?.LegalAppAccessKey is null) return BadRequest();
 

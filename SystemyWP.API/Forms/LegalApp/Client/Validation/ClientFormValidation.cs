@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.LegalApp.Client.Validation
 {
-    public class ClientFormValidation: AbstractValidator<ClientForm>
+    public class ClientFormValidation : AbstractValidator<ClientForm>
     {
         public ClientFormValidation()
         {

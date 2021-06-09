@@ -9,7 +9,9 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
 {
     public class LegalAppClient : TrackedModel<long>
     {
-        [Required] [MaxLength(50)] public string Name { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Name { get; set; }
 
         public List<LegalAppCase> LegalAppCases { get; set; } = new();
         public List<LegalAppContactDetails> Contacts { get; set; } = new();

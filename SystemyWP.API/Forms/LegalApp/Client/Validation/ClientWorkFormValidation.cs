@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace SystemyWP.API.Forms.LegalApp.Client.Validation
 {

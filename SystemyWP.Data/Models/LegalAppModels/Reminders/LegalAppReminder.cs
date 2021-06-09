@@ -10,7 +10,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Reminders
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public bool Public { get; set; } = false;
+        public bool Public { get; set; }
 
         [Required]
         [MaxLength(256)]
