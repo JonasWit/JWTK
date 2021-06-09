@@ -28,9 +28,7 @@ namespace SystemyWP.API
         private readonly IWebHostEnvironment _env;
         private const string NuxtJsApp = "NuxtJsApp";
 
-        public Startup(
-            IConfiguration configuration,
-            IWebHostEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _env = env;
