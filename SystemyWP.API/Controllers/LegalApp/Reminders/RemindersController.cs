@@ -42,6 +42,31 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             }
         }
         
+        [HttpGet("/list/limit")]
+        public async Task<IActionResult> GetReminders(string from, string to)
+        {
+            try
+            {
+                if (DateTime.TryParse(from, out var fromDate) &&
+                    DateTime.TryParse(to, out var toDate))
+                {
+                    var reminders = _context.LegalAppReminders
+                        .GetReminders(UserId, Role, fromDate, toDate, _context)
+                        .Select(LegalAppRemindersProjections.Projection)
+                        .ToList(); 
+                    
+                    return Ok(reminders);  
+                }
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        
         
         
         
