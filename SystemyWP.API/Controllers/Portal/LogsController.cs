@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
@@ -40,16 +41,18 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpPost("logs/delete/{id}")]
-        public IActionResult DeleteLogRecord(long id)
+        public async Task<IActionResult> DeleteLogRecord(long id)
         {
             var logRecord = _context.PortalLogs.FirstOrDefault(x => x.Id == id);
 
             if (logRecord is not null)
             {
-                //todo: do this
+                _context.Remove(logRecord);
+                await _context.SaveChangesAsync();
+                return Ok();  
             }
 
-            return Ok();
+            return BadRequest();
         }
 
         [HttpGet("logs/split/dates")]

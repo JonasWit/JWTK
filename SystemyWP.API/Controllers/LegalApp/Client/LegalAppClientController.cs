@@ -43,6 +43,28 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        
+        [HttpGet("client/{clientId}/allowed-users")]
+        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        public async Task<IActionResult> GetClientAllowedUsers(int clientId)
+        {
+            try
+            {
+             
+
+                
+                
+                
+                
+                
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpGet("clients/basic-list")]
         public async Task<IActionResult> GetClientsBasicList()
