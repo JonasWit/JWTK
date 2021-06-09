@@ -17,9 +17,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
 {
     [Route("/api/legal-app-reminders")]
     [Authorize(SystemyWpConstants.Policies.Client)]
-    public class RemindersController : LegalAppApiController
+    public class LegalAppRemindersController : LegalAppApiController
     {
-        public RemindersController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public LegalAppRemindersController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
 

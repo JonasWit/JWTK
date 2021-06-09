@@ -40,6 +40,7 @@ namespace SystemyWP.Data
         public DbSet<LegalAppReminder> LegalAppReminders { get; set; }       
         
         //Client Tree
+        public DbSet<LegalAppBillingRecord> LegalAppBillingData { get; set; }
         public DbSet<LegalAppClient> LegalAppClients { get; set; }
         public DbSet<LegalAppClientWorkRecord> LegalAppClientWorkRecords { get; set; }
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
