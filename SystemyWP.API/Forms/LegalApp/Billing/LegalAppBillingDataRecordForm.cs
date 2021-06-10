@@ -7,13 +7,13 @@
         public string Address { get; set; }
         
         public string City { get; set; }
-
-        public int PostalCode { get; set; }     
         
-        public int PhoneNumber { get; set; }
-        public int FaxNumber { get; set; }
+        public string PostalCode { get; set; }     
         
-        public int Nip { get; set; }      
-        public int Regon { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FaxNumber { get; set; }
+        
+        public string Nip { get; set; }      
+        public string Regon { get; set; }
     }
 }
