@@ -19,24 +19,32 @@
             <v-form ref="addBillingDataForm" v-model="validation.valid">
               <v-card>
                 <v-card-text>
-                  <v-text-field v-model="form.name" :rules="validation.name" label="Nazwa"></v-text-field>
-                  <v-text-field v-model="form.street" label="Ulica"></v-text-field>
-
-                  <v-text-field v-model="form.address" required
-                                label="Nr budynku i lokalu"></v-text-field>
-                  <v-text-field v-model="form.postalCode" required
-                                label="Kod pocztowy"></v-text-field>
-                  <v-text-field v-model="form.city" required
-                                label="Miasto"></v-text-field>
-                  <v-text-field v-model="form.phoneNumber" required
-                                label="Telefon"></v-text-field>
-                  <v-text-field v-model="form.faxNumber" required
-                                label="Fax"></v-text-field>
-                  <v-text-field v-model="form.nip" required
-                                label="NIP"></v-text-field>
-                  <v-text-field v-model="form.regon" required
-                                label="Regon"></v-text-field>
+                  <v-text-field v-model="form.name" label="Nazwa"
+                                required :rules="validation.notEmpty"></v-text-field>
+                  <v-text-field v-model="form.street" label="Ulica"
+                                required></v-text-field>
+                  <v-text-field v-model="form.address" label="Nr budynku i lokalu" required
+                  ></v-text-field>
+                  <text-field-wrapper v-model="form.postalCode" filed-label="Kod pocztowy"
+                                      :map-operation="postalCodeMapping" :validation="validation.notEmpty"/>
                 </v-card-text>
+                <!--                <text-field-wrapper v-model="form.name" filed-label="Nazwa" :rules="validation.name"/>-->
+
+
+                <!--                <v-card-text>-->
+                <!--                  <v-text-field v-model="form.postalCode" required-->
+                <!--                                label="Kod pocztowy"></v-text-field>-->
+                <!--                  <v-text-field v-model="form.city" required-->
+                <!--                                label="Miasto"></v-text-field>-->
+                <!--                  <v-text-field v-model="form.phoneNumber" required-->
+                <!--                                label="Telefon"></v-text-field>-->
+                <!--                  <v-text-field v-model="form.faxNumber" required-->
+                <!--                                label="Fax"></v-text-field>-->
+                <!--                  <v-text-field v-model="form.nip" required-->
+                <!--                                label="NIP"></v-text-field>-->
+                <!--                  <v-text-field v-model="form.regon" required-->
+                <!--                                label="Regon"></v-text-field>-->
+                <!--                </v-card-text>-->
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-btn text color="primary" @click="resetForm()">
@@ -65,12 +73,15 @@
 </template>
 
 <script>
-import {notEmptyAndLimitedRule, numberOnly, phoneNumberRule} from "@/data/vuetify-validations";
+
 import BillingDetails from "@/components/legal-app/financials/billing-details";
+import AddBillingDataInputFields from "@/components/legal-app/financials/dialogs/add-billing-data-input-fields";
+import TextFieldWrapper from "@/components/legal-app/financials/dialogs/text-field-wrapper";
+import {notEmptyAndLimitedRule,} from "@/data/vuetify-validations";
 
 export default {
   name: "add-billing-details",
-  components: {BillingDetails},
+  components: {TextFieldWrapper, AddBillingDataInputFields, BillingDetails},
   data: () => ({
     dialog: false,
     loading: false,
@@ -78,68 +89,37 @@ export default {
       name: "",
       street: "",
       address: "",
-      phoneNumber: "",
-      faxNumber: "",
+      // phoneNumber: "",
+      // faxNumber: "",
       postalCode: "",
-      city: "",
-      nip: "",
-      regon: "",
+      // city: "",
+      // nip: "",
+      // regon: "",
     },
     billingData: [],
     modal: false,
     validation: {
       valid: false,
-      numberOnly: numberOnly(),
-      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 50),
-      phoneNumber: phoneNumberRule(),
-
+      notEmptyAndLenght: notEmptyAndLimitedRule()
     },
 
   }),
 
-  computed: {
-
-    postalCodeInt() {
-      return parseInt((this.form.postalCode).replace(/-|\s/g, ""));
-    },
-
-    phoneNumberInt() {
-      return parseInt((this.form.phoneNumber).replace(/-|\s/g, ""));
-
-    },
-
-    faxNumberInt() {
-      return parseInt((this.form.faxNumber).replace(/-|\s/g, ""));
-
-    },
-
-    nipNumberInt() {
-      return parseInt((this.form.nip).replace(/-|\s/g, ""));
-
-    },
-    regonNumberInt() {
-      return parseInt((this.form.regon).replace(/-|\s/g, ""));
-
-    },
-
-
-  },
-
   methods: {
     async handleSubmit() {
-      if (!this.$refs.addBillingDataForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      // if (!this.$refs.addBillingDataForm.validate()) return;
+      // if (this.loading) return;
+      // this.loading = true;
 
       const data = {
         name: this.form.name,
         street: this.form.street,
         address: this.form.address,
-        phoneNumber: this.phoneNumberInt,
-        faxNumber: this.faxNumberInt,
-        nip: this.nipNumberInt,
-        regon: this.regonNumberInt,
-        postalCode: this.postalCodeInt,
+        // phoneNumber: this.phoneNumber,
+        // faxNumber: this.form.faxNumber,
+        // nip: this.form.nip,
+        // regon: this.form.regon,
+        postalCode: this.form.postalCode,
       }
 
       console.warn('billingData', data)
@@ -156,7 +136,18 @@ export default {
       }
 
 
-    }
+    },
+
+    postalCodeMapping(text) {
+      return text = text.replace(/-/g, "").replace(/^(?=[0-9]{5})([0-9]{2})([0-9]{3})$/, "$1-$2");
+    },
+
+    // testmapping(text) {
+    //   console.warn("mapping function", text)
+    //   let realNumber = text.replace(/-/gi, '');
+    //   let dashedNumber = realNumber.match(/.{1,3}/g);
+    //   return dashedNumber.join('-');
+    // }
   }
 
 }
