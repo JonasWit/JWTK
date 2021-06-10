@@ -28,13 +28,13 @@
                                 label="Kod pocztowy"></v-text-field>
                   <v-text-field v-model="form.city" required
                                 label="Miasto"></v-text-field>
-                  <v-text-field v-model="form.phoneNumber" required :rules="validation.phoneNumber"
+                  <v-text-field v-model="form.phoneNumber" required
                                 label="Telefon"></v-text-field>
-                  <v-text-field v-model="form.faxNumber" required :rules="validation.phoneNumber"
+                  <v-text-field v-model="form.faxNumber" required
                                 label="Fax"></v-text-field>
-                  <v-text-field v-model="form.nip" required :rules="validation.numberOnly"
+                  <v-text-field v-model="form.nip" required
                                 label="NIP"></v-text-field>
-                  <v-text-field v-model="form.regon" required :rules="validation.numberOnly"
+                  <v-text-field v-model="form.regon" required
                                 label="Regon"></v-text-field>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -56,35 +56,7 @@
         <v-card-text v-if="!billingData.length">W tym miejscu możesz dodać dane, które znajdą się na raporcie
           rozliczeniowym:
         </v-card-text>
-        <v-row>
-          <v-col>
-            <v-list>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Nazwa firmy: {{ billingData.name }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Ulica: {{ billingData.street }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Nr budynku i lokalu: {{ billingData.address }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Kod pocztowy: {{ billingData.postalCode }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Miasto: {{ billingData.city }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
-          <v-col>
-            <v-list>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Nr telefonu: {{ billingData.phoneNumber }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Fax: {{ billingData.faxNumber }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>NIP: {{ billingData.nip }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>REGON: {{ billingData.regon }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
-        </v-row>
-
-
+        <billing-details/>
       </v-card>
     </v-col>
   </v-row>
@@ -94,9 +66,11 @@
 
 <script>
 import {notEmptyAndLimitedRule, numberOnly, phoneNumberRule} from "@/data/vuetify-validations";
+import BillingDetails from "@/components/legal-app/financials/billing-details";
 
 export default {
   name: "add-billing-details",
+  components: {BillingDetails},
   data: () => ({
     dialog: false,
     loading: false,
@@ -122,8 +96,37 @@ export default {
     },
 
   }),
+
+  computed: {
+
+    postalCodeInt() {
+      return parseInt((this.form.postalCode).replace(/-|\s/g, ""));
+    },
+
+    phoneNumberInt() {
+      return parseInt((this.form.phoneNumber).replace(/-|\s/g, ""));
+
+    },
+
+    faxNumberInt() {
+      return parseInt((this.form.faxNumber).replace(/-|\s/g, ""));
+
+    },
+
+    nipNumberInt() {
+      return parseInt((this.form.nip).replace(/-|\s/g, ""));
+
+    },
+    regonNumberInt() {
+      return parseInt((this.form.regon).replace(/-|\s/g, ""));
+
+    },
+
+
+  },
+
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (!this.$refs.addBillingDataForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -132,14 +135,27 @@ export default {
         name: this.form.name,
         street: this.form.street,
         address: this.form.address,
-        phoneNumber: this.form.phoneNumber,
-        faxNumber: this.form.faxNumber,
-        nip: this.form.nip,
-        regon: this.form.regon,
+        phoneNumber: this.phoneNumberInt,
+        faxNumber: this.faxNumberInt,
+        nip: this.nipNumberInt,
+        regon: this.regonNumberInt,
+        postalCode: this.postalCodeInt,
       }
 
-      this.billingData = data
-      this.dialog = false
+      console.warn('billingData', data)
+      try {
+        await this.$axios.$post('/api/legal-app-billing/create', data);
+        this.$nuxt.refresh();
+        this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
+
+      } catch (e) {
+        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      } finally {
+        this.dialog = false;
+
+      }
+
+
     }
   }
 
