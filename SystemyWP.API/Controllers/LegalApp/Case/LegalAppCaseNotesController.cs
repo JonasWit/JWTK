@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases;
 using SystemyWP.API.Forms.GeneralApp.Note;
+using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
@@ -14,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp.Case
 {
-    [Route("/api/legal-app-cases/notes")]
+    [Route("/api/legal-app-cases-notes")]
     [Authorize(SystemyWpConstants.Policies.Client)]
     public class LegalAppCaseNotesController : LegalAppApiController
     {
@@ -33,6 +34,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                     .Include(x => x.LegalAppCaseNotes
                         .Where(y => y.Id == noteId))
                     .Select(x => x.LegalAppCaseNotes.FirstOrDefault())
+                    .Select(LegalAppCaseNoteProjections.Projection)
                     .FirstOrDefault();
                 if (note is null) return BadRequest();
                 
