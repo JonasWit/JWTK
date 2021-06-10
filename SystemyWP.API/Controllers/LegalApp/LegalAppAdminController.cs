@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp
 {
+    //todo: delete in the future
     [Route("/api/legal-app-admin")]
     [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
     public class LegalAppAdminController : ApiController

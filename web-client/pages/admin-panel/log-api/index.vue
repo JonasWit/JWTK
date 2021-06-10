@@ -1,6 +1,8 @@
 ﻿<template>
   <div class="ma-3">
-    <back-to-main/>
+    <div>
+      <h3 class="text-h3 mb-4 text-center">Api Logs</h3>
+    </div>
     <api-log-manager-panel/>
   </div>
 </template>

@@ -31,7 +31,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var results = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
-                    .Select(AccessKeyProjection.FullProjection())
+                    .Select(AccessKeyProjection.FullProjection)
                     .ToList();
                 
                 return Ok(results);
@@ -101,17 +101,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var keyToDelete = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == id);
-
-                if (keyToDelete is null) return BadRequest("Key with this id does not exists!");
-
-                var relatedLegalAppData = _context.LegalAppClients
-                    .Include(x => x.LegalAppAccessKey)
-                    .Count(x => x.LegalAppAccessKey.Name.Equals(keyToDelete.Name));
-
-                if (relatedLegalAppData > 0)
-                    _context.LegalAppClients.RemoveRange(_context.LegalAppClients
-                        .Include(x => x.LegalAppAccessKey)
-                        .Where(x => x.LegalAppAccessKey.Name.Equals(keyToDelete.Name)));
+                if (keyToDelete is null) return BadRequest();
 
                 _context.LegalAppAccessKeys.Remove(keyToDelete);
                 await _context.SaveChangesAsync();
@@ -133,13 +123,11 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id == user.Id);
-
-                if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
+                if (user is null || userProfile is null) return BadRequest();
 
                 var accessKey = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == form.KeyId);
-
-                if (accessKey is null) return BadRequest("Key not found!");
+                if (accessKey is null) return BadRequest();
 
                 accessKey.Users.Add(userProfile);
                 var result = await _context.SaveChangesAsync();

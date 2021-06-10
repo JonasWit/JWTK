@@ -43,7 +43,7 @@ namespace SystemyWP.API.Controllers.Portal
                     var accessKey = _context.LegalAppAccessKeys
                         .Include(x => x.Users)
                         .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
-                        .Select(AccessKeyProjection.FullProjection())
+                        .Select(AccessKeyProjection.FullProjection)
                         .FirstOrDefault();
 
                     result.Add(new UserProjections.UserViewModel
