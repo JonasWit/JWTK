@@ -47,6 +47,11 @@ namespace SystemyWP.Data.ContextBuilders
                 .WithOne(x => x.LegalAppAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
             
+            modelBuilder.Entity<LegalAppAccessKey>()
+                .HasMany(x => x.LegalAppClientBillingData)
+                .WithOne(x => x.LegalAppAccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             //Contacts setup
             modelBuilder.Entity<LegalAppContactDetails>()
                 .HasOne<LegalAppClient>()

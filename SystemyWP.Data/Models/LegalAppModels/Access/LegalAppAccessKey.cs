@@ -7,6 +7,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Access
 {
     public class LegalAppAccessKey : AccessKeyBase<int>
     {
+        public List<LegalAppBillingRecord> LegalAppClientBillingData { get; set; } = new();
         public List<LegalAppClient> LegalAppClients { get; set; } = new();
         public List<LegalAppReminder> LegalAppReminders { get; set; } = new();
     }
