@@ -15,12 +15,15 @@ namespace SystemyWP.Data.Models.Abstractions
         [MaxLength(100)]
         public string City { get; set; }
 
-        public int PostalCode { get; set; }     
-        
-        public int PhoneNumber { get; set; }
-        public int FaxNumber { get; set; }
-        
-        public int Nip { get; set; }       
-        public int Regon { get; set; } 
+        [MaxLength(50)]
+        public string PostalCode { get; set; }     
+        [MaxLength(50)] 
+        public string PhoneNumber { get; set; }
+        [MaxLength(50)]
+        public string FaxNumber { get; set; }
+        [MaxLength(50)]
+        public string Nip { get; set; }    
+        [MaxLength(50)]
+        public string Regon { get; set; } 
     }
 }

@@ -6,7 +6,8 @@ namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
 {
     public static class AccessKeyProjection
     {
-        public static Expression<Func<AccessKeyBase<int>, object>> FullProjection() =>
+        public static Func<AccessKeyBase<int>, object> CreateFull => FullProjection.Compile();
+        public static Expression<Func<AccessKeyBase<int>, object>> FullProjection =>
             key => new
             {
                 key.Id,

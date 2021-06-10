@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ma-3">
     <div>
-      <h3 class="text-h3 text-center">Legal App Access Keys</h3>
+      <h3 class="text-h3 mb-4 text-center">Legal App Access Keys</h3>
     </div>
     <create-access-key key-type="legal-app"/>
     <v-expansion-panels focusable>

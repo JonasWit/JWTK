@@ -1,5 +1,8 @@
 ﻿<template>
   <div class="ma-3">
+    <div>
+      <h3 class="text-h3 mb-4 text-center">Users</h3>
+    </div>
     <div class="mb-4">
       <v-form>
         <v-text-field ref="inviteForm" :rules="validation.email" label="Email" :disabled="loading" v-model="email">

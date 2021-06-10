@@ -10,6 +10,11 @@ namespace SystemyWP.API.Forms.LegalApp.Billing.Validation
             RuleFor(x => x.Street).NotEmpty().MaximumLength(200);
             RuleFor(x => x.Street).NotEmpty().MaximumLength(200);
             RuleFor(x => x.City).MaximumLength(100);
+            RuleFor(x => x.Nip).MaximumLength(50);     
+            RuleFor(x => x.Regon).MaximumLength(50);   
+            RuleFor(x => x.PhoneNumber).MaximumLength(50);   
+            RuleFor(x => x.PostalCode).MaximumLength(50);  
+            RuleFor(x => x.FaxNumber).MaximumLength(50);  
         }
     }
 }
