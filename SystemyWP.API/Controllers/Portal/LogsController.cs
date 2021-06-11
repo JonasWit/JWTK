@@ -41,7 +41,7 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpPost("logs/delete/{id}")]
-        public async Task<IActionResult> DeleteLogRecord(long id)
+        public async Task<IActionResult> DeletePortalLogRecord(long id)
         {
             var logRecord = _context.PortalLogs.FirstOrDefault(x => x.Id == id);
 
@@ -78,15 +78,15 @@ namespace SystemyWP.API.Controllers.Portal
         }
         
         [HttpGet("logs/server")]
-        public IEnumerable<object> ListServerLogRecords()
+        public IEnumerable<object> ListApiLogRecords()
         {
-            return _context.PortalLogs
-                .Select(PortalLogRecordProjections.StandardProjection)
+            return _context.ApiLogs
+                .Select(ApiLogRecordProjections.StandardProjection)
                 .ToList();
         }
 
         [HttpGet("logs/server/split")]
-        public IEnumerable<object> ListServerLogRecords(int cursor, int take)
+        public IEnumerable<object> ListApiLogRecords(int cursor, int take)
         {
             return _context.ApiLogs
                 .OrderByDescending(x => x.Created)
@@ -97,7 +97,7 @@ namespace SystemyWP.API.Controllers.Portal
         }
         
         [HttpGet("logs/server/split/dates/")]
-        public IEnumerable<object> ListPortalLogRecords(string from, string to,
+        public IEnumerable<object> ListApiLogRecords(string from, string to,
             int cursor, int take, bool information, bool critical, bool debug, bool error, bool none, bool trace,
             bool warning)
         {

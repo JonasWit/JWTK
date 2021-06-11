@@ -77,6 +77,7 @@ namespace SystemyWP.API
                 new CookiePolicyOptions
                 {
                     Secure = CookieSecurePolicy.Always,
+                    MinimumSameSitePolicy = SameSiteMode.Strict
                 });
 
             app.UseRouting();

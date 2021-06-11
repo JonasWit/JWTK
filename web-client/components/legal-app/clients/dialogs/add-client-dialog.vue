@@ -21,7 +21,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text color="primary" @click="handleSubmit()">
+          <v-btn text color="primary" @click="handleSubmit">
             Dodaj
           </v-btn>
         </v-card-actions>
@@ -33,7 +33,7 @@
 
 <script>
 
-import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 
 export default {
   name: "add-client-dialog",
