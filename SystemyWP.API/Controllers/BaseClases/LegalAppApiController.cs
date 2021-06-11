@@ -19,7 +19,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         {
         }
 
-        protected async Task<List<UserBasic>> CreateUsersOutput(List<User> users, UserManager<IdentityUser> userManager)
+        protected async Task<List<UserBasic>> GetOnlyNormalUsers(List<User> users, UserManager<IdentityUser> userManager)
         {
             var output = new List<UserBasic>();
 

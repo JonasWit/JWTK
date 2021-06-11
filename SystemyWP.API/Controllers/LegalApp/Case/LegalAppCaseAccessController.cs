@@ -70,7 +70,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
-                var result = await CreateUsersOutput(users, userManager);
+                var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
 
                 var currentAccesses = _context.DataAccesses
@@ -116,7 +116,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
-                var result = await CreateUsersOutput(users, userManager);
+                var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
 
                 var currentAccess = _context.DataAccesses
@@ -155,7 +155,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                         x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == caseId)
                     .ToList();
 
-                var result = await CreateUsersOutput(users, userManager);
+                var result = await GetOnlyNormalUsers(users, userManager);
                 result.RemoveAll(x =>
                     !x.Role.Equals(SystemyWpConstants.Roles.Client) ||
                     currentAllowed.Any(y => y.UserId == x.Id));
