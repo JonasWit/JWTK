@@ -31,25 +31,28 @@
 <script>
 export default {
   name: "billing-details",
-  // billingData: [],
+  billingDataFromFetch: [],
 
-  // async fetch() {
-  //   return this.getBillingData();
-  // },
-  //
-  // methods: {
-  //   async getBillingData() {
-  //     // try {
-  //     //   await this.$axios.$get('/api/legal-app-billing/list');
-  //     //
-  //     // } catch (e) {
-  //     //   console.warn('getBillingData API error', e)
-  //     //
-  //     // }
-  //
-  //   }
+  async fetch() {
+    await this.getBillingData()
+  },
 
-// }
+  methods: {
+    async getBillingData() {
+      try {
+        let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
+
+
+        console.warn('billing data from fetch', billingDataFromFetch)
+
+      } catch (e) {
+        console.warn('getBillingData API error', e)
+
+      }
+
+    }
+
+  }
 }
 </script>
 
