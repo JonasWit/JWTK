@@ -11,7 +11,8 @@
 
   //Financials records
 
-  financialRecordsFromFetch: []
+  financialRecordsFromFetch: [],
+  billingDataFromFetch: []
 });
 
 export const state = initState;
@@ -30,22 +31,27 @@ export const getters = {
   addressesList(state) {
     return state.contactDetailsFromFetch.physicalAddresses;
   },
-
+//Financials records
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
   },
 
+  //Billing data
+
+  billingDataList(state) {
+    return state.billingDataFromFetch;
+  }
 
 };
 
 export const mutations = {
   setClientForAction(state, client) {
-    console.warn('mutation done', client);
+    console.warn('mutation done for setClientForAction', client);
     state.clientForAction = client;
   },
 
   setContactForAction(state, contact) {
-    console.warn('mutation done for contact', contact);
+    console.warn('mutation done for setContactForAction', contact);
   },
 
   //Contact-details and add-email dialogs
@@ -62,6 +68,13 @@ export const mutations = {
   reset(state) {
     Object.assign(state, initState());
   },
+  //Billing data
+  updateBillingDataFromFetch(state, {billingDataFromFetch}) {
+    console.warn('mutation done for updateBillingDataFromFetch', billingDataFromFetch);
+    state.billingDataFromFetch = billingDataFromFetch;
+
+  }
+
 };
 
 export const actions = {
@@ -85,5 +98,20 @@ export const actions = {
         console.warn('error in getFinancialRecordsFromFetch', e);
       });
   },
+
+  //Billing data
+
+  async getBillingDataFromFetch({commit}) {
+    try {
+      let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
+      commit('updateBillingDataFromFetch', {billingDataFromFetch});
+      console.warn('Action from store = getBillingDataFromFetch', billingDataFromFetch)
+    } catch (e) {
+      console.warn('Action from store = getBillingDataFromFetch API error', e)
+
+    }
+
+
+  }
 
 };

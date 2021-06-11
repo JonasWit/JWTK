@@ -1,43 +1,55 @@
 <template>
 
   <v-list>
-    <v-list-item v-for="item in billingDataFromFetch" :key="item.id">
-      <v-list-item-content>
-        <v-list-item-subtitle>{{ item.id }}. {{ item.name }}</v-list-item-subtitle>
-        <v-list-item-subtitle>Ulica: {{ item.street }}, Nr: {{ item.address }}</v-list-item-subtitle>
-        <v-list-item-subtitle>Tel.: {{ item.phone }}, Fax: {{ item.fax }}</v-list-item-subtitle>
-        <v-list-item-subtitle>NIP: {{ item.nip }}, REGON: {{ item.regon }}</v-list-item-subtitle>
-      </v-list-item-content>
+    <v-list-item v-for="item in billingDataList" :key="item.id">
+      <v-col>
+        <v-list-item-content>
+          <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+          <v-list-item-subtitle>Ulica: {{ item.street }}, Nr: {{ item.address }}</v-list-item-subtitle>
+          <v-list-item-subtitle>Tel.: {{ item.phone }}, Fax: {{ item.fax }}</v-list-item-subtitle>
+          <v-list-item-subtitle>NIP: {{ item.nip }}, REGON: {{ item.regon }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-col>
+      <v-col>
+        <v-list-item-content>
+          <v-list-item>
+            <edit-billing-data :selected-billing-record="item"/>
+          </v-list-item>
+          <v-list-item>
+            <delete-billing-data :selected-billing-record="item"/>
+          </v-list-item>
+          <v-list-item>
+
+          </v-list-item>
+        </v-list-item-content>
+      </v-col>
+
     </v-list-item>
+
   </v-list>
 
 
 </template>
 
 <script>
+import EditBillingData from "@/components/legal-app/financials/dialogs/edit-billing-data";
+import DeleteBillingData from "@/components/legal-app/financials/dialogs/delete-billing-data";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+
 export default {
   name: "billing-details-list",
-  data: () => ({
-    billingDataFromFetch: [],
-  }),
+  components: {DeleteBillingData, EditBillingData},
 
   async fetch() {
-    await this.getBillingData()
+    await this.getBillingDataFromFetch()
+    console.warn('billing data list -- fetch from store completed', this.billingDataList);
   },
-
+  computed: {
+    ...mapGetters('legal-app-client-store', ['billingDataList'])
+  },
   methods: {
-    async getBillingData() {
-      try {
-        let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
-        console.warn('billing data from fetch', billingDataFromFetch)
-        this.billingDataFromFetch = billingDataFromFetch
-
-      } catch (e) {
-        console.warn('getBillingData API error', e)
-
-      }
-
-    }
+    ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
+    ...mapActions('legal-app-client-store', ['getBillingDataFromFetch'])
 
   }
 }

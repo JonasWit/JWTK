@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :value="selectedFinancialRecord" persistent width="500">
+  <v-dialog v-model="dialog" :value="selectedBillingRecord" persistent width="500">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -7,17 +7,17 @@
             <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
-        <span>Usuń zarejestrowany czas</span>
+        <span>Usuń dane</span>
       </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="justify-center">Usuń zarejestrowany czas</v-card-title>
+      <v-card-title class="justify-center">Usuń dane do rozliczenia</v-card-title>
       <v-card-subtitle>Potwierdzając operację usuniesz wybrany rekord. Odzyskanie dostępu będzie niemożliwe.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="error" text @click="deleteFinancialRecord">
+        <v-btn color="error" text @click="deleteBillingRecord">
           Potwierdź
         </v-btn>
         <v-spacer/>
@@ -33,30 +33,36 @@
 
 <script>
 export default {
-  name: "delete-work-record",
+  name: "delete-billing-data",
   props: {
-    selectedFinancialRecord: {
+    selectedBillingRecord: {
       required: true,
       type: Object,
       default: null
-    }
+    },
+
   },
   data: () => ({
     dialog: false,
     loading: false,
+    billingRecord: null,
   }),
 
-  methods: {
+  async fetch() {
+    this.billingRecord = this.selectedBillingRecord
 
-    async deleteFinancialRecord() {
+  },
+
+  methods: {
+    async deleteBillingRecord() {
+      await this.$axios.$delete(`/api/legal-app-billing/delete/${this.billingRecord.id}`)
       try {
-        await this.$axios.$delete(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.selectedFinancialRecord.id}`)
         this.$nuxt.refresh();
         console.warn('Rekord usunięty pomyślnie');
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
 
       } catch (e) {
-        console.warn('delete selectedFinancialRecord error', e);
+        console.warn('delete deleteBillingRecord error', e);
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
         this.dialog = false;

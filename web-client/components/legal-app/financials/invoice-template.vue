@@ -1,18 +1,9 @@
 <template>
   <v-card>
     <v-card-title>Invoice content here</v-card-title>
-    <v-col>
-      <!--      <v-list class="d-flex justify-space-between" v-for="item in selectedRecords" :key="item.id">-->
-      <!--        <v-list-item>-->
-      <!--          <v-list-item-content>-->
-      <!--            <v-list-item-subtitle>Hours: {{ item.hours }}</v-list-item-subtitle>-->
-      <!--            <v-list-item-subtitle>Minutes: {{ item.minutes }}</v-list-item-subtitle>-->
-      <!--            <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>-->
-      <!--          </v-list-item-content>-->
-      <!--        </v-list-item>-->
-      <!--      </v-list>-->
-    </v-col>
-
+    <v-card-title>Invoice content here</v-card-title>
+    <v-card-title>Invoice content here</v-card-title>
+    <v-card-title>Invoice content here</v-card-title>
 
     <client-only>
       <vue-html2pdf :show-layout="false"
@@ -39,10 +30,11 @@
 </template>
 
 <script>
+import MyWorkRecordsList from "@/components/legal-app/financials/my-work-records-list";
+
 export default {
   name: "invoice-template",
-
-
+  components: {MyWorkRecordsList},
 }
 </script>
 

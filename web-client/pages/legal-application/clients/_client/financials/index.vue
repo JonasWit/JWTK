@@ -4,18 +4,22 @@
       <v-card>
         <v-tabs v-model="tab" background-color="deep-purple accent-4" centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
-
           <v-tab href="#tab-1">
+            Twoje dane
+            <v-icon>mdi-account-box-multiple</v-icon>
+          </v-tab>
+
+          <v-tab href="#tab-2">
             Dodaj nowe rozliczenie
             <v-icon>mdi-clock</v-icon>
           </v-tab>
 
-          <v-tab href="#tab-2">
+          <v-tab href="#tab-3">
             Moje rozliczenia
             <v-icon>mdi-clipboard-text-search</v-icon>
           </v-tab>
 
-          <v-tab href="#tab-3">
+          <v-tab href="#tab-4">
             Generuj raport
             <v-icon>mdi-file-chart</v-icon>
           </v-tab>
@@ -24,15 +28,22 @@
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
             <v-card flat>
+              <add-billing-details/>
+              <billing-details-list/>
+            </v-card>
+          </v-tab-item>
+
+          <v-tab-item :value="'tab-2'">
+            <v-card flat>
               <add-new-work-record/>
             </v-card>
           </v-tab-item>
-          <v-tab-item :value="'tab-2'">
+          <v-tab-item :value="'tab-3'">
             <v-card flat>
               <my-work-records-search/>
             </v-card>
           </v-tab-item>
-          <v-tab-item :value="'tab-3'">
+          <v-tab-item :value="'tab-4'">
             <v-card flat>
               <generate-invoice/>
             </v-card>
@@ -56,10 +67,14 @@ import InvoiceTemplate from "@/components/legal-app/financials/invoice-template"
 import AddNewWorkRecord from "@/components/legal-app/financials/dialogs/add-new-work-record";
 import GenerateInvoice from "@/components/legal-app/financials/generate-invoice";
 import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-records-search";
+import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
+import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 
 export default {
   name: "index",
   components: {
+    BillingDetailsList,
+    AddBillingDetails,
     MyWorkRecordsSearch,
     GenerateInvoice,
     AddNewWorkRecord,
