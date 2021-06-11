@@ -20,8 +20,10 @@ namespace SystemyWP.API.Projections.LegalApp.Billing
                 legalAppBillingRecord.Name,
                 legalAppBillingRecord.Nip,
                 legalAppBillingRecord.Regon,
-                legalAppBillingRecord.Street
-                
+                legalAppBillingRecord.Street,
+                legalAppBillingRecord.FaxNumber,
+                legalAppBillingRecord.PhoneNumber,
+                legalAppBillingRecord.PostalCode
             };
     }
 }
