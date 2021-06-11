@@ -111,7 +111,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             }
         }
 
-        [HttpPost("update/{billingId}")]
+        [HttpPut("update/{billingId}")]
         public async Task<IActionResult> UpdateBilling(long billingId, [FromBody] LegalAppBillingDataRecordForm form)
         {
             try
@@ -150,7 +150,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             }
         }
         
-        [HttpPost("delete/{billingId}")]
+        [HttpDelete("delete/{billingId}")]
         public async Task<IActionResult> DeleteBilling(long billingId)
         {
             try
