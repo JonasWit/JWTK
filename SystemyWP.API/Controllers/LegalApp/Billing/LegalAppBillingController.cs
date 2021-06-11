@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                     .Select(LegalAppBillingProjections.Projection)
                     .ToList();
 
-                return Ok();
+                return Ok(result);
             }
             catch (Exception e)
             {
