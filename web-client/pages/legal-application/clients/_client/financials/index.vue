@@ -126,9 +126,6 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
-    clearResults() {
-      Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-    },
 
 
   },

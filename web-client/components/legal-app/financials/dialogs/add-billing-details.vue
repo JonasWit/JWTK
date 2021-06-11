@@ -3,7 +3,7 @@
     <v-col>
       <v-card>
         <v-toolbar>
-          <v-toolbar-title>Twoje dane do faktury</v-toolbar-title>
+          <v-toolbar-title>Twoje dane do rozliczenia</v-toolbar-title>
           <v-dialog v-model="dialog" max-width="500px">
             <template #activator="{ on: dialog }" v-slot:activator="{ on }">
               <v-tooltip bottom>
@@ -13,7 +13,7 @@
                     <v-icon>mdi-plus</v-icon>
                   </v-btn>
                 </template>
-                <span>Dodaj dane do faktury</span>
+                <span>Dodaj dane do rozliczenia</span>
               </v-tooltip>
             </template>
             <v-form ref="addBillingDataForm" v-model="validation.valid">
@@ -54,7 +54,7 @@
         <v-card-text v-if="!billingData.length">W tym miejscu możesz dodać dane, które znajdą się na raporcie
           rozliczeniowym:
         </v-card-text>
-        <billing-details/>
+        <billing-details-list/>
       </v-card>
     </v-col>
   </v-row>
@@ -64,12 +64,13 @@
 
 <script>
 
-import BillingDetails from "@/components/legal-app/financials/billing-details";
+
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
+import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 
 export default {
   name: "add-billing-details",
-  components: {BillingDetails},
+  components: {BillingDetailsList},
   data: () => ({
     dialog: false,
     loading: false,
