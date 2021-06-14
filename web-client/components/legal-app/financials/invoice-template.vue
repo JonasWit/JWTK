@@ -68,6 +68,7 @@
             <td>{{ item.description }}</td>
             <td>{{ item.hours }}</td>
             <td>PLN {{ item.rate }}</td>
+            <td>{{ item.vat }}%</td>
             <td>PLN {{ item.amount }}</td>
 
             <td></td>

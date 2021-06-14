@@ -14,6 +14,7 @@
       <v-card>
         <v-card-text>
           <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nazwę"></v-text-field>
+          <v-text-field v-model="form.layerName" :rules="validation.name" label="Prawnik"></v-text-field>
           <v-text-field v-model="form.description" label="Dodaj krótki opis"></v-text-field>
 
           <v-text-field v-model="form.hours" required :rules="validation.numberOnly"
@@ -74,7 +75,8 @@ export default {
       minutes: "",
       rate: "",
       eventDate: "",
-      vat: ""
+      vat: "",
+      layerName: '',
     },
     modal: false,
     date: new Date().toISOString().substr(0, 10),
@@ -127,6 +129,7 @@ export default {
         eventDate: this.form.eventDate,
         vat: this.givenVat,
         amount: this.calculatedAmount,
+        layerName: this.form.layerName,
 
       };
 
