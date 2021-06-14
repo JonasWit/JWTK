@@ -62,6 +62,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newEntity = new LegalAppClientWorkRecord
                 {
                     LawyerName = form.LawyerName,
+                    Description = form.Description,
                     Amount = form.Amount,
                     Name = form.Name,
                     Rate = form.Rate,
