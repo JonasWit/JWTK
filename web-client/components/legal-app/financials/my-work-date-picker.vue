@@ -44,13 +44,14 @@
       </v-btn>
     </v-col>
     <v-col cols="12" md="2">
-      <v-btn depressed color="primary" @click="reset">
+      <v-btn depressed color="primary" @click="resetAll">
         Wyczyść
       </v-btn>
     </v-col>
     <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
       Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
     </v-alert>
+
   </v-row>
 </template>
 
@@ -67,6 +68,7 @@ export default {
       modalFrom: false,
       modalTo: false,
       alert: false,
+
 
     }
   ),
@@ -95,6 +97,7 @@ export default {
         this.alert = true;
       }
     },
+
   },
 
   methods: {
@@ -118,6 +121,10 @@ export default {
         this.loading = false;
       }
     },
+    resetAll() {
+      Object.assign(this.$data, this.$options.data.call(this));
+      this.reset()
+    }
   },
 }
 </script>

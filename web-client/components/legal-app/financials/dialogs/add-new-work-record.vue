@@ -60,7 +60,7 @@
 
 <script>
 
-import {notEmptyAndLimitedRule, numberOnly} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 
 export default {
   name: "add-new-work-record",
@@ -81,7 +81,7 @@ export default {
     validation: {
       valid: false,
       numberOnly: numberOnly(),
-      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 10),
+      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 50),
     },
 
   }),
@@ -97,7 +97,7 @@ export default {
     },
 
     givenRate() {
-      return (parseInt(this.form.rate));
+      return (parseFloat(this.form.rate));
     },
 
     givenVat() {
@@ -133,7 +133,7 @@ export default {
       console.warn('Nowy work rekord', workRecord)
 
 
-      return this.$axios.$post(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-records`, workRecord)
+      return this.$axios.$post(`/api/legal-app-clients-work/client/${this.$route.params.client}/work-records`, workRecord)
         .then(() => {
           this.resetForm()
           Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)

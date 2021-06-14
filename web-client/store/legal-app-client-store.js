@@ -36,8 +36,21 @@ export const getters = {
     return state.financialRecordsFromFetch;
   },
 
-  //Billing data
+  sortedFinancialRecords(state) {
+    const sortedItems = [...state.financialRecordsFromFetch].sort((a, b) => {
+      if (a.eventDate > b.eventDate) {
+        return 1
+      } else if (b.eventDate > a.eventDate) {
+        return -1
+      }
+      return 0
+    })
 
+    return sortedItems
+
+  },
+
+  //Billing data
   billingDataList(state) {
     return state.billingDataFromFetch;
   }
@@ -64,10 +77,14 @@ export const mutations = {
   updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
     console.warn('mutation done for updateFinancialRecordsFromFetch', financialRecordsFromFetch);
     state.financialRecordsFromFetch = financialRecordsFromFetch;
+
   },
+
   reset(state) {
     Object.assign(state, initState());
   },
+
+
   //Billing data
   updateBillingDataFromFetch(state, {billingDataFromFetch}) {
     console.warn('mutation done for updateBillingDataFromFetch', billingDataFromFetch);
@@ -98,6 +115,7 @@ export const actions = {
         console.warn('error in getFinancialRecordsFromFetch', e);
       });
   },
+
 
   //Billing data
 

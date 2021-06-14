@@ -24,6 +24,12 @@ export function formatDate(date) {
   return `${result.toLocaleDateString("pl-PL", options)}`;
 }
 
+export function formatDateForInvoice(date) {
+  let result = new Date(date);
+  let options = {year: 'numeric', month: 'short', day: 'numeric'};
+  return `${result.toLocaleDateString("pl-PL", options)}`;
+}
+
 export const colorDate = (date) => {
   let today = new Date();
   const expireDate = Date.parse(date);
@@ -39,3 +45,13 @@ export const colorDate = (date) => {
   }
   return "error--text";
 };
+
+export const timeStamp = () => {
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
+
+  return today = dd + '/' + mm + '/' + yyyy;
+};
+
