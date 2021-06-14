@@ -46,7 +46,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 result.Contacts.Add(newEntity);
                 await _context.SaveChangesAsync();
-                return Ok(newEntity);
+                return Ok();
             }
             catch (Exception e)
             {
