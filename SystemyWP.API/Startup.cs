@@ -52,9 +52,10 @@ namespace SystemyWP.API
 
             services.AddScoped<EmailClient>();
             services.AddFileServices(_configuration);
+
             services.AddCors(options => options.AddPolicy(NuxtJsApp, build => build
                 .AllowAnyHeader()
-                .WithOrigins("https://localhost:3000", "https://portal.systemywp.pl")
+                .WithOrigins(_configuration["Cors"])
                 .AllowAnyMethod()
                 .AllowCredentials()));
         }
@@ -69,7 +70,7 @@ namespace SystemyWP.API
             {
                 var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
                 loggerFactory.AddProvider(new AppLoggerProvider(
-                        serviceProvider.GetRequiredService<AppDbContext>()));
+                    serviceProvider.GetRequiredService<AppDbContext>()));
                 app.UseExceptionHandler("/Error");
             }
 
