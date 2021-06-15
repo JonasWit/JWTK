@@ -23,6 +23,25 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
             context)
         {
         }
+        
+        [HttpGet("case/{caseId}/list-basic")]
+        public async Task<IActionResult> GetNotes(long caseId)
+        {
+            try
+            {
+                var result = _context.LegalAppCaseNotes
+                    .GetAllowedNotes(UserId, Role, caseId, _context)
+                    .Select(LegalAppCaseNoteProjections.BasicProjection)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpGet("client/{clientId}/case/{caseId}/note/{noteId}")]
         public async Task<IActionResult> GetNote(long clientId, long caseId, long noteId)
@@ -37,7 +56,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                     .Select(LegalAppCaseNoteProjections.Projection)
                     .FirstOrDefault();
                 if (note is null) return BadRequest();
-                
+
                 return Ok(note);
             }
             catch (Exception e)

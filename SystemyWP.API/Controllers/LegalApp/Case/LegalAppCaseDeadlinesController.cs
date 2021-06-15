@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases;
 using SystemyWP.API.Forms.LegalApp.Case;
+using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
@@ -22,6 +23,31 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
             context)
         {
         }
+        
+        [HttpGet("case/{caseId}/list")]
+        public async Task<IActionResult> GetDeadlines(long caseId, string from, string to)
+        {
+            try
+            {
+                if (DateTime.TryParse(from, out var fromDate) &&
+                    DateTime.TryParse(to, out var toDate))
+                {
+                    var result = _context.LegalAppCaseDeadlines
+                        .GetAllowedDeadlines(UserId, Role, caseId, fromDate, toDate, _context)
+                        .Select(LegalAppCaseDeadlineProjections.Projection)
+                        .ToList();
+
+                    return Ok(result);
+                }
+                
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }    
 
         [HttpPost("client/{clientId}/case/{caseId}/create")]
         public async Task<IActionResult> CreateDeadline(long clientId, long caseId, [FromBody] DeadlineFrom form)
