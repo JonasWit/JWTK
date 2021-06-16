@@ -112,7 +112,7 @@ export const actions = {
       .then((financialRecordsFromFetch) => {
 
         financialRecordsFromFetch.forEach(x => {
-          x.invoiceVatAmount = vatAmount(x.rate, x.vat);
+          x.invoiceVatAmount = vatAmount(x.amount, x.vat);
           x.invoiceDecimalVat = vatRate(x.vat);
           x.invoiceRateNet = rateNet(x.rate, x.vat);
           x.invoiceAmountNet = amountNet(x.amount, x.vat);

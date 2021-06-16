@@ -91,11 +91,11 @@ export default {
   computed: {
 
     hoursSpent() {
-      return parseInt(this.form.hours);
+      return parseFloat(this.form.hours);
     },
 
     minutesSpent() {
-      return parseInt(this.form.minutes);
+      return parseFloat(this.form.minutes);
     },
 
     givenRate() {
@@ -107,7 +107,7 @@ export default {
     },
 
     calculatedAmount() {
-      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate).toFixed(2);
+      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate)
     }
 
   },
@@ -125,7 +125,7 @@ export default {
         description: this.form.description,
         hours: this.hoursSpent,
         minutes: this.minutesSpent,
-        rate: this.form.rate,
+        rate: this.givenRate,
         eventDate: this.form.eventDate,
         vat: this.givenVat,
         amount: this.calculatedAmount,
