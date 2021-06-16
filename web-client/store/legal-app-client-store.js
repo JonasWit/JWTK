@@ -1,4 +1,6 @@
-﻿const initState = () => ({
+﻿import {amountNet, rateNet, vatAmount, vatRate} from "@/data/functions";
+
+const initState = () => ({
   clientForAction: null,
   contactForAction: null,
 
@@ -108,6 +110,13 @@ export const actions = {
   getFinancialRecordsFromFetch({commit}, {clientId, query}) {
     return this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`)
       .then((financialRecordsFromFetch) => {
+
+        financialRecordsFromFetch.forEach(x => {
+          x.invoiceVatAmount = vatAmount(x.rate, x.vat);
+          x.invoiceDecimalVat = vatRate(x.vat);
+          x.invoiceRateNet = rateNet(x.rate, x.vat);
+          x.invoiceAmountNet = amountNet(x.amount, x.vat);
+        })
         console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch);
         commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch});
 

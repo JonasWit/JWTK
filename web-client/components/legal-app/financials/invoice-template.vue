@@ -35,47 +35,56 @@
         <template v-slot:default>
           <thead>
           <tr>
-            <th class="text-left">
+            <th class="text-center">
               <span class="font-weight-bold">Data</span>
               <span class="font-italic">(Date)</span>
             </th>
-            <th class="text-left">
+            <th class="text-center">
               <span class="font-weight-bold">Prawnik</span>
               <span class="font-italic">(Layer name)</span>
             </th>
-            <th class="text-left">
+            <th class="text-center">
               <span class="font-weight-bold">Opis</span>
               <span class="font-italic">(Description)</span>
             </th>
-            <th class="text-left">
+            <th class="text-center">
               <span class="font-weight-bold">Godziny</span>
               <span class="font-italic">(Hours)</span>
             </th>
-            <th class="text-left">
-              <span class="font-weight-bold">Stawka</span>
-              <span class="font-italic">(Rate)</span>
+            <th class="text-center">
+              <span class="font-weight-bold">Stawka netto</span>
+              <span class="font-italic">(Rate net)</span>
             </th>
-            <th class="text-left">
-              <span class="font-weight-bold">Suma</span>
-              <span class="font-italic">(Total Amount)</span>
+            <th class="text-center">
+              <span class="font-weight-bold">VAT</span>
+              <span class="font-italic">(VAT)</span>
+            </th>
+            <th class="text-center">
+              <span class="font-weight-bold">Kwota VAT</span>
+              <span class="font-italic">(VAT amount)</span>
+            </th>
+            <th class="text-center">
+              <span class="font-weight-bold">Amount net</span>
+              <span class="font-italic">(Amount net)</span>
             </th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="item in selectedWorkRecords" :key="item.id">
+          <tr v-for="item in selectedWorkRecords" :key="item.id" class="text-center">
             <td>{{ formatDateForInvoice(item.eventDate) }}</td>
             <td>{{ item.lawyerName }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.hours }}</td>
-            <td>PLN {{ item.rate }}</td>
-            <td>{{ item.vat }}%</td>
-            <td>PLN {{ item.amount }}</td>
-
-            <td></td>
+            <td>{{ item.hours }}h {{ item.minutes }}min</td>
+            <td>PLN{{ item.invoiceRateNet }}</td>
+            <td>{{ item.invoiceDecimalVat }}</td>
+            <td>PLN {{ item.invoiceVatAmount }}</td>
+            <td>PLN {{ item.invoiceAmountNet }}</td>
           </tr>
           </tbody>
         </template>
       </v-simple-table>
+      <v-divider class="my-6"></v-divider>
+
 
     </v-card>
 
@@ -121,27 +130,6 @@ export default {
       default: null
     }
   },
-
-  computed: {
-    hoursSpent() {
-      return Number(this.selectedWorkRecords.hours);
-    },
-
-    minutesSpent() {
-      return Number(this.selectedWorkRecords.minutes);
-    },
-
-    givenVat() {
-      return (parseInt(this.selectedWorkRecords.vat));
-    },
-
-    timeSpent() {
-      return Math.round(this.hoursSpent + (this.minutesSpent / 60));
-    }
-
-
-  },
-
   methods: {
 
     formatDateForInvoice(date) {
@@ -150,7 +138,9 @@ export default {
 
     getTimeStamp() {
       return timeStamp();
-    }
+    },
+
+
   }
 
 }

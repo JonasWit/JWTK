@@ -22,7 +22,7 @@
           <v-text-field v-model="form.minutes" required :rules="validation.numberOnly"
                         label="Dodaj liczbę minut"></v-text-field>
           <v-text-field v-model="form.rate" required :rules="validation.numberOnly"
-                        label="Dodaj stawkę godzinową"></v-text-field>
+                        label="Dodaj stawkę godzinową brutto"></v-text-field>
           <v-text-field v-model="form.vat" required :rules="validation.numberOnly"
                         label="Dodaj stawkę VAT"></v-text-field>
           <v-dialog
@@ -107,7 +107,7 @@ export default {
     },
 
     calculatedAmount() {
-      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * (this.givenRate + (this.givenRate * (this.givenVat / 100)))).toFixed(2);
+      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate).toFixed(2);
     }
 
   },

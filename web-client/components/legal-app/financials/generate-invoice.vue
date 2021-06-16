@@ -10,11 +10,27 @@
                     return-object></v-select>
         </v-col>
         <v-col class="d-flex" cols="12" sm="6">
+
           <v-select v-model="selectedWorkRecords" :items="sortedFinancialRecords" item-text="name"
                     :menu-props="{ maxHeight: '400' }"
                     label="Wybierz rozliczenia" hint="Proszę wybrać zakres dat, aby zobaczyć dostępne rozliczenia"
                     persistent-hint multiple
-                    return-object></v-select>
+                    return-object>
+            <template v-slot:prepend-item>
+              <v-list-item ripple @click="toggle">
+                <v-list-item-action>
+                  <v-icon :color="selectedWorkRecords.length > 0 ? 'indigo darken-4' : ''">
+                    {{ icon }}
+                  </v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    Wybierz wszystko
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-select>
         </v-col>
       </v-row>
     </v-container>
@@ -63,29 +79,43 @@ export default {
 
   },
 
-  watch: {},
-
-
   computed: {
     ...mapGetters('legal-app-client-store', ['billingDataList', 'workRecordsList', 'sortedFinancialRecords']),
 
+    selectAllRecords() {
+      return this.selectedWorkRecords.length === this.sortedFinancialRecords.length
+    },
+    selectSomeRecords() {
+      return this.selectedWorkRecords.length > 0 && !this.selectAllRecords
+    },
 
+
+    icon() {
+      if (this.selectAllRecords) return 'mdi-close-box'
+      if (this.selectSomeRecords) return 'mdi-minus-box'
+      return 'mdi-checkbox-blank-outline'
+    },
   },
+
+
   methods: {
-    ...
-      mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
-    ...
-      mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
+    ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
+    ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
 
     generateReport() {
       this.$refs.html2Pdf.generatePdf()
-    }
-    ,
+    },
 
-
-  }
-  ,
-
+    toggle() {
+      this.$nextTick(() => {
+        if (this.selectAllRecords) {
+          this.selectedWorkRecords = []
+        } else {
+          this.selectedWorkRecords = this.sortedFinancialRecords.slice()
+        }
+      })
+    },
+  },
 
 }
 </script>
