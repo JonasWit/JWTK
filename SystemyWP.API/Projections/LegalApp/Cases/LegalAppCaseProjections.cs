@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.LegalAppModels.Cases;
 
@@ -30,14 +29,6 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCase.UpdatedBy,
                 legalAppCase.Created,
                 legalAppCase.CreatedBy,
-                Notes = legalAppCase.LegalAppCaseNotes
-                    .AsQueryable()
-                    .Select(LegalAppCaseNoteProjections.BasicProjection)
-                    .ToList(),
-                Deadlines = legalAppCase.LegalAppCaseDeadlines
-                    .AsQueryable()
-                    .Select(LegalAppCaseDeadlineProjections.Projection)
-                    .ToList()
             };
     }
 }
