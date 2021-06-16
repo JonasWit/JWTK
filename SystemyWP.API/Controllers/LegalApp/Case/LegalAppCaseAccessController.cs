@@ -74,17 +74,21 @@ namespace SystemyWP.API.Controllers.LegalApp.Case
                 if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
 
                 var currentCasesAccesses = _context.DataAccesses
-                    .Where(x => x.RestrictedType == RestrictedType.LegalAppCase && x.UserId.Equals(userId))
-                    .ToList();
-                if (currentCasesAccesses.Any(x => x.ItemId == caseId)) return BadRequest();
+                    .Where(x => 
+                        x.RestrictedType == RestrictedType.LegalAppCase && 
+                        x.UserId.Equals(userId) &&
+                        x.ItemId == caseId)
+                    .FirstOrDefault();
+                if (currentCasesAccesses is not null) return BadRequest();
                 
                 // Add access to client if there is none already
                 var currentClientsAccesses = _context.DataAccesses
-                    .Where(x => x.RestrictedType == RestrictedType.LegalAppClient && x.UserId.Equals(userId))
-                    .ToList();
-                if (!currentClientsAccesses.Any(x => 
-                    x.RestrictedType == RestrictedType.LegalAppClient && 
-                    x.ItemId == lappCase.LegalAppClientId))
+                    .Where(x => 
+                        x.RestrictedType == RestrictedType.LegalAppClient && 
+                        x.UserId.Equals(userId) &&
+                        x.ItemId == lappCase.LegalAppClientId)
+                    .FirstOrDefault();
+                if (currentClientsAccesses is null)
                 {
                     _context.DataAccesses.Add(new DataAccess
                     {
