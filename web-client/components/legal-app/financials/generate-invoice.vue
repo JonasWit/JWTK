@@ -42,9 +42,7 @@
       <!--        Generuj podgląd raportu-->
       <!--      </v-btn>-->
 
-      <v-btn depressed color="primary" @click="generateReport">
-        Generuj raport
-      </v-btn>
+
     </v-row>
     <v-divider></v-divider>
     <v-card>
@@ -102,9 +100,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
 
-    generateReport() {
-      this.$refs.html2Pdf.generatePdf()
-    },
 
     toggle() {
       this.$nextTick(() => {
@@ -115,6 +110,7 @@ export default {
         }
       })
     },
+
   },
 
 }

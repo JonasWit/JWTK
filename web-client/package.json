@@ -15,8 +15,7 @@
     "core-js": "^3.12.1",
     "mathjs": "^9.4.2",
     "nuxt": "^2.15.6",
-    "vue-client-only": "^2.1.0",
-    "vue-html2pdf": "^1.8.0"
+    "vue-client-only": "^2.1.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3",
