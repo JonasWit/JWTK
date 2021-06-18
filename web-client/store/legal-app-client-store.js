@@ -1,9 +1,10 @@
 ﻿import {amountNet, rateNet, vatAmount, vatRate} from "@/data/functions";
 
 const initState = () => ({
+  //Clients
   clientForAction: null,
   contactForAction: null,
-
+  clientDataFromFetch: [],
 
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: [],
@@ -12,7 +13,6 @@ const initState = () => ({
   addressesList: [],
 
   //Financials records
-
   financialRecordsFromFetch: [],
   billingDataFromFetch: []
 });
@@ -20,6 +20,7 @@ const initState = () => ({
 export const state = initState;
 
 export const getters = {
+
 
   //Contact-details and add-email dialogs
   emailsList(state) {
@@ -55,6 +56,11 @@ export const getters = {
   //Billing data
   billingDataList(state) {
     return state.billingDataFromFetch;
+  },
+
+  //Clients List
+  clientData(state) {
+    return state.clientDataFromFetch;
   }
 
 };
@@ -92,6 +98,12 @@ export const mutations = {
     console.warn('mutation done for updateBillingDataFromFetch', billingDataFromFetch);
     state.billingDataFromFetch = billingDataFromFetch;
 
+  },
+
+  //Client List
+  updateClientDataFromFetch(state, {clientDataFromFetch}) {
+    console.warn('mutation done for updateBillingDataFromFetch', clientDataFromFetch);
+    state.clientDataFromFetch = clientDataFromFetch
   }
 
 };
@@ -139,6 +151,17 @@ export const actions = {
     }
 
 
+  },
+
+  //Clients list
+  async getClientData({commit}, {clientId}) {
+    try {
+      let clientDataFromFetch = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
+      commit('updateClientDataFromFetch', {clientDataFromFetch});
+      console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch)
+    } catch (e) {
+      console.warn('Action from store = clientBasicListFromFetch API error', e)
+    }
   }
 
 };

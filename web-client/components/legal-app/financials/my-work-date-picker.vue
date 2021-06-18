@@ -114,11 +114,13 @@ export default {
         let query = this.query;
         this.getFinancialRecordsFromFetch({clientId, query});
         console.warn('work-records-list- -- fetch from store completed', this.financialRecordsFromFetch);
+        this.$notifier.showSuccessMessage("Rozliczenia wyszukane pomyślnie.");
 
       } catch (e) {
         console.warn('Error during financial records fetch', e);
       } finally {
         this.loading = false;
+
       }
     },
     resetAll() {

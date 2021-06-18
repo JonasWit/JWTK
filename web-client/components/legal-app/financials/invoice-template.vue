@@ -1,18 +1,27 @@
 <template>
   <v-card>
-    <v-btn depressed color="primary" @click="generateReport">
-      Generuj raport
-    </v-btn>
-    <v-btn depressed color="primary" @click="generateReportWithJsPdf">
-      Generuj raport z jsPDF
-    </v-btn>
-
-    <v-card id="pdfTemplate" elevation="0" width="100%">
+    <v-row class="d-flex justify-space-between">
+      <v-btn depressed color="primary" width="100%" @click="generateReportWithJsPdf">
+        Generuj rozliczenie
+      </v-btn>
+    </v-row>
+    <v-card id="pdfTemplate" elevation="0" class="mx-10" width="1150px">
       <v-row class="d-flex justify-space-between my-4 ">
         <v-col>
           <v-card-title>Wykaz czynności objętych fakturą</v-card-title>
           <v-card-subtitle class="font-italic">Invoice details</v-card-subtitle>
+          <v-list-item>
+            <v-list-item-content>
 
+              <v-list-item-subtitle>Numer faktury <span
+                class="font-italic">(Invoice number): </span>{{ invoiceDetails.number }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>Data faktury <span class="font-italic">(Invoice date): </span>{{
+                  invoiceDetails.date
+                }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </v-col>
 
         <v-col>
@@ -34,8 +43,7 @@
           </v-list-item>
         </v-col>
         <v-col>
-          <v-card-title>Rozliczenie nr: {{ selectedWorkRecords.id }}</v-card-title>
-          <v-card-subtitle>Data wygenerowania: {{ getTimeStamp() }}</v-card-subtitle>
+          <v-card-title>Data wygenerowania: {{ getTimeStamp() }}</v-card-title>
         </v-col>
       </v-row>
 
@@ -48,16 +56,9 @@
             <v-list-item-content>
               <v-list-item-subtitle>Wygenerowano dla:</v-list-item-subtitle>
               <v-list-item-title class="text-h6 my-1">
-                {{ selectedBillingData.name }}
+                {{ clientData.name }}
               </v-list-item-title>
-              <v-list-item-subtitle>Adres: {{ selectedBillingData.street }} {{ selectedBillingData.address }},
-                {{ selectedBillingData.postalCode }}, {{ selectedBillingData.city }}
-              </v-list-item-subtitle>
-              <v-list-item-subtitle>Tel.: {{ selectedBillingData.phoneNumber }}, Fax:
-                {{ selectedBillingData.faxNumber }}
-              </v-list-item-subtitle>
-              <v-list-item-subtitle>NIP: {{ selectedBillingData.nip }}, REGON: {{ selectedBillingData.regon }}
-              </v-list-item-subtitle>
+
             </v-list-item-content>
           </v-list-item>
         </v-col>
@@ -123,7 +124,10 @@
         </v-simple-table>
       </v-row>
       <v-row class="d-flex justify-end mx-7 my-10">
-        <div>
+        <v-col cols="8">
+
+        </v-col>
+        <v-col cols="4">
           <v-simple-table>
             <tbody>
             <tr>
@@ -152,7 +156,7 @@
             </tr>
             </tbody>
           </v-simple-table>
-        </div>
+        </v-col>
       </v-row>
     </v-card>
 
@@ -164,6 +168,7 @@
 <script>
 import MyWorkRecordsList from "@/components/legal-app/financials/my-work-records-list";
 import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 
 export default {
@@ -177,9 +182,21 @@ export default {
     selectedWorkRecords: {
       required: true,
       default: null
+    },
+    invoiceDetails: {
+      required: true,
+      default: null
     }
   },
+
+  async fetch() {
+    let clientId = this.$route.params.client;
+    await this.getClientData({clientId})
+    console.warn('getClientsBasicList -- fetch from store completed', this.clientData);
+  },
+
   computed: {
+    ...mapGetters('legal-app-client-store', ['clientData']),
     sumNet() {
       const totalNetValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceAmountNet;
@@ -202,6 +219,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions('legal-app-client-store', ['getClientData']),
+    ...mapMutations('legal-app-client-store', ['updateClientDataFromFetch']),
 
     formatDateForInvoice(date) {
       return formatDateForInvoice(date);
@@ -209,10 +228,6 @@ export default {
 
     getTimeStamp() {
       return timeStamp();
-    },
-
-    generateReport() {
-      this.$refs.html2Pdf.generatePdf()
     },
 
     generateReportWithJsPdf() {
