@@ -54,6 +54,6 @@ namespace SystemyWP.Data.Models.General
         public DateTime? LastLogin  { get; set; }  
 
         public List<DataAccess> DataAccess { get; set; } =
-            new List<DataAccess>();
+            new ();
     }
 }
