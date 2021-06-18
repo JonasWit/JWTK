@@ -1,4 +1,5 @@
-﻿using SystemyWP.Data.ContextBuilders;
+﻿using System;
+using SystemyWP.Data.ContextBuilders;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
@@ -65,8 +66,6 @@ namespace SystemyWP.Data
         
         public DbSet<MedicalAppPatient> MedicalAppPatients { get; set; }      
         
-        
-
         #endregion
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

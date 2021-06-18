@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.Portal
 {
-    [Route("/api/news")]
+    [Route("/api/portal-news")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
     public class NewsController : ApiController
     {

@@ -132,29 +132,37 @@ namespace SystemyWP.API.Controllers.Portal
                 var roleClaim = userClaims?.FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role));
 
                 if (form.Role.Equals(roleClaim?.Value, StringComparison.InvariantCultureIgnoreCase))
-                    return BadRequest("Unable to add to new role!");
+                    return BadRequest("Role Claim not found!");
 
                 var logoutResult = await userManager.UpdateSecurityStampAsync(user);
                 if (!logoutResult.Succeeded)
                     return BadRequest("Unable to sign out user!");
 
+                //Remove from current role
                 var roleRemoveResult = await userManager.RemoveClaimAsync(user, roleClaim);
                 if (!roleRemoveResult.Succeeded)
                     return BadRequest("Unable to remove from role!");
 
+                //Change from normal User to admin
                 if (form.Role.Equals(SystemyWpConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var addToRoleResult = await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim);
-                    if (addToRoleResult.Succeeded)
-                        return Ok();
+                    var addToRoleResult =
+                        await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim);
+                    if (addToRoleResult.Succeeded) return Ok();
                 }
-                else if (form.Role.Equals(SystemyWpConstants.Roles.ClientAdmin,
-                    StringComparison.InvariantCultureIgnoreCase))
+                
+                //Change from Admin to normal User
+                if (form.Role.Equals(SystemyWpConstants.Roles.ClientAdmin, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =
                         await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientAdminClaim);
                     if (addToRoleResult.Succeeded)
+                    {
+                        _context.RemoveRange(_context.DataAccesses.Where(x => x.UserId.Equals(user.Id)));
+                        await _context.SaveChangesAsync();
                         return Ok();
+                    }
+                    if (addToRoleResult.Succeeded) return Ok();
                 }
 
                 return BadRequest("Unable to add to new role!");
@@ -176,7 +184,7 @@ namespace SystemyWP.API.Controllers.Portal
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
                 if (user is null) return BadRequest();
-                
+
                 var lockResult = await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(+25));
                 var logoutResult = await userManager.UpdateSecurityStampAsync(user);
 

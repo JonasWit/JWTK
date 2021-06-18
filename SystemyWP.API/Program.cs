@@ -1,3 +1,4 @@
+using SystemyWP.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -19,8 +20,8 @@ namespace SystemyWP.API
 
             if (env.IsDevelopment())
             {
-                 // var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                 // DataSeed.DevSeed(context, identityContext, userManager);
+                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                 DataSeed.DevSeed(context, identityContext, userManager);
             }
             else if (env.IsProduction())
             {
