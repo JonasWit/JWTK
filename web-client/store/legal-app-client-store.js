@@ -14,7 +14,8 @@ const initState = () => ({
 
   //Financials records
   financialRecordsFromFetch: [],
-  billingDataFromFetch: []
+  billingDataFromFetch: [],
+  fullWorkRecordsList: [],
 });
 
 export const state = initState;
@@ -88,6 +89,11 @@ export const mutations = {
 
   },
 
+  updateFullWorkRecordsList(state, {fullWorkRecordsList}) {
+    state.fullWorkRecordsList = fullWorkRecordsList;
+
+  },
+
   reset(state) {
     Object.assign(state, initState());
   },
@@ -135,6 +141,16 @@ export const actions = {
       }).catch((e) => {
         console.warn('error in getFinancialRecordsFromFetch', e);
       });
+  },
+
+  async getAllWorkRecordsOnFetch({commit}, {clientId}) {
+    try {
+      let fullWorkRecordsList = await this.$axios.$post(`/api/legal-app-clients-work/client/${clientId}/work-records`)
+      commit('updateFullWorkRecordsList', {fullWorkRecordsList});
+    } catch (e) {
+      console.warn('error in getAllWorkRecordsOnFetch', e);
+    }
+
   },
 
 

@@ -41,7 +41,7 @@ export default {
   components: {DeleteBillingData, EditBillingData},
 
   async fetch() {
-    await this.getBillingDataFromFetch()
+    await this.getBillingDataFromFetch();
     console.warn('billing data list -- fetch from store completed', this.billingDataList);
   },
   computed: {

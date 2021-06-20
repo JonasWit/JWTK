@@ -7,12 +7,12 @@
         <template #activator="{ on: dialog }" v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-              <v-btn class="mx-3" color="pink" fab dark small
+              <v-btn class="mx-3" color="primary"
                      v-on="{ ...tooltip, ...dialog }">
-                <v-icon>mdi-plus</v-icon>
+                Dodaj dane do rozliczenia
               </v-btn>
             </template>
-            <span>Dodaj dane do rozliczenia</span>
+            <span></span>
           </v-tooltip>
         </template>
         <v-form ref="addBillingDataForm" v-model="validation.valid">
@@ -58,6 +58,7 @@
 
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
+import {mapActions} from "vuex";
 
 export default {
   name: "add-billing-details",
@@ -79,7 +80,7 @@ export default {
 
     validation: {
       valid: false,
-      generalRule: notEmptyAndLimitedRule('Pole nie może być puste oraz liczba znaków nie może przekraczać 50', 3, 50),
+      generalRule: notEmptyAndLimitedRule('Pole nie może być puste oraz liczba znaków nie może przekraczać 50', 1, 50),
       postal: postalCode(),
       nip: lengthRule('Poprawna liczba znaków dla numeru NIP to 10. Sprawdź poprawność danych.', 10, 10),
       regon: lengthRule('Liczba znaków nie może przekraczać 20', 10, 20),
@@ -126,6 +127,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async handleSubmit() {
       if (!this.$refs.addBillingDataForm.validate()) return;
       if (this.loading) return;
@@ -141,18 +143,17 @@ export default {
         regon: this.regonNumber,
         postalCode: this.postalCode,
       }
-
-      console.warn('billingData', data)
       try {
         await this.$axios.$post('/api/legal-app-billing/create', data);
-        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
+
 
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
+        await this.getBillingDataFromFetch()
         this.dialog = false;
-
+        this.loading = false;
       }
     },
 

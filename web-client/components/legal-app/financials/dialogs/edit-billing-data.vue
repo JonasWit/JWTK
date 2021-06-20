@@ -46,6 +46,7 @@
 
 <script>
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
+import {mapActions} from "vuex";
 
 export default {
   name: "edit-billing-data",
@@ -88,6 +89,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async saveBillingDataChange() {
       if (!this.$refs.editBillingDataForm.validate()) return;
       if (this.loading) return;
@@ -107,13 +109,14 @@ export default {
       console.warn('edited billingData', data)
       try {
         await this.$axios.$put(`/api/legal-app-billing/update/${this.billingRecord.id}`, data);
-        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
 
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
+        await this.getBillingDataFromFetch()
         this.dialog = false;
+        this.loading = false;
 
       }
 

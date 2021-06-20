@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "delete-billing-data",
   props: {
@@ -54,18 +56,20 @@ export default {
   },
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
+
     async deleteBillingRecord() {
       await this.$axios.$delete(`/api/legal-app-billing/delete/${this.billingRecord.id}`)
       try {
-        this.$nuxt.refresh();
-        console.warn('Rekord usunięty pomyślnie');
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
 
       } catch (e) {
         console.warn('delete deleteBillingRecord error', e);
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
+        await this.getBillingDataFromFetch()
         this.dialog = false;
+        this.loading = false;
       }
 
     }

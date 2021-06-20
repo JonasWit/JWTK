@@ -10,15 +10,15 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.4",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
-    "core-js": "^3.12.1",
+    "core-js": "^3.14.0",
     "mathjs": "^9.4.2",
-    "nuxt": "^2.15.6",
+    "nuxt": "^2.15.7",
     "vue-client-only": "^2.1.0"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.3",
+    "@nuxtjs/vuetify": "^1.12.1",
     "axios": "^0.21.1"
   }
 }

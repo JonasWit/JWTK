@@ -32,6 +32,10 @@
 </template>
 
 <script>
+
+
+import {mapActions} from "vuex";
+
 export default {
   name: "delete-work-record",
   props: {
@@ -47,11 +51,11 @@ export default {
   }),
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
 
     async deleteFinancialRecord() {
       try {
-        await this.$axios.$delete(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.selectedFinancialRecord.id}`)
-        this.$nuxt.refresh();
+        await this.$axios.$delete(`/api/legal-app-clients-work/client/${this.$route.params.client}/work-record/${this.selectedFinancialRecord.id}`)
         console.warn('Rekord usunięty pomyślnie');
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
 
@@ -59,7 +63,10 @@ export default {
         console.warn('delete selectedFinancialRecord error', e);
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
+        let clientId = this.$route.params.client
+        await this.getAllWorkRecordsOnFetch({clientId});
         this.dialog = false;
+        this.loading = false;
       }
 
     }

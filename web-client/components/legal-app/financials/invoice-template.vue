@@ -1,18 +1,17 @@
 <template>
-  <v-card>
-    <v-row class="d-flex justify-space-between">
-      <v-btn depressed color="primary" width="100%" @click="generateReportWithJsPdf">
-        Generuj rozliczenie
-      </v-btn>
-    </v-row>
-    <v-card id="pdfTemplate" elevation="0" class="mx-10" width="1150px">
+  <div>
+    <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Poniżej znajduje się podgląd rozliczenia.
+      Sprawdź dane i kliknij 'GENERUJ ROZLICZENIE'. Jeśli
+      chcesz dokonać zmian, cofnij się do poprzednich kroków.
+    </v-alert>
+    <v-divider></v-divider>
+    <v-card id="pdfTemplate" elevation="0">
       <v-row class="d-flex justify-space-between my-4 ">
         <v-col>
           <v-card-title>Wykaz czynności objętych fakturą</v-card-title>
           <v-card-subtitle class="font-italic">Invoice details</v-card-subtitle>
           <v-list-item>
             <v-list-item-content>
-
               <v-list-item-subtitle>Numer faktury <span
                 class="font-italic">(Invoice number): </span>{{ invoiceDetails.number }}
               </v-list-item-subtitle>
@@ -23,7 +22,6 @@
             </v-list-item-content>
           </v-list-item>
         </v-col>
-
         <v-col>
           <v-list-item>
             <v-list-item-content>
@@ -46,11 +44,7 @@
           <v-card-title>Data wygenerowania: {{ getTimeStamp() }}</v-card-title>
         </v-col>
       </v-row>
-
-
       <v-row class="d-flex justify-space-between my-4">
-
-
         <v-col cols="4">
           <v-list-item class="d-flex justify-end">
             <v-list-item-content>
@@ -62,53 +56,52 @@
             </v-list-item-content>
           </v-list-item>
         </v-col>
-
       </v-row>
-      <v-row class="mx-7">
+      <v-row>
         <v-simple-table>
           <template v-slot:default>
             <thead>
             <tr>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Data</span>
                 <span class="font-italic">(Date)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Prawnik</span>
                 <span class="font-italic">(Lawyer name)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Opis</span>
                 <span class="font-italic">(Description)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Godziny</span>
                 <span class="font-italic">(Hours)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Stawka netto</span>
                 <span class="font-italic">(Rate net)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Wartość netto</span>
                 <span class="font-italic">(Amount net)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Stawka VAT</span>
                 <span class="font-italic">(VAT rate)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Kwota VAT</span>
                 <span class="font-italic">(VAT amount)</span>
               </th>
-              <th class="text-center">
+              <th class="text-left">
                 <span class="font-weight-bold">Wartość brutto</span>
                 <span class="font-italic">(Amount gross)</span>
               </th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in selectedWorkRecords" :key="item.id" class="text-center">
+            <tr v-for="item in selectedWorkRecords" :key="item.id">
               <td>{{ formatDateForInvoice(item.eventDate) }}</td>
               <td>{{ item.lawyerName }}</td>
               <td>{{ item.description }}</td>
@@ -125,7 +118,6 @@
       </v-row>
       <v-row class="d-flex justify-end mx-7 my-10">
         <v-col cols="8">
-
         </v-col>
         <v-col cols="4">
           <v-simple-table>
@@ -135,7 +127,7 @@
                 Suma netto (Sum net):
               </td>
               <td class="font-weight-medium">
-                {{ sumNet }}
+                PLN {{ sumNet }}
               </td>
             </tr>
             <tr>
@@ -143,7 +135,7 @@
                 Suma vat (Sum VAT):
               </td>
               <td class="font-weight-medium">
-                {{ sumVat }}
+                PLN {{ sumVat }}
               </td>
             </tr>
             <tr>
@@ -151,7 +143,7 @@
                 Suma brutto (Sum gross):
               </td>
               <td class="font-weight-medium">
-                {{ sumGross }}
+                PLN {{ sumGross }}
               </td>
             </tr>
             </tbody>
@@ -159,9 +151,16 @@
         </v-col>
       </v-row>
     </v-card>
-
-
-  </v-card>
+    <v-btn color="primary" width="100%" @click="generateReportWithJsPdf">
+      Generuj rozliczenie
+    </v-btn>
+    <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">
+      Po naciśnięciu przycisku 'GENERUJ RAPORT' pojawi się 'Podgląd wydruku'. Jeśli chcesz zapisać rozliczenie w formie
+      pdf w oknie podgląd wybierz opcję 'Zapisz jako pdf'. Jeśli chcesz wydrukować rozliczenie postępuj zgodnie z
+      instrukcją drukowania. Pamiętaj, że jakośc wydruku zależy od indywidualnych ustawień.
+      Rekomendujemy wybór poziomego układu strony w oknie wydruku.
+    </v-alert>
+  </div>
 
 </template>
 
