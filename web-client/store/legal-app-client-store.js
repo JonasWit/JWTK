@@ -43,14 +43,14 @@ export const getters = {
   sortedFinancialRecords(state) {
     const sortedItems = [...state.financialRecordsFromFetch].sort((a, b) => {
       if (a.eventDate > b.eventDate) {
-        return 1
+        return 1;
       } else if (b.eventDate > a.eventDate) {
-        return -1
+        return -1;
       }
-      return 0
-    })
+      return 0;
+    });
 
-    return sortedItems
+    return sortedItems;
 
   },
 
@@ -110,7 +110,7 @@ export const mutations = {
   //Client List
   updateClientDataFromFetch(state, {clientDataFromFetch}) {
     console.warn('mutation done for updateBillingDataFromFetch', clientDataFromFetch);
-    state.clientDataFromFetch = clientDataFromFetch
+    state.clientDataFromFetch = clientDataFromFetch;
   }
 
 };
@@ -135,7 +135,7 @@ export const actions = {
           x.invoiceDecimalVat = vatRate(x.vat);
           x.invoiceRateNet = rateNet(x.rate, x.vat);
           x.invoiceAmountNet = amountNet(x.amount, x.vat);
-        })
+        });
         console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch);
         commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch});
 
@@ -146,7 +146,8 @@ export const actions = {
 
   async getAllWorkRecordsOnFetch({commit}, {clientId}) {
     try {
-      let fullWorkRecordsList = await this.$axios.$post(`/api/legal-app-clients-work/client/${clientId}/work-records`)
+      console.warn("Getting data from store - legal-app-client-store - getAllWorkRecordsOnFetch");
+      let fullWorkRecordsList = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records`);
       commit('updateFullWorkRecordsList', {fullWorkRecordsList});
     } catch (e) {
       console.warn('error in getAllWorkRecordsOnFetch', e);
@@ -161,9 +162,9 @@ export const actions = {
     try {
       let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
       commit('updateBillingDataFromFetch', {billingDataFromFetch});
-      console.warn('Action from store = getBillingDataFromFetch', billingDataFromFetch)
+      console.warn('Action from store = getBillingDataFromFetch', billingDataFromFetch);
     } catch (e) {
-      console.warn('Action from store = getBillingDataFromFetch API error', e)
+      console.warn('Action from store = getBillingDataFromFetch API error', e);
 
     }
 
@@ -175,9 +176,9 @@ export const actions = {
     try {
       let clientDataFromFetch = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
       commit('updateClientDataFromFetch', {clientDataFromFetch});
-      console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch)
+      console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch);
     } catch (e) {
-      console.warn('Action from store = clientBasicListFromFetch API error', e)
+      console.warn('Action from store = clientBasicListFromFetch API error', e);
     }
   }
 

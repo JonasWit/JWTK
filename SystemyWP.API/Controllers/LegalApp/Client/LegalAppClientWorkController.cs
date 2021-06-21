@@ -39,7 +39,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     return Ok(result);  
                 }
                 
-                return BadRequest();
+                return BadRequest("Date parameters incorrect or missing!");
             }
             catch (Exception e)
             {
@@ -57,7 +57,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
                 
-                if (client is null) return BadRequest();
+                if (client is null) return BadRequest("Client not found");
                 
                 var newEntity = new LegalAppClientWorkRecord
                 {
@@ -127,7 +127,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                     .FirstOrDefault();
                 
-                if (entity is null) return BadRequest();           
+                if (entity is null) return BadRequest("Work record or client not found");           
                 
                 _context.Remove(entity);
                 await _context.SaveChangesAsync();
