@@ -46,7 +46,7 @@
 
 <script>
 
-import {notEmptyAndLimitedRule, numberOnly} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 
 export default {
   name: "edit-work-record",
@@ -102,14 +102,15 @@ export default {
         description: this.workRecord.description,
       }
       try {
-        await this.$axios.$put(`/api/legal-app-clients-finance/client/${this.$route.params.client}/finance-record/${this.workRecord.id}`, workRecord)
+        await this.$axios.$put(`/api/legal-app-clients-work/client/${this.$route.params.client}/work-record/${this.workRecord.id}`, workRecord)
         this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Rekord zmieniony pomyślnie!");
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
-        this.dialog = false;
 
+        this.dialog = false;
+        this.loading = false;
       }
 
 

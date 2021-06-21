@@ -151,7 +151,7 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-btn color="primary" width="100%" @click="generateReportWithJsPdf">
+    <v-btn color="primary" block @click="generateReportWithJsPdf">
       Generuj rozliczenie
     </v-btn>
     <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">

@@ -113,7 +113,7 @@ export default {
         let clientId = this.$route.params.client;
         let query = this.query;
         this.getFinancialRecordsFromFetch({clientId, query});
-        this.$notifier.showSuccessMessage("Rozliczenia wyszukane pomyślnie.");
+
 
       } catch (e) {
         console.warn('Error during financial records fetch', e);

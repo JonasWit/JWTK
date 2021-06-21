@@ -90,6 +90,7 @@ export const mutations = {
   },
 
   updateFullWorkRecordsList(state, {fullWorkRecordsList}) {
+    console.warn('mutation done for updateFullWorkRecordsList', fullWorkRecordsList);
     state.fullWorkRecordsList = fullWorkRecordsList;
 
   },

@@ -7,12 +7,11 @@
         <template #activator="{ on: dialog }" v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-              <v-btn class="mx-3" color="primary"
-                     v-on="{ ...tooltip, ...dialog }">
+              <v-btn class="mx-3" color="primary" v-on="{ ...tooltip, ...dialog }">
                 Dodaj dane do rozliczenia
               </v-btn>
             </template>
-            <span></span>
+            <span>Dodaj dane do rozliczenia</span>
           </v-tooltip>
         </template>
         <v-form ref="addBillingDataForm" v-model="validation.valid">

@@ -5,7 +5,15 @@
         <v-toolbar-title class="mr-3">
           Lista spraw
         </v-toolbar-title>
+        <v-btn @click="groupByKey">Test for grouping
+        </v-btn>
       </v-toolbar>
+
+      <v-card v-for="item in groupedCases" :key="item.id">
+        <v-card-title v-for="group in item" :key="group.id">{{ group.group }}</v-card-title>
+      </v-card>
+
+
       <v-card>
         <v-list v-for="item in listOfCases" :key="item.id">
           <v-list-item>
@@ -26,6 +34,7 @@
 
 <script>
 import Layout from "../../../../../components/legal-app/layout";
+import {groupByKey} from "@/data/functions";
 
 
 export default {
@@ -39,24 +48,19 @@ export default {
     name: "",
     signature: "",
     description: "",
-    group: "",
+    groupedCases: [],
 
 
   }),
 
-  computed: {
-    groupedItems() {
-      let group = this.listOfCases.reduce((r, a) => {
-        r[a[this.group]] = [...r[a.this.group] || [], a];
-        return r;
-      }, {});
-      console.log("group", group);
-    },
-
-
-  },
   async fetch() {
-    return this.searchListOfCases()
+    try {
+      await this.searchListOfCases()
+    } finally {
+      return this.groupByKey()
+
+
+    }
 
   },
   methods: {
@@ -70,10 +74,22 @@ export default {
         console.warn('list of cases fetch error', e)
       }
 
+    },
+
+    groupByKey() {
+      let input = this.listOfCases;
+      let key = 'group';
+
+      const groups = groupByKey(input, key)
+      this.groupedCases = groups
+      console.log('group by category fired', groups)
+
+
     }
 
+  },
 
-  }
+
 }
 </script>
 

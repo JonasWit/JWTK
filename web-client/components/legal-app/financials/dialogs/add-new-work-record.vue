@@ -93,11 +93,11 @@ export default {
   computed: {
 
     hoursSpent() {
-      return parseFloat(this.form.hours);
+      return parseInt(this.form.hours);
     },
 
     minutesSpent() {
-      return parseFloat(this.form.minutes);
+      return parseInt(this.form.minutes);
     },
 
     givenRate() {

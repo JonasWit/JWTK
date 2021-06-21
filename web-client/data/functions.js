@@ -31,3 +31,14 @@ export const amountNet = (amount, vat) => {
   }
 ;
 
+export const groupByKey = (input, key) => {
+  return input.reduce((acc, currentValue) => {
+    let groupKey = currentValue[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(currentValue);
+    return acc;
+  }, {});
+};
+

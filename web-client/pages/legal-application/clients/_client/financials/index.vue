@@ -73,6 +73,7 @@ import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-recor
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
+import {mapActions} from "vuex";
 
 export default {
   name: "index",
@@ -126,6 +127,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
     async searchFinancialRecords() {
       if (this.loading) return;
       this.loading = true;
@@ -140,6 +142,8 @@ export default {
       } catch (e) {
         console.warn('Error during financial records fetch', e);
       } finally {
+        let clientId = this.$route.params.client
+        await this.getAllWorkRecordsOnFetch({clientId});
         this.loading = false;
       }
     },
