@@ -1,33 +1,35 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar class="my-3">
-        <v-toolbar-title class="mr-3">
+      <v-container>
+        <h1 class="my-2">
           Lista spraw
-        </v-toolbar-title>
-        <v-btn @click="groupByKey">Test for grouping
-        </v-btn>
-      </v-toolbar>
+        </h1>
+        <v-expansion-panels class="expansion" focusable>
+          <v-expansion-panel v-for="item in groupedCases" :key="item[0].group">
+            <v-expansion-panel-header>
+              {{ item[0].group }}
+            </v-expansion-panel-header>
+            <v-expansion-panel-content v-for="object in item" :key="object.id">
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>
+                    {{ object.name }}
+                  </v-list-item-title>
+                  <v-list-item-title>
+                    {{ object.signature }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ object.id }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <cases-notes :selected-case="object"/>
+              </v-list>
 
-      <v-card v-for="item in groupedCases" :key="item.id">
-        <v-card-title v-for="group in item" :key="group.id">{{ group.group }}</v-card-title>
-      </v-card>
-
-
-      <v-card>
-        <v-list v-for="item in listOfCases" :key="item.id">
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ item.name }}
-              </v-list-item-title>
-              <v-list-item-subtitle>{{ item.signature }}</v-list-item-subtitle>
-              <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
-              <v-list-item-subtitle>{{ item.group }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-container>
     </template>
   </layout>
 </template>
@@ -35,11 +37,12 @@
 <script>
 import Layout from "../../../../../components/legal-app/layout";
 import {groupByKey} from "@/data/functions";
+import CasesNotes from "@/components/legal-app/cases/cases-notes";
 
 
 export default {
   name: "index",
-  components: {Layout},
+  components: {CasesNotes, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -79,12 +82,9 @@ export default {
     groupByKey() {
       let input = this.listOfCases;
       let key = 'group';
-
       const groups = groupByKey(input, key)
       this.groupedCases = groups
       console.log('group by category fired', groups)
-
-
     }
 
   },
@@ -94,5 +94,8 @@ export default {
 </script>
 
 <style scoped>
+.expansion {
+  border-left: 3px solid #B41946 !important;
+}
 
 </style>
