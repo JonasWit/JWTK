@@ -16,6 +16,11 @@ const initState = () => ({
   financialRecordsFromFetch: [],
   billingDataFromFetch: [],
   fullWorkRecordsList: [],
+
+  //Notes
+  notesListFromFetch: [],
+
+
 });
 
 export const state = initState;
@@ -62,6 +67,11 @@ export const getters = {
   //Clients List
   clientData(state) {
     return state.clientDataFromFetch;
+  },
+
+  //Notes List
+  notesBasicList(state) {
+    return state.notesListFromFetch;
   }
 
 };
@@ -111,6 +121,13 @@ export const mutations = {
   updateClientDataFromFetch(state, {clientDataFromFetch}) {
     console.warn('mutation done for updateBillingDataFromFetch', clientDataFromFetch);
     state.clientDataFromFetch = clientDataFromFetch;
+  },
+
+  //Notes
+
+  updateNotesListFromFetch(state, {notesListFromFetch}) {
+    console.warn('mutation done for updateNotesListFromFetch', notesListFromFetch);
+    state.notesListFromFetch = notesListFromFetch
   }
 
 };
@@ -180,6 +197,20 @@ export const actions = {
     } catch (e) {
       console.warn('Action from store = clientBasicListFromFetch API error', e);
     }
+  },
+
+  //Notes list
+
+  async getNotesListFromFetch({commit}, {caseId}) {
+    try {
+      let notesListFromFetch = await this.$axios.$get(`/api/legal-app-cases-notes/case/${caseId}/list-basic`)
+      commit('updateNotesListFromFetch', {notesListFromFetch});
+      console.warn('Action from store = notesListFromFetch', notesListFromFetch);
+    } catch (e) {
+      console.warn('Action from store = getNotesListFromFetch API error', e);
+    }
+
+
   }
 
 };
