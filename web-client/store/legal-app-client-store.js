@@ -119,7 +119,7 @@ export const mutations = {
 
   //Client List
   updateClientDataFromFetch(state, {clientDataFromFetch}) {
-    console.warn('mutation done for updateBillingDataFromFetch', clientDataFromFetch);
+    console.warn('mutation done for updateClientDataFromFetch', clientDataFromFetch);
     state.clientDataFromFetch = clientDataFromFetch;
   },
 

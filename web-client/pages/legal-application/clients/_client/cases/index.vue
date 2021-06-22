@@ -2,52 +2,33 @@
   <layout>
     <template v-slot:content>
       <v-container>
-        <v-card class="mx-auto" v-for="item in groupedCases" :key="item[0].group">
+        <v-card class="my-6">
           <v-card-title class="white--text orange darken-4">
-            {{ item[0].group }}
+            Lista spraw
             <v-spacer></v-spacer>
             <v-btn color="white" class="text--primary" fab small>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-card-title>
-          <v-divider></v-divider>
-          <v-virtual-scroll height="300" :items="items" :item-height="50">
-            <template v-slot:default="{ item }">
-              <v-list-item>
-                <v-list-item-content v-for="object in item" :key="object.id">
-                  <v-list-item-title> {{ object.name }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn depressed small>
-                    Przejdź do szczegółów
-                    <v-icon color="orange darken-4" right>
-                      mdi-open-in-new
-                    </v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-virtual-scroll>
         </v-card>
+        <v-expansion-panels focusable>
+          <v-expansion-panel v-for="item in groupedCases" :key="item[0].group" class="expansion">
+            <v-expansion-panel-header>{{ item[0].group }}</v-expansion-panel-header>
+            <v-expansion-panel-content>
 
 
-        <h1 class="my-5">
-          Lista spraw
-        </h1>
-        <v-row class="d-flex justify-space-around">
-          <v-card v-for="item in groupedCases" :key="item[0].group">
-            <v-card-title>
-              {{ item[0].group }}
-            </v-card-title>
-            <v-card-subtitle v-for="object in item" :key="object.id">
-              {{ object.name }}
-            </v-card-subtitle>
-
-          </v-card>
-
-        </v-row>
+              <v-card v-for="object in item" :key="object.id" class="d-flex justify-space-between">
+                <v-card-subtitle>
+                  {{ object.name }}
+                </v-card-subtitle>
+                <go-to-case-panel :selected-case="object" :client-item="clientNumber"/>
+                <delete-case :selected-case="object"/>
+              </v-card>
 
 
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-container>
     </template>
   </layout>
@@ -57,11 +38,13 @@
 import Layout from "../../../../../components/legal-app/layout";
 import {groupByKey} from "@/data/functions";
 import CasesNotes from "@/components/legal-app/cases/cases-notes";
+import GoToCasePanel from "@/components/legal-app/cases/go-to-case-panel";
+import DeleteCase from "@/components/legal-app/cases/dialogs/delete-case";
 
 
 export default {
   name: "index",
-  components: {CasesNotes, Layout},
+  components: {DeleteCase, GoToCasePanel, CasesNotes, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -71,8 +54,6 @@ export default {
     signature: "",
     description: "",
     groupedCases: [],
-    benched: 0,
-
 
   }),
 
@@ -94,6 +75,9 @@ export default {
     length() {
       return 7000
     },
+    clientNumber() {
+      return this.$route.params.client
+    }
   },
 
   methods: {
