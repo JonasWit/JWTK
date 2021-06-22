@@ -38,6 +38,5 @@ namespace SystemyWP.API.Controllers.BaseClases
 
             return output;
         }
-        
     }
 }

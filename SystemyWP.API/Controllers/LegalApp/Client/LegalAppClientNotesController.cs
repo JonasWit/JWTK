@@ -61,7 +61,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/note/create")]
+        [HttpPost("client/{clientId}/note")]
         public async Task<IActionResult> CreateNote(int clientId, [FromBody] NoteForm form)
         {
             try

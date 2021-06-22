@@ -33,11 +33,8 @@ namespace SystemyWP.API.Controllers.Access
         {
             try
             {
-                await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Loggin in");
-
-                var userId = UserId;
-                if (string.IsNullOrEmpty(userId)) return BadRequest();
-
+                await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Logging in");
+                
                 var user = await _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
@@ -73,7 +70,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -81,56 +78,70 @@ namespace SystemyWP.API.Controllers.Access
         public async Task<IActionResult> UpdatePersonalData([FromBody] UserPersonalDataForm form)
         {
             var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null)
-                return BadRequest("Nie znaleziono profilu użytkownika. Skontaktuj się z administratorem!");
+            if (userProfile is null) return BadRequest("User profile not found");
 
-            userProfile.Address = form.Address;
-            userProfile.City = form.City;
-            userProfile.Country = form.Country;
-            userProfile.Name = form.Name;
-            userProfile.Surname = form.Surname;
-            userProfile.Vivodership = form.Vivodership;
-            userProfile.AddressCorrespondence = form.AddressCorrespondence;
-            userProfile.PhoneNumber = form.PhoneNumber;
-            userProfile.PostCode = form.PostCode;
-            userProfile.CompanyFullName = form.CompanyFullName;
-            userProfile.Krs = form.Krs;
-            userProfile.Nip = form.Nip;
-            userProfile.Regon = form.Regon;
+            try
+            {
+                userProfile.Address = form.Address;
+                userProfile.City = form.City;
+                userProfile.Country = form.Country;
+                userProfile.Name = form.Name;
+                userProfile.Surname = form.Surname;
+                userProfile.Vivodership = form.Vivodership;
+                userProfile.AddressCorrespondence = form.AddressCorrespondence;
+                userProfile.PhoneNumber = form.PhoneNumber;
+                userProfile.PostCode = form.PostCode;
+                userProfile.CompanyFullName = form.CompanyFullName;
+                userProfile.Krs = form.Krs;
+                userProfile.Nip = form.Nip;
+                userProfile.Regon = form.Regon;
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                await _context.SaveChangesAsync();
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpDelete("personal-data/clear/{userId}")]
         public async Task<IActionResult> DeletePersonalData(string userId)
         {
             var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null)
-                return BadRequest("Nie znaleziono profilu użytkownika. Skontaktuj się z administratorem!");
+            if (userProfile is null) return BadRequest("User profile not found");
 
-            userProfile.Address = null;
-            userProfile.City = null;
-            userProfile.Country = null;
-            userProfile.Name = null;
-            userProfile.Surname = null;
-            userProfile.Vivodership = null;
-            userProfile.AddressCorrespondence = null;
-            userProfile.PhoneNumber = null;
-            userProfile.PostCode = null;
-            userProfile.CompanyFullName = null;
-            userProfile.Krs = null;
-            userProfile.Nip = null;
-            userProfile.Regon = null;
+            try
+            {
+                userProfile.Address = null;
+                userProfile.City = null;
+                userProfile.Country = null;
+                userProfile.Name = null;
+                userProfile.Surname = null;
+                userProfile.Vivodership = null;
+                userProfile.AddressCorrespondence = null;
+                userProfile.PhoneNumber = null;
+                userProfile.PostCode = null;
+                userProfile.CompanyFullName = null;
+                userProfile.Krs = null;
+                userProfile.Nip = null;
+                userProfile.Regon = null;
 
-            await _context.SaveChangesAsync();
-            return Ok();
+                await _context.SaveChangesAsync();
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPut("me/image")]
-        public async Task<IActionResult> UpdateProfileImage(
-            IFormFile image,
-            [FromServices] IFileProvider fileManager)
+        public async Task<IActionResult> UpdateProfileImage(IFormFile image, [FromServices] IFileProvider fileManager)
         {
             try
             {
@@ -156,8 +167,7 @@ namespace SystemyWP.API.Controllers.Access
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

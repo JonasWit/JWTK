@@ -45,47 +45,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
         }
 
         public static IQueryable<LegalAppCase> GetAllowedCase(this IQueryable<LegalAppCase> source, string userId,
-            string role, long clientId, long caseId, AppDbContext context, bool active)
-        {
-            switch (role)
-            {
-                case SystemyWpConstants.Roles.ClientAdmin:
-                    source = source
-                        .Where(lappCase =>
-                            lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
-                            lappCase.Active == active &&
-                            lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
-                    break;
-                case SystemyWpConstants.Roles.PortalAdmin:
-                    source = source
-                        .Where(lappCase =>
-                            lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
-                            lappCase.Active == active &&
-                            lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
-                    break;
-                case SystemyWpConstants.Roles.Client:
-                    source = source
-                        .Where(lappCase =>
-                            lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
-                            lappCase.Active == active &&
-                            lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
-                            context.DataAccesses.Any(dataAccess =>
-                                dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
-                                dataAccess.ItemId == lappCase.Id));
-                    break;
-            }
-
-            return source;
-        }
-
-        public static IQueryable<LegalAppCase> GetAllowedCase(this IQueryable<LegalAppCase> source, string userId,
-            string role, long caseId, AppDbContext context, bool active)
+            string role, long caseId, AppDbContext context, bool active = true)
         {
             switch (role)
             {
@@ -120,9 +80,9 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
 
             return source;
         }
-
-        public static IQueryable<LegalAppCase> GetAllowedCase(this IQueryable<LegalAppCase> source, string userId,
-            string role, long clientId, long caseId, AppDbContext context)
+        
+        public static IQueryable<LegalAppCase> GetAllAllowedCases(this IQueryable<LegalAppCase> source, string userId,
+            string role, long caseId, AppDbContext context)
         {
             switch (role)
             {
@@ -130,7 +90,6 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     source = source
                         .Where(lappCase =>
                             lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
@@ -138,7 +97,6 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     source = source
                         .Where(lappCase =>
                             lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
@@ -146,7 +104,6 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     source = source
                         .Where(lappCase =>
                             lappCase.Id == caseId &&
-                            lappCase.LegalAppClientId == clientId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>

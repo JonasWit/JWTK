@@ -135,7 +135,6 @@ namespace SystemyWP.API
 
                     financeRecord.CreatedBy = "system";
                     financeRecord.UserId = userId;
-                    financeRecord.UserEmail = "test@test.pl";
 
                     newClient.LegalAppClientWorkRecords.Add(financeRecord);
                 }

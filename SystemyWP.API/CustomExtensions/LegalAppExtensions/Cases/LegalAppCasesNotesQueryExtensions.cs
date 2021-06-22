@@ -42,5 +42,44 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
 
             return source;
         }
+
+        public static IQueryable<LegalAppCaseNote> GetAllowedNote(
+            this IQueryable<LegalAppCaseNote> source,
+            string userId, string role, long caseId, long noteId, AppDbContext context,
+            bool active = true)
+        {
+            switch (role)
+            {
+                case SystemyWpConstants.Roles.ClientAdmin:
+                    source = source.Where(legalAppCaseNote =>
+                        legalAppCaseNote.Id == noteId &&
+                        legalAppCaseNote.LegalAppCaseId == caseId &&
+                        legalAppCaseNote.Active == active &&
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                    break;
+                case SystemyWpConstants.Roles.PortalAdmin:
+                    source = source.Where(legalAppCaseNote =>
+                        legalAppCaseNote.Id == noteId &&
+                        legalAppCaseNote.LegalAppCaseId == caseId &&
+                        legalAppCaseNote.Active == active &&
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                    break;
+                case SystemyWpConstants.Roles.Client:
+                    source = source.Where(legalAppCaseNote =>
+                        legalAppCaseNote.Id == noteId &&
+                        legalAppCaseNote.LegalAppCaseId == caseId &&
+                        legalAppCaseNote.Active == active &&
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                        context.DataAccesses.Any(dataAccess =>
+                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.ItemId == legalAppCaseNote.LegalAppCase.Id));
+                    break;
+            }
+
+            return source;
+        }
     }
 }

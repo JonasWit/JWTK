@@ -39,29 +39,27 @@ namespace SystemyWP.API.Controllers.Access
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] IFileProvider fileManager)
         {
-            var uId = UserId;
             try
             {
-                var user = await userManager.FindByIdAsync(uId);
+                var user = await userManager.FindByIdAsync(UserId);
+                if (user is null) return BadRequest("User not found");
 
                 await userManager.UpdateSecurityStampAsync(user);
                 await signInManager.SignOutAsync();
 
-                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(uId));
-                if (!string.IsNullOrEmpty(userProfile?.Image))
-                    await fileManager.DeleteProfileImageAsync(userProfile.Image);
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
 
                 if (userProfile is not null) _context.Remove(userProfile);
+                
                 await _context.SaveChangesAsync();
-
                 await userManager.DeleteAsync(user);
 
                 return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, uId, UserEmail, e.Message, e);
+                await HandleException(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
