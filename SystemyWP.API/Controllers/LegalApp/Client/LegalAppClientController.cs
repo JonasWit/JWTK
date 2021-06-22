@@ -31,7 +31,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var result = _context.LegalAppClients
-                    .GetAllowedClients(UserId, Role, _context, true)
+                    .GetAllowedClient(UserId, Role, clientId, _context, true)
                     .Select(LegalAppClientProjections.FlatProjection)
                     .FirstOrDefault();
 
