@@ -48,7 +48,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/work-records")]
+        [HttpPost("client/{clientId}/work-record")]
         public async Task<IActionResult> CreateWorkRecord(long clientId, [FromBody] ClientWorkForm form)
         {
             try
