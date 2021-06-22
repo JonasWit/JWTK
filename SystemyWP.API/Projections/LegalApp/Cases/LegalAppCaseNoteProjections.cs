@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 
 namespace SystemyWP.API.Projections.LegalApp.Cases
 {

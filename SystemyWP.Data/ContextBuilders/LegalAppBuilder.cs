@@ -1,7 +1,7 @@
 ﻿using SystemyWP.Data.Models.LegalAppModels.Access;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
-using SystemyWP.Data.Models.LegalAppModels.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Contacts;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.Data.ContextBuilders

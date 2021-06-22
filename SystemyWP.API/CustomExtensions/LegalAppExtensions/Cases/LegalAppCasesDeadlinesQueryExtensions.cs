@@ -2,7 +2,7 @@
 using System.Linq;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 
 namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
 {
