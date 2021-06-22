@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Models.LegalAppModels.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Contacts;
 
 namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
 {

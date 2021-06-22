@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
 
-namespace SystemyWP.Data.Models.LegalAppModels.Contact
+namespace SystemyWP.Data.Models.LegalAppModels.Contacts
 {
     public class LegalAppPhysicalAddress : BaseModel<long>
     {        
