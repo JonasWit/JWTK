@@ -47,7 +47,7 @@ namespace SystemyWP.Data
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
         
         //Contacts
-        public DbSet<LegalAppContactDetails> LegalAppContacts { get; set; }
+        public DbSet<LegalAppContactDetail> LegalAppContacts { get; set; }
         public DbSet<LegalAppEmailAddress> LegalAppEmailAddresses { get; set; }       
         public DbSet<LegalAppPhoneNumber> LegalAppPhoneNumbers { get; set; }
         public DbSet<LegalAppPhysicalAddress> LegalAppPhysicalAddresses { get; set; }

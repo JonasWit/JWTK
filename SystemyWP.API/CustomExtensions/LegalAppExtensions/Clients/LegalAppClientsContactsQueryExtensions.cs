@@ -7,8 +7,8 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
 {
     public static class LegalAppClientsContactsQueryExtensions
     {
-        public static IQueryable<LegalAppContactDetails> GetAllowedContacts(
-            this IQueryable<LegalAppContactDetails> source,
+        public static IQueryable<LegalAppContactDetail> GetAllowedContacts(
+            this IQueryable<LegalAppContactDetail> source,
             string userId, string role, long clientId, AppDbContext context, bool active = true)
         {
             switch (role)
@@ -17,22 +17,22 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                     source = source
                         .Where(lappClientContact =>
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappClientContact =>
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappClientContact =>
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClientContact.LegalAppClientId));
@@ -42,8 +42,8 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
             return source;
         }
 
-        public static IQueryable<LegalAppContactDetails> GetAllowedContact(
-            this IQueryable<LegalAppContactDetails> source,
+        public static IQueryable<LegalAppContactDetail> GetAllowedContact(
+            this IQueryable<LegalAppContactDetail> source,
             string userId, string role, long clientId, long contactId, AppDbContext context, bool active = true)
         {
             switch (role)
@@ -53,24 +53,24 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         .Where(lappClientContact =>
                             lappClientContact.Id == contactId &&
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappClientContact =>
                             lappClientContact.Id == contactId &&
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappClientContact =>
                             lappClientContact.Id == contactId &&
                             lappClientContact.Active == active &&
-                            lappClientContact.LegalAppClient.LegalAppAccessKeyId == context.Users
-                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                            context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClientContact.LegalAppClientId));

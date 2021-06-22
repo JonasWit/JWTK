@@ -35,7 +35,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .FirstOrDefault();
                 if (legalAppClient is null) return BadRequest("Contact not found"); 
 
-                var newEntity = new LegalAppContactDetails
+                var newEntity = new LegalAppContactDetail
                 {
                     CreatedBy = UserEmail,
                     Name = createContactForm.Name,

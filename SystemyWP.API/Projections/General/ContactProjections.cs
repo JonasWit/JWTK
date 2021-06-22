@@ -7,8 +7,8 @@ namespace SystemyWP.API.Projections.General
 {
     public class ContactProjections
     {
-        public static Func<LegalAppContactDetails, object> CreateFull => FullProjection.Compile();
-        public static Expression<Func<LegalAppContactDetails, object>> FullProjection =>
+        public static Func<LegalAppContactDetail, object> CreateFull => FullProjection.Compile();
+        public static Expression<Func<LegalAppContactDetail, object>> FullProjection =>
             contactDetails => new
             {
                 contactDetails.Created,
@@ -46,8 +46,8 @@ namespace SystemyWP.API.Projections.General
                 contactDetails.Comment
             };
         
-        public static Func<LegalAppContactDetails, object> CreateBasic => BasicProjection.Compile();
-        public static Expression<Func<LegalAppContactDetails, object>> BasicProjection =>
+        public static Func<LegalAppContactDetail, object> CreateBasic => BasicProjection.Compile();
+        public static Expression<Func<LegalAppContactDetail, object>> BasicProjection =>
             contactDetails => new
             {
                 contactDetails.Created,
