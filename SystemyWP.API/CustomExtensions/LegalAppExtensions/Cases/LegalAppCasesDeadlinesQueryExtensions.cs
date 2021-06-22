@@ -46,5 +46,44 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
 
             return source;
         }
+
+        public static IQueryable<LegalAppCaseDeadline> GetAllowedDeadline(
+            this IQueryable<LegalAppCaseDeadline> source,
+            string userId, string role, long caseId, long deadlineId, AppDbContext context,
+            bool active = true)
+        {
+            switch (role)
+            {
+                case SystemyWpConstants.Roles.ClientAdmin:
+                    source = source.Where(lappDeadline =>
+                        lappDeadline.Id == deadlineId &&
+                        lappDeadline.LegalAppCaseId == caseId &&
+                        lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                    break;
+                case SystemyWpConstants.Roles.PortalAdmin:
+                    source = source.Where(lappDeadline =>
+                        lappDeadline.Id == deadlineId &&
+                        lappDeadline.LegalAppCaseId == caseId &&
+                        lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
+                    break;
+                case SystemyWpConstants.Roles.Client:
+                    source = source.Where(lappDeadline =>
+                        lappDeadline.Id == deadlineId &&
+                        lappDeadline.LegalAppCaseId == caseId &&
+                        lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                            .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                        context.DataAccesses.Any(dataAccess =>
+                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.ItemId == lappDeadline.LegalAppCase.Id));
+                    break;
+            }
+
+            return source;
+        }
     }
 }

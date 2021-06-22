@@ -104,11 +104,11 @@ namespace SystemyWP.API
             var appDefinedSingletonTypes = singletonServiceType.Assembly.DefinedTypes.ToList();
 
             var transientServices = appDefinedTransientTypes
-                .Where(x => x.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
+                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
             var scopedServices = appDefinedScopedTypes
-                .Where(x => x.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
+                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
             var singletonServices = appDefinedSingletonTypes
-                .Where(x => x.GetTypeInfo().GetCustomAttribute<SingletonService>() != null);
+                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<SingletonService>() != null);
 
             foreach (var service in transientServices)
                 services.AddTransient(service);

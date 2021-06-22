@@ -29,10 +29,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var client = _context.LegalAppClients
+                var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (client is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest();
 
                 var allowedUsers = _context.DataAccesses
                     .Where(x => x.ItemId == clientId && x.RestrictedType == RestrictedType.LegalAppClient)
@@ -56,26 +56,29 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var client = _context.LegalAppClients
+                var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (client is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest("Client not found");
 
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
+                if (admin is null)  return StatusCode(StatusCodes.Status403Forbidden);
 
                 // Eligible users
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
+                if (!result.Any(userBasic => userBasic.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
 
                 var currentAccesses = _context.DataAccesses
-                    .Where(x => x.RestrictedType == RestrictedType.LegalAppClient && x.UserId.Equals(userId))
+                    .Where(dataAccess => 
+                        dataAccess.RestrictedType == RestrictedType.LegalAppClient && 
+                        dataAccess.UserId.Equals(userId))
                     .ToList();
-                if (currentAccesses.Any(x => x.ItemId == clientId)) return BadRequest();
+                if (currentAccesses.Any(dataAccess => dataAccess.ItemId == clientId)) return BadRequest();
 
                 _context.DataAccesses.Add(new DataAccess
                 {

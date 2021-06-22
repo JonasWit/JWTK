@@ -95,7 +95,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null) return BadRequest();
+                if (user?.LegalAppAccessKey is null) return BadRequest("Access Key not found");
 
                 var newClient = new LegalAppClient
                 {
@@ -133,15 +133,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var result = _context.LegalAppClients
+                var client = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (result is null) return BadRequest();
+                if (client is null) return BadRequest("Client not found");
 
-                result.UpdatedBy = UserEmail;
-                result.Updated = DateTime.UtcNow;
-                result.Name = form.Name;
+                client.UpdatedBy = UserEmail;
+                client.Updated = DateTime.UtcNow;
+                client.Name = form.Name;
 
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -154,25 +154,45 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPut("archive/{clientId}")]
+        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
         public async Task<IActionResult> ArchiveClient(long clientId)
         {
             try
             {
-                var result = _context.LegalAppClients
+                var legalAppClient = _context.LegalAppClients
+                    .Include(x => x.LegalAppCases)
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (result is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest("Client not found");
 
-                result.Active = !result.Active;
-                result.UpdatedBy = UserEmail;
-                result.Updated = DateTime.UtcNow;
+                _context.RemoveRange(_context.DataAccesses
+                    .Where(x => x.RestrictedType == RestrictedType.LegalAppClient && x.ItemId == clientId));
+                
+                _context.RemoveRange(_context.DataAccesses
+                    .Where(dataAccess => 
+                        dataAccess.RestrictedType == RestrictedType.LegalAppCase && 
+                        _context.LegalAppCases
+                            .Where(legalAppCase => legalAppCase.LegalAppClientId == clientId)
+                            .Any(x => x.Id == dataAccess.ItemId)));
 
-                _context.RemoveRange(
-                    _context.DataAccesses
-                        .Where(x =>
-                            x.RestrictedType == RestrictedType.LegalAppClient && x.ItemId == clientId));
+                legalAppClient.Active = !legalAppClient.Active;
+                legalAppClient.UpdatedBy = UserEmail;
+                legalAppClient.Updated = DateTime.UtcNow;
 
+                foreach (var legalAppCase in legalAppClient.LegalAppCases)
+                {
+                    switch (legalAppClient.Active)
+                    {
+                        case true: 
+                            legalAppCase.Active = true;
+                            break;
+                        case false:      
+                            legalAppCase.Active = false;
+                            break;
+                    }
+                }
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -184,17 +204,18 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpDelete("delete/{clientId}")]
+        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
         public async Task<IActionResult> DeleteClient(long clientId)
         {
             try
             {
-                var result = _context.LegalAppClients
+                var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (result is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest("Client not found");
 
-                _context.Remove(result);
+                _context.Remove(legalAppClient);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

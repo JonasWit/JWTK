@@ -31,7 +31,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         .Where(lappClient =>
                             lappClient.Active == active &&
                             lappClient.LegalAppAccessKeyId == context.Users
-                                .First(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClient.Id));
@@ -68,7 +68,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                             lappClient.Id == clientId &&
                             lappClient.Active == active &&
                             lappClient.LegalAppAccessKeyId == context.Users
-                                .First(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClient.Id));
@@ -102,7 +102,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         .Where(lappClient =>
                             lappClient.Id == clientId &&
                             lappClient.LegalAppAccessKeyId == context.Users
-                                .First(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClient.Id));

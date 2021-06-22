@@ -24,7 +24,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         {
         }
         
-        [HttpGet("case/{caseId}/list-basic")]
+        [HttpGet("case/{caseId}/list")]
         public async Task<IActionResult> GetNotes(long caseId)
         {
             try
@@ -43,20 +43,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpGet("client/{clientId}/case/{caseId}/note/{noteId}")]
-        public async Task<IActionResult> GetNote(long clientId, long caseId, long noteId)
+        [HttpGet("case/{caseId}/note/{noteId}")]
+        public async Task<IActionResult> GetNote(long caseId, long noteId)
         {
             try
             {
-                var note = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
-                    .Include(x => x.LegalAppCaseNotes
-                        .Where(y => y.Id == noteId))
-                    .Select(x => x.LegalAppCaseNotes.FirstOrDefault())
+                var note = _context.LegalAppCaseNotes
+                    .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .Select(LegalAppCaseNoteProjections.Projection)
                     .FirstOrDefault();
-                if (note is null) return BadRequest();
-
+                if (note is null) return BadRequest("Note not found");
+                
                 return Ok(note);
             }
             catch (Exception e)
@@ -66,17 +63,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("client/{clientId}/case/{caseId}/create")]
-        public async Task<IActionResult> CreateNote(long clientId, long caseId, [FromBody] NoteForm form)
+        [HttpPost("case/{caseId}")]
+        public async Task<IActionResult> CreateNote(long caseId, [FromBody] NoteForm form)
         {
             try
             {
-                var result = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
+                var legalAppCase = _context.LegalAppCases
+                    .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (result is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest();
 
-                result.LegalAppCaseNotes.Add(new LegalAppCaseNote()
+                legalAppCase.LegalAppCaseNotes.Add(new LegalAppCaseNote()
                 {
                     Title = form.Title,
                     Message = form.Message,
@@ -94,21 +91,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("client/{clientId}/case/{caseId}/note/{noteId}/delete")]
-        public async Task<IActionResult> DeleteNote(long clientId, long caseId, long noteId, [FromBody] NoteForm form)
+        [HttpDelete("case/{caseId}/note/{noteId}")]
+        public async Task<IActionResult> DeleteNote(long caseId, long noteId, [FromBody] NoteForm form)
         {
             try
             {
-                var note = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
-                    .Include(x => x.LegalAppCaseNotes.Where(y => y.Id == noteId))
-                    .Select(x => x.LegalAppCaseNotes.FirstOrDefault())
-                    .AsSingleQuery()
+                var legalAppCaseNote = _context.LegalAppCaseNotes
+                    .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .FirstOrDefault();
+                if (legalAppCaseNote is null) return BadRequest("Note not found");
 
-                if (note is null) return BadRequest();
-
-                _context.Remove(note);
+                _context.Remove(legalAppCaseNote);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -119,24 +112,20 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("client/{clientId}/case/{caseId}/note/{noteId}/update")]
-        public async Task<IActionResult> UpdateNote(long clientId, long caseId, long noteId, [FromBody] NoteForm form)
+        [HttpPut("case/{caseId}/note/{noteId}")]
+        public async Task<IActionResult> UpdateNote(long caseId, long noteId, [FromBody] NoteForm form)
         {
             try
             {
-                var note = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
-                    .Include(x => x.LegalAppCaseNotes.Where(y => y.Id == noteId))
-                    .Select(x => x.LegalAppCaseNotes.FirstOrDefault())
-                    .AsSingleQuery()
+                var legalAppCaseNote = _context.LegalAppCaseNotes
+                    .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .FirstOrDefault();
+                if (legalAppCaseNote is null) return BadRequest("Note not found");
 
-                if (note is null) return BadRequest();
-
-                note.UpdatedBy = UserEmail;
-                note.Updated = DateTime.UtcNow;
-                note.Message = form.Message;
-                note.Title = form.Title;
+                legalAppCaseNote.UpdatedBy = UserEmail;
+                legalAppCaseNote.Updated = DateTime.UtcNow;
+                legalAppCaseNote.Message = form.Message;
+                legalAppCaseNote.Title = form.Title;
 
                 await _context.SaveChangesAsync();
                 return Ok();

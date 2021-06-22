@@ -44,13 +44,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpGet("client/{clientId}/case/{caseId}")]
-        public async Task<IActionResult> GetCase(long clientId, long caseId)
+        [HttpGet("case/{caseId}")]
+        public async Task<IActionResult> GetCase(long caseId)
         {
             try
             {
                 var result = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .Select(LegalAppCaseProjections.Projection)
                     .AsSingleQuery()
                     .FirstOrDefault();
@@ -66,15 +66,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("client/{clientId}/case/create")]
+        [HttpPost("client/{clientId}/case")]
         public async Task<IActionResult> CreateCase(long clientId, [FromBody] CaseForm form)
         {
             try
             {
-                var appClient = _context.LegalAppClients
+                var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context, true)
                     .FirstOrDefault();
-                if (appClient is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest();
                 
                 var newCase = new LegalAppCase()
                 {
@@ -86,7 +86,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     UpdatedBy = UserEmail
                 };
                 
-                appClient.LegalAppCases.Add(newCase);
+                legalAppClient.LegalAppCases.Add(newCase);
                 await _context.SaveChangesAsync();
 
                 //Act as normal as User
@@ -111,21 +111,21 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
         
-        [HttpPut("client/{clientId}/case/{caseId}/update")]
-        public async Task<IActionResult> UpdateCase(long clientId, long caseId, [FromBody] CaseForm form)
+        [HttpPut("case/{caseId}")]
+        public async Task<IActionResult> UpdateCase(long caseId, [FromBody] CaseForm form)
         {
             try
             {
-                var entity = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context)
+                var legalAppCase = _context.LegalAppCases
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (entity is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest();
 
-                entity.Description = form.Description;
-                entity.Name = form.Name;
-                entity.Signature = form.Signature;
-                entity.Group = form.Group;
+                legalAppCase.Description = form.Description;
+                legalAppCase.Name = form.Name;
+                legalAppCase.Signature = form.Signature;
+                legalAppCase.Group = form.Group;
 
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -137,18 +137,18 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
         
-        [HttpDelete("client/{clientId}/case/{caseId}")]
-        public async Task<IActionResult> DeleteCase(long clientId, long caseId)
+        [HttpDelete("case/{caseId}")]
+        public async Task<IActionResult> DeleteCase(long caseId)
         {
             try
             {
-                var entity = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context)
+                var legalAppCase = _context.LegalAppCases
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (entity is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest();
                 
-                _context.Remove(entity);
+                _context.Remove(legalAppCase);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -159,25 +159,24 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
         
-        [HttpPut("client/{clientId}/case/{caseId}/archive")]
-        public async Task<IActionResult> ArchiveCase(long clientId, long caseId)
+        [HttpPut("archive/case/{caseId}")]
+        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        public async Task<IActionResult> ArchiveCase(long caseId)
         {
             try
             {
-                var entity = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context)
+                var legalAppCase = _context.LegalAppCases
+                    .GetAllAllowedCases(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (entity is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest();
                 
-                entity.Active = !entity.Active;
-                entity.UpdatedBy = UserEmail;
-                entity.Updated = DateTime.UtcNow;
+                legalAppCase.Active = !legalAppCase.Active;
+                legalAppCase.UpdatedBy = UserEmail;
+                legalAppCase.Updated = DateTime.UtcNow;
                 
-                _context.RemoveRange(
-                    _context.DataAccesses
-                        .Where(x =>
-                            x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == clientId));
+                _context.RemoveRange(_context.DataAccesses
+                        .Where(x => x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == caseId));
                 
                 await _context.SaveChangesAsync();
                 return Ok();

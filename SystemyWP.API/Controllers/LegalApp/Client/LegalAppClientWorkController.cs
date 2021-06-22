@@ -70,7 +70,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     Minutes = form.Minutes,
                     EventDate = form.EventDate,
                     Vat = form.Vat,
-                    UserEmail = UserEmail,
                     UserId = UserId,
                     CreatedBy = UserEmail,
                 };
@@ -96,14 +95,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                         .FirstOrDefault();
                 
-                if (entity is null) return BadRequest();
+                if (entity is null) return BadRequest("Record not found");
                 
                 entity.LawyerName = form.LawyerName;
                 entity.Amount = form.Amount;
                 entity.Name = form.Name;
                 entity.Rate = form.Rate;
                 entity.EventDate = form.EventDate;
-                entity.UserEmail = UserEmail;
                 entity.UserId = UserId;
                 entity.CreatedBy = UserEmail;
                 entity.Vat = form.Vat;

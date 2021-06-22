@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
+using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.Data.Models.LegalAppModels.Contacts
 {
@@ -20,5 +21,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Contacts
         public List<LegalAppPhysicalAddress> PhysicalAddresses { get; set; } = new();
         
         public long LegalAppClientId { get; set; }
+        public LegalAppClient LegalAppClient { get; set; }
     }
 }

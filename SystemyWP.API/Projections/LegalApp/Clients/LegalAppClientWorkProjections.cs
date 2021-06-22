@@ -22,7 +22,6 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClientFinance.Minutes,
                 legalAppClientFinance.Rate,
                 legalAppClientFinance.EventDate,
-                legalAppClientFinance.UserEmail,
                 legalAppClientFinance.Vat
             };
     }

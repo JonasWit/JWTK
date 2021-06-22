@@ -49,17 +49,17 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }    
 
-        [HttpPost("client/{clientId}/case/{caseId}/create")]
-        public async Task<IActionResult> CreateDeadline(long clientId, long caseId, [FromBody] DeadlineFrom form)
+        [HttpPost("case/{caseId}/create")]
+        public async Task<IActionResult> CreateDeadline(long caseId, [FromBody] DeadlineFrom form)
         {
             try
             {
-                var result = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
+                var legalAppCase = _context.LegalAppCases
+                    .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (result is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest("Case not found");
 
-                result.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
+                legalAppCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
                 {
                     Deadline = form.Deadline,
                     Message = form.Message,
@@ -76,19 +76,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpDelete("client/{clientId}/case/{caseId}/item/{deadlineId}/delete")]
-        public async Task<IActionResult> DeleteDeadline(long clientId, long caseId, long deadlineId)
+        [HttpDelete("case/{caseId}/item/{deadlineId}/delete")]
+        public async Task<IActionResult> DeleteDeadline(long caseId, long deadlineId)
         {
             try
             {
-                var deadlineToDelete = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, clientId, caseId, _context, true)
-                    .Include(x => x.LegalAppCaseDeadlines.Where(y => y.Id == deadlineId))
-                    .Select(x => x.LegalAppCaseDeadlines.FirstOrDefault())
-                    .AsSingleQuery()
+                var deadlineToDelete = _context.LegalAppCaseDeadlines
+                    .GetAllowedDeadline(UserId, Role, caseId, deadlineId, _context)
                     .FirstOrDefault();
-                
-                if (deadlineToDelete is null) return BadRequest();
+                if (deadlineToDelete is null) return BadRequest("Deadline not found");
 
                 _context.Remove(deadlineToDelete);
                 await _context.SaveChangesAsync();

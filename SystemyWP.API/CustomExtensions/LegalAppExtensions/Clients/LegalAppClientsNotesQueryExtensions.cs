@@ -17,27 +17,24 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         .Where(lappNote =>
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id);
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappNote =>
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id);
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id &&
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappNote.LegalAppClientId));
@@ -56,25 +53,22 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                     source = source
                         .Where(lappNote =>
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id);
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappNote =>
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id);
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
                             lappNote.Active == active &&
-                            lappNote.LegalAppClientId == context.LegalAppClients
-                                .GetAllowedClient(userId, role, clientId, context, active)
-                                .FirstOrDefault().Id &&
+                            lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
+                                .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappNote.LegalAppClientId));
