@@ -64,7 +64,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedContacts(UserId, Role, clientId, _context)
                     .Select(ContactProjections.BasicProjection)
                     .ToList();
-                
                 return Ok(result);
             }
             catch (Exception e)
