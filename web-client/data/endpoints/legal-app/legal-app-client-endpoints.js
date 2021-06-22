@@ -42,7 +42,6 @@ export const GetClientEligibleUsers = (clientId) => {
 export const CreateContact = (clientId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact`;//POST
 };
-
 export const GetContacts = (clientId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contacts`;//GET
 };
