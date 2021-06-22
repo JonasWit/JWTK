@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms.LegalApp.Case
+﻿namespace SystemyWP.API.Forms.LegalApp.Client.Case
 {
     public class CaseForm
     {

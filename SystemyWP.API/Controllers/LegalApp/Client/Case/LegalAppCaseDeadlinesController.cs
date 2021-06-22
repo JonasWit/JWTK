@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases;
-using SystemyWP.API.Forms.LegalApp.Case;
+using SystemyWP.API.Forms.LegalApp.Client.Case;
 using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;

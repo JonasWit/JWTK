@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.LegalApp.Case.Validation
+namespace SystemyWP.API.Forms.LegalApp.Client.Case.Validation
 {
     public class CaseFormValidation : AbstractValidator<CaseForm>
     {
