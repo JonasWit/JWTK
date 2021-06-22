@@ -61,7 +61,7 @@ export default {
     try {
       await this.searchListOfCases()
     } finally {
-      return this.groupByKey()
+      this.groupByKey()
 
 
     }
@@ -111,8 +111,6 @@ export default {
 </script>
 
 <style scoped>
-.expansion {
-  border-left: 3px solid #B41946 !important;
-}
+
 
 </style>
