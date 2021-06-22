@@ -86,28 +86,27 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPut("client/{clientId}/work-record/{workRecordId}")]
-        public async Task<IActionResult> UpdateWorkRecord(long clientId, long workRecordId,
-            [FromBody] ClientWorkForm form)
+        public async Task<IActionResult> UpdateWorkRecord(long clientId, long workRecordId, [FromBody] ClientWorkForm form)
         {
             try
             {
-                var entity = _context.LegalAppClientWorkRecords
+                var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                         .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                         .FirstOrDefault();
                 
-                if (entity is null) return BadRequest("Record not found");
+                if (legalAppClientWorkRecord is null) return BadRequest("Record not found");
                 
-                entity.LawyerName = form.LawyerName;
-                entity.Amount = form.Amount;
-                entity.Name = form.Name;
-                entity.Rate = form.Rate;
-                entity.EventDate = form.EventDate;
-                entity.UserId = UserId;
-                entity.CreatedBy = UserEmail;
-                entity.Vat = form.Vat;
+                legalAppClientWorkRecord.LawyerName = form.LawyerName;
+                legalAppClientWorkRecord.Amount = form.Amount;
+                legalAppClientWorkRecord.Name = form.Name;
+                legalAppClientWorkRecord.Rate = form.Rate;
+                legalAppClientWorkRecord.EventDate = form.EventDate;
+                legalAppClientWorkRecord.UserId = UserId;
+                legalAppClientWorkRecord.CreatedBy = UserEmail;
+                legalAppClientWorkRecord.Vat = form.Vat;
 
                 await _context.SaveChangesAsync();
-                return Ok(entity);
+                return Ok(legalAppClientWorkRecord);
             }
             catch (Exception e)
             {
@@ -121,13 +120,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var entity = _context.LegalAppClientWorkRecords
+                var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                     .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                     .FirstOrDefault();
                 
-                if (entity is null) return BadRequest("Work record or client not found");           
+                if (legalAppClientWorkRecord is null) return BadRequest("Work record or client not found");           
                 
-                _context.Remove(entity);
+                _context.Remove(legalAppClientWorkRecord);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

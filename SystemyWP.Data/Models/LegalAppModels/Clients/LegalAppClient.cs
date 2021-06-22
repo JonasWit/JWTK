@@ -14,7 +14,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
         public string Name { get; set; }
 
         public List<LegalAppCase> LegalAppCases { get; set; } = new();
-        public List<LegalAppContactDetails> Contacts { get; set; } = new();
+        public List<LegalAppContactDetail> Contacts { get; set; } = new();
 
         public List<LegalAppClientWorkRecord> LegalAppClientWorkRecords { get; set; } = new();
 

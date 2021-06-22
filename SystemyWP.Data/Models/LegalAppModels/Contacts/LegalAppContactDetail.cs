@@ -5,7 +5,7 @@ using SystemyWP.Data.Models.LegalAppModels.Clients;
 
 namespace SystemyWP.Data.Models.LegalAppModels.Contacts
 {
-    public class LegalAppContactDetails : BaseModel<long>
+    public class LegalAppContactDetail : BaseModel<long>
     {
         [MaxLength(300)]
         public string Comment { get; set; }
@@ -21,6 +21,5 @@ namespace SystemyWP.Data.Models.LegalAppModels.Contacts
         public List<LegalAppPhysicalAddress> PhysicalAddresses { get; set; } = new();
         
         public long LegalAppClientId { get; set; }
-        public LegalAppClient LegalAppClient { get; set; }
     }
 }

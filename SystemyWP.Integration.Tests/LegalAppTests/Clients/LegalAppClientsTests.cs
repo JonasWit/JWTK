@@ -83,7 +83,7 @@ namespace SystemyWP.Integration.Tests.LegalAppTests.Clients
                     AllowAutoRedirect = false,
                 });
 
-            var result = await client.GetAsync("/api/legal-app-clients/client/300");
+            var result = await client.GetAsync("/api/legal-app-clients/client/251");
             
             result.StatusCode.Should().Be(StatusCodes.Status204NoContent);
         }

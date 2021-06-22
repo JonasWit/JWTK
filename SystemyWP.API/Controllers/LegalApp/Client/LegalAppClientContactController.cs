@@ -33,9 +33,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context, true)
                     .FirstOrDefault();
-                if (legalAppClient is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest("Contact not found"); 
 
-                var newEntity = new LegalAppContactDetails
+                var newEntity = new LegalAppContactDetail
                 {
                     CreatedBy = UserEmail,
                     Name = createContactForm.Name,
@@ -62,9 +62,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var result = _context.LegalAppContacts
                     .GetAllowedContacts(UserId, Role, clientId, _context)
-                    .Select(ContactProjections.FullProjection)
+                    .Select(ContactProjections.BasicProjection)
                     .ToList();
-                
                 return Ok(result);
             }
             catch (Exception e)
@@ -82,9 +81,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var result = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .Select(ContactProjections.FullProjection)
-                    .FirstOrDefault();       
+                    .FirstOrDefault();
+                if (result is null) return BadRequest("Contact not found"); 
                 
-                if (result is null) return BadRequest();
                 return Ok(result);
             }
             catch (Exception e)
@@ -102,9 +101,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
-                    .FirstOrDefault();       
-                
-                if (legalAppContactDetails is null) return BadRequest();
+                    .FirstOrDefault();
+                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
                 
                 var newEmail = new LegalAppEmailAddress
                 {
@@ -133,9 +131,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .Include(x => x.Emails.Where(y => y.Id == itemId))
                     .Select(x => x.Emails.FirstOrDefault())
-                    .FirstOrDefault();       
-                
-                if (legalAppEmailAddress is null) return BadRequest();
+                    .FirstOrDefault();
+                if (legalAppEmailAddress is null) return BadRequest("Contact not found"); 
 
                 _context.Remove(legalAppEmailAddress);
                 await _context.SaveChangesAsync();
@@ -156,9 +153,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
-                    .FirstOrDefault();   
-                
-                if (legalAppContactDetails is null) return BadRequest(); 
+                    .FirstOrDefault();
+                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
                 
                 var newPhone = new LegalAppPhoneNumber()
                 {
@@ -187,9 +183,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
                     .Select(x => x.PhoneNumbers.FirstOrDefault())
-                    .FirstOrDefault();       
-                
-                if (legalAppPhoneNumber is null) return BadRequest(); 
+                    .FirstOrDefault();
+                if (legalAppPhoneNumber is null) return BadRequest("Contact not found"); 
                 
                 _context.Remove(legalAppPhoneNumber);
                 await _context.SaveChangesAsync();
@@ -208,11 +203,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         {
             try
             {
-                var contact = _context.LegalAppContacts
+                var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
-                    .FirstOrDefault();   
-                
-                if (contact is null) return BadRequest(); 
+                    .FirstOrDefault();
+                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
                 
                 var newEntity = new LegalAppPhysicalAddress()
                 {
@@ -225,7 +219,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     PostCode = createPhysicalAddressForm.PostCode
                 };
 
-                contact.PhysicalAddresses.Add(newEntity);
+                legalAppContactDetails.PhysicalAddresses.Add(newEntity);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -245,9 +239,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
                     .Select(x => x.PhysicalAddresses.FirstOrDefault())
-                    .FirstOrDefault();       
-                
-                if (legalAppPhysicalAddress is null) return BadRequest();
+                    .FirstOrDefault();
+                if (legalAppPhysicalAddress is null) return BadRequest("Contact not found"); 
                 
                 _context.Remove(legalAppPhysicalAddress);
                 await _context.SaveChangesAsync();
@@ -268,7 +261,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest();
+                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
                 
                 _context.Remove(legalAppContactDetails);
                 await _context.SaveChangesAsync();
@@ -289,9 +282,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
-                    .FirstOrDefault();       
-                
-                if (legalAppContactDetails is null) return BadRequest();
+                    .FirstOrDefault();
+                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
                 
                 legalAppContactDetails.Name = updateContactForm.Name;
                 legalAppContactDetails.Comment = updateContactForm.Comment;

@@ -13,17 +13,17 @@ namespace SystemyWP.Data.ContextBuilders
             #region Legal App Contacts Specific
 
             modelBuilder.Entity<LegalAppEmailAddress>()
-                .HasOne<LegalAppContactDetails>()
+                .HasOne<LegalAppContactDetail>()
                 .WithMany(x => x.Emails)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<LegalAppPhoneNumber>()
-                .HasOne<LegalAppContactDetails>()
+                .HasOne<LegalAppContactDetail>()
                 .WithMany(x => x.PhoneNumbers)
                 .OnDelete(DeleteBehavior.Cascade);  
             
             modelBuilder.Entity<LegalAppPhysicalAddress>()
-                .HasOne<LegalAppContactDetails>()
+                .HasOne<LegalAppContactDetail>()
                 .WithMany(x => x.PhysicalAddresses)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -53,7 +53,7 @@ namespace SystemyWP.Data.ContextBuilders
                 .OnDelete(DeleteBehavior.Cascade);
             
             //Contacts setup
-            modelBuilder.Entity<LegalAppContactDetails>()
+            modelBuilder.Entity<LegalAppContactDetail>()
                 .HasOne<LegalAppClient>()
                 .WithMany(x => x.Contacts)
                 .OnDelete(DeleteBehavior.Cascade);

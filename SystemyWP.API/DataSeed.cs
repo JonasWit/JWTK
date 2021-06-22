@@ -80,7 +80,7 @@ namespace SystemyWP.API
                 // Seed contact details
                 for (var contactDetailsNumber = 0; contactDetailsNumber < 20; contactDetailsNumber++)
                 {
-                    var contact = new LegalAppContactDetails();
+                    var contact = new LegalAppContactDetail();
                     contact.Comment = $"Comment for Contact {contactDetailsNumber}";
                     contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber} Key: {legalAppAccessKey.Name}";
                     contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";

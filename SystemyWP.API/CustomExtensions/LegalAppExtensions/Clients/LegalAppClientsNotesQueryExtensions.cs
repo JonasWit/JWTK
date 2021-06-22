@@ -15,6 +15,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -23,6 +24,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -31,6 +33,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Id == noteId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -52,6 +55,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
@@ -59,6 +63,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
@@ -66,6 +71,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
+                            lappNote.LegalAppClientId == clientId &&
                             lappNote.Active == active &&
                             lappNote.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
