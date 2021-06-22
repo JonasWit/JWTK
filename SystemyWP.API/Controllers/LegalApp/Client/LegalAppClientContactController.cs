@@ -62,7 +62,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var result = _context.LegalAppContacts
                     .GetAllowedContacts(UserId, Role, clientId, _context)
-                    .Select(ContactProjections.FullProjection)
+                    .Select(ContactProjections.BasicProjection)
                     .ToList();
                 
                 return Ok(result);
