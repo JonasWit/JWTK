@@ -8,7 +8,7 @@ using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.LegalAppModels.Contact;
+using SystemyWP.Data.Models.LegalAppModels.Contacts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

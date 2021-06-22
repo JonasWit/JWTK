@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.LegalAppModels.Access;
 
-namespace SystemyWP.Data.Models.LegalAppModels.Clients
+namespace SystemyWP.Data.Models.LegalAppModels.Access
 {
     public class LegalAppBillingRecord : BillingData<long>
     {

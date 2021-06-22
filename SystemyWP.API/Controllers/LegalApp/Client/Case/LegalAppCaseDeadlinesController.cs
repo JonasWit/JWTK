@@ -7,7 +7,7 @@ using SystemyWP.API.Forms.LegalApp.Client.Case;
 using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Models.LegalAppModels.Cases;
+using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
