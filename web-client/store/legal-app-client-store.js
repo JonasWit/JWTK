@@ -1,5 +1,6 @@
 ﻿import {amountNet, rateNet, vatAmount, vatRate} from "@/data/functions";
-import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {getNotesTitlesList} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {formatDateToMonth} from "@/data/date-extensions";
 
 const initState = () => ({
   //Clients
@@ -20,7 +21,7 @@ const initState = () => ({
 
   //Notes list for cases
   notesListFromFetch: [],
-
+  clientNotesList: []
 
 });
 
@@ -128,6 +129,10 @@ export const mutations = {
   },
 
 
+  updateNotesTitlesListFromFetch(state, {clientNotesList}) {
+    state.clientNotesList = clientNotesList
+  }
+
 };
 
 export const actions = {
@@ -208,6 +213,23 @@ export const actions = {
       console.warn('Action from store = getNotesListFromFetch API error', e);
     }
 
+
+  },
+
+  //CLIENT Notes - list of titles
+
+  getClientsNotes({commit}, {clientId}) {
+    return this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`)
+      .then((clientNotesList) => {
+        clientNotesList.forEach(x => {
+          x.caseCreatedDate = formatDateToMonth(x.created);
+
+        });
+        console.warn('Action from store: clientNotesTitlesList', clientNotesList)
+        commit('updateNotesTitlesListFromFetch', {clientNotesList});
+      }).catch((e) => {
+        console.warn('error in getClientsNotes', e);
+      });
 
   },
 

@@ -3,24 +3,24 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="secondary" v-on="{ ...tooltip, ...dialog }">
-            Edytuj
+          <v-btn fab class="mx-2" v-on="{ ...tooltip, ...dialog }">
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <span>Edytuj treść</span>
+        <span>Dodaj notkę</span>
       </v-tooltip>
     </template>
-    <v-form ref="editNoteForm">
+    <v-form ref="addNoteForm">
       <v-card>
         <v-card-text>
           <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
-          <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
+          <v-textarea outlined v-model="form.message" label="Treść notatki" :rules="validation.message"></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="saveChanges()">
-            Zapisz zmianę
+          <v-btn text color="primary" @click="save">
+            Zapisz
           </v-btn>
           <v-btn color="success" text @click="dialog = false">
             Anuluj
@@ -29,56 +29,57 @@
       </v-card>
     </v-form>
   </v-dialog>
-
 </template>
 
 <script>
-import {updateNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {createNoteForClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
-  name: "edit-note-dialog",
-  props: {
-    noteForAction: {
-      required: true,
-      default: null
-    }
-  },
+  name: "add-note",
   data: () => ({
     dialog: false,
     form: {
       title: "",
       message: "",
     },
-  }),
-  fetch() {
-    this.form.title = this.noteForAction.title;
-    this.form.message = this.noteForAction.message;
-  },
-  methods: {
-    updateNote(clientId, noteId) {
-      return updateNote(clientId, noteId);
+    validation: {
+      valid: false,
+      message: notEmptyAndLimitedRule("Notatka może zawierać maksymalnie 1000 znaków.", 4, 1000),
     },
-    async saveChanges() {
+  }),
+
+  methods: {
+    createNoteForClient(clientId) {
+      return createNoteForClient(clientId)
+    },
+
+    async save() {
       try {
+        this.resetForm();
         const note = {
           title: this.form.title,
           message: this.form.message,
         };
 
         let clientId = this.$route.params.client;
-        let noteId = this.noteForAction.id;
 
-        await this.$axios.$put(updateNote(clientId, noteId), note);
+        await this.$axios.$post(createNoteForClient(clientId), note);
 
+        this.$notifier.showSuccessMessage("Notatka dodana pomyślnie!");
       } catch (e) {
         console.error(e);
+
       } finally {
         this.dialog = false;
-        this.$emit('action-completed');
       }
-    }
+    },
+    resetForm() {
+      this.$refs.addNoteForm.reset();
+      this.$refs.addNoteForm.resetValidation();
+    },
   }
-};
+}
 </script>
 
 <style scoped>
