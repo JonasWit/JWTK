@@ -65,6 +65,9 @@ namespace SystemyWP.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
+                loggerFactory.AddProvider(new AppLoggerProvider(
+                    serviceProvider.GetRequiredService<AppDbContext>()));
             }
             else
             {
@@ -135,6 +138,7 @@ namespace SystemyWP.API
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
+                    options.User.AllowedUserNameCharacters = "ąęźżćłśĄĘĆŚŹŻŚŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
                     options.User.RequireUniqueEmail = true;
 
                     if (_env.IsDevelopment())

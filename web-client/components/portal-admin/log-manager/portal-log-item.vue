@@ -9,6 +9,10 @@
           logItem.description
         }}
       </v-list-item-subtitle>
+      <v-list-item-subtitle v-if="logItem.description" class="py-0">User: {{
+          logItem.userEmail
+        }}
+      </v-list-item-subtitle>
     </v-list-item-content>
     <v-spacer/>
     <v-list-item-content>

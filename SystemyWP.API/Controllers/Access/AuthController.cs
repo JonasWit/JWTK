@@ -5,7 +5,6 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

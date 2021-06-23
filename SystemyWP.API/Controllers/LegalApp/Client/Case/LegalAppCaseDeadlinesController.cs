@@ -11,7 +11,6 @@ using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 {
@@ -49,7 +48,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }    
 
-        [HttpPost("case/{caseId}/create")]
+        [HttpPost("case/{caseId}")]
         public async Task<IActionResult> CreateDeadline(long caseId, [FromBody] DeadlineFrom form)
         {
             try

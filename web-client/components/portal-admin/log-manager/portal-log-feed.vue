@@ -36,6 +36,7 @@
 <script>
 
 import PortalLogItem from "@/components/portal-admin/log-manager/portal-log-item";
+
 export default {
   name: "portal-log-feed",
   components: {PortalLogItem},
@@ -55,7 +56,6 @@ export default {
     loading: false,
   }),
   fetch() {
-    console.warn('fetch fired');
     return this.handleLogs();
   },
   watch: {
@@ -93,7 +93,7 @@ export default {
       if (this.searchConditionsProvided) {
         return `/dates?from=${this.minDate}&to=${this.maxDate}&cursor=${this.cursor}&take=10&access=${this.access}&exception=${this.exception}&admin=${this.admin}&personalData=${this.personalData}&issue=${this.issue}`;
       } else {
-        return `?cursor=${this.cursor}&take=10`;
+        return `?cursor=${this.cursor}&take=25`;
       }
     },
     todayDate() {
@@ -109,14 +109,10 @@ export default {
       }
     },
     search() {
-      if (this.loading === true) return;
-      this.loading = true;
       this.logs = [];
       this.searchConditionsProvided = true;
       this.cursor = 0;
       this.handleLogs();
-
-      this.loading = false;
     },
     clear() {
       this.searchConditionsProvided = false;
@@ -137,26 +133,27 @@ export default {
       this.finished = false;
       this.$nuxt.refresh();
     },
-    handleLogs() {
+    async handleLogs() {
       if (this.loading) return;
       this.loading = true;
 
-      console.warn('handle logs fired', this.query);
-      return this.$axios.$get(`/api/portal-admin/log-admin/logs/split${this.query}`)
-        .then(logs => {
-          console.log('logs', logs);
-          if (logs.length === 0) {
-            this.finished = true;
-          } else {
-            logs.forEach(x => {
-              if (!this.logs.some(y => y.id === x.id)) {
-                this.logs.push(x);
-              }
-            });
-            this.cursor += 10;
-          }
-        })
-        .finally(() => this.loading = false);
+      try {
+        let response = await this.$axios.$get(`/api/portal-admin/log-admin/logs/split${this.query}`);
+        if (response.length === 0) {
+          this.finished = true;
+        } else {
+          response.forEach(x => {
+            if (!this.logs.some(y => y.id === x.id)) {
+              this.logs.push(x);
+            }
+          });
+          this.cursor += 25;
+        }
+      } catch (e) {
+        console.error("Error on handleLogs", e);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };

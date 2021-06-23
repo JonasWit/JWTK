@@ -60,7 +60,6 @@ export default {
     loading: false,
   }),
   fetch() {
-    console.warn('fetch fired');
     return this.handleLogs();
   },
   watch: {
@@ -144,27 +143,27 @@ export default {
       this.finished = false;
       this.handleLogs();
     },
-    handleLogs() {
+    async handleLogs() {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`)
-        .then(logs => {
-          if (logs.length === 0) {
-            this.finished = true;
-            console.warn('api-log-feed-query dates', this.query)
-          } else {
-            logs.forEach(x => {
-              if (!this.logs.some(y => y.id === x.id)) {
-                this.logs.push(x);
-              }
-            });
-            this.cursor += 10;
-          }
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      try {
+        let response = await this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`);
+        if (response.length === 0) {
+          this.finished = true;
+        } else {
+          response.forEach(x => {
+            if (!this.logs.some(y => y.id === x.id)) {
+              this.logs.push(x);
+            }
+          });
+          this.cursor += 10;
+        }
+      } catch (e) {
+        console.error("Error on handleLogs", e);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };

@@ -66,14 +66,15 @@ namespace SystemyWP.API
                 };
 
                 // Seed Client notes
-                for (var clientNoteNumber = 0; clientNoteNumber < 25; clientNoteNumber++)
+                for (var clientNoteNumber = 0; clientNoteNumber < 15; clientNoteNumber++)
                 {
                     newClient.LegalAppClientNotes.Add(new LegalAppClientNote
                     {
                         UpdatedBy = "system",
                         CreatedBy = "system",
                         Title = $"Note Title {clientNoteNumber} Key: {legalAppAccessKey.Name}",
-                        Message = GenerateText(random.Next(50, 1000))
+                        Message = GenerateText(random.Next(50, 1000)),
+                        Created = DateTime.UtcNow.AddDays(clientNoteNumber * 5 * -1)
                     });
                 }
 

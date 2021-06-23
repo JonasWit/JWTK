@@ -86,7 +86,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             }
         }
 
-        [HttpPost("reminder/create")]
+        [HttpPost("reminder")]
         public async Task<IActionResult> CreateReminder([FromBody] ReminderForm form)
         {
             try
