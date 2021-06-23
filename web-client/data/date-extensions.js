@@ -55,6 +55,12 @@ export const timeStamp = () => {
   return today = dd + '/' + mm + '/' + yyyy;
 };
 
+export function formatDateWithHours(date) {
+  let result = new Date(date);
+  let options = {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'};
+  return `${result.toLocaleDateString("pl-PL", options)}`;
+};
+
 export function formatDateToMonth(date) {
   let result = new Date(date);
   let options = {year: 'numeric', month: 'long'};

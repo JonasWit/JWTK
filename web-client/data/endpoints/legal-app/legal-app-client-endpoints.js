@@ -78,13 +78,13 @@ export const UpdateContact = (clientId, contactId) => {
 export const GetNotesTitlesList = (clientId) => {
   return `/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`;//GET
 };
-export const GetNote = (clientId, noteId) => {
+export const getNote = (clientId, noteId) => {
   return `/api/legal-app-clients-notes/client/${clientId}/note/${noteId}`;//GET
 };
 export const CreateNote = (clientId) => {
   return `/api/legal-app-clients-notes/client/${clientId}/note`;//POST
 };
-export const UpdateNote = (clientId, noteId) => {
+export const updateNote = (clientId, noteId) => {
   return `/api/legal-app-clients-notes/client/${clientId}/note/${noteId}`;//PUT
 };
 export const DeleteNote = (clientId, noteId) => {

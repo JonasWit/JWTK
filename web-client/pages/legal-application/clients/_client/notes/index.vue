@@ -7,10 +7,23 @@
           <v-expansion-panel-header class="text-uppercase">{{ formatDateToMonth(item[0].created) }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card v-for="object in item" :key="object.id" class="d-flex justify-space-between">
-              <v-card-subtitle>
-                {{ object.title }}
-              </v-card-subtitle>
+            <v-card v-for="object in item" :key="object.id" class="d-flex justify-space-between my-4">
+              <v-row>
+                <v-col cols="4">
+                  <v-card-title>
+                    Dodano: {{ formatDate(object.created) }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    Zmieniono: {{ formatDate(object.updated) }}
+                  </v-card-subtitle>
+                </v-col>
+                <v-col cols="8">
+                  <v-card-title>
+                    Tytuł: {{ object.title }}
+                  </v-card-title>
+                  <notes-details :selected-note="object"/>
+                </v-col>
+              </v-row>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -25,12 +38,13 @@
 <script>
 
 import Layout from "@/components/legal-app/layout";
-import {formatDateToMonth} from "@/data/date-extensions";
+import {formatDate, formatDateToMonth} from "@/data/date-extensions";
 import {groupByKey} from "@/data/functions";
+import NotesDetails from "@/components/legal-app/notes/notes-details";
 
 export default {
   name: "index",
-  components: {Layout},
+  components: {NotesDetails, Layout},
   data: () => ({
     fullNotesList: [],
     groupedNotes: [],
@@ -65,6 +79,10 @@ export default {
 
     formatDateToMonth(date) {
       return formatDateToMonth(date)
+    },
+
+    formatDate(date) {
+      return formatDate(date)
     },
 
     groupByKey() {

@@ -1,4 +1,5 @@
 ﻿import {amountNet, rateNet, vatAmount, vatRate} from "@/data/functions";
+import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 const initState = () => ({
   //Clients
@@ -17,7 +18,7 @@ const initState = () => ({
   billingDataFromFetch: [],
   fullWorkRecordsList: [],
 
-  //Notes
+  //Notes list for cases
   notesListFromFetch: [],
 
 
@@ -69,10 +70,6 @@ export const getters = {
     return state.clientDataFromFetch;
   },
 
-  //Notes List
-  notesBasicList(state) {
-    return state.notesListFromFetch;
-  }
 
 };
 
@@ -123,12 +120,13 @@ export const mutations = {
     state.clientDataFromFetch = clientDataFromFetch;
   },
 
-  //Notes
+  //Notes list for cases
 
   updateNotesListFromFetch(state, {notesListFromFetch}) {
     console.warn('mutation done for updateNotesListFromFetch', notesListFromFetch);
     state.notesListFromFetch = notesListFromFetch
-  }
+  },
+
 
 };
 
@@ -199,7 +197,7 @@ export const actions = {
     }
   },
 
-  //Notes list
+  //Notes list for cases
 
   async getNotesListFromFetch({commit}, {caseId}) {
     try {
@@ -212,8 +210,6 @@ export const actions = {
 
 
   },
-
-  //List of cases
 
 
 };
