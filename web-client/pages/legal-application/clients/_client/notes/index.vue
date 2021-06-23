@@ -8,7 +8,7 @@
 
       </v-toolbar>
       <v-expansion-panels focusable>
-        <v-expansion-panel v-for="item in groupedNotes" :key="item[0].created" class="expansion">
+        <v-expansion-panel v-for="item in clientNotesList" :key="item[0].created" class="expansion">
           <v-expansion-panel-header class="text-uppercase">{{ formatDateToMonth(item[0].created) }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -43,61 +43,28 @@
 
 import Layout from "@/components/legal-app/layout";
 import {formatDate, formatDateToMonth} from "@/data/date-extensions";
-import {groupByKey} from "@/data/functions";
 import NotesDetails from "@/components/legal-app/notes/notes-details";
 import AddNote from "@/components/legal-app/notes/add-note";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "index",
   components: {AddNote, NotesDetails, Layout},
-  data: () => ({
-    fullNotesList: [],
-    groupedNotes: [],
-  }),
-
-  async fetch() {
-    try {
-      await this.getClientsNotes();
-    } finally {
-      this.groupByKey();
-    }
+  data: () => ({}),
+  fetch() {
+    return this.getClientsNotes(this.$route.params.client);
   },
-
+  computed: {
+    ...mapState('legal-app-client-store', ['clientNotesList'])
+  },
   methods: {
-    async getClientsNotes() {
-      try {
-        let notesList = await this.$axios.$get(`/api/legal-app-clients-notes/client/${this.$route.params.client}/notes/titles-list`);
-        this.fullNotesList = notesList;
-        console.warn('NotesList from API:', notesList);
-      } catch (e) {
-        console.log('error from API: client notes fetch', e);
-      } finally {
-        this.fullNotesList.forEach(x => {
-          x.caseCreatedDate = this.formatDateToMonth(x.created);
-
-        });
-      }
-
-    },
-
+    ...mapActions('legal-app-client-store', ['getClientsNotes']),
     formatDateToMonth(date) {
       return formatDateToMonth(date);
     },
-
     formatDate(date) {
       return formatDate(date);
     },
-
-    groupByKey() {
-      let input = this.fullNotesList;
-      let key = 'caseCreatedDate';
-      const groups = groupByKey(input, key);
-      this.groupedNotes = groups;
-      console.log('group by category fired', groups);
-
-    },
-
-
   }
 };
 </script>

@@ -34,6 +34,7 @@
 
 <script>
 import {updateNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapActions} from "vuex";
 
 export default {
   name: "edit-note-dialog",
@@ -55,6 +56,7 @@ export default {
     this.form.message = this.noteForAction.message;
   },
   methods: {
+    ...mapActions('legal-app-client-store', ['getClientsNotes']),
     updateNote(clientId, noteId) {
       return updateNote(clientId, noteId);
     },
@@ -73,6 +75,7 @@ export default {
       } catch (e) {
         console.error(e);
       } finally {
+        await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;
         this.$emit('action-completed');
       }

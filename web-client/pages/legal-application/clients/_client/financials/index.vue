@@ -100,13 +100,10 @@ export default {
       tab: null,
     }
   ),
-
-  async fetch() {
+  fetch() {
     return this.searchFinancialRecords();
   },
-
   computed: {
-
     query() {
       let convertedDateTo = new Date(this.dateTo);
       convertedDateTo.setDate(convertedDateTo.getDate() + 1);
@@ -125,7 +122,6 @@ export default {
       }
     },
   },
-
   methods: {
     ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
     async searchFinancialRecords() {
@@ -150,8 +146,6 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
-
-
   },
 }
 </script>

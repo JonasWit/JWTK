@@ -66,14 +66,10 @@ export default {
       } catch (e) {
         console.error(e);
       } finally {
+        await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;
-        let clientId = this.$route.params.client;
-        await this.getClientsNotes({clientId});
         this.$emit('delete-completed');
-
       }
-
-
     }
   }
 }

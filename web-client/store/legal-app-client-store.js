@@ -1,6 +1,6 @@
-﻿import {amountNet, rateNet, vatAmount, vatRate} from "@/data/functions";
-import {getNotesTitlesList} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+﻿import {amountNet, groupByKey, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
+
 
 const initState = () => ({
   //Clients
@@ -22,31 +22,25 @@ const initState = () => ({
   //Notes list for cases
   notesListFromFetch: [],
   clientNotesList: []
-
 });
 
 export const state = initState;
 
 export const getters = {
-
-
   //Contact-details and add-email dialogs
   emailsList(state) {
     return state.contactDetailsFromFetch.emails;
   },
-
   phoneNumbersList(state) {
     return state.contactDetailsFromFetch.phoneNumbers;
   },
-
   addressesList(state) {
     return state.contactDetailsFromFetch.physicalAddresses;
   },
-//Financials records
+  //Financials records
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
   },
-
   sortedFinancialRecords(state) {
     const sortedItems = [...state.financialRecordsFromFetch].sort((a, b) => {
       if (a.eventDate > b.eventDate) {
@@ -56,22 +50,16 @@ export const getters = {
       }
       return 0;
     });
-
     return sortedItems;
-
   },
-
   //Billing data
   billingDataList(state) {
     return state.billingDataFromFetch;
   },
-
   //Clients List
   clientData(state) {
     return state.clientDataFromFetch;
   },
-
-
 };
 
 export const mutations = {
@@ -122,17 +110,13 @@ export const mutations = {
   },
 
   //Notes list for cases
-
   updateNotesListFromFetch(state, {notesListFromFetch}) {
     console.warn('mutation done for updateNotesListFromFetch', notesListFromFetch);
     state.notesListFromFetch = notesListFromFetch
   },
-
-
   updateNotesTitlesListFromFetch(state, {clientNotesList}) {
     state.clientNotesList = clientNotesList
   }
-
 };
 
 export const actions = {
@@ -218,20 +202,17 @@ export const actions = {
 
   //CLIENT Notes - list of titles
 
-  getClientsNotes({commit}, {clientId}) {
-    return this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`)
-      .then((clientNotesList) => {
-        clientNotesList.forEach(x => {
-          x.caseCreatedDate = formatDateToMonth(x.created);
-
-        });
-        console.warn('Action from store: clientNotesTitlesList', clientNotesList)
-        commit('updateNotesTitlesListFromFetch', {clientNotesList});
-      }).catch((e) => {
-        console.warn('error in getClientsNotes', e);
+  async getClientsNotes({commit}, clientId) {
+    try {
+      let response = await this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`)
+      response.forEach(x => {
+        x.caseCreatedDate = formatDateToMonth(x.created)
       });
+      const clientNotesList = groupByKey(response, 'caseCreatedDate');
+      commit('updateNotesTitlesListFromFetch', {clientNotesList});
+    } catch (e) {
+      console.warn('error in getClientsNotes', e);
+    }
 
-  },
-
-
+  }
 };
