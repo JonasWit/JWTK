@@ -7,7 +7,6 @@ using SystemyWP.API.Forms.GeneralApp.Contact;
 using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Contacts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -81,6 +80,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var result = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .Select(ContactProjections.FullProjection)
+                    .AsSingleQuery()
                     .FirstOrDefault();
                 if (result is null) return BadRequest("Contact not found"); 
                 

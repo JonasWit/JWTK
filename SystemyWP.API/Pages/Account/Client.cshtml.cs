@@ -25,7 +25,7 @@ namespace SystemyWP.API.Pages.Account
             public string Username { get; set; }
             
             [Required(ErrorMessage = "Pole jest wymagane")]
-            [StringLength(25, ErrorMessage = "Hasło musi mieć od 12 do 25 znaków", MinimumLength = 12)]
+            [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             [DataType(DataType.Password)]
@@ -51,11 +51,8 @@ namespace SystemyWP.API.Pages.Account
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] SignInManager<IdentityUser> signInManager)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page(); 
-            }
-            
+            if (!ModelState.IsValid) return Page();
+
             var existingUser = await userManager.FindByNameAsync(Form.Username);
             if (existingUser is not null)
             {
@@ -83,7 +80,6 @@ namespace SystemyWP.API.Pages.Account
             }
             
             CustomErrors.Add("Wystąpił błąd, spróbuj jeszcze raz.");
-            
             return Page();
         }
     }

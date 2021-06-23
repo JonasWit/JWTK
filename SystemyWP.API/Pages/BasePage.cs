@@ -6,7 +6,5 @@ namespace SystemyWP.API.Pages
     public class BasePage : PageModel
     {
         public IList<string> CustomErrors { get; set; } = new List<string>();
-
-
     }
 }
