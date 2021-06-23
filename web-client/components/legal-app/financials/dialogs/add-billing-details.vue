@@ -17,18 +17,13 @@
         <v-form ref="addBillingDataForm" v-model="validation.valid">
           <v-card>
             <v-card-text>
-              <v-text-field v-model="name" label="Nazwa" required
-                            :rules="validation.generalRule"></v-text-field>
-              <v-text-field v-model="street" label="Ulica" required
-                            :rules="validation.generalRule"></v-text-field>
+              <v-text-field v-model="name" label="Nazwa" required :rules="validation.generalRule"></v-text-field>
+              <v-text-field v-model="street" label="Ulica" required :rules="validation.generalRule"></v-text-field>
               <v-text-field v-model="address" label="Nr budynku i lokalu" required
                             :rules="validation.generalRule"></v-text-field>
-              <v-text-field v-model="postalCode" label="Kod pocztowy"
-                            :rules="validation.postal"></v-text-field>
-              <v-text-field v-model="city" label="Miasto"
-                            :rules="validation.lengthRule"></v-text-field>
-              <v-text-field v-model="phoneNumber"
-                            label="Telefon"></v-text-field>
+              <v-text-field v-model="postalCode" label="Kod pocztowy" :rules="validation.postal"></v-text-field>
+              <v-text-field v-model="city" label="Miasto" :rules="validation.lengthRule"></v-text-field>
+              <v-text-field v-model="phoneNumber" label="Telefon"></v-text-field>
               <v-text-field v-model="faxNumber" label="Fax"></v-text-field>
               <v-text-field v-model="nipNumber" label="NIP"></v-text-field>
               <v-text-field v-model="regonNumber" label="REGON" :rules="validation.regon"></v-text-field>
@@ -98,8 +93,8 @@ export default {
     postalCode() {
       if (this.postalCode) {
         let realNumber = this.postalCode.replace(/-/gi, '');
-        let dashedNumber = realNumber.replace(/^(?=[0-9]{5})([0-9]{2})([0-9]{3})$/, "$1-$2")
-        this.postalCode = dashedNumber
+        let dashedNumber = realNumber.replace(/^(?=[0-9]{5})([0-9]{2})([0-9]{3})$/, "$1-$2");
+        this.postalCode = dashedNumber;
       }
 
 
@@ -108,8 +103,8 @@ export default {
     faxNumber() {
       if (this.faxNumber) {
         let realNumber = this.faxNumber.replace(/-/gi, '');
-        let dashedNumber = realNumber.replace(/^(?=[0-9]{9})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})$/, "$1-$2-$3-$4")
-        this.faxNumber = dashedNumber
+        let dashedNumber = realNumber.replace(/^(?=[0-9]{9})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})$/, "$1-$2-$3-$4");
+        this.faxNumber = dashedNumber;
       }
 
     },
@@ -117,14 +112,13 @@ export default {
     nipNumber() {
       if (this.nipNumber) {
         let realNumber = this.nipNumber.replace(/-/gi, '');
-        let dashedNumber = realNumber.replace(/^(?=[0-9]{10})([0-9]{3})([0-9]{3})([0-9]{2})([0-9]{2})$/, "$1-$2-$3-$4")
-        this.nipNumber = dashedNumber
+        let dashedNumber = realNumber.replace(/^(?=[0-9]{10})([0-9]{3})([0-9]{3})([0-9]{2})([0-9]{2})$/, "$1-$2-$3-$4");
+        this.nipNumber = dashedNumber;
       }
     }
 
 
   },
-
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async handleSubmit() {
@@ -141,7 +135,7 @@ export default {
         nip: this.nipNumber,
         regon: this.regonNumber,
         postalCode: this.postalCode,
-      }
+      };
       try {
         await this.$axios.$post('/api/legal-app-billing/create', data);
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
@@ -150,19 +144,17 @@ export default {
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
       } finally {
-        await this.getBillingDataFromFetch()
+        await this.getBillingDataFromFetch();
         this.dialog = false;
         this.loading = false;
       }
     },
-
     resetForm() {
       this.$refs.addBillingDataForm.reset();
       this.$refs.addBillingDataForm.resetValidation();
     },
   }
-
-}
+};
 </script>
 
 <style scoped>

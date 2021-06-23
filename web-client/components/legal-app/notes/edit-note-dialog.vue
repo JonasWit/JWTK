@@ -13,10 +13,8 @@
     <v-form ref="editNoteForm">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.title" label="Tytuł"
-                        required></v-text-field>
-          <v-textarea outlined v-model="form.message" label="Treść notatki"
-          ></v-textarea>
+          <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
+          <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -51,35 +49,37 @@ export default {
     form: {
       title: "",
       message: "",
-
     },
   }),
+  fetch() {
+    this.form.title = this.noteForAction.title;
+    this.form.message = this.noteForAction.message;
+  },
   methods: {
     updateNote(clientId, noteId) {
-      return updateNote(clientId, noteId)
+      return updateNote(clientId, noteId);
     },
-
     async saveChanges() {
       try {
         const note = {
-          title: this.selectedNote.title,
-          message: this.selectedNote.message,
-        }
-        let clientId = this.$route.params.client
-        let noteId = this.selectedNote.id
-        await this.$axios.$put(updateNote(clientId, noteId), note)
+          title: this.form.title,
+          message: this.form.message,
+        };
+
+        let clientId = this.$route.params.client;
+        let noteId = this.noteForAction.id;
+
+        await this.$axios.$put(updateNote(clientId, noteId), note);
 
       } catch (e) {
-        console.log('error with ')
+        console.error(e);
+      } finally {
+        this.dialog = false;
+        this.$emit('action-completed');
       }
-
-
     }
-
   }
-
-
-}
+};
 </script>
 
 <style scoped>

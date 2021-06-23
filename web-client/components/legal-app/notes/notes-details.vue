@@ -8,13 +8,13 @@
           </v-btn>
         </template>
 
-        <v-card>
+        <v-card v-if="noteDetails">
 
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="dialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>{{ selectedNote.title }}</v-toolbar-title>
+            <v-toolbar-title>{{ noteDetails.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn dark text @click="dialog = false">
@@ -23,7 +23,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-list three-line subheader>
-            <v-subheader>{{ formatDateWithHours(selectedNote.created) }}</v-subheader>
+            <v-subheader>{{ formatDateWithHours(noteDetails.created) }}</v-subheader>
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>Treść notatki</v-list-item-title>
@@ -34,7 +34,7 @@
 
           </v-list>
           <v-divider></v-divider>
-          <edit-note-dialog :note-for-action="selectedNote"/>
+          <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
         </v-card>
       </v-dialog>
     </v-row>
@@ -58,41 +58,46 @@ export default {
   },
   data: () => ({
     dialog: false,
-    noteDetails: [],
+    noteDetails: null,
     value: 'Treść notatki...',
     noteForAction: null,
   }),
-
-  async fetch() {
-    return this.getNotesDetails()
+  watch: {
+    dialog(visible) {
+      if (visible) {
+        this.getNotesDetails();
+      }
+    }
   },
-
   methods: {
     getNote(clientId, noteId) {
-      return getNote(clientId, noteId)
+      return getNote(clientId, noteId);
     },
 
     async getNotesDetails() {
       try {
-        let clientId = this.$route.params.client
-        let noteId = this.selectedNote.id
-        this.noteDetails = await this.$axios.$get(this.getNote(clientId, noteId))
-        this.noteForAction = this.selectedNote.id
-        console.warn('note details fetched', this.noteDetails)
+        let clientId = this.$route.params.client;
+        let noteId = this.selectedNote.id;
+        this.noteDetails = await this.$axios.$get(this.getNote(clientId, noteId));
+        this.noteForAction = this.selectedNote.id;
+        console.warn('note details fetched', this.noteDetails);
       } catch (e) {
-        console.log('error fetching note details', e)
+        console.log('error fetching note details', e);
       }
 
     },
+    async editDone() {
+      await this.getNotesDetails();
+    },
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
     formatDateWithHours(date) {
-      return formatDateWithHours(date)
+      return formatDateWithHours(date);
     }
 
   }
-}
+};
 </script>
 
 <style scoped>

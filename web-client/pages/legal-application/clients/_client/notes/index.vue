@@ -28,11 +28,8 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-
-
     </template>
   </layout>
-
 </template>
 
 <script>
@@ -52,22 +49,20 @@ export default {
 
   async fetch() {
     try {
-      await this.getClientsNotes()
+      await this.getClientsNotes();
     } finally {
-      this.groupByKey()
+      this.groupByKey();
     }
-
-
   },
 
   methods: {
     async getClientsNotes() {
       try {
-        let notesList = await this.$axios.$get(`/api/legal-app-clients-notes/client/${this.$route.params.client}/notes/titles-list`)
-        this.fullNotesList = notesList
-        console.warn('NotesList from API:', notesList)
+        let notesList = await this.$axios.$get(`/api/legal-app-clients-notes/client/${this.$route.params.client}/notes/titles-list`);
+        this.fullNotesList = notesList;
+        console.warn('NotesList from API:', notesList);
       } catch (e) {
-        console.log('error from API: client notes fetch', e)
+        console.log('error from API: client notes fetch', e);
       } finally {
         this.fullNotesList.forEach(x => {
           x.caseCreatedDate = this.formatDateToMonth(x.created);
@@ -78,23 +73,23 @@ export default {
     },
 
     formatDateToMonth(date) {
-      return formatDateToMonth(date)
+      return formatDateToMonth(date);
     },
 
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
 
     groupByKey() {
       let input = this.fullNotesList;
       let key = 'caseCreatedDate';
-      const groups = groupByKey(input, key)
-      this.groupedNotes = groups
-      console.log('group by category fired', groups)
+      const groups = groupByKey(input, key);
+      this.groupedNotes = groups;
+      console.log('group by category fired', groups);
 
     },
   }
-}
+};
 </script>
 
 <style scoped>

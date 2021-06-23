@@ -103,7 +103,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 note.Title = form.Title;
                 note.Message = form.Message;
-
+                note.UpdatedBy = UserEmail;
+                note.Updated = DateTime.UtcNow;
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }
