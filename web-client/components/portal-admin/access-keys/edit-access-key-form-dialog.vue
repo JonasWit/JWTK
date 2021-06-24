@@ -92,8 +92,9 @@ export default {
 
       try {
         await this.$axios.$put(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/update/${this.selectedKey.id}`, payload);
+        this.$notifier.showSuccessMessage("Key modified");
       } catch (error) {
-        console.error(error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getLegalAppAccessKeys();
         this.loading = false;

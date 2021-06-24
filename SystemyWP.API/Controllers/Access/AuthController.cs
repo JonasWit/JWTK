@@ -59,7 +59,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

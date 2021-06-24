@@ -72,7 +72,7 @@ export default {
         this.resetForm();
         this.$notifier.showSuccessMessage("New key added!");
       } catch (error) {
-        this.$notifier.showSuccessMessage(`Issue! ${error}`);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getLegalAppAccessKeys();
         this.loading = false;

@@ -48,8 +48,9 @@ export default {
 
       try {
         await this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id});
+        this.$notifier.showSuccessMessage("Access granted");
       } catch (error) {
-        console.error("grantLegalAppAccess - Error", error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;
@@ -62,8 +63,9 @@ export default {
 
       try {
         await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id});
+        this.$notifier.showSuccessMessage("Access revoked");
       } catch (error) {
-        console.error("revokeLegalAppAccess - Error", error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;

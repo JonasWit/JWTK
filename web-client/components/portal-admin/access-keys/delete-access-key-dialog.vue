@@ -49,8 +49,9 @@ export default {
 
       try {
         await this.$axios.$delete(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/delete/${this.selectedKey.id}`);
+        this.$notifier.showSuccessMessage("Key deleted!");
       } catch (error) {
-        console.error(error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getLegalAppAccessKeys();
         this.loading = false;

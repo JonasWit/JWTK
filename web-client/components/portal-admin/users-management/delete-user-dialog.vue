@@ -52,10 +52,10 @@ export default {
       this.form.userId = this.selectedUser.id;
 
       try {
-        let response = await this.$axios.$post(`/api/portal-admin/user-admin/user/delete`, this.form);
-        console.warn("Delete log response", response);
+        await this.$axios.$post(`/api/portal-admin/user-admin/user/delete`, this.form);
+        this.$notifier.showSuccessMessage("User deleted");
       } catch (error) {
-        console.error("deleteUser - Error", error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         await this.getUsers();
         this.loading = false;

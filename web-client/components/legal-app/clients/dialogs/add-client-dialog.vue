@@ -57,20 +57,13 @@ export default {
       };
 
       try {
-        // Always get response object
-        let response = await this.$axios.$post(createClient(), client);
+        await this.$axios.$post(createClient(), client);
 
-        console.log('resp copmponent', response);
-
-        // Check status of the response - if 200 then success and do some logic
-
-        this.$notifier.showSuccessMessage("Klient dodany!");
+        this.$notifier.showSuccessMessage("Klient dodany");
         this.resetForm();
 
       } catch (error) {
-        // Show error only when there is an error with the code or Axios itself
-        //this.$notifier.showErrorMessage("Wystąpił błąd!");
-        console.log('error from compoennt', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         Object.assign(this.$data, this.$options.data.call(this));
         this.$nuxt.refresh();

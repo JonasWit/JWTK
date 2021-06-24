@@ -39,7 +39,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
 
-                if (adminUser is null) return BadRequest();
+                if (adminUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 if (adminUser.LegalAppAccessKey is null) return Ok(result);
 
                 //Get related users with the same data access key
@@ -65,10 +65,10 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                await HandleException(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -80,23 +80,23 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var identityUser = await userManager.FindByIdAsync(form.UserId);
-                if (identityUser is null) return BadRequest();
+                if (identityUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 var logoutResult = await userManager.UpdateSecurityStampAsync(identityUser);
-                if (!logoutResult.Succeeded)  return StatusCode(StatusCodes.Status500InternalServerError);
+                if (!logoutResult.Succeeded)  return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 var requester = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (requester is null) return BadRequest();
+                if (requester is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 var user = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
-                if (user is null) return BadRequest();
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
-                if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest();
-                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
+                if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
+                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 _context.DataAccesses.RemoveRange(_context.DataAccesses
                         .Where(x => x.UserId.Equals(user.Id)));
@@ -122,10 +122,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                await HandleException(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -137,23 +137,23 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var identityUser = await userManager.FindByIdAsync(form.UserId);
-                if (identityUser is null) return BadRequest();
+                if (identityUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 var logoutResult = await userManager.UpdateSecurityStampAsync(identityUser);
-                if (!logoutResult.Succeeded) return StatusCode(StatusCodes.Status500InternalServerError);
+                if (!logoutResult.Succeeded) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 var requester = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (requester is null) return BadRequest();
+                if (requester is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 var user = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
-                if (user is null) return BadRequest();
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
-                if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest();
-                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
+                if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
+                if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 _context.DataAccesses.RemoveRange(_context.DataAccesses
                         .Where(x => x.UserId.Equals(user.Id)));
@@ -188,10 +188,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                await HandleException(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -203,20 +203,20 @@ namespace SystemyWP.API.Controllers.LegalApp
             try
             {
                 var identityUser = await userManager.FindByIdAsync(form.UserId);
-                if (identityUser is null) return BadRequest();
+                if (identityUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var logoutResult = await userManager.UpdateSecurityStampAsync(identityUser);
-                if (!logoutResult.Succeeded) return StatusCode(StatusCodes.Status500InternalServerError);
+                if (!logoutResult.Succeeded) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 var requester = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (requester is null) return BadRequest();
+                if (requester is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 var user = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(form.UserId));
-                if (user is null) return BadRequest();
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
                 
                 if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest();
                 if (!requester.LegalAppAccessKey.Name.Equals(user.LegalAppAccessKey.Name)) return BadRequest();
@@ -227,10 +227,10 @@ namespace SystemyWP.API.Controllers.LegalApp
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                await HandleException(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -243,7 +243,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id.Equals(UserId)));
 
-            if (accessKey is null) return BadRequest();
+            if (accessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
             var relatedUsers = _context.Users
                 .Include(x => x.LegalAppAccessKey)

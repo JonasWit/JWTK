@@ -40,39 +40,47 @@ namespace SystemyWP.API.Controllers.Portal
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] EmailClient emailClient)
         {
-            var existingUser = await userManager.FindByEmailAsync(form.Email);
-            if (existingUser is not null) return BadRequest("User with this email already exists");
-
-            var client = new IdentityUser
+            try
             {
-                UserName = form.Email,
-                Email = form.Email
-            };
+                var existingUser = await userManager.FindByEmailAsync(form.Email);
+                if (existingUser is not null) return BadRequest(SystemyWpConstants.ResponseMessages.DataAlreadyExists);
 
-            var randomPart = new Random().Next(1000000000, int.MaxValue);
-            var createResult = await userManager.CreateAsync(client, $"{randomPart}a1!A");
+                var client = new IdentityUser
+                {
+                    UserName = form.Email,
+                    Email = form.Email
+                };
 
-            if (!createResult.Succeeded)
-            {
-                var errorResponse = createResult.Errors
-                    .Aggregate("Failed to create user:", (a, b) => $"{a} {b.Description}");
+                var randomPart = new Random().Next(1000000000, int.MaxValue);
+                var createResult = await userManager.CreateAsync(client, $"{randomPart}a1!A");
 
-                return BadRequest(errorResponse);
+                if (!createResult.Succeeded)
+                {
+                    var errorResponse = createResult.Errors
+                        .Aggregate("Failed to create user:", (a, b) => $"{a} {b.Description}");
+
+                    return BadRequest(errorResponse);
+                }
+
+                await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
+                var code = await userManager.GeneratePasswordResetTokenAsync(client);
+
+                var link = Url.Page("/Account/Client", "Get", new
+                {
+                    email = form.Email,
+                    returnUrl = form.ReturnUrl,
+                    code
+                }, HttpContext.Request.Scheme);
+
+                await emailClient.SendClientInvite(form.Email, link);
+
+                return Ok(link);
             }
-
-            await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
-            var code = await userManager.GeneratePasswordResetTokenAsync(client);
-
-            var link = Url.Page("/Account/Client", "Get", new
+            catch (Exception e)
             {
-                email = form.Email,
-                returnUrl = form.ReturnUrl,
-                code
-            }, HttpContext.Request.Scheme);
-
-            await emailClient.SendClientInvite(form.Email, link);
-
-            return Ok(link);
+                await HandleException(e);
+                return ServerError;
+            }
         }
     }
 }

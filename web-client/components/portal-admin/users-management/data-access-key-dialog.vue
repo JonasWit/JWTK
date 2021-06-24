@@ -96,8 +96,9 @@ export default {
 
       try {
         await this.$axios.$post("/api/portal-admin/key-admin/user/grant/access-key", this.form);
+        this.$notifier.showSuccessMessage("Access granted");
       } catch (error) {
-        console.error('grantAccessKey - Error', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;
@@ -110,8 +111,9 @@ export default {
 
       try {
         await this.$axios.$post("/api/portal-admin/key-admin/user/revoke/access-key", this.form);
+        this.$notifier.showSuccessMessage("Access revoked");
       } catch (error) {
-        console.error('revokeAccessKey - Error', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;

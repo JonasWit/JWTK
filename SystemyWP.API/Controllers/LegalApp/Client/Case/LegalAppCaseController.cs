@@ -40,7 +40,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -59,7 +59,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -74,14 +74,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .AsSingleQuery()
                     .FirstOrDefault();
 
-                if (result is null) return BadRequest();
+                if (result is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 return Ok(result);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -93,7 +93,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context, true)
                     .FirstOrDefault();
-                if (legalAppClient is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var newCase = new LegalAppCase()
                 {
@@ -126,7 +126,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -139,7 +139,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (legalAppCase is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 legalAppCase.Description = form.Description;
                 legalAppCase.Name = form.Name;
@@ -152,7 +152,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -165,7 +165,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (legalAppCase is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(legalAppCase);
                 await _context.SaveChangesAsync();
@@ -174,7 +174,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -188,7 +188,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .GetAllAllowedCases(UserId, Role, caseId, _context)
                     .FirstOrDefault(); 
                 
-                if (legalAppCase is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 legalAppCase.Active = !legalAppCase.Active;
                 legalAppCase.UpdatedBy = UserEmail;
@@ -203,7 +203,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

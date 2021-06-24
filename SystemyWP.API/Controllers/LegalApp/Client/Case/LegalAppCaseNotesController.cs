@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -51,14 +51,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .Select(LegalAppCaseNoteProjections.Projection)
                     .FirstOrDefault();
-                if (note is null) return BadRequest("Note not found");
+                if (note is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 return Ok(note);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -70,7 +70,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var legalAppCase = _context.LegalAppCases
                     .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (legalAppCase is null) return BadRequest();
+                if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 legalAppCase.LegalAppCaseNotes.Add(new LegalAppCaseNote()
                 {
@@ -86,7 +86,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -98,7 +98,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var legalAppCaseNote = _context.LegalAppCaseNotes
                     .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .FirstOrDefault();
-                if (legalAppCaseNote is null) return BadRequest("Note not found");
+                if (legalAppCaseNote is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.Remove(legalAppCaseNote);
                 await _context.SaveChangesAsync();
@@ -107,7 +107,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -119,7 +119,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var legalAppCaseNote = _context.LegalAppCaseNotes
                     .GetAllowedNote(UserId, Role, caseId, noteId, _context)
                     .FirstOrDefault();
-                if (legalAppCaseNote is null) return BadRequest("Note not found");
+                if (legalAppCaseNote is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 legalAppCaseNote.UpdatedBy = UserEmail;
                 legalAppCaseNote.Updated = DateTime.UtcNow;
@@ -132,7 +132,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

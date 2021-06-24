@@ -1,16 +1,6 @@
-﻿export default function ({$axios, store}) {
+﻿export default function ({$axios, store, error: nuxtError}) {
   $axios.setHeader('X-Requested-With', 'XMLHttpRequest');
   $axios.onRequest(config => {
     config.withCredentials = true;
-  });
-
-  $axios.onError((error) => {
-    if (error.response && error.response.status && error.response.data) {
-      const {status, data} = error.response;
-      if ((status | 0) === 400) {
-        store.dispatch('axios-manager/error', data);
-        return {error};
-      }
-    }
   });
 }

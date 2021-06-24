@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -58,12 +58,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                     return Ok(reminders);
                 }
 
-                return BadRequest();
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -82,7 +82,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -91,12 +91,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
         {
             try
             {
-                if (form.Start >= form.End) return BadRequest();
+                if (form.Start >= form.End) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
                 
                 var user = await _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-                if (user?.LegalAppAccessKey is null) return BadRequest();
+                if (user?.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var reminder = new LegalAppReminder
                 {
@@ -118,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -127,13 +127,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
         {
             try
             {
-                if (form.Start >= form.End) return BadRequest();
+                if (form.Start >= form.End) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
                 
                 var reminder = _context.LegalAppReminders
                     .GetReminder(UserId, Role, reminderId, _context)
                     .FirstOrDefault();
 
-                if (reminder is null) return BadRequest();
+                if (reminder is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 reminder.Updated = DateTime.UtcNow;
                 reminder.UpdatedBy = UserEmail;
@@ -149,7 +149,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -162,7 +162,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                     .GetReminder(UserId, Role, reminderId, _context)
                     .FirstOrDefault();
                 
-                if (reminder is null) return BadRequest();
+                if (reminder is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.Remove(reminder);
                 await _context.SaveChangesAsync();
@@ -171,7 +171,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

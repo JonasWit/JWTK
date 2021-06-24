@@ -33,7 +33,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
 
-                if (lappCase is null) return BadRequest();
+                if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var allowedUsers = _context.DataAccesses
                     .Where(x => x.ItemId == lappCase.Id && x.RestrictedType == RestrictedType.LegalAppCase)
@@ -46,7 +46,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -60,7 +60,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var lappCase = _context.LegalAppCases
                     .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (lappCase is null) return BadRequest();
+                if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
@@ -71,7 +71,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
+                if (!result.Any(x => x.Id.Equals(userId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var currentCasesAccesses = _context.DataAccesses
                     .Where(x =>
@@ -79,7 +79,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                         x.UserId.Equals(userId) &&
                         x.ItemId == caseId)
                     .FirstOrDefault();
-                if (currentCasesAccesses is not null) return BadRequest();
+                if (currentCasesAccesses is not null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 // Add access to client if there is none already
                 var currentClientsAccesses = _context.DataAccesses
@@ -113,7 +113,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -127,7 +127,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var lappCase = _context.LegalAppCases
                     .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (lappCase is null) return BadRequest();
+                if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
@@ -152,7 +152,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -165,7 +165,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
@@ -186,7 +186,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Wystąpił błąd");
+                return ServerError;
             }
         }
     }

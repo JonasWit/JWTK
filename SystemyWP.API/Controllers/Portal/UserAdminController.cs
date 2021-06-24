@@ -69,7 +69,7 @@ namespace SystemyWP.API.Controllers.Portal
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -90,12 +90,12 @@ namespace SystemyWP.API.Controllers.Portal
                     return Ok("User locked!");
                 }
 
-                return BadRequest("Error during lock!");
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -111,12 +111,12 @@ namespace SystemyWP.API.Controllers.Portal
 
                 var result = await userManager.SetLockoutEndDateAsync(user, null);
                 if (result.Succeeded) return Ok("User locked!");
-                return BadRequest("Error during unlock!");
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -165,12 +165,12 @@ namespace SystemyWP.API.Controllers.Portal
                     if (addToRoleResult.Succeeded) return Ok();
                 }
 
-                return BadRequest("Unable to add to new role!");
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -203,12 +203,12 @@ namespace SystemyWP.API.Controllers.Portal
                     return Ok();
                 }
 
-                return BadRequest();
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -222,11 +222,11 @@ namespace SystemyWP.API.Controllers.Portal
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaim is null) return BadRequest("User not found!");
+                if (user is null || legalAppClaim is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 if (legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                            x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
-                    return BadRequest("User already have access!");
+                    return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
 
                 var result = await userManager
                     .AddClaimAsync(user, SystemyWpConstants.Claims.LegalAppAccessClaim);
@@ -238,7 +238,7 @@ namespace SystemyWP.API.Controllers.Portal
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -252,7 +252,7 @@ namespace SystemyWP.API.Controllers.Portal
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaim is null) return BadRequest("User not found!");
+                if (user is null || legalAppClaim is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 if (!legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                             x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
@@ -268,7 +268,7 @@ namespace SystemyWP.API.Controllers.Portal
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

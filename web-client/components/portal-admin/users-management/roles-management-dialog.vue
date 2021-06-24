@@ -55,8 +55,9 @@ export default {
           userId: this.selectedUser.id,
           role: role
         });
+        this.$notifier.showSuccessMessage("Role chenged");
       } catch (error) {
-        console.error('switchRole - Error', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;

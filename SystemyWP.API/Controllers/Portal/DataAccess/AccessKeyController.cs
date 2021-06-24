@@ -28,7 +28,7 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
                 var user = await userManager.FindByIdAsync(userId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
-                if (user is null || userProfile is null) return BadRequest("There is no user with this ID!");
+                if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var assignedLegalAppKey = _context.LegalAppAccessKeys
                     .Include(x => x.Users)
@@ -54,7 +54,7 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();
+                return ServerError;
             }
         }
     }

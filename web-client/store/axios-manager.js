@@ -3,16 +3,16 @@
 export const state = initState;
 
 export const actions = {
-  error(message) {
-    this.$notifier.showErrorMessage(message);
-    console.error('Error from API => ', message);
+  error(data) {
+    this.$notifier.showErrorMessage(data);
+    console.error('Error from API => ', data);
   },
-  success(message) {
-    this.$notifier.showSuccessMessage(message);
-    console.log('Success from API => ', message);
+  success(data) {
+    this.$notifier.showSuccessMessage(data);
+    console.log('Success from API => ', data);
   },
-  warning(message) {
-    this.$notifier.showWarningMessage(message);
-    console.warn('Warning from API => ', message);
+  warning(data) {
+    this.$notifier.showWarningMessage(data);
+    console.warn('Warning from API => ', data);
   },
 };

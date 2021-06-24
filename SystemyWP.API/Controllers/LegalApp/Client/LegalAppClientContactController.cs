@@ -32,7 +32,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context, true)
                     .FirstOrDefault();
-                if (legalAppClient is null) return BadRequest("Contact not found"); 
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newEntity = new LegalAppContactDetail
                 {
@@ -50,7 +50,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -68,7 +68,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -82,14 +82,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Select(ContactProjections.FullProjection)
                     .AsSingleQuery()
                     .FirstOrDefault();
-                if (result is null) return BadRequest("Contact not found"); 
+                if (result is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 return Ok(result);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -102,7 +102,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
+                if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var newEmail = new LegalAppEmailAddress
                 {
@@ -118,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -132,7 +132,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.Emails.Where(y => y.Id == itemId))
                     .Select(x => x.Emails.FirstOrDefault())
                     .FirstOrDefault();
-                if (legalAppEmailAddress is null) return BadRequest("Contact not found"); 
+                if (legalAppEmailAddress is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.Remove(legalAppEmailAddress);
                 await _context.SaveChangesAsync();
@@ -141,7 +141,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -154,7 +154,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
+                if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var newPhone = new LegalAppPhoneNumber()
                 {
@@ -170,7 +170,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -184,7 +184,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.PhoneNumbers.Where(y => y.Id == itemId))
                     .Select(x => x.PhoneNumbers.FirstOrDefault())
                     .FirstOrDefault();
-                if (legalAppPhoneNumber is null) return BadRequest("Contact not found"); 
+                if (legalAppPhoneNumber is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(legalAppPhoneNumber);
                 await _context.SaveChangesAsync();
@@ -193,7 +193,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -206,7 +206,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
+                if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var newEntity = new LegalAppPhysicalAddress()
                 {
@@ -226,7 +226,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -240,7 +240,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.PhysicalAddresses.Where(y => y.Id == itemId))
                     .Select(x => x.PhysicalAddresses.FirstOrDefault())
                     .FirstOrDefault();
-                if (legalAppPhysicalAddress is null) return BadRequest("Contact not found"); 
+                if (legalAppPhysicalAddress is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(legalAppPhysicalAddress);
                 await _context.SaveChangesAsync();
@@ -249,7 +249,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -261,7 +261,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
+                if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(legalAppContactDetails);
                 await _context.SaveChangesAsync();
@@ -270,7 +270,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -283,7 +283,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppContactDetails = _context.LegalAppContacts
                     .GetAllowedContact(UserId, Role, clientId, contactId, _context)
                     .FirstOrDefault();
-                if (legalAppContactDetails is null) return BadRequest("Contact not found"); 
+                if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 legalAppContactDetails.Name = updateContactForm.Name;
                 legalAppContactDetails.Comment = updateContactForm.Comment;
@@ -296,7 +296,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

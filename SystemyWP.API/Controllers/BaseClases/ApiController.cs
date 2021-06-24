@@ -16,7 +16,7 @@ namespace SystemyWP.API.Controllers.BaseClases
         protected readonly PortalLogger _portalLogger;
         protected readonly AppDbContext _context;
 
-        protected IActionResult ServerError => StatusCode(StatusCodes.Status500InternalServerError, "Wystąpił Błąd");
+        protected IActionResult ServerError => StatusCode(StatusCodes.Status500InternalServerError, "Wystąpił błąd, skontaktuj się z Administratorem");
 
         public ApiController(PortalLogger portalLogger, AppDbContext context)
         {

@@ -53,8 +53,9 @@ export default {
 
       try {
         await this.$axios.$post("/api/portal-admin/user-admin/user/lock", this.form);
+        this.$notifier.showSuccessMessage("User locked");
       } catch (error) {
-        console.error('lock - Error', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;
@@ -68,8 +69,9 @@ export default {
       try {
         this.form.userId = this.selectedUser.id;
         await this.$axios.$post("/api/portal-admin/user-admin/user/unlock", this.form);
+        this.$notifier.showSuccessMessage("User unlocked");
       } catch (error) {
-        console.error('unlock - Error', error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
         this.loading = false;

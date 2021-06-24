@@ -39,12 +39,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     return Ok(result);
                 }
                 
-                return BadRequest();
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }    
 
@@ -56,7 +56,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var legalAppCase = _context.LegalAppCases
                     .GetAllowedCase(UserId, Role, caseId, _context, true)
                     .FirstOrDefault();
-                if (legalAppCase is null) return BadRequest("Case not found");
+                if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 legalAppCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
                 {
@@ -71,7 +71,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -83,7 +83,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var deadlineToDelete = _context.LegalAppCaseDeadlines
                     .GetAllowedDeadline(UserId, Role, caseId, deadlineId, _context)
                     .FirstOrDefault();
-                if (deadlineToDelete is null) return BadRequest("Deadline not found");
+                if (deadlineToDelete is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.Remove(deadlineToDelete);
                 await _context.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

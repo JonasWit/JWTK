@@ -36,7 +36,7 @@ export const actions = {
       let users = await this.$axios.$get("/api/portal-admin/user-admin/users");
       commit('updateUsersList', {users});
     } catch (error) {
-      console.error("getUsers - Error", error);
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
   async getLegalAppAccessKeys({commit}) {
@@ -45,7 +45,7 @@ export const actions = {
       keys.forEach(x => x.keyType = "legal-app");
       commit('updateLegalAppAccessKeysList', {keys});
     } catch (error) {
-      console.error("getUsers - Error", error);
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
   async getMedicalAppAccessKeys({commit}) {

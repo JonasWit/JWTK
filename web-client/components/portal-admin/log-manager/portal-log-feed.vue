@@ -150,7 +150,7 @@ export default {
           this.cursor += 25;
         }
       } catch (e) {
-        console.error("Error on handleLogs", e);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.loading = false;
       }

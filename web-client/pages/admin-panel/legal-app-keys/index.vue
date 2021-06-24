@@ -72,8 +72,9 @@ export default {
     async revokeKeyForClient(client) {
       try {
         await this.$axios.post(`/api/portal-admin/key-admin/user/revoke/access-key/${client.id}`);
+        this.$notifier.showErrorMessage("User removed from key!");
       } catch (error) {
-        console.error("getUsers - Error", error);
+        this.$notifier.showErrorMessage(error.response.data);
       }
       await this.$fetch();
     },

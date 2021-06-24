@@ -39,7 +39,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -49,7 +49,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             try
             {
                 if (_context.LegalAppAccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
-                    return BadRequest("Key with this name already exists!");
+                    return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 _context.Add(new LegalAppAccessKey
                 {
@@ -65,7 +65,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();
+                return ServerError;
             }
         }
 
@@ -76,8 +76,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var keyToUpdate = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == keyId);
-
-                if (keyToUpdate is null) return BadRequest("Key with this name not exists!");
+                if (keyToUpdate is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 keyToUpdate.Name = form.NewKeyName;
                 keyToUpdate.ExpireDate = form.ExpireDate;
@@ -90,7 +89,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();
+                return ServerError;
             }
         }
 
@@ -101,7 +100,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var keyToDelete = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == id);
-                if (keyToDelete is null) return BadRequest();
+                if (keyToDelete is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 _context.LegalAppAccessKeys.Remove(keyToDelete);
                 await _context.SaveChangesAsync();
@@ -110,7 +109,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest();
+                return ServerError;
             }
         }
 
@@ -123,23 +122,23 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id == user.Id);
-                if (user is null || userProfile is null) return BadRequest();
+                if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var accessKey = _context.LegalAppAccessKeys
                     .FirstOrDefault(x => x.Id == form.KeyId);
-                if (accessKey is null) return BadRequest();
+                if (accessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 accessKey.Users.Add(userProfile);
                 var result = await _context.SaveChangesAsync();
 
                 if (result > 0)
                     return Ok();
-                return BadRequest();
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest("Error when adding the Claim!");
+                return ServerError;
             }
         }
     }

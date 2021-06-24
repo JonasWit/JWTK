@@ -161,15 +161,15 @@ export default {
 
       this.loading = false;
     },
-    inviteRequest(data) {
-      return this.$axios.$post("/api/portal-admin/clients", data)
-        .then(r => {
-          this.$notifier.showSuccessMessage("User Invited!");
-        })
-        .catch((e) => {
-          this.$notifier.showErrorMessage(`${e}`);
-        })
-        .finally(this.getUsers());
+    async inviteRequest(data) {
+      try {
+        await this.$axios.$post("/api/portal-admin/clients", data);
+        this.$notifier.showSuccessMessage("User Invited!");
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        this.getUsers();
+      }
     }
   },
 };

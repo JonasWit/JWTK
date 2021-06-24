@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.Portal
             catch (Exception e)
             {
                 await HandleException(e);
-                return BadRequest(); 
+                return ServerError;
             }
         }
     }

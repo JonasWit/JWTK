@@ -46,12 +46,12 @@ namespace SystemyWP.API.Controllers.Access
                     return Ok();
                 }
 
-                return BadRequest();
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (legalAppClient is null) return BadRequest();
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var allowedUsers = _context.DataAccesses
                     .Where(x => x.ItemId == clientId && x.RestrictedType == RestrictedType.LegalAppClient)
@@ -45,7 +45,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -59,26 +59,26 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClient = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (legalAppClient is null) return BadRequest("Client not found");
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-                if (admin is null)  return StatusCode(StatusCodes.Status403Forbidden);
+                if (admin is null)  return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 // Eligible users
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(userBasic => userBasic.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
+                if (!result.Any(userBasic => userBasic.Id.Equals(userId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var currentAccesses = _context.DataAccesses
                     .Where(dataAccess => 
                         dataAccess.RestrictedType == RestrictedType.LegalAppClient && 
                         dataAccess.UserId.Equals(userId))
                     .ToList();
-                if (currentAccesses.Any(dataAccess => dataAccess.ItemId == clientId)) return BadRequest();
+                if (currentAccesses.Any(dataAccess => dataAccess.ItemId == clientId)) return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
 
                 _context.DataAccesses.Add(new DataAccess
                 {
@@ -94,7 +94,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -108,7 +108,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var client = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (client is null) return BadRequest();
+                if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
@@ -119,11 +119,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
+                if (!result.Any(x => x.Id.Equals(userId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var currentAccess = _context.DataAccesses
                     .FirstOrDefault(x => x.RestrictedType == RestrictedType.LegalAppClient && x.UserId.Equals(userId));
-                if (currentAccess is null) return BadRequest();
+                if (currentAccess is null) return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyRevoked);
 
                 _context.Remove(currentAccess);
 
@@ -133,7 +133,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -146,7 +146,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
@@ -167,7 +167,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

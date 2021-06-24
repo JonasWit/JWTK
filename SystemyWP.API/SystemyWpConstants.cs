@@ -5,6 +5,17 @@ namespace SystemyWP.API
 {
     public class SystemyWpConstants
     {
+        public struct ResponseMessages
+        {
+            public const string IncorrectParameters = "Niepoprawne zapytanie!";
+            public const string NoAccess = "Brak dostępu!";
+            public const string IncorrectBehaviour = "Zapytanie nie zostało obsłużone poprawnie!";
+            public const string DataAlreadyExists = "Te dane już istnieją!";
+            public const string DataNotFound = "Zapytanie nie zostało obsłużone poprawnie - nie znaleziono potrzebnych danych!";
+            public const string AlreadyGranted = "Dostęp został już udzielony";
+            public const string AlreadyRevoked = "Dostęp został już odebrany";
+        }
+        
         public struct Policies
         {
             public const string Client = nameof(Client);

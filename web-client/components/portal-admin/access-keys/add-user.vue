@@ -61,8 +61,9 @@ export default {
 
       try {
         await this.$axios.post(`/api/portal-admin/key-admin/${this.keyType}/user/grant/access-key`, payload);
+        this.$notifier.showSuccessMessage("Granted!");
       } catch (error) {
-        console.error("Error - add-user - grantKey", error);
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getLegalAppAccessKeys();
         this.getMedicalAppAccessKeys();

@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -57,7 +57,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -70,7 +70,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (client is null) return BadRequest();
+                if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newEntity = new LegalAppClientNote
                 {
@@ -88,7 +88,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -101,7 +101,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedNote(UserId, Role, clientId, noteId, _context)
                     .FirstOrDefault();
 
-                if (note is null) return BadRequest();
+                if (note is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 note.Title = form.Title;
                 note.Message = form.Message;
@@ -114,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -127,7 +127,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedNote(UserId, Role, clientId, noteId, _context)
                     .FirstOrDefault();
 
-                if (note is null) return BadRequest();
+                if (note is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(note);
                 await _context.SaveChangesAsync();
@@ -136,7 +136,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

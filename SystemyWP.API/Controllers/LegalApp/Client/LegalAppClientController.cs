@@ -114,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest("Brak dostępu");
+                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newClient = new LegalAppClient
                 {
@@ -156,7 +156,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (client is null) return BadRequest("Client not found");
+                if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 client.UpdatedBy = UserEmail;
                 client.Updated = DateTime.UtcNow;
@@ -183,7 +183,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (legalAppClient is null) return BadRequest("Client not found");
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.RemoveRange(_context.DataAccesses
                     .Where(x => x.RestrictedType == RestrictedType.LegalAppClient && x.ItemId == clientId));
@@ -232,7 +232,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
 
-                if (legalAppClient is null) return BadRequest("Client not found");
+                if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.Remove(legalAppClient);
                 await _context.SaveChangesAsync();

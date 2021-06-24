@@ -43,7 +43,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -70,7 +70,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -107,7 +107,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -146,7 +146,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
         
@@ -174,7 +174,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

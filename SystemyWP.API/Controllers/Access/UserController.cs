@@ -70,7 +70,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -78,7 +78,7 @@ namespace SystemyWP.API.Controllers.Access
         public async Task<IActionResult> UpdatePersonalData([FromBody] UserPersonalDataForm form)
         {
             var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null) return BadRequest("User profile not found");
+            if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
             try
             {
@@ -103,7 +103,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -111,7 +111,7 @@ namespace SystemyWP.API.Controllers.Access
         public async Task<IActionResult> DeletePersonalData(string userId)
         {
             var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null) return BadRequest("User profile not found");
+            if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
             try
             {
@@ -136,7 +136,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -145,10 +145,10 @@ namespace SystemyWP.API.Controllers.Access
         {
             try
             {
-                if (image is null) return BadRequest();
+                if (image is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-                if (user is null) return NoContent();
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteProfileImageAsync(user.Image);
 
@@ -168,7 +168,7 @@ namespace SystemyWP.API.Controllers.Access
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

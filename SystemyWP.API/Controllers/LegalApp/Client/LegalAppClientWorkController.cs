@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -56,7 +56,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var client = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                if (client is null) return BadRequest("Client not found");
+                if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var newEntity = new LegalAppClientWorkRecord
                 {
@@ -80,7 +80,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -92,7 +92,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                         .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                         .FirstOrDefault();
-                if (legalAppClientWorkRecord is null) return BadRequest("Record not found");
+                if (legalAppClientWorkRecord is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 legalAppClientWorkRecord.LawyerName = form.LawyerName;
                 legalAppClientWorkRecord.Amount = form.Amount;
@@ -109,7 +109,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -121,7 +121,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                     .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                     .FirstOrDefault();
-                if (legalAppClientWorkRecord is null) return BadRequest("Work record or client not found");           
+                if (legalAppClientWorkRecord is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);     
                 
                 _context.Remove(legalAppClientWorkRecord);
                 await _context.SaveChangesAsync();
@@ -130,7 +130,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }
