@@ -208,8 +208,10 @@ export const actions = {
       response.forEach(x => {
         x.caseCreatedDate = formatDateToMonth(x.created)
       });
-      const clientNotesList = groupByKey(response, 'caseCreatedDate');
+      const clientNotesList = groupByKey(response, 'caseCreatedDate')
+
       commit('updateNotesTitlesListFromFetch', {clientNotesList});
+      console.warn("list z grupami", clientNotesList)
     } catch (e) {
       console.warn('error in getClientsNotes', e);
     }

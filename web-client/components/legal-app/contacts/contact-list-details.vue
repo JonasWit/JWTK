@@ -29,6 +29,9 @@
     </v-tab>
     <v-tab-item>
       <v-card flat>
+        <!--        <v-alert v-if="emailsList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
+        <!--          Nie posiadasz jeszcze żadnych adresów email. Użyj zielonej ikonki "+", aby dodać adres email.-->
+        <!--        </v-alert>-->
         <v-card-text v-for="item in emailsList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -42,6 +45,9 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
+        <!--        <v-alert v-if="phoneNumbersList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
+        <!--          Nie posiadasz jeszcze żadnych numerów telefonów. Użyj zielonej ikonki "+", aby dodać numery.-->
+        <!--        </v-alert>-->
         <v-card-text v-for="item in phoneNumbersList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -55,6 +61,9 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
+        <!--        <v-alert v-if="addressesList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
+        <!--          Nie posiadasz jeszcze żadnych adresów. Użyj zielonej ikonki "+", aby dodać adresy.-->
+        <!--        </v-alert>-->
         <v-card-text v-for="item in addressesList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -89,6 +98,7 @@
       </v-card>
     </v-tab-item>
   </v-tabs>
+
 </template>
 
 <script>

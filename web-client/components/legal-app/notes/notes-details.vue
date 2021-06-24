@@ -15,6 +15,10 @@
             <v-toolbar-title>{{ noteDetails.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
+          <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+            Jeśli chcesz zmodyfikować treść notatki, użyj guzika "EDYTUJ". W nowym okienku będziesz mógł dokonać zmian.
+            Jeśli już nie potrzebujesz tej notatki, użyj guzika "USUŃ" i potwierdź operację.
+          </v-alert>
           <v-subheader class="mx-2"><span
             class="font-weight-bold">Utworzono: </span> {{ formatDateWithHours(noteDetails.created) }}
           </v-subheader>

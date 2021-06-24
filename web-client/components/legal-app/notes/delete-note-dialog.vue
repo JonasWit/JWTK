@@ -60,7 +60,6 @@ export default {
       try {
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
-
         await this.$axios.$delete(deleteNote(clientId, noteId));
 
       } catch (e) {

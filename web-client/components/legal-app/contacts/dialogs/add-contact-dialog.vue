@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
+          <v-btn color="white" class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="success">mdi-account-plus</v-icon>
           </v-btn>
         </template>
@@ -38,7 +38,7 @@
 
 <script>
 import {mapActions} from "vuex";
-import {lengthRule, notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 
 export default {
   name: "add-contact-dialog",
@@ -56,9 +56,9 @@ export default {
     validation: {
       valid: false,
       title: notEmptyAndLimitedRule("Nazwa nie może być pusta. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
-      name: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
-      surname: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
-      comment: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 200!", 4, 200)
+      name: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 0, 50),
+      surname: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 0, 50),
+      comment: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 200!", 0, 200)
     },
 
   }),

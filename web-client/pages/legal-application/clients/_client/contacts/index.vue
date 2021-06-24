@@ -1,12 +1,16 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar class="my-3">
+      <v-toolbar class="my-3 white--text" color="primary" dark>
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
         </v-toolbar-title>
-        <v-autocomplete return-object clearable v-model="searchResult" placeholder="Start typing to Search" dense
-                        hide-details append-icon="" prepend-inner-icon="mdi-magnify" :items="contactItems"
+        <v-autocomplete flat
+                        hide-no-data
+                        hide-details
+                        label="Wyszukaj kontakt"
+                        solo-inverted return-object clearable v-model="searchResult"
+                        prepend-inner-icon="mdi-magnify" :items="contactItems"
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
@@ -18,21 +22,33 @@
           <add-contact-dialog/>
         </template>
       </v-toolbar>
-      <v-expansion-panels focusable>
+      <v-alert v-if="contactList.length === 0" elevation="5" text type="info" dismissible
+               close-text="Zamknij">
+        Zarządzaj kontaktami dla Klienta! Wybierz sekcję, którą chcesz uzupełnić. Użyj zielonej ikonki "DODAJ KONTAKT",
+        aby
+        uzupełnić pierwszy kontakt.
+      </v-alert>
+      <v-expansion-panels focusable multiple class="expansion">
         <v-expansion-panel v-for="item in contactList" :key="item.id">
           <v-expansion-panel-header>
+            <template v-slot:actions>
+              <v-icon color="primary">
+                $expand
+              </v-icon>
+            </template>
             <v-row>
               <v-col>
-                <v-col> Nazwa: {{ item.title }}</v-col>
-                <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
+                <v-col class="font-weight-bold"> Nazwa: {{ item.title }}</v-col>
+                <v-col class="font-weight-bold"> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
               </v-col>
               <v-col>
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
-                <v-col class="hidden-sm-and-down">Dodano: {{ item.created }}</v-col>
+                <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
+
             <contact-list-details :selected-contact="item"/>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -47,6 +63,7 @@ import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contac
 import {hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
+import {formatDate} from "@/data/date-extensions";
 
 
 const searchItemFactory = (name, id) => ({
@@ -96,8 +113,11 @@ export default {
   methods: {
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
+    },
+
+    formatDate(date) {
+      return formatDate(date)
     }
-    ,
   }
 
 
