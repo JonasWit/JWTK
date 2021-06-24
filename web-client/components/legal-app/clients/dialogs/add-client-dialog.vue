@@ -34,6 +34,7 @@
 <script>
 
 import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {createClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-client-dialog",
@@ -41,51 +42,45 @@ export default {
     dialog: false,
     form: {
       name: "",
-
     },
     validation: {
       valid: false,
       name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
     },
-
   }),
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (!this.$refs.addNewClientForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
 
       const client = {
         name: this.form.name,
       };
-      return this.$axios.$post("/api/legal-app-clients/create", client)
-        .then(() => {
-          this.resetForm();
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          this.$nuxt.refresh();
-          console.warn('Client list refreshed after client creation', client);
-          this.$notifier.showSuccessMessage("Klient dodany pomyślnie!");
 
-        })
-        .catch((e) => {
-          console.warn('create client error', e);
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        // Always get response object
+        let response = await this.$axios.$post(createClient(), client);
 
+        console.log('resp copmponent', response);
 
+        // Check status of the response - if 200 then success and do some logic
+
+        this.$notifier.showSuccessMessage("Klient dodany!");
+        this.resetForm();
+
+      } catch (error) {
+        // Show error only when there is an error with the code or Axios itself
+        //this.$notifier.showErrorMessage("Wystąpił błąd!");
+        console.log('error from compoennt', error);
+      } finally {
+        Object.assign(this.$data, this.$options.data.call(this));
+        this.$nuxt.refresh();
+      }
     },
     resetForm() {
       this.$refs.addNewClientForm.reset();
       this.$refs.addNewClientForm.resetValidation();
     },
-
-
   }
-
-
 };
 </script>
 

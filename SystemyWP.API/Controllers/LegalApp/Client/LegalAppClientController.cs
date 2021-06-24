@@ -40,7 +40,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -58,9 +58,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
             catch (Exception e)
             {
-                await _portalLogger
-                    .Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, e.Message, e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -82,7 +81,27 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
+            }
+        }
+        
+        [HttpGet("clients/archive")]
+        public async Task<IActionResult> GetArchivedClients()
+        {
+            try
+            {
+                var result = _context.LegalAppClients
+                    .GetAllowedClients(UserId, Role, _context, false)
+                    .OrderBy(x => x.Name)
+                    .Select(LegalAppClientProjections.FlatProjection)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
             }
         }
 
@@ -95,7 +114,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null) return BadRequest("Access Key not found");
+                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest("Brak dostępu");
 
                 var newClient = new LegalAppClient
                 {
@@ -119,12 +138,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 }
 
                 await _context.SaveChangesAsync();
-                return Ok(LegalAppClientProjections.CreateFlat(newClient));
+                return Ok();
             }
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -149,7 +168,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -199,7 +218,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -222,7 +241,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
 
@@ -250,7 +269,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             catch (Exception e)
             {
                 await HandleException(e);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ServerError;
             }
         }
     }

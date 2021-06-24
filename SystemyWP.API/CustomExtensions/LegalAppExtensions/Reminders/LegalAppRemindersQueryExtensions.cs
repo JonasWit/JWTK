@@ -14,18 +14,21 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
             {
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&
                         lappReminder.LegalAppAccessKeyId == context.Users
@@ -43,6 +46,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
             {
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
                         lappReminder.LegalAppAccessKeyId == context.Users
@@ -50,6 +54,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
                         lappReminder.LegalAppAccessKeyId == context.Users
@@ -57,6 +62,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&
@@ -75,6 +81,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
             {
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
                         lappReminder.LegalAppAccessKeyId == context.Users
@@ -82,6 +89,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
                         lappReminder.LegalAppAccessKeyId == context.Users
@@ -89,6 +97,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source.Where(lappReminder =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&

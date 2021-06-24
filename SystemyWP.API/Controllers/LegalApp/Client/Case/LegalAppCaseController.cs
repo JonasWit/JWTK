@@ -43,6 +43,25 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        
+        [HttpGet("client/{clientId}/cases/archive")]
+        public async Task<IActionResult> GetArchivedCases(long clientId)
+        {
+            try
+            {
+                var result = _context.LegalAppCases
+                    .GetAllowedCases(UserId, Role, clientId, _context, false)
+                    .Select(LegalAppCaseProjections.LinkedProjection)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpGet("case/{caseId}")]
         public async Task<IActionResult> GetCase(long caseId)

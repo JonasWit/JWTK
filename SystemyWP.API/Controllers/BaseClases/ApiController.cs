@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.BaseClases
@@ -14,6 +15,8 @@ namespace SystemyWP.API.Controllers.BaseClases
     {
         protected readonly PortalLogger _portalLogger;
         protected readonly AppDbContext _context;
+
+        protected IActionResult ServerError => StatusCode(StatusCodes.Status500InternalServerError, "Wystąpił Błąd");
 
         public ApiController(PortalLogger portalLogger, AppDbContext context)
         {

@@ -3,10 +3,16 @@
 export const state = initState;
 
 export const actions = {
-  error({commit}, message) {
-    console.error('!!!Error from API!!!', message);
+  error(message) {
+    this.$notifier.showErrorMessage(message);
+    console.error('Error from API => ', message);
   },
-  success({commit}, message) {
-    console.error('!!!Success from API!!!', message);
+  success(message) {
+    this.$notifier.showSuccessMessage(message);
+    console.log('Success from API => ', message);
+  },
+  warning(message) {
+    this.$notifier.showWarningMessage(message);
+    console.warn('Warning from API => ', message);
   },
 };

@@ -17,6 +17,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
             {
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
@@ -25,6 +26,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
@@ -33,6 +35,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
@@ -56,6 +59,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
             {
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Id == deadlineId &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Active == active &&
@@ -64,6 +68,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Id == deadlineId &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Active == active &&
@@ -72,6 +77,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                     break;
                 case SystemyWpConstants.Roles.Client:
                     source = source.Where(lappDeadline =>
+                        context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Id == deadlineId &&
                         lappDeadline.LegalAppCaseId == caseId &&
                         lappDeadline.Active == active &&

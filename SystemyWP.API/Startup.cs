@@ -65,9 +65,6 @@ namespace SystemyWP.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                var serviceProvider = app.ApplicationServices.CreateScope().ServiceProvider;
-                loggerFactory.AddProvider(new AppLoggerProvider(
-                    serviceProvider.GetRequiredService<AppDbContext>()));
             }
             else
             {

@@ -56,7 +56,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var client = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-                
                 if (client is null) return BadRequest("Client not found");
                 
                 var newEntity = new LegalAppClientWorkRecord
@@ -93,7 +92,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                         .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                         .FirstOrDefault();
-                
                 if (legalAppClientWorkRecord is null) return BadRequest("Record not found");
                 
                 legalAppClientWorkRecord.LawyerName = form.LawyerName;
@@ -123,7 +121,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var legalAppClientWorkRecord = _context.LegalAppClientWorkRecords
                     .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                     .FirstOrDefault();
-                
                 if (legalAppClientWorkRecord is null) return BadRequest("Work record or client not found");           
                 
                 _context.Remove(legalAppClientWorkRecord);

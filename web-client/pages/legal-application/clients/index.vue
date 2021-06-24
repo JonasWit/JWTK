@@ -35,7 +35,7 @@ import {mapState} from "vuex";
 import Layout from "@/components/legal-app/layout";
 import ClientListItem from "@/components/legal-app/clients/client-list-item";
 import ButtonToGoUp from "@/components/legal-app/button-to-go-up";
-
+import {getClients, getClientsBasicList} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -58,20 +58,19 @@ export default {
     loading: false,
     searchConditionsProvided: false,
     cursor: 0,
+    takeAmount: 30
 
   }),
-
-
   async fetch() {
-    this.clientSearchItems = await this.$axios.$get("/api/legal-app-clients/clients/basic-list");
+    this.cursor = 0;
+    this.clientList = [];
+    this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
     await this.handleFeed();
-    console.warn('fetched clients');
   },
 
   watch: {
     searchResult() {
       if (this.searchResult) {
-        console.warn('Search result:', this.searchResult);
         this.loading = true;
         this.$axios.$get(`/api/legal-app-clients/client/${this.searchResult.id}`)
           .then(clientFound => {
@@ -92,7 +91,6 @@ export default {
     clientForAction() {
       Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
       this.$nuxt.refresh();
-      console.warn('Client list refreshed', this.cursor);
     }
   },
 
@@ -107,7 +105,7 @@ export default {
         this.cursor = 0;
         this.clientList = [];
       } else {
-        return `cursor=${this.cursor}&take=10`;
+        return `cursor=${this.cursor}&take=${this.takeAmount}`;
       }
     },
 
@@ -130,15 +128,13 @@ export default {
       if (this.loading) return;
       this.loading = true;
 
-      return this.$axios.$get(`/api/legal-app-clients/clients?${this.query}`)
+      return this.$axios.$get(`${getClients()}?${this.query}`)
         .then(clientsFeed => {
-          console.warn('query feed', this.query);
-          console.warn('query feed', clientsFeed);
           if (clientsFeed.length === 0) {
             this.finished = true;
           } else {
             clientsFeed.forEach(x => this.clientList.push(x));
-            this.cursor += 10;
+            this.cursor += this.takeAmount;
           }
         })
         .catch(e => {

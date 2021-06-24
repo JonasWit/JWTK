@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
@@ -15,6 +16,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.LegalAppClientId == clientId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -23,6 +25,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.LegalAppClientId == clientId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -31,6 +34,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.LegalAppClientId == clientId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -52,6 +56,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -60,6 +65,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -68,6 +74,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.Active == active &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
@@ -89,6 +96,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.ClientAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
@@ -96,6 +104,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
@@ -103,6 +112,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappCase =>
+                            context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappCase.Id == caseId &&
                             lappCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                                 .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&

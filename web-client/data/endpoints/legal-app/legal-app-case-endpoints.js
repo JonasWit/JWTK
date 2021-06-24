@@ -1,5 +1,8 @@
 //Case Controller
 
+export const getArchivedCases = (clientId) => {
+  return `/api/legal-app-clients/client/${clientId}/cases/archive`;//GET
+};
 export const getCases = (clientId) => {
   return `/api/legal-app-cases/client/${clientId}/cases`;//GET
 };

@@ -28,8 +28,7 @@ export const getters = {
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
   client: (state, getters) => getters.authenticated && state.profile.role === ROLES.CLIENT,
-  clientAdmin: (state, getters) => getters.authenticated &&
-    (state.profile.role === ROLES.CLIENT_ADMIN || getters.portalAdmin),
+  clientAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.CLIENT_ADMIN || getters.portalAdmin),
   portalAdmin: (state, getters) => getters.authenticated && state.profile.role === ROLES.PORTAL_ADMIN,
   legalAppAllowed: (state, getters) => getters.authenticated && state.profile.legalAppAllowed === true,
 };
@@ -47,6 +46,7 @@ export const actions = {
   initialize({commit}) {
     return this.$axios.$get('/api/users/me')
       .then((profile) => {
+        console.warn('User Profile: ', profile);
         commit('saveProfile', {profile},
         );
       })

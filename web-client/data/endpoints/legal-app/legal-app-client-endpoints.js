@@ -1,15 +1,18 @@
 ﻿//Client Controller
 
+export const getArchivedClient = () => {
+  return `/api/legal-app-clients/clients/archive`;//GET
+};
 export const GetClient = (clientId) => {
   return `/api/legal-app-clients/client/${clientId}`;//GET
 };
-export const GetClientsBasicList = () => {
+export const getClientsBasicList = () => {
   return `/api/legal-app-clients/clients/basic-list`;//GET
 };
-export const GetClients = () => {
+export const getClients = () => {
   return `/api/legal-app-clients/clients`;//GET
 };
-export const CreateClient = () => {
+export const createClient = () => {
   return `/api/legal-app-clients/create`;//POST
 };
 export const UpdateClient = (clientId) => {

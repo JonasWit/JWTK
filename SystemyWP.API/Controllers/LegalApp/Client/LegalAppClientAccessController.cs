@@ -146,7 +146,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-                if (admin?.LegalAppAccessKey is null) return BadRequest();
+                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
