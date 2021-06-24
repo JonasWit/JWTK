@@ -76,7 +76,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     CreatedBy = UserEmail,
                     Title = form.Title,
-                    Message = form.Message
+                    Message = form.Message,
+                    UpdatedBy = UserEmail,
+                    Updated = DateTime.UtcNow
                 };
 
                 client.LegalAppClientNotes.Add(newEntity);
