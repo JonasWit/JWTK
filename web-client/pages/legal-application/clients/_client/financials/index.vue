@@ -88,7 +88,7 @@ export default {
     ButtonToGoUp,
     Layout,
   },
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'client-admin', 'authenticated'],
   data: () => ({
       financialRecords: [],
       loading: false,

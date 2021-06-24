@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-2 option-btn" x-large v-on="{ ...tooltip, ...dialog }">
+          <v-btn icon class="mx-2 option-btn" x-large v-on="{ ...tooltip, ...dialog }">
             <v-icon medium color="success">mdi-file-document-edit</v-icon>
           </v-btn>
         </template>
@@ -41,7 +41,7 @@
 
 <script>
 import {mapMutations} from "vuex";
-import {lengthRule, notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 
 export default {
   name: "edit-contact-dialog",

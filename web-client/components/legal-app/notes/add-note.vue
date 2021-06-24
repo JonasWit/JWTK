@@ -10,11 +10,12 @@
         <span>Dodaj notkę</span>
       </v-tooltip>
     </template>
-    <v-form ref="addNoteForm">
+    <v-form ref="addNoteForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
-          <v-textarea outlined v-model="form.message" label="Treść notatki" :rules="validation.message"></v-textarea>
+          <v-text-field v-model="form.title" label="Tytuł" required :rules="validation.title"></v-text-field>
+          <v-textarea outlined v-model="form.message" label="Treść notatki" required
+                      :rules="validation.message"></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -32,12 +33,14 @@
 </template>
 
 <script>
-import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {createNoteForClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapActions} from "vuex";
 
 export default {
   name: "add-note",
   data: () => ({
+    loading: false,
     dialog: false,
     form: {
       title: "",
@@ -45,38 +48,44 @@ export default {
     },
     validation: {
       valid: false,
-      message: notEmptyAndLimitedRule("Notatka może zawierać maksymalnie 1000 znaków.", 4, 1000),
+      title: notEmptyRule("Tytuł notatki nie może być pusty"),
+      message: notEmptyAndLimitedRule("Notatka nie może byc pusta i może zawierać maksymalnie 1000 znaków.", 4, 1000),
     },
   }),
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getClientsNotes']),
+
     createNoteForClient(clientId) {
       return createNoteForClient(clientId)
     },
 
     async save() {
+      if (!this.$refs.addNoteForm.validate()) return;
+      if (this.loading) return;
+      this.loading = true;
       try {
-        this.resetForm();
         const note = {
           title: this.form.title,
           message: this.form.message,
         };
 
         let clientId = this.$route.params.client;
-
         await this.$axios.$post(createNoteForClient(clientId), note);
-
         this.$notifier.showSuccessMessage("Notatka dodana pomyślnie!");
       } catch (e) {
         console.error(e);
 
       } finally {
+        await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;
+        this.loading = false;
       }
     },
     resetForm() {
       this.$refs.addNoteForm.reset();
       this.$refs.addNoteForm.resetValidation();
+
     },
   }
 }
