@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
           <v-btn fab class="mx-2" v-on="{ ...tooltip, ...dialog }">
-            <v-icon>mdi-plus</v-icon>
+            <v-icon color="success">mdi-plus</v-icon>
           </v-btn>
         </template>
         <span>Dodaj notkę</span>

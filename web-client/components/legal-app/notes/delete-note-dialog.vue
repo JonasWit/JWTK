@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {deleteNote, updateNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {deleteNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
 
 export default {

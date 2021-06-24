@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar class="mb-4">
+      <v-toolbar class="mb-4 white--text" color="primary">
         <v-toolbar-title>Moje notatki</v-toolbar-title>
         <v-spacer></v-spacer>
         <add-note/>
