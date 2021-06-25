@@ -17,7 +17,6 @@
                         required></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj nazwę"
                         required></v-text-field>
-          <small class="grey--text">* Hint text here</small>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>

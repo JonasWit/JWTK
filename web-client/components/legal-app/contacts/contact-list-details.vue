@@ -103,16 +103,11 @@ export default {
       type: Object,
       default: null
     },
-
-
   },
-
   async fetch() {
     let clientId = this.$route.params.client;
     let contactId = this.selectedContact.id;
     this.getContactDetailsFromFetch({clientId, contactId});
-    console.warn('contact-list-details -- fetch from store completed', this.contactDetailsFromFetch);
-
   },
   computed: {
     ...mapState('legal-app-client-store', ['emailsList', 'phoneNumbersList', 'addressesList']),
@@ -121,7 +116,6 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['updateContactDetailsList']),
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch'])
-
   }
 };
 </script>

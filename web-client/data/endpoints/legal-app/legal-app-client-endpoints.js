@@ -54,13 +54,13 @@ export const GetContact = (clientId, contactId) => {
 export const createContactEmail = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/emails`;//POST
 };
-export const DeleteContactEmail = (clientId, contactId, itemId) => {
+export const deleteContactEmail = (clientId, contactId, itemId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/email/${itemId}`;//DELETE
 };
 export const createContactPhoneNumber = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/phone-number`;//POST
 };
-export const DeleteContactPhoneNumber = (clientId, contactId, itemId) => {
+export const deleteContactPhoneNumber = (clientId, contactId, itemId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/phone-number/${itemId}`;//DELETE
 };
 export const createContactPhysicalAddress = (clientId, contactId) => {
@@ -72,7 +72,7 @@ export const deleteContactPhysicalAddress = (clientId, contactId, itemId) => {
 export const deleteContact = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`;//DELETE
 };
-export const UpdateContact = (clientId, contactId) => {
+export const updateContact = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`;//PUT
 };
 
@@ -96,22 +96,34 @@ export const deleteNote = (clientId, noteId) => {
 
 //Client Work Controller
 
-export const GetWorkRecords = (clientId) => {
+export const getWorkRecords = (clientId) => {
   return `/api/legal-app-clients-work/client/${clientId}/work-records`;//GET
 };
 
-export const CreateWorkRecord = (clientId) => {
+export const createWorkRecord = (clientId) => {
   return `/api/legal-app-clients-work/client/${clientId}/work-record`;//POST
 };
 
-export const UpdateWorkRecord = (clientId, workRecordId) => {
+export const updateWorkRecord = (clientId, workRecordId) => {
   return `/api/legal-app-clients-work/client/${clientId}/work-record/${workRecordId}`;//PUT
 };
 
-export const DeleteWorkRecord = (clientId, workRecordId) => {
+export const deleteWorkRecord = (clientId, workRecordId) => {
   return `/api/legal-app-clients-work/client/${clientId}/work-record/${workRecordId}`;//DELETE
 };
 
+// Billing data
+export const addBillingData = () => {
+  return `/api/legal-app-billing/create`;//POST
+};
+
+export const deleteBillingData = (billingRecordId) => {
+  return `/api/legal-app-billing/delete/${billingRecordId}`;//DELETE
+};
+
+export const updateBillingData = (billingRecordId) => {
+  return `/api/legal-app-billing/update/${billingRecordId}`;//PUT
+};
 
 
 

@@ -210,7 +210,7 @@ export const actions = {
       response.sort((a, b) => {
         const dateA = new Date(a.created)
         const dateB = new Date(b.created)
-        return dateA - dateB
+        return dateB - dateA
       });
       response.forEach(x => {
         x.caseCreatedDate = formatDateToMonth(x.created)

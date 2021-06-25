@@ -63,14 +63,12 @@ export default {
           title: this.form.title,
           message: this.form.message,
         };
-
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
-
         await this.$axios.$put(updateNote(clientId, noteId), note);
 
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;

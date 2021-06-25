@@ -47,6 +47,7 @@
 <script>
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import {mapActions} from "vuex";
+import {updateBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "edit-billing-data",
@@ -85,9 +86,7 @@ export default {
   }),
   async fetch() {
     this.billingRecord = this.selectedBillingRecord
-
   },
-
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async saveBillingDataChange() {
@@ -105,27 +104,20 @@ export default {
         regon: this.billingRecord.regon,
         postalCode: this.billingRecord.postalCode,
       }
-
-      console.warn('edited billingData', data)
       try {
-        await this.$axios.$put(`/api/legal-app-billing/update/${this.billingRecord.id}`, data);
+        let billingRecordId = this.billingRecord.id
+        await this.$axios.$put(updateBillingData(billingRecordId), data);
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
-
-      } catch (e) {
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         await this.getBillingDataFromFetch()
         this.dialog = false;
         this.loading = false;
-
       }
-
-
     }
-
-
   },
-
 }
 </script>
 

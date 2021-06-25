@@ -13,7 +13,13 @@
       </v-alert>
       <v-expansion-panels focusable>
         <v-expansion-panel v-for="item in clientNotesList" :key="item[0].created" class="expansion">
-          <v-expansion-panel-header class="text-uppercase">{{ formatDateToMonth(item[0].created) }}
+          <v-expansion-panel-header class="text-uppercase">
+            {{ formatDateToMonth(item[0].created) }}
+            <template v-slot:actions>
+              <v-icon color="primary">
+                $expand
+              </v-icon>
+            </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-card v-for="object in item" :key="object.id" class="my-4">

@@ -14,10 +14,10 @@
       <v-card>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
-                        required :rules="validation.title"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię*"
+                        required :rules="validation.fieldLength"></v-text-field>
+          <v-text-field v-model="form.name" :rules="validation.fieldLength" label="Dodaj imię"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
+          <v-text-field v-model="form.surname" :rules="validation.fieldLength" label="Dodaj nazwisko"
           ></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
           ></v-text-field>
@@ -30,8 +30,8 @@
           <v-btn text color="primary" @click="saveContactChange()">
             Zapisz zmianę
           </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
+          <v-btn color="success" text @click="resetForm()">
+            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -41,6 +41,7 @@
 
 <script>
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {updateContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "edit-contact-dialog",
@@ -64,15 +65,13 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      title: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
-      name: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
-      surname: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
-      comment: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 200!", 4, 200)
+      fieldLength: notEmptyAndLimitedRule("Pole nie może być puste. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      comment: lengthRule("Maksymalna liczba znaków to 200!", 0, 200)
     },
 
   }),
   fetch() {
-    this.contact = this.selectedContact;
+    // this.contact = this.selectedContact;
     this.form.title = this.selectedContact.title;
     this.form.name = this.selectedContact.name;
     this.form.surname = this.selectedContact.surname;
@@ -81,30 +80,32 @@ export default {
 
   },
   methods: {
-
-    saveContactChange() {
+    async saveContactChange() {
       if (!this.$refs.editContactNameForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
 
       const contact = {
-        title: this.contact.title,
-        name: this.contact.name,
-        surname: this.contact.surname,
-        comment: this.contact.comment,
+        title: this.form.title,
+        name: this.form.name,
+        surname: this.form.surname,
+        comment: this.form.comment,
 
       }
 
-      this.$axios.$put(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}`, contact)
-        .then(() => {
-          this.$notifier.showSuccessMessage("Kontakt updatowany pomyślnie!");
-        })
-        .catch(() => {
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
-        this.setContactForAction(this.selectedContact)
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        await this.$axios.$put(updateContact(clientId, contactId), contact)
+        this.$notifier.showSuccessMessage("Kontakt zmieniony pomyślnie!");
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        this.$nuxt.refresh()
+        this.loading = false;
         this.dialog = false;
-      });
+      }
 
     },
     resetForm() {

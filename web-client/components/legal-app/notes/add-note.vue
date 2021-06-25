@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
           <v-btn fab class="mx-2" v-on="{ ...tooltip, ...dialog }">
-            <v-icon color="success">mdi-plus</v-icon>
+            <v-icon color="success" x-large>mdi-plus</v-icon>
           </v-btn>
         </template>
         <span>Dodaj notkę</span>
@@ -55,11 +55,6 @@ export default {
 
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
-
-    createNoteForClient(clientId) {
-      return createNoteForClient(clientId)
-    },
-
     async save() {
       if (!this.$refs.addNoteForm.validate()) return;
       if (this.loading) return;
@@ -69,13 +64,11 @@ export default {
           title: this.form.title,
           message: this.form.message,
         };
-
         let clientId = this.$route.params.client;
         await this.$axios.$post(createNoteForClient(clientId), note);
         this.$notifier.showSuccessMessage("Notatka dodana pomyślnie!");
-      } catch (e) {
-        console.error(e);
-
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;
@@ -85,7 +78,6 @@ export default {
     resetForm() {
       this.$refs.addNoteForm.reset();
       this.$refs.addNoteForm.resetValidation();
-
     },
   }
 }

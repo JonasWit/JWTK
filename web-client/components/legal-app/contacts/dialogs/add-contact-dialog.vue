@@ -15,9 +15,9 @@
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
                         required :rules="validation.title"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię*"
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
+          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko"
           ></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
           ></v-text-field>

@@ -1,5 +1,4 @@
 <template>
-
   <v-container class="my-7">
     <v-stepper v-model="e1" vertical>
       <v-stepper-header>
@@ -47,7 +46,6 @@
                 </v-list-item>
               </template>
             </v-select>
-
           </v-card>
           <v-btn color="primary" @click="e1 = 2">
             Przejdź dalej
@@ -63,7 +61,6 @@
                       :menu-props="{ maxHeight: '400' }"
                       label="Wybierz Twoje dane rozliczeniowe" persistent-hint
                       return-object></v-select>
-
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title class="text-h6 my-1">
@@ -79,8 +76,6 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-
-
           </v-card>
           <v-btn color="primary" @click="e1 = 3">
             Przejdź dalej
@@ -116,7 +111,6 @@
                   <v-divider></v-divider>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-
                     <v-btn text color="primary" @click="handleSubmit">
                       Dodaj
                     </v-btn>
@@ -176,40 +170,28 @@ export default {
     },
     invoiceDetails: [],
     e1: 1,
-
-
   }),
   async fetch() {
     await this.getBillingDataFromFetch()
-    console.warn('billing data list -- fetch from store completed', this.billingDataList);
-
-
   },
 
   computed: {
     ...mapGetters('legal-app-client-store', ['billingDataList', 'workRecordsList', 'sortedFinancialRecords']),
-
     selectAllRecords() {
       return this.selectedWorkRecords.length === this.sortedFinancialRecords.length
     },
     selectSomeRecords() {
       return this.selectedWorkRecords.length > 0 && !this.selectAllRecords
     },
-
-
     icon() {
       if (this.selectAllRecords) return 'mdi-close-box'
       if (this.selectSomeRecords) return 'mdi-minus-box'
       return 'mdi-checkbox-blank-outline'
     },
   },
-
-
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
-
-
     toggle() {
       this.$nextTick(() => {
         if (this.selectAllRecords) {
@@ -219,33 +201,22 @@ export default {
         }
       })
     },
-
     async handleSubmit() {
       try {
         const details = {
           number: this.form.invoiceNumber,
           date: this.form.invoiceDate
         }
-        console.warn('invoice details', details)
         return this.invoiceDetails = details
-        Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Dodano pomyślnie!");
-      } catch (e) {
-        console.warn('create invoice details error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
-
         this.dialog = false;
-
       }
-
-
     }
-
   },
-
 }
 </script>
 
