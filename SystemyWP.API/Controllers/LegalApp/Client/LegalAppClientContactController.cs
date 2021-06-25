@@ -25,7 +25,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPost("client/{clientId}/contact")]
-        public async Task<IActionResult> CreateContact(int clientId, [FromBody] ContactForm contactForm)
+        public async Task<IActionResult> CreateContact(int clientId, [FromBody] ContactForm form)
         {
             try
             {
@@ -37,10 +37,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newEntity = new LegalAppContactDetail
                 {
                     CreatedBy = UserEmail,
-                    Name = contactForm.Name,
-                    Comment = contactForm.Comment,
-                    Surname = contactForm.Surname,
-                    Title = contactForm.Title
+                    Name = form.Name,
+                    Comment = form.Comment,
+                    Surname = form.Surname,
+                    Title = form.Title
                 };
 
                 legalAppClient.Contacts.Add(newEntity);
@@ -95,7 +95,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
         [HttpPost("client/{clientId}/contact/{contactId}/emails")]
         public async Task<IActionResult> CreateContactEmail(long clientId, long contactId,
-            [FromBody] CreateContactEmailFrom createContactEmailFrom)
+            [FromBody] CreateContactEmailFrom form)
         {
             try
             {
@@ -107,8 +107,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newEmail = new LegalAppEmailAddress
                 {
                     CreatedBy = UserEmail,
-                    Comment = createContactEmailFrom.Comment,
-                    Email = createContactEmailFrom.Email
+                    Comment = form.Comment,
+                    Email = form.Email
                 };
 
                 legalAppContactDetails.Emails.Add(newEmail);
@@ -147,7 +147,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
         [HttpPost("client/{clientId}/contact/{contactId}/phone-number")]
         public async Task<IActionResult> CreateContactPhoneNumber(long clientId, long contactId,
-            [FromBody] CreateContactPhoneNumberForm createContactPhoneNumberForm)
+            [FromBody] CreateContactPhoneNumberForm form)
         {
             try
             {
@@ -159,8 +159,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newPhone = new LegalAppPhoneNumber()
                 {
                     CreatedBy = UserEmail,
-                    Number = createContactPhoneNumberForm.Number,
-                    Comment = createContactPhoneNumberForm.Comment
+                    Number = form.Number,
+                    Comment = form.Comment
                 };
 
                 legalAppContactDetails.PhoneNumbers.Add(newPhone);
@@ -199,7 +199,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
         [HttpPost("client/{clientId}/contact/{contactId}/address")]
         public async Task<IActionResult> CreateContactPhysicalAddress(long clientId, long contactId,
-            [FromBody] CreatePhysicalAddressForm createPhysicalAddressForm)
+            [FromBody] CreatePhysicalAddressForm form)
         {
             try
             {
@@ -211,12 +211,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newEntity = new LegalAppPhysicalAddress()
                 {
                     CreatedBy = UserEmail,
-                    Building = createPhysicalAddressForm.Building,
-                    Comment = createPhysicalAddressForm.Comment,
-                    Country = createPhysicalAddressForm.Country,
-                    City = createPhysicalAddressForm.City,
-                    Street = createPhysicalAddressForm.Street,
-                    PostCode = createPhysicalAddressForm.PostCode
+                    Building = form.Building,
+                    Comment = form.Comment,
+                    Country = form.Country,
+                    City = form.City,
+                    Street = form.Street,
+                    PostCode = form.PostCode
                 };
 
                 legalAppContactDetails.PhysicalAddresses.Add(newEntity);
@@ -276,7 +276,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
         [HttpPut("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> UpdateContact(long clientId, long contactId,
-            [FromBody] ContactForm updateContactForm)
+            [FromBody] ContactForm form)
         {
             try
             {
@@ -285,10 +285,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .FirstOrDefault();
                 if (legalAppContactDetails is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
-                legalAppContactDetails.Name = updateContactForm.Name;
-                legalAppContactDetails.Comment = updateContactForm.Comment;
-                legalAppContactDetails.Surname = updateContactForm.Surname;
-                legalAppContactDetails.Title = updateContactForm.Title;
+                legalAppContactDetails.Name = form.Name;
+                legalAppContactDetails.Comment = form.Comment;
+                legalAppContactDetails.Surname = form.Surname;
+                legalAppContactDetails.Title = form.Title;
 
                 await _context.SaveChangesAsync();
                 return Ok();
