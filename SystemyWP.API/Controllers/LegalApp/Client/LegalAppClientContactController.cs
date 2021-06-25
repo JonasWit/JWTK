@@ -25,7 +25,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPost("client/{clientId}/contact")]
-        public async Task<IActionResult> CreateContact(int clientId, [FromBody] CreateContactForm createContactForm)
+        public async Task<IActionResult> CreateContact(int clientId, [FromBody] ContactForm contactForm)
         {
             try
             {
@@ -37,10 +37,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var newEntity = new LegalAppContactDetail
                 {
                     CreatedBy = UserEmail,
-                    Name = createContactForm.Name,
-                    Comment = createContactForm.Comment,
-                    Surname = createContactForm.Surname,
-                    Title = createContactForm.Title
+                    Name = contactForm.Name,
+                    Comment = contactForm.Comment,
+                    Surname = contactForm.Surname,
+                    Title = contactForm.Title
                 };
 
                 legalAppClient.Contacts.Add(newEntity);
@@ -276,7 +276,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
         [HttpPut("client/{clientId}/contact/{contactId}")]
         public async Task<IActionResult> UpdateContact(long clientId, long contactId,
-            [FromBody] UpdateContactForm updateContactForm)
+            [FromBody] ContactForm updateContactForm)
         {
             try
             {

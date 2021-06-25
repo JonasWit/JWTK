@@ -2,9 +2,9 @@
 
 namespace SystemyWP.API.Forms.GeneralApp.Contact.Validation
 {
-    public class CreateContactValidation : AbstractValidator<CreateContactForm>
+    public class ContactValidation : AbstractValidator<ContactForm>
     {
-        public CreateContactValidation()
+        public ContactValidation()
         {
             RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
             RuleFor(x => x.Name).MaximumLength(200);
