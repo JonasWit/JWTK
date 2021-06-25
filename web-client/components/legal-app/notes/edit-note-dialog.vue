@@ -57,9 +57,6 @@ export default {
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
-    updateNote(clientId, noteId) {
-      return updateNote(clientId, noteId);
-    },
     async saveChanges() {
       try {
         const note = {

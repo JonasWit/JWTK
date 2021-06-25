@@ -58,7 +58,6 @@ export default {
 
       try {
         await this.$axios.$post(createClient(), client);
-
         this.$notifier.showSuccessMessage("Klient dodany");
         this.resetForm();
 

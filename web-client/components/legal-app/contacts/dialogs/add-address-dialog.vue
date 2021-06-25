@@ -22,7 +22,7 @@
           <v-text-field v-model="form.city" label="Miasto"
                         required></v-text-field>
           <v-text-field v-model="form.postCode" label="Kod pocztowy*"
-                        required></v-text-field>
+                        :rules="validation.postal"></v-text-field>
           <v-text-field v-model="form.country" label="Państwo"
                         required></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
@@ -34,6 +34,9 @@
           <v-btn text color="primary" @click="saveNewAddress()">
             Dodaj
           </v-btn>
+          <v-btn text color="error" @click="resetForm()">
+            Wyczyść
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -42,7 +45,8 @@
 
 <script>
 import {mapActions} from "vuex";
-import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
+import {createContactPhysicalAddress} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-address-dialog",
@@ -67,14 +71,15 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      street: notEmptyAndLimitedRule("Nazwa ulicy jest wymagana! Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
-      comment: notEmptyAndLimitedRule("Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50)
+      street: notEmptyAndLimitedRule("Nazwa ulicy jest wymagana! Maksymalna liczba znaków to 50", 2, 50),
+      comment: notEmptyAndLimitedRule("Pole jest wymagane. Maksymalna liczba znaków to 50", 0, 50),
+      postal: postalCode(),
     },
   }),
 
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
-    saveNewAddress() {
+    async saveNewAddress() {
       if (!this.$refs.addNewAddressForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -88,24 +93,23 @@ export default {
         country: this.form.country,
 
       };
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        await this.$axios.$post(createContactPhysicalAddress(clientId, contactId), address)
+        this.$notifier.showSuccessMessage("Kontakt dodany pomyślnie!");
+        this.resetForm();
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        await this.getContactDetailsFromFetch({clientId, contactId})
+        this.loading = false;
+        this.dialog = false;
 
-      return this.$axios.$post(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/address`, address)
-        .then(() => {
-          this.resetForm();
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-
-          let clientId = this.$route.params.client;
-          let contactId = this.selectedContact.id;
-          this.getContactDetailsFromFetch({clientId, contactId})
-
-          this.$notifier.showSuccessMessage("Adres dodany pomyślnie!");
-        }).catch(() => {
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-        })
-
+      }
     },
     resetForm() {
       this.$refs.addNewAddressForm.reset();

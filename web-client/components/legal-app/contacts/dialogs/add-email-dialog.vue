@@ -22,9 +22,11 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="saveNewEmail()">
             Dodaj
+          </v-btn>
+          <v-btn text color="primary" @click="resetForm()">
+            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -35,7 +37,8 @@
 <script>
 
 import {mapActions} from "vuex";
-import {emailRule, notEmptyAndLimitedRule, notEmptyRule} from "../../../../data/vuetify-validations";
+import {emailRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {createContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-email-dialog",
@@ -51,7 +54,6 @@ export default {
     form: {
       name: "",
       comment: "",
-
     },
     loading: false,
     validation: {
@@ -63,7 +65,7 @@ export default {
 
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
-    saveNewEmail() {
+    async saveNewEmail() {
       if (!this.$refs.addNewEmailForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -72,25 +74,25 @@ export default {
         comment: this.form.comment,
         email: this.form.email,
       };
-
-      return this.$axios.$post(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/emails`, email)
-        .then(() => {
-          this.resetForm();
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-
-          let clientId = this.$route.params.client;
-          let contactId = this.selectedContact.id;
-          this.getContactDetailsFromFetch({clientId, contactId})
-
-          this.$notifier.showSuccessMessage("Adres email dodany pomyślnie!");
-        }).catch(() => {
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-        })
-
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        await this.$axios.$post(createContactEmail(clientId, contactId), email)
+        this.$notifier.showSuccessMessage("Adres email dodany pomyślnie!");
+        this.resetForm();
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        await this.getContactDetailsFromFetch({clientId, contactId})
+        this.loading = false;
+        this.dialog = false;
+      }
     },
+
+
     resetForm() {
       this.$refs.addNewEmailForm.reset();
       this.$refs.addNewEmailForm.resetValidation();

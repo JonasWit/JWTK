@@ -3,8 +3,8 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn icon class="mx-2 option-btn" x-large v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="success">mdi-file-document-edit</v-icon>
+          <v-btn color="primary" class="mx-2" medium v-on="{ ...tooltip, ...dialog }">
+            Edytuj kontakt
           </v-btn>
         </template>
         <span>Edytuj kontakt</span>
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 
 export default {
@@ -74,9 +73,15 @@ export default {
   }),
   fetch() {
     this.contact = this.selectedContact;
+    this.form.title = this.selectedContact.title;
+    this.form.name = this.selectedContact.name;
+    this.form.surname = this.selectedContact.surname;
+    this.form.comment = this.selectedContact.comment;
+
+
   },
   methods: {
-    ...mapMutations('legal-app-client-store', ['setContactForAction']),
+
     saveContactChange() {
       if (!this.$refs.editContactNameForm.validate()) return;
       if (this.loading) return;

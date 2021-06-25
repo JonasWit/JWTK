@@ -21,17 +21,11 @@
       Adresy
       <add-address-dialog :selected-contact="selectedContact"/>
     </v-tab>
-    <v-tab class="d-flex justify-start">
-      <v-icon left class="mr-4">
-        mdi-cog-outline
-      </v-icon>
-      Opcje
-    </v-tab>
     <v-tab-item>
       <v-card flat>
-        <!--        <v-alert v-if="emailsList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
-        <!--          Nie posiadasz jeszcze żadnych adresów email. Użyj zielonej ikonki "+", aby dodać adres email.-->
-        <!--        </v-alert>-->
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Nie posiadasz jeszcze żadnych adresów email? Użyj zielonej ikonki "+", aby dodać nowy email.
+        </v-alert>
         <v-card-text v-for="item in emailsList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -45,9 +39,9 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
-        <!--        <v-alert v-if="phoneNumbersList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
-        <!--          Nie posiadasz jeszcze żadnych numerów telefonów. Użyj zielonej ikonki "+", aby dodać numery.-->
-        <!--        </v-alert>-->
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Nie posiadasz jeszcze żadnych numerów telefonów? Użyj zielonej ikonki "+", aby dodać numery.
+        </v-alert>
         <v-card-text v-for="item in phoneNumbersList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -61,9 +55,9 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
-        <!--        <v-alert v-if="addressesList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">-->
-        <!--          Nie posiadasz jeszcze żadnych adresów. Użyj zielonej ikonki "+", aby dodać adresy.-->
-        <!--        </v-alert>-->
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Nie posiadasz jeszcze żadnych adresów? Użyj zielonej ikonki "+", aby dodać adresy.
+        </v-alert>
         <v-card-text v-for="item in addressesList" :key="item.id">
           <v-row class="d-flex flex-sm-column flex-md-row">
             <v-col>Nazwa: {{ item.comment }}</v-col>
@@ -73,26 +67,6 @@
             <v-col>
               <delete-address-dialog :selected-address="item" :selected-contact="selectedContact"/>
             </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
-    <v-tab-item>
-      <v-card flat>
-        <v-card-text>
-          <v-row class="mt-4">
-            Opcje umożliwiają zarządzanie wybranym kontaktem.
-            W tym miejscu możesz usunąć lub edytować kontakt.
-            Wybierz odpowiednią opcję.
-          </v-row>
-          <v-row class="my-5 d-flex">
-            <v-col>
-              <delete-contact-dialog :selected-contact="selectedContact"/>
-            </v-col>
-            <v-col>
-              <edit-contact-dialog :selected-contact="selectedContact"/>
-            </v-col>
-
           </v-row>
         </v-card-text>
       </v-card>

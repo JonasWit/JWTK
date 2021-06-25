@@ -42,34 +42,34 @@ export const GetClientEligibleUsers = (clientId) => {
 
 //Client Contacts Controller
 
-export const CreateContact = (clientId) => {
+export const createContact = (clientId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact`;//POST
 };
-export const GetContacts = (clientId) => {
+export const getContacts = (clientId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contacts`;//GET
 };
 export const GetContact = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`;//GET
 };
-export const CreateContactEmail = (clientId, contactId) => {
+export const createContactEmail = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/emails`;//POST
 };
 export const DeleteContactEmail = (clientId, contactId, itemId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/email/${itemId}`;//DELETE
 };
-export const CreateContactPhoneNumber = (clientId, contactId) => {
+export const createContactPhoneNumber = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/phone-number`;//POST
 };
 export const DeleteContactPhoneNumber = (clientId, contactId, itemId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/phone-number/${itemId}`;//DELETE
 };
-export const CreateContactPhysicalAddress = (clientId, contactId) => {
+export const createContactPhysicalAddress = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/address`;//POST
 };
-export const DeleteContactPhysicalAddress = (clientId, contactId, itemId) => {
+export const deleteContactPhysicalAddress = (clientId, contactId, itemId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}/address/${itemId}`;//DELETE
 };
-export const DeleteContact = (clientId, contactId) => {
+export const deleteContact = (clientId, contactId) => {
   return `/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`;//DELETE
 };
 export const UpdateContact = (clientId, contactId) => {
