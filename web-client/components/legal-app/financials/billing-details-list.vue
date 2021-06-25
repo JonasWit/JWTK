@@ -1,5 +1,4 @@
 <template>
-
   <v-list>
     <v-list-item v-for="item in billingDataList" :key="item.id">
       <v-col>
@@ -19,18 +18,12 @@
             <delete-billing-data :selected-billing-record="item"/>
           </v-list-item>
           <v-list-item>
-
           </v-list-item>
         </v-list-item-content>
       </v-col>
-
     </v-list-item>
-
   </v-list>
-
-
 </template>
-
 <script>
 import EditBillingData from "@/components/legal-app/financials/dialogs/edit-billing-data";
 import DeleteBillingData from "@/components/legal-app/financials/dialogs/delete-billing-data";
@@ -42,7 +35,6 @@ export default {
 
   async fetch() {
     await this.getBillingDataFromFetch();
-    console.warn('billing data list -- fetch from store completed', this.billingDataList);
   },
   computed: {
     ...mapGetters('legal-app-client-store', ['billingDataList'])
@@ -50,7 +42,6 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch'])
-
   }
 }
 </script>

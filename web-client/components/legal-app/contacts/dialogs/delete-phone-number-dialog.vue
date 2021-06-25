@@ -11,8 +11,8 @@
       </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="justify-center">Usuń numer telefonu email</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz wybrany adres email. Odzyskanie danych będzie niemożliwe.
+      <v-card-title class="justify-center">Usuń numer telefonu</v-card-title>
+      <v-card-subtitle>Potwierdzając operację usuniesz wybrany numer telefonu. Odzyskanie danych będzie niemożliwe.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
@@ -31,6 +31,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {deleteContactPhoneNumber} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-phone-number-dialog",
@@ -54,19 +55,23 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
 
-    deletePhoneNumber() {
-      this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/phone-number/${this.selectedPhoneNumber.id}`)
-        .then(() => {
-          this.$notifier.showSuccessMessage("Wybrany numer telefonu został usunięty pomyślnie!");
-        }).catch((e) => {
-        console.warn('delete email error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-      }).finally(() => {
+    async deletePhoneNumber() {
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        let itemId = this.selectedPhoneNumber.id
+        await this.$axios.delete(deleteContactPhoneNumber(clientId, contactId, itemId))
+        this.$notifier.showSuccessMessage("Numer usunięty pomyślnie!");
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
         let clientId = this.$route.params.client;
         let contactId = this.selectedContact.id;
-        this.getContactDetailsFromFetch({clientId, contactId})
+        await this.getContactDetailsFromFetch({clientId, contactId})
+        this.loading = false;
         this.dialog = false;
-      })
+      }
     }
 
   }

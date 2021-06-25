@@ -33,6 +33,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {deleteBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-billing-data",
@@ -49,32 +50,26 @@ export default {
     loading: false,
     billingRecord: null,
   }),
-
   async fetch() {
     this.billingRecord = this.selectedBillingRecord
-
   },
 
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
-
     async deleteBillingRecord() {
-      await this.$axios.$delete(`/api/legal-app-billing/delete/${this.billingRecord.id}`)
       try {
+        let billingRecordId = this.billingRecord.id
+        await this.$axios.$delete(deleteBillingData(billingRecordId))
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
-
-      } catch (e) {
-        console.warn('delete deleteBillingRecord error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         await this.getBillingDataFromFetch()
         this.dialog = false;
         this.loading = false;
       }
-
     }
-
-
   }
 }
 </script>

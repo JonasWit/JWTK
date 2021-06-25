@@ -63,6 +63,7 @@
 
 import {lengthRule, notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 import {mapActions} from "vuex";
+import {createWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-new-work-record",
@@ -91,27 +92,21 @@ export default {
   }),
 
   computed: {
-
     hoursSpent() {
       return parseInt(this.form.hours);
     },
-
     minutesSpent() {
       return parseInt(this.form.minutes);
     },
-
     givenRate() {
       return (parseFloat(this.form.rate));
     },
-
     givenVat() {
       return (parseInt(this.form.vat));
     },
-
     calculatedAmount() {
       return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate)
     }
-
   },
 
 
@@ -137,22 +132,21 @@ export default {
       };
       console.warn('work record:', workRecord)
       try {
-        await this.$axios.$post(`/api/legal-app-clients-work/client/${this.$route.params.client}/work-records`, workRecord)
+        let clientId = this.$route.params.client
+        await this.$axios.$post(createWorkRecord(clientId), workRecord)
         this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
-      } catch (e) {
-        console.warn('create work record error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        this.resetForm();
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         let clientId = this.$route.params.client
         await this.getAllWorkRecordsOnFetch({clientId});
         this.loading = false;
         this.dialog = false;
-        this.resetForm();
 
       }
-
     },
-
     resetForm() {
       this.$refs.createClientWorkForm.reset();
       this.$refs.createClientWorkForm.resetValidation();

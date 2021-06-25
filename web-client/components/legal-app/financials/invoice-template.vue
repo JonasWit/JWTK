@@ -52,7 +52,6 @@
               <v-list-item-title class="text-h6 my-1">
                 {{ clientData.name }}
               </v-list-item-title>
-
             </v-list-item-content>
           </v-list-item>
         </v-col>
@@ -151,7 +150,7 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-btn color="primary" block @click="generateReportWithJsPdf">
+    <v-btn color="primary" block @click="generateReport">
       Generuj rozliczenie
     </v-btn>
     <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">
@@ -191,9 +190,7 @@ export default {
   async fetch() {
     let clientId = this.$route.params.client;
     await this.getClientData({clientId})
-    console.warn('getClientsBasicList -- fetch from store completed', this.clientData);
   },
-
   computed: {
     ...mapGetters('legal-app-client-store', ['clientData']),
     sumNet() {
@@ -229,7 +226,7 @@ export default {
       return timeStamp();
     },
 
-    generateReportWithJsPdf() {
+    generateReport() {
       try {
         const printContents = document.getElementById('pdfTemplate').innerHTML;
         const originalContents = document.body.innerHTML;
@@ -242,13 +239,8 @@ export default {
       } finally {
         document.location.reload()
       }
-
-
     },
-
   }
-
-
 }
 </script>
 

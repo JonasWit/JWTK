@@ -1,7 +1,6 @@
 ﻿import {amountNet, groupByKey, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
 
-
 const initState = () => ({
   //Clients
   clientForAction: null,
@@ -13,6 +12,7 @@ const initState = () => ({
   emailsList: [],
   phoneNumbersList: [],
   addressesList: [],
+
 
   //Financials records
   financialRecordsFromFetch: [],
@@ -28,6 +28,7 @@ export const state = initState;
 
 export const getters = {
   //Contact-details and add-email dialogs
+
   emailsList(state) {
     return state.contactDetailsFromFetch.emails;
   },
@@ -63,16 +64,16 @@ export const getters = {
 };
 
 export const mutations = {
+
+
   setClientForAction(state, client) {
     console.warn('mutation done for setClientForAction', client);
     state.clientForAction = client;
   },
 
-  setContactForAction(state, contact) {
-    console.warn('mutation done for setContactForAction', contact);
-  },
 
   //Contact-details and add-email dialogs
+
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
     console.warn('mutation done for updateContactDetailsList', contactDetailsFromFetch);
     state.contactDetailsFromFetch = contactDetailsFromFetch;
@@ -121,6 +122,7 @@ export const mutations = {
 
 export const actions = {
   //Contact-details and add-email dialogs
+
   getContactDetailsFromFetch({commit}, {clientId, contactId}) {
     return this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
       .then((contactDetailsFromFetch) => {
@@ -205,13 +207,16 @@ export const actions = {
   async getClientsNotes({commit}, clientId) {
     try {
       let response = await this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`)
+      response.sort((a, b) => {
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
+      });
       response.forEach(x => {
         x.caseCreatedDate = formatDateToMonth(x.created)
       });
       const clientNotesList = groupByKey(response, 'caseCreatedDate')
-
       commit('updateNotesTitlesListFromFetch', {clientNotesList});
-      console.warn("list z grupami", clientNotesList)
     } catch (e) {
       console.warn('error in getClientsNotes', e);
     }

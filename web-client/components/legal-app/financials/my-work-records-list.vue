@@ -47,14 +47,10 @@
         </v-col>
       </v-row>
     </v-card>
-
-
   </div>
 </template>
 
 <script>
-
-
 import DeleteWorkRecord from "@/components/legal-app/financials/dialogs/delete-work-record";
 import EditWorkRecord from "@/components/legal-app/financials/dialogs/edit-work-record";
 import {mapGetters, mapMutations} from "vuex";
@@ -63,21 +59,15 @@ import {formatDate} from "@/data/date-extensions";
 export default {
   name: "my-work-records-list",
   components: {EditWorkRecord, DeleteWorkRecord},
-
-
   computed: {
     ...mapGetters('legal-app-client-store', ['workRecordsList']),
-
   },
-
   methods: {
     ...mapMutations('legal-app-client-store', ['updateFinancialRecordsFromFetch']),
     formatDate(date) {
       return formatDate(date);
     },
-
   }
-
 }
 </script>
 

@@ -88,6 +88,15 @@ export default {
           text: 'Zarządzaj rozliczeniami',
           icon: 'mdi-calculator-variant-outline'
         },
+        {
+          id: '6',
+          route: `/legal-application/clients/${params.client}/archive`,
+          name: 'Archiwum Spraw',
+          text: 'Lista zarchiwizowanych Spraw',
+          icon: 'mdi-briefcase-account-outline'
+
+        },
+
 
       ],
     }

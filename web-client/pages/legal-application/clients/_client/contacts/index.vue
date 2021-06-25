@@ -24,9 +24,8 @@
       </v-toolbar>
       <v-alert v-if="contactList.length === 0" elevation="5" text type="info" dismissible
                close-text="Zamknij">
-        Zarządzaj kontaktami dla Klienta! Wybierz sekcję, którą chcesz uzupełnić. Użyj zielonej ikonki "DODAJ KONTAKT",
-        aby
-        uzupełnić pierwszy kontakt.
+        Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
+        Następnie wybierz sekcję, którą chcesz uzupełnić.
       </v-alert>
       <v-expansion-panels focusable multiple class="expansion">
         <v-expansion-panel v-for="item in contactList" :key="item.id">
@@ -36,7 +35,7 @@
                 $expand
               </v-icon>
             </template>
-            <v-row>
+            <v-row class="d-flex align-center">
               <v-col>
                 <v-col class="font-weight-bold"> Nazwa: {{ item.title }}</v-col>
                 <v-col class="font-weight-bold"> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
@@ -45,10 +44,13 @@
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
                 <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
+              <v-col>
+                <delete-contact-dialog :selected-contact="item"/>
+                <edit-contact-dialog :selected-contact="item"/>
+              </v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-
             <contact-list-details :selected-contact="item"/>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -64,6 +66,8 @@ import {hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 import {formatDate} from "@/data/date-extensions";
+import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
 
 
 const searchItemFactory = (name, id) => ({
@@ -75,7 +79,7 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
+  components: {EditContactDialog, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -89,8 +93,13 @@ export default {
   }),
 
   async fetch() {
-    this.contactItemsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contacts`);
-    console.warn('clients contacts search results', this.contactItemsFromFetch);
+    let clientId = this.$route.params.client
+    this.contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
+    this.contactItemsFromFetch.sort((a, b) => {
+      let contactA = new Date(a.created)
+      let contactB = new Date(b.created)
+      return contactB - contactA;
+    })
     this.contactList = this.contactItemsFromFetch;
   },
 
@@ -105,6 +114,7 @@ export default {
     },
   },
   computed: {
+
     contactItems() {
       return []
         .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));

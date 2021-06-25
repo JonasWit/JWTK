@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
           <v-btn color="white" class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="success">mdi-account-plus</v-icon>
+            <v-icon x-large color="success">mdi-plus</v-icon>
           </v-btn>
         </template>
         <span>Dodaj kontakt</span>
@@ -15,9 +15,9 @@
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
                         required :rules="validation.title"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię*"
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
+          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko"
           ></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
           ></v-text-field>
@@ -30,6 +30,9 @@
           <v-btn text color="primary" @click="handleSubmit()">
             Dodaj
           </v-btn>
+          <v-btn text color="error" @click="resetForm()">
+            Wyczyść
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -39,6 +42,7 @@
 <script>
 import {mapActions} from "vuex";
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {createContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-contact-dialog",
@@ -55,16 +59,16 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      title: notEmptyAndLimitedRule("Nazwa nie może być pusta. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
-      name: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 0, 50),
-      surname: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 50!", 0, 50),
-      comment: lengthRule("Dopuszczalna liczba znaków pomiędzy 4 a 200!", 0, 200)
+      title: notEmptyAndLimitedRule("Nazwa nie może być pusta. Maksymalan liczba znaków to 50!", 0, 50),
+      name: lengthRule("Maksymalan liczba znaków to 50!", 0, 50),
+      surname: lengthRule("Maksymalan liczba znaków to 50!", 0, 50),
+      comment: lengthRule("Maksymalan liczba znaków to 200!", 0, 200)
     },
 
   }),
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
-    handleSubmit() {
+    async handleSubmit() {
       if (!this.$refs.addNewContactForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
@@ -75,31 +79,26 @@ export default {
         surname: this.form.surname,
         comment: this.form.comment,
       };
-      return this.$axios.$post(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/create`, contact)
-        .then(() => {
-          this.resetForm();
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          let clientId = this.$route.params.client;
-          let contactId = this.selectedContact.id;
-          this.getContactDetailsFromFetch({clientId, contactId})
-          this.$notifier.showSuccessMessage("Kontakt dodany pomyślnie!");
-        })
-        .catch((e) => {
-          console.warn(e, 'błąd dodania kontaktu')
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
-          this.loading = false;
-          this.dialog = false;
-        });
+      try {
+        let clientId = this.$route.params.client
+        await this.$axios.$post(createContact(clientId), contact)
+        this.$notifier.showSuccessMessage("Kontakt dodany pomyślnie!");
+        this.resetForm();
 
-
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        this.$nuxt.refresh()
+        Object.assign(this.$data, this.$options.data.call(this));
+        this.loading = false;
+        this.dialog = false;
+      }
     },
     resetForm() {
       this.$refs.addNewContactForm.reset();
       this.$refs.addNewContactForm.resetValidation();
     },
-
-
   }
 }
 </script>

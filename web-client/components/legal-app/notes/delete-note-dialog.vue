@@ -50,20 +50,14 @@ export default {
 
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
-
-    deleteNote(clientId, noteId) {
-      return deleteNote(clientId, noteId)
-
-    },
-
     async deleteClientNote() {
       try {
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
         await this.$axios.$delete(deleteNote(clientId, noteId));
 
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         await this.getClientsNotes(this.$route.params.client);
         this.dialog = false;

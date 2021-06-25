@@ -3,8 +3,8 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn icon class="mx-2 option-btn" x-large v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="error">mdi-delete</v-icon>
+          <v-btn class="mx-2" medium color="error" v-on="{ ...tooltip, ...dialog }">
+            Usuń kontakt
           </v-btn>
         </template>
         <span>Usuń Kontakt</span>
@@ -31,7 +31,7 @@
 
 <script>
 
-import {mapMutations} from "vuex";
+import {deleteContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-contact-dialog",
@@ -46,25 +46,20 @@ export default {
     dialog: false,
   }),
   methods: {
-    ...mapMutations('legal-app-client-store', ['setContactForAction']),
-    deleteContact() {
-      this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}`)
-
-        .then((selectedContact) => {
-          this.$notifier.showSuccessMessage("Wybrany kontakt został usunięty pomyślnie!");
-          console.warn(selectedContact, 'Selected Contact deleted successfully')
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          this.$nuxt.refresh()
-
-        }).catch((e) => {
-        console.warn('delete contact error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-
-      }).finally(() => {
-        this.setContactForAction(this.selectedContact)
+    async deleteContact() {
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        await this.$axios.delete(deleteContact(clientId, contactId))
+        this.$notifier.showSuccessMessage("Kontakt usunięty pomyślnie!");
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        this.$nuxt.refresh()
+        this.loading = false;
         this.dialog = false;
-      })
-
+      }
 
     }
   }
@@ -73,7 +68,5 @@ export default {
 </script>
 
 <style>
-.option-btn {
-  width: 150px;
-}
+
 </style>

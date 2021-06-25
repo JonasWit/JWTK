@@ -53,6 +53,7 @@
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import {mapActions} from "vuex";
+import {addBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-billing-details",
@@ -96,8 +97,6 @@ export default {
         let dashedNumber = realNumber.replace(/^(?=[0-9]{5})([0-9]{2})([0-9]{3})$/, "$1-$2");
         this.postalCode = dashedNumber;
       }
-
-
     },
 
     faxNumber() {
@@ -106,7 +105,6 @@ export default {
         let dashedNumber = realNumber.replace(/^(?=[0-9]{9})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})$/, "$1-$2-$3-$4");
         this.faxNumber = dashedNumber;
       }
-
     },
 
     nipNumber() {
@@ -116,8 +114,6 @@ export default {
         this.nipNumber = dashedNumber;
       }
     }
-
-
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
@@ -137,12 +133,12 @@ export default {
         postalCode: this.postalCode,
       };
       try {
-        await this.$axios.$post('/api/legal-app-billing/create', data);
+        await this.$axios.$post(addBillingData(), data);
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
-
-
-      } catch (e) {
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+        this.resetForm()
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         await this.getBillingDataFromFetch();
         this.dialog = false;

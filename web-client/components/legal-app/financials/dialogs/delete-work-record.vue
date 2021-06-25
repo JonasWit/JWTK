@@ -21,11 +21,9 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -35,6 +33,7 @@
 
 
 import {mapActions} from "vuex";
+import {deleteWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-work-record",
@@ -55,13 +54,14 @@ export default {
 
     async deleteFinancialRecord() {
       try {
-        await this.$axios.$delete(`/api/legal-app-clients-work/client/${this.$route.params.client}/work-record/${this.selectedFinancialRecord.id}`)
+        let clientId = this.$route.params.client
+        let workRecordId = this.selectedFinancialRecord.id
+        await this.$axios.$delete(deleteWorkRecord(clientId, workRecordId))
         console.warn('Rekord usunięty pomyślnie');
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
-
-      } catch (e) {
-        console.warn('delete selectedFinancialRecord error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         let clientId = this.$route.params.client
         await this.getAllWorkRecordsOnFetch({clientId});

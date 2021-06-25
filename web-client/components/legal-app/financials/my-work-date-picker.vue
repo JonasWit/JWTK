@@ -56,30 +56,25 @@
 </template>
 
 <script>
-
 import {mapActions, mapMutations} from "vuex";
 
 export default {
   name: "my-work-date-picker",
   data: () => ({
       loading: false,
-      dateFrom: null,
-      dateTo: null,
+      dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       modalFrom: false,
       modalTo: false,
       alert: false,
 
-
     }
   ),
   async fetch() {
-
     return this.searchFinancialRecords();
-
   },
 
   computed: {
-
     query() {
       let convertedDateTo = new Date(this.dateTo);
       convertedDateTo.setDate(convertedDateTo.getDate() + 1);
@@ -108,18 +103,15 @@ export default {
       if (this.loading) return;
       this.loading = true;
       console.warn('handle logs fired', this.query);
-
       try {
         let clientId = this.$route.params.client;
         let query = this.query;
         this.getFinancialRecordsFromFetch({clientId, query});
-
-
-      } catch (e) {
-        console.warn('Error during financial records fetch', e);
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       } finally {
         this.loading = false;
-
       }
     },
     resetAll() {

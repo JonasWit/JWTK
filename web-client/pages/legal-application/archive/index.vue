@@ -1,25 +1,22 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar color="primary" class="white--text">
-        <v-toolbar-title>Archiwum</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-icon color="white">mdi-archive</v-icon>
-      </v-toolbar>
-      <h1>This is archive storage for all data.</h1>
+      <archived-clients/>
     </template>
-
   </layout>
-
 </template>
 
 <script>
 import Layout from "@/components/legal-app/layout";
+import ArchivedClients from "@/components/legal-app/archive/archived-clients";
 
 export default {
   name: "index",
-  components: {Layout}
+  components: {ArchivedClients, Layout},
+
 }
+
+
 </script>
 
 <style scoped>

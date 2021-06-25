@@ -32,6 +32,7 @@
 <script>
 
 import {mapActions} from "vuex";
+import {deleteContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-email-dialog",
@@ -53,29 +54,26 @@ export default {
 
   methods: {
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
-
-    deleteEmail() {
-      console.warn(this.selectedEmail, 'Selected email props')
-      console.warn(this.selectedContact, 'Selected contact props')
-      this.$axios.$delete(`/api/legal-app-client-contacts/client/${this.$route.params.client}/contact/${this.selectedContact.id}/email/${this.selectedEmail.id}`)
-        .then((selectedEmail) => {
-          this.$notifier.showSuccessMessage("Wybrany email usunięty pomyślnie!");
-
-          console.warn(selectedEmail, 'selected email deleted successfully')
-        }).catch((e) => {
-        console.warn('delete email error', e);
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-      }).finally(() => {
+    async deleteEmail() {
+      try {
+        let clientId = this.$route.params.client
+        let contactId = this.selectedContact.id
+        let itemId = this.selectedEmail.id
+        await this.$axios.delete(deleteContactEmail(clientId, contactId, itemId))
+        this.$notifier.showSuccessMessage("Adres email usunięty pomyślnie!");
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
         let clientId = this.$route.params.client;
         let contactId = this.selectedContact.id;
-        this.getContactDetailsFromFetch({clientId, contactId})
+        await this.getContactDetailsFromFetch({clientId, contactId})
+        this.loading = false;
         this.dialog = false;
-      })
+      }
     }
 
   }
-
-
 }
 </script>
 

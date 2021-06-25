@@ -49,10 +49,11 @@
 </template>
 
 <script>
-import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+
 import {formatDate, formatDateWithHours} from "@/data/date-extensions";
 import EditNoteDialog from "@/components/legal-app/notes/edit-note-dialog";
 import DeleteNoteDialog from "@/components/legal-app/notes/delete-note-dialog";
+import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "notes-details",
@@ -77,32 +78,23 @@ export default {
     }
   },
   methods: {
-    getNote(clientId, noteId) {
-      return getNote(clientId, noteId);
-    },
-
     async getNotesDetails() {
       try {
         let clientId = this.$route.params.client;
         let noteId = this.selectedNote.id;
-        this.noteDetails = await this.$axios.$get(this.getNote(clientId, noteId));
+        this.noteDetails = await this.$axios.$get(getNote(clientId, noteId));
         this.noteForAction = this.selectedNote.id;
-        console.warn('note details fetched', this.noteDetails);
-      } catch (e) {
-        console.log('error fetching note details', e);
+      } catch (error) {
+        console.error(error)
+        this.$notifier.showErrorMessage(error);
       }
-
     },
     async editDone() {
       await this.getNotesDetails();
-
     },
-
     async deleteDone() {
       this.dialog = false;
-
     },
-
     formatDate(date) {
       return formatDate(date);
     },
