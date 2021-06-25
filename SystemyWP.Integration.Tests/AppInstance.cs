@@ -51,7 +51,7 @@ namespace SystemyWP.Integration.Tests
                     //
                     // DbContextUtils.SeedDatabase(services.BuildServiceProvider());
                     services.AddSingleton<IAuthenticationSchemeProvider, MockSchemeProvider>();
-                    services.AddSingleton<MockClaimSeed>(_ => new MockClaimSeed(claimSeed));
+                    services.AddSingleton(_ => new MockClaimSeed(claimSeed));
                 });
             });
         }
@@ -99,7 +99,7 @@ namespace SystemyWP.Integration.Tests
         
                 protected override Task<AuthenticateResult> HandleAuthenticateAsync()
                 {
-                    var claimsIdentity = new ClaimsIdentity(_claimSeed.getSeeds(), IdentityConstants.ApplicationScheme);
+                    var claimsIdentity = new ClaimsIdentity(_claimSeed.GetSeeds(), IdentityConstants.ApplicationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     var ticket = new AuthenticationTicket(claimsPrincipal, IdentityConstants.ApplicationScheme);
                     return Task.FromResult(AuthenticateResult.Success(ticket));
@@ -115,7 +115,7 @@ namespace SystemyWP.Integration.Tests
                     _seed = seed;
                 }
         
-                public IEnumerable<Claim> getSeeds() => _seed;
+                public IEnumerable<Claim> GetSeeds() => _seed;
             }
     }
 }

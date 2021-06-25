@@ -11,7 +11,6 @@ using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -69,7 +68,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var result = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .Select(LegalAppCaseProjections.Projection)
                     .AsSingleQuery()
                     .FirstOrDefault();

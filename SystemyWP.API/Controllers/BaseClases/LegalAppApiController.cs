@@ -8,7 +8,6 @@ using SystemyWP.API.ViewModels.General;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

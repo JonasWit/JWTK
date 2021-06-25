@@ -9,7 +9,6 @@ using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
@@ -54,7 +53,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var legalAppCase = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault();
                 if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 

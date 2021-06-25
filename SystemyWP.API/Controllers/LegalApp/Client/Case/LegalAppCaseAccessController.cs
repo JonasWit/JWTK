@@ -30,7 +30,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var lappCase = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault();
 
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
@@ -58,7 +58,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var lappCase = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault();
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
@@ -125,7 +125,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var lappCase = _context.LegalAppCases
-                    .GetAllowedCase(UserId, Role, caseId, _context, true)
+                    .GetAllowedCase(UserId, Role, caseId, _context)
                     .FirstOrDefault();
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 

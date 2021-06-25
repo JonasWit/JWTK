@@ -8,10 +8,8 @@ using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.DataAccessModifiers;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
