@@ -15,8 +15,7 @@
         <v-card-text>
           <v-text-field v-model="form.email" :rules="validation.email" label="Dodaj adres email"
                         required></v-text-field>
-          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj nazwę"
-                        required></v-text-field>
+          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj nazwę" required></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -74,30 +73,28 @@ export default {
         email: this.form.email,
       };
       try {
-        let clientId = this.$route.params.client
-        let contactId = this.selectedContact.id
-        await this.$axios.$post(createContactEmail(clientId, contactId), email)
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        await this.$axios.$post(createContactEmail(clientId, contactId), email);
         this.$notifier.showSuccessMessage("Adres email dodany pomyślnie!");
         this.resetForm();
       } catch (error) {
-        console.error('creating contact error', error)
+        console.error('creating contact error', error);
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         let clientId = this.$route.params.client;
         let contactId = this.selectedContact.id;
-        await this.getContactDetailsFromFetch({clientId, contactId})
+        await this.getContactDetailsFromFetch({clientId, contactId});
         this.loading = false;
         this.dialog = false;
       }
     },
-
-
     resetForm() {
       this.$refs.addNewEmailForm.reset();
       this.$refs.addNewEmailForm.resetValidation();
     },
   }
-}
+};
 
 
 </script>

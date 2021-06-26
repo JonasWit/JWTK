@@ -4,7 +4,10 @@
       <h3 class="text-h3 mb-4 text-center">Legal App Access Keys</h3>
     </div>
     <create-access-key key-type="legal-app"/>
-    <v-expansion-panels focusable>
+    <div v-if="loading" class="text-center">
+      <v-progress-circular :size="70" :width="7" indeterminate color="primary"></v-progress-circular>
+    </div>
+    <v-expansion-panels v-else focusable>
       <v-expansion-panel v-for="(keyItem, index) in keysList" :key="`key-index-${index}`">
         <v-expansion-panel-header :class="colorDate(keyItem.expireDate)">{{ keyItem.name }} Expires:
           {{ formatDate(keyItem.expireDate) }}
@@ -22,6 +25,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+
   </div>
 </template>
 
@@ -41,12 +45,13 @@ export default {
 
   data: () => ({
     activeKeys: [],
-    loading: false,
+    loading: true,
     searchResult: "",
     selectedKey: null,
   }),
   async fetch() {
     await this.getLegalAppAccessKeys();
+    this.loading = false;
   },
   computed: {
     ...mapState('portal-admin-store', ['legalAppAccessKeys']),
@@ -68,15 +73,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'revokeKey']),
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys']),
     async revokeKeyForClient(client) {
       try {
+        if (this.loading) return;
+        this.loading = !this.loading;
+
         await this.$axios.post(`/api/portal-admin/key-admin/user/revoke/access-key/${client.id}`);
         this.$notifier.showErrorMessage("User removed from key!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
+      } finally {
+        await this.$fetch();
       }
-      await this.$fetch();
     },
     formatDate(date) {
       return formatDate(date);
