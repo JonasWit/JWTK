@@ -27,7 +27,7 @@ export const deleteClient = (clientId) => {
 
 //Client Access Controller
 
-export const GetClientAllowedUsers = (clientId) => {
+export const getClientAllowedUsers = (clientId) => {
   return `/api/legal-app-client-access/client/${clientId}/allowed-users`;//GET
 };
 export const GrantAccess = (clientId, userId) => {
@@ -36,7 +36,7 @@ export const GrantAccess = (clientId, userId) => {
 export const RevokeAccess = (clientId, userId) => {
   return `/api/legal-app-client-access/client/${clientId}/revoke-access/${userId}`;//POST
 };
-export const GetClientEligibleUsers = (clientId) => {
+export const getClientEligibleUsers = (clientId) => {
   return `/api/legal-app-client-access/client/${clientId}/eligible-users`;//GET
 };
 

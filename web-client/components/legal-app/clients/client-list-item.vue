@@ -1,8 +1,7 @@
 ﻿<template>
-  <v-expansion-panels multiple focusable>
+  <v-expansion-panels>
     <v-expansion-panel class="expansion">
-      <v-expansion-panel-header class="text-uppercase">
-        Nazwa: {{ clientItem.name }} {{ clientItem.surname }}
+      <v-expansion-panel-header>Nazwa: {{ clientItem.name }}
         <template v-slot:actions>
           <v-icon color="primary">
             $expand
@@ -12,17 +11,17 @@
       <v-expansion-panel-content>
         <v-card class="my-5">
           <v-tabs vertical>
-            <v-tab class="d-flex justify-space-between">
+            <v-tab class="d-flex justify-start">
               <v-icon left>
                 mdi-account-box
               </v-icon>
               Dane podstawowe
             </v-tab>
-            <v-tab class="d-flex justify-space-between">
+            <v-tab class="d-flex justify-start">
               <v-icon left>
                 mdi-folder-lock
               </v-icon>
-              Dostępy do klienta
+              Panel dostępów
             </v-tab>
             <v-tab-item>
               <v-card flat>
@@ -31,11 +30,7 @@
                     <v-col class="mx-2">
                       <v-list class="d-flex justify-space-between">
                         <v-list-item-content>
-                          <v-list-item-title> Nazwa: {{ clientItem.name }} {{
-                              clientItem.surname
-                            }}
-
-                          </v-list-item-title>
+                          <v-list-item-title> Nazwa:{{ clientItem.id }} {{ clientItem.name }}</v-list-item-title>
                         </v-list-item-content>
                       </v-list>
                     </v-col>
@@ -63,9 +58,9 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <v-card-text>
+                <eligible-users :client-item-for-action="clientItem"/>
 
-                </v-card-text>
+                <!--                <allowed-users :client-item-for-action="clientItem"/>-->
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -82,11 +77,18 @@ import ArchiveClientDialog from "@/components/legal-app/clients/dialogs/archive-
 import GoToClientPanel from "@/components/legal-app/clients/go-to-client-panel";
 import EditClientNameDialog from "@/components/legal-app/clients/dialogs/edit-client-name-dialog";
 import {formatDate} from "@/data/date-extensions";
+import EligibleUsers from "@/components/legal-app/clients/accesses-panel/eligible-users";
+import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
+import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 
 
 export default {
   name: "client-list-item",
-  components: {EditClientNameDialog, GoToClientPanel, ArchiveClientDialog, DeleteClientDialog},
+  components: {
+    GrantAccess,
+    AllowedUsers,
+    EligibleUsers, EditClientNameDialog, GoToClientPanel, ArchiveClientDialog, DeleteClientDialog
+  },
   props: {
     clientItem: {
       type: Object,

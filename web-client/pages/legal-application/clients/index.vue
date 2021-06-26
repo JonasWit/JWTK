@@ -11,7 +11,7 @@
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
-              <v-list-item-content>{{ item.id }}{{ item.name }}</v-list-item-content>
+              <v-list-item-content>{{ item.name }}</v-list-item-content>
             </v-list-item>
           </template>
         </v-autocomplete>
@@ -20,7 +20,7 @@
         </template>
       </v-toolbar>
       <div v-scroll="onScroll" class="my-6">
-        <v-alert :value="alertMessage" v-if="clientList.length === 0" elevation="5" text type="info" dismissible
+        <v-alert v-if="clientList.length === 0" elevation="5" text type="info" dismissible
                  close-text="Zamknij">
           Witaj w bazie Klientów! Użyj zielonej ikonki "+", aby dodać pierwszego klienta.
         </v-alert>
@@ -64,18 +64,16 @@ export default {
     searchConditionsProvided: false,
     cursor: 0,
     takeAmount: 30,
-    alertMessage: false
+
 
   }),
   async fetch() {
     this.cursor = 0;
     this.clientList = [];
     this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
-    console.log('lista klientów', this.clientSearchItems)
+    console.log('lista klientów', this.clientList)
     await this.handleFeed();
-    setTimeout(() => {
-      this.alertMessage = true
-    }, 500)
+
   },
 
   watch: {
