@@ -4,13 +4,7 @@
       <h3 class="text-h3 mb-4 text-center">Users</h3>
     </div>
     <div class="mb-4">
-      <v-form>
-        <v-text-field ref="inviteForm" :rules="validation.email" label="Email" :disabled="loading" v-model="email">
-          <template slot="append-outer">
-            <v-btn color="primary" depressed :disabled="loading" @click="sendInvite">Invite</v-btn>
-          </template>
-        </v-text-field>
-      </v-form>
+      <invite-user v-on:action-complete="refresh"/>
     </div>
     <div class="mb-4">
       <v-autocomplete clearable v-model="searchResult" placeholder="Start typing to Search" dense hide-details
@@ -24,7 +18,10 @@
         </template>
       </v-autocomplete>
     </div>
-    <v-list>
+    <div v-if="loading" class="text-center">
+      <v-progress-circular :size="70" :width="7" indeterminate color="primary"></v-progress-circular>
+    </div>
+    <v-list v-else>
       <template v-for="(user, index) in usersList">
         <v-list-item :key="user.id">
           <v-list-item-content>
@@ -87,7 +84,7 @@ import DeleteUserDialog from "@/components/portal-admin/users-management/delete-
 import RolesManagementDialog from "@/components/portal-admin/users-management/roles-management-dialog";
 import LockUserDialog from "@/components/portal-admin/users-management/lock-user-dialog";
 import ApplicationsAccessDialog from "@/components/portal-admin/users-management/applications-access-dialog";
-import {emailRule} from "@/data/vuetify-validations";
+import InviteUser from "@/components/portal-admin/users-management/invite-user";
 
 const initState = () => ({});
 
@@ -99,23 +96,19 @@ const searchItemFactory = (name, email) => ({
 });
 
 export default {
-  components: {ApplicationsAccessDialog, LockUserDialog, RolesManagementDialog, DeleteUserDialog},
+  components: {InviteUser, ApplicationsAccessDialog, LockUserDialog, RolesManagementDialog, DeleteUserDialog},
   middleware: ["portal-admin"],
   name: "index",
   data: () => ({
     showDataAccessKeyDialog: false,
     showLockDialog: false,
     selectedUser: null,
-    loading: false,
-    email: "",
+    loading: true,
     searchResult: "",
-    validation: {
-      valid: false,
-      email: emailRule('Email must be valid')
-    },
   }),
   async fetch() {
     await this.getUsers();
+    this.loading = false;
   },
   computed: {
     ...mapState('portal-admin-store', ['users']),
@@ -142,34 +135,8 @@ export default {
     searchFilter(item, queryText, itemText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
-    sendInvite() {
-      if (!this.$refs.inviteForm.validate()) return;
-
-      if (this.loading) return;
-      this.loading = true;
-
-      const data = {
-        email: this.email,
-        returnUrl: location.origin
-      };
-
-      this.inviteRequest(data);
-
-      this.$refs.inviteForm.reset();
-      this.$refs.inviteForm.resetValidation();
-      Object.assign(this.$data, this.$options.data.call(this));
-
-      this.loading = false;
-    },
-    async inviteRequest(data) {
-      try {
-        await this.$axios.$post("/api/portal-admin/clients", data);
-        this.$notifier.showSuccessMessage("User Invited!");
-      } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
-      } finally {
-        this.getUsers();
-      }
+    refresh() {
+      this.$fetch();
     }
   },
 };

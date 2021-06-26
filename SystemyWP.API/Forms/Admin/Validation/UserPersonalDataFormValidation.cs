@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Admin.Validation
 {
-    public class UserPersonalDataFormValidation: AbstractValidator<UserPersonalDataForm>
+    public class UserPersonalDataFormValidation : AbstractValidator<UserPersonalDataForm>
     {
         public UserPersonalDataFormValidation()
         {

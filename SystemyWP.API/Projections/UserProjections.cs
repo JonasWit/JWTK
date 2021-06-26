@@ -26,11 +26,11 @@ namespace SystemyWP.API.Projections
                 Role = role
             };
         
-        public static Expression<Func<User, object>> LegalAppUserProjection(string userName, string role, bool legalAppAllowed) =>
+        public static Expression<Func<User, object>> LegalAppUserProjection(string role, bool legalAppAllowed) =>
             user => new
             {
                 user.Id,
-                Username = userName,
+                user.Username,
                 user.Image,
                 Role = role,
                 LegalAppDataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
@@ -51,16 +51,14 @@ namespace SystemyWP.API.Projections
                 user.LastLogin
             };
         
-        public static Expression<Func<User, object>> RelatedLegalAppUserProjection(string userName, string email, string role) =>
+        public static Expression<Func<User, object>> RelatedLegalAppUserProjection(string role) =>
             user => new
             {
                 user.Id,
-                Email = email,
-                Username = userName,
+                user.Email,
+                user.Username,
                 user.Image,
                 Role = role,
-                LegalAppDataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
-                MedicalAppDataAccessKey = user.MedicalAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
                 user.PhoneNumber,
                 user.Address,
                 user.City,
@@ -75,13 +73,6 @@ namespace SystemyWP.API.Projections
                 NIP = user.Nip,
                 REGON = user.Regon,
                 user.LastLogin,
-                DataAccess = user.DataAccess
-                    .AsQueryable()
-                    .Where(x => 
-                        x.RestrictedType.Equals(RestrictedType.LegalAppCase) ||
-                        x.RestrictedType.Equals(RestrictedType.LegalAppClient))
-                    .Select(DataAccessProjections.Projection)
-                    .ToList()
             };
 
         public class UserViewModel
