@@ -15,7 +15,6 @@
         <v-card-text>
           <v-text-field v-model="client.name" :rules="validation.name" label="Edytuj nazwę Klienta"
                         required></v-text-field>
-          <small class="grey--text">* Hint text here</small>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -35,7 +34,8 @@
 
 <script>
 import {mapMutations} from "vuex";
-import {notEmptyAndLimitedRule} from "../../../../data/vuetify-validations";
+import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {updateClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "edit-client-name-dialog",
@@ -64,32 +64,24 @@ export default {
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
-    saveClientNameChange() {
-
+    async saveClientNameChange() {
       if (!this.$refs.editClientNameForm.validate()) return;
       if (this.loading) return;
       this.loading = true;
-
       const payload = {
         name: this.client.name,
       };
-
-      this.$axios.$put(`/api/legal-app-clients/update/${this.selectedClient.id}`, payload)
-        .then((selectedClient) => {
-          this.$notifier.showSuccessMessage("Nazwa klienta updatowana pomyślnie!");
-          console.warn(selectedClient, 'Client name updated successfully');
-
-        })
-        .catch((e) => {
-          console.warn('client name change error', e);
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
+      try {
+        let clientId = this.selectedClient.id
+        await this.$axios.$put(updateClient(clientId), payload)
+        this.$notifier.showSuccessMessage("Nazwa klienta updatowana pomyślnie!");
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
-      });
-
+      }
     },
-
   }
 };
 </script>

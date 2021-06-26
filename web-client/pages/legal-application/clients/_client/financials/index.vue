@@ -128,15 +128,12 @@ export default {
       if (this.loading) return;
       this.loading = true;
       console.warn('handle logs fired', this.query);
-
       try {
         let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
-        console.warn('call from API', apiQuery)
-        let financialRecords = await this.$axios.$get(apiQuery);
-        console.log('financialRecords', financialRecords);
-        this.financialRecords = financialRecords
-      } catch (e) {
-        console.warn('Error during financial records fetch', e);
+        this.financialRecords = await this.$axios.$get(apiQuery);
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
         let clientId = this.$route.params.client
         await this.getAllWorkRecordsOnFetch({clientId});

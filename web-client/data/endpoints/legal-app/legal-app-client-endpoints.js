@@ -15,13 +15,13 @@ export const getClients = () => {
 export const createClient = () => {
   return `/api/legal-app-clients/create`;//POST
 };
-export const UpdateClient = (clientId) => {
+export const updateClient = (clientId) => {
   return `/api/legal-app-clients/update/${clientId}`;//PUT
 };
-export const ArchiveClient = (clientId) => {
+export const archiveClient = (clientId) => {
   return `/api/legal-app-clients/archive/${clientId}`;//PUT
 };
-export const DeleteClient = (clientId) => {
+export const deleteClient = (clientId) => {
   return `/api/legal-app-clients/delete/${clientId}`;//DELETE
 };
 

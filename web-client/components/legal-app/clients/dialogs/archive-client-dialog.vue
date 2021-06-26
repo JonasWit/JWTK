@@ -12,7 +12,8 @@
     </template>
     <v-card>
       <v-card-title class="justify-center">Archiwizuj Klienta</v-card-title>
-      <v-card-subtitle>Potwierdzając operację dodasz do archiwum klienta i wszystkie jego dane. Dostęp do danych będzie
+      <v-card-subtitle>Potwierdzając operację dodasz do archiwum klienta i wszystkie powiązane dane, takie jak stworzone
+        notatki, przypomnienia i rozliczenia. Dostęp do danych będzie
         możliwy w Archiwum.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
@@ -22,11 +23,9 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -35,6 +34,7 @@
 <script>
 
 import {mapMutations} from "vuex";
+import {archiveClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "archive-client-dialog",
@@ -56,24 +56,21 @@ export default {
   }),
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
-    archiveClient() {
-      this.$axios.$put(`/api/legal-app-clients/archive/${this.selectedClient.id}`)
-        .then(() => {
-          this.$notifier.showSuccessMessage("Klient został pomyślnie dodany do archiwum!");
-          Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
-          this.$nuxt.refresh();
+    async archiveClient() {
+      try {
+        let clientId = this.selectedClient.id
+        await this.$axios.$put(archiveClient(clientId))
+        this.$notifier.showSuccessMessage("Klient został pomyślnie dodany do archiwum!");
+        Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
+        this.$nuxt.refresh();
 
-        })
-        .catch((e) => {
-          console.warn('archive client error', e);
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
         this.tooltipVisible = true;
-      });
-
-
+      }
     }
   }
 };

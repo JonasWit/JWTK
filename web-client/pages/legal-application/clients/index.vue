@@ -1,11 +1,12 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-toolbar>
+      <v-toolbar class="my-3 white--text" color="primary" dark>
         <v-toolbar-title class="mr-3">
           Lista Klientów
         </v-toolbar-title>
-        <v-autocomplete return-object clearable dense hide-details append-icon="" v-model="searchResult"
+        <v-autocomplete flat hide-no-data hide-details label="Wyszukaj klienta" solo-inverted return-object clearable
+                        v-model="searchResult"
                         placeholder="Wpisz nazwę klienta" prepend-inner-icon="mdi-magnify" :items="clientItems"
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
@@ -19,6 +20,10 @@
         </template>
       </v-toolbar>
       <div v-scroll="onScroll" class="my-6">
+        <v-alert :value="alertMessage" v-if="clientList.length === 0" elevation="5" text type="info" dismissible
+                 close-text="Zamknij">
+          Witaj w bazie Klientów! Użyj zielonej ikonki "+", aby dodać pierwszego klienta.
+        </v-alert>
         <client-list-item :client-item="ci" v-for="ci in clientList" :key="`ci-item-${ci.id}`"/>
       </div>
       <button-to-go-up/>
@@ -58,14 +63,19 @@ export default {
     loading: false,
     searchConditionsProvided: false,
     cursor: 0,
-    takeAmount: 30
+    takeAmount: 30,
+    alertMessage: false
 
   }),
   async fetch() {
     this.cursor = 0;
     this.clientList = [];
     this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
+    console.log('lista klientów', this.clientSearchItems)
     await this.handleFeed();
+    setTimeout(() => {
+      this.alertMessage = true
+    }, 500)
   },
 
   watch: {
@@ -80,6 +90,7 @@ export default {
               this.cursor = 0;
               this.finished = false;
             }
+
           })
           .finally(() => this.loading = false);
       } else {

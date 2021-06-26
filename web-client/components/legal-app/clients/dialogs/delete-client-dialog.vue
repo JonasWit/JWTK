@@ -12,7 +12,9 @@
     </template>
     <v-card>
       <v-card-title class="justify-center">Usuń Klienta</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz wszystkie dane klienta. Odzyskanie dostępu będzie niemożliwe.
+      <v-card-subtitle>Potwierdzając operację usuniesz wszystkie dane klienta i wszystkie powiązane dane, takie jak
+        stworzone
+        notatki, przypomnienia i rozliczenia. Odzyskanie dostępu będzie niemożliwe.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
@@ -33,6 +35,7 @@
 
 <script>
 import {mapMutations} from "vuex";
+import {deleteClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "delete-client-dialog",
@@ -53,22 +56,17 @@ export default {
   }),
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
-    deleteClient() {
-      this.$axios.$delete(`/api/legal-app-clients/delete/${this.selectedClient.id}`)
-        .then((selectedClient) => {
-          this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
-          console.warn(selectedClient, 'Client deleted successfully');
-
-        })
-        .catch((e) => {
-          console.warn('delete client error', e);
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        }).finally(() => {
+    async deleteClient() {
+      try {
+        let clientId = this.selectedClient.id
+        await this.$axios.$delete(deleteClient(clientId))
+        this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
+      } catch (error) {
+        this.$notifier.showErrorMessage(error.response.data);
+      } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
-      });
-
-
+      }
     }
   }
 };

@@ -3,8 +3,8 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn fab v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="success">mdi-account-plus</v-icon>
+          <v-btn color="white" fab v-on="{ ...tooltip, ...dialog }">
+            <v-icon x-large color="success">mdi-plus</v-icon>
           </v-btn>
         </template>
         <span>Dodaj klienta</span>
@@ -13,9 +13,8 @@
     <v-form ref="addNewClientForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nowego Klienta"
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nazwę nowego Klienta"
                         required></v-text-field>
-          <small class="grey--text">* Hint text here</small>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>

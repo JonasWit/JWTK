@@ -5,10 +5,7 @@
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
         </v-toolbar-title>
-        <v-autocomplete flat
-                        hide-no-data
-                        hide-details
-                        label="Wyszukaj kontakt"
+        <v-autocomplete flat hide-no-data hide-details label="Wyszukaj kontakt"
                         solo-inverted return-object clearable v-model="searchResult"
                         prepend-inner-icon="mdi-magnify" :items="contactItems"
                         :filter="searchFilter">
@@ -22,7 +19,7 @@
           <add-contact-dialog/>
         </template>
       </v-toolbar>
-      <v-alert v-if="contactList.length === 0" elevation="5" text type="info" dismissible
+      <v-alert :value="alertMessage" v-if="contactList.length === 0" elevation="5" text type="info" dismissible
                close-text="Zamknij">
         Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
         Następnie wybierz sekcję, którą chcesz uzupełnić.
@@ -37,8 +34,8 @@
             </template>
             <v-row class="d-flex align-center">
               <v-col>
-                <v-col class="font-weight-bold"> Nazwa: {{ item.title }}</v-col>
-                <v-col class="font-weight-bold"> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
+                <v-col> Nazwa: {{ item.title }}</v-col>
+                <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
               </v-col>
               <v-col>
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
@@ -88,19 +85,14 @@ export default {
     searchResult: "",
     finished: false,
     loading: false,
-
-
+    alertMessage: false
   }),
 
   async fetch() {
-    let clientId = this.$route.params.client
-    this.contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
-    this.contactItemsFromFetch.sort((a, b) => {
-      let contactA = new Date(a.created)
-      let contactB = new Date(b.created)
-      return contactB - contactA;
-    })
-    this.contactList = this.contactItemsFromFetch;
+    await this.getContactsList()
+    setTimeout(() => {
+      this.alertMessage = true
+    }, 500)
   },
 
   watch: {
@@ -114,23 +106,37 @@ export default {
     },
   },
   computed: {
-
     contactItems() {
       return []
         .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));
     },
   },
   methods: {
+    async getContactsList() {
+      try {
+        let clientId = this.$route.params.client
+        this.contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
+        this.contactItemsFromFetch.sort((a, b) => {
+          let contactA = new Date(a.created)
+          let contactB = new Date(b.created)
+          return contactB - contactA;
+        })
+        this.contactList = this.contactItemsFromFetch;
+      } catch (error) {
+        console.error('creating contact error', error)
+        this.$notifier.showErrorMessage(error.response.data)
+      }
+    },
+
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
 
     formatDate(date) {
       return formatDate(date)
-    }
+    },
+
   }
-
-
 };
 </script>
 
