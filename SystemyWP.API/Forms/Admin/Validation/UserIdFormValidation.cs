@@ -2,9 +2,9 @@
 
 namespace SystemyWP.API.Forms.Admin.Validation
 {
-    public class LegalAppUpdateUserAccessValidation: AbstractValidator<LegalAppUpdateUserAccessForm>
+    public class UserIdFormValidation : AbstractValidator<UserPersonalDataForm>
     {
-        public LegalAppUpdateUserAccessValidation()
+        public UserIdFormValidation()
         {
             RuleFor(x => x.UserId).NotEmpty();
         }
