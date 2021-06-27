@@ -30,10 +30,10 @@ export const deleteClient = (clientId) => {
 export const getClientAllowedUsers = (clientId) => {
   return `/api/legal-app-client-access/client/${clientId}/allowed-users`;//GET
 };
-export const GrantAccess = (clientId, userId) => {
+export const grantAccess = (clientId, userId) => {
   return `/api/legal-app-client-access/client/${clientId}/grant-access/${userId}`;//POST
 };
-export const RevokeAccess = (clientId, userId) => {
+export const revokeAccess = (clientId, userId) => {
   return `/api/legal-app-client-access/client/${clientId}/revoke-access/${userId}`;//POST
 };
 export const getClientEligibleUsers = (clientId) => {
