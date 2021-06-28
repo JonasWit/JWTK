@@ -17,12 +17,14 @@ namespace SystemyWP.API.Projections.LegalApp.Clients
                 legalAppClientNote.Title,
                 legalAppClientNote.Id,
                 legalAppClientNote.Message,
+                legalAppClientNote.Public
             };
         
         public static Func<LegalAppClientNote, object> CreateBasic => BasicProjection.Compile();
         public static Expression<Func<LegalAppClientNote, object>> BasicProjection =>
             legalAppClientNote => new
             {
+                legalAppClientNote.Public,
                 legalAppClientNote.Created,
                 legalAppClientNote.CreatedBy,
                 legalAppClientNote.UpdatedBy,

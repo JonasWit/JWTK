@@ -70,6 +70,7 @@ namespace SystemyWP.API
                 {
                     newClient.LegalAppClientNotes.Add(new LegalAppClientNote
                     {
+                        AuthorId = userId,
                         UpdatedBy = "system",
                         CreatedBy = "system",
                         Title = $"Note Title {clientNoteNumber} Key: {legalAppAccessKey.Name}",
@@ -263,7 +264,7 @@ namespace SystemyWP.API
                     CreatedBy = "system"
                 });
 
-                // Seed Reminders
+                //Seed Reminders
                 for (var i = -20; i < 20; i++)
                 {
                     var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
@@ -308,7 +309,7 @@ namespace SystemyWP.API
                         CreatedBy = "system"
                     });
                     
-                    // Seed Reminders
+                    //Seed Reminders
                     for (var i = -20; i < 20; i++)
                     {
                         var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);

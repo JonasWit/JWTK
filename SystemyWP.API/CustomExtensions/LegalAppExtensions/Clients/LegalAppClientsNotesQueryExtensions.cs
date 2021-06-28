@@ -36,6 +36,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
+                            (lappNote.AuthorId.Equals(userId) || lappNote.Public) &&
                             context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappNote.LegalAppClientId == clientId &&
                             lappNote.Id == noteId &&
@@ -77,6 +78,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                 case SystemyWpConstants.Roles.Client:
                     source = source
                         .Where(lappNote =>
+                            (lappNote.AuthorId.Equals(userId) || lappNote.Public) &&
                             context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                             lappNote.LegalAppClientId == clientId &&
                             lappNote.Active == active &&
