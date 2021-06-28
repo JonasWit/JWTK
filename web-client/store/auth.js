@@ -4,7 +4,7 @@ import {getGDPRConsent} from "~/data/cookie-handlers";
 const initState = () => ({
   profile: null,
   relatedUsers: [],
-  lightTheme: false
+  darkThemeStored: false
 });
 
 export const state = initState;
@@ -42,8 +42,11 @@ export const mutations = {
   saveRelatedUsers(state, {users}) {
     state.relatedUsers = users;
   },
-  setTheme(state, theme) {
-    state.lightTheme = theme;
+  setLightTheme(state) {
+    state.darkThemeStored = false;
+  },
+  setDarkTheme(state) {
+    state.darkThemeStored = true;
   },
   reset(state) {
     Object.assign(state, initState());
@@ -62,9 +65,7 @@ export const actions = {
       console.warn('User Profile: ', profile);
       console.warn('Related Users: ', users);
     } catch (error) {
-      // if (error.response.status !== 401 || error.response.status !== 403) {
-      //   console.error("Authorization error: ", error.response.status);
-      // }
+      console.error("Authorization error: ", error.response.status);
     }
   },
   login() {
