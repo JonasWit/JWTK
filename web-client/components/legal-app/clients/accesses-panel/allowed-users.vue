@@ -1,13 +1,12 @@
 <template>
-  <v-card-text>
-    <v-card-title>UŻYTKOWNICY ALLOWED DOSTĘPU</v-card-title>
+  <v-card-text v-if="allowedUsers.length > 0">
+    <v-card-title>Lista użytkowników z dostępem do klienta</v-card-title>
     <v-card flat v-for="item in allowedUsers" :key="item.id">
-      <v-row class="d-flex justify-space-between align-center">
+      <v-row class="d-flex justify-space-between align-center mx-3">
         <v-card-subtitle>
           Nazwa użytkownika: {{ item.username }}
         </v-card-subtitle>
         <v-card-subtitle>Adres email: {{ item.email }}</v-card-subtitle>
-        <v-card-subtitle>Rola: {{ item.role }}</v-card-subtitle>
         <revoke-access :user-for-action="item" :client-item-for-action="clientItemForAction"/>
       </v-row>
     </v-card>
@@ -15,9 +14,9 @@
 </template>
 
 <script>
-import {getClientAllowedUsers} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import RevokeAccess from "@/components/legal-app/clients/accesses-panel/revoke-access";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "allowed-users",
@@ -28,28 +27,16 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    allowedUsers: [],
-
-  }),
 
   async fetch() {
-    await this.getAllowedUsers()
-
+    let clientId = this.clientItemForAction.id;
+    await this.getAllowedUsers({clientId})
   },
-
+  computed: {
+    ...mapGetters('legal-app-client-store', ['allowedUsers'])
+  },
   methods: {
-    async getAllowedUsers() {
-      try {
-        let clientId = this.clientItemForAction.id;
-        console.warn('clientItemForAction:', this.clientItemForAction)
-        this.allowedUsers = await this.$axios.$get(getClientAllowedUsers(clientId))
-        console.warn('allowed users list:', this.allowedUsers)
-      } catch (e) {
-        console.warn('error:', e)
-      }
-    },
-
+    ...mapActions('legal-app-client-store', ['getAllowedUsers']),
 
   }
 }
