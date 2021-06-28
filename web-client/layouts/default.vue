@@ -97,16 +97,9 @@ export default {
   data: () => ({
     lightTheme: false
   }),
-  // fetch(context) {
-  //   console.log("FETCHING");
-  //   return console.log(context.req);
-  // },
-  // beforeMount() {
-  //   const themeCookie = getCookie("custom-color-theme");
-  //   if (themeCookie) {
-  //     this.lightTheme = themeCookie === "light";
-  //   }
-  // },
+  beforeMount() {
+    this.lightTheme = !this.$vuetify.theme.dark;
+  },
   watch: {
     lightTheme: function (val) {
       if (val) {

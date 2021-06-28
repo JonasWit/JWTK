@@ -3,7 +3,8 @@ import {getGDPRConsent} from "~/data/cookie-handlers";
 
 const initState = () => ({
   profile: null,
-  relatedUsers: []
+  relatedUsers: [],
+
 });
 
 export const state = initState;
