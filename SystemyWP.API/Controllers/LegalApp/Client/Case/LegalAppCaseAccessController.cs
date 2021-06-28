@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases;
+using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
@@ -50,10 +51,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("case/{caseId}/grant-access/{userId}")]
-        public async Task<IActionResult> GrantAccess([FromServices] UserManager<IdentityUser> userManager,
-            long caseId,
-            string userId)
+        [HttpPost("case/{caseId}/grant-access")]
+        public async Task<IActionResult> GrantAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager,
+            long caseId)
         {
             try
             {
@@ -71,12 +73,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (!result.Any(x => x.Id.Equals(form.UserId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var currentCasesAccesses = _context.DataAccesses
                     .Where(x =>
                         x.RestrictedType == RestrictedType.LegalAppCase &&
-                        x.UserId.Equals(userId) &&
+                        x.UserId.Equals(form.UserId) &&
                         x.ItemId == caseId)
                     .FirstOrDefault();
                 if (currentCasesAccesses is not null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
@@ -85,14 +87,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var currentClientsAccesses = _context.DataAccesses
                     .Where(x =>
                         x.RestrictedType == RestrictedType.LegalAppClient &&
-                        x.UserId.Equals(userId) &&
+                        x.UserId.Equals(form.UserId) &&
                         x.ItemId == lappCase.LegalAppClientId)
                     .FirstOrDefault();
                 if (currentClientsAccesses is null)
                 {
                     _context.DataAccesses.Add(new DataAccess
                     {
-                        UserId = userId,
+                        UserId = form.UserId,
                         CreatedBy = UserEmail,
                         ItemId = lappCase.LegalAppClientId,
                         RestrictedType = RestrictedType.LegalAppClient
@@ -101,7 +103,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 
                 _context.DataAccesses.Add(new DataAccess
                 {
-                    UserId = userId,
+                    UserId = form.UserId,
                     CreatedBy = UserEmail,
                     ItemId = caseId,
                     RestrictedType = RestrictedType.LegalAppCase
@@ -117,10 +119,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             }
         }
 
-        [HttpPost("case/{caseId}/revoke-access/{userId}")]
-        public async Task<IActionResult> RevokeAccess([FromServices] UserManager<IdentityUser> userManager,
-            long caseId,
-            string userId)
+        [HttpPost("case/{caseId}/revoke-access")]
+        public async Task<IActionResult> RevokeAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager,
+            long caseId)
         {
             try
             {
@@ -138,10 +141,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId))) return StatusCode(StatusCodes.Status403Forbidden);
+                if (!result.Any(x => x.Id.Equals(form.UserId))) return StatusCode(StatusCodes.Status403Forbidden);
 
                 var currentAccess = _context.DataAccesses
-                    .FirstOrDefault(x => x.RestrictedType == RestrictedType.LegalAppCase && x.UserId.Equals(userId));
+                    .FirstOrDefault(x => x.RestrictedType == RestrictedType.LegalAppCase && x.UserId.Equals(form.UserId));
                 if (currentAccess is null) return BadRequest();
 
                 _context.Remove(currentAccess);

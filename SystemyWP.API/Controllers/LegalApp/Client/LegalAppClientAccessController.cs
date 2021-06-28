@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases;
 using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
+using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
@@ -49,10 +50,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/grant-access/{userId}")]
-        public async Task<IActionResult> GrantAccess([FromServices] UserManager<IdentityUser> userManager,
-            long clientId,
-            string userId)
+        [HttpPost("client/{clientId}/grant-access")]
+        public async Task<IActionResult> GrantAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager,
+            long clientId)
         {
             try
             {
@@ -71,20 +73,20 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(userBasic => userBasic.Id.Equals(userId)))
+                if (!result.Any(userBasic => userBasic.Id.Equals(form.UserId)))
                     return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var currentAccesses = _context.DataAccesses
                     .Where(dataAccess =>
                         dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
-                        dataAccess.UserId.Equals(userId))
+                        dataAccess.UserId.Equals(form.UserId))
                     .ToList();
                 if (currentAccesses.Any(dataAccess => dataAccess.ItemId == clientId))
                     return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
 
                 _context.DataAccesses.Add(new DataAccess
                 {
-                    UserId = userId,
+                    UserId = form.UserId,
                     CreatedBy = UserEmail,
                     ItemId = clientId,
                     RestrictedType = RestrictedType.LegalAppClient
@@ -100,10 +102,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             }
         }
 
-        [HttpPost("client/{clientId}/revoke-access/{userId}")]
-        public async Task<IActionResult> RevokeAccess([FromServices] UserManager<IdentityUser> userManager,
-            long clientId,
-            string userId)
+        [HttpPost("client/{clientId}/revoke-access")]
+        public async Task<IActionResult> RevokeAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager,
+            long clientId)
         {
             try
             {
@@ -121,7 +124,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
-                if (!result.Any(x => x.Id.Equals(userId)))
+                if (!result.Any(x => x.Id.Equals(form.UserId)))
                     return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 //Remove client access
@@ -129,14 +132,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     _context.DataAccesses
                         .Where(x =>
                             x.RestrictedType == RestrictedType.LegalAppClient &&
-                            x.UserId.Equals(userId)));
+                            x.UserId.Equals(form.UserId)));
 
                 //Remove cases access
                 _context.RemoveRange(
                     _context.DataAccesses
                         .Where(dataAccess =>
                             dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
-                            dataAccess.UserId.Equals(userId) &&
+                            dataAccess.UserId.Equals(form.UserId) &&
                             _context.LegalAppCases.GetAllowedCases(UserId, Role, clientId, _context, true)
                                 .Any(legalAppCase => legalAppCase.Id == dataAccess.ItemId)));
 
