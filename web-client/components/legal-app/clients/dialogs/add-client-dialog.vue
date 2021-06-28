@@ -12,14 +12,25 @@
     </template>
     <v-form ref="addNewClientForm" v-model="validation.valid">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Dodaj klienta
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Dodaj nazwę nowego Klienta. Po zapisaniu zostanie udostępiony PANEL KLIENTA, w którym można zarządzać
+          sprawami, notatakmi oraz rozliczeniami.
+        </v-alert>
         <v-card-text>
           <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj nazwę nowego Klienta"
                         required></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn text color="error" @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="handleSubmit">
             Dodaj
           </v-btn>

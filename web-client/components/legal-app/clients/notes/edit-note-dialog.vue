@@ -12,6 +12,15 @@
     </template>
     <v-form ref="editNoteForm">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Edytuj notatkę
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Każda nowa notatka jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
+          Jeśli chcesz, aby notatka była widoczna dla innych, oznacz ją jako publiczną.
+        </v-alert>
         <v-card-text>
           <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
           <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
@@ -71,11 +80,12 @@ export default {
         let noteId = this.noteForAction.id;
         console.warn('notka', note)
         await this.$axios.$put(updateNote(clientId, noteId), note);
+        this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
 
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        await this.getClientsNotes(this.$route.params.client);
+
         this.dialog = false;
         this.$emit('action-completed');
       }

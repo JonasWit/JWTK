@@ -26,6 +26,9 @@ const initState = () => ({
   //Accesses
   allowedUsersList: [],
   eligibleUsersList: [],
+
+  //Cases
+  clientCaseDetails: [],
 });
 
 export const state = initState;
@@ -72,6 +75,11 @@ export const getters = {
   },
   eligibleUsers(state) {
     return state.eligibleUsersList
+  },
+
+  //CASES
+  clientCaseDetails(state) {
+    return state.clientCaseDetails
   }
 };
 
@@ -128,6 +136,12 @@ export const mutations = {
   updateEligibleUsersList(state, {eligibleUsersList}) {
     state.eligibleUsersList = eligibleUsersList
   },
+
+  //CASES
+  updateClientCaseDetails(state, {clientCaseDetails}) {
+    state.clientCaseDetails = clientCaseDetails
+  }
+
 };
 
 export const actions = {
@@ -240,6 +254,30 @@ export const actions = {
       console.warn('error:', e)
     }
   },
+
+  //CASES
+
+  async getAllCases({commit}, {clientId}) {
+    try {
+      let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
+      console.warn('list of cases', listOfCases)
+      this.listOfCases = listOfCases
+
+    } catch (e) {
+      console.warn('list of cases fetch error', e)
+    }
+
+  },
+
+  async getCaseDetails({commit}, {caseId}) {
+    try {
+      let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`)
+      commit('updateClientCaseDetails', {clientCaseDetails});
+      console.warn('case details:', clientCaseDetails)
+    } catch (e) {
+      console.warn('error:', e)
+    }
+  }
 
 
 };

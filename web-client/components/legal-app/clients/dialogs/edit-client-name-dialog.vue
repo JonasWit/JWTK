@@ -12,19 +12,23 @@
     </template>
     <v-form ref="editClientNameForm">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Edytuj nazwę klienta
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <v-text-field v-model="client.name" :rules="validation.name" label="Edytuj nazwę Klienta"
                         required></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="error" text @click="dialog = false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="saveClientNameChange()">
             Zapisz zmianę
-          </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
           </v-btn>
         </v-card-actions>
       </v-card>

@@ -29,13 +29,14 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="error" text @click="dialog = false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="save">
             Zapisz
           </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
-          </v-btn>
+
         </v-card-actions>
       </v-card>
     </v-form>

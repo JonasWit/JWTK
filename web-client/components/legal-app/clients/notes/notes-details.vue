@@ -29,7 +29,7 @@
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
             <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
             <v-checkbox v-model="checkbox" :label="labelCondition(noteDetails.public)" :value="noteDetails.public"
-                        disabled></v-checkbox>
+                        value disabled></v-checkbox>
           </v-row>
           <v-card-text>
             {{ noteDetails.message }}

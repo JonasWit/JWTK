@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import CasesNotes from "@/components/legal-app/cases/cases-notes";
-import CaseDeadlines from "@/components/legal-app/cases/case-deadlines";
-import CaseDetails from "@/components/legal-app/cases/case-details";
+import CasesNotes from "@/components/legal-app/clients/cases/cases-notes";
+import CaseDeadlines from "@/components/legal-app/clients/cases/case-deadlines";
+import CaseDetails from "@/components/legal-app/clients/cases/case-details";
 
 export default {
   name: "c-details",

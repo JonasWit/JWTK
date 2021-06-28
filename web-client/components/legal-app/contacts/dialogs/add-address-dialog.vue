@@ -12,6 +12,11 @@
     </template>
     <v-form ref="addNewAddressForm" v-model="validation.valid">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Dodaj adres
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Nazwa"
                         required></v-text-field>
@@ -29,13 +34,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn text color="error" @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="saveNewAddress()">
             Dodaj
-          </v-btn>
-          <v-btn text color="error" @click="resetForm()">
-            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>

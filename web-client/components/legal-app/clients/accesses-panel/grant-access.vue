@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn medium color="amber" v-on="{ ...tooltip, ...dialog }">
+          <v-btn medium color="error" v-on="{ ...tooltip, ...dialog }">
             Nadaj dostęp
           </v-btn>
         </template>

@@ -12,6 +12,11 @@
     </template>
     <v-form ref="editContactNameForm">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Edytuj kontakt
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
                         required :rules="validation.fieldLength"></v-text-field>
@@ -25,13 +30,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="error" text @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="saveContactChange()">
             Zapisz zmianę
-          </v-btn>
-          <v-btn color="success" text @click="resetForm()">
-            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -40,7 +44,7 @@
 </template>
 
 <script>
-import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {lengthRule} from "@/data/vuetify-validations";
 import {updateContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
@@ -65,7 +69,7 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      fieldLength: notEmptyAndLimitedRule("Pole nie może być puste. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      fieldLength: lengthRule("Dozwolona liczba znaków pomiędzy 50", 0, 50),
       comment: lengthRule("Maksymalna liczba znaków to 200!", 0, 200)
     },
 
