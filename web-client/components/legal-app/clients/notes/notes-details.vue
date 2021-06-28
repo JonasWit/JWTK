@@ -28,6 +28,8 @@
             <v-card-title>Treść notatki</v-card-title>
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
             <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
+            <v-checkbox v-model="checkbox" :label="labelCondition(noteDetails.public)" :value="noteDetails.public"
+                        disabled></v-checkbox>
           </v-row>
           <v-card-text>
             {{ noteDetails.message }}
@@ -51,8 +53,8 @@
 <script>
 
 import {formatDate, formatDateWithHours} from "@/data/date-extensions";
-import EditNoteDialog from "@/components/legal-app/notes/edit-note-dialog";
-import DeleteNoteDialog from "@/components/legal-app/notes/delete-note-dialog";
+import EditNoteDialog from "@/components/legal-app/clients/notes/edit-note-dialog";
+import DeleteNoteDialog from "@/components/legal-app/clients/notes/delete-note-dialog";
 import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
@@ -69,6 +71,7 @@ export default {
     noteDetails: null,
     value: 'Treść notatki...',
     noteForAction: null,
+    checkbox: true
   }),
   watch: {
     dialog(visible) {
@@ -84,6 +87,7 @@ export default {
         let noteId = this.selectedNote.id;
         this.noteDetails = await this.$axios.$get(getNote(clientId, noteId));
         this.noteForAction = this.selectedNote.id;
+        console.log('notes details', this.noteDetails)
       } catch (error) {
         console.error(error)
         this.$notifier.showErrorMessage(error);
@@ -100,8 +104,13 @@ export default {
     },
     formatDateWithHours(date) {
       return formatDateWithHours(date);
+    },
+    labelCondition(val) {
+      if (val) {
+        return "Notatka publiczna"
+      }
+      return "Notatka prywatna"
     }
-
   }
 };
 </script>

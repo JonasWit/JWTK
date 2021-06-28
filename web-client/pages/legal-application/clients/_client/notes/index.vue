@@ -54,8 +54,8 @@
 
 import Layout from "@/components/legal-app/layout";
 import {formatDate, formatDateToMonth} from "@/data/date-extensions";
-import NotesDetails from "@/components/legal-app/notes/notes-details";
-import AddNote from "@/components/legal-app/notes/add-note";
+import NotesDetails from "@/components/legal-app/clients/notes/notes-details";
+import AddNote from "@/components/legal-app/clients/notes/add-note";
 import {mapActions, mapState} from "vuex";
 
 export default {

@@ -15,6 +15,7 @@
         <v-card-text>
           <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
           <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
+          <v-checkbox v-model="form.public" label="Notatka publiczna" color="red darken-3"></v-checkbox>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -49,11 +50,13 @@ export default {
     form: {
       title: "",
       message: "",
+      public: false,
     },
   }),
   fetch() {
     this.form.title = this.noteForAction.title;
     this.form.message = this.noteForAction.message;
+    this.form.public = this.noteForAction.public;
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
@@ -62,9 +65,11 @@ export default {
         const note = {
           title: this.form.title,
           message: this.form.message,
+          public: this.form.public
         };
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
+        console.warn('notka', note)
         await this.$axios.$put(updateNote(clientId, noteId), note);
 
       } catch (error) {
