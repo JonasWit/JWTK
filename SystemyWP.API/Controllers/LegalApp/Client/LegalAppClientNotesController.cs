@@ -68,11 +68,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var client = _context.LegalAppClients
                     .GetAllowedClient(UserId, Role, clientId, _context)
                     .FirstOrDefault();
-
                 if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newEntity = new LegalAppClientNote
                 {
+                    Public = form.Public,
+                    AuthorId = UserId,
                     CreatedBy = UserEmail,
                     Title = form.Title,
                     Message = form.Message,
@@ -99,9 +100,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var note = _context.LegalAppClientNotes
                     .GetAllowedNote(UserId, Role, clientId, noteId, _context)
                     .FirstOrDefault();
-
                 if (note is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
+                note.Public = form.Public;
                 note.Title = form.Title;
                 note.Message = form.Message;
                 note.UpdatedBy = UserEmail;
@@ -125,7 +126,6 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 var note = _context.LegalAppClientNotes
                     .GetAllowedNote(UserId, Role, clientId, noteId, _context)
                     .FirstOrDefault();
-
                 if (note is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 _context.Remove(note);

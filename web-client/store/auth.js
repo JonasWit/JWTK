@@ -3,6 +3,7 @@ import {getGDPRConsent} from "~/data/cookie-handlers";
 
 const initState = () => ({
   profile: null,
+  relatedUsers: []
 });
 
 export const state = initState;
@@ -37,21 +38,30 @@ export const mutations = {
   saveProfile(state, {profile}) {
     state.profile = profile;
   },
+  saveRelatedUsers(state, {users}) {
+    state.relatedUsers = users;
+  },
   reset(state) {
     Object.assign(state, initState());
   },
 };
 
 export const actions = {
-  initialize({commit}) {
-    return this.$axios.$get('/api/users/me')
-      .then((profile) => {
-        console.warn('User Profile: ', profile);
-        commit('saveProfile', {profile},
-        );
-      })
-      .catch(() => {
-      });
+  async initialize({commit}) {
+    try {
+      let profile = await this.$axios.$get('/api/users/me');
+      let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
+
+      commit('saveProfile', {profile});
+      commit('saveRelatedUsers', {users});
+
+      console.warn('User Profile: ', profile);
+      console.warn('Related Users: ', users);
+    } catch (error) {
+      if (error.response.status !== 401) {
+        console.error("Authorization error: ", error.response.status);
+      }
+    }
   },
   login() {
     if (process.server) return;

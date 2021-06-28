@@ -41,6 +41,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                             context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
                             context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
+                                dataAccess.UserId.Equals(userId) &&
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClientContact.LegalAppClientId));
                     break;
@@ -85,6 +86,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                             context.LegalAppClients.FirstOrDefault(x => x.Id == lappClientContact.LegalAppClientId).LegalAppAccessKeyId == 
                             context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
                             context.DataAccesses.Any(dataAccess =>
+                                dataAccess.UserId.Equals(userId) &&
                                 dataAccess.RestrictedType == RestrictedType.LegalAppClient &&
                                 dataAccess.ItemId == lappClientContact.LegalAppClientId));
                     break;

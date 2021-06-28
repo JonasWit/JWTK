@@ -4,6 +4,11 @@
   document.cookie = `${cname}=${cvalue};expires=${d.toUTCString()};samesite=${samesite};path=/`;
 };
 
+function getCookieFromRequest(cookieName, stringCookie) {
+  let strCookie = new RegExp('' + cookieName + '[^;]+').exec(stringCookie)[0];
+  return unescape(strCookie ? strCookie.toString().replace(/^[^=]+./, '') : '');
+}
+
 export const getCookie = (cname) => {
   let name = cname + "=";
   let ca = document.cookie.split(';');

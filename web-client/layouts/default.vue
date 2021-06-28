@@ -88,7 +88,7 @@
 import {mapActions, mapGetters, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
-import {checkCookie, getCookie, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
+import {checkCookie, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
 
 
 export default {
@@ -97,12 +97,16 @@ export default {
   data: () => ({
     lightTheme: false
   }),
-  beforeMount() {
-    const themeCookie = getCookie("custom-color-theme");
-    if (themeCookie) {
-      this.lightTheme = themeCookie === "light";
-    }
-  },
+  // fetch(context) {
+  //   console.log("FETCHING");
+  //   return console.log(context.req);
+  // },
+  // beforeMount() {
+  //   const themeCookie = getCookie("custom-color-theme");
+  //   if (themeCookie) {
+  //     this.lightTheme = themeCookie === "light";
+  //   }
+  // },
   watch: {
     lightTheme: function (val) {
       if (val) {
@@ -128,7 +132,7 @@ export default {
           }
         }
       }
-      this.$bus.$emit('theme-switched', this.$vuetify.theme.dark)
+      this.$bus.$emit('theme-switched', this.$vuetify.theme.dark);
     }
   },
   computed: {
