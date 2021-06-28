@@ -58,9 +58,8 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <eligible-users :client-item-for-action="clientItem"/>
-
-                <!--                <allowed-users :client-item-for-action="clientItem"/>-->
+                <allowed-users :client-item-for-action="clientItem"/>
+                <grant-access :client-item="clientItem"/>
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -77,7 +76,6 @@ import ArchiveClientDialog from "@/components/legal-app/clients/dialogs/archive-
 import GoToClientPanel from "@/components/legal-app/clients/go-to-client-panel";
 import EditClientNameDialog from "@/components/legal-app/clients/dialogs/edit-client-name-dialog";
 import {formatDate} from "@/data/date-extensions";
-import EligibleUsers from "@/components/legal-app/clients/accesses-panel/eligible-users";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 
@@ -85,9 +83,7 @@ import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-acc
 export default {
   name: "client-list-item",
   components: {
-    GrantAccess,
-    AllowedUsers,
-    EligibleUsers, EditClientNameDialog, GoToClientPanel, ArchiveClientDialog, DeleteClientDialog
+    GrantAccess, AllowedUsers, EditClientNameDialog, GoToClientPanel, ArchiveClientDialog, DeleteClientDialog
   },
   props: {
     clientItem: {
