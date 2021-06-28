@@ -98,7 +98,7 @@ export default {
     lightTheme: false
   }),
   beforeMount() {
-    this.lightTheme = !this.$vuetify.theme.dark;
+
   },
   watch: {
     lightTheme: function (val) {
