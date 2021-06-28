@@ -27,11 +27,11 @@ export const archiveCase = (caseId) => {
 export const getClientAllowedUsers = (caseId) => {
   return `/api/legal-app-case-access/case/${caseId}/allowed-users`;//GET
 };
-export const grantAccess = (caseId, userId) => {
-  return `/api/legal-app-case-access/case/${caseId}/grant-access/${userId}`;//POST
+export const grantAccess = (caseId) => {
+  return `/api/legal-app-case-access/case/${caseId}/grant-access`;//POST
 };
-export const revokeAccess = (caseId, userId) => {
-  return `/api/legal-app-case-access/case/${caseId}/revoke-access/${userId}`;//POST
+export const revokeAccess = (caseId) => {
+  return `/api/legal-app-case-access/case/${caseId}/revoke-access`;//POST
 };
 export const getClientEligibleUsers = (caseId) => {
   return `/api/legal-app-case-access/case/${caseId}/eligible-users`;//GET
