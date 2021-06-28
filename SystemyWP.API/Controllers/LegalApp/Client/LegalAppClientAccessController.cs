@@ -131,6 +131,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 _context.RemoveRange(
                     _context.DataAccesses
                         .Where(x =>
+                            x.ItemId == clientId &&
                             x.RestrictedType == RestrictedType.LegalAppClient &&
                             x.UserId.Equals(form.UserId)));
 
