@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :dark="isDarkTheme">
     <client-only>
       <cookie-consent/>
     </client-only>
@@ -13,7 +13,7 @@
       <home-navbar/>
       <v-spacer></v-spacer>
       <div class="mr-5">
-        <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="lightTheme"/>
+        <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="themeSwitch"/>
       </div>
 
       <if-auth>
@@ -85,54 +85,75 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState,} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
-import {checkCookie, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
-
+import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
 
 export default {
   name: "default",
   components: {SnackbarNotifier, IfAuth},
   data: () => ({
-    lightTheme: false
+    goDark: false,
+    themeSwitch: false
   }),
-  beforeMount() {
+  created() {
+    let themeEnabled;
+    if (process.server) {
+      themeEnabled = getCookieFromRequest("custom-color-theme", this.$nuxt.context.req.headers.cookie) === 'dark';
+    } else {
+      themeEnabled = this.darkThemeStored === true;
+    }
+    this.goDark = themeEnabled;
 
+    if (this.goDark) {
+      this.setDarkTheme();
+    } else {
+      this.setLightTheme();
+      this.themeSwitch = true;
+    }
   },
   watch: {
-    lightTheme: function (val) {
-      if (val) {
-        this.$vuetify.theme.light = true;
-        this.$vuetify.theme.dark = false;
-        if (getGDPRConsent()) {
-          if (checkCookie("custom-color-theme")) {
-            setCookie("custom-color-theme", "", 0);
-            setCookie("custom-color-theme", "light", 365);
-          } else {
-            setCookie("custom-color-theme", "light", 365);
+    themeSwitch: function (val) {
+      if (process.client && this.darkThemeStored !== !val) {
+        console.warn('watcher run');
+        if (val) {
+          this.$vuetify.theme.dark = false;
+          this.setLightTheme();
+
+          if (getGDPRConsent()) {
+            if (checkCookie("custom-color-theme")) {
+              setCookie("custom-color-theme", "", 0);
+              setCookie("custom-color-theme", "light", 365);
+            } else {
+              setCookie("custom-color-theme", "light", 365);
+            }
           }
-        }
-      } else {
-        this.$vuetify.theme.light = false;
-        this.$vuetify.theme.dark = true;
-        if (getGDPRConsent()) {
-          if (checkCookie("custom-color-theme")) {
-            setCookie("custom-color-theme", "", 0);
-            setCookie("custom-color-theme", "dark", 365);
-          } else {
-            setCookie("custom-color-theme", "dark", 365);
+        } else {
+          this.$vuetify.theme.dark = true;
+          this.setDarkTheme();
+
+          if (getGDPRConsent()) {
+            if (checkCookie("custom-color-theme")) {
+              setCookie("custom-color-theme", "", 0);
+              setCookie("custom-color-theme", "dark", 365);
+            } else {
+              setCookie("custom-color-theme", "dark", 365);
+            }
           }
         }
       }
-      this.$bus.$emit('theme-switched', this.$vuetify.theme.dark);
     }
   },
   computed: {
-    ...mapState('auth', ['profile']),
+    ...mapState('auth', ['profile', 'darkThemeStored']),
     ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin', 'authenticated']),
+    isDarkTheme() {
+      return this.$vuetify.theme.dark = this.goDark;
+    }
   },
   methods: {
+    ...mapMutations('auth', ['setLightTheme', 'setDarkTheme']),
     ...mapActions('auth', ['logout', 'initialize', 'changePassword']),
   }
 };
