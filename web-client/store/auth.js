@@ -58,7 +58,7 @@ export const actions = {
       console.warn('User Profile: ', profile);
       console.warn('Related Users: ', users);
     } catch (error) {
-      if (error.response.status !== 401) {
+      if (error.response.status !== 401 || error.response.status !== 403) {
         console.error("Authorization error: ", error.response.status);
       }
     }
