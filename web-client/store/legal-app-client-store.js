@@ -21,7 +21,11 @@ const initState = () => ({
 
   //Notes list for cases
   notesListFromFetch: [],
-  clientNotesList: []
+  clientNotesList: [],
+
+  //Accesses
+  allowedUsersList: [],
+  eligibleUsersList: [],
 });
 
 export const state = initState;
@@ -61,19 +65,23 @@ export const getters = {
   clientData(state) {
     return state.clientDataFromFetch;
   },
+
+  //Access allowed users
+  allowedUsers(state) {
+    return state.allowedUsersList
+  },
+  eligibleUsers(state) {
+    return state.eligibleUsersList
+  }
 };
 
 export const mutations = {
-
 
   setClientForAction(state, client) {
     console.warn('mutation done for setClientForAction', client);
     state.clientForAction = client;
   },
-
-
   //Contact-details and add-email dialogs
-
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
     console.warn('mutation done for updateContactDetailsList', contactDetailsFromFetch);
     state.contactDetailsFromFetch = contactDetailsFromFetch;
@@ -83,25 +91,20 @@ export const mutations = {
   updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
     console.warn('mutation done for updateFinancialRecordsFromFetch', financialRecordsFromFetch);
     state.financialRecordsFromFetch = financialRecordsFromFetch;
-
   },
-
   updateFullWorkRecordsList(state, {fullWorkRecordsList}) {
     console.warn('mutation done for updateFullWorkRecordsList', fullWorkRecordsList);
     state.fullWorkRecordsList = fullWorkRecordsList;
-
   },
 
   reset(state) {
     Object.assign(state, initState());
   },
 
-
   //Billing data
   updateBillingDataFromFetch(state, {billingDataFromFetch}) {
     console.warn('mutation done for updateBillingDataFromFetch', billingDataFromFetch);
     state.billingDataFromFetch = billingDataFromFetch;
-
   },
 
   //Client List
@@ -117,12 +120,18 @@ export const mutations = {
   },
   updateNotesTitlesListFromFetch(state, {clientNotesList}) {
     state.clientNotesList = clientNotesList
-  }
+  },
+  //CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
+  updateAllowedUsersList(state, {allowedUsersList}) {
+    state.allowedUsersList = allowedUsersList
+  },
+  updateEligibleUsersList(state, {eligibleUsersList}) {
+    state.eligibleUsersList = eligibleUsersList
+  },
 };
 
 export const actions = {
   //Contact-details and add-email dialogs
-
   getContactDetailsFromFetch({commit}, {clientId, contactId}) {
     return this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
       .then((contactDetailsFromFetch) => {
@@ -135,7 +144,6 @@ export const actions = {
   getFinancialRecordsFromFetch({commit}, {clientId, query}) {
     return this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`)
       .then((financialRecordsFromFetch) => {
-
         financialRecordsFromFetch.forEach(x => {
           x.invoiceVatAmount = vatAmount(x.amount, x.vat);
           x.invoiceDecimalVat = vatRate(x.vat);
@@ -149,7 +157,6 @@ export const actions = {
         console.warn('error in getFinancialRecordsFromFetch', e);
       });
   },
-
   async getAllWorkRecordsOnFetch({commit}, {clientId}) {
     try {
       console.warn("Getting data from store - legal-app-client-store - getAllWorkRecordsOnFetch");
@@ -158,12 +165,8 @@ export const actions = {
     } catch (e) {
       console.warn('error in getAllWorkRecordsOnFetch', e);
     }
-
   },
-
-
   //Billing data
-
   async getBillingDataFromFetch({commit}) {
     try {
       let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
@@ -171,12 +174,8 @@ export const actions = {
       console.warn('Action from store = getBillingDataFromFetch', billingDataFromFetch);
     } catch (e) {
       console.warn('Action from store = getBillingDataFromFetch API error', e);
-
     }
-
-
   },
-
   //Clients list
   async getClientData({commit}, {clientId}) {
     try {
@@ -221,5 +220,26 @@ export const actions = {
       console.warn('error in getClientsNotes', e);
     }
 
-  }
+  },
+  // CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
+
+  async getAllowedUsers({commit}, {clientId}) {
+    try {
+      let allowedUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/allowed-users`)
+      commit('updateAllowedUsersList', {allowedUsersList});
+    } catch (e) {
+      console.warn('error:', e)
+    }
+  },
+
+  async getEligibleUsersList({commit}, {clientId}) {
+    try {
+      let eligibleUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/eligible-users`)
+      commit('updateEligibleUsersList', {eligibleUsersList});
+    } catch (e) {
+      console.warn('error:', e)
+    }
+  },
+
+
 };

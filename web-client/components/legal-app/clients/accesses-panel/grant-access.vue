@@ -3,11 +3,11 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn x-large color="primary" v-on="{ ...tooltip, ...dialog }">
-            Dodaj dostęp
+          <v-btn medium color="info" v-on="{ ...tooltip, ...dialog }">
+            Nadaj dostęp
           </v-btn>
         </template>
-        <span>Dodaj dostęp</span>
+        <span>Nadaj dostęp</span>
       </v-tooltip>
     </template>
     <v-card min-height="400px">
@@ -17,11 +17,10 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-select class="mx-2"
-                v-model="selectedUsers"
+                v-model="selectedUser"
                 :items="eligibleUsers"
                 item-text="email"
                 :menu-props="{ maxHeight: '200' }"
-                multiple
                 return-object
                 small-chips
                 deletable-chips
@@ -29,22 +28,22 @@
                 persistent-placeholder
                 outlined
       ></v-select>
-      <v-alert v-if="selectedUsers.length === 0" elevation="5" text type="info" dismissible
+      <v-alert v-if="selectedUser.length === 0" elevation="5" text type="info" dismissible
                close-text="Zamknij">
-        Z listy powyżej wybierz użytkowników, którym chcesz nadać dostęp do klienta. Upoważniona osoba będzie miała
-        wgląd w dane klienta, rozliczenia i coś jeszcze? Jonasz to confirm :)
+        Z listy powyżej wybierz użytkownika, któremu chcesz nadać dostęp do klienta. Upoważniona osoba będzie miała
+        dostęp do panelu klienta, w którym będzie mogła zarządzać swoimi notatkami, rozliczeniami oraz sprawami.
       </v-alert>
       <v-list>
-        <v-list-item v-for="user in selectedUsers" :key="user.id">
+        <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Użytkownik: {{ user.username }}
+              Użytkownik: {{ selectedUser.username }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              Adres email: {{ user.email }}
+              Adres email: {{ selectedUser.email }}
             </v-list-item-subtitle>
             <v-list-item-subtitle>
-              Rola: {{ user.role }}
+              Rola: {{ selectedUser.role }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -64,7 +63,8 @@
 </template>
 
 <script>
-import {getClientEligibleUsers, grantAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {grantAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "grant-access",
@@ -75,38 +75,43 @@ export default {
     }
   },
   data: () => ({
-    selectedUsers: [],
-    eligibleUsers: [],
+    selectedUser: [],
     dialog: false,
     loading: false,
-    user: null,
   }),
 
   async fetch() {
-    await this.getEligibleUsersList()
+    let clientId = this.clientItem.id;
+    await this.getEligibleUsersList({clientId})
+    console.warn('eligible users list:', this.eligibleUsers)
+  },
+
+  computed: {
+    ...mapGetters('legal-app-client-store', ['eligibleUsers']),
   },
 
   methods: {
-    async getEligibleUsersList() {
-      try {
-        let clientId = this.clientItem.id;
-        this.eligibleUsers = await this.$axios.$get(getClientEligibleUsers(clientId))
-        console.warn('eligible users list:', this.eligibleUsers)
-      } catch (e) {
-        console.warn('error:', e)
-      }
-    },
+    ...mapActions('legal-app-client-store', ['getAllowedUsers']),
+    ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
 
     async grantAccess() {
+      const payload = {
+        userId: this.selectedUser.id
+      }
       try {
         let clientId = this.clientItem.id;
-        let userId = this.selectedUsers.id;
-        console.warn('user id', userId)
-        await this.$axios.$post(grantAccess(clientId, userId))
+        console.warn('user id', payload)
+        await this.$axios.$post(grantAccess(clientId), payload)
+        this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
       } catch (error) {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
+        Object.assign(this.$data, this.$options.data.call(this));
+        let clientId = this.clientItem.id;
+        console.warn('client id:', clientId)
+        await this.getAllowedUsers({clientId})
+        await this.getEligibleUsersList({clientId})
         this.dialog = false
 
       }
