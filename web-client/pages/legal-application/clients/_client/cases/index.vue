@@ -63,7 +63,6 @@
 
 <script>
 import Layout from "../../../../../components/legal-app/layout";
-import {groupByKey} from "@/data/functions";
 import CasesNotes from "@/components/legal-app/clients/cases/cases-notes";
 import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case";
 import {formatDate} from "@/data/date-extensions";
