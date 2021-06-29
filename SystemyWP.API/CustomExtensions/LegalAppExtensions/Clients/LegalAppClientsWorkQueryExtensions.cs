@@ -15,7 +15,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
         {
             switch (role)
             {
-                case SystemyWpConstants.Roles.ClientAdmin:
+                case SystemyWpConstants.Roles.UserAdmin:
                     source = source.Where(lappWorkRecord =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappWorkRecord.LegalAppClientId == clientId &&
@@ -33,7 +33,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
-                case SystemyWpConstants.Roles.Client:
+                case SystemyWpConstants.Roles.User:
                     source = source.Where(lappWorkRecord =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappWorkRecord.LegalAppClientId == clientId &&
@@ -58,7 +58,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
         {
             switch (role)
             {
-                case SystemyWpConstants.Roles.ClientAdmin:
+                case SystemyWpConstants.Roles.UserAdmin:
                     source = source.Where(lappWorkRecord =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappWorkRecord.LegalAppClientId == clientId &&
@@ -76,7 +76,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id);
                     break;
-                case SystemyWpConstants.Roles.Client:
+                case SystemyWpConstants.Roles.User:
                     source = source.Where(lappWorkRecord =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappWorkRecord.LegalAppClientId == clientId &&

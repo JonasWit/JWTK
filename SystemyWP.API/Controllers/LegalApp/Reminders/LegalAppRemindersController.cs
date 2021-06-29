@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Reminders
 {
     [Route("/api/legal-app-reminders")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppRemindersController : LegalAppApiController
     {
         public LegalAppRemindersController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SystemyWP.API.Controllers.LegalApp.Client
 {
     [Route("/api/legal-app-clients-notes")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppClientNotesController : LegalAppApiController
     {
         public LegalAppClientNotesController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,

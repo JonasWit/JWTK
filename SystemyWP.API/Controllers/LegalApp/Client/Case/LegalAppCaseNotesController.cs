@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 {
     [Route("/api/legal-app-cases-notes")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppCaseNotesController : LegalAppApiController
     {
         public LegalAppCaseNotesController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
@@ -90,7 +90,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
 
         [HttpDelete("case/{caseId}/note/{noteId}")]
-        public async Task<IActionResult> DeleteNote(long caseId, long noteId, [FromBody] NoteForm form)
+        public async Task<IActionResult> DeleteNote(long caseId, long noteId)
         {
             try
             {

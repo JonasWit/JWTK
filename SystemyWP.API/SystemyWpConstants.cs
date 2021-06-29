@@ -12,14 +12,14 @@ namespace SystemyWP.API
             public const string IncorrectBehaviour = "Zapytanie nie zostało obsłużone poprawnie!";
             public const string DataAlreadyExists = "Te dane już istnieją!";
             public const string DataNotFound = "Zapytanie nie zostało obsłużone poprawnie - nie znaleziono potrzebnych danych!";
-            public const string AlreadyGranted = "Dostęp został już udzielony";
-            public const string AlreadyRevoked = "Dostęp został już odebrany";
+            public const string AlreadyGranted = "Dostęp został już udzielony!";
+            public const string AlreadyRevoked = "Dostęp został już odebrany!";
         }
         
         public struct Policies
         {
-            public const string Client = nameof(Client);
-            public const string ClientAdmin = nameof(ClientAdmin);
+            public const string User = nameof(User);
+            public const string UserAdmin = nameof(UserAdmin);
             public const string PortalAdmin = nameof(PortalAdmin);
             public const string LegalAppAccess = nameof(LegalAppAccess);
         }
@@ -29,8 +29,8 @@ namespace SystemyWP.API
             public const string Role = "Role";
             public const string AppAccess = "AppAccess";
             public static readonly Claim InvitedClaim = new(Role, Roles.Invited);
-            public static readonly Claim ClientClaim = new (Role, Roles.Client);
-            public static readonly Claim ClientAdminClaim = new (Role, Roles.ClientAdmin);
+            public static readonly Claim UserClaim = new (Role, Roles.User);
+            public static readonly Claim UserAdminClaim = new (Role, Roles.UserAdmin);
             public static readonly Claim PortalAdminClaim = new (Role, Roles.PortalAdmin);
             public static readonly Claim LegalAppAccessClaim = new (AppAccess, Apps.LegalApp);
         }
@@ -38,8 +38,8 @@ namespace SystemyWP.API
         public struct Roles
         {
             public const string Invited = nameof(Invited);
-            public const string Client = nameof(Client);
-            public const string ClientAdmin = nameof(ClientAdmin);
+            public const string User = nameof(User);
+            public const string UserAdmin = nameof(UserAdmin);
             public const string PortalAdmin = nameof(PortalAdmin);
         }
 

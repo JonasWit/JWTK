@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 {
     [Route("/api/legal-app-cases")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppCaseController : LegalAppApiController
     {
         public LegalAppCaseController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -44,6 +44,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
         
         [HttpGet("client/{clientId}/cases/archive")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> GetArchivedCases(long clientId)
         {
             try
@@ -108,7 +109,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 await _context.SaveChangesAsync();
 
                 //Act as normal as User
-                if (Role.Equals(SystemyWpConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.User))
                 {
                     _context.Add(new DataAccess
                     {
@@ -178,7 +179,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
         
         [HttpPut("archive/case/{caseId}")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> ArchiveCase(long caseId)
         {
             try

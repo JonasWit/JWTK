@@ -224,6 +224,56 @@ namespace SystemyWP.API
                     CreatedBy = "system"
                 });
             }
+            
+            //Admin User with no key
+            var identityUser = new IdentityUser($"clientadmin-nokey")
+            {
+                Email = $"clientadmin-nokey@test.com",
+                LockoutEnabled = true,
+                EmailConfirmed = true
+            };
+            userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
+            userManager
+                .AddClaimsAsync(identityUser, new[]
+                {
+                    SystemyWpConstants.Claims.UserAdminClaim,
+                    SystemyWpConstants.Claims.LegalAppAccessClaim
+                })
+                .GetAwaiter()
+                .GetResult();
+
+            context.Add(new User
+            {
+                Username = identityUser.UserName,
+                Email = identityUser.Email,
+                Id = identityUser.Id,
+                CreatedBy = "system"
+            });
+            
+            //User with no key
+            identityUser = new IdentityUser($"client-nokey")
+            {
+                Email = $"client-nokey@test.com",
+                LockoutEnabled = true,
+                EmailConfirmed = true
+            };
+            userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
+            userManager
+                .AddClaimsAsync(identityUser, new[]
+                {
+                    SystemyWpConstants.Claims.UserClaim,
+                    SystemyWpConstants.Claims.LegalAppAccessClaim
+                })
+                .GetAwaiter()
+                .GetResult();
+
+            context.Add(new User
+            {
+                Username = identityUser.UserName,
+                Email = identityUser.Email,
+                Id = identityUser.Id,
+                CreatedBy = "system"
+            });
 
             //Seed Client Admins
             for (var adminNumber = -2; adminNumber < 3; adminNumber++)
@@ -251,7 +301,7 @@ namespace SystemyWP.API
                 userManager
                     .AddClaimsAsync(testClientAdmin, new[]
                     {
-                        SystemyWpConstants.Claims.ClientAdminClaim,
+                        SystemyWpConstants.Claims.UserAdminClaim,
                         SystemyWpConstants.Claims.LegalAppAccessClaim
                     })
                     .GetAwaiter()
@@ -295,7 +345,7 @@ namespace SystemyWP.API
                     userManager
                         .AddClaimsAsync(testClient, new[]
                         {
-                            SystemyWpConstants.Claims.ClientClaim,
+                            SystemyWpConstants.Claims.UserClaim,
                             SystemyWpConstants.Claims.LegalAppAccessClaim
                         })
                         .GetAwaiter()

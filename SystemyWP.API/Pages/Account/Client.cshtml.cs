@@ -73,7 +73,7 @@ namespace SystemyWP.API.Pages.Account
                 await userManager.UpdateAsync(user);
                 
                 await userManager.RemoveClaimAsync(user, SystemyWpConstants.Claims.InvitedClaim);
-                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim); 
+                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserClaim); 
                 
                 await signInManager.SignInAsync(user, true);
                 return Redirect(Form.ReturnUrl);

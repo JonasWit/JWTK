@@ -25,7 +25,7 @@ namespace SystemyWP.API.Controllers.Portal
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var users = await userManager.GetUsersForClaimAsync(
-                SystemyWpConstants.Claims.ClientClaim);
+                SystemyWpConstants.Claims.UserClaim);
 
             return Ok(users.Select(x => new
             {

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Client
 {
     [Route("/api/legal-app-client-contacts")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppClientContactController : LegalAppApiController
     {
         public LegalAppClientContactController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,

@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 {
     [Route("/api/legal-app-case-access")]
-    [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+    [Authorize(SystemyWpConstants.Policies.UserAdmin)]
     public class LegalAppCaseAccessController : LegalAppApiController
     {
         public LegalAppCaseAccessController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
@@ -181,7 +181,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 
                 var result = await GetOnlyNormalUsers(users, userManager);
                 result.RemoveAll(x =>
-                    !x.Role.Equals(SystemyWpConstants.Roles.Client) ||
+                    !x.Role.Equals(SystemyWpConstants.Roles.User) ||
                     currentAllowed.Any(y => y.UserId == x.Id));
 
                 return Ok(result);
