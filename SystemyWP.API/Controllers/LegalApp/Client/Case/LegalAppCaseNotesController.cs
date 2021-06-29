@@ -90,7 +90,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
 
         [HttpDelete("case/{caseId}/note/{noteId}")]
-        public async Task<IActionResult> DeleteNote(long caseId, long noteId, [FromBody] NoteForm form)
+        public async Task<IActionResult> DeleteNote(long caseId, long noteId)
         {
             try
             {
