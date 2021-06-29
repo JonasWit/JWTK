@@ -31,7 +31,8 @@ const initState = () => ({
   clientCaseDetails: null,
   groupedCases: [],
   allowedUsersForCase: [],
-  eligibleUsersForCase: []
+  eligibleUsersForCase: [],
+  notesListForCases: []
 
 });
 
@@ -121,9 +122,8 @@ export const mutations = {
   },
 
   //Notes list for cases
-  updateNotesListFromFetch(state, {notesListFromFetch}) {
-    console.warn('mutation done for updateNotesListFromFetch', notesListFromFetch);
-    state.notesListFromFetch = notesListFromFetch
+  updateNotesListForCases(state, {notesListForCases}) {
+    state.notesListForCases = notesListForCases
   },
   updateNotesTitlesListFromFetch(state, {clientNotesList}) {
     state.clientNotesList = clientNotesList
@@ -211,14 +211,21 @@ export const actions = {
   },
 
   //Notes list for cases
-
-  async getNotesListFromFetch({commit}, {caseId}) {
+  async getNotesListForCases({commit}, {caseId}) {
     try {
-      let notesListFromFetch = await this.$axios.$get(`/api/legal-app-cases-notes/case/${caseId}/list-basic`)
-      commit('updateNotesListFromFetch', {notesListFromFetch});
-      console.warn('Action from store = notesListFromFetch', notesListFromFetch);
+      let response = await this.$axios.$get(`/api/legal-app-cases-notes/case/${caseId}/list`)
+      response.sort((a, b) => {
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
+      });
+      response.forEach(x => {
+        x.caseCreatedDate = formatDateToMonth(x.created)
+      });
+      const notesListForCases = groupByKey(response, 'caseCreatedDate')
+      commit('updateNotesListForCases', {notesListForCases});
     } catch (e) {
-      console.warn('Action from store = getNotesListFromFetch API error', e);
+      console.warn('Action from store = notesListForCases API error', e);
     }
   },
 

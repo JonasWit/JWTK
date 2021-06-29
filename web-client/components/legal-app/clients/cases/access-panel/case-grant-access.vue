@@ -68,12 +68,6 @@ import {mapActions, mapState} from "vuex";
 
 export default {
   name: "case-grant-access",
-  props: {
-    clientItem: {
-      type: Object,
-      required: true
-    }
-  },
   data: () => ({
     selectedUser: [],
     dialog: false,

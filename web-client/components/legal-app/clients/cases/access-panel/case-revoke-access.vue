@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {revokeAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {revokeAccess} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {mapActions} from "vuex";
 
 export default {
@@ -41,33 +41,29 @@ export default {
     userForAction: {
       required: true
     },
-    clientItemForAction: {
-      type: Object,
-      required: true
-    }
   },
   data: () => ({
     dialog: false
   }),
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllowedUsers']),
-    ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
+    ...mapActions('legal-app-client-store', ['getAllowedUsersForCase']),
+    ...mapActions('legal-app-client-store', ['getEligibleUsersForCase']),
     async revokeAccess() {
       const payload = {
         userId: this.userForAction.id
       }
       try {
-        let clientId = this.clientItemForAction.id
+        let caseId = this.$route.params.case
         console.warn('user id:', payload)
-        await this.$axios.$post(revokeAccess(clientId), payload)
+        await this.$axios.$post(revokeAccess(caseId), payload)
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-        let clientId = this.clientItemForAction.id
-        await this.getAllowedUsers({clientId})
-        await this.getEligibleUsersList({clientId})
+        let caseId = this.$route.params.case
+        await this.getAllowedUsersForCase({caseId})
+        await this.getEligibleUsersForCase({caseId})
       }
 
 
