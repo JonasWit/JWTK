@@ -238,6 +238,8 @@ namespace SystemyWP.API
                 };
                 context.LegalAppAccessKeys.Add(key);
                 context.SaveChanges();
+                
+                var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
 
                 var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
                 {
@@ -259,7 +261,7 @@ namespace SystemyWP.API
                 {
                     Username = testClientAdmin.UserName,
                     Email = testClientAdmin.Email,
-                    LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                    LegalAppAccessKey = accKey,
                     Id = testClientAdmin.Id,
                     CreatedBy = "system"
                 });
@@ -267,7 +269,6 @@ namespace SystemyWP.API
                 //Seed Reminders
                 for (var i = -20; i < 20; i++)
                 {
-                    var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
                     context.Add(new LegalAppReminder
                     {
                         AuthorId = testClientAdmin.Id,
@@ -304,7 +305,7 @@ namespace SystemyWP.API
                     {
                         Username = testClient.UserName,
                         Email = testClient.Email,
-                        LegalAppAccessKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id),
+                        LegalAppAccessKey = accKey,
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });
@@ -312,7 +313,6 @@ namespace SystemyWP.API
                     //Seed Reminders
                     for (var i = -20; i < 20; i++)
                     {
-                        var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
                         context.Add(new LegalAppReminder
                         {
                             AuthorId = testClient.Id,

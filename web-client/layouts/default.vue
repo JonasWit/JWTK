@@ -116,8 +116,8 @@ export default {
   watch: {
     themeSwitch: function (val) {
       if (process.client && this.darkThemeStored !== !val) {
-        console.warn('watcher run');
         if (val) {
+          this.$vuetify.theme.light = true;
           this.$vuetify.theme.dark = false;
           this.setLightTheme();
 
@@ -130,6 +130,7 @@ export default {
             }
           }
         } else {
+          this.$vuetify.theme.light = false;
           this.$vuetify.theme.dark = true;
           this.setDarkTheme();
 
@@ -142,6 +143,8 @@ export default {
             }
           }
         }
+
+        this.goDark = this.darkThemeStored;
       }
     }
   },
