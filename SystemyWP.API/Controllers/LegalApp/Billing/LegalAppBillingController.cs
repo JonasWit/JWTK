@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Billing
 {
     [Route("/api/legal-app-billing")]
-    [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+    [Authorize(SystemyWpConstants.Policies.UserAdmin)]
     public class LegalAppBillingController : LegalAppApiController
     {
         public LegalAppBillingController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

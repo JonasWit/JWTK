@@ -28,11 +28,11 @@ namespace SystemyWP.Integration.Tests.PortalTests
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
             var user = userManager
-                .GetUsersForClaimAsync(SystemyWpConstants.Claims.ClientAdminClaim)
+                .GetUsersForClaimAsync(SystemyWpConstants.Claims.UserAdminClaim)
                 .GetAwaiter()
                 .GetResult()
                 .First(x =>
-                    x.Email.Equals(TestsConstants.Emails.ClientAdminEmail,
+                    x.Email.Equals(TestsConstants.Emails.UserAdminEmailKey2,
                         StringComparison.InvariantCultureIgnoreCase));
 
             var client = _instance
@@ -41,7 +41,7 @@ namespace SystemyWP.Integration.Tests.PortalTests
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
                     SystemyWpConstants.Claims.LegalAppAccessClaim,
-                    SystemyWpConstants.Claims.ClientAdminClaim
+                    SystemyWpConstants.Claims.UserAdminClaim
                 )
                 .CreateClient(new WebApplicationFactoryClientOptions()
                 {

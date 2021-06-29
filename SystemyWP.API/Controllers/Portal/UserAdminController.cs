@@ -143,18 +143,18 @@ namespace SystemyWP.API.Controllers.Portal
                     return BadRequest("Unable to remove from role!");
 
                 //Change from normal User to admin
-                if (form.Role.Equals(SystemyWpConstants.Roles.Client, StringComparison.InvariantCultureIgnoreCase))
+                if (form.Role.Equals(SystemyWpConstants.Roles.User, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =
-                        await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientClaim);
+                        await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserClaim);
                     if (addToRoleResult.Succeeded) return Ok();
                 }
                 
                 //Change from Admin to normal User
-                if (form.Role.Equals(SystemyWpConstants.Roles.ClientAdmin, StringComparison.InvariantCultureIgnoreCase))
+                if (form.Role.Equals(SystemyWpConstants.Roles.UserAdmin, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =
-                        await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.ClientAdminClaim);
+                        await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserAdminClaim);
                     if (addToRoleResult.Succeeded)
                     {
                         _context.RemoveRange(_context.DataAccesses.Where(x => x.UserId.Equals(user.Id)));

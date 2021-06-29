@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp.Client
 {
     [Route("/api/legal-app-clients")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppClientController : LegalAppApiController
     {
         public LegalAppClientController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
@@ -112,7 +112,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) 
+                    return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newClient = new LegalAppClient
                 {
@@ -124,7 +125,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 _context.Add(newClient);
 
                 //Act as normal as User
-                if (Role.Equals(SystemyWpConstants.Roles.Client))
+                if (Role.Equals(SystemyWpConstants.Roles.User))
                 {
                     _context.Add(new DataAccess
                     {
@@ -171,7 +172,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpPut("archive/{clientId}")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> ArchiveClient(long clientId)
         {
             try
@@ -221,7 +222,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpDelete("delete/{clientId}")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> DeleteClient(long clientId)
         {
             try
@@ -244,7 +245,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
 
         [HttpGet("admin/flat")]
-        [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> GetClientsAndCasesForAccess()
         {
             try

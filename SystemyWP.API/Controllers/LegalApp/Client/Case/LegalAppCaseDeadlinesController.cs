@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 {
     [Route("/api/legal-app-cases/deadlines")]
-    [Authorize(SystemyWpConstants.Policies.Client)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppCaseDeadlinesController : LegalAppApiController
     {
         public LegalAppCaseDeadlinesController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,

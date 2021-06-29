@@ -19,7 +19,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.LegalApp
 {
     [Route("/api/legal-app-admin/general")]
-    [Authorize(SystemyWpConstants.Policies.ClientAdmin)]
+    [Authorize(SystemyWpConstants.Policies.UserAdmin)]
     public class LegalAppAdminController : ApiController
     {
         public LegalAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)

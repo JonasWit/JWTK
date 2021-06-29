@@ -185,18 +185,18 @@ namespace SystemyWP.API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(SystemyWpConstants.Policies.Client, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
-                        SystemyWpConstants.Roles.Client,
+                        SystemyWpConstants.Roles.User,
                         SystemyWpConstants.Roles.PortalAdmin,
-                        SystemyWpConstants.Roles.ClientAdmin));
+                        SystemyWpConstants.Roles.UserAdmin));
 
-                options.AddPolicy(SystemyWpConstants.Policies.ClientAdmin, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.UserAdmin, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
                         SystemyWpConstants.Roles.PortalAdmin,
-                        SystemyWpConstants.Roles.ClientAdmin));
+                        SystemyWpConstants.Roles.UserAdmin));
 
                 options.AddPolicy(SystemyWpConstants.Policies.PortalAdmin, policy => policy
                     .RequireAuthenticatedUser()
