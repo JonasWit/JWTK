@@ -154,14 +154,12 @@ export default {
     searchConditionsProvided: false,
     cursor: 0,
     takeAmount: 30,
-
-
   }),
   async fetch() {
     this.cursor = 0;
     this.clientList = [];
     this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
-    console.log('lista klientów', this.clientList)
+    console.log('lista klientów', this.clientSearchItems)
     await this.handleFeed();
 
   },

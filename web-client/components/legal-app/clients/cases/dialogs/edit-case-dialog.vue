@@ -28,17 +28,16 @@
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required
                       :rules="validation.description"></v-textarea>
-          <!--          <v-checkbox v-model="form.public" label="Sprawa publiczna" color="red darken-3"></v-checkbox>-->
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="error" text @click="dialog = false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveChanges()">
             Zapisz zmianę
-          </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -77,11 +76,12 @@ export default {
       description: lengthRule("Liczba znaków nie może przekraczać 1000", 0, 1000)
     },
   }),
-  fetch() {
-    this.form.name = this.caseForAction.name,
-      this.form.signature = this.caseForAction.signature,
-      this.form.description = this.caseForAction.description,
-      this.form.group = this.caseForAction.group
+  beforeMount() {
+    console.log('case for action', this.caseForAction.name)
+    this.form.name = this.caseForAction.name
+    this.form.signature = this.caseForAction.signature
+    this.form.description = this.caseForAction.description
+    this.form.group = this.caseForAction.group
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails']),
@@ -102,8 +102,8 @@ export default {
       } finally {
         let caseId = this.caseForAction.id;
         await this.getCaseDetails({caseId})
-        this.dialog = false;
         this.$emit('action-completed');
+        this.dialog = false;
       }
     }
   }

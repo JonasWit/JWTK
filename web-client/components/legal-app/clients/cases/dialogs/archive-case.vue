@@ -3,21 +3,21 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="error" v-on="{ ...tooltip, ...dialog }">
-            Usuń
+          <v-btn elevation="2" small class="mx-2" color="warning" v-on="{ ...tooltip, ...dialog }">
+            Archiwizuj
           </v-btn>
         </template>
-        <span>Usuń klienta</span>
+        <span>Dodaj do archiwum</span>
       </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="justify-center">Usuń Sprawę</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz sprawę. Odzyskanie dostępu będzie niemożliwe.
-        Zatwierdź operację używjąc guzika 'POTWIERDŹ'
+      <v-card-title class="justify-center">Archiwizuj Sprawę</v-card-title>
+      <v-card-subtitle>Potwierdzając operację dodasz sprawę do archiwum spraw.Zatwierdź operację używjąc guzika
+        'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="error" text @click="deleteClientCase">
+        <v-btn color="error" text @click="addToCaseArchive">
           Potwierdź
         </v-btn>
         <v-spacer/>
@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import {deleteCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import {archiveCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 
 export default {
-  name: "delete-case",
+  name: "archive-case",
   props: {
     caseForAction: {
       required: true,
@@ -44,11 +44,11 @@ export default {
     dialog: false,
   }),
   methods: {
-    async deleteClientCase() {
+    async addToCaseArchive() {
       try {
         let caseId = this.caseForAction.id;
-        await this.$axios.$delete(deleteCase(caseId));
-        this.$notifier.showSuccessMessage("Sprawa została usunięta!");
+        await this.$axios.put(archiveCase(caseId));
+        this.$notifier.showSuccessMessage("Sprawa została dodana do archiwum!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {

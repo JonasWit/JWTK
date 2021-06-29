@@ -18,7 +18,6 @@
           <add-case/>
         </template>
       </v-toolbar>
-
       <v-alert elevation="5" text type="info" dismissible
                close-text="Zamknij">
         Witaj w bazie spraw Klienta! Użyj zielonej ikonki "+", aby dodać pierwszą sprawę.
@@ -50,7 +49,8 @@
                   </v-card-text>
                 </v-col>
                 <v-col cols="3">
-                  <case-details :selected-case="object" :client-item="clientNumber"/>
+                  <go-to-case-details :selected-case="object" :client-item="clientNumber"/>
+                  <!--                  <case-details-comp :selected-case="object" :client-item="clientNumber"/>-->
                 </v-col>
               </v-row>
             </v-card>
@@ -63,17 +63,17 @@
 
 <script>
 import Layout from "../../../../../components/legal-app/layout";
-import CasesNotes from "@/components/legal-app/clients/cases/cases-notes";
-import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case";
 import {formatDate} from "@/data/date-extensions";
 import CaseDetails from "@/components/legal-app/clients/cases/case-details";
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapState} from "vuex";
+import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
+import CaseDetailsComp from "@/components/legal-app/clients/cases/case-details";
 
 
 export default {
   name: "index",
-  components: {AddCase, CaseDetails, DeleteCase, CasesNotes, Layout},
+  components: {CaseDetailsComp, GoToCaseDetails, AddCase, CaseDetails, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
@@ -89,7 +89,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('legal-app-client-store', ['groupedCases']),
+    ...mapState('legal-app-client-store', ['groupedCases']),
     clientNumber() {
       return this.$route.params.client
     }

@@ -28,8 +28,11 @@ const initState = () => ({
   eligibleUsersList: [],
 
   //Cases
-  clientCaseDetails: [],
-  groupedCases: []
+  clientCaseDetails: null,
+  groupedCases: [],
+  allowedUsersForCase: [],
+  eligibleUsersForCase: []
+
 });
 
 export const state = initState;
@@ -77,15 +80,6 @@ export const getters = {
   eligibleUsers(state) {
     return state.eligibleUsersList
   },
-
-  //CASES
-  clientCaseDetails(state) {
-    return state.clientCaseDetails
-  },
-
-  groupedCases(state) {
-    return state.groupedCases
-  }
 };
 
 export const mutations = {
@@ -149,7 +143,13 @@ export const mutations = {
 
   updateGroupedCases(state, {groupedCases}) {
     state.groupedCases = groupedCases
-  }
+  },
+  updateAllowedUsersForCase(state, {allowedUsersForCase}) {
+    state.allowedUsersForCase = allowedUsersForCase
+  },
+  updateEligibleUsersForCase(state, {eligibleUsersForCase}) {
+    state.eligibleUsersForCase = eligibleUsersForCase
+  },
 
 };
 
@@ -220,8 +220,6 @@ export const actions = {
     } catch (e) {
       console.warn('Action from store = getNotesListFromFetch API error', e);
     }
-
-
   },
 
   //CLIENT Notes - list of titles
@@ -265,19 +263,6 @@ export const actions = {
   },
 
   //CASES
-
-  // async getAllCases({commit}, {clientId}) {
-  //   try {
-  //     let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
-  //     console.warn('list of cases', listOfCases)
-  //     this.listOfCases = listOfCases
-  //
-  //   } catch (e) {
-  //     console.warn('list of cases fetch error', e)
-  //   }
-  //
-  // },
-
   async getCaseDetails({commit}, {caseId}) {
     try {
       let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`)
@@ -301,6 +286,25 @@ export const actions = {
       console.warn('list of cases', groupedCases)
     } catch (e) {
       console.warn('list of cases fetch error', e)
+    }
+  },
+  // CASE ACCESS - GET ALLOWED & ELIGIBLE USERS
+
+  async getAllowedUsersForCase({commit}, {caseId}) {
+    try {
+      let allowedUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/allowed-users`)
+      commit('updateAllowedUsersForCase', {allowedUsersForCase});
+    } catch (e) {
+      console.warn('error:', e)
+    }
+  },
+
+  async getEligibleUsersForCase({commit}, {caseId}) {
+    try {
+      let eligibleUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/eligible-users`)
+      commit('updateEligibleUsersForCase', {eligibleUsersForCase});
+    } catch (e) {
+      console.warn('error:', e)
     }
   },
 };
