@@ -44,6 +44,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
         
         [HttpGet("client/{clientId}/cases/archive")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> GetArchivedCases(long clientId)
         {
             try

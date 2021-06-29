@@ -84,6 +84,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
         }
         
         [HttpGet("clients/archive")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> GetArchivedClients()
         {
             try
