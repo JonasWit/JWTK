@@ -69,6 +69,7 @@ import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case
 import {formatDate} from "@/data/date-extensions";
 import CaseDetails from "@/components/legal-app/clients/cases/case-details";
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
+import {mapActions, mapGetters} from "vuex";
 
 
 export default {
@@ -77,66 +78,30 @@ export default {
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
-
     listOfCases: [],
     name: "",
     signature: "",
     description: "",
-    groupedCases: [],
     dialog: false
-
   }),
-
   async fetch() {
-    try {
-      await this.searchListOfCases()
-    } finally {
-      this.groupByKey()
-    }
+    let clientId = this.$route.params.client
+    await this.getListOfGroupedCases({clientId})
   },
 
   computed: {
-    items() {
-      return Array.from({length: this.length}, (k, v) => v + 1)
-    },
-    length() {
-      return 7000
-    },
+    ...mapGetters('legal-app-client-store', ['groupedCases']),
     clientNumber() {
       return this.$route.params.client
     }
   },
 
   methods: {
-    async searchListOfCases() {
-      try {
-        let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${this.$route.params.client}/cases`)
-        console.warn('list of cases', listOfCases)
-        this.listOfCases = listOfCases
-
-      } catch (e) {
-        console.warn('list of cases fetch error', e)
-      }
-
-    },
-
-    groupByKey() {
-      let input = this.listOfCases;
-      let key = 'group';
-      const groups = groupByKey(input, key)
-      this.groupedCases = groups
-      console.log('group by category fired', groups)
-    },
-    genRandomIndex(length) {
-      return Math.ceil(Math.random() * (length - 1))
-    },
+    ...mapActions('legal-app-client-store', ['getListOfGroupedCases']),
     formatDate(date) {
       return formatDate(date)
     }
-
   },
-
-
 }
 </script>
 

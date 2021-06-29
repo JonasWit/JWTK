@@ -29,6 +29,7 @@ const initState = () => ({
 
   //Cases
   clientCaseDetails: [],
+  groupedCases: []
 });
 
 export const state = initState;
@@ -80,6 +81,10 @@ export const getters = {
   //CASES
   clientCaseDetails(state) {
     return state.clientCaseDetails
+  },
+
+  groupedCases(state) {
+    return state.groupedCases
   }
 };
 
@@ -140,6 +145,10 @@ export const mutations = {
   //CASES
   updateClientCaseDetails(state, {clientCaseDetails}) {
     state.clientCaseDetails = clientCaseDetails
+  },
+
+  updateGroupedCases(state, {groupedCases}) {
+    state.groupedCases = groupedCases
   }
 
 };
@@ -257,17 +266,17 @@ export const actions = {
 
   //CASES
 
-  async getAllCases({commit}, {clientId}) {
-    try {
-      let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
-      console.warn('list of cases', listOfCases)
-      this.listOfCases = listOfCases
-
-    } catch (e) {
-      console.warn('list of cases fetch error', e)
-    }
-
-  },
+  // async getAllCases({commit}, {clientId}) {
+  //   try {
+  //     let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
+  //     console.warn('list of cases', listOfCases)
+  //     this.listOfCases = listOfCases
+  //
+  //   } catch (e) {
+  //     console.warn('list of cases fetch error', e)
+  //   }
+  //
+  // },
 
   async getCaseDetails({commit}, {caseId}) {
     try {
@@ -277,7 +286,21 @@ export const actions = {
     } catch (e) {
       console.warn('error:', e)
     }
-  }
+  },
 
-
+  async getListOfGroupedCases({commit}, {clientId}) {
+    try {
+      let response = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
+      response.sort((a, b) => {
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
+      })
+      const groupedCases = groupByKey(response, 'group')
+      commit('updateGroupedCases', {groupedCases});
+      console.warn('list of cases', groupedCases)
+    } catch (e) {
+      console.warn('list of cases fetch error', e)
+    }
+  },
 };
