@@ -1,112 +1,106 @@
 <template>
   <layout>
     <template v-slot:content>
-      <v-container>
-        <v-card class="my-6">
-          <v-card-title class="white--text orange darken-4">
-            Lista spraw
-            <v-spacer></v-spacer>
-            <v-btn color="white" class="text--primary" fab small>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-card-title>
-        </v-card>
-        <v-expansion-panels focusable>
-          <v-expansion-panel v-for="item in groupedCases" :key="item[0].group" class="expansion">
-            <v-expansion-panel-header>{{ item[0].group }}</v-expansion-panel-header>
-            <v-expansion-panel-content>
-
-
-              <v-card v-for="object in item" :key="object.id" class="d-flex justify-space-between">
-                <v-card-subtitle>
-                  {{ object.name }}
-                </v-card-subtitle>
-                <go-to-case-panel :selected-case="object" :client-item="clientNumber"/>
-                <delete-case :selected-case="object"/>
-              </v-card>
-
-
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-container>
+      <v-toolbar class="my-3 white--text" color="primary" dark>
+        <v-toolbar-title class="mr-3">
+          Lista Spraw
+        </v-toolbar-title>
+        <v-autocomplete flat hide-no-data hide-details label="Wyszukaj sprawę" solo-inverted return-object clearable
+                        placeholder="Wpisz sygnaturę sprawy" prepend-inner-icon="mdi-magnify" :items="listOfCases"
+        >
+          <template v-slot:item="{item ,on , attrs}">
+            <v-list-item v-on="on" :attrs="attrs">
+              <v-list-item-content>{{ item.name }}</v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-autocomplete>
+        <template v-slot:extension>
+          <add-case/>
+        </template>
+      </v-toolbar>
+      <v-alert elevation="5" text type="info" dismissible
+               close-text="Zamknij">
+        Witaj w bazie spraw Klienta! Użyj zielonej ikonki "+", aby dodać pierwszą sprawę.
+      </v-alert>
+      <v-expansion-panels>
+        <v-expansion-panel v-for="item in groupedCases" :key="item[0].group" class="expansion">
+          <v-expansion-panel-header>
+            {{ item[0].group }}
+            <template v-slot:actions>
+              <v-icon color="primary">
+                $expand
+              </v-icon>
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card v-for="object in item" :key="object.id" class="my-4">
+              <v-row class="d-flex align-center">
+                <v-col cols="4">
+                  <v-card-text>
+                    <div class="font-weight-bold">Nazwa:{{ object.name }}</div>
+                    <div> Sygnatura: {{ object.signature }}</div>
+                  </v-card-text>
+                </v-col>
+                <v-col cols="5">
+                  <v-card-text>
+                    <div class="font-weight-bold">Dodano: {{ formatDate(object.created) }}</div>
+                    <div> Ostatnia modyfikacja: {{ formatDate(object.updated) }}</div>
+                    <div>Użytkownik: {{ object.updatedBy }}</div>
+                  </v-card-text>
+                </v-col>
+                <v-col cols="3">
+                  <go-to-case-details :selected-case="object" :client-item="clientNumber"/>
+                  <!--                  <case-details-comp :selected-case="object" :client-item="clientNumber"/>-->
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </template>
   </layout>
 </template>
 
 <script>
 import Layout from "../../../../../components/legal-app/layout";
-import {groupByKey} from "@/data/functions";
-import CasesNotes from "@/components/legal-app/cases/cases-notes";
-import GoToCasePanel from "@/components/legal-app/cases/go-to-case-panel";
-import DeleteCase from "@/components/legal-app/cases/dialogs/delete-case";
+import {formatDate} from "@/data/date-extensions";
+import CaseDetails from "@/components/legal-app/clients/cases/case-details";
+import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
+import {mapActions, mapState} from "vuex";
+import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
+import CaseDetailsComp from "@/components/legal-app/clients/cases/case-details";
 
 
 export default {
   name: "index",
-  components: {DeleteCase, GoToCasePanel, CasesNotes, Layout},
+  components: {CaseDetailsComp, GoToCaseDetails, AddCase, CaseDetails, Layout},
   middleware: ['legal-app-permission', 'client', 'authenticated'],
 
   data: () => ({
-
     listOfCases: [],
     name: "",
     signature: "",
     description: "",
-    groupedCases: [],
-
+    dialog: false
   }),
-
   async fetch() {
-    try {
-      await this.searchListOfCases()
-    } finally {
-      this.groupByKey()
-
-
-    }
-
+    let clientId = this.$route.params.client
+    await this.getListOfGroupedCases({clientId})
   },
 
   computed: {
-    items() {
-      return Array.from({length: this.length}, (k, v) => v + 1)
-    },
-    length() {
-      return 7000
-    },
+    ...mapState('legal-app-client-store', ['groupedCases']),
     clientNumber() {
       return this.$route.params.client
     }
   },
 
   methods: {
-    async searchListOfCases() {
-      try {
-        let listOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${this.$route.params.client}/cases`)
-        console.warn('list of cases', listOfCases)
-        this.listOfCases = listOfCases
-
-      } catch (e) {
-        console.warn('list of cases fetch error', e)
-      }
-
-    },
-
-    groupByKey() {
-      let input = this.listOfCases;
-      let key = 'group';
-      const groups = groupByKey(input, key)
-      this.groupedCases = groups
-      console.log('group by category fired', groups)
-    },
-    genRandomIndex(length) {
-      return Math.ceil(Math.random() * (length - 1))
-    },
-
+    ...mapActions('legal-app-client-store', ['getListOfGroupedCases']),
+    formatDate(date) {
+      return formatDate(date)
+    }
   },
-
-
 }
 </script>
 

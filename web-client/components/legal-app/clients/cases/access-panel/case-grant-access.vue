@@ -18,7 +18,7 @@
       </v-toolbar>
       <v-select class="mx-2"
                 v-model="selectedUser"
-                :items="eligibleUsers"
+                :items="eligibleUsersForCase"
                 item-text="email"
                 :menu-props="{ maxHeight: '200' }"
                 return-object
@@ -63,17 +63,11 @@
 </template>
 
 <script>
-import {grantAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import {mapActions, mapGetters} from "vuex";
+import {grantAccess} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import {mapActions, mapState} from "vuex";
 
 export default {
-  name: "grant-access",
-  props: {
-    clientItem: {
-      type: Object,
-      required: true
-    }
-  },
+  name: "case-grant-access",
   data: () => ({
     selectedUser: [],
     dialog: false,
@@ -81,37 +75,37 @@ export default {
   }),
 
   async fetch() {
-    let clientId = this.clientItem.id;
-    await this.getEligibleUsersList({clientId})
-    console.warn('eligible users list:', this.eligibleUsers)
+    let caseId = this.$route.params.case
+    await this.getEligibleUsersForCase({caseId})
+    console.warn('eligible users list:', this.eligibleUsersForCase)
   },
 
   computed: {
-    ...mapGetters('legal-app-client-store', ['eligibleUsers']),
+    ...mapState('legal-app-client-store', ['eligibleUsersForCase']),
   },
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllowedUsers']),
-    ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
+    ...mapActions('legal-app-client-store', ['getAllowedUsersForCase']),
+    ...mapActions('legal-app-client-store', ['getEligibleUsersForCase']),
 
     async grantAccess() {
       const payload = {
         userId: this.selectedUser.id
       }
       try {
-        let clientId = this.clientItem.id;
+        let caseId = this.$route.params.case
         console.warn('user id', payload)
-        await this.$axios.$post(grantAccess(clientId), payload)
+        await this.$axios.$post(grantAccess(caseId), payload)
         this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
       } catch (error) {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
         Object.assign(this.$data, this.$options.data.call(this));
-        let clientId = this.clientItem.id;
-        console.warn('client id:', clientId)
-        await this.getAllowedUsers({clientId})
-        await this.getEligibleUsersList({clientId})
+        let caseId = this.$route.params.case
+        console.warn('case id:', caseId)
+        await this.getAllowedUsersForCase({caseId})
+        await this.getEligibleUsersForCase({caseId})
         this.dialog = false
 
       }

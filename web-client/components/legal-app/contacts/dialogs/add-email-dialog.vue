@@ -12,6 +12,11 @@
     </template>
     <v-form ref="addNewEmailForm" v-model="validation.valid">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Dodaj adres email
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.email" :rules="validation.email" label="Dodaj adres email"
                         required></v-text-field>
@@ -19,13 +24,14 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn text color="primary" @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveNewEmail()">
             Dodaj
           </v-btn>
-          <v-btn text color="primary" @click="resetForm()">
-            Wyczyść
-          </v-btn>
+
         </v-card-actions>
       </v-card>
     </v-form>

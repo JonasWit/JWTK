@@ -39,16 +39,10 @@ export default {
   data: () => ({
     client: null,
   }),
-  fetch() {
-    this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`)
-      .then(resp => {
-        this.client = resp
-      })
-
+  async fetch() {
+    this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`)
   },
-
   async asyncData({params}) {
-
     return {
       items: [
 
@@ -90,7 +84,7 @@ export default {
         },
         {
           id: '6',
-          route: `/legal-application/clients/${params.client}/archive`,
+          route: `/legal-application/clients/${params.client}/archived-cases`,
           name: 'Archiwum Spraw',
           text: 'Lista zarchiwizowanych Spraw',
           icon: 'mdi-briefcase-account-outline'

@@ -12,12 +12,21 @@
     </template>
     <v-form ref="addNewContactForm" v-model="validation.valid">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Dodaj kontakt
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          Dodaj nowy punkt kontaktu dla Klienta, a następie utwórz swoją bazę adresową. Po dodaniu nazwy głównej
+          uzyskasz dostęp do szczegółowych sekcji adresowych.
+        </v-alert>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
                         required :rules="validation.title"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię"
+          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię*"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko"
+          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
           ></v-text-field>
           <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
           ></v-text-field>
@@ -25,13 +34,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn text color="error" @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
-
           <v-btn text color="primary" @click="handleSubmit()">
             Dodaj
-          </v-btn>
-          <v-btn text color="error" @click="resetForm()">
-            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>

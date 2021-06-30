@@ -73,10 +73,10 @@
                           </v-col>
                           <v-col class="mx-2">
                             <v-list class="d-flex justify-md-end justify-sm-space-between">
+                              <go-to-client-panel :client-item="clientItem"/>
+                              <edit-client-name-dialog :selected-client="clientItem"/>
                               <delete-client-dialog :selected-client="clientItem"/>
                               <archive-client-dialog :selected-client="clientItem"/>
-                              <edit-client-name-dialog :selected-client="clientItem"/>
-                              <go-to-client-panel :client-item="clientItem"/>
                             </v-list>
                           </v-col>
                         </v-row>
@@ -154,14 +154,12 @@ export default {
     searchConditionsProvided: false,
     cursor: 0,
     takeAmount: 30,
-
-
   }),
   async fetch() {
     this.cursor = 0;
     this.clientList = [];
     this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
-    console.log('lista klientów', this.clientList)
+    console.log('lista klientów', this.clientSearchItems)
     await this.handleFeed();
 
   },

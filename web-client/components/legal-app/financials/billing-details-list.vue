@@ -27,7 +27,7 @@
 <script>
 import EditBillingData from "@/components/legal-app/financials/dialogs/edit-billing-data";
 import DeleteBillingData from "@/components/legal-app/financials/dialogs/delete-billing-data";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 
 export default {
   name: "billing-details-list",
@@ -37,7 +37,7 @@ export default {
     await this.getBillingDataFromFetch();
   },
   computed: {
-    ...mapGetters('legal-app-client-store', ['billingDataList'])
+    ...mapState('legal-app-client-store', ['billingDataFromFetch'])
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),

@@ -12,6 +12,11 @@
     </template>
     <v-form ref="addNewPhoneNumberForm" v-model="validation.valid">
       <v-card>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>
+            Dodaj numer telefonu
+          </v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.number" :rules="validation.number" label="Dodaj numer telefonu"
                         required></v-text-field>
@@ -20,12 +25,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn text color="primary" @click="dialog=false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveNewPhoneNumber()">
             Dodaj
-          </v-btn>
-          <v-btn text color="primary" @click="resetForm()">
-            Wyczyść
           </v-btn>
         </v-card-actions>
       </v-card>

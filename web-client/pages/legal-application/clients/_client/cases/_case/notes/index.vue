@@ -2,18 +2,19 @@
   <layout>
     <template v-slot:content>
       <v-toolbar class="mb-4 white--text" color="primary">
-        <v-toolbar-title>Moje notatki</v-toolbar-title>
+        <v-toolbar-title>Notes sprawy</v-toolbar-title>
         <v-spacer></v-spacer>
-        <add-note/>
+        <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
+        <case-add-note/>
       </v-toolbar>
-      <v-alert v-if="Object.keys(clientNotesList).length === 0" elevation="5" text type="info"
+      <v-alert v-if="Object.keys(notesListForCases).length === 0" elevation="5" text type="info"
                dismissible
                close-text="Zamknij">
-        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
+        Zarządzaj notatkami dla Sprawy! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
       </v-alert>
       <v-expansion-panels focusable>
-        <v-expansion-panel v-for="item in clientNotesList" :key="item[0].created" class="expansion">
+        <v-expansion-panel v-for="item in notesListForCases" :key="item[0].created" class="expansion">
           <v-expansion-panel-header class="text-uppercase">
             {{ formatDateToMonth(item[0].created) }}
             <template v-slot:actions>
@@ -39,38 +40,39 @@
                   </v-card-text>
                 </v-col>
                 <v-col cols="3">
-                  <notes-details :selected-note="object"/>
+                  <case-notes-details :selected-note="object"/>
                 </v-col>
               </v-row>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+
+
     </template>
   </layout>
 </template>
-
 <script>
-
 import Layout from "@/components/legal-app/layout";
-import {formatDate, formatDateToMonth} from "@/data/date-extensions";
-import NotesDetails from "@/components/legal-app/clients/notes/notes-details";
-import AddNote from "@/components/legal-app/clients/notes/add-note";
 import {mapActions, mapState} from "vuex";
+import {formatDate, formatDateToMonth} from "@/data/date-extensions";
+import CaseAddNote from "@/components/legal-app/clients/cases/notes/case-add-note";
+import CaseNotesDetails from "@/components/legal-app/clients/cases/notes/case-notes-details";
 
 export default {
   name: "index",
-  components: {AddNote, NotesDetails, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  components: {CaseNotesDetails, CaseAddNote, Layout},
+  async fetch() {
+    let caseId = this.$route.params.case
+    await this.getNotesListForCases({caseId});
+    await this.getCaseDetails({caseId})
 
-  fetch() {
-    return this.getClientsNotes(this.$route.params.client);
   },
   computed: {
-    ...mapState('legal-app-client-store', ['clientNotesList'])
+    ...mapState('legal-app-client-store', ['notesListForCases', 'clientCaseDetails'])
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getClientsNotes']),
+    ...mapActions('legal-app-client-store', ['getNotesListForCases', 'getCaseDetails']),
     formatDateToMonth(date) {
       return formatDateToMonth(date);
     },
@@ -78,7 +80,7 @@ export default {
       return formatDate(date);
     },
   }
-};
+}
 </script>
 
 <style scoped>
