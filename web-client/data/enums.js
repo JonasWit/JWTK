@@ -12,8 +12,8 @@ export const ROLES_POLISH = {
 
 export const ROLES = {
   INVITED: "Invited",
-  CLIENT: "Client",
-  CLIENT_ADMIN: "ClientAdmin",
+  CLIENT: "User",
+  CLIENT_ADMIN: "UserAdmin",
   PORTAL_ADMIN: "PortalAdmin",
 };
 
