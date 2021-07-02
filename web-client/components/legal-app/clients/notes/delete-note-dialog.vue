@@ -59,7 +59,8 @@ export default {
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        await this.getClientsNotes(this.$route.params.client);
+        let clientId = this.$route.params.client;
+        await this.getClientsNotes(clientId);
         this.dialog = false;
         this.$emit('delete-completed');
       }
