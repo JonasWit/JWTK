@@ -32,7 +32,9 @@ const initState = () => ({
   groupedCases: [],
   allowedUsersForCase: [],
   eligibleUsersForCase: [],
-  notesListForCases: []
+  notesListForCases: [],
+  deadlines: []
+
 
 });
 
@@ -151,6 +153,10 @@ export const mutations = {
     state.eligibleUsersForCase = eligibleUsersForCase
   },
 
+  //CASE DEADLINES LIST
+  updateCaseDeadlinesList(state, {deadlines}) {
+    state.deadlines = deadlines
+  }
 };
 
 export const actions = {
@@ -195,8 +201,8 @@ export const actions = {
       let billingDataFromFetch = await this.$axios.$get('/api/legal-app-billing/list');
       commit('updateBillingDataFromFetch', {billingDataFromFetch});
       console.warn('Action from store = getBillingDataFromFetch', billingDataFromFetch);
-    } catch (e) {
-      console.warn('Action from store = getBillingDataFromFetch API error', e);
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
   //Clients list
@@ -205,8 +211,8 @@ export const actions = {
       let clientDataFromFetch = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
       commit('updateClientDataFromFetch', {clientDataFromFetch});
       console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch);
-    } catch (e) {
-      console.warn('Action from store = clientBasicListFromFetch API error', e);
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -224,8 +230,8 @@ export const actions = {
       });
       const notesListForCases = groupByKey(response, 'caseCreatedDate')
       commit('updateNotesListForCases', {notesListForCases});
-    } catch (e) {
-      console.warn('Action from store = notesListForCases API error', e);
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -244,8 +250,8 @@ export const actions = {
       });
       const clientNotesList = groupByKey(response, 'caseCreatedDate')
       commit('updateNotesTitlesListFromFetch', {clientNotesList});
-    } catch (e) {
-      console.warn('error in getClientsNotes', e);
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
 
   },
@@ -255,8 +261,8 @@ export const actions = {
     try {
       let allowedUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/allowed-users`)
       commit('updateAllowedUsersList', {allowedUsersList});
-    } catch (e) {
-      console.warn('error:', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -264,8 +270,8 @@ export const actions = {
     try {
       let eligibleUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/eligible-users`)
       commit('updateEligibleUsersList', {eligibleUsersList});
-    } catch (e) {
-      console.warn('error:', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -275,8 +281,8 @@ export const actions = {
       let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`)
       commit('updateClientCaseDetails', {clientCaseDetails});
       console.warn('case details:', clientCaseDetails)
-    } catch (e) {
-      console.warn('error:', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -291,8 +297,8 @@ export const actions = {
       const groupedCases = groupByKey(response, 'group')
       commit('updateGroupedCases', {groupedCases});
       console.warn('list of cases', groupedCases)
-    } catch (e) {
-      console.warn('list of cases fetch error', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
   // CASE ACCESS - GET ALLOWED & ELIGIBLE USERS
@@ -301,8 +307,8 @@ export const actions = {
     try {
       let allowedUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/allowed-users`)
       commit('updateAllowedUsersForCase', {allowedUsersForCase});
-    } catch (e) {
-      console.warn('error:', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
@@ -310,8 +316,28 @@ export const actions = {
     try {
       let eligibleUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/eligible-users`)
       commit('updateEligibleUsersForCase', {eligibleUsersForCase});
-    } catch (e) {
-      console.warn('error:', e)
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
     }
   },
+
+  //CASE DEADLINES
+  async getCaseDeadlines({commit}, {caseId, query}) {
+    try {
+      let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/case/${caseId}/list${query}`)
+      deadlines.sort((a, b) => {
+        const dateA = new Date(a.deadline)
+        const dateB = new Date(b.deadline)
+        return dateA - dateB
+      })
+      console.warn('deadlines', deadlines)
+      commit('updateCaseDeadlinesList', {deadlines})
+
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
+
+    }
+
+  }
+
 };
