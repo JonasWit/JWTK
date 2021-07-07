@@ -45,7 +45,57 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 await HandleException(e);
                 return ServerError;
             }
-        }    
+        }   
+        
+        [HttpGet("list-all")]
+        public async Task<IActionResult> GetAllDeadlines(long caseId, string from, string to)
+        {
+            try
+            {
+                if (DateTime.TryParse(from, out var fromDate) &&
+                    DateTime.TryParse(to, out var toDate))
+                {
+                    var result = _context.LegalAppCaseDeadlines
+                        .GetAllAllowedDeadlines(UserId, Role, fromDate, toDate, _context)
+                        .Select(LegalAppCaseDeadlineProjections.Projection)
+                        .ToList();
+
+                    return Ok(result);
+                }
+                
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        } 
+        
+        [HttpGet("client/{clientId}/list-all")]
+        public async Task<IActionResult> GetAllDeadlinesForClient(long clientId, string from, string to)
+        {
+            try
+            {
+                if (DateTime.TryParse(from, out var fromDate) &&
+                    DateTime.TryParse(to, out var toDate))
+                {
+                    var result = _context.LegalAppCaseDeadlines
+                        .GetAllowedDeadlinesForClient(UserId, Role, clientId, fromDate,  toDate, _context)
+                        .Select(LegalAppCaseDeadlineProjections.Projection)
+                        .ToList();
+
+                    return Ok(result);
+                }
+                
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        } 
 
         [HttpPost("case/{caseId}")]
         public async Task<IActionResult> CreateDeadline(long caseId, [FromBody] DeadlineFrom form)
