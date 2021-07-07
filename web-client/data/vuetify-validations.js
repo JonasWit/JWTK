@@ -31,3 +31,6 @@ export const postalCode = () => [
   v => (v && v.length) === 6 || 'Dozowlona liczba znaków to 6 '
 
 ];
+
+
+

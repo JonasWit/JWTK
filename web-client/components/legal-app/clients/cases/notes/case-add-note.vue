@@ -18,7 +18,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
-          Placeholder na alert
+          Każda dodana notatka będzie widoczna dla użytkowników, którzy mają dostęp do sprawy.
         </v-alert>
         <v-card-text>
           <v-text-field v-model="form.title" label="Tytuł" required :rules="validation.title"></v-text-field>
