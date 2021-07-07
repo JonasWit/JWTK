@@ -59,11 +59,16 @@ export function formatDateWithHours(date) {
   let result = new Date(date);
   let options = {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'};
   return `${result.toLocaleDateString("pl-PL", options)}`;
-};
+}
 
 export function formatDateToMonth(date) {
   let result = new Date(date);
   let options = {year: 'numeric', month: 'long'};
   return `${result.toLocaleDateString("pl-PL", options)}`;
 }
+
+export function addHoursToDate(date, hours) {
+  return new Date(new Date(date).setHours(date.getHours() + hours));
+}
+
 

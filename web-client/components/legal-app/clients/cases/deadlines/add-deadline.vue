@@ -7,7 +7,7 @@
             <v-icon color="success" x-large>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <span>Dodaj Sprawę</span>
+        <span>Dodaj termin</span>
       </v-tooltip>
     </template>
     <v-form ref="addNewDeadlineForm" v-model="validation.valid">
@@ -58,7 +58,7 @@ export default {
   data: () => ({
     loading: false,
     dialog: false,
-    deadline: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    deadline: '',
     menu2: false,
     form: {
       message: "",
@@ -90,6 +90,7 @@ export default {
         console.warn('nowy termin', newDeadline)
         this.$nuxt.refresh()
         this.$notifier.showSuccessMessage("Termin dodany pomyślnie!");
+        this.resetForm()
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
