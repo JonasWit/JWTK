@@ -15,6 +15,7 @@ namespace SystemyWP.API.Projections.LegalApp.Cases
                 legalAppCaseDeadline.CreatedBy,
                 legalAppCaseDeadline.Deadline, 
                 legalAppCaseDeadline.Message, 
+                Case = legalAppCaseDeadline.LegalAppCase
             };
     }
 }
