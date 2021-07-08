@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.BaseClases;
@@ -7,6 +8,7 @@ using SystemyWP.API.Forms.LegalApp.Reminders;
 using SystemyWP.API.Projections.LegalApp.Reminders;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -84,6 +86,28 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                 return ServerError;
             }
         }
+        
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetReminderCategories()
+        {
+            try
+            {
+                var result = new List<object>();
+                foreach(ReminderCategory cat in Enum.GetValues(typeof(ReminderCategory)) )
+                {
+                    result.Add(new {
+                        key = (int)cat,
+                        value = cat.ToString()
+                    });
+                }
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
 
         [HttpPost("reminder")]
         public async Task<IActionResult> CreateReminder([FromBody] ReminderForm form)
@@ -99,6 +123,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
 
                 var reminder = new LegalAppReminder
                 {
+                    ReminderCategory = form.ReminderCategory,
                     LegalAppAccessKey = user.LegalAppAccessKey,
                     Name = form.Name,
                     Start = form.Start,
@@ -133,7 +158,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                     .FirstOrDefault();
 
                 if (reminder is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
-                
+
+                reminder.ReminderCategory = form.ReminderCategory;
+                reminder.Active = form.Active;
                 reminder.Updated = DateTime.UtcNow;
                 reminder.UpdatedBy = UserEmail;
                 reminder.Public = form.Public;

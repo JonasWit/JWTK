@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
@@ -321,6 +322,7 @@ namespace SystemyWP.API
                 {
                     context.Add(new LegalAppReminder
                     {
+                        ReminderCategory = ReminderCategory.Memo,
                         AuthorId = testClientAdmin.Id,
                         Name = $"Test reminder from {testClientAdmin.Email} for Key: {accKey?.Name}",
                         LegalAppAccessKey = accKey,
