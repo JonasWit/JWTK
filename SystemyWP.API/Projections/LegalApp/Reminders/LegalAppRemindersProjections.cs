@@ -10,6 +10,7 @@ namespace SystemyWP.API.Projections.LegalApp.Reminders
         public static Expression<Func<LegalAppReminder, object>> Projection =>
             legalAppReminder => new
             {
+                legalAppReminder.Public,
                 legalAppReminder.UpdatedBy,
                 legalAppReminder.Updated,
                 legalAppReminder.Created,
