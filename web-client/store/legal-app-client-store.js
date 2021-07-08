@@ -83,6 +83,24 @@ export const getters = {
   eligibleUsers(state) {
     return state.eligibleUsersList
   },
+
+  //CASES deadlines
+  // deadlinesList(state) {
+  //   return state.deadlines
+  // }
+
+  newEvents(state) {
+    let newArray = []
+    state.deadlines.forEach(x => {
+      newArray.push({
+        name: x.message,
+        start: new Date(x.deadline).toISOString().substr(0, 10),
+        end: new Date(x.deadline).toISOString().substr(0, 10),
+        color: 'error'
+      })
+    });
+    return newArray
+  }
 };
 
 export const mutations = {
@@ -329,12 +347,12 @@ export const actions = {
         const dateA = new Date(a.deadline)
         const dateB = new Date(b.deadline)
         return dateA - dateB
-      })
+      });
       console.warn('deadlines', deadlines)
       commit('updateCaseDeadlinesList', {deadlines})
 
-    } catch (error) {
-      this.$notifier.showErrorMessage(error.response.data);
+    } catch (e) {
+      console.error('error', e)
 
     }
 
