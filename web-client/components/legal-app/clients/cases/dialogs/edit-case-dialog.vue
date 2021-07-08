@@ -17,10 +17,9 @@
             Edytuj notatkę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
-          Każda nowa notatka jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
-          Jeśli chcesz, aby notatka była widoczna dla innych, oznacz ją jako publiczną.
-        </v-alert>
+        <!--        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">-->
+        <!--         Miejsce na tekst-->
+        <!--        </v-alert>-->
         <v-card-text>
           <v-text-field v-model="form.name" label="Tytuł sprawy" required :rules="validation.name"></v-text-field>
           <v-text-field v-model="form.group" label="Kategoria sprawy" required :rules="validation.group"></v-text-field>

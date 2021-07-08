@@ -7,29 +7,56 @@
             <v-icon color="success" x-large>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <span>Dodaj termin</span>
+        <span>Dodaj</span>
       </v-tooltip>
     </template>
-    <v-form ref="addNewDeadlineForm" v-model="validation.valid">
+    <v-form ref="addNewReminderForm" v-model="validation.valid">
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
-            Dodaj Termin
+            Dodaj
           </v-toolbar-title>
         </v-toolbar>
         <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
-          Nowy termin będzie widoczny w widoku listy oraz w kalendarzyu terminów. Lista pokazuje terminy w porządku od
-          najbliższego.
+          Dodaj nowe przypomnienie, zadanie lub zaplanuj spotkanie.
         </v-alert>
         <v-card-text>
-          <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition"
-                  offset-y min-width="auto">
+          <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field v-model="deadline" label="Wybierz termin" prepend-icon="mdi-calendar" readonly
-                            v-bind="attrs" v-on="on" :rules="validation.deadline"></v-text-field>
+              <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
             </template>
-            <v-date-picker v-model="deadline" @input="menu2 = false"></v-date-picker>
-          </v-menu>
+            <v-date-picker v-model="dateFrom" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modalFrom = false">
+                Anuluj
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogFrom.save(dateFrom)">
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
+          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent
+                    width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs"
+                            v-on="on"></v-text-field>
+            </template>
+            <v-date-picker v-model="dateTo" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modalTo = false">
+                Anuluj
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogTo.save(dateTo)">
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
+          <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
+            Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
+          </v-alert>
           <v-text-field v-model="form.message" label="Opis" required :rules="validation.message"></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
@@ -54,7 +81,7 @@ import {mapActions} from "vuex";
 import {createDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 
 export default {
-  name: "add-deadline",
+  name: "add-reminder",
   data: () => ({
     loading: false,
     dialog: false,
@@ -71,6 +98,12 @@ export default {
       deadline: notEmptyRule("Data nie może być pusta!")
 
     },
+
+    dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    modalFrom: false,
+    modalTo: false,
+    alert: false,
   }),
 
   methods: {
