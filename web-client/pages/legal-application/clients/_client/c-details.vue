@@ -63,27 +63,20 @@ export default {
         },
         {
           id: '3',
-          route: `/legal-application/clients/${params.client}/reminders`,
-          name: 'Przypomnienia',
-          text: 'Sprawdź przypomnienia dla Klienta',
-          icon: 'mdi-calendar-clock'
-        },
-        {
-          id: '4',
           route: `/legal-application/clients/${params.client}/notes`,
           name: 'Notatki',
           text: 'Zarządzaj notatkami',
           icon: 'mdi-book-open-outline'
         },
         {
-          id: '5',
+          id: '4',
           route: `/legal-application/clients/${params.client}/financials`,
           name: 'Rozliczenia',
           text: 'Zarządzaj rozliczeniami',
           icon: 'mdi-calculator-variant-outline'
         },
         {
-          id: '6',
+          id: '5',
           route: `/legal-application/clients/${params.client}/archived-cases`,
           name: 'Archiwum Spraw',
           text: 'Lista zarchiwizowanych Spraw',
