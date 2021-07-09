@@ -72,6 +72,9 @@
               </v-toolbar>
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
+                <v-checkbox v-model="checkbox" :label="labelCondition(selectedEvent.public)"
+                            :value="selectedEvent.public"
+                            value disabled></v-checkbox>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
@@ -119,6 +122,7 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+    checkbox: true
   }),
   mounted() {
     this.$refs.calendar.checkChange()
@@ -161,12 +165,14 @@ export default {
         let newEvents = []
         this.remindersList.forEach(x => {
           newEvents.push({
+
             name: x.name,
             details: x.message,
             start: new Date(x.start).toISOString().substr(0, 10),
             end: new Date(x.end).toISOString().substr(0, 10),
             color: 'accent',
-            id: x.id
+            id: x.id,
+            public: x.public
           })
         });
         console.warn('nowe eventy', newEvents)
@@ -180,6 +186,12 @@ export default {
     actionDone() {
       this.getEvents()
       this.selectedOpen = false
+    },
+    labelCondition(val) {
+      if (val) {
+        return "Publiczne"
+      }
+      return "Prywatne"
     }
 
 
