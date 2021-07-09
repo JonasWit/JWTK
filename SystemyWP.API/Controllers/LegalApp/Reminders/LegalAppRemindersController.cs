@@ -137,7 +137,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
 
                 _context.Add(reminder);
                 await _context.SaveChangesAsync();
-                return Ok(reminder);
+                return Ok();
             }
             catch (Exception e)
             {
@@ -170,7 +170,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                 reminder.End = form.End;
                 
                 await _context.SaveChangesAsync();
-                return Ok(reminder);
+                return Ok();
             }
             catch (Exception e)
             {
