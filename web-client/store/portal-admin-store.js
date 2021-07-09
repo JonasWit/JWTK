@@ -45,7 +45,7 @@ export const actions = {
       keys.forEach(x => x.keyType = "legal-app");
       commit('updateLegalAppAccessKeysList', {keys});
     } catch (error) {
-      console.error("getUsers - Error", error);
+      console.error("getLegalAppAccessKeys - Error", error);
     }
   },
   async getMedicalAppAccessKeys({commit}) {
