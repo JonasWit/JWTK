@@ -11,6 +11,6 @@ namespace SystemyWP.API.Forms.LegalApp.Reminders
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool Public  { get; set; }
-        public ReminderCategory ReminderCategory { get; set; }
+        public ReminderCategory ReminderCategory { get; set; } = ReminderCategory.Memo;
     }
 }
