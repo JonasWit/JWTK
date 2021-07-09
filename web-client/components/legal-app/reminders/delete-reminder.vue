@@ -47,6 +47,7 @@ export default {
     async deleteReminder() {
       try {
         let reminderId = this.reminderForAction.id
+        console.warn('reminder id', reminderId)
         await this.$axios.$delete(deleteReminder(reminderId));
         this.$notifier.showSuccessMessage("Przypomnienie zostało usunięte!");
       } catch (e) {

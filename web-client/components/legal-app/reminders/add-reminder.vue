@@ -37,6 +37,21 @@
               </v-btn>
             </v-date-picker>
           </v-dialog>
+          <v-dialog ref="dialogTimeFrom" v-model="modalTimeFrom" :return-value.sync="form.timeFrom" width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="form.timeFrom" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline"
+                            readonly v-bind="attrs" v-on="on"></v-text-field>
+            </template>
+            <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="form.timeFrom = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogTimeFrom.save(form.timeFrom)">
+                OK
+              </v-btn>
+            </v-time-picker>
+          </v-dialog>
           <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
                     width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -53,6 +68,21 @@
                 OK
               </v-btn>
             </v-date-picker>
+          </v-dialog>
+          <v-dialog ref="dialogTimeTo" v-model="modalTimeTo" :return-value.sync="form.timeTo" width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="form.timeTo" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline"
+                            readonly v-bind="attrs" v-on="on"></v-text-field>
+            </template>
+            <v-time-picker v-if="modalTimeTo" v-model="form.timeTo" full-width>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="form.timeTo = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.dialogTimeTo.save(form.timeTo)">
+                OK
+              </v-btn>
+            </v-time-picker>
           </v-dialog>
           <v-alert v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
             Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
@@ -86,7 +116,6 @@
 
 <script>
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
-import {createReminder} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
 export default {
   name: "add-reminder",
@@ -96,6 +125,8 @@ export default {
     deadline: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu2: false,
     form: {
+      timeFrom: null,
+      timeTo: null,
       name: "",
       message: "",
       public: true,
@@ -115,7 +146,9 @@ export default {
     checkbox: true,
     items: [{text: 'Spotkanie', value: 0}, {text: 'Przypomnienie', value: 1}, {text: 'Zadanie', value: 2},],
     catNumber: {},
-    value: null
+    value: null,
+    modalTimeFrom: false,
+    modalTimeTo: false
   }),
 
   methods: {
@@ -128,13 +161,14 @@ export default {
           active: true,
           name: this.form.name,
           message: this.form.message,
-          start: this.form.dateFrom,
+          timeFrom: this.form.timeFrom,
+          start: this.form.dateFrom + this.form.timeFrom,
           end: this.form.dateTo,
           public: this.form.public,
           reminderCategory: this.form.selectedCategory.value
         };
         console.warn('nowy reminder', newReminder)
-        await this.$axios.$post(createReminder(), newReminder);
+        // await this.$axios.$post(createReminder(), newReminder);
 
         this.$nuxt.refresh()
         this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
