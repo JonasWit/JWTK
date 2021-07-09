@@ -113,7 +113,7 @@ export default {
     alert: false,
     alert2: true,
     checkbox: true,
-    items: [{text: 'Spotkanie', value: 0}, {text: 'Zadanie', value: 2}, {text: 'Przypomnienie', value: 1}],
+    items: [{text: 'Spotkanie', value: 0}, {text: 'Przypomnienie', value: 1}, {text: 'Zadanie', value: 2},],
     catNumber: {},
     value: null
   }),
