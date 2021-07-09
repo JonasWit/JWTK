@@ -5,7 +5,10 @@
 };
 
 export const getCookieFromRequest = (cookieName, stringCookie) => {
-  let strCookie = new RegExp('' + cookieName + '[^;]+').exec(stringCookie)[0];
+  if (!stringCookie) return null;
+  let expression = new RegExp('' + cookieName + '[^;]+').exec(stringCookie);
+  if (!expression) return null;
+  let strCookie = expression[0];
   return unescape(strCookie ? strCookie.toString().replace(/^[^=]+./, '') : '');
 };
 
