@@ -24,8 +24,7 @@
           <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="form.dateFrom" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
-                            v-bind="attrs"
-                            v-on="on"></v-text-field>
+                            v-bind="attrs" v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="form.dateFrom" scrollable>
               <v-spacer></v-spacer>
@@ -52,12 +51,10 @@
               </v-btn>
             </v-time-picker>
           </v-dialog>
-          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
-                    width="290px">
+          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
-                            v-bind="attrs"
-                            v-on="on"></v-text-field>
+                            v-bind="attrs" v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="form.dateTo" scrollable>
               <v-spacer></v-spacer>
@@ -91,8 +88,7 @@
           <v-text-field v-model="form.message" label="Opis" required :rules="validation.message"></v-text-field>
           <v-select v-model="form.selectedCategory" :items="items" item-text="text" :item-value="value" return-object
                     label="Kategoria"></v-select>
-          <v-alert v-if="form.public" v-model="alert2" elevation="5" text type="info" dismissible
-                   close-text="Zamknij">
+          <v-alert v-if="form.public" v-model="alert2" elevation="5" text type="info" dismissible close-text="Zamknij">
             Status publiczny oznacza, że przypomnienia, zadania lub zaplanowane spotkania będą widoczne dla wszystkich
             użytkowników. Jeśli chcesz, zmienić status na prywatny odznacz flagę.
           </v-alert>
@@ -162,19 +158,19 @@ export default {
           name: this.form.name,
           message: this.form.message,
           timeFrom: this.form.timeFrom,
-          start: this.form.dateFrom + this.form.timeFrom,
+          start: this.form.dateFrom + '' + this.form.timeFrom,
           end: this.form.dateTo,
           public: this.form.public,
           reminderCategory: this.form.selectedCategory.value
         };
-        console.warn('nowy reminder', newReminder)
-        // await this.$axios.$post(createReminder(), newReminder);
+        console.warn('nowy reminder', newReminder);
+        await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
 
-        this.$nuxt.refresh()
+        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
-        this.resetForm()
-      } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        this.resetForm();
+      } catch (e) {
+        console.error('error reminders', e);
       } finally {
         this.dialog = false;
         this.loading = false;
@@ -194,7 +190,7 @@ export default {
     //   return "Status prywatny"
     // }
   }
-}
+};
 </script>
 
 <style scoped>

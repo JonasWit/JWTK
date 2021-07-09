@@ -59,10 +59,8 @@
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus" color="primary" :events="newEvents" :type="type"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
-                      @change="getEvents"
-          ></v-calendar>
-          <v-menu
-            v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
+                      @change="getEvents"></v-calendar>
+          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
             <v-card color="grey lighten-4" max-width="800px" flat>
               <v-toolbar :color="selectedEvent.color" dark>
                 <v-btn icon>
@@ -73,8 +71,7 @@
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
                 <v-checkbox v-model="checkbox" :label="labelCondition(selectedEvent.public)"
-                            :value="selectedEvent.public"
-                            value disabled></v-checkbox>
+                            :value="selectedEvent.public" value disabled></v-checkbox>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
@@ -122,82 +119,86 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    checkbox: true
+    checkbox: true,
+    colors: ['blue', 'deep-purple', 'cyan'],
   }),
   mounted() {
-    this.$refs.calendar.checkChange()
+    this.$refs.calendar.checkChange();
   },
   methods: {
     viewDay({date}) {
-      this.focus = date
-      this.type = 'day'
+      this.focus = date;
+      this.type = 'day';
     },
     setToday() {
-      this.focus = ''
+      this.focus = '';
     },
     prev() {
-      this.$refs.calendar.prev()
+      this.$refs.calendar.prev();
     },
     next() {
-      this.$refs.calendar.next()
+      this.$refs.calendar.next();
     },
     showEvent({nativeEvent, event}) {
       const open = () => {
-        this.selectedEvent = event
-        console.log('selected event', this.selectedEvent)
-        this.selectedElement = nativeEvent.target
-        requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true))
-      }
+        this.selectedEvent = event;
+        console.log('selected event', this.selectedEvent);
+        this.selectedElement = nativeEvent.target;
+        requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
+      };
 
       if (this.selectedOpen) {
-        this.selectedOpen = false
-        requestAnimationFrame(() => requestAnimationFrame(() => open()))
+        this.selectedOpen = false;
+        requestAnimationFrame(() => requestAnimationFrame(() => open()));
       } else {
-        open()
+        open();
       }
 
-      nativeEvent.stopPropagation()
+      nativeEvent.stopPropagation();
     },
     async getEvents() {
       try {
-        this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
-        console.warn('reminders', this.remindersList)
-        let newEvents = []
+        this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
+        console.warn('reminders', this.remindersList);
+        let newEvents = [];
         this.remindersList.forEach(x => {
           newEvents.push({
-
             name: x.name,
             details: x.message,
             start: new Date(x.start).toISOString().substr(0, 10),
             end: new Date(x.end).toISOString().substr(0, 10),
-            color: 'accent',
+            color: this.colors[this.rnd(0, this.colors.length - 1)],
             id: x.id,
-            public: x.public
-          })
+            public: x.public,
+            category: x.reminderCategory
+          });
         });
-        console.warn('nowe eventy', newEvents)
-        this.newEvents = newEvents
+        console.warn('nowe eventy', newEvents);
+        this.newEvents = newEvents;
 
       } catch (e) {
 
       }
 
     },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a;
+    },
     actionDone() {
-      this.getEvents()
-      this.selectedOpen = false
+      this.getEvents();
+      this.selectedOpen = false;
     },
     labelCondition(val) {
       if (val) {
-        return "Publiczne"
+        return "Publiczne";
       }
-      return "Prywatne"
+      return "Prywatne";
     }
 
 
   }
 
-}
+};
 </script>
 
 <style scoped>
