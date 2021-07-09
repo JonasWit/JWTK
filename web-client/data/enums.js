@@ -10,6 +10,12 @@ export const ROLES_POLISH = {
   PORTAL_ADMIN: "Portal-Admin",
 };
 
+export const REMINDER_TYPES = {
+  Spotkanie: 0,
+  Przypomnienie: 1,
+  Zadanie: 2,
+};
+
 export const ROLES = {
   INVITED: "Invited",
   CLIENT: "User",
