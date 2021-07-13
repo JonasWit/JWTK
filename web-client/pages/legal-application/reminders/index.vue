@@ -59,7 +59,9 @@
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus" color="primary" :events="newEvents" :type="type"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
-                      @change="getEvents"></v-calendar>
+                      @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
+                      :weekdays="weekday"
+          ></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
             <v-card color="grey lighten-4" max-width="800px" flat>
               <v-toolbar :color="selectedEvent.color" dark>
@@ -102,12 +104,6 @@ export default {
     types: ['month', 'week', 'day'],
     mode: 'stack',
     weekday: [1, 2, 3, 4, 5, 6, 0],
-    weekdays: [
-      {text: 'Nd - Sob', value: [0, 1, 2, 3, 4, 5, 6]},
-      {text: 'Pon - Nd', value: [1, 2, 3, 4, 5, 6, 0]},
-      {text: 'Pon - Pt', value: [1, 2, 3, 4, 5]},
-      {text: 'Pon, Śr, Pt', value: [1, 3, 5]},
-    ],
     value: '',
     typeToLabel: {
       month: 'Miesiąc',
@@ -121,6 +117,7 @@ export default {
     selectedOpen: false,
     checkbox: true,
     colors: ['blue', 'deep-purple', 'cyan'],
+    events: [],
   }),
   mounted() {
     this.$refs.calendar.checkChange();
@@ -172,7 +169,20 @@ export default {
             public: x.public,
             category: x.reminderCategory
           });
+
         });
+        newEvents.push({
+          name: "test timed event",
+          details: 'test timed event',
+          start: '2021-08-15 10:00',
+          end: '2021-08-15 10:30',
+          color: 'cyan',
+          id: 32,
+          public: true,
+          category: 0
+        });
+
+
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
 

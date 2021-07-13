@@ -21,6 +21,7 @@
           Dodaj nowe przypomnienie, zadanie lub zaplanuj spotkanie.
         </v-alert>
         <v-card-text>
+          <v-switch v-model="switcher" color="primary" label="Cały dzień"></v-switch>
           <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="form.dateFrom" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
@@ -36,14 +37,15 @@
               </v-btn>
             </v-date-picker>
           </v-dialog>
-          <v-dialog ref="dialogTimeFrom" v-model="modalTimeFrom" :return-value.sync="form.timeFrom" width="290px">
+          <v-dialog v-if="!switcher" ref="dialogTimeFrom" v-model="modalTimeFrom" :return-value.sync="form.timeFrom"
+                    width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.timeFrom" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline"
                             readonly v-bind="attrs" v-on="on"></v-text-field>
             </template>
-            <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width>
+            <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width format="24hr">
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="form.timeFrom = false">
+              <v-btn text color="primary" @click="modalTimeFrom = false">
                 Cancel
               </v-btn>
               <v-btn text color="primary" @click="$refs.dialogTimeFrom.save(form.timeFrom)">
@@ -51,7 +53,8 @@
               </v-btn>
             </v-time-picker>
           </v-dialog>
-          <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent width="290px">
+          <v-dialog v-if="!switcher" ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
+                    width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
@@ -66,14 +69,15 @@
               </v-btn>
             </v-date-picker>
           </v-dialog>
-          <v-dialog ref="dialogTimeTo" v-model="modalTimeTo" :return-value.sync="form.timeTo" width="290px">
+          <v-dialog v-if="!switcher" ref="dialogTimeTo" v-model="modalTimeTo" :return-value.sync="form.timeTo"
+                    width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.timeTo" label="Picker in dialog" prepend-icon="mdi-clock-time-four-outline"
                             readonly v-bind="attrs" v-on="on"></v-text-field>
             </template>
-            <v-time-picker v-if="modalTimeTo" v-model="form.timeTo" full-width>
+            <v-time-picker v-if="modalTimeTo" v-model="form.timeTo" full-width format="24hr">
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="form.timeTo = false">
+              <v-btn text color="primary" @click="modalTimeTo = false">
                 Cancel
               </v-btn>
               <v-btn text color="primary" @click="$refs.dialogTimeTo.save(form.timeTo)">
@@ -121,14 +125,14 @@ export default {
     deadline: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu2: false,
     form: {
-      timeFrom: null,
-      timeTo: null,
+      timeFrom: '',
+      timeTo: '',
       name: "",
       message: "",
       public: true,
       selectedCategory: {},
-      dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      dateFrom: '',
+      dateTo: ''
     },
     validation: {
       valid: false,
@@ -144,7 +148,8 @@ export default {
     catNumber: {},
     value: null,
     modalTimeFrom: false,
-    modalTimeTo: false
+    modalTimeTo: false,
+    switcher: false
   }),
 
   methods: {
@@ -158,14 +163,13 @@ export default {
           name: this.form.name,
           message: this.form.message,
           timeFrom: this.form.timeFrom,
-          start: this.form.dateFrom + '' + this.form.timeFrom,
+          start: this.form.dateFrom,
           end: this.form.dateTo,
           public: this.form.public,
           reminderCategory: this.form.selectedCategory.value
         };
         console.warn('nowy reminder', newReminder);
         await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
-
         this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
         this.resetForm();
