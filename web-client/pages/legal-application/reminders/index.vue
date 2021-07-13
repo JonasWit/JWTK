@@ -122,6 +122,8 @@ export default {
   mounted() {
     this.$refs.calendar.checkChange();
   },
+
+  computed: {},
   methods: {
     viewDay({date}) {
       this.focus = date;
