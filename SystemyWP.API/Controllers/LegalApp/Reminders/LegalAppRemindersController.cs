@@ -123,6 +123,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
 
                 var reminder = new LegalAppReminder
                 {
+                    AllDayEvent = form.AllDayEvent,
                     ReminderCategory = form.ReminderCategory,
                     LegalAppAccessKey = user.LegalAppAccessKey,
                     Name = form.Name,
@@ -159,6 +160,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
 
                 if (reminder is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
+                reminder.AllDayEvent = form.AllDayEvent;
                 reminder.ReminderCategory = form.ReminderCategory;
                 reminder.Active = form.Active;
                 reminder.Updated = DateTime.UtcNow;

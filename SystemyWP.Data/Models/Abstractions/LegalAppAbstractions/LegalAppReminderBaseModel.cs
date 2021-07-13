@@ -6,6 +6,7 @@ namespace SystemyWP.Data.Models.Abstractions.LegalAppAbstractions
 {
     public class ReminderBaseModel<TKey> : TrackedModel<TKey>
     {
+        public bool AllDayEvent { get; set; }
         [Required]
         public ReminderCategory ReminderCategory { get; set; }
         [Required]
