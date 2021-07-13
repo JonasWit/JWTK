@@ -5,6 +5,7 @@ namespace SystemyWP.API.Forms.LegalApp.Reminders
 {
     public class ReminderForm
     {
+        public bool AllDayEvent { get; set; }
         public bool Active { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
