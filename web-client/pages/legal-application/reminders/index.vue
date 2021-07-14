@@ -4,10 +4,12 @@
       <v-toolbar class="white--text" color="primary">
         <v-toolbar-title>Przypomnienia</v-toolbar-title>
         <v-spacer></v-spacer>
-        <add-reminder/>
+        <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
       <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
-        Witaj w panelu przypomnień!
+        Witaj w panelu przypomnień! Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ"
+        powrócisz do dziejszej daty.
+        Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
       </v-alert>
       <div>
         <v-sheet tile height="64" class="d-flex">
@@ -52,35 +54,29 @@
             </v-menu>
           </v-toolbar>
         </v-sheet>
-        <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
-          Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ" powrócisz do dziejszej daty.
-          Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
-        </v-alert>
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus" color="primary" :events="newEvents" :type="type"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
-                      :weekdays="weekday"
+                      :weekdays="weekday" event-overlap-mode="stack"
           ></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
-            <v-card color="grey lighten-4" max-width="800px" flat>
+            <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat>
               <v-toolbar :color="selectedEvent.color" dark>
-                <v-btn icon>
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
-                <v-checkbox v-model="checkbox" :label="labelCondition(selectedEvent.public)"
-                            :value="selectedEvent.public" value disabled></v-checkbox>
+                <v-checkbox v-model="checkbox" label="Status publiczny"
+                            :value="selectedEvent.public" disabled></v-checkbox>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
                   Anuluj
                 </v-btn>
                 <v-spacer></v-spacer>
-                <delete-reminder :reminder-for-action="selectedEvent" v-on:delete-completed="actionDone"/>
+                <delete-reminder :event-for-action="selectedEvent" v-on:delete-completed="actionDone"/>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -94,15 +90,15 @@
 import Layout from "@/components/legal-app/layout";
 import AddReminder from "@/components/legal-app/reminders/add-reminder";
 import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
+import EditReminder from "@/components/legal-app/reminders/edit-reminder";
 
 export default {
   name: "index",
-  components: {DeleteReminder, AddReminder, Layout},
+  components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
     type: 'month',
     types: ['month', 'week', 'day'],
-    mode: 'stack',
     weekday: [1, 2, 3, 4, 5, 6, 0],
     value: '',
     typeToLabel: {
@@ -172,9 +168,8 @@ export default {
         });
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
-
       } catch (e) {
-
+        console.error('calendar fetch error', e)
       }
 
     },
@@ -199,14 +194,6 @@ export default {
       this.getEvents();
       this.selectedOpen = false;
     },
-    labelCondition(val) {
-      if (val) {
-        return "Publiczne";
-      }
-      return "Prywatne";
-    }
-
-
   }
 
 };
