@@ -11,7 +11,6 @@ namespace SystemyWP.API.Forms.LegalApp.Reminders.Validation
             RuleFor(x => x.Public).NotEmpty();
             RuleFor(x => x.Start).NotEmpty();
             RuleFor(x => x.End).NotEmpty();
-            RuleFor(x => x.AllDayEvent).NotEmpty();
             RuleFor(x => x.ReminderCategory).NotNull().IsInEnum();
         }
     }
