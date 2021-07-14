@@ -185,10 +185,7 @@ export default {
         console.log('data end', date)
         return date
       }
-
-
     }
-
   },
 
   methods: {

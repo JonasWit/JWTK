@@ -122,8 +122,6 @@ export default {
   mounted() {
     this.$refs.calendar.checkChange();
   },
-
-  computed: {},
   methods: {
     viewDay({date}) {
       this.focus = date;
@@ -145,14 +143,12 @@ export default {
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
-
       if (this.selectedOpen) {
         this.selectedOpen = false;
         requestAnimationFrame(() => requestAnimationFrame(() => open()));
       } else {
         open();
       }
-
       nativeEvent.stopPropagation();
     },
     async getEvents() {
@@ -164,27 +160,16 @@ export default {
           newEvents.push({
             name: x.name,
             details: x.message,
-            start: new Date(x.start).toISOString().substr(0, 10),
-            end: new Date(x.end).toISOString().substr(0, 10),
+            start: this.eventStartDate(x),
+            end: this.eventEndDate(x),
             color: this.colors[this.rnd(0, this.colors.length - 1)],
             id: x.id,
             public: x.public,
-            category: x.reminderCategory
+            category: x.reminderCategory,
+            timed: x.allDayEvent
+
           });
-
         });
-        newEvents.push({
-          name: "test timed event",
-          details: 'test timed event',
-          start: '2021-08-15 10:00',
-          end: '2021-08-15 10:30',
-          color: 'cyan',
-          id: 32,
-          public: true,
-          category: 0
-        });
-
-
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
 
@@ -192,6 +177,20 @@ export default {
 
       }
 
+    },
+    eventStartDate(item) {
+      if (item.allDayEvent) {
+        return new Date(item.start).toISOString().substr(0, 10)
+      } else {
+        return new Date(item.start).toISOString().substr(0, 10) + " " + (item.start).split("T")[1].split(".")[0]
+      }
+    },
+    eventEndDate(item) {
+      if (item.allDayEvent) {
+        return new Date(item.start).toISOString().substr(0, 10)
+      } else {
+        return new Date(item.end).toISOString().substr(0, 10) + " " + (item.end).split("T")[1].split(".")[0]
+      }
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;

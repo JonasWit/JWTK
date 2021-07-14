@@ -52,7 +52,7 @@ export const timeStamp = () => {
   let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   let yyyy = today.getFullYear();
 
-  return today = dd + '/' + mm + '/' + yyyy;
+  return dd + '/' + mm + '/' + yyyy;
 };
 
 export function formatDateWithHours(date) {
