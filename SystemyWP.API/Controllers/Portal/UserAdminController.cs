@@ -150,7 +150,7 @@ namespace SystemyWP.API.Controllers.Portal
                     if (addToRoleResult.Succeeded) return Ok();
                 }
                 
-                //Change from Admin to normal User
+                //Change from Admin to Normal User
                 if (form.Role.Equals(SystemyWpConstants.Roles.UserAdmin, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 {
     [Route("/api/portal-admin/key-admin/legal-app")]
-    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.User)]
     public class LegalAppAccessKeyController : ApiController
     {
         public LegalAppAccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
@@ -24,6 +24,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpGet("access-keys")]
+        [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> ListAccessKeys()
         {
             try
@@ -43,6 +44,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPost("access-key/create")]
+        [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> CreateAccessKey([FromBody] CreateAccessKeyForm form)
         {
             try
@@ -69,6 +71,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPut("access-key/update/{keyId}")]
+        [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> UpdateAccessKey(int keyId, [FromBody] EditAccessKeyForm form)
         {
             try
@@ -92,7 +95,31 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             }
         }
 
+        [HttpDelete("access-key/delete")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
+        public async Task<IActionResult> DeleteAccessKey()
+        {
+            try
+            {
+                var user = await _context.Users
+                    .Include(x => x.LegalAppAccessKey)
+                    .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+                if (user?.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+
+                _context.LegalAppAccessKeys.Remove(user.LegalAppAccessKey);
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
         [HttpDelete("access-key/delete/{id}")]
+        [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> DeleteAccessKey(int id)
         {
             try
@@ -114,6 +141,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
         }
 
         [HttpPost("user/grant/access-key")]
+        [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> GrantDataAccessKey(
             [FromBody] GrantDataAccessKeyForm form,
             [FromServices] UserManager<IdentityUser> userManager)

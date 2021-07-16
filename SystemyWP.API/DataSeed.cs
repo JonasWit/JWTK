@@ -55,7 +55,7 @@ namespace SystemyWP.API
             var random = new Random();
 
             // Seed Clients
-            for (var clientNumber = 0; clientNumber < 50; clientNumber++)
+            for (var clientNumber = 0; clientNumber < 3; clientNumber++)
             {
                 var newClient = new LegalAppClient
                 {
@@ -67,7 +67,7 @@ namespace SystemyWP.API
                 };
 
                 // Seed Client notes
-                for (var clientNoteNumber = 1; clientNoteNumber < 15; clientNoteNumber++)
+                for (var clientNoteNumber = 1; clientNoteNumber < 5; clientNoteNumber++)
                 {
                     newClient.LegalAppClientNotes.Add(new LegalAppClientNote
                     {
@@ -82,7 +82,7 @@ namespace SystemyWP.API
                 }
 
                 // Seed contact details
-                for (var contactDetailsNumber = 0; contactDetailsNumber < 20; contactDetailsNumber++)
+                for (var contactDetailsNumber = 0; contactDetailsNumber < 2; contactDetailsNumber++)
                 {
                     var contact = new LegalAppContactDetail();
                     contact.Comment = $"Comment for Contact {contactDetailsNumber}";
@@ -90,7 +90,7 @@ namespace SystemyWP.API
                     contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";
                     contact.CreatedBy = "system";
 
-                    for (var contactEmailNumber = 0; contactEmailNumber < 20; contactEmailNumber++)
+                    for (var contactEmailNumber = 0; contactEmailNumber < 2; contactEmailNumber++)
                     {
                         contact.Emails.Add(new LegalAppEmailAddress
                         {
@@ -100,7 +100,7 @@ namespace SystemyWP.API
                         });
                     }
 
-                    for (var contactPhone = 0; contactPhone < 10; contactPhone++)
+                    for (var contactPhone = 0; contactPhone < 2; contactPhone++)
                     {
                         contact.PhoneNumbers.Add(new LegalAppPhoneNumber
                         {
@@ -110,7 +110,7 @@ namespace SystemyWP.API
                         });
                     }
 
-                    for (var contactAddress = 0; contactAddress < 10; contactAddress++)
+                    for (var contactAddress = 0; contactAddress < 2; contactAddress++)
                     {
                         contact.PhysicalAddresses.Add(new LegalAppPhysicalAddress
                         {
@@ -143,9 +143,9 @@ namespace SystemyWP.API
                     newClient.LegalAppClientWorkRecords.Add(financeRecord);
                 }
 
-                for (var groupNumber = 0; groupNumber < 5; groupNumber++)
+                for (var groupNumber = 0; groupNumber < 3; groupNumber++)
                 {
-                    for (var caseNumber = 0; caseNumber < 10; caseNumber++)
+                    for (var caseNumber = 0; caseNumber < 3; caseNumber++)
                     {
                         var newCase = new LegalAppCase
                         {
@@ -167,7 +167,7 @@ namespace SystemyWP.API
                             });
                         }
                         
-                        for (var i = 0; i < 30; i++)
+                        for (var i = 0; i < 5; i++)
                         {
                             newCase.LegalAppCaseNotes.Add(new LegalAppCaseNote
                             {
@@ -318,7 +318,7 @@ namespace SystemyWP.API
                 });
 
                 //Seed Reminders
-                for (var i = -20; i < 20; i++)
+                for (var i = -10; i < 10; i++)
                 {
                     context.Add(new LegalAppReminder
                     {
@@ -335,7 +335,7 @@ namespace SystemyWP.API
                 }
  
                 //Seed Clients
-                for (var userNumber = 0; userNumber < 6; userNumber++)
+                for (var userNumber = 0; userNumber < 3; userNumber++)
                 {
                     var testClient = new IdentityUser($"client{userNumber}{adminNumber}")
                     {
@@ -363,7 +363,7 @@ namespace SystemyWP.API
                     });
                     
                     //Seed Reminders
-                    for (var i = -20; i < 20; i++)
+                    for (var i = -10; i < 10; i++)
                     {
                         context.Add(new LegalAppReminder
                         {
