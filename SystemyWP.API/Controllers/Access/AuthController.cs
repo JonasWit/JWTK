@@ -49,11 +49,15 @@ namespace SystemyWP.API.Controllers.Access
                 if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
 
                 if (userProfile is not null) _context.Remove(userProfile);
-                
                 await _context.SaveChangesAsync();
-                await userManager.DeleteAsync(user);
+                
+                var deleteResult = await userManager.DeleteAsync(user);
+                if (deleteResult.Succeeded)
+                {
+                    return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
+                }
 
-                return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
+                return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
             {

@@ -102,6 +102,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                 if (keyToDelete is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 _context.LegalAppAccessKeys.Remove(keyToDelete);
+
                 await _context.SaveChangesAsync();
                 return Ok();
             }

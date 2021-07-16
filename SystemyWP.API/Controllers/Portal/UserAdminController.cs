@@ -197,9 +197,12 @@ namespace SystemyWP.API.Controllers.Portal
                         _context.Remove(userProfile);
                         await _context.SaveChangesAsync();
                     }
-
-                    await userManager.DeleteAsync(user);
-                    return Ok();
+                    
+                    var deleteResult = await userManager.DeleteAsync(user);
+                    if (deleteResult.Succeeded)
+                    {
+                        return Ok();
+                    }
                 }
 
                 return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
