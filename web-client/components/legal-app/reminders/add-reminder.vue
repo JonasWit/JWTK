@@ -162,7 +162,7 @@ export default {
         date.setHours(this.form.timeFrom.getHours())
         date.setMinutes(this.form.timeFrom.getMinutes())
       }
-      console.log('data start', date)
+      console.log('UTC data start', date)
       return date
     },
     submittableDateEnd() {
@@ -179,7 +179,7 @@ export default {
           date.setHours(this.form.timeTo.getHours())
           date.setMinutes(this.form.timeTo.getMinutes())
         }
-        console.log('data end', date)
+        console.log('UTC data end', date)
         return date
       }
     }
@@ -195,8 +195,8 @@ export default {
           active: true,
           name: this.form.name,
           message: this.form.message,
-          start: new Date(this.submittableDateStart),
-          end: new Date(this.submittableDateEnd),
+          start: this.submittableDateStart.toISOString(),
+          end: this.submittableDateEnd.toISOString(),
           public: this.form.public,
           reminderCategory: this.form.selectedCategory.value,
           allDayEvent: this.form.switcher

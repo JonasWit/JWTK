@@ -175,6 +175,8 @@ export default {
     },
     eventStartDate(item) {
       if (item.allDayEvent) {
+
+
         return new Date(item.start).toISOString().substr(0, 10)
       } else {
         return new Date(item.start).toISOString().substr(0, 10) + " " + (item.start).split("T")[1].split(".")[0]

@@ -71,4 +71,13 @@ export function addHoursToDate(date, hours) {
   return new Date(new Date(date).setHours(date.getHours() + hours));
 }
 
+export function formatDateForCalendar(date) {
+  const eventDate = new Date(date).toUTCString()
+  const month = (eventDate.getUTCMonth() + 1).padStart(2, '0');
+  const day = (eventDate.getUTCDate()).padStart(2, '0');
+  const year = eventDate.getUTCFullYear();
+  return [year, month, day].join('-');
+
+}
+
 
