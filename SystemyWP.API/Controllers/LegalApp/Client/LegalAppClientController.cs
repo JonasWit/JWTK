@@ -113,7 +113,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) 
+                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow)
                     return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newClient = new LegalAppClient
@@ -130,6 +130,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     _context.Add(new DataAccess
                     {
+                        LegalAppAccessKey = user.LegalAppAccessKey,
                         UserId = UserId,
                         ItemId = newClient.Id,
                         RestrictedType = RestrictedType.LegalAppClient,

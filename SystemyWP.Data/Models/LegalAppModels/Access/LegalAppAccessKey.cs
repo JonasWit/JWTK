@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;

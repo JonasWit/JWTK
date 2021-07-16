@@ -177,38 +177,5 @@ namespace SystemyWP.API.Controllers.LegalApp
                 return ServerError;
             }
         }
-
-        // [HttpGet("legal-app-summary")]
-        // public async Task<IActionResult> GetLegalAppSummary([FromServices] UserManager<IdentityUser> userManager)
-        // {
-        //     var result = new AppSummaryViewModel();
-        //
-        //     var accessKey = await _context.LegalAppAccessKeys
-        //         .Include(x => x.Users)
-        //         .FirstOrDefaultAsync(x => x.Users.Any(y => y.Id.Equals(UserId)));
-        //
-        //     if (accessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
-        //
-        //     var relatedUsers = _context.Users
-        //         .Include(x => x.LegalAppAccessKey)
-        //         .Where(x => x.LegalAppAccessKey.Name.Equals(accessKey.Name))
-        //         .ToList();
-        //
-        //     var appData = _context.LegalAppClients
-        //         .Include(x => x.LegalAppAccessKey)
-        //         .Where(x => x.LegalAppAccessKey.Name.Equals(accessKey.Name))
-        //         .Select(x => new
-        //         {
-        //             x.Id,
-        //             x.LegalAppCases.Count
-        //         })
-        //         .ToList();
-        //
-        //     result.ClientsCount = appData.Count;
-        //     result.CasesCount = appData.Sum(x => x.Count);
-        //     result.UsersCount = relatedUsers.Count;
-        //
-        //     return Ok();
-        // }
     }
 }

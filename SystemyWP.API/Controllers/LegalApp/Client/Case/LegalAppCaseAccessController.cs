@@ -67,7 +67,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var admin = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-
+                if (admin is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                    
                 // Eligible users
                 var users = _context.Users
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
@@ -94,6 +95,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     _context.DataAccesses.Add(new DataAccess
                     {
+                        LegalAppAccessKey = admin.LegalAppAccessKey,
                         UserId = form.UserId,
                         CreatedBy = UserEmail,
                         ItemId = lappCase.LegalAppClientId,
@@ -103,6 +105,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 
                 _context.DataAccesses.Add(new DataAccess
                 {
+                    LegalAppAccessKey = admin.LegalAppAccessKey,
                     UserId = form.UserId,
                     CreatedBy = UserEmail,
                     ItemId = caseId,

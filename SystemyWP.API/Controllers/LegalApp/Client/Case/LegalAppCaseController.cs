@@ -95,6 +95,11 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .FirstOrDefault();
                 if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
+                var user = _context.Users
+                    .Include(x => x.LegalAppAccessKey)
+                    .FirstOrDefault(x => x.Id == UserId);
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                
                 var newCase = new LegalAppCase()
                 {
                     Group = form.Group,
@@ -113,6 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     _context.Add(new DataAccess
                     {
+                        LegalAppAccessKey = user.LegalAppAccessKey,
                         UserId = UserId,
                         ItemId = newCase.Id,
                         RestrictedType = RestrictedType.LegalAppCase,

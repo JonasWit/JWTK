@@ -86,6 +86,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 _context.DataAccesses.Add(new DataAccess
                 {
+                    LegalAppAccessKey = admin.LegalAppAccessKey,
                     UserId = form.UserId,
                     CreatedBy = UserEmail,
                     ItemId = clientId,
