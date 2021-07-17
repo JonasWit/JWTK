@@ -68,6 +68,8 @@
               </v-toolbar>
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
+                <v-card-subtitle v-html="selectedEvent.start"></v-card-subtitle>
+                <v-card-subtitle v-html="selectedEvent.end"></v-card-subtitle>
                 <v-checkbox v-model="checkbox" label="Status publiczny"
                             :value="selectedEvent.public" disabled></v-checkbox>
               </v-card-text>
@@ -91,6 +93,7 @@ import Layout from "@/components/legal-app/layout";
 import AddReminder from "@/components/legal-app/reminders/add-reminder";
 import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
 import EditReminder from "@/components/legal-app/reminders/edit-reminder";
+import {formatDateToLocaleTimeZone, formatDateToLocaleTimeZoneWithoutTime} from "@/data/date-extensions";
 
 export default {
   name: "index",
@@ -175,18 +178,25 @@ export default {
     },
     eventStartDate(item) {
       if (item.allDayEvent) {
-
-
-        return new Date(item.start).toISOString().substr(0, 10)
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
       } else {
-        return new Date(item.start).toISOString().substr(0, 10) + " " + (item.start).split("T")[1].split(".")[0]
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
+
       }
     },
     eventEndDate(item) {
       if (item.allDayEvent) {
-        return new Date(item.start).toISOString().substr(0, 10)
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
       } else {
-        return new Date(item.end).toISOString().substr(0, 10) + " " + (item.end).split("T")[1].split(".")[0]
+        const date = new Date(item.end)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
       }
     },
     rnd(a, b) {
