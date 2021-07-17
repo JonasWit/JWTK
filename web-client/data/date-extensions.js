@@ -95,6 +95,11 @@ export function formatDateToLocaleTimeZone(date) {
     day = '0' + day;
   }
 
+  if (minutes.length < 2) {
+    minutes = minutes + '0';
+  }
+
+
   return [year, month, day,].join('-') + " " + hours + ":" + minutes;
 }
 

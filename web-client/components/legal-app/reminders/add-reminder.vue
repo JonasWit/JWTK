@@ -27,12 +27,13 @@
                               v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
               </template>
               <v-date-picker v-model="form.dateFrom" scrollable locale="pl">
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modalFrom = false">
+
+                <v-btn text color="error" @click="modalFrom = false">
                   Anuluj
                 </v-btn>
+                <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="$refs.dialogFrom.save(form.dateFrom)">
-                  OK
+                  Wybierz
                 </v-btn>
               </v-date-picker>
             </v-dialog>
@@ -45,18 +46,19 @@
                               readonly v-bind="attrs" v-on="on" :rules="validation.time"></v-text-field>
               </template>
               <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width format="24hr">
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modalTimeFrom = false">
-                  Cancel
+
+                <v-btn text color="error" @click="modalTimeFrom = false">
+                  Anuluj
                 </v-btn>
+                <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="$refs.dialogTimeFrom.save(form.timeFrom)">
-                  OK
+                  Wybierz
                 </v-btn>
               </v-time-picker>
             </v-dialog>
           </v-row>
           <v-row class="d-flex justify=space-between">
-            <v-dialog v-if="!form.switcher" ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
+            <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
                       width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
@@ -64,11 +66,11 @@
               </template>
               <v-date-picker v-model="form.dateTo" scrollable locale="pl">
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modalTo = false">
+                <v-btn text color="error" @click="modalTo = false">
                   Anuluj
                 </v-btn>
                 <v-btn text color="primary" @click="$refs.dialogTo.save(form.dateTo)">
-                  OK
+                  Wybierz
                 </v-btn>
               </v-date-picker>
             </v-dialog>
@@ -80,11 +82,11 @@
               </template>
               <v-time-picker v-if="modalTimeTo" v-model="form.timeTo" full-width format="24hr">
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modalTimeTo = false">
-                  Cancel
+                <v-btn text color="error" @click="modalTimeTo = false">
+                  Anuluj
                 </v-btn>
                 <v-btn text color="primary" @click="$refs.dialogTimeTo.save(form.timeTo)">
-                  OK
+                  Wybierz
                 </v-btn>
               </v-time-picker>
             </v-dialog>
@@ -180,7 +182,7 @@ export default {
     },
     submittableDateEnd() {
       if (this.form.switcher) {
-        return this.submittableDateStart
+        return new Date(this.form.dateTo)
       } else {
         const date = new Date(this.form.dateTo)
         if (typeof this.form.timeTo === 'string') {
@@ -200,10 +202,10 @@ export default {
 
   methods: {
     addNewReminder: async function () {
+      if (!this.$refs.addNewReminderForm.validate()) return;
       if (this.submittableDateStart > this.submittableDateEnd) {
         return this.alert = true
       } else {
-        if (!this.$refs.addNewReminderForm.validate()) return;
         if (this.loading) return;
         this.loading = true;
         try {
@@ -220,7 +222,8 @@ export default {
           console.warn('nowy reminder', newReminder);
           await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
           this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
-          this.resetForm();
+          Object.assign(this.$data, this.$options.data());
+          this.resetForm()
         } catch (e) {
           console.error('error reminders', e);
         } finally {
@@ -231,7 +234,6 @@ export default {
       }
     },
     resetForm() {
-      this.$refs.addNewReminderForm.reset();
       this.$refs.addNewReminderForm.resetValidation();
     }
   }
