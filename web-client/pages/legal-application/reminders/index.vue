@@ -55,21 +55,22 @@
           </v-toolbar>
         </v-sheet>
         <v-sheet height="600">
-          <v-calendar ref="calendar" v-model="focus" color="primary" :events="newEvents" :type="type"
+          <v-calendar ref="calendar" v-model="focus" :events="newEvents" :type="type" color="primary"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"
           ></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
-            <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat>
+            <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
                 <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <span v-html="selectedEvent.details"></span>
-                <v-card-subtitle v-html="selectedEvent.start"></v-card-subtitle>
-                <v-card-subtitle v-html="selectedEvent.end"></v-card-subtitle>
+                <v-card-subtitle>Opis: {{ selectedEvent.details }}</v-card-subtitle>
+                <v-card-subtitle>Data początkowa: {{ selectedEvent.start }}</v-card-subtitle>
+                <v-card-subtitle>Data końcowa: {{ selectedEvent.end }}</v-card-subtitle>
+                <v-card-subtitle>Kategoria: {{ categoryToDisplay }}</v-card-subtitle>
                 <v-checkbox v-model="checkbox" label="Status publiczny"
                             :value="selectedEvent.public" disabled></v-checkbox>
               </v-card-text>
@@ -115,13 +116,29 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     checkbox: true,
-    colors: ['blue', 'deep-purple', 'cyan'],
+    colors: ['blue', '#ffaa2d', 'cyan'],
     events: [],
   }),
   mounted() {
     this.$refs.calendar.checkChange();
   },
+  computed: {
+    categoryToDisplay() {
+      if (this.selectedEvent.category === 0) {
+        return "Spotkanie"
+      }
+      if (this.selectedEvent.category === 1) {
+        return "Przypomnienie"
+      }
+      if (this.selectedEvent.category === 2) {
+        return "Zadanie"
+      }
+
+    }
+  },
   methods: {
+
+
     viewDay({date}) {
       this.focus = date;
       this.type = 'day';
@@ -190,7 +207,7 @@ export default {
     },
     eventEndDate(item) {
       if (item.allDayEvent) {
-        const date = new Date(item.start)
+        const date = new Date(item.end)
         const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
         return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
       } else {
