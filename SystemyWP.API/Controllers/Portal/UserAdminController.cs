@@ -158,6 +158,7 @@ namespace SystemyWP.API.Controllers.Portal
                     if (addToRoleResult.Succeeded)
                     {
                         _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(user.Id)));
+                        _context.RemoveRange(_context.MedicalAppDataAccesses.Where(x => x.UserId.Equals(user.Id)));
                         await _context.SaveChangesAsync();
                         return Ok();
                     }
