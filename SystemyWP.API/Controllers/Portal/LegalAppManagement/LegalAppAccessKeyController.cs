@@ -107,7 +107,6 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                 if (user?.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 _context.LegalAppAccessKeys.Remove(user.LegalAppAccessKey);
-
                 await _context.SaveChangesAsync();
                 return Ok();
             }

@@ -130,7 +130,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     _context.Add(new DataAccess
                     {
-                        LegalAppAccessKey = user.LegalAppAccessKey,
+                        LegalAppAccessKeyId = user.LegalAppAccessKey.Id,
                         UserId = UserId,
                         ItemId = newClient.Id,
                         RestrictedType = RestrictedType.LegalAppClient,

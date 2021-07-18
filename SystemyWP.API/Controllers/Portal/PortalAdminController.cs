@@ -21,7 +21,7 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpGet("clients")]
-        public async Task<IActionResult> ListClients(
+        public async Task<IActionResult> ListUsers(
             [FromServices] UserManager<IdentityUser> userManager)
         {
             var users = await userManager.GetUsersForClaimAsync(
@@ -35,7 +35,7 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpPost("clients")]
-        public async Task<IActionResult> InviteClient(
+        public async Task<IActionResult> InviteUser(
             [FromBody] InviteClientForm form,
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] EmailClient emailClient)

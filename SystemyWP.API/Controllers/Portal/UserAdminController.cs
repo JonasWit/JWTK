@@ -142,7 +142,7 @@ namespace SystemyWP.API.Controllers.Portal
                 if (!roleRemoveResult.Succeeded)
                     return BadRequest("Unable to remove from role!");
 
-                //Change from normal User to admin
+                //Change from admin to normal
                 if (form.Role.Equals(SystemyWpConstants.Roles.User, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =
@@ -150,7 +150,7 @@ namespace SystemyWP.API.Controllers.Portal
                     if (addToRoleResult.Succeeded) return Ok();
                 }
                 
-                //Change from Admin to Normal User
+                //Change from normal to admin
                 if (form.Role.Equals(SystemyWpConstants.Roles.UserAdmin, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var addToRoleResult =
