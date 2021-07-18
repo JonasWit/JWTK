@@ -1,12 +1,13 @@
 ﻿using SystemyWP.Data.ContextBuilders;
-using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 using SystemyWP.Data.Models.LegalAppModels.Access;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Contacts;
 using SystemyWP.Data.Models.LegalAppModels.Reminders;
 using SystemyWP.Data.Models.MedicalAppModels.Access;
+using SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Patients;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,8 @@ namespace SystemyWP.Data
         #region Applications
 
         //Access
-        public DbSet<DataAccess> DataAccesses { get; set; }
+        public DbSet<LegalAppDataAccess> LegalAppDataAccesses { get; set; }
+        public DbSet<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; }
 
         #endregion
 
@@ -74,14 +76,19 @@ namespace SystemyWP.Data
             #region Access Specific
 
             modelBuilder.Entity<User>()
-                .HasMany(x => x.DataAccess)
+                .HasMany(x => x.LegalAppDataAccesses)
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.MedicalAppDataAccesses)
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //Legal
             
             modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(c => c.DataAccesses)
+                .HasMany(c => c.LegalAppDataAccesses)
                 .WithOne(e => e.LegalAppAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
             
@@ -108,7 +115,7 @@ namespace SystemyWP.Data
             //Medical
             
             modelBuilder.Entity<MedicalAccessKey>()
-                .HasMany(c => c.DataAccesses)
+                .HasMany(c => c.MedicalAppDataAccesses)
                 .WithOne(e => e.MedicalAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
             

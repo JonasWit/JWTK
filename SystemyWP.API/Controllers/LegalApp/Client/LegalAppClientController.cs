@@ -7,7 +7,7 @@ using SystemyWP.API.Forms.LegalApp.Client;
 using SystemyWP.API.Projections.LegalApp.Clients;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -124,21 +124,22 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     UpdatedBy = UserEmail
                 };
                 _context.Add(newClient);
+                await _context.SaveChangesAsync();
 
                 //Act as normal as User
                 if (Role.Equals(SystemyWpConstants.Roles.User))
                 {
-                    _context.Add(new DataAccess
+                    _context.Add(new LegalAppDataAccess
                     {
                         LegalAppAccessKeyId = user.LegalAppAccessKey.Id,
                         UserId = UserId,
                         ItemId = newClient.Id,
-                        RestrictedType = RestrictedType.LegalAppClient,
+                        LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient,
                         CreatedBy = UserEmail
                     });
+                    await _context.SaveChangesAsync();
                 }
-
-                await _context.SaveChangesAsync();
+                
                 return Ok();
             }
             catch (Exception e)
@@ -186,12 +187,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                _context.RemoveRange(_context.DataAccesses
-                    .Where(x => x.RestrictedType == RestrictedType.LegalAppClient && x.ItemId == clientId));
+                _context.RemoveRange(_context.LegalAppDataAccesses
+                    .Where(x => x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppClient && x.ItemId == clientId));
                 
-                _context.RemoveRange(_context.DataAccesses
+                _context.RemoveRange(_context.LegalAppDataAccesses
                     .Where(dataAccess => 
-                        dataAccess.RestrictedType == RestrictedType.LegalAppCase && 
+                        dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase && 
                         _context.LegalAppCases
                             .Where(legalAppCase => legalAppCase.LegalAppClientId == clientId)
                             .Any(x => x.Id == dataAccess.ItemId)));

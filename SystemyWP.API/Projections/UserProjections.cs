@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
-using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Projections

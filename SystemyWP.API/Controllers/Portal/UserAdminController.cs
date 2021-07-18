@@ -157,7 +157,7 @@ namespace SystemyWP.API.Controllers.Portal
                         await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserAdminClaim);
                     if (addToRoleResult.Succeeded)
                     {
-                        _context.RemoveRange(_context.DataAccesses.Where(x => x.UserId.Equals(user.Id)));
+                        _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(user.Id)));
                         await _context.SaveChangesAsync();
                         return Ok();
                     }

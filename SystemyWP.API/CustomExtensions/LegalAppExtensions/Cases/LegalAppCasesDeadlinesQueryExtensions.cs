@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 
 namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
@@ -44,9 +44,9 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         lappDeadline.Active == active &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
-                        context.DataAccesses.Any(dataAccess =>
+                        context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
-                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase &&
                             dataAccess.ItemId == lappDeadline.LegalAppCase.Id));
                     break;
             }
@@ -87,9 +87,9 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         lappDeadline.Active == active &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
-                        context.DataAccesses.Any(dataAccess =>
+                        context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
-                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase &&
                             dataAccess.ItemId == lappDeadline.LegalAppCase.Id));
                     break;
             }
@@ -133,9 +133,9 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         lappDeadline.LegalAppCase.LegalAppClientId == clientId &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
-                        context.DataAccesses.Any(dataAccess =>
+                        context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
-                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase &&
                             dataAccess.ItemId == lappDeadline.LegalAppCase.Id));
                     break;
             }
@@ -179,9 +179,9 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         lappDeadline.Active == active &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAppAccessKey.Id &&
-                        context.DataAccesses.Any(dataAccess =>
+                        context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
-                            dataAccess.RestrictedType == RestrictedType.LegalAppCase &&
+                            dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase &&
                             dataAccess.ItemId == lappDeadline.LegalAppCase.Id));
                     break;
             }

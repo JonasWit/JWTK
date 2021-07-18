@@ -7,7 +7,7 @@ using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -36,8 +36,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                var allowedUsers = _context.DataAccesses
-                    .Where(x => x.ItemId == lappCase.Id && x.RestrictedType == RestrictedType.LegalAppCase)
+                var allowedUsers = _context.LegalAppDataAccesses
+                    .Where(x => x.ItemId == lappCase.Id && x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase)
                     .Select(x => x.User)
                     .Select(UserProjections.BasicUserProjection)
                     .ToList();
@@ -76,40 +76,40 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(form.UserId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                var currentCasesAccesses = _context.DataAccesses
+                var currentCasesAccesses = _context.LegalAppDataAccesses
                     .Where(x =>
-                        x.RestrictedType == RestrictedType.LegalAppCase &&
+                        x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase &&
                         x.UserId.Equals(form.UserId) &&
                         x.ItemId == caseId)
                     .FirstOrDefault();
                 if (currentCasesAccesses is not null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 // Add access to client if there is none already
-                var currentClientsAccesses = _context.DataAccesses
+                var currentClientsAccesses = _context.LegalAppDataAccesses
                     .Where(x =>
-                        x.RestrictedType == RestrictedType.LegalAppClient &&
+                        x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppClient &&
                         x.UserId.Equals(form.UserId) &&
                         x.ItemId == lappCase.LegalAppClientId)
                     .FirstOrDefault();
                 if (currentClientsAccesses is null)
                 {
-                    _context.DataAccesses.Add(new DataAccess
+                    _context.LegalAppDataAccesses.Add(new LegalAppDataAccess
                     {
                         LegalAppAccessKey = admin.LegalAppAccessKey,
                         UserId = form.UserId,
                         CreatedBy = UserEmail,
                         ItemId = lappCase.LegalAppClientId,
-                        RestrictedType = RestrictedType.LegalAppClient
+                        LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient
                     });
                 }
 
-                _context.DataAccesses.Add(new DataAccess
+                _context.LegalAppDataAccesses.Add(new LegalAppDataAccess
                 {
                     LegalAppAccessKey = admin.LegalAppAccessKey,
                     UserId = form.UserId,
                     CreatedBy = UserEmail,
                     ItemId = caseId,
-                    RestrictedType = RestrictedType.LegalAppCase
+                    LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase
                 });
 
                 await _context.SaveChangesAsync();
@@ -146,8 +146,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(form.UserId))) return StatusCode(StatusCodes.Status403Forbidden);
 
-                var currentAccess = _context.DataAccesses
-                    .FirstOrDefault(x => x.RestrictedType == RestrictedType.LegalAppCase && x.UserId.Equals(form.UserId));
+                var currentAccess = _context.LegalAppDataAccesses
+                    .FirstOrDefault(x => x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase && x.UserId.Equals(form.UserId));
                 if (currentAccess is null) return BadRequest();
 
                 _context.Remove(currentAccess);
@@ -177,9 +177,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
                     .ToList();
 
-                var currentAllowed = _context.DataAccesses
+                var currentAllowed = _context.LegalAppDataAccesses
                     .Where(x =>
-                        x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == caseId)
+                        x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase && x.ItemId == caseId)
                     .ToList();
 
                 var result = await GetOnlyNormalUsers(users, userManager);

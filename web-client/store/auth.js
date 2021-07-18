@@ -65,7 +65,7 @@ export const actions = {
       console.warn('User Profile: ', profile);
       console.warn('Related Users: ', users);
     } catch (error) {
-      console.error("Authorization error: ", error.response.status);
+      console.error("Authorization error: ", error);
     }
   },
   login() {

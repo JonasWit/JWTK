@@ -10,7 +10,7 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                 var relatedUsers = _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .Where(x => x.LegalAppAccessKey.Id == adminUser.LegalAppAccessKey.Id)
-                    .Include(x => x.DataAccess)
+                    .Include(x => x.LegalAppDataAccesses)
                     .ToList();
 
                 if (relatedUsers.Count == 0) return Ok(result);
@@ -97,8 +97,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 if (requester.LegalAppAccessKey.Id != user.LegalAppAccessKey.Id) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                _context.DataAccesses
-                    .RemoveRange(_context.DataAccesses
+                _context.LegalAppDataAccesses
+                    .RemoveRange(_context.LegalAppDataAccesses
                         .Where(x => 
                             x.UserId.Equals(user.Id)));
 
@@ -109,18 +109,18 @@ namespace SystemyWP.API.Controllers.LegalApp
 
                 foreach (var client in clients)
                 {
-                    _context.Add(new DataAccess
+                    _context.Add(new LegalAppDataAccess
                     {
-                        RestrictedType = RestrictedType.LegalAppClient,
+                        LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient,
                         ItemId = client.Id,
                         UserId = user.Id,
                         CreatedBy = UserId
                     });
 
                     foreach (var cs in client.LegalAppCases)
-                        _context.Add(new DataAccess
+                        _context.Add(new LegalAppDataAccess
                         {
-                            RestrictedType = RestrictedType.LegalAppCase,
+                            LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase,
                             ItemId = cs.Id,
                             UserId = user.Id,
                             CreatedBy = UserId
@@ -163,8 +163,8 @@ namespace SystemyWP.API.Controllers.LegalApp
                 if (requester.LegalAppAccessKey is null || user.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 if (requester.LegalAppAccessKey.Id != user.LegalAppAccessKey.Id) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                _context.DataAccesses
-                    .RemoveRange(_context.DataAccesses
+                _context.LegalAppDataAccesses
+                    .RemoveRange(_context.LegalAppDataAccesses
                         .Where(x => 
                             x.UserId.Equals(user.Id)));
 

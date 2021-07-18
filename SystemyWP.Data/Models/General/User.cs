@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.DataAccessModifiers;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.LegalAppModels.Access;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Access;
+using SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers;
 using Microsoft.AspNetCore.Identity;
 
 namespace SystemyWP.Data.Models.General
@@ -53,7 +54,8 @@ namespace SystemyWP.Data.Models.General
         
         public DateTime? LastLogin  { get; set; }  
 
-        public List<DataAccess> DataAccess { get; set; } =
-            new ();
+        public List<LegalAppDataAccess> LegalAppDataAccesses { get; set; } = new ();
+        
+        public List<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; } = new ();
     }
 }

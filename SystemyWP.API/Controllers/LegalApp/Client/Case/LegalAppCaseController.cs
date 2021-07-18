@@ -8,7 +8,7 @@ using SystemyWP.API.Forms.LegalApp.Client.Case;
 using SystemyWP.API.Projections.LegalApp.Cases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.DataAccessModifiers;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,21 +111,22 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 };
                 
                 legalAppClient.LegalAppCases.Add(newCase);
-
+                await _context.SaveChangesAsync();
+                
                 //Act as normal as User
                 if (Role.Equals(SystemyWpConstants.Roles.User))
                 {
-                    _context.Add(new DataAccess
+                    _context.Add(new LegalAppDataAccess
                     {
                         LegalAppAccessKeyId = user.LegalAppAccessKey.Id,
                         UserId = UserId,
                         ItemId = newCase.Id,
-                        RestrictedType = RestrictedType.LegalAppCase,
+                        LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase,
                         CreatedBy = UserEmail
                     });
+                    await _context.SaveChangesAsync();
                 }
-                
-                await _context.SaveChangesAsync();   
+
                 return Ok();
             }
             catch (Exception e)
@@ -199,8 +200,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 legalAppCase.UpdatedBy = UserEmail;
                 legalAppCase.Updated = DateTime.UtcNow;
                 
-                _context.RemoveRange(_context.DataAccesses
-                        .Where(x => x.RestrictedType == RestrictedType.LegalAppCase && x.ItemId == caseId));
+                _context.RemoveRange(_context.LegalAppDataAccesses
+                        .Where(x => x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase && x.ItemId == caseId));
                 
                 await _context.SaveChangesAsync();
                 return Ok();
