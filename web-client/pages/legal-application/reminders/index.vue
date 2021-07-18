@@ -4,10 +4,12 @@
       <v-toolbar class="white--text" color="primary">
         <v-toolbar-title>Przypomnienia</v-toolbar-title>
         <v-spacer></v-spacer>
-        <add-reminder/>
+        <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
       <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
-        Witaj w panelu przypomnień!
+        Witaj w panelu przypomnień! Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ"
+        powrócisz do dziejszej daty.
+        Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
       </v-alert>
       <div>
         <v-sheet tile height="64" class="d-flex">
@@ -52,33 +54,31 @@
             </v-menu>
           </v-toolbar>
         </v-sheet>
-        <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
-          Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ" powrócisz do dziejszej daty.
-          Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
-        </v-alert>
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus" color="primary" :events="newEvents" :type="type"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
-                      @change="getEvents"></v-calendar>
+                      @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
+                      :weekdays="weekday" event-overlap-mode="stack"
+          ></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
-            <v-card color="grey lighten-4" max-width="800px" flat>
+            <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat>
               <v-toolbar :color="selectedEvent.color" dark>
-                <v-btn icon>
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
-                <v-checkbox v-model="checkbox" :label="labelCondition(selectedEvent.public)"
-                            :value="selectedEvent.public" value disabled></v-checkbox>
+                <v-card-subtitle v-html="selectedEvent.start"></v-card-subtitle>
+                <v-card-subtitle v-html="selectedEvent.end"></v-card-subtitle>
+                <v-checkbox v-model="checkbox" label="Status publiczny"
+                            :value="selectedEvent.public" disabled></v-checkbox>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
                   Anuluj
                 </v-btn>
                 <v-spacer></v-spacer>
-                <delete-reminder :reminder-for-action="selectedEvent" v-on:delete-completed="actionDone"/>
+                <delete-reminder :event-for-action="selectedEvent" v-on:delete-completed="actionDone"/>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -92,22 +92,17 @@
 import Layout from "@/components/legal-app/layout";
 import AddReminder from "@/components/legal-app/reminders/add-reminder";
 import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
+import EditReminder from "@/components/legal-app/reminders/edit-reminder";
+import {formatDateToLocaleTimeZone, formatDateToLocaleTimeZoneWithoutTime} from "@/data/date-extensions";
 
 export default {
   name: "index",
-  components: {DeleteReminder, AddReminder, Layout},
+  components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
     type: 'month',
     types: ['month', 'week', 'day'],
-    mode: 'stack',
     weekday: [1, 2, 3, 4, 5, 6, 0],
-    weekdays: [
-      {text: 'Nd - Sob', value: [0, 1, 2, 3, 4, 5, 6]},
-      {text: 'Pon - Nd', value: [1, 2, 3, 4, 5, 6, 0]},
-      {text: 'Pon - Pt', value: [1, 2, 3, 4, 5]},
-      {text: 'Pon, Śr, Pt', value: [1, 3, 5]},
-    ],
     value: '',
     typeToLabel: {
       month: 'Miesiąc',
@@ -121,6 +116,7 @@ export default {
     selectedOpen: false,
     checkbox: true,
     colors: ['blue', 'deep-purple', 'cyan'],
+    events: [],
   }),
   mounted() {
     this.$refs.calendar.checkChange();
@@ -146,14 +142,12 @@ export default {
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
-
       if (this.selectedOpen) {
         this.selectedOpen = false;
         requestAnimationFrame(() => requestAnimationFrame(() => open()));
       } else {
         open();
       }
-
       nativeEvent.stopPropagation();
     },
     async getEvents() {
@@ -165,21 +159,45 @@ export default {
           newEvents.push({
             name: x.name,
             details: x.message,
-            start: new Date(x.start).toISOString().substr(0, 10),
-            end: new Date(x.end).toISOString().substr(0, 10),
+            start: this.eventStartDate(x),
+            end: this.eventEndDate(x),
             color: this.colors[this.rnd(0, this.colors.length - 1)],
             id: x.id,
             public: x.public,
-            category: x.reminderCategory
+            category: x.reminderCategory,
+            timed: x.allDayEvent
+
           });
         });
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
-
       } catch (e) {
-
+        console.error('calendar fetch error', e)
       }
 
+    },
+    eventStartDate(item) {
+      if (item.allDayEvent) {
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
+      } else {
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
+
+      }
+    },
+    eventEndDate(item) {
+      if (item.allDayEvent) {
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
+      } else {
+        const date = new Date(item.end)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
+      }
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
@@ -188,14 +206,6 @@ export default {
       this.getEvents();
       this.selectedOpen = false;
     },
-    labelCondition(val) {
-      if (val) {
-        return "Publiczne";
-      }
-      return "Prywatne";
-    }
-
-
   }
 
 };

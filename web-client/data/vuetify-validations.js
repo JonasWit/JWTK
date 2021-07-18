@@ -6,7 +6,10 @@
 export const notEmptyRule = (message) => [
   v => !!v || message
 ];
+export const selectOption = (message) => [
+  v => v?.length === 0 || message
 
+];
 export const notEmptyAndLimitedRule = (message, min, max) => [
   v => !!v || message,
   v => (v?.length >= min && v?.length <= max) || message,

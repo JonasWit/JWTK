@@ -57,7 +57,7 @@ export const getters = {
     return state.financialRecordsFromFetch;
   },
   sortedFinancialRecords(state) {
-    const sortedItems = [...state.financialRecordsFromFetch].sort((a, b) => {
+    return [...state.financialRecordsFromFetch].sort((a, b) => {
       if (a.eventDate > b.eventDate) {
         return 1;
       } else if (b.eventDate > a.eventDate) {
@@ -65,7 +65,6 @@ export const getters = {
       }
       return 0;
     });
-    return sortedItems;
   },
   //Billing data
   billingDataList(state) {
@@ -84,23 +83,6 @@ export const getters = {
     return state.eligibleUsersList
   },
 
-  //CASES deadlines
-  // deadlinesList(state) {
-  //   return state.deadlines
-  // }
-
-  newEvents(state) {
-    let newArray = []
-    state.deadlines.forEach(x => {
-      newArray.push({
-        name: x.message,
-        start: new Date(x.deadline).toISOString().substr(0, 10),
-        end: new Date(x.deadline).toISOString().substr(0, 10),
-        color: 'error'
-      })
-    });
-    return newArray
-  }
 };
 
 export const mutations = {

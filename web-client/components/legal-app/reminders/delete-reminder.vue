@@ -17,7 +17,7 @@
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="error" text @click="deleteReminder">
+        <v-btn color="error" text @click="deleteEvent">
           Potwierdź
         </v-btn>
         <v-spacer/>
@@ -35,7 +35,7 @@ import {deleteReminder} from "@/data/endpoints/legal-app/legal-app-reminders-end
 export default {
   name: "delete-reminder",
   props: {
-    reminderForAction: {
+    eventForAction: {
       required: true,
       default: null
     }
@@ -44,9 +44,9 @@ export default {
     dialog: false,
   }),
   methods: {
-    async deleteReminder() {
+    async deleteEvent() {
       try {
-        let reminderId = this.reminderForAction.id
+        let reminderId = this.eventForAction.id
         console.warn('reminder id', reminderId)
         await this.$axios.$delete(deleteReminder(reminderId));
         this.$notifier.showSuccessMessage("Przypomnienie zostało usunięte!");

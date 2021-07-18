@@ -52,7 +52,7 @@ export const timeStamp = () => {
   let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   let yyyy = today.getFullYear();
 
-  return today = dd + '/' + mm + '/' + yyyy;
+  return dd + '/' + mm + '/' + yyyy;
 };
 
 export function formatDateWithHours(date) {
@@ -69,6 +69,48 @@ export function formatDateToMonth(date) {
 
 export function addHoursToDate(date, hours) {
   return new Date(new Date(date).setHours(date.getHours() + hours));
+}
+
+export function formatDateForCalendar(date) {
+  const eventDate = new Date(date).toUTCString()
+  const month = (eventDate.getUTCMonth() + 1).padStart(2, '0');
+  const day = (eventDate.getUTCDate()).padStart(2, '0');
+  const year = eventDate.getUTCFullYear();
+  return [year, month, day].join('-');
+
+}
+
+export function formatDateToLocaleTimeZone(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear(),
+    hours = d.getHours(),
+    minutes = d.getMinutes()
+
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+
+  return [year, month, day,].join('-') + " " + hours + ":" + minutes;
+}
+
+export function formatDateToLocaleTimeZoneWithoutTime(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+
+  return [year, month, day,].join('-');
 }
 
 
