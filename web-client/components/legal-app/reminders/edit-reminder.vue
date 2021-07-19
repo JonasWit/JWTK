@@ -121,6 +121,7 @@
 
 <script>
 import {updateReminder} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-reminder",
@@ -218,7 +219,6 @@ export default {
       }
     }
   },
-
   methods: {
     async saveChanges() {
       try {
@@ -236,8 +236,9 @@ export default {
         console.warn('edited reminder', newReminder)
         await this.$axios.$put(updateReminder(reminderId), newReminder);
         this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
-      } catch (e) {
-        console.error('error in edit mode', e);
+      } catch (error) {
+        this.$notifier.showErrorMessage("Wystąpił bład. Spróbuj ponownie!");
+        handleError(error)
       } finally {
         this.dialog = false;
         this.$emit('action-completed');

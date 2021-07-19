@@ -42,3 +42,11 @@ export const groupByKey = (input, key) => {
   }, {});
 };
 
+export function handleError(error) {
+  if (error.response.data) {
+    console.log(error.response.data);
+  } else {
+    console.log(error)
+  }
+}
+
