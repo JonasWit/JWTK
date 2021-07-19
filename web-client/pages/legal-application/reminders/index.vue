@@ -2,7 +2,7 @@
   <layout>
     <template v-slot:content>
       <v-toolbar class="white--text" color="primary">
-        <v-toolbar-title>Przypomnienia</v-toolbar-title>
+        <v-toolbar-title>Kalendarz</v-toolbar-title>
         <v-spacer></v-spacer>
         <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
@@ -54,22 +54,31 @@
             </v-menu>
             <v-spacer></v-spacer>
             <v-select
-              v-model="selectedView"
+              v-model="selectedCategory"
               :items="items"
               item-text="text" :item-value="value" return-object
               label="Wybierz kategorię"
               outlined
-              dense class="mt-8" @click="filterEvents()"
+              dense class="mt-8"
             ></v-select>
-
+            <v-spacer></v-spacer>
+            <v-select
+              v-model="selectedStatus"
+              :items="statuses"
+              item-text="text" :item-value="value" return-object
+              label="Wybierz status"
+              outlined
+              dense class="mt-8"
+            ></v-select>
           </v-toolbar>
         </v-sheet>
         <v-sheet height="600">
-          <v-calendar ref="calendar" v-model="focus" :events="newEvents" :type="type" color="primary"
+          <v-calendar ref="calendar" v-model="focus"
+                      :events="filteredEvents"
+                      :type="type" color="primary"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
-                      :weekdays="weekday" event-overlap-mode="stack"
-          ></v-calendar>
+                      :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
@@ -111,8 +120,17 @@ export default {
   components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
-    selectedView: null,
-    items: [{text: 'Spotkania', value: 0}, {text: 'Przypomnienia', value: 1}, {text: 'Zadania', value: 2},],
+    selectedCategory: null,
+    items: [
+      {text: 'Spotkania', value: 0},
+      {text: 'Przypomnienia', value: 1},
+      {text: 'Zadania', value: 2},
+      {text: 'Wszystko', value: 3}],
+    selectedStatus: null,
+    statuses: [
+      {text: 'Publiczne', value: true},
+      {text: 'Prywatne', value: false},
+      {text: 'Wszystko', value: null}],
     type: 'month',
     types: ['month', 'week', 'day'],
     weekday: [1, 2, 3, 4, 5, 6, 0],
@@ -123,16 +141,50 @@ export default {
       day: 'Dzień',
     },
     newEvents: [],
+    filteredEvents: [],
     remindersList: [],
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     checkbox: true,
-    colors: ['blue', '#ffaa2d', 'cyan'],
     events: [],
   }),
-  mounted() {
-    this.$refs.calendar.checkChange();
+  async mounted() {
+    try {
+      this.$refs.calendar.checkChange();
+      await this.getEvents();
+      this.filteredEvents = this.newEvents
+      console.warn('filtered events', this.filteredEvents)
+    } catch (e) {
+      console.error('error in fetching event data', e)
+    }
+  },
+
+  watch: {
+
+    selectedCategory(cat) {
+      if (cat.value === 0) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
+        console.warn('Spotkania publiczne', this.filteredEvents)
+      }
+      if (cat.value === 0) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
+        console.warn('Spotkania prywatne', this.filteredEvents)
+      }
+      if (cat.value === 1) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
+        console.warn('Przypomnienia', this.filteredEvents)
+      }
+      if (cat.value === 2) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
+        console.warn('Zadania', this.filteredEvents)
+      }
+      if (cat.value === 3) {
+        this.filteredEvents = this.newEvents
+        console.warn('Wszystko', this.filteredEvents)
+      }
+
+    },
   },
   computed: {
     categoryToDisplay() {
@@ -145,17 +197,9 @@ export default {
       if (this.selectedEvent.category === 2) {
         return "Zadanie"
       }
-
     }
   },
   methods: {
-    filterEvents() {
-      let filteredEvents = this.newEvents.filter((item) => {
-        return item.category === 0;
-      })
-      console.log('Meetings filtered', filteredEvents);
-    },
-
     viewDay({date}) {
       this.focus = date;
       this.type = 'day';
@@ -172,7 +216,7 @@ export default {
     showEvent({nativeEvent, event}) {
       const open = () => {
         this.selectedEvent = event;
-        console.log('selected event', this.selectedEvent);
+        // console.log('selected event', this.selectedEvent);
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
@@ -187,7 +231,7 @@ export default {
     async getEvents() {
       try {
         this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
-        console.warn('reminders', this.remindersList);
+        // console.warn('reminders', this.remindersList);
         let newEvents = [];
         this.remindersList.forEach(x => {
           newEvents.push({
@@ -205,6 +249,9 @@ export default {
         });
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
+        // console.warn('calendar start', this.$refs.calendar.)
+        // this.filteredEvents = newEvents
+
       } catch (e) {
         console.error('calendar fetch error', e)
       }
@@ -249,9 +296,15 @@ export default {
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
     },
-    actionDone() {
-      this.getEvents();
-      this.selectedOpen = false;
+    async actionDone() {
+      try {
+        await this.getEvents();
+        this.filteredEvents = this.newEvents
+        this.selectedOpen = false;
+      } catch (e) {
+        console.error('error in refreshing data', e)
+      }
+
     },
   }
 
