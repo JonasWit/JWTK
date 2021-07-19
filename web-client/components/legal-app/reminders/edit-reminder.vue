@@ -165,10 +165,22 @@ export default {
     this.form.timeFrom = (this.eventForAction.start).substr(10, 6);
     this.form.dateTo = (this.eventForAction.end).substr(0, 10);
     this.form.timeTo = (this.eventForAction.end).substr(10, 6);
-    this.form.selectedCategory = this.eventForAction.category;
+    this.form.selectedCategory = this.selectedDefault;
   },
 
   computed: {
+    selectedDefault() {
+      if (this.eventForAction.category === 0) {
+        return {text: 'Spotkanie', value: 0}
+      }
+      if (this.eventForAction.category === 1) {
+        return {text: 'Przypomnienie', value: 1}
+      }
+      if (this.eventForAction.category === 1) {
+        return {text: 'Zadanie', value: 2}
+      }
+    },
+
     submittableDateStart() {
       if (this.form.switcher) {
         return new Date(this.form.dateFrom)
@@ -221,7 +233,7 @@ export default {
           allDayEvent: this.form.switcher
         };
         let reminderId = this.eventForAction.id;
-        console.warn('edyited reminder', newReminder)
+        console.warn('edited reminder', newReminder)
         await this.$axios.$put(updateReminder(reminderId), newReminder);
         this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
       } catch (e) {
