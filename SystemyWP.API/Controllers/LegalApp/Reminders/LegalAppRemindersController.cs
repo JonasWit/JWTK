@@ -152,7 +152,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
         {
             try
             {
-                if (form.Start >= form.End) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
+                if (form.Start > form.End) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
                 
                 var reminder = _context.LegalAppReminders
                     .GetReminder(UserId, Role, reminderId, _context)
