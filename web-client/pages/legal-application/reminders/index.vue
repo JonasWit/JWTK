@@ -52,6 +52,16 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+            <v-spacer></v-spacer>
+            <v-select
+              v-model="selectedView"
+              :items="items"
+              item-text="text" :item-value="value" return-object
+              label="Wybierz kategorię"
+              outlined
+              dense class="mt-8" @click="filterEvents()"
+            ></v-select>
+
           </v-toolbar>
         </v-sheet>
         <v-sheet height="600">
@@ -101,6 +111,8 @@ export default {
   components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
+    selectedView: null,
+    items: [{text: 'Spotkania', value: 0}, {text: 'Przypomnienia', value: 1}, {text: 'Zadania', value: 2},],
     type: 'month',
     types: ['month', 'week', 'day'],
     weekday: [1, 2, 3, 4, 5, 6, 0],
@@ -137,7 +149,12 @@ export default {
     }
   },
   methods: {
-
+    filterEvents() {
+      let filteredEvents = this.newEvents.filter((item) => {
+        return item.category === 0;
+      })
+      console.log('Meetings filtered', filteredEvents);
+    },
 
     viewDay({date}) {
       this.focus = date;
@@ -178,7 +195,7 @@ export default {
             details: x.message,
             start: this.eventStartDate(x),
             end: this.eventEndDate(x),
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
+            color: this.setColor(x),
             id: x.id,
             public: x.public,
             category: x.reminderCategory,
@@ -190,6 +207,19 @@ export default {
         this.newEvents = newEvents;
       } catch (e) {
         console.error('calendar fetch error', e)
+      }
+
+    },
+
+    setColor(item) {
+      if (item.reminderCategory === 0) {
+        return "blue"
+      }
+      if (item.reminderCategory === 1) {
+        return "orange lighten-1"
+      }
+      if (item.reminderCategory === 2) {
+        return "green"
       }
 
     },
