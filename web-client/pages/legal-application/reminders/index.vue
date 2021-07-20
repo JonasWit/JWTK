@@ -98,7 +98,7 @@
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
-          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
+          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedEvent">
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
                 <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
@@ -109,8 +109,7 @@
                 <v-card-subtitle>Data początkowa: {{ selectedEvent.start }}</v-card-subtitle>
                 <v-card-subtitle>Data końcowa: {{ selectedEvent.end }}</v-card-subtitle>
                 <v-card-subtitle>Kategoria: {{ categoryToDisplay }}</v-card-subtitle>
-                <v-checkbox v-model="checkbox" label="Status publiczny"
-                            :value="selectedEvent.public" disabled></v-checkbox>
+                <v-card-subtitle>Status: {{ labelCondition(selectedEvent.public) }}</v-card-subtitle>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
@@ -164,8 +163,8 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    checkbox: true,
     events: [],
+    offset: true,
   }),
   async mounted() {
     try {
@@ -269,8 +268,9 @@ export default {
     showEvent({nativeEvent, event}) {
       const open = () => {
         this.selectedEvent = event;
-        // console.log('selected event', this.selectedEvent);
-        this.selectedElement = nativeEvent.target;
+        console.log('selected event', event);
+
+
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
       if (this.selectedOpen) {
@@ -281,6 +281,8 @@ export default {
       }
       nativeEvent.stopPropagation();
     },
+
+
     async getEvents() {
       try {
         this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
@@ -351,8 +353,13 @@ export default {
       } catch (e) {
         console.error('error in refreshing data', e)
       }
-
     },
+    labelCondition(val) {
+      if (val) {
+        return "Status publiczny"
+      }
+      return "Status prywatny"
+    }
   }
 
 };

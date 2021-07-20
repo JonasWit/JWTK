@@ -250,14 +250,15 @@ export default {
           let reminderId = this.eventForAction.id;
           console.warn('edited reminder', newReminder)
           await this.$axios.$put(updateReminder(reminderId), newReminder);
+
           this.resetForm()
           this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
         } catch (error) {
           this.$notifier.showErrorMessage("Wystąpił bład. Spróbuj ponownie!");
           handleError(error)
         } finally {
-          this.dialog = false;
           this.$emit('action-completed');
+          this.dialog = false;
         }
 
       }
