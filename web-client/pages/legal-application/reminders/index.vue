@@ -75,8 +75,11 @@
                         ></v-select>
                       </v-col>
                       <v-col>
-                        <v-btn @click="filterResults()">
+                        <v-btn color="accent" class="ma-2" @click="filterResults()">
                           Filtruj
+                        </v-btn>
+                        <v-btn color="accent" class="ma-2" @click="clearFilterResults()">
+                          Wyczyść
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -244,6 +247,12 @@ export default {
       }
     },
 
+    clearFilterResults() {
+      this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+      this.selectedStatus = {text: 'Wszystkie statusy', value: null}
+      this.filteredEvents = this.newEvents
+    },
+
     viewDay({date}) {
       this.focus = date;
       this.type = 'day';
@@ -288,14 +297,10 @@ export default {
             public: x.public,
             category: x.reminderCategory,
             timed: x.allDayEvent
-
           });
         });
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
-        // console.warn('calendar start', this.$refs.calendar.)
-        // this.filteredEvents = newEvents
-
       } catch (e) {
         console.error('calendar fetch error', e)
       }
@@ -323,7 +328,6 @@ export default {
         const date = new Date(item.start)
         const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
         return formatDateToLocaleTimeZone(isoDateTime)
-
       }
     },
     eventEndDate(item) {
@@ -337,12 +341,11 @@ export default {
         return formatDateToLocaleTimeZone(isoDateTime)
       }
     },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
-    },
     async actionDone() {
       try {
         await this.getEvents();
+        this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+        this.selectedStatus = {text: 'Wszystkie statusy', value: null}
         this.filteredEvents = this.newEvents
         this.selectedOpen = false;
       } catch (e) {
