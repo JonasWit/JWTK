@@ -11,66 +11,82 @@
         powrócisz do dziejszej daty.
         Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
       </v-alert>
-      <div>
-        <v-sheet tile height="64" class="d-flex">
-          <v-toolbar flat>
-            <v-btn class="mr-4" color="accent" @click="setToday">
-              Dzisiaj
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small>
-                mdi-chevron-left
-              </v-icon>
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small>
-                mdi-chevron-right
-              </v-icon>
-            </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-menu bottom right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="accent" v-bind="attrs" v-on="on">
-                  <span>{{ typeToLabel[type] }}</span>
-                  <v-icon right>
-                    mdi-menu-down
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="type = 'day'">
-                  <v-list-item-title>Dzień</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'week'">
-                  <v-list-item-title>Tydzień</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'month'">
-                  <v-list-item-title>Miesiąc</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-            <v-spacer></v-spacer>
-            <v-select
-              v-model="selectedCategory"
-              :items="items"
-              item-text="text" :item-value="value" return-object
-              label="Wybierz kategorię"
-              outlined
-              dense class="mt-8"
-            ></v-select>
-            <v-spacer></v-spacer>
-            <v-select
-              v-model="selectedStatus"
-              :items="statuses"
-              item-text="text" :item-value="value" return-object
-              label="Wybierz status"
-              outlined
-              dense class="mt-8"
-            ></v-select>
-          </v-toolbar>
+      <div class="mt-7">
+        <v-sheet tile>
+
+          <v-col>
+            <v-row>
+              <v-btn icon small color="primary" @click="prev" class="mx-2">
+                <v-icon small color="">
+                  mdi-chevron-left
+                </v-icon>
+              </v-btn>
+              <v-toolbar-title v-if="$refs.calendar">
+                {{ $refs.calendar.title }}
+              </v-toolbar-title>
+              <v-btn icon small color="primary" @click="next" class="mx-2">
+                <v-icon small>
+                  mdi-chevron-right
+                </v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-select
+                v-model="type"
+                :items="types"
+                item-text="text"
+                dense
+                outlined
+                hide-details
+                label="Zmień widok"
+              ></v-select>
+              <v-spacer></v-spacer>
+              <v-btn class="mr-4" color="accent" @click="setToday">
+                Dzisiaj
+              </v-btn>
+            </v-row>
+            <v-row>
+              <v-expansion-panels flat>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Wybierz filtry</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-row>
+                      <v-col>
+                        <v-select
+                          v-model="selectedCategory"
+                          :items="items"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz kategorię"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
+                      </v-col>
+                      <v-col>
+                        <v-select
+                          v-model="selectedStatus"
+                          :items="statuses"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz status"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
+                      </v-col>
+                      <v-col>
+                        <v-btn @click="filterResults()">
+                          Filtruj
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-row>
+          </v-col>
+
+
         </v-sheet>
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus"
@@ -120,26 +136,25 @@ export default {
   components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
-    selectedCategory: null,
+    selectedCategory: {text: 'Wszystkie kategorie', value: 3},
     items: [
       {text: 'Spotkania', value: 0},
       {text: 'Przypomnienia', value: 1},
       {text: 'Zadania', value: 2},
-      {text: 'Wszystko', value: 3}],
-    selectedStatus: null,
+      {text: 'Wszystkie kategorie', value: 3}],
+    selectedStatus: {text: 'Wszystkie statusy', value: null},
     statuses: [
       {text: 'Publiczne', value: true},
       {text: 'Prywatne', value: false},
-      {text: 'Wszystko', value: null}],
+      {text: 'Wszystkie statusy', value: null}],
     type: 'month',
-    types: ['month', 'week', 'day'],
+    types: [
+      {text: 'Miesiąc', value: 'month'},
+      {text: 'Tydzień', value: 'week'},
+      {text: 'Dzień', value: 'day'},
+    ],
     weekday: [1, 2, 3, 4, 5, 6, 0],
     value: '',
-    typeToLabel: {
-      month: 'Miesiąc',
-      week: 'Tydzień',
-      day: 'Dzień',
-    },
     newEvents: [],
     filteredEvents: [],
     remindersList: [],
@@ -160,32 +175,6 @@ export default {
     }
   },
 
-  watch: {
-
-    selectedCategory(cat) {
-      if (cat.value === 0) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
-        console.warn('Spotkania publiczne', this.filteredEvents)
-      }
-      if (cat.value === 0) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
-        console.warn('Spotkania prywatne', this.filteredEvents)
-      }
-      if (cat.value === 1) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
-        console.warn('Przypomnienia', this.filteredEvents)
-      }
-      if (cat.value === 2) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
-        console.warn('Zadania', this.filteredEvents)
-      }
-      if (cat.value === 3) {
-        this.filteredEvents = this.newEvents
-        console.warn('Wszystko', this.filteredEvents)
-      }
-
-    },
-  },
   computed: {
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
@@ -200,6 +189,61 @@ export default {
     }
   },
   methods: {
+    filterResults() {
+      //All
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents
+        console.warn('Wszystko', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.public === true)
+        console.warn('Wszystko publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.public === false)
+        console.warn('Wszystko prywatne', this.filteredEvents)
+      }
+      // Meetings
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
+        console.warn('Spotkania prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
+        console.warn('Spotkania publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0)
+        console.warn('Spotkania wszystkie', this.filteredEvents)
+      }
+      // Reminders
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === false)
+        console.warn('Przypomnienia prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === true)
+        console.warn('Przypomnienia publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
+        console.warn('Przypomnienia wszystkie', this.filteredEvents)
+      }
+      // Tasks
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === false)
+        console.warn('Zadania prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === true)
+        console.warn('Zadania publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
+        console.warn('Zadania wszystkie', this.filteredEvents)
+      }
+    },
+
     viewDay({date}) {
       this.focus = date;
       this.type = 'day';
