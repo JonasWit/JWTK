@@ -2,7 +2,7 @@
   <layout>
     <template v-slot:content>
       <v-toolbar class="white--text" color="primary">
-        <v-toolbar-title>Przypomnienia</v-toolbar-title>
+        <v-toolbar-title>Kalendarz</v-toolbar-title>
         <v-spacer></v-spacer>
         <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
@@ -11,55 +11,93 @@
         powrócisz do dziejszej daty.
         Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
       </v-alert>
-      <div>
-        <v-sheet tile height="64" class="d-flex">
-          <v-toolbar flat>
-            <v-btn class="mr-4" color="accent" @click="setToday">
-              Dzisiaj
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small>
-                mdi-chevron-left
-              </v-icon>
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small>
-                mdi-chevron-right
-              </v-icon>
-            </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-menu bottom right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="accent" v-bind="attrs" v-on="on">
-                  <span>{{ typeToLabel[type] }}</span>
-                  <v-icon right>
-                    mdi-menu-down
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="type = 'day'">
-                  <v-list-item-title>Dzień</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'week'">
-                  <v-list-item-title>Tydzień</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'month'">
-                  <v-list-item-title>Miesiąc</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-toolbar>
+      <div class="mt-7">
+        <v-sheet tile>
+
+          <v-col>
+            <v-row>
+              <v-btn icon small color="primary" @click="prev" class="mx-2">
+                <v-icon small color="">
+                  mdi-chevron-left
+                </v-icon>
+              </v-btn>
+              <v-toolbar-title v-if="$refs.calendar">
+                {{ $refs.calendar.title }}
+              </v-toolbar-title>
+              <v-btn icon small color="primary" @click="next" class="mx-2">
+                <v-icon small>
+                  mdi-chevron-right
+                </v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-select
+                v-model="type"
+                :items="types"
+                item-text="text"
+                dense
+                outlined
+                hide-details
+                label="Zmień widok"
+              ></v-select>
+              <v-spacer></v-spacer>
+              <v-btn class="mr-4" color="accent" @click="setToday">
+                Dzisiaj
+              </v-btn>
+            </v-row>
+            <v-row>
+              <v-expansion-panels flat>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Wybierz filtry</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-row>
+                      <v-col>
+                        <v-select
+                          v-model="selectedCategory"
+                          :items="items"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz kategorię"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
+                      </v-col>
+                      <v-col>
+                        <v-select
+                          v-model="selectedStatus"
+                          :items="statuses"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz status"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
+                      </v-col>
+                      <v-col>
+                        <v-btn color="accent" class="ma-2" @click="filterResults()">
+                          Filtruj
+                        </v-btn>
+                        <v-btn color="accent" class="ma-2" @click="clearFilterResults()">
+                          Wyczyść
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-row>
+          </v-col>
+
+
         </v-sheet>
         <v-sheet height="600">
-          <v-calendar ref="calendar" v-model="focus" :events="newEvents" :type="type" color="primary"
+          <v-calendar ref="calendar" v-model="focus"
+                      :events="filteredEvents"
+                      :type="type" color="primary"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
-                      :weekdays="weekday" event-overlap-mode="stack"
-          ></v-calendar>
+                      :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
           <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
@@ -101,27 +139,45 @@ export default {
   components: {EditReminder, DeleteReminder, AddReminder, Layout},
   data: () => ({
     focus: '',
+    selectedCategory: {text: 'Wszystkie kategorie', value: 3},
+    items: [
+      {text: 'Spotkania', value: 0},
+      {text: 'Przypomnienia', value: 1},
+      {text: 'Zadania', value: 2},
+      {text: 'Wszystkie kategorie', value: 3}],
+    selectedStatus: {text: 'Wszystkie statusy', value: null},
+    statuses: [
+      {text: 'Publiczne', value: true},
+      {text: 'Prywatne', value: false},
+      {text: 'Wszystkie statusy', value: null}],
     type: 'month',
-    types: ['month', 'week', 'day'],
+    types: [
+      {text: 'Miesiąc', value: 'month'},
+      {text: 'Tydzień', value: 'week'},
+      {text: 'Dzień', value: 'day'},
+    ],
     weekday: [1, 2, 3, 4, 5, 6, 0],
     value: '',
-    typeToLabel: {
-      month: 'Miesiąc',
-      week: 'Tydzień',
-      day: 'Dzień',
-    },
     newEvents: [],
+    filteredEvents: [],
     remindersList: [],
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     checkbox: true,
-    colors: ['blue', '#ffaa2d', 'cyan'],
     events: [],
   }),
-  mounted() {
-    this.$refs.calendar.checkChange();
+  async mounted() {
+    try {
+      this.$refs.calendar.checkChange();
+      await this.getEvents();
+      this.filteredEvents = this.newEvents
+      console.warn('filtered events', this.filteredEvents)
+    } catch (e) {
+      console.error('error in fetching event data', e)
+    }
   },
+
   computed: {
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
@@ -133,11 +189,69 @@ export default {
       if (this.selectedEvent.category === 2) {
         return "Zadanie"
       }
-
     }
   },
   methods: {
+    filterResults() {
+      //All
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents
+        console.warn('Wszystko', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.public === true)
+        console.warn('Wszystko publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 3 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.public === false)
+        console.warn('Wszystko prywatne', this.filteredEvents)
+      }
+      // Meetings
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
+        console.warn('Spotkania prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
+        console.warn('Spotkania publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 0 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0)
+        console.warn('Spotkania wszystkie', this.filteredEvents)
+      }
+      // Reminders
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === false)
+        console.warn('Przypomnienia prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === true)
+        console.warn('Przypomnienia publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 1 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
+        console.warn('Przypomnienia wszystkie', this.filteredEvents)
+      }
+      // Tasks
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === false) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === false)
+        console.warn('Zadania prywatne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === true) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === true)
+        console.warn('Zadania publiczne', this.filteredEvents)
+      }
+      if (this.selectedCategory.value === 2 && this.selectedStatus.value === null) {
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
+        console.warn('Zadania wszystkie', this.filteredEvents)
+      }
+    },
 
+    clearFilterResults() {
+      this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+      this.selectedStatus = {text: 'Wszystkie statusy', value: null}
+      this.filteredEvents = this.newEvents
+    },
 
     viewDay({date}) {
       this.focus = date;
@@ -155,7 +269,7 @@ export default {
     showEvent({nativeEvent, event}) {
       const open = () => {
         this.selectedEvent = event;
-        console.log('selected event', this.selectedEvent);
+        // console.log('selected event', this.selectedEvent);
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
@@ -170,7 +284,7 @@ export default {
     async getEvents() {
       try {
         this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
-        console.warn('reminders', this.remindersList);
+        // console.warn('reminders', this.remindersList);
         let newEvents = [];
         this.remindersList.forEach(x => {
           newEvents.push({
@@ -178,18 +292,30 @@ export default {
             details: x.message,
             start: this.eventStartDate(x),
             end: this.eventEndDate(x),
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
+            color: this.setColor(x),
             id: x.id,
             public: x.public,
             category: x.reminderCategory,
             timed: x.allDayEvent
-
           });
         });
         console.warn('nowe eventy', newEvents);
         this.newEvents = newEvents;
       } catch (e) {
         console.error('calendar fetch error', e)
+      }
+
+    },
+
+    setColor(item) {
+      if (item.reminderCategory === 0) {
+        return "blue"
+      }
+      if (item.reminderCategory === 1) {
+        return "orange lighten-1"
+      }
+      if (item.reminderCategory === 2) {
+        return "green"
       }
 
     },
@@ -202,7 +328,6 @@ export default {
         const date = new Date(item.start)
         const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
         return formatDateToLocaleTimeZone(isoDateTime)
-
       }
     },
     eventEndDate(item) {
@@ -216,12 +341,17 @@ export default {
         return formatDateToLocaleTimeZone(isoDateTime)
       }
     },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
-    },
-    actionDone() {
-      this.getEvents();
-      this.selectedOpen = false;
+    async actionDone() {
+      try {
+        await this.getEvents();
+        this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+        this.selectedStatus = {text: 'Wszystkie statusy', value: null}
+        this.filteredEvents = this.newEvents
+        this.selectedOpen = false;
+      } catch (e) {
+        console.error('error in refreshing data', e)
+      }
+
     },
   }
 
