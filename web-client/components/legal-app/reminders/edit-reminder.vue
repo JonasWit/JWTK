@@ -176,6 +176,7 @@ export default {
     this.form.dateTo = (this.eventForAction.end).substr(0, 10);
     this.form.timeTo = (this.eventForAction.end).substr(10, 6);
     this.form.selectedCategory = this.selectedDefault;
+
   },
 
   computed: {
@@ -197,8 +198,8 @@ export default {
       } else {
         const date = new Date(this.form.dateFrom)
         if (typeof this.form.timeFrom === 'string') {
-          const hours = this.form.timeFrom.match(/^(\d+)/)[1]
-          const minutes = this.form.timeFrom.match(/:(\d+)/)[1]
+          const hours = this.form.timeFrom.split(':')[0]
+          const minutes = this.form.timeFrom.split(':')[1]
           date.setHours(hours)
           date.setMinutes(minutes)
         } else {
@@ -215,8 +216,8 @@ export default {
       } else {
         const date = new Date(this.form.dateTo)
         if (typeof this.form.timeTo === 'string') {
-          const hours = this.form.timeTo.match(/^(\d+)/)[1]
-          const minutes = this.form.timeTo.match(/:(\d+)/)[1]
+          const hours = this.form.timeTo.split(':')[0]
+          const minutes = this.form.timeTo.split(':')[1]
           date.setHours(hours)
           date.setMinutes(minutes)
         } else {
@@ -250,7 +251,6 @@ export default {
           let reminderId = this.eventForAction.id;
           console.warn('edited reminder', newReminder)
           await this.$axios.$put(updateReminder(reminderId), newReminder);
-
           this.resetForm()
           this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
         } catch (error) {
@@ -258,9 +258,9 @@ export default {
           handleError(error)
         } finally {
           this.$emit('action-completed');
+          this.loading = false;
           this.dialog = false;
         }
-
       }
     },
     resetForm() {
