@@ -48,7 +48,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }   
         
         [HttpGet("list-all")]
-        public async Task<IActionResult> GetAllDeadlines(long caseId, string from, string to)
+        public async Task<IActionResult> GetAllDeadlines(string from, string to)
         {
             try
             {
