@@ -163,6 +163,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
         }
         
         [HttpDelete("case/{caseId}")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> DeleteCase(long caseId)
         {
             try
