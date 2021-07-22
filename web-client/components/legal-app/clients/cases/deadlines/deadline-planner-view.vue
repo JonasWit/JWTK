@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "deadline-planner-view",
@@ -103,12 +103,11 @@ export default {
       week: 'Tydzień',
       day: 'Dzień',
     },
+    newEvents: []
   }),
 
   computed: {
     ...mapState('legal-app-client-store', ['deadlines']),
-    ...mapGetters('legal-app-client-store', ['newEvents'])
-
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDeadlines']),
@@ -125,9 +124,37 @@ export default {
     next() {
       this.$refs.calendar.next()
     },
-    getEvents() {
-      this.$emit('deadlines-needed');
+    eventDate(item) {
+      return new Date(item.deadline).toISOString().substr(0, 10)
+      // const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      // return formatDateToLocaleTimeZone(isoDateTime)
     },
+    async getEvents() {
+      try {
+        let newEvents = [];
+        this.deadlines.forEach(x => {
+          newEvents.push({
+            name: x.case.name,
+            signature: x.case.signature,
+            details: x.message,
+            start: this.eventDate(x),
+            end: this.eventDate(x),
+            color: 'error',
+            id: x.id,
+            timed: false
+          });
+        });
+        console.warn('nowe deadlines', newEvents);
+        this.newEvents = newEvents;
+      } catch (e) {
+        console.error('calendar fetch error', e)
+      }
+
+    },
+
+    // getEvents() {
+    //   this.$emit('deadlines-needed');
+    // },
 
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a
