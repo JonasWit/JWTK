@@ -330,6 +330,8 @@ export const actions = {
         const dateB = new Date(b.deadline)
         return dateA - dateB
       });
+
+
       console.warn('deadlines', deadlines)
       commit('updateCaseDeadlinesList', {deadlines})
 

@@ -88,8 +88,6 @@
               </v-expansion-panels>
             </v-row>
           </v-col>
-
-
         </v-sheet>
         <v-sheet height="600">
           <v-calendar ref="calendar" v-model="focus"
@@ -98,7 +96,7 @@
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
-          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
+          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedEvent" offset-x>
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
                 <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
@@ -109,8 +107,7 @@
                 <v-card-subtitle>Data początkowa: {{ selectedEvent.start }}</v-card-subtitle>
                 <v-card-subtitle>Data końcowa: {{ selectedEvent.end }}</v-card-subtitle>
                 <v-card-subtitle>Kategoria: {{ categoryToDisplay }}</v-card-subtitle>
-                <v-checkbox v-model="checkbox" label="Status publiczny"
-                            :value="selectedEvent.public" disabled></v-checkbox>
+                <v-card-subtitle>Status: {{ labelCondition(selectedEvent.public) }}</v-card-subtitle>
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="secondary" @click="selectedOpen = false">
@@ -133,6 +130,7 @@ import AddReminder from "@/components/legal-app/reminders/add-reminder";
 import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
 import EditReminder from "@/components/legal-app/reminders/edit-reminder";
 import {formatDateToLocaleTimeZone, formatDateToLocaleTimeZoneWithoutTime} from "@/data/date-extensions";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "index",
@@ -164,8 +162,8 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    checkbox: true,
     events: [],
+    offset: true,
   }),
   async mounted() {
     try {
@@ -177,8 +175,8 @@ export default {
       console.error('error in fetching event data', e)
     }
   },
-
   computed: {
+    ...mapState('legal-app-client-store', ['deadlines']),
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
         return "Spotkanie"
@@ -192,6 +190,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('legal-app-client-store', ['getCaseDeadlines']),
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
@@ -246,13 +245,11 @@ export default {
         console.warn('Zadania wszystkie', this.filteredEvents)
       }
     },
-
     clearFilterResults() {
       this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
       this.selectedStatus = {text: 'Wszystkie statusy', value: null}
       this.filteredEvents = this.newEvents
     },
-
     viewDay({date}) {
       this.focus = date;
       this.type = 'day';
@@ -269,8 +266,7 @@ export default {
     showEvent({nativeEvent, event}) {
       const open = () => {
         this.selectedEvent = event;
-        // console.log('selected event', this.selectedEvent);
-        this.selectedElement = nativeEvent.target;
+        console.log('selected event', event);
         requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
       };
       if (this.selectedOpen) {
@@ -299,14 +295,26 @@ export default {
             timed: x.allDayEvent
           });
         });
-        console.warn('nowe eventy', newEvents);
+        this.deadlines.forEach(x => {
+          newEvents.push({
+            name: x.case.name,
+            signature: x.case.signature,
+            details: x.message,
+            start: this.eventDate(x),
+            end: this.eventDate(x),
+            color: 'error',
+            id: x.id,
+            timed: false
+          });
+        });
+
+        console.warn('nowe eventy plus deadlinsy', newEvents);
         this.newEvents = newEvents;
       } catch (e) {
         console.error('calendar fetch error', e)
       }
 
     },
-
     setColor(item) {
       if (item.reminderCategory === 0) {
         return "blue"
@@ -317,7 +325,11 @@ export default {
       if (item.reminderCategory === 2) {
         return "green"
       }
-
+    },
+    eventDate(item) {
+      return new Date(item.deadline).toISOString().substr(0, 10)
+      // const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      // return formatDateToLocaleTimeZone(isoDateTime)
     },
     eventStartDate(item) {
       if (item.allDayEvent) {
@@ -351,8 +363,13 @@ export default {
       } catch (e) {
         console.error('error in refreshing data', e)
       }
-
     },
+    labelCondition(val) {
+      if (val) {
+        return "Status publiczny"
+      }
+      return "Status prywatny"
+    }
   }
 
 };

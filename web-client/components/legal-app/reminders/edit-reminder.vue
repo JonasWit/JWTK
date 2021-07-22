@@ -176,6 +176,7 @@ export default {
     this.form.dateTo = (this.eventForAction.end).substr(0, 10);
     this.form.timeTo = (this.eventForAction.end).substr(10, 6);
     this.form.selectedCategory = this.selectedDefault;
+
   },
 
   computed: {
@@ -197,8 +198,8 @@ export default {
       } else {
         const date = new Date(this.form.dateFrom)
         if (typeof this.form.timeFrom === 'string') {
-          const hours = this.form.timeFrom.match(/^(\d+)/)[1]
-          const minutes = this.form.timeFrom.match(/:(\d+)/)[1]
+          const hours = this.form.timeFrom.split(':')[0]
+          const minutes = this.form.timeFrom.split(':')[1]
           date.setHours(hours)
           date.setMinutes(minutes)
         } else {
@@ -215,8 +216,8 @@ export default {
       } else {
         const date = new Date(this.form.dateTo)
         if (typeof this.form.timeTo === 'string') {
-          const hours = this.form.timeTo.match(/^(\d+)/)[1]
-          const minutes = this.form.timeTo.match(/:(\d+)/)[1]
+          const hours = this.form.timeTo.split(':')[0]
+          const minutes = this.form.timeTo.split(':')[1]
           date.setHours(hours)
           date.setMinutes(minutes)
         } else {
@@ -256,10 +257,10 @@ export default {
           this.$notifier.showErrorMessage("Wystąpił bład. Spróbuj ponownie!");
           handleError(error)
         } finally {
-          this.dialog = false;
           this.$emit('action-completed');
+          this.loading = false;
+          this.dialog = false;
         }
-
       }
     },
     resetForm() {

@@ -219,6 +219,7 @@ export default {
             reminderCategory: this.form.selectedCategory.value,
             allDayEvent: this.form.switcher
           };
+
           console.warn('nowy reminder', newReminder);
           await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
           this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");

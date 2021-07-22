@@ -10,7 +10,6 @@
         Zarządzaj terminami dla Sprawy! Dodawaj terminy procesowe i inne. Skorzystaj z widoku listy lub kalendarza, aby
         sprawdzić nadchodzące terminy. Nie masz jeszcze żadnego terminu. Użyj ikonki "plus", aby dodać pierwszy termin.
       </v-alert>
-
       <v-tabs v-model="tab" centered dark icons-and-text background-color="primary">
         <v-tabs-slider></v-tabs-slider>
         <v-tab href="#tab-1">
@@ -40,17 +39,16 @@
                   </v-card-text>
                 </v-col>
                 <v-col>
-                  <delete-deadline :deadline-for-action="item" v-on:delete-completed="deleteDone"/>
+                  <delete-deadline :deadline-for-action="item" v-on:delete-completed="actionDone"/>
                 </v-col>
               </v-row>
             </v-card>
           </v-tab-item>
           <v-tab-item :value="'tab-2'">
-            <deadline-planner-view v-on:deadlines-needed="deleteDone"/>
+            <deadline-planner-view v-on:deadlines-needed="actionDone"/>
           </v-tab-item>
         </v-tabs-items>
       </v-tabs>
-
     </template>
   </layout>
 </template>
@@ -77,10 +75,8 @@ export default {
   },
   computed: {
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
-
     todayDate() {
       return (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-
     },
     query() {
       let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
@@ -88,13 +84,12 @@ export default {
       return `?from=${fromDate}&to=${toDate}`;
     },
   },
-
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails', 'getCaseDeadlines']),
     formatDate(date) {
       return formatDate(date)
     },
-    async deleteDone() {
+    async actionDone() {
       let caseId = this.$route.params.case
       let query = this.query
       await this.getCaseDeadlines({caseId, query})
