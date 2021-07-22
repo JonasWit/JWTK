@@ -1,10 +1,11 @@
 ﻿<template>
-  <v-container fluid>
+  <v-container>
     <v-row no-gutters>
-      <v-col cols="2">
-        <navigation-drawer/>
-      </v-col>
-      <v-col cols="9" class="my-5">
+      <!--      <v-col cols="2">-->
+      <!--                <navigation-drawer/>-->
+      <!--      </v-col>-->
+      <v-col cols="12" class="my-5">
+        <breadcrumbs/>
         <slot name="content">
         </slot>
       </v-col>
@@ -15,10 +16,11 @@
 
 
 import NavigationDrawer from "./navigation-drawer";
+import Breadcrumbs from "@/components/legal-app/breadcrumbs";
 
 export default {
   name: "layout",
-  components: {NavigationDrawer},
+  components: {Breadcrumbs, NavigationDrawer},
 };
 </script>
 

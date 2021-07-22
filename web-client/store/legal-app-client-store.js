@@ -1,4 +1,4 @@
-﻿import {amountNet, groupByKey, rateNet, vatAmount, vatRate} from "@/data/functions";
+﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
 
 const initState = () => ({
@@ -282,7 +282,7 @@ export const actions = {
       commit('updateClientCaseDetails', {clientCaseDetails});
       console.warn('case details:', clientCaseDetails)
     } catch (error) {
-      this.$notifier.showErrorMessage(error.response.data);
+      handleError(error)
     }
   },
 

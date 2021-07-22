@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-item v-for="item in billingDataList" :key="item.id">
+    <v-list-item v-for="item in billingDataFromFetch" :key="item.id">
       <v-col>
         <v-list-item-content>
           <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>

@@ -53,7 +53,7 @@
   </layout>
 </template>
 <script>
-import {addDays, formatDate} from "@/data/date-extensions";
+import {formatDate, queryDate, todayDate} from "@/data/date-extensions";
 import Layout from "@/components/legal-app/layout";
 import AddDeadline from "@/components/legal-app/clients/cases/deadlines/add-deadline";
 import {mapActions, mapState} from "vuex";
@@ -76,13 +76,11 @@ export default {
   computed: {
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
     todayDate() {
-      return (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+      return todayDate()
     },
     query() {
-      let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-      let toDate = (addDays(this.todayDate, 30)).toISOString().substr(0, 10)
-      return `?from=${fromDate}&to=${toDate}`;
-    },
+      return queryDate(this.todayDate)
+    }
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails', 'getCaseDeadlines']),
