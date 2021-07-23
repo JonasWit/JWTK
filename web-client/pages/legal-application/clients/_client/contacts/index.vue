@@ -37,13 +37,13 @@
                 <v-col> Nazwa: {{ item.title }}</v-col>
                 <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
               </v-col>
+              <v-spacer></v-spacer>
               <v-col>
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
                 <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
               <v-col>
-                <delete-contact-dialog :selected-contact="item"/>
-                <edit-contact-dialog :selected-contact="item"/>
+
               </v-col>
             </v-row>
           </v-expansion-panel-header>

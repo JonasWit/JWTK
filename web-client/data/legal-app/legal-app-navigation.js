@@ -26,7 +26,7 @@ export const legalappRoute = {
       route: '/legal-application/archive',
       name: 'Archiwum Klientów',
       icon: 'mdi-archive',
-      text: 'Zajrzyj do zarchiwzowanych spraw lub klinetów'
+      text: 'Lista zarchiwzowanych klinetów'
     },
   ],
 };

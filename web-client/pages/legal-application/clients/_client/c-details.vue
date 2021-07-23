@@ -22,15 +22,9 @@
       </v-row>
     </template>
   </layout>
-
-
 </template>
-
 <script>
-
-
 import Layout from "@/components/legal-app/layout";
-
 
 export default {
   name: "c-details",
@@ -81,10 +75,7 @@ export default {
           name: 'Archiwum Spraw',
           text: 'Lista zarchiwizowanych Spraw',
           icon: 'mdi-briefcase-account-outline'
-
         },
-
-
       ],
     }
   },

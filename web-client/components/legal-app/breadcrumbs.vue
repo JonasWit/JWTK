@@ -13,76 +13,124 @@
 </template>
 
 <script>
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "breadcrumbs",
+  fetch() {
+    let clientId = this.$route.params.client
+    if (clientId) {
+      return this.getClientData({clientId})
+    }
+  },
   computed: {
+    ...mapState('legal-app-client-store', ['clientDataFromFetch']),
     crumbs() {
       const fullPath = this.$route.fullPath
-      console.log('full path', fullPath)
       const params = fullPath.substring(1).split('/')
-      console.log('params', params)
       const crumbs = []
       let path = ''
 
       params.forEach((param, index, {length}) => {
         path = `${path}/${param}`
-        console.log('path', path)
         const match = this.$router.match(path)
         if (match.name !== 'index') {
-          console.log('match path', match.name)
           if (index === length - 1) {
             crumbs.push({
               text: this.pathName(match.name),
               disabled: true,
             })
           } else {
-            crumbs.push({
-              text: this.pathName(match.name),
-              disabled: false,
-              href: path + '/',
-            })
+            crumbs.push(
+              this.pathName(match.name, path)
+            )
           }
         }
       })
       return crumbs
     },
   },
-
   methods: {
-    pathName(name) {
+    ...mapActions('legal-app-client-store', ['getClientData']),
+    pathName(name, path) {
+      if (name === null) {
+        return {
+          text: this.clientDataFromFetch.name,
+          disabled: true,
+          href: path + '/',
+        }
+      }
       if (name === 'legal-application') {
-        return 'Strona główna'
+        return {
+          text: 'Strona główna',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients') {
-        return 'Lista Klientów'
+        return {
+          text: 'Lista Klientów',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-c-details') {
-        return 'Panel Klienta'
+        return {
+          text: 'Panel Klienta',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-contacts') {
-        return 'Kontakty'
+        return {
+          text: 'Kontakty',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-cases') {
-        return 'Sprawy'
+        return {
+          text: 'Sprawy',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-notes') {
-        return 'Notatki'
+        return {
+          text: 'Notatki',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-financials') {
-        return 'Rozliczenia'
+        return {
+          text: 'Rozliczenia',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-clients-client-archived-cases') {
-        return 'Archiwum spraw'
+        return {
+          text: 'Archiwum spraw',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-reminders') {
-        return 'Kalendarz'
+        return {
+          text: 'Kalendarz',
+          disabled: false,
+          href: path + '/',
+        }
       }
       if (name === 'legal-application-archive') {
-        return 'Archiwum Klientów'
+        return {
+          text: 'Archiwum Klientów',
+          disabled: false,
+          href: path + '/',
+        }
       }
-
     }
-
   }
 }
 </script>
