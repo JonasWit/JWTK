@@ -51,7 +51,7 @@ export default {
         console.error('creating contact error', error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.$nuxt.refresh()
+        this.$emit('action-completed');
         this.loading = false;
         this.dialog = false;
       }

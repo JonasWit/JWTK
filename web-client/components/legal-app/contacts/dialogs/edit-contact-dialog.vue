@@ -70,13 +70,10 @@ export default {
 
   }),
   fetch() {
-    // this.contact = this.selectedContact;
     this.form.title = this.selectedContact.title;
     this.form.name = this.selectedContact.name;
     this.form.surname = this.selectedContact.surname;
     this.form.comment = this.selectedContact.comment;
-
-
   },
   methods: {
     async saveContactChange() {
@@ -89,7 +86,6 @@ export default {
         name: this.form.name,
         surname: this.form.surname,
         comment: this.form.comment,
-
       }
 
       try {
@@ -105,7 +101,6 @@ export default {
         this.loading = false;
         this.dialog = false;
       }
-
     },
     resetForm() {
       this.$refs.editContactNameForm.reset();

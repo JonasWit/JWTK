@@ -15,7 +15,6 @@
       <div class="mr-5">
         <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="themeSwitch"/>
       </div>
-
       <if-auth>
         <template v-slot:allowed="{portalAdmin, legalAppAllowed, client}">
           <div class="d-flex align-center">

@@ -31,7 +31,6 @@
 
 <script>
 
-import {mapActions} from "vuex";
 import {deleteContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
@@ -53,7 +52,6 @@ export default {
   }),
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
     async deleteEmail() {
       try {
         let clientId = this.$route.params.client
@@ -65,9 +63,7 @@ export default {
         console.error('creating contact error', error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        let clientId = this.$route.params.client;
-        let contactId = this.selectedContact.id;
-        await this.getContactDetailsFromFetch({clientId, contactId})
+        this.$emit('action-completed');
         this.loading = false;
         this.dialog = false;
       }

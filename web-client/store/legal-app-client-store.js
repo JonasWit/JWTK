@@ -8,11 +8,7 @@ const initState = () => ({
   clientDataFromFetch: [],
 
   //Contact-details and add-email dialogs
-  contactDetailsFromFetch: [],
-  emailsList: [],
-  phoneNumbersList: [],
-  addressesList: [],
-
+  contactDetailsFromFetch: null,
 
   //Financials records
   financialRecordsFromFetch: [],
@@ -41,17 +37,6 @@ const initState = () => ({
 export const state = initState;
 
 export const getters = {
-  //Contact-details and add-email dialogs
-
-  emailsList(state) {
-    return state.contactDetailsFromFetch.emails;
-  },
-  phoneNumbersList(state) {
-    return state.contactDetailsFromFetch.phoneNumbers;
-  },
-  addressesList(state) {
-    return state.contactDetailsFromFetch.physicalAddresses;
-  },
   //Financials records
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
@@ -88,14 +73,11 @@ export const getters = {
 export const mutations = {
 
   setClientForAction(state, client) {
-    console.warn('mutation done for setClientForAction', client);
     state.clientForAction = client;
   },
   //Contact-details and add-email dialogs
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
-    console.warn('mutation done for updateContactDetailsList', contactDetailsFromFetch);
     state.contactDetailsFromFetch = contactDetailsFromFetch;
-
   },
 //Financials records
   updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
@@ -119,7 +101,6 @@ export const mutations = {
 
   //Client List
   updateClientDataFromFetch(state, {clientDataFromFetch}) {
-    console.warn('mutation done for updateClientDataFromFetch', clientDataFromFetch);
     state.clientDataFromFetch = clientDataFromFetch;
   },
 
@@ -161,13 +142,14 @@ export const mutations = {
 
 export const actions = {
   //Contact-details and add-email dialogs
-  getContactDetailsFromFetch({commit}, {clientId, contactId}) {
-    return this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
-      .then((contactDetailsFromFetch) => {
-        commit('updateContactDetailsList', {contactDetailsFromFetch});
-      })
-      .catch(() => {
-      });
+  async getContactDetailsFromFetch({commit}, {clientId, contactId}) {
+    try {
+      let contactDetailsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
+      commit('updateContactDetailsList', {contactDetailsFromFetch});
+    } catch (error) {
+      handleError(error)
+    }
+
   },
 //Financials records
   getFinancialRecordsFromFetch({commit}, {clientId, query}) {
@@ -210,7 +192,6 @@ export const actions = {
     try {
       let clientDataFromFetch = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
       commit('updateClientDataFromFetch', {clientDataFromFetch});
-      console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch);
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }

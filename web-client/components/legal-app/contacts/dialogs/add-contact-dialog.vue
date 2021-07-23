@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
@@ -75,7 +74,7 @@ export default {
 
   }),
   methods: {
-    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
+
     async handleSubmit() {
       if (!this.$refs.addNewContactForm.validate()) return;
       if (this.loading) return;
@@ -97,7 +96,7 @@ export default {
         console.error('creating contact error', error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.$nuxt.refresh()
+        this.$emit('action-completed');
         Object.assign(this.$data, this.$options.data.call(this));
         this.loading = false;
         this.dialog = false;

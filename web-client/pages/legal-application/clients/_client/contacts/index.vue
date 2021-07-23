@@ -16,10 +16,10 @@
           </template>
         </v-autocomplete>
         <template v-slot:extension>
-          <add-contact-dialog/>
+          <add-contact-dialog v-on:action-completed="actionDone"/>
         </template>
       </v-toolbar>
-      <v-alert :value="alertMessage" v-if="contactList.length === 0" elevation="5" text type="info" dismissible
+      <v-alert :value="alertMessage" v-if="!contactList" elevation="5" text type="info" dismissible
                close-text="Zamknij">
         Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
         Następnie wybierz sekcję, którą chcesz uzupełnić.
@@ -42,9 +42,7 @@
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
                 <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
-              <v-col>
 
-              </v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -59,7 +57,7 @@
 <script>
 import Layout from "@/components/legal-app/layout";
 import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contact-dialog";
-import {hasOccurrences} from "@/data/functions";
+import {handleError, hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 import {formatDate} from "@/data/date-extensions";
@@ -77,7 +75,7 @@ const searchItemFactory = (name, id) => ({
 export default {
   name: "index",
   components: {EditContactDialog, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     contactItemsFromFetch: [],
@@ -125,6 +123,14 @@ export default {
       } catch (error) {
         console.error('creating contact error', error)
         this.$notifier.showErrorMessage(error.response.data)
+      }
+    },
+
+    async actionDone() {
+      try {
+        await this.getContactsList();
+      } catch (error) {
+        handleError(error)
       }
     },
 
