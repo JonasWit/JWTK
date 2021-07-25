@@ -75,13 +75,38 @@
     <v-sheet height="600">
       <v-calendar v-model="focus" locale="pl" ref="calendar" :weekdays="weekday" :type="type"
                   :events="newEvents" :event-overlap-mode="mode" :event-overlap-threshold="30" @change="getEvents"
-                  @click:more="viewDay" @click:date="viewDay"></v-calendar>
+                  @click:more="viewDay" @click:date="viewDay" @click:event="showEvent"></v-calendar>
+      <v-menu v-model="selectedOpen" :close-on-content-click="false"
+              :activator="selectedEvent">
+        <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
+          <v-toolbar :color="selectedEvent.color" dark>
+            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-card-subtitle>Sprawa: {{ selectedEvent.details }}</v-card-subtitle>
+            <v-card-subtitle>Termin: {{ selectedEvent.start }}</v-card-subtitle>
+            <v-card-subtitle>Sygnatura: {{ selectedEvent.signature }}</v-card-subtitle>
+            <v-alert dense elevation="5" text type="info">Zarządzanie terminami dla spraw nie jest możliwe z poziomu
+              kalendarza. Kalendarz stanowi
+              jedynie podgląd zbliżających się terminów. Proszę wejść w zakładkę 'LISTA TERMINÓW', aby dokonać zmian.
+            </v-alert>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text color="secondary" @click="selectedOpen = false">
+              Anuluj
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+
+
     </v-sheet>
   </div>
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "deadline-planner-view",
@@ -103,7 +128,10 @@ export default {
       week: 'Tydzień',
       day: 'Dzień',
     },
-    newEvents: []
+    newEvents: [],
+    selectedEvent: {},
+    selectedElement: null,
+    selectedOpen: false,
   }),
 
   computed: {
@@ -124,19 +152,31 @@ export default {
     next() {
       this.$refs.calendar.next()
     },
+    showEvent({nativeEvent, event}) {
+      const open = () => {
+        this.selectedEvent = event;
+        console.log('selected event', event);
+        requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true));
+      };
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        requestAnimationFrame(() => requestAnimationFrame(() => open()));
+      } else {
+        open();
+      }
+      nativeEvent.stopPropagation();
+    },
     eventDate(item) {
       return new Date(item.deadline).toISOString().substr(0, 10)
-      // const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-      // return formatDateToLocaleTimeZone(isoDateTime)
     },
     async getEvents() {
       try {
         let newEvents = [];
         this.deadlines.forEach(x => {
           newEvents.push({
-            name: x.case.name,
+            details: x.case.name,
             signature: x.case.signature,
-            details: x.message,
+            name: x.message,
             start: this.eventDate(x),
             end: this.eventDate(x),
             color: 'error',
@@ -144,23 +184,12 @@ export default {
             timed: false
           });
         });
-        console.warn('nowe deadlines', newEvents);
         this.newEvents = newEvents;
-      } catch (e) {
-        console.error('calendar fetch error', e)
+      } catch (error) {
+        handleError(error)
       }
-
     },
-
-    // getEvents() {
-    //   this.$emit('deadlines-needed');
-    // },
-
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
-    },
-  }
-  ,
+  },
 }
 </script>
 

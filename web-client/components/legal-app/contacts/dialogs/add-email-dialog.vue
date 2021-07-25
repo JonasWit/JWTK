@@ -24,23 +24,20 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn text color="primary" @click="dialog=false">
+          <v-btn text color="error" @click="dialog=false">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveNewEmail()">
             Dodaj
           </v-btn>
-
         </v-card-actions>
       </v-card>
     </v-form>
   </v-dialog>
 </template>
-
 <script>
 
-import {mapActions} from "vuex";
 import {emailRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
@@ -68,7 +65,6 @@ export default {
   }),
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
     async saveNewEmail() {
       if (!this.$refs.addNewEmailForm.validate()) return;
       if (this.loading) return;
@@ -88,9 +84,7 @@ export default {
         console.error('creating contact error', error);
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        let clientId = this.$route.params.client;
-        let contactId = this.selectedContact.id;
-        await this.getContactDetailsFromFetch({clientId, contactId});
+        this.$emit('action-completed');
         this.loading = false;
         this.dialog = false;
       }

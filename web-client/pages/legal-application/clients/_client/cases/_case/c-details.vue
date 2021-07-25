@@ -2,7 +2,7 @@
   <layout>
     <template v-slot:content>
       <v-container>
-        <h1>test</h1>
+        <h1>{{ clientCaseDetails.name }} {{ clientCaseDetails.signature }}</h1>
         <v-row>
           <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
             <v-col>
@@ -26,10 +26,12 @@
 </template>
 <script>
 import Layout from "@/components/legal-app/layout";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "c-details",
   components: {Layout},
+
   data: () => ({
     client: null,
     case: null,
@@ -37,8 +39,8 @@ export default {
   async fetch() {
     this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`)
     this.case = await this.$axios.$get(`/api/legal-app-cases/case/${this.$route.params.case}`)
-
-
+    let caseId = this.$route.params.case
+    await this.getCaseDetails({caseId})
   },
   async asyncData({params}) {
     return {
@@ -73,6 +75,12 @@ export default {
         },
       ]
     }
+  },
+  computed: {
+    ...mapState('legal-app-client-store', ['clientCaseDetails'])
+  },
+  methods: {
+    ...mapActions('legal-app-client-store', ['getCaseDetails'])
   }
 
 }

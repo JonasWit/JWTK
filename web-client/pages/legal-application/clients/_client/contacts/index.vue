@@ -16,10 +16,10 @@
           </template>
         </v-autocomplete>
         <template v-slot:extension>
-          <add-contact-dialog/>
+          <add-contact-dialog v-on:action-completed="actionDone"/>
         </template>
       </v-toolbar>
-      <v-alert :value="alertMessage" v-if="contactList.length === 0" elevation="5" text type="info" dismissible
+      <v-alert :value="alertMessage" v-if="!contactList" elevation="5" text type="info" dismissible
                close-text="Zamknij">
         Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
         Następnie wybierz sekcję, którą chcesz uzupełnić.
@@ -37,14 +37,12 @@
                 <v-col> Nazwa: {{ item.title }}</v-col>
                 <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
               </v-col>
+              <v-spacer></v-spacer>
               <v-col>
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
                 <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
-              <v-col>
-                <delete-contact-dialog :selected-contact="item"/>
-                <edit-contact-dialog :selected-contact="item"/>
-              </v-col>
+
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -59,12 +57,12 @@
 <script>
 import Layout from "@/components/legal-app/layout";
 import AddContactDialog from "@/components/legal-app/contacts/dialogs/add-contact-dialog";
-import {hasOccurrences} from "@/data/functions";
+import {handleError, hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 import {formatDate} from "@/data/date-extensions";
-import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
+import {mapActions} from "vuex";
 
 
 const searchItemFactory = (name, id) => ({
@@ -77,7 +75,7 @@ const searchItemFactory = (name, id) => ({
 export default {
   name: "index",
   components: {EditContactDialog, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     contactItemsFromFetch: [],
@@ -89,7 +87,8 @@ export default {
   }),
 
   async fetch() {
-    await this.getContactsList()
+    let clientId = this.$route.params.client
+    await this.getContactsList({clientId})
     setTimeout(() => {
       this.alertMessage = true
     }, 500)
@@ -112,30 +111,21 @@ export default {
     },
   },
   methods: {
-    async getContactsList() {
+    ...mapActions('legal-app-client-store', ['getContactsList']),
+    async actionDone() {
       try {
         let clientId = this.$route.params.client
-        this.contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
-        this.contactItemsFromFetch.sort((a, b) => {
-          let contactA = new Date(a.created)
-          let contactB = new Date(b.created)
-          return contactB - contactA;
-        })
-        this.contactList = this.contactItemsFromFetch;
+        await this.getContactsList({clientId});
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data)
+        handleError(error)
       }
     },
-
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
-
     formatDate(date) {
       return formatDate(date)
     },
-
   }
 };
 </script>

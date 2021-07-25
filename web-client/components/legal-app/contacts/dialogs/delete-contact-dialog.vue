@@ -1,14 +1,9 @@
 <template>
   <v-dialog v-model="dialog" :value="selectedContact" persistent width="500">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn class="mx-2" medium color="error" v-on="{ ...tooltip, ...dialog }">
-            Usuń kontakt
-          </v-btn>
-        </template>
-        <span>Usuń Kontakt</span>
-      </v-tooltip>
+      <v-btn class="mx-2" medium color="error" v-on="{ ...dialog }">
+        Usuń kontakt
+      </v-btn>
     </template>
     <v-card>
       <v-card-title class="justify-center">Usuń Kontakt</v-card-title>
@@ -56,7 +51,7 @@ export default {
         console.error('creating contact error', error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.$nuxt.refresh()
+        this.$emit('action-completed');
         this.loading = false;
         this.dialog = false;
       }

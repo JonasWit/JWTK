@@ -111,8 +111,17 @@ export function formatDateToLocaleTimeZoneWithoutTime(date) {
   if (day.length < 2) {
     day = '0' + day;
   }
-
   return [year, month, day,].join('-');
+}
+
+export function todayDate() {
+  return (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+}
+
+export function queryDate(date) {
+  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+  let toDate = (addDays(date, 30)).toISOString().substr(0, 10)
+  return `?from=${fromDate}&to=${toDate}`;
 }
 
 

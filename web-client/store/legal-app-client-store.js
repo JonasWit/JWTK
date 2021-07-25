@@ -1,5 +1,6 @@
-﻿import {amountNet, groupByKey, rateNet, vatAmount, vatRate} from "@/data/functions";
+﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
+import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 const initState = () => ({
   //Clients
@@ -8,11 +9,8 @@ const initState = () => ({
   clientDataFromFetch: [],
 
   //Contact-details and add-email dialogs
-  contactDetailsFromFetch: [],
-  emailsList: [],
-  phoneNumbersList: [],
-  addressesList: [],
-
+  contactDetailsFromFetch: null,
+  contactItemsFromFetch: [],
 
   //Financials records
   financialRecordsFromFetch: [],
@@ -41,17 +39,6 @@ const initState = () => ({
 export const state = initState;
 
 export const getters = {
-  //Contact-details and add-email dialogs
-
-  emailsList(state) {
-    return state.contactDetailsFromFetch.emails;
-  },
-  phoneNumbersList(state) {
-    return state.contactDetailsFromFetch.phoneNumbers;
-  },
-  addressesList(state) {
-    return state.contactDetailsFromFetch.physicalAddresses;
-  },
   //Financials records
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
@@ -88,14 +75,17 @@ export const getters = {
 export const mutations = {
 
   setClientForAction(state, client) {
-    console.warn('mutation done for setClientForAction', client);
     state.clientForAction = client;
   },
+
+  //CONTACT ITEMS
+  updateContactItemsList(state, {contactItemsFromFetch}) {
+    state.contactItemsFromFetch = contactItemsFromFetch
+  },
+
   //Contact-details and add-email dialogs
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
-    console.warn('mutation done for updateContactDetailsList', contactDetailsFromFetch);
     state.contactDetailsFromFetch = contactDetailsFromFetch;
-
   },
 //Financials records
   updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
@@ -119,7 +109,6 @@ export const mutations = {
 
   //Client List
   updateClientDataFromFetch(state, {clientDataFromFetch}) {
-    console.warn('mutation done for updateClientDataFromFetch', clientDataFromFetch);
     state.clientDataFromFetch = clientDataFromFetch;
   },
 
@@ -161,13 +150,14 @@ export const mutations = {
 
 export const actions = {
   //Contact-details and add-email dialogs
-  getContactDetailsFromFetch({commit}, {clientId, contactId}) {
-    return this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
-      .then((contactDetailsFromFetch) => {
-        commit('updateContactDetailsList', {contactDetailsFromFetch});
-      })
-      .catch(() => {
-      });
+  async getContactDetailsFromFetch({commit}, {clientId, contactId}) {
+    try {
+      let contactDetailsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
+      commit('updateContactDetailsList', {contactDetailsFromFetch});
+    } catch (error) {
+      handleError(error)
+    }
+
   },
 //Financials records
   getFinancialRecordsFromFetch({commit}, {clientId, query}) {
@@ -210,7 +200,6 @@ export const actions = {
     try {
       let clientDataFromFetch = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
       commit('updateClientDataFromFetch', {clientDataFromFetch});
-      console.warn('Action from store = clientBasicListFromFetch', clientDataFromFetch);
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
@@ -282,7 +271,7 @@ export const actions = {
       commit('updateClientCaseDetails', {clientCaseDetails});
       console.warn('case details:', clientCaseDetails)
     } catch (error) {
-      this.$notifier.showErrorMessage(error.response.data);
+      handleError(error)
     }
   },
 
@@ -330,8 +319,6 @@ export const actions = {
         const dateB = new Date(b.deadline)
         return dateA - dateB
       });
-
-
       console.warn('deadlines', deadlines)
       commit('updateCaseDeadlinesList', {deadlines})
 
@@ -340,6 +327,23 @@ export const actions = {
 
     }
 
-  }
+  },
+  //CONTACT DETAILS
+
+  async getContactsList({commit}, {clientId}) {
+    try {
+      let contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
+      contactItemsFromFetch.sort((a, b) => {
+        let contactA = new Date(a.created)
+        let contactB = new Date(b.created)
+        return contactB - contactA;
+      })
+      commit('updateContactItemsList', {contactItemsFromFetch})
+      this.contactList = this.contactItemsFromFetch;
+    } catch (error) {
+      console.error('creating contact error', error)
+      this.$notifier.showErrorMessage(error.response.data)
+    }
+  },
 
 };

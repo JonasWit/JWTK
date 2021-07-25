@@ -1,14 +1,9 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn color="primary" class="mx-2" medium v-on="{ ...tooltip, ...dialog }">
-            Edytuj kontakt
-          </v-btn>
-        </template>
-        <span>Edytuj kontakt</span>
-      </v-tooltip>
+      <v-btn color="primary" class="mx-2" medium v-on="{ ...dialog }">
+        Edytuj kontakt
+      </v-btn>
     </template>
     <v-form ref="editContactNameForm">
       <v-card>
@@ -75,13 +70,10 @@ export default {
 
   }),
   fetch() {
-    // this.contact = this.selectedContact;
     this.form.title = this.selectedContact.title;
     this.form.name = this.selectedContact.name;
     this.form.surname = this.selectedContact.surname;
     this.form.comment = this.selectedContact.comment;
-
-
   },
   methods: {
     async saveContactChange() {
@@ -94,7 +86,6 @@ export default {
         name: this.form.name,
         surname: this.form.surname,
         comment: this.form.comment,
-
       }
 
       try {
@@ -110,7 +101,6 @@ export default {
         this.loading = false;
         this.dialog = false;
       }
-
     },
     resetForm() {
       this.$refs.editContactNameForm.reset();
