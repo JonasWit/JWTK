@@ -96,7 +96,8 @@
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
                       @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
-          <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedEvent" offset-x>
+          <v-menu v-if="!selectedEvent.signature" v-model="selectedOpen" :close-on-content-click="false"
+                  :activator="selectedEvent" offset-x>
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
               <v-toolbar :color="selectedEvent.color" dark>
                 <edit-reminder :event-for-action="selectedEvent" v-on:action-completed="actionDone"/>
@@ -118,6 +119,29 @@
               </v-card-actions>
             </v-card>
           </v-menu>
+          <v-menu v-if="selectedEvent.signature" v-model="selectedOpen" :close-on-content-click="false"
+                  :activator="selectedEvent">
+            <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
+              <v-toolbar :color="selectedEvent.color" dark>
+                <v-toolbar-title v-html="selectedEvent.details"></v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-card-subtitle>Opis: {{ selectedEvent.name }}</v-card-subtitle>
+                <v-card-subtitle>Termin: {{ selectedEvent.start }}</v-card-subtitle>
+                <v-card-subtitle>Sygnatura: {{ selectedEvent.signature }}</v-card-subtitle>
+                <v-alert dense elevation="5" text type="info">Zarządzanie terminami dla spraw nie jest możliwe z poziomu
+                  kalendarza. Kalendarz stanowi
+                  jedynie podgląd zbliżających się terminów. Proszę wejść w panel sprawy, a następnie w zakładkę
+                  'TERMINY', aby dokonać zmian.
+                </v-alert>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text color="secondary" @click="selectedOpen = false">
+                  Anuluj
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
         </v-sheet>
       </div>
     </template>
@@ -129,8 +153,12 @@ import Layout from "@/components/legal-app/layout";
 import AddReminder from "@/components/legal-app/reminders/add-reminder";
 import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
 import EditReminder from "@/components/legal-app/reminders/edit-reminder";
-import {formatDateToLocaleTimeZone, formatDateToLocaleTimeZoneWithoutTime} from "@/data/date-extensions";
-import {mapActions, mapState} from "vuex";
+import {
+  formatDateToLocaleTimeZone,
+  formatDateToLocaleTimeZoneWithoutTime, queryDate,
+  todayDate
+} from "@/data/date-extensions";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
@@ -163,20 +191,18 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    offset: true,
+
   }),
   async mounted() {
     try {
       this.$refs.calendar.checkChange();
       await this.getEvents();
       this.filteredEvents = this.newEvents
-      console.warn('filtered events', this.filteredEvents)
     } catch (e) {
       console.error('error in fetching event data', e)
     }
   },
   computed: {
-    ...mapState('legal-app-client-store', ['deadlines']),
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
         return "Spotkanie"
@@ -187,62 +213,57 @@ export default {
       if (this.selectedEvent.category === 2) {
         return "Zadanie"
       }
+    },
+    todayDate() {
+      return todayDate()
+    },
+    query() {
+      return queryDate(this.todayDate)
     }
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getCaseDeadlines']),
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
         this.filteredEvents = this.newEvents
-        console.warn('Wszystko', this.filteredEvents)
       }
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === true) {
         this.filteredEvents = this.newEvents.filter((item) => item.public === true)
-        console.warn('Wszystko publiczne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === false) {
         this.filteredEvents = this.newEvents.filter((item) => item.public === false)
-        console.warn('Wszystko prywatne', this.filteredEvents)
+
       }
       // Meetings
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === false) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
-        console.warn('Spotkania prywatne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === true) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
-        console.warn('Spotkania publiczne', this.filteredEvents)
+
       }
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === null) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 0)
-        console.warn('Spotkania wszystkie', this.filteredEvents)
       }
       // Reminders
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === false) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === false)
-        console.warn('Przypomnienia prywatne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === true) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === true)
-        console.warn('Przypomnienia publiczne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === null) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
-        console.warn('Przypomnienia wszystkie', this.filteredEvents)
       }
       // Tasks
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === false) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === false)
-        console.warn('Zadania prywatne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === true) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === true)
-        console.warn('Zadania publiczne', this.filteredEvents)
       }
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === null) {
         this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
-        console.warn('Zadania wszystkie', this.filteredEvents)
       }
     },
     clearFilterResults() {
@@ -279,10 +300,10 @@ export default {
     },
     async getEvents() {
       try {
-        this.remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
-        // console.warn('reminders', this.remindersList);
+        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${this.query}`)
+        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
         let newEvents = [];
-        this.remindersList.forEach(x => {
+        remindersList.forEach(x => {
           newEvents.push({
             name: x.name,
             details: x.message,
@@ -295,25 +316,22 @@ export default {
             timed: x.allDayEvent
           });
         });
-        this.deadlines.forEach(x => {
+        deadlines.forEach(x => {
           newEvents.push({
             name: x.case.name,
             signature: x.case.signature,
             details: x.message,
-            start: this.eventDate(x),
-            end: this.eventDate(x),
+            start: this.deadlineDate(x),
+            end: this.deadlineDate(x),
             color: 'error',
             id: x.id,
             timed: false
           });
         });
-
-        console.warn('nowe eventy plus deadlinsy', newEvents);
         this.newEvents = newEvents;
-      } catch (e) {
-        console.error('calendar fetch error', e)
+      } catch (error) {
+        handleError(error)
       }
-
     },
     setColor(item) {
       if (item.reminderCategory === 0) {
@@ -326,10 +344,8 @@ export default {
         return "green"
       }
     },
-    eventDate(item) {
+    deadlineDate(item) {
       return new Date(item.deadline).toISOString().substr(0, 10)
-      // const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-      // return formatDateToLocaleTimeZone(isoDateTime)
     },
     eventStartDate(item) {
       if (item.allDayEvent) {
@@ -360,8 +376,8 @@ export default {
         this.selectedStatus = {text: 'Wszystkie statusy', value: null}
         this.filteredEvents = this.newEvents
         this.selectedOpen = false;
-      } catch (e) {
-        console.error('error in refreshing data', e)
+      } catch (error) {
+        handleError(error)
       }
     },
     labelCondition(val) {
@@ -371,7 +387,6 @@ export default {
       return "Status prywatny"
     }
   }
-
 };
 </script>
 
