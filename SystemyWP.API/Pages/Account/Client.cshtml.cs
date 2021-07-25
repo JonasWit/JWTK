@@ -47,10 +47,10 @@ namespace SystemyWP.API.Pages.Account
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
             
-            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja polityki prywatności i regulaminu jest wymagana!")]
+            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja polityki prywatności i regulaminu jest wymagana")]
             public bool RulesAccepted { get; set; }
             
-            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja faktur w formie elektronicznej jest wymagana!")]
+            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja faktur w formie elektronicznej jest wymagana")]
             public bool InvoiceAccepted { get; set; }
         }
         
