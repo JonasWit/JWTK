@@ -61,8 +61,8 @@ import {handleError, hasOccurrences} from "@/data/functions";
 import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-contact-dialog";
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 import {formatDate} from "@/data/date-extensions";
-import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
+import {mapActions} from "vuex";
 
 
 const searchItemFactory = (name, id) => ({
@@ -87,7 +87,8 @@ export default {
   }),
 
   async fetch() {
-    await this.getContactsList()
+    let clientId = this.$route.params.client
+    await this.getContactsList({clientId})
     setTimeout(() => {
       this.alertMessage = true
     }, 500)
@@ -110,38 +111,21 @@ export default {
     },
   },
   methods: {
-    async getContactsList() {
-      try {
-        let clientId = this.$route.params.client
-        this.contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
-        this.contactItemsFromFetch.sort((a, b) => {
-          let contactA = new Date(a.created)
-          let contactB = new Date(b.created)
-          return contactB - contactA;
-        })
-        this.contactList = this.contactItemsFromFetch;
-      } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data)
-      }
-    },
-
+    ...mapActions('legal-app-client-store', ['getContactsList']),
     async actionDone() {
       try {
-        await this.getContactsList();
+        let clientId = this.$route.params.client
+        await this.getContactsList({clientId});
       } catch (error) {
         handleError(error)
       }
     },
-
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
-
     formatDate(date) {
       return formatDate(date)
     },
-
   }
 };
 </script>

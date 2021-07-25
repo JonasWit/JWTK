@@ -1,5 +1,6 @@
 ﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
+import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 const initState = () => ({
   //Clients
@@ -9,6 +10,7 @@ const initState = () => ({
 
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: null,
+  contactItemsFromFetch: [],
 
   //Financials records
   financialRecordsFromFetch: [],
@@ -75,6 +77,12 @@ export const mutations = {
   setClientForAction(state, client) {
     state.clientForAction = client;
   },
+
+  //CONTACT ITEMS
+  updateContactItemsList(state, {contactItemsFromFetch}) {
+    state.contactItemsFromFetch = contactItemsFromFetch
+  },
+
   //Contact-details and add-email dialogs
   updateContactDetailsList(state, {contactDetailsFromFetch}) {
     state.contactDetailsFromFetch = contactDetailsFromFetch;
@@ -311,8 +319,6 @@ export const actions = {
         const dateB = new Date(b.deadline)
         return dateA - dateB
       });
-
-
       console.warn('deadlines', deadlines)
       commit('updateCaseDeadlinesList', {deadlines})
 
@@ -321,6 +327,23 @@ export const actions = {
 
     }
 
-  }
+  },
+  //CONTACT DETAILS
+
+  async getContactsList({commit}, {clientId}) {
+    try {
+      let contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
+      contactItemsFromFetch.sort((a, b) => {
+        let contactA = new Date(a.created)
+        let contactB = new Date(b.created)
+        return contactB - contactA;
+      })
+      commit('updateContactItemsList', {contactItemsFromFetch})
+      this.contactList = this.contactItemsFromFetch;
+    } catch (error) {
+      console.error('creating contact error', error)
+      this.$notifier.showErrorMessage(error.response.data)
+    }
+  },
 
 };
