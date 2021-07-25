@@ -32,7 +32,7 @@ export default {
       },
       {
         id: '3',
-        route: '/portal-web/statute',
+        route: '/portal-web/terms-of-service',
         name: 'Regulamin'
       },
       {
