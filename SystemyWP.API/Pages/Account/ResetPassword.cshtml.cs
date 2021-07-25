@@ -22,10 +22,10 @@ namespace SystemyWP.API.Pages.Account
         {
             [Required] [EmailAddress] public string Email { get; set; }
 
-            [Required(ErrorMessage = "Hasło jest wymagane!")]
             [DataType(DataType.Password)]
+            [Required(ErrorMessage = "Hasło jest wymagane!")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
-            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{16,}$", 
+            [RegularExpression(SystemyWpConstants.Patterns.PasswordPattern, 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             [Display(Name = "Hasło")]
             public string Password { get; set; }

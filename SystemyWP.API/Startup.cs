@@ -5,6 +5,7 @@ using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
+using SystemyWP.API.Settings;
 using SystemyWP.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -46,7 +47,9 @@ namespace SystemyWP.API
                     x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
 
             services.AddRazorPages();
+            
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
+            services.Configure<CorsSettings>(_configuration.GetSection(nameof(CorsSettings)));
 
             AddMarkedServices(services);
 
@@ -55,7 +58,7 @@ namespace SystemyWP.API
 
             services.AddCors(options => options.AddPolicy(NuxtJsApp, build => build
                 .AllowAnyHeader()
-                .WithOrigins(_configuration["Cors"])
+                .WithOrigins(_configuration.GetValue("CorsSettings:PortalUrl", ""))
                 .AllowAnyMethod()
                 .AllowCredentials()));
         }
@@ -124,7 +127,7 @@ namespace SystemyWP.API
                 config.UseNpgsql(_configuration.GetConnectionString("Default")));
 
             services.AddDataProtection()
-                .SetApplicationName("SystemyWP")
+                .SetApplicationName("Systemywp")
                 .UseCryptographicAlgorithms(
                     new AuthenticatedEncryptorConfiguration()
                     {
@@ -166,7 +169,7 @@ namespace SystemyWP.API
                 .AddDefaultTokenProviders();
 
             services.Configure<DataProtectionTokenProviderOptions>(o =>
-                o.TokenLifespan = TimeSpan.FromHours(3));
+                o.TokenLifespan = TimeSpan.FromHours(48));
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {

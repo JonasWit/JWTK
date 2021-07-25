@@ -25,6 +25,20 @@
         <input asp-for="Form.ConfirmPassword"/>
         <span class="val-text" asp-validation-for="Form.ConfirmPassword"></span>
     </div>
+    <div class="form-group">
+        <div class="checkbox p-2">
+            Akceptuję <a href=@Model.PortalPrivacyUrl target="_blank">Politykę Prywatności</a> oraz <a href=@Model.PortalTermsOfServiceUrl target="_blank">Regulamin</a>
+            <input asp-for="Form.RulesAccepted"/>
+            <span class="val-text" asp-validation-for="Form.RulesAccepted"></span>
+        </div>
+        <div class="checkbox p-2">
+            <label>
+                Wyrażam zgodę na otrzymywanie faktur w formie elektronicznej
+                <input asp-for="Form.InvoiceAccepted"/>
+                <span class="val-text" asp-validation-for="Form.InvoiceAccepted"></span>
+            </label>
+        </div>
+    </div>
     @if (Model.CustomErrors.Count > 0)
     {
         <div class="field">
@@ -35,7 +49,5 @@
         </div>
     }
     <hr>
-    <button class="button" type="submit">Zarejestruj</button>
-
-
+    <button type="submit">Zarejestruj</button>
 </form>

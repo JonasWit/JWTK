@@ -5,6 +5,10 @@ namespace SystemyWP.API
 {
     public class SystemyWpConstants
     {
+        public struct Patterns
+        {
+            public const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{16,}$";
+        }
         public struct ResponseMessages
         {
             public const string IncorrectParameters = "Niepoprawne zapytanie!";

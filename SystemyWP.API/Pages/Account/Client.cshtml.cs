@@ -1,13 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using SystemyWP.API.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace SystemyWP.API.Pages.Account
 {
     public class Client : BasePage
     {
-        [BindProperty] public RegisterForm Form { get; set; } 
+        [BindProperty] public RegisterForm Form { get; set; }
+        public string PortalPrivacyUrl => $@"{_settings.PortalUrl}\portal-web\privacy-policy";
+        public string PortalTermsOfServiceUrl => $@"{_settings.PortalUrl}\portal-web\terms-of-service";
+
+        private readonly CorsSettings _settings;
+
+        public Client(IOptionsMonitor<CorsSettings> optionsMonitor)
+        {
+            _settings = optionsMonitor.CurrentValue;
+        }
         
         public class RegisterForm
         {
@@ -24,17 +35,23 @@ namespace SystemyWP.API.Pages.Account
             [StringLength(20, ErrorMessage = "Nazwa użytkownika może mieć maksymalnie 20 znaków")]
             public string Username { get; set; }
             
+            [DataType(DataType.Password)]
             [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
-            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
+            [RegularExpression(SystemyWpConstants.Patterns.PasswordPattern, 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
-            [DataType(DataType.Password)]
             public string Password { get; set; }
             
-            [Required(ErrorMessage = "Pole jest wymagane")]
             [DataType(DataType.Password)]
+            [Required(ErrorMessage = "Pole jest wymagane")]
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
+            
+            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja polityki prywatności i regulaminu jest wymagana!")]
+            public bool RulesAccepted { get; set; }
+            
+            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja faktur w formie elektronicznej jest wymagana!")]
+            public bool InvoiceAccepted { get; set; }
         }
         
         public void OnGet(string returnUrl, string code, string email)
