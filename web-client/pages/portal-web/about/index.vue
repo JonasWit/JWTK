@@ -1,12 +1,14 @@
 <template>
   <v-container fluid>
     <section>
-      <div class="content">
-        <h1 class="text-center mt-5">Zapraszamy do współpracy</h1>
-        <h5>
-          <span>Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
-          Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie biznesu.
-        </h5>
+      <div class="content white--text text-center d-flex align-center">
+        <div>
+          <h1>Zapraszamy do współpracy</h1>
+          <h5>
+            <span>Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
+            Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie biznesu.
+          </h5>
+        </div>
       </div>
     </section>
     <v-row class="d-flex justify-space-between my-5">
@@ -19,19 +21,17 @@
       </v-card>
     </v-row>
     <section class="section-2">
-      <div class="content">
-        <h1 class="text-center mt-5">Technologia</h1>
+      <div class="content white--text text-center">
+        <h1>Technologie</h1>
         <h5>
           Wykorzystujemy sprawdzoną technologię. Więcej informacji możesz uzyskać na oficjlanych stronach podlinkowanych
           poniżej.
         </h5>
         <v-row class="d-flex justify-space-between">
-          <v-card elevation="0" class="icon-card" v-for="item in icons" :key="item.id">
+          <v-card elevation="0" class="icon-card mx-auto" v-for="item in icons" :key="item.id">
             <a :href="item.url" target="_blank"><img class="icon" :src="item.img"/></a>
           </v-card>
         </v-row>
-
-
       </div>
     </section>
   </v-container>
@@ -112,10 +112,6 @@ export default {
 
     });
   },
-  created() {
-    console.log(this.items);
-  },
-
 };
 </script>
 
@@ -131,7 +127,7 @@ export default {
 }
 
 h1 {
-  font-size: 3.5vw;
+  font-size: 65px;
   font-weight: 800 !important;
   line-height: 60px;
   padding: 10px 0;
@@ -139,10 +135,26 @@ h1 {
 }
 
 h5 {
-  font-size: 1.5vw;
+  font-size: 25px;
   font-weight: 400 !important;
   padding: 10px 0;
   margin-left: 10px;
+}
+
+@media only screen and (max-width: 780px) {
+  section {
+
+  }
+
+  .content h1 {
+    font-size: 30px;
+    line-height: 30px;
+  }
+
+  .content h5 {
+    font-size: 15px;
+    padding: 2px 0px;
+  }
 }
 
 #card {
@@ -152,7 +164,7 @@ h5 {
 section {
   position: relative;
   width: 100%;
-  height: 40vh;
+  height: 45vh;
   display: flex;
   justify-content: center;
   /*align-items: center;*/
@@ -169,11 +181,20 @@ section .content {
 
 }
 
-.section-2 .content {
+.section-2 {
   justify-content: center;
-
-
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
 }
+
+.section-2 .content {
+  margin-bottom: 25px;
+}
+
 
 section:before {
   content: '';

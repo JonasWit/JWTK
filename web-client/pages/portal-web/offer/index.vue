@@ -1,13 +1,14 @@
 ﻿<template>
   <v-container fluid>
     <section>
-      <div class="content">
-        <h1 class="text-center mt-5">Nasza oferta</h1>
-        <h5 class="mx-7">
-          Tworzymy zarówno statyczne strony internetowe jak również aplikacje webowe. Zamów u nas stronę lub aplikację a
-          my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu.
-          Nie będziesz musiał się niczym przejmować!
-        </h5>
+      <div class="content text-center white--text d-flex align-center">
+        <div>
+          <h1>Nasza oferta</h1>
+          <h5>
+            Tworzymy zarówno statyczne strony internetowe jak również aplikacje webowe. Zamów u nas stronę lub aplikację
+            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym przejmować!
+          </h5>
+        </div>
       </div>
     </section>
     <v-row class="d-flex justify-space-between my-4">
@@ -20,16 +21,16 @@
       </v-card>
     </v-row>
     <section class="section-2">
-      <div class="content">
-        <h1 class="text-center mt-5">Cennik</h1>
+      <div class="content text-center white--text">
+        <h1 class="mt-5">Cennik</h1>
         <h5 class="mx-7">
           Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi.
         </h5>
         <v-container class="my-6">
           <v-row align-content="center" justify="center">
             <v-col align-self="center" v-for=" plan in plans" :key="plan.id">
-              <v-card elevation="" height="550px" width="350px">
-                <v-card-text class="text-center font-weight-medium headline">{{ plan.title }}</v-card-text>
+              <v-card elevation="" height="550px" width="350px" class="d-flex flex-column align-center mx-auto">
+                <h2 class="text-center header">{{ plan.title }}</h2>
                 <v-list disabled>
                   <v-list-item-group>
                     <v-list-item v-for="(bullet, i) in plan.bullet" :key="i">
@@ -42,9 +43,11 @@
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
-                <v-card-text class="text-center title mb-2">
-                  {{ plan.price }}
-                </v-card-text>
+                <v-card-actions class="card-actions py-9">
+                  <h2>
+                    {{ plan.price }}
+                  </h2>
+                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
@@ -93,21 +96,21 @@ export default {
         {
           id: 1,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Webowe oraz Strony Internetowe',
-          price: 'od 1200 PLN netto',
+          title: 'Strony Internetowe',
+          price: 'od 600 PLN netto',
           bullet: [
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
             ['Możliwość wyboru technologii, w której stworzymy projekt'],
             ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
             ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
-            ['Hosting']
+
           ],
         },
         {
           id: 2,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Twoja Kancelaria',
-          price: 'od 100 PLN netto/mc za użytkownika',
+          price: 'od 100 PLN netto',
           bullet: [
             ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
             ['Zapewniamy wsparcie techniczne w ciągu maksimum 4 godzin od zgłoszenia'],
@@ -123,6 +126,45 @@ export default {
             ['Aplikacje desktopowe w technologii: .NET5+, WPF lub WinForms, możliwość integracji z bazą danych'],
           ],
         },
+        {
+          id: 4,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Webowe',
+          price: 'od 600 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Możliwość wyboru technologii, w której stworzymy projekt'],
+            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
+            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
+
+          ],
+        },
+        {
+          id: 5,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Webowe',
+          price: 'od 600 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Możliwość wyboru technologii, w której stworzymy projekt'],
+            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
+            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
+
+          ],
+        },
+        {
+          id: 6,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Webowe',
+          price: 'od 600 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Możliwość wyboru technologii, w której stworzymy projekt'],
+            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
+            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
+
+          ],
+        },
       ],
 
     });
@@ -131,12 +173,26 @@ export default {
 </script>
 
 <style scoped>
+
+.card-actions {
+  position: absolute;
+  bottom: 0;
+
+}
+
 .icon {
   padding: 20px;
 }
 
+.header {
+  letter-spacing: -.03em !important;
+  font-weight: 800 !important;
+  font-size: 25px;
+  padding-top: 30px;
+}
+
 h1 {
-  font-size: 3.5vw;
+  font-size: 65px;
   font-weight: 800 !important;
   line-height: 60px;
   padding: 10px 0px;
@@ -144,17 +200,33 @@ h1 {
 }
 
 h5 {
-  font-size: 1.5vw;
+  font-size: 25px;
   font-weight: 400 !important;
   padding: 10px 0px;
 
+}
 
+@media only screen and (max-width: 780px) {
+  .content h1 {
+    font-size: 30px;
+    line-height: 30px;
+  }
+
+  .content h5 {
+    font-size: 15px;
+    padding: 2px 8px;
+  }
+
+  section .content {
+    margin-top: 5px;
+
+  }
 }
 
 section {
   position: relative;
   width: 100%;
-  height: 40vh;
+  height: 45vh;
   display: flex;
   justify-content: center;
   /*align-items: center;*/
@@ -186,8 +258,6 @@ section:before {
 .section-2 {
   width: 100%;
   height: 100%;
-
-
 }
 
 .section-2:before {
@@ -206,5 +276,6 @@ section:before {
 #card {
   background: transparent !important;
 }
+
 
 </style>

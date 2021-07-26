@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <section>
+    <section class="first-section">
       <v-row class="d-flex justify-space-between mx-9">
         <v-col cols="6" class="content">
           <h1>Tworzymy aplikacje przyszłości</h1>
@@ -44,7 +44,7 @@ export default {
 };
 </script>
 <style scoped>
-section {
+.first-section {
   position: relative;
   width: 100%;
   height: 78vh;
@@ -56,7 +56,7 @@ section {
   /*background: linear-gradient(45deg, midnightblue, #000000)*/
 }
 
-section .content {
+.first-section .content {
   position: relative;
   z-index: 1;
   text-align: left;
@@ -65,7 +65,7 @@ section .content {
 
 }
 
-section .content h1 {
+.first-section .content h1 {
   font-size: 3.5vw;
   font-weight: 800 !important;
   line-height: 60px;
@@ -75,14 +75,14 @@ section .content h1 {
 
 }
 
-section .content h5 {
+.first-section .content h5 {
   font-size: 1.5vw;
   font-weight: 400 !important;
   padding: 10px 0px;
   margin-left: 15px;
 }
 
-section .content-video {
+.first-section .content-video {
   position: relative;
   z-index: 1;
 }
@@ -93,7 +93,7 @@ video {
   object-fit: cover
 }
 
-section:before {
+.first-section:before {
   content: '';
   position: absolute;
   top: 0;
