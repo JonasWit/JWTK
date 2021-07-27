@@ -1,6 +1,6 @@
 ﻿<template>
   <div>
-    <v-card class="mb-2">
+    <v-card flat class="mb-2">
       <v-card-title class="d-flex justify-center error--text">Usunięcie Konta</v-card-title>
       <v-col class="d-flex justify-center" cols="12">
         <div class="d-flex flex-column">
@@ -9,8 +9,9 @@
             związanych z portalem. W celu ponownego uzyskania dostępu konieczne będzie przesłanie prośby o utworzenie
             nowego konta i otrzymanie nowego zaproszenia.
           </v-card-subtitle>
+          <v-divider class="my-4"></v-divider>
           <default-confirmation-dialog button-color="error" v-on:action-confirmed="deleteAccount" title="Usuń Konto"
-                                       button-text="Usuń Konto"
+                                       button-text="Usuń Konto" tooltip-message="Usuń konto"
                                        message="Czy na pewno chcesz trwale usunąć konto na portalu?"/>
         </div>
       </v-col>

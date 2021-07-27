@@ -1,48 +1,65 @@
 ﻿<template>
-  <v-card>
-    <v-card-title class="d-flex justify-center"> Dane Personalne</v-card-title>
-    <v-card-text class="py-0">
-      <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Status:</strong> {{ userRole }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Telefon:</strong> {{ profile.phoneNumber }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Firma:</strong> {{ profile.companyFullName }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Imię:</strong> {{ profile.name }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Nazwisko:</strong> {{ profile.surname }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Adres:</strong> {{ profile.address }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Adres Korespondencyjny:</strong>
-      {{ profile.addressCorrespondence }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>NIP:</strong> {{ profile.nip }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>REGON:</strong> {{ profile.regon }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>KRS:</strong> {{ profile.krs }}
-    </v-card-text>
-    <v-divider class="my-2"/>
-    <v-card-actions class="pt-0">
-      <personal-data-edit-dialog v-on:action-completed="initialize"/>
-      <v-btn text @click="downloadPersonalData">Pobierz</v-btn>
-      <v-spacer/>
-      <confirm-personal-data-delete v-on:action-completed=""/>
-    </v-card-actions>
-  </v-card>
+  <div class="my-5">
+
+    <v-row>
+      <v-col sm="12" xs="12" md="5">
+        <v-card-text class="py-0">
+          <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Status:</strong> {{ userRole }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Imię:</strong> {{ profile.name }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Nazwisko:</strong> {{ profile.surname }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Firma:</strong> {{ profile.companyFullName }}
+        </v-card-text>
+      </v-col>
+      <v-col sm="12" xs="12" md="5">
+        <v-card-text class="py-0">
+          <strong>Adres:</strong> {{ profile.address }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Adres Korespondencyjny:</strong>
+          {{ profile.addressCorrespondence }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>NIP:</strong> {{ profile.nip }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>REGON:</strong> {{ profile.regon }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>KRS:</strong> {{ profile.krs }}
+        </v-card-text>
+        <v-card-text class="py-0">
+          <strong>Telefon:</strong> {{ profile.phoneNumber }}
+        </v-card-text>
+      </v-col>
+      <v-col sm="12" xs="12" md="2">
+        <v-card-actions class="pt-0 d-flex justify-space-between">
+          <personal-data-edit-dialog v-on:action-completed="actionDone"/>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
+                <v-icon>mdi-download</v-icon>
+              </v-btn>
+            </template>
+            <span>Pobierz dane</span>
+          </v-tooltip>
+          <confirm-personal-data-delete v-on:action-completed=""/>
+        </v-card-actions>
+
+
+      </v-col>
+    </v-row>
+
+
+  </div>
 </template>
 
 <script>
@@ -102,6 +119,11 @@ export default {
       );
       a.dispatchEvent(e);
     },
+    async actionDone() {
+      await this.initialize()
+    }
+
+
   },
 };
 </script>

@@ -1,23 +1,59 @@
 ﻿<template>
-  <v-container>
-    <div v-if="authenticated">
-      <main-header class="mb-4"/>
-      <div>
-        <div>
-          <personal-data/>
-        </div>
-        <if-auth>
-          <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, l}">
-            <div v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable" class="mt-4">
-              <legalapp-key-remove/>
-            </div>
-            <div>
-              <account-remove/>
-            </div>
-          </template>
-        </if-auth>
-      </div>
-    </div>
+  <v-container class="mt-6">
+    <v-card v-if="authenticated">
+      <v-toolbar flat color="primary" dark extended>
+        <main-header class="mt-6"/>
+        <v-spacer></v-spacer>
+        <v-toolbar-title>Profil użytkownika</v-toolbar-title>
+      </v-toolbar>
+      <v-tabs vertical>
+        <v-tab class="d-flex justify-start">
+          <v-icon>
+            mdi-account
+          </v-icon>
+          Dane podstawowe
+        </v-tab>
+        <v-tab class="d-flex justify-start">
+          <v-icon>
+            mdi-delete-alert
+          </v-icon>
+          Dane Kancelarii
+        </v-tab>
+        <v-tab class="d-flex justify-start">
+          <v-icon>
+            mdi-account-cancel
+          </v-icon>
+          Twoje konto
+        </v-tab>
+        <v-tab-item>
+          <v-card flat>
+            <personal-data/>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <if-auth>
+              <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
+                <div v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable" class="mt-4">
+                  <legalapp-key-remove/>
+                </div>
+              </template>
+            </if-auth>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <if-auth>
+              <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
+                <div>
+                  <account-remove/>
+                </div>
+              </template>
+            </if-auth>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
   </v-container>
 </template>
 

@@ -1,22 +1,29 @@
 ﻿<template>
   <v-dialog persistent v-model="dialog" width="400">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn depressed text v-bind="attrs" v-on="on">
-        Edytuj
-      </v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn color="warning" icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon>
+              mdi-account-edit
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Edytuj dane</span>
+      </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="justify-center">
-        Edycja Danych Personalnych
-      </v-card-title>
+      <v-toolbar color="primary" dark>
+        <v-toolbar-title>
+          Edycja Danych Personalnych
+        </v-toolbar-title>
+      </v-toolbar>
       <v-form ref="editPersonalDataFrom" v-model="validation.valid">
-        <v-text-field class="ma-3" v-model="form.phoneNumber" :rules="validation.smallLength"
-                      label="Numer Telefonu"></v-text-field>
-        <v-text-field class="ma-3" v-model="form.companyFullName" :rules="validation.normalLength"
-                      label="Firma"></v-text-field>
         <v-text-field class="ma-3" v-model="form.name" :rules="validation.smallLength" label="Imię"></v-text-field>
         <v-text-field class="ma-3" v-model="form.surname" :rules="validation.smallLength"
                       label="Nazwisko"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.companyFullName" :rules="validation.normalLength"
+                      label="Firma"></v-text-field>
         <v-text-field class="ma-3" v-model="form.address" :rules="validation.extendedLength"
                       label="Adres"></v-text-field>
         <v-text-field class="ma-3" v-model="form.addressCorrespondence" :rules="validation.extendedLength"
@@ -24,15 +31,16 @@
         <v-text-field class="ma-3" v-model="form.nip" :rules="validation.smallLength" label="NIP"></v-text-field>
         <v-text-field class="ma-3" v-model="form.regon" :rules="validation.smallLength" label="REGON"></v-text-field>
         <v-text-field class="ma-3" v-model="form.krs" :rules="validation.smallLength" label="KRS"></v-text-field>
+        <v-text-field class="ma-3" v-model="form.phoneNumber" :rules="validation.smallLength"
+                      label="Numer Telefonu"></v-text-field>
       </v-form>
-      <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="warning" text @click="saveData">
-          Zapisz
+        <v-btn color="error" text @click="closeDialog">
+          Anuluj
         </v-btn>
         <v-spacer/>
-        <v-btn color="success" text @click="closeDialog">
-          Anuluj
+        <v-btn color="primary" text @click="saveData">
+          Zapisz
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -42,6 +50,7 @@
 <script>
 
 import {mapGetters, mapState} from "vuex";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "personal-data-edit-dialog",
@@ -97,18 +106,21 @@ export default {
     ...mapGetters('auth', ['userRole'])
   },
   methods: {
-    saveData() {
-      if (this.loading) return;
-      this.loading = true;
+    async saveData() {
+      try {
+        if (this.loading) return;
+        this.loading = true;
+        this.form.userId = this.profile.id;
+        await this.$axios.$put("/api/users/personal-data/update", this.form)
+        this.$notifier.showSuccessMessage("Dane zmienione pomyślnie!");
+      } catch (error) {
+        handleError(error)
+      } finally {
+        this.loading = false;
+        this.$emit('action-completed');
+        this.closeDialog();
+      }
 
-      this.form.userId = this.profile.id;
-      return this.$axios.$put("/api/users/personal-data/update", this.form)
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.$emit('action-completed');
-          this.closeDialog();
-        });
     },
     closeDialog() {
       this.$refs.editPersonalDataFrom.reset();

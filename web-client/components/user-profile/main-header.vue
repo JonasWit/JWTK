@@ -1,26 +1,27 @@
 ﻿<template>
-  <v-card>
-    <v-img height="150" src="" class="d-flex align-center">
-      <v-list-item>
-        <v-hover v-slot:default="{ hover }">
-          <v-avatar size="75">
-            <v-btn :disabled="uploadingImage" icon v-if="hover" @click="$refs.profileImageInput.click()">
-              <v-icon>mdi-account-edit</v-icon>
-            </v-btn>
-            <img v-else-if="profile.image" :src="profile.image" alt="profile image"/>
-            <v-icon x-large v-else>mdi-account</v-icon>
-          </v-avatar>
-        </v-hover>
-        <input class="d-none" type="file" accept="image/*" ref="profileImageInput" @change="changeProfileImage"/>
-        <v-list-item-content class="ml-2">
-          <v-list-item-title class="title">
-            {{ profile.username }}
-          </v-list-item-title>
-          <v-list-item-subtitle>{{ userRole }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-img>
-  </v-card>
+
+  <v-img height="150" src="" class="d-flex align-center">
+    <v-list-item>
+      <v-hover v-slot:default="{ hover }">
+        <v-avatar size="75">
+          <v-btn :disabled="uploadingImage" icon v-if="hover" @click="$refs.profileImageInput.click()">
+            <v-icon>mdi-account-edit</v-icon>
+          </v-btn>
+          <img v-else-if="profile.image" :src="profile.image" alt="profile image"/>
+          <v-icon x-large v-else>mdi-account</v-icon>
+        </v-avatar>
+      </v-hover>
+      <input class="d-none" type="file" accept="image/*" ref="profileImageInput" @change="changeProfileImage"/>
+      <v-list-item-content class="ml-2">
+        <v-list-item-title class="title">
+          {{ profile.username }}
+        </v-list-item-title>
+        <v-list-item-subtitle>{{ userRole }}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+  </v-img>
+
+
 </template>
 
 <script>
