@@ -57,13 +57,13 @@ export const actions = {
   async initialize({commit}) {
     try {
       let profile = await this.$axios.$get('/api/users/me');
+      console.warn('User Profile: ', profile);
       commit('saveProfile', {profile});
 
       let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
+      console.warn('Related Users: ', users);
       commit('saveRelatedUsers', {users});
 
-      console.warn('User Profile: ', profile);
-      console.warn('Related Users: ', users);
     } catch (error) {
       console.error("Not authorized");
     }

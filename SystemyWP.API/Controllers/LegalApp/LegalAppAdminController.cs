@@ -38,7 +38,7 @@ namespace SystemyWP.API.Controllers.LegalApp
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
                 if (adminUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
-                if (adminUser.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (adminUser.LegalAppAccessKey is null) return Ok(result);
 
                 //Get related users with the same data access key
                 var relatedUsers = _context.Users
