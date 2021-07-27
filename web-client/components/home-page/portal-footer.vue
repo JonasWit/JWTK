@@ -59,7 +59,6 @@ export default {
 
 .btn-link:hover {
   display: block;
-  border-bottom: solid 1px crimson;
   opacity: 0.6;
   transition: opacity 0.5s ease;
 }

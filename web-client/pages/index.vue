@@ -2,7 +2,7 @@
   <v-container fluid>
     <section class="first-section">
       <v-row class="d-flex justify-space-between mx-9">
-        <v-col cols="6" class="content">
+        <v-col sm="12" xs="12" md="6" class="content">
           <h1>Tworzymy aplikacje przyszłości</h1>
           <h5 class="text--secondary">Naszą misją jest optymalizacja każdego aspektu pracy Twojej firmy.</h5>
           <h5 class="text--secondary">Zawsze używany najnowszej dostępnej wersji technologii, dlatego możesz mieć
@@ -11,7 +11,7 @@
           <v-divider class="mt-4 mb-4"/>
           <div class="d-flex ">
             <nuxt-link to="/portal-web/offer" class="text-decoration-none">
-              <v-btn class="my-3 ml-7" outlined color="primary">Sprawdź ofertę</v-btn>
+              <v-btn class="my-3 ml-7" outlined color="primary">Oferta</v-btn>
             </nuxt-link>
             <v-spacer></v-spacer>
             <nuxt-link to="/portal-web/contact" class="text-decoration-none">
@@ -19,7 +19,7 @@
             </nuxt-link>
           </div>
         </v-col>
-        <v-col cols="6" class="content-video">
+        <v-col sm="12" xs="12" md="6" class="content-video">
           <video v-if="darkThemeStored" :src="videoDark" autoplay="true" loop="true" muted></video>
           <video v-else :src="videoLight" autoplay="true" loop="true" muted></video>
         </v-col>
@@ -106,5 +106,27 @@ video {
   transform: scaleX(1.5);
 }
 
+@media only screen and (max-width: 960px) {
+  .first-section .content h1 {
+    font-size: 30px;
+    line-height: 30px;
+  }
 
+  .first-section .content h5 {
+    font-size: 15px;
+    padding: 2px 0px;
+  }
+
+  .first-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
+    overflow: hidden;
+    /*background-color: azure;*/
+    /*background: linear-gradient(45deg, midnightblue, #000000)*/
+  }
+}
 </style>
