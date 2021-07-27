@@ -75,8 +75,8 @@
                             <v-list class="d-flex justify-md-end justify-sm-space-between">
                               <go-to-client-panel :client-item="clientItem"/>
                               <edit-client-name-dialog :selected-client="clientItem"/>
-                              <delete-client-dialog :selected-client="clientItem"/>
-                              <archive-client-dialog :selected-client="clientItem"/>
+                              <delete-client-dialog v-if="clientAdmin" :selected-client="clientItem"/>
+                              <archive-client-dialog v-if="clientAdmin" :selected-client="clientItem"/>
                             </v-list>
                           </v-col>
                         </v-row>
@@ -142,7 +142,7 @@ export default {
     ArchiveClientDialog,
     DeleteClientDialog, AllowedUsers, GrantAccess, ButtonToGoUp, AddClientDialog, Layout, IfAuth
   },
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
 
   data: () => ({

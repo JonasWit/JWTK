@@ -1,6 +1,6 @@
 ﻿<template>
   <v-container>
-    <v-row>
+    <v-row class="mt-10">
       <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
         <v-col>
           <v-hover v-slot="{ hover }">
@@ -24,7 +24,7 @@
 import {legalappRoute} from "@/data/legal-app/legal-app-navigation";
 
 export default {
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     items: []
   }),

@@ -150,15 +150,16 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-btn color="primary" block @click="generateReport">
-      Generuj rozliczenie
-    </v-btn>
+
     <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">
       Po naciśnięciu przycisku 'GENERUJ RAPORT' pojawi się 'Podgląd wydruku'. Jeśli chcesz zapisać rozliczenie w formie
       pdf w oknie podgląd wybierz opcję 'Zapisz jako pdf'. Jeśli chcesz wydrukować rozliczenie postępuj zgodnie z
       instrukcją drukowania. Pamiętaj, że jakośc wydruku zależy od indywidualnych ustawień.
       Rekomendujemy wybór poziomego układu strony w oknie wydruku.
     </v-alert>
+    <v-btn color="error" block @click="generateReport">
+      Generuj rozliczenie
+    </v-btn>
   </div>
 
 </template>

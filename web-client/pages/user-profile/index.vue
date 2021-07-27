@@ -1,5 +1,5 @@
 ﻿<template>
-  <div>
+  <v-container>
     <div v-if="authenticated">
       <main-header class="mb-4"/>
       <div>
@@ -9,7 +9,6 @@
         <if-auth>
           <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin}">
             <div v-if="legalAppAllowed && (portalAdmin || clientAdmin)" class="mt-4">
-
             </div>
             <div>
               <account-remove/>
@@ -18,7 +17,7 @@
         </if-auth>
       </div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -30,7 +29,7 @@ import IfAuth from "@/components/auth/if-auth";
 
 export default {
   components: {IfAuth, AccountRemove, PersonalData, MainHeader},
-  middleware: ["client", "authenticated"],
+  middleware: ["user", "authenticated"],
   data: () => ({}),
   computed: {
     ...mapState("auth", ["profile"]),

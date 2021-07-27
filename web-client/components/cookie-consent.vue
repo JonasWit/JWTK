@@ -1,23 +1,25 @@
 ﻿<template>
-  <div v-if="isOpen" class="cookie">
-    <v-alert prominent type="warning">
-      <v-row align="center">
-        <v-col class="grow">
-          <slot name="message">
-            We use cookies to provide our services and for analytics and
-            marketing. To find out more about our use of cookies, please see our
-            <nuxt-link class="cookie__link" to="/privacy-policy">Privacy Policy</nuxt-link>
-          </slot>
-        </v-col>
-        <v-col class="shrink d-flex justify-end" cols="12" md="3">
-          <v-btn class="ma-2" @click="accept">{{ buttonTextAccept }}</v-btn>
-          <v-btn class="ma-2" text @click="deny">{{ buttonTextDeny }}</v-btn>
-        </v-col>
-      </v-row>
-    </v-alert>
-  </div>
+  <v-overlay v-if="isOpen" class="cookie">
+    <v-card>
+      <v-alert prominent type="warning" border="bottom" colored-border class="px-3">
+        <v-row align="center">
+          <v-col>
+            <slot>
+              Używamy cookies i podobnych technologii m.in. w celach: świadczenia usług, statystyk. Korzystanie
+              z witryny bez zmiany ustawień Twojej przeglądarki oznacza, że będą one umieszczane w Twoim urządzeniu
+              końcowym. Pamiętaj, że zawsze możesz zmienić te ustawienia. Szczegóły znajdziesz w
+              <nuxt-link class="cookie__link" to="/portal-web/privacy-policy">Polityce Prywatności.</nuxt-link>
+            </slot>
+          </v-col>
+          <v-col class="shrink d-flex justify-end" cols="12" md="3">
+            <v-btn class="ma-2" @click="accept">{{ buttonTextAccept }}</v-btn>
+            <v-btn class="ma-2" text @click="deny">{{ buttonTextDeny }}</v-btn>
+          </v-col>
+        </v-row>
+      </v-alert>
+    </v-card>
+  </v-overlay>
 </template>
-
 <script>
 export default {
   name: "CookieMessage",
@@ -29,11 +31,6 @@ export default {
     buttonTextDeny: {
       type: String,
       default: "Odmawiam"
-    },
-    message: {
-      type: String,
-      default:
-        "We use cookies to provide our services and for analytics and marketing. To find out more about our use of cookies, please see our Privacy Policy. By continuing to browse our website, you agree to our use of cookies."
     },
     position: {
       type: String,

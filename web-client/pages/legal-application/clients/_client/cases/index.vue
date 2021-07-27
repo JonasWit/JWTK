@@ -74,7 +74,7 @@ import CaseDetailsComp from "@/components/legal-app/clients/cases/case-details";
 export default {
   name: "index",
   components: {CaseDetailsComp, GoToCaseDetails, AddCase, CaseDetails, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     listOfCases: [],

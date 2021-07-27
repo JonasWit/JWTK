@@ -74,6 +74,7 @@ import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-bil
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
 import {mapActions} from "vuex";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
@@ -88,7 +89,7 @@ export default {
     ButtonToGoUp,
     Layout,
   },
-  middleware: ['legal-app-permission', 'client-admin', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
       financialRecords: [],
       loading: false,
@@ -132,7 +133,7 @@ export default {
         let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
         this.financialRecords = await this.$axios.$get(apiQuery);
       } catch (error) {
-        console.error('creating contact error', error)
+        handleError(error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         let clientId = this.$route.params.client
