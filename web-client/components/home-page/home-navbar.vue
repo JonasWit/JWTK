@@ -77,7 +77,6 @@ export default {
 
 .nav-item:hover {
   display: block;
-  border-bottom: solid 1px crimson;
   opacity: 0.6;
   transition: opacity 0.5s ease;
 
