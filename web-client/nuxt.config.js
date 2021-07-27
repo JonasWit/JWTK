@@ -9,7 +9,8 @@ const config = {
       loginPath: process.env.LOGIN_PATH,
       changePassPath: process.env.PASSWORD_CHANGE_PATH,
       logoutPath: process.env.LOGOUT_PATH,
-      deletePath: process.env.DELETE_PATH
+      deletePath: process.env.DELETE_PATH,
+      deleteLeglaAppKeyPath: process.env.DELETE_LAPP_KEY_PATH
     },
     axios: {
       baseURL: process.env.BROWSER_SIDE_URL,

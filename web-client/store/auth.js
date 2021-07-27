@@ -27,6 +27,7 @@ export const getters = {
       return "Brak Roli!";
     }
   },
+  legalAppKeyAvailable: state => !!state.profile.legalAppDataAccessKey,
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
   client: (state, getters) => getters.authenticated && state.profile.role === ROLES.CLIENT,
@@ -68,6 +69,14 @@ export const actions = {
       console.error("Not authorized");
     }
   },
+  async reloadProfile({commit}) {
+    try {
+      let profile = await this.$axios.$get('/api/users/me');
+      commit('saveProfile', {profile});
+    } catch (error) {
+      console.error("Not authorized");
+    }
+  },
   login() {
     if (process.server) return;
     if (getGDPRConsent() === false) return;
@@ -89,5 +98,17 @@ export const actions = {
     if (process.server) return;
     commit('reset');
     window.location = this.$config.auth.deletePath;
+  },
+  async deleteLegalAppKey({dispatch}) {
+    if (process.server) return;
+    try {
+      await this.$axios.$get(this.$config.auth.deleteLeglaAppKeyPath);
+      this.$notifier.showSuccessMessage("Dane zostały usunięte!");
+    } catch (error) {
+      this.$notifier.showErrorMessage("Błąd podczas usuwania danych!");
+      console.error('Data delete error!', error);
+    } finally {
+      dispatch('reloadProfile');
+    }
   }
 };

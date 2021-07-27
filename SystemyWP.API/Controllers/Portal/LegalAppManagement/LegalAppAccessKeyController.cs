@@ -95,7 +95,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             }
         }
 
-        [HttpDelete("access-key/delete")]
+        [HttpGet("access-key/delete")]
         [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> DeleteAccessKey()
         {
