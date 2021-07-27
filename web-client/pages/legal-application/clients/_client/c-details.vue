@@ -29,7 +29,7 @@ import Layout from "@/components/legal-app/layout";
 export default {
   name: "c-details",
   components: {Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     client: null,
   }),

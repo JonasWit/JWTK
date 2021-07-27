@@ -63,6 +63,7 @@ import DeadlinePlannerView from "@/components/legal-app/clients/cases/deadlines/
 export default {
   name: "index",
   components: {DeadlinePlannerView, DeleteDeadline, AddDeadline, Layout},
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     tab: null,
   }),

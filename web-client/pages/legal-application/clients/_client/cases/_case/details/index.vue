@@ -28,8 +28,8 @@
               <v-card-title>Opis sprawy</v-card-title>
               <v-card-title> Sygnatura: {{ clientCaseDetails.signature }}</v-card-title>
               <edit-case-dialog :case-for-action="clientCaseDetails" v-on:action-completed="editDone"/>
-              <delete-case :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
-              <archive-case :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
+              <delete-case v-if="clientAdmin" :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
+              <archive-case v-if="clientAdmin" :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
             </v-row>
             <v-card-text>
               {{ clientCaseDetails.description }}
@@ -64,8 +64,8 @@ import {formatDateWithHours} from "@/data/date-extensions";
 export default {
   name: "index",
   components: {ArchiveCase, DeleteCase, EditCaseDialog, Layout, CaseDetails},
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
-    // dialog: false,
     caseForAction: null,
     tab: null,
   }),

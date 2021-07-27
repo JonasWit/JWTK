@@ -13,7 +13,7 @@
             aby zobaczyć listę użytkowników, którzy mogą uzyskać dostęp do Sprawy.
           </v-alert>
           <v-card-text class="d-flex justify-space-between mx-3">
-            <case-grant-access/>
+            <case-grant-access v-if="clientAdmin"/>
           </v-card-text>
           <v-card-text v-if="allowedUsersForCase.length > 0">
             <v-card-title>Lista użytkowników z dostępem do sprawy</v-card-title>
@@ -33,7 +33,7 @@
   </layout>
 </template>
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import CaseGrantAccess from "@/components/legal-app/clients/cases/access-panel/case-grant-access";
 import CaseRevokeAccess from "@/components/legal-app/clients/cases/access-panel/case-revoke-access";
 import Layout from "@/components/legal-app/layout";
@@ -41,6 +41,8 @@ import Layout from "@/components/legal-app/layout";
 export default {
   name: "index",
   components: {Layout, CaseRevokeAccess, CaseGrantAccess},
+  middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
+
   async fetch() {
     let caseId = this.$route.params.case
     await this.getAllowedUsersForCase({caseId})
@@ -48,7 +50,8 @@ export default {
     console.warn('case details', this.clientCaseDetails)
   },
   computed: {
-    ...mapState('legal-app-client-store', ['allowedUsersForCase', 'clientCaseDetails'])
+    ...mapState('legal-app-client-store', ['allowedUsersForCase', 'clientCaseDetails']),
+    ...mapGetters('auth', ['clientAdmin']),
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getAllowedUsersForCase', 'getCaseDetails']),

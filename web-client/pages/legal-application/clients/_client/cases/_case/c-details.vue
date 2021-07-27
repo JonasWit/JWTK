@@ -2,7 +2,6 @@
   <layout>
     <template v-slot:content>
       <v-container>
-        <h1>{{ clientCaseDetails.name }} {{ clientCaseDetails.signature }}</h1>
         <v-row>
           <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
             <v-col>
@@ -31,6 +30,7 @@ import {mapActions, mapState} from "vuex";
 export default {
   name: "c-details",
   components: {Layout},
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     client: null,
