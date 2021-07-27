@@ -32,7 +32,7 @@ namespace SystemyWP.API.Pages.Account
             
             [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Obecne Hasło")]
+            [Display(Name = "Obecne hasło")]
             public string OldPassword { get; set; }
 
             [Required(ErrorMessage = "Hasło jest wymagane!")]
@@ -40,11 +40,11 @@ namespace SystemyWP.API.Pages.Account
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{12,}$", 
                 ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
-            [Display(Name = "Hasło")]
+            [Display(Name = "Nowe hasło")]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Powtórz nowe Hasło")]
+            [Display(Name = "Powtórz nowe hasło")]
             [Compare("NewPassword", ErrorMessage = "Hasła nie są identyczne!")]
             public string ConfirmPassword { get; set; }
         }
