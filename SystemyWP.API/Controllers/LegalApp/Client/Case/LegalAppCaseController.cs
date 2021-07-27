@@ -173,8 +173,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .FirstOrDefault(); 
                 
                 if (legalAppCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+
+                _context.RemoveRange(_context.LegalAppDataAccesses
+                    .Where(x =>
+                        x.ItemId == legalAppCase.Id &&
+                        x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase));
                 
                 _context.Remove(legalAppCase);
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }
