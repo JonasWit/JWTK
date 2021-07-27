@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SystemyWP.API.Utilities;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -18,13 +19,12 @@ namespace SystemyWP.API.Services.Email
 
         public Task<Response> SendClientInvite(string email, string link)
         {
-            var htmlContent = $@"You are invited <a href=""{link}"">link</a> to register";
             var msg = MailHelper.CreateSingleEmail(
                 new EmailAddress(_optionsMonitor.CurrentValue.From),
                 new EmailAddress(email),
                 "Systemywp.pl - Zaproszenie"
                 , "",
-                htmlContent
+                EmailTemplates.InvitationEmailBody(link)
             );
 
             return _client.SendEmailAsync(msg);
