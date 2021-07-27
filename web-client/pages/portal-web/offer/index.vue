@@ -6,8 +6,8 @@
           <h1>Nasza oferta</h1>
           <h5>
             Tworzymy zarówno statyczne strony internetowe jak również aplikacje webowe. Zamów u nas stronę lub aplikację
-            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym przejmować!
-          </h5>
+            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym
+            przejmować! </h5>
         </div>
       </div>
     </section>
@@ -24,8 +24,7 @@
       <div class="content text-center white--text">
         <h1 class="mt-5">Cennik</h1>
         <h5 class="mx-7">
-          Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi.
-        </h5>
+          Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
         <v-container class="my-6">
           <v-row align-content="center" justify="center">
             <v-col align-self="center" v-for=" plan in plans" :key="plan.id">
@@ -45,8 +44,7 @@
                 </v-list>
                 <v-card-actions class="card-actions py-9">
                   <h2>
-                    {{ plan.price }}
-                  </h2>
+                    {{ plan.price }} </h2>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -96,31 +94,29 @@ export default {
         {
           id: 1,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Strony Internetowe',
-          price: 'od 600 PLN netto',
+          title: 'Twoja Kancelaria',
+          price: '100 PLN netto / miesiąc za Użytkownika',
           bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt'],
-            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
-            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
-
+            ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii'],
+            ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
+            ['Zapewniamy wsparcie techniczne w ciągu maksimum 4 godzin od zgłoszenia'],
           ],
         },
         {
           id: 2,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Twoja Kancelaria',
-          price: 'od 100 PLN netto',
+          title: 'Strony Internetowe',
+          price: 'od 600 PLN netto',
           bullet: [
-            ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
-            ['Zapewniamy wsparcie techniczne w ciągu maksimum 4 godzin od zgłoszenia'],
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            [''],
           ],
         },
         {
           id: 3,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Aplikacje Desktopowe',
-          price: 'Wycena indywidualna',
+          price: 'od 2000 PLN netto',
           bullet: [
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
             ['Aplikacje desktopowe w technologii: .NET5+, WPF lub WinForms, możliwość integracji z bazą danych'],
@@ -130,39 +126,35 @@ export default {
           id: 4,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Aplikacje Webowe',
-          price: 'od 600 PLN netto',
+          price: 'od 2500 PLN netto',
           bullet: [
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt'],
-            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
-            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
-
+            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
+            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5+, PostgreSQL'],
           ],
         },
         {
           id: 5,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Webowe',
-          price: 'od 600 PLN netto',
+          title: 'Utrzymanie Hostingu',
+          price: 'od 300 PLN netto / miesiąc za aplikację',
           bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt'],
-            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
-            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
-
+            ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
+            ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
+            ['Monitorowanie stanu aplikacji'],
+            ['Regularne instalowanie łatek systemu'],
           ],
         },
         {
           id: 6,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Webowe',
-          price: 'od 600 PLN netto',
+          title: 'Utrzymanie Aplikacji',
+          price: 'od 200 PLN netto / miesiąc za aplikację. Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie',
           bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt'],
-            ['Technologie front-end dla rozwiązań indywidualnych: Wordpress, Vue.js, Blazor WASM'],
-            ['Technologie back-end dla rozwiązań indywidualnych: .NET5+'],
-
+            ['Pomoc techniczna w przypadku błędów'],
+            ['Wprowadzanie nowych funkcjonalności'],
+            ['Zmiany istniejących funkcjonalności'],
+            ['Monitorowanie stanu aplikacji'],
           ],
         },
       ],
