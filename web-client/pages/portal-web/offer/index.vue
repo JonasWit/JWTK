@@ -108,8 +108,9 @@ export default {
           title: 'Strony Internetowe',
           price: 'od 600 PLN netto',
           bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            [''],
+            ['Statyczne strony internetowe - wizytówki'],
+            ['Możliwość dodania dodatkowych funkcjonalności'],
+            ['Możliwość zastosowania CMS'],
           ],
         },
         {
@@ -129,6 +130,7 @@ export default {
           price: 'od 2500 PLN netto',
           bullet: [
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Aplikacje do obługi firmy, sklepy internetowe'],
             ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
             ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5+, PostgreSQL'],
           ],
