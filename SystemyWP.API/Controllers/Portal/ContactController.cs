@@ -24,12 +24,8 @@ namespace SystemyWP.API.Controllers.Portal
         {
             try
             {
-                await _portalLogger
-                    .Log(LogType.PersonalData, HttpContext.Request.Path.Value, UserId, UserEmail,
-                        $"Contact requested by {contactForm.Name} - {contactForm.Email}");
-
                 await emailClient.SendEmailAsync(
-                    contactForm.Email,
+                    SystemyWpConstants.Emails.ContactAddress,
                     "Contact Request",
                     $"Name: {contactForm.Name}, Email: {contactForm.Email}, Phone: {contactForm.Phone}");
                 

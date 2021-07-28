@@ -23,11 +23,11 @@ namespace SystemyWP.API.Services.Logging
             {
                 LogType = logType,
                 Description = description,
-                UserEmail = userEmail,
+                UserEmail = string.IsNullOrEmpty(userEmail) ? "" : userEmail,
                 Endpoint = endpoint,
                 ExceptionMessage = ex is not null ? ex.Message : null,
                 ExceptionStackTrace = ex is not null ? ex.StackTrace : null,
-                CreatedBy = userId,
+                CreatedBy = string.IsNullOrEmpty(userId) ? "" : userId,
             });
             await _context.SaveChangesAsync();
         }

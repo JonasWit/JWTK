@@ -51,6 +51,12 @@ namespace SystemyWP.API
         {
             public const string LegalApp = nameof(LegalApp);
         }
+        
+        public struct Emails
+        {
+            public const string ContactAddress = "kontakt@systemywp.pl";
+            public const string OfficeAddress = "biuro@systemywp.pl";
+        }
 
         public struct Files
         {
