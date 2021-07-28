@@ -1,64 +1,62 @@
 ﻿<template>
   <div class="my-5">
-
-    <v-row>
-      <v-col sm="12" xs="12" md="5">
-        <v-card-text class="py-0">
-          <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
-        </v-card-text>
-        <v-card-text class="py-0">
+    <v-card flat>
+      <v-card-title>Dane podstawowe</v-card-title>
+      <v-card-text>
+        <div class="text--primary"><strong>Nazwa Użytkownika:</strong> {{ profile.username }}</div>
+        <div class="text--primary">
           <strong>Status:</strong> {{ userRole }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>Imię:</strong> {{ profile.name }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>Nazwisko:</strong> {{ profile.surname }}
-        </v-card-text>
-        <v-card-text class="py-0">
-          <strong>Firma:</strong> {{ profile.companyFullName }}
-        </v-card-text>
-      </v-col>
-      <v-col sm="12" xs="12" md="5">
-        <v-card-text class="py-0">
+        </div>
+      </v-card-text>
+    </v-card>
+    <v-card flat>
+      <v-card-title>Twoja firma</v-card-title>
+      <v-card-text>
+        <div class="text--primary">
+          <strong>Nazwa firmy:</strong> {{ profile.companyFullName }}
+        </div>
+        <div class="text--primary">
           <strong>Adres:</strong> {{ profile.address }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>Adres Korespondencyjny:</strong>
           {{ profile.addressCorrespondence }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>NIP:</strong> {{ profile.nip }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>REGON:</strong> {{ profile.regon }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>KRS:</strong> {{ profile.krs }}
-        </v-card-text>
-        <v-card-text class="py-0">
+        </div>
+        <div class="text--primary">
           <strong>Telefon:</strong> {{ profile.phoneNumber }}
-        </v-card-text>
-      </v-col>
-      <v-col sm="12" xs="12" md="2">
-        <v-card-actions class="pt-0 d-flex justify-space-between">
-          <personal-data-edit-dialog v-on:action-completed="actionDone"/>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
-                <v-icon>mdi-download</v-icon>
-              </v-btn>
-            </template>
-            <span>Pobierz dane</span>
-          </v-tooltip>
-          <confirm-personal-data-delete v-on:action-completed=""/>
-        </v-card-actions>
-
-
-      </v-col>
-    </v-row>
-
-
+        </div>
+      </v-card-text>
+    </v-card>
+    <v-card-title>Opcje</v-card-title>
+    <v-card-actions>
+      <v-card-text class="mb-1 d-flex justify-space-between">
+        <personal-data-edit-dialog v-on:action-completed="actionDone"/>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Pobierz dane</span>
+        </v-tooltip>
+        <confirm-personal-data-delete v-on:action-completed=""/>
+      </v-card-text>
+    </v-card-actions>
   </div>
 </template>
 

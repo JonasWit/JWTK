@@ -1,7 +1,7 @@
 ﻿<template>
 
   <v-card flat class="mb-2">
-    <v-card-title class="d-flex justify-center error--text my-4">Usunięcie Danych Kancelarii</v-card-title>
+    <v-card-title class="d-flex justify-center my-4">Usunięcie Danych Kancelarii</v-card-title>
     <v-col class="d-flex justify-center" cols="12">
       <div class="d-flex flex-column">
         <v-card-subtitle>
@@ -12,13 +12,11 @@
           nie potrzebuje wglądu we wprowadzone dane, ponieważ odzyskanie ich nie będzie możliwe.
         </v-card-subtitle>
         <v-divider class="my-4"></v-divider>
-
-
         <default-confirmation-dialog button-color="error"
                                      v-on:action-confirmed="deleteLegalAppKey" title="Usuń Dane"
                                      button-text="Usuń Dane"
                                      message="Czy na pewno chcesz trwale usunąć wszystkie dane?"
-                                     tooltip-message="usuń dane"/>
+                                     tooltip-message="Usuń dane"/>
       </div>
     </v-col>
   </v-card>

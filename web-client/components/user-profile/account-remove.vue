@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <v-card flat class="mb-2">
-      <v-card-title class="d-flex justify-center error--text">Usunięcie Konta</v-card-title>
+      <v-card-title class="d-flex justify-center">Usunięcie Konta</v-card-title>
       <v-col class="d-flex justify-center" cols="12">
         <div class="d-flex flex-column">
           <v-card-subtitle>
