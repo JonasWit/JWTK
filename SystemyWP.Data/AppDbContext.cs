@@ -75,6 +75,14 @@ namespace SystemyWP.Data
         {
             #region Access Specific
 
+            modelBuilder.Entity<LegalAppDataAccess>()
+                .HasIndex(x => x.ItemId);
+            
+            modelBuilder.Entity<MedicalAppDataAccess>()
+                .HasIndex(x => x.ItemId);
+            
+            //General
+
             modelBuilder.Entity<User>()
                 .HasMany(x => x.LegalAppDataAccesses)
                 .WithOne(x => x.User)
