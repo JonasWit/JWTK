@@ -1,14 +1,12 @@
 ﻿<template>
   <v-container>
     <v-row no-gutters>
-      <!--      <v-col cols="2">-->
-      <!--                <navigation-drawer/>-->
-      <!--      </v-col>-->
       <v-col cols="12" class="my-5">
         <breadcrumbs/>
+        <reminders-floating-icon/>
         <slot name="content">
         </slot>
-        <reminders-floating-icon/>
+
       </v-col>
     </v-row>
   </v-container>

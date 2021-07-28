@@ -104,7 +104,6 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
-      <button-to-go-up/>
     </template>
   </layout>
 
