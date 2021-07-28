@@ -1,7 +1,10 @@
 ﻿<template>
-  <div class="my-5">
+  <div>
     <v-card flat>
-      <v-card-title>Dane podstawowe</v-card-title>
+      <v-toolbar color="primary" dense>
+        <v-toolbar-title-title class="white--text">Dane podstawowe</v-toolbar-title-title>
+      </v-toolbar>
+
       <v-card-text>
         <div class="text--primary"><strong>Nazwa Użytkownika:</strong> {{ profile.username }}</div>
         <div class="text--primary">
@@ -16,7 +19,10 @@
       </v-card-text>
     </v-card>
     <v-card flat>
-      <v-card-title>Twoja firma</v-card-title>
+      <v-toolbar color="primary" dense>
+        <v-toolbar-title class="white--text">Twoja firma</v-toolbar-title>
+      </v-toolbar>
+
       <v-card-text>
         <div class="text--primary">
           <strong>Nazwa firmy:</strong> {{ profile.companyFullName }}
@@ -42,7 +48,9 @@
         </div>
       </v-card-text>
     </v-card>
-    <v-card-title>Opcje</v-card-title>
+    <v-toolbar color="primary" dense>
+      <v-toolbar-title class="white--text">Opcje</v-toolbar-title>
+    </v-toolbar>
     <v-card-actions>
       <v-card-text class="mb-1 d-flex justify-space-between">
         <personal-data-edit-dialog v-on:action-completed="actionDone"/>

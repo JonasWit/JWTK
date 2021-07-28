@@ -8,6 +8,7 @@
         <breadcrumbs/>
         <slot name="content">
         </slot>
+        <reminders-floating-icon/>
       </v-col>
     </v-row>
   </v-container>
@@ -17,10 +18,11 @@
 
 import NavigationDrawer from "./navigation-drawer";
 import Breadcrumbs from "@/components/legal-app/breadcrumbs";
+import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
 
 export default {
   name: "layout",
-  components: {Breadcrumbs, NavigationDrawer},
+  components: {RemindersFloatingIcon, Breadcrumbs, NavigationDrawer},
 };
 </script>
 

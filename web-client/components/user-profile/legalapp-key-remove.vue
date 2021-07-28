@@ -1,7 +1,8 @@
 ﻿<template>
-
   <v-card flat class="mb-2">
-    <v-card-title class="d-flex justify-center my-4">Usunięcie Danych Kancelarii</v-card-title>
+    <v-toolbar color="primary" dense>
+      <v-toolbar-title class="white--text">Usunięcie Danych Kancelarii</v-toolbar-title>
+    </v-toolbar>
     <v-col class="d-flex justify-center" cols="12">
       <div class="d-flex flex-column">
         <v-card-subtitle>

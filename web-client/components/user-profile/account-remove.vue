@@ -1,7 +1,9 @@
 ﻿<template>
   <div>
-    <v-card flat class="mb-2">
-      <v-card-title class="d-flex justify-center">Usunięcie Konta</v-card-title>
+    <v-card flat class="mt-2">
+      <v-toolbar color="primary" dense>
+        <v-toolbar-title class="white--text">Usunięcie Konta</v-toolbar-title>
+      </v-toolbar>
       <v-col class="d-flex justify-center" cols="12">
         <div class="d-flex flex-column">
           <v-card-subtitle>

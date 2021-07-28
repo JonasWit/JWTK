@@ -5,32 +5,31 @@
     </v-toolbar>
     <v-row>
       <v-col md="4">
-        <v-card>
-          <main-header class="mt-6"/>
-          <v-divider></v-divider>
+        <v-card class="mt-6">
+          <main-header/>
           <personal-data class="mb-4"/>
         </v-card>
       </v-col>
       <v-col md="8">
-        <v-card>
-          <if-auth>
-            <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-              <div v-if="legalAppAllowed && legalAppKeyAvailable" class="mt-4">
-                <v-card-text>
-                  <v-card-title class="d-flex justify-center my-3">
-                    Twoje konto
-                  </v-card-title>
+        <v-card class="mt-6">
+          <v-toolbar color="primary" dense>
+            <v-toolbar-title class="white--text">Twoje konto</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <div class="text--primary py-1">
+              <strong>Ostatnie logowanie:</strong> {{ formatDateToLocaleTimeZone(profile.lastLogin) }}
+            </div>
+            <if-auth>
+              <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
+                <div v-if="legalAppAllowed && legalAppKeyAvailable" class="mt-4">
                   <div class="text--primary py-1">
-                    <strong>Ostatnie logowanie:</strong> {{ formatDateToLocaleTimeZone(profile.lastLogin) }}
-                  </div>
-                  <div class="text--primary py-1">
-                    <strong>Ostatnie logowanie:</strong>
+                    <strong>Klucz do Twoja Kancelaria jest ważny do:</strong>
                     {{ formatDateForCalendar(profile.legalAppDataAccessKey.expireDate) }}
                   </div>
-                </v-card-text>
-              </div>
-            </template>
-          </if-auth>
+                </div>
+              </template>
+            </if-auth>
+          </v-card-text>
         </v-card>
         <v-card>
           <if-auth>
@@ -44,7 +43,7 @@
         <v-card>
           <if-auth>
             <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-              <div>
+              <div class="mt-4">
                 <account-remove/>
               </div>
             </template>
