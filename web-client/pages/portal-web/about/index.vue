@@ -6,8 +6,7 @@
           <h1>Zapraszamy do współpracy</h1>
           <h5>
             <span>Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb Twojej firmy.
-            Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie biznesu.
-          </h5>
+            Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie biznesu. </h5>
         </div>
       </div>
     </section>
@@ -25,8 +24,7 @@
         <h1>Technologie</h1>
         <h5>
           Wykorzystujemy sprawdzoną technologię. Więcej informacji możesz uzyskać na oficjlanych stronach podlinkowanych
-          poniżej.
-        </h5>
+          poniżej. </h5>
         <v-row class="d-flex justify-space-between">
           <v-card elevation="0" class="icon-card mx-auto" v-for="item in icons" :key="item.id">
             <a :href="item.url" target="_blank"><img class="icon" :src="item.img"/></a>
@@ -49,14 +47,14 @@ export default {
           img: `${require('assets/images/background.jpg')}`,
           icon: `${require('assets/images/icons8-security-configuration-100.png')}`,
           title: 'Bezpieczeństwo',
-          text: 'Kładziemy nacisk na bezpieczeńswto naszych aplikacji. Korzystamy z najnowszych rozwiązań w zakresie bezpieczeństwa baz danych i bezpieczeństwa w sieci.'
+          text: 'Kładziemy nacisk na bezpieczeńswto naszych aplikacji. Korzystamy z najnowszych rozwiązań w zakresie bezpieczeństwa.'
         },
         {
           id: 2,
           img: `${require('assets/images/background.jpg')}`,
           icon: `${require('assets/images/icons8-innovation-100.png')}`,
           title: 'Innowacyjność',
-          text: 'Korzystamy z najnowszych technologii zapewniających bezproblemowe funkcjonowanie naszych rozwiązań.\n' +
+          text: 'Zawsze rozpoczynamy projekt w najnowszej dostępnej wersji danej technologii. Oferujemy również późniejsze utrzymanie i akutalizaję aplikacji.\n' +
             '\n'
         },
         {
@@ -64,7 +62,7 @@ export default {
           img: `${require('assets/images/background.jpg')}`,
           icon: `${require('assets/images/icons8-short-hair-girl-question-mark-100.png')}`,
           title: 'Elastyczność',
-          text: 'Naszym celem jest zadowolenie klienta! Dlatego, realizując nasze projekty i nie wiem co tutaj napisać dalej. POMOCY!!!'
+          text: 'Jesteśmy otwarci na wszelkie zmiany i dodatki do aplikacji. Zarówno oferowanych już na portalu jak i stworonych na zamówienie. Oferujemy zawsze bezpłatną konsultację i wycenę każdej zmiany lub rozszeżenia.'
         },
 
 
