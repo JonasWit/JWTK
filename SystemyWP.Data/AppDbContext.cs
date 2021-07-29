@@ -24,6 +24,8 @@ namespace SystemyWP.Data
         public DbSet<User> Users { get; set; }
         public DbSet<PortalLogRecord> PortalLogs { get; set; }
         public DbSet<ApiLogRecord> ApiLogs { get; set; }
+        
+        public DbSet<PortalPublication> PortalPublications { get; set; }
 
         #endregion
 
