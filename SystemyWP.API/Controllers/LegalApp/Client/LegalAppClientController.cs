@@ -239,13 +239,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 _context.RemoveRange(_context.LegalAppDataAccesses
                     .Where(x => 
                         x.ItemId == legalAppClient.Id && x.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppClient));
-
+                        
                 _context.RemoveRange(_context.LegalAppDataAccesses
-                    .Where(access => 
+                    .Where(dataAccess => 
+                        dataAccess.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase && 
                         _context.LegalAppCases
-                            .Any(cs => 
-                                cs.LegalAppClientId == legalAppClient.Id && cs.Id == access.ItemId) && access.LegalAppRestrictedType == LegalAppRestrictedType.LegalAppCase));
-                
+                            .Where(legalAppCase => legalAppCase.LegalAppClientId == clientId)
+                            .Any(x => x.Id == dataAccess.ItemId)));
+
                 _context.Remove(legalAppClient);
                 
                 await _context.SaveChangesAsync();
