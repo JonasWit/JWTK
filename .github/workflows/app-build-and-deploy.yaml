@@ -2,8 +2,7 @@
 
 on:
   workflow_dispatch:
-    branches:
-      - Release
+
 jobs:
   build:
     name: Build our App
