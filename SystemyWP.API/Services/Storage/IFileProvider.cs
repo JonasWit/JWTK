@@ -5,7 +5,8 @@ namespace SystemyWP.API.Services.Storage
 {
     public interface IFileProvider
     {
+        public Task<string> SavePortalPublicationImageAsync(Stream fileStream);
         public Task<string> SaveProfileImageAsync(Stream fileStream);
-        public Task<string> DeleteProfileImageAsync(string filePath);
+        public Task<string> DeleteFileAsync(string filePath);
     }
 }

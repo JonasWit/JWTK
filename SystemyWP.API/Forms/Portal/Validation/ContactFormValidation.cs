@@ -2,7 +2,7 @@
 
 namespace SystemyWP.API.Forms.Portal.Validation
 {
-    public class ContactFormValidation: AbstractValidator<ContactForm>
+    public class ContactFormValidation : AbstractValidator<ContactForm>
     {
         public ContactFormValidation()
         {

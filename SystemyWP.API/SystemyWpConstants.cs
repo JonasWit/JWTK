@@ -66,11 +66,17 @@ namespace SystemyWP.API
                 public const string S3 = nameof(S3);
             }
 
-            private const string ProfilePrefix = "profile_picture_";
+            private const string ProfilePrefix = "prof_pic_";
+            private const string PortalPublicationPrefix = "portal_pub_";
 
             public static string GenerateProfileFileName()
             {
                 return $"{ProfilePrefix}{DateTime.Now.Ticks}.jpg";
+            }
+            
+            public static string GeneratePortalPublicationFileName()
+            {
+                return $"{PortalPublicationPrefix}{DateTime.Now.Ticks}.jpg";
             }
         }
     }
