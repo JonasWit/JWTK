@@ -1,11 +1,27 @@
 <template>
   <layout>
     <template v-slot:content v-if="client">
-
       <h1 class="ma-3">{{ client.name }}</h1>
       <v-row>
         <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
-          <v-col>
+          <if-auth v-if="item.adminAccess">
+            <template v-slot:allowed="{portalAdmin, clientAdmin}">
+              <v-col v-if="(portalAdmin || clientAdmin)">
+                <v-hover v-slot="{ hover }">
+                  <nuxt-link class="nav-item" :to="item.route">
+                    <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
+                      <v-row class="d-flex ma-3" align="center">
+                        <v-icon>{{ item.icon }}</v-icon>
+                        <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
+                      </v-row>
+                      <v-card-text class="font-weight-light">{{ item.text }}</v-card-text>
+                    </v-card>
+                  </nuxt-link>
+                </v-hover>
+              </v-col>
+            </template>
+          </if-auth>
+          <v-col v-else>
             <v-hover v-slot="{ hover }">
               <nuxt-link class="nav-item" :to="item.route">
                 <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
@@ -34,25 +50,26 @@ export default {
     client: null,
   }),
   async fetch() {
-    this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`)
+    this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`);
   },
   async asyncData({params}) {
     return {
       items: [
-
         {
           id: '1',
           route: `/legal-application/clients/${params.client}/contacts`,
           name: 'Kontakty',
           text: 'Lista kontaktów dla Klienta',
-          icon: 'mdi-card-account-mail-outline'
+          icon: 'mdi-card-account-mail-outline',
+          adminAccess: false
         },
         {
           id: '2',
           route: `/legal-application/clients/${params.client}/cases`,
           name: 'Sprawy',
           text: 'Zarządzaj sprawami klienta',
-          icon: 'mdi-briefcase-account-outline'
+          icon: 'mdi-briefcase-account-outline',
+          adminAccess: false
 
         },
         {
@@ -60,24 +77,27 @@ export default {
           route: `/legal-application/clients/${params.client}/notes`,
           name: 'Notatki',
           text: 'Zarządzaj notatkami',
-          icon: 'mdi-book-open-outline'
+          icon: 'mdi-book-open-outline',
+          adminAccess: false
         },
         {
           id: '4',
           route: `/legal-application/clients/${params.client}/financials`,
           name: 'Rozliczenia',
           text: 'Zarządzaj rozliczeniami',
-          icon: 'mdi-calculator-variant-outline'
+          icon: 'mdi-calculator-variant-outline',
+          adminAccess: false
         },
         {
           id: '5',
           route: `/legal-application/clients/${params.client}/archived-cases`,
           name: 'Archiwum Spraw',
           text: 'Lista zarchiwizowanych Spraw',
-          icon: 'mdi-briefcase-account-outline'
+          icon: 'mdi-briefcase-account-outline',
+          adminAccess: true
         },
       ],
-    }
+    };
   },
 
 }

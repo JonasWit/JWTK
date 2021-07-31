@@ -18,8 +18,8 @@ export const REMINDER_TYPES = {
 
 export const ROLES = {
   INVITED: "Invited",
-  CLIENT: "User",
-  CLIENT_ADMIN: "UserAdmin",
+  USER: "User",
+  USER_ADMIN: "UserAdmin",
   PORTAL_ADMIN: "PortalAdmin",
 };
 

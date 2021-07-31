@@ -53,10 +53,10 @@ export default {
   },
   methods: {
     convertRole(role) {
-      if (role === ROLES.CLIENT_ADMIN) {
+      if (role === ROLES.USER_ADMIN) {
         return ROLES_POLISH.CLIENT_ADMIN;
       }
-      if (role === ROLES.CLIENT) {
+      if (role === ROLES.USER) {
         return ROLES_POLISH.CLIENT;
       }
       if (role === ROLES.INVITED) {

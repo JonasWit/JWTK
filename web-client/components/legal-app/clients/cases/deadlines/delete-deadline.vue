@@ -46,19 +46,19 @@ export default {
   methods: {
     async deleteDeadline() {
       try {
-        let caseId = this.$route.params.case
-        let deadlineId = this.deadlineForAction.id
+        let caseId = this.$route.params.case;
+        let deadlineId = this.deadlineForAction.id;
         await this.$axios.$delete(deleteDeadline(caseId, deadlineId));
         this.$notifier.showSuccessMessage("Termin został usunięty!");
       } catch (e) {
-        console.error('error', e)
+        console.error('error', e);
       } finally {
         this.dialog = false;
         this.$emit('delete-completed');
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

@@ -6,8 +6,7 @@
         <v-spacer></v-spacer>
         <add-note/>
       </v-toolbar>
-      <v-alert v-if="Object.keys(clientNotesList).length === 0" elevation="5" text type="info"
-               dismissible
+      <v-alert v-if="Object.keys(clientNotesList).length === 0" elevation="5" text type="info" dismissible
                close-text="Zamknij">
         Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
@@ -61,7 +60,7 @@ import {mapActions, mapState} from "vuex";
 export default {
   name: "index",
   components: {AddNote, NotesDetails, Layout},
-  middleware: ['legal-app-permission', 'client', 'authenticated'],
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   fetch() {
     return this.getClientsNotes(this.$route.params.client);

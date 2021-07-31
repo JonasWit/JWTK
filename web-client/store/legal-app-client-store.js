@@ -119,7 +119,7 @@ export const mutations = {
   updateNotesTitlesListFromFetch(state, {clientNotesList}) {
     state.clientNotesList = clientNotesList;
   },
-  //CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
+  //USER ACCESS - GET ALLOWED & ELIGIBLE USERS
   updateAllowedUsersList(state, {allowedUsersList}) {
     state.allowedUsersList = allowedUsersList;
   },
@@ -224,7 +224,7 @@ export const actions = {
     }
   },
 
-  //CLIENT Notes - list of titles
+  //USER Notes - list of titles
 
   async getClientsNotes({commit}, clientId) {
     try {
@@ -242,9 +242,8 @@ export const actions = {
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
-
   },
-  // CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
+  // USER ACCESS - GET ALLOWED & ELIGIBLE USERS
 
   async getAllowedUsers({commit}, {clientId}) {
     try {
@@ -314,6 +313,7 @@ export const actions = {
   async getCaseDeadlines({commit}, {caseId, query}) {
     try {
       let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/case/${caseId}/list${query}`);
+      console.warn('deadlines input', deadlines);
       deadlines.sort((a, b) => {
         const dateA = new Date(a.deadline);
         const dateB = new Date(b.deadline);

@@ -19,8 +19,8 @@
             Jeśli chcesz zmodyfikować treść notatki, użyj guzika "EDYTUJ". W nowym okienku będziesz mógł dokonać zmian.
             Jeśli już nie potrzebujesz tej notatki, użyj guzika "USUŃ" i potwierdź operację.
           </v-alert>
-          <v-subheader class="mx-2"><span
-            class="font-weight-bold">Utworzono: </span> {{ formatDateWithHours(noteDetails.created) }}
+          <v-subheader class="mx-2"><span class="font-weight-bold">Utworzono: </span>
+            {{ formatDateWithHours(noteDetails.created) }}
           </v-subheader>
           <v-subheader class="mx-2"><span class="font-weight-bold">Utworzone przez: </span> {{ noteDetails.createdBy }}
           </v-subheader>
@@ -28,8 +28,8 @@
             <v-card-title>Treść notatki</v-card-title>
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
             <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
-            <v-checkbox v-model="checkbox" :label="labelCondition(noteDetails.public)" :value="noteDetails.public"
-                        value disabled></v-checkbox>
+            <v-checkbox v-model="checkbox" :label="labelCondition(noteDetails.public)" :value="noteDetails.public" value
+                        disabled></v-checkbox>
           </v-row>
           <v-card-text>
             {{ noteDetails.message }}
@@ -56,6 +56,7 @@ import {formatDate, formatDateWithHours} from "@/data/date-extensions";
 import EditNoteDialog from "@/components/legal-app/clients/notes/edit-note-dialog";
 import DeleteNoteDialog from "@/components/legal-app/clients/notes/delete-note-dialog";
 import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapActions} from "vuex";
 
 export default {
   name: "notes-details",
@@ -81,20 +82,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async getNotesDetails() {
       try {
         let clientId = this.$route.params.client;
         let noteId = this.selectedNote.id;
         this.noteDetails = await this.$axios.$get(getNote(clientId, noteId));
         this.noteForAction = this.selectedNote.id;
-        console.log('notes details', this.noteDetails)
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie");
       }
     },
     async editDone() {
       await this.getNotesDetails();
+      return this.getClientsNotes(this.$route.params.client);
     },
     async deleteDone() {
       this.dialog = false;
@@ -107,9 +108,9 @@ export default {
     },
     labelCondition(val) {
       if (val) {
-        return "Notatka publiczna"
+        return "Notatka publiczna";
       }
-      return "Notatka prywatna"
+      return "Notatka prywatna";
     }
   }
 };

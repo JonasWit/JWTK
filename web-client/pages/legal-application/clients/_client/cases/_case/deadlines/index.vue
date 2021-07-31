@@ -53,7 +53,7 @@
   </layout>
 </template>
 <script>
-import {formatDate, queryDate, todayDate} from "@/data/date-extensions";
+import {formatDate, queryDateExtended, todayDate} from "@/data/date-extensions";
 import Layout from "@/components/legal-app/layout";
 import AddDeadline from "@/components/legal-app/clients/cases/deadlines/add-deadline";
 import {mapActions, mapState} from "vuex";
@@ -68,34 +68,32 @@ export default {
     tab: null,
   }),
   async fetch() {
-    let caseId = this.$route.params.case
-    let query = this.query
-    console.warn('deadlines', this.deadlines)
-    await this.getCaseDeadlines({caseId, query})
-    await this.getCaseDetails({caseId})
+    let caseId = this.$route.params.case;
+    let query = this.query;
+    await this.getCaseDeadlines({caseId, query});
+    await this.getCaseDetails({caseId});
   },
   computed: {
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
     todayDate() {
-      return todayDate()
+      return todayDate();
     },
     query() {
-      return queryDate(this.todayDate)
+      return queryDateExtended(this.todayDate, 3600);
     }
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails', 'getCaseDeadlines']),
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
     async actionDone() {
-      let caseId = this.$route.params.case
-      let query = this.query
-      await this.getCaseDeadlines({caseId, query})
-
+      let caseId = this.$route.params.case;
+      let query = this.query;
+      await this.getCaseDeadlines({caseId, query});
     }
   }
-}
+};
 </script>
 
 <style scoped>

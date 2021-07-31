@@ -1,34 +1,16 @@
 <template>
   <div>
     <v-sheet tile height="64" class="d-flex">
-      <v-toolbar
-        flat
-      >
-        <v-btn
-          class="mr-4"
-          color="accent"
-          @click="setToday"
-        >
+      <v-toolbar flat>
+        <v-btn class="mr-4" color="accent" @click="setToday">
           Dzisiaj
         </v-btn>
-        <v-btn
-          fab
-          text
-          small
-          color="grey darken-2"
-          @click="prev"
-        >
+        <v-btn fab text small color="grey darken-2" @click="prev">
           <v-icon small>
             mdi-chevron-left
           </v-icon>
         </v-btn>
-        <v-btn
-          fab
-          text
-          small
-          color="grey darken-2"
-          @click="next"
-        >
+        <v-btn fab text small color="grey darken-2" @click="next">
           <v-icon small>
             mdi-chevron-right
           </v-icon>
@@ -37,16 +19,9 @@
           {{ $refs.calendar.title }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-menu
-          bottom
-          right
-        >
+        <v-menu bottom right>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="accent"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn color="accent" v-bind="attrs" v-on="on">
               <span>{{ typeToLabel[type] }}</span>
               <v-icon right>
                 mdi-menu-down
@@ -73,11 +48,10 @@
       listą dostępnych widoków.
     </v-alert>
     <v-sheet height="600">
-      <v-calendar v-model="focus" locale="pl" ref="calendar" :weekdays="weekday" :type="type"
-                  :events="newEvents" :event-overlap-mode="mode" :event-overlap-threshold="30" @change="getEvents"
-                  @click:more="viewDay" @click:date="viewDay" @click:event="showEvent"></v-calendar>
-      <v-menu v-model="selectedOpen" :close-on-content-click="false"
-              :activator="selectedEvent">
+      <v-calendar v-model="focus" locale="pl" ref="calendar" :weekdays="weekday" :type="type" :events="newEvents"
+                  :event-overlap-mode="mode" :event-overlap-threshold="30" @change="getEvents" @click:more="viewDay"
+                  @click:date="viewDay" @click:event="showEvent"></v-calendar>
+      <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedEvent">
         <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
           <v-toolbar :color="selectedEvent.color" dark>
             <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
@@ -140,17 +114,17 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDeadlines']),
     viewDay({date}) {
-      this.focus = date
-      this.type = 'day'
+      this.focus = date;
+      this.type = 'day';
     },
     setToday() {
-      this.focus = ''
+      this.focus = '';
     },
     prev() {
-      this.$refs.calendar.prev()
+      this.$refs.calendar.prev();
     },
     next() {
-      this.$refs.calendar.next()
+      this.$refs.calendar.next();
     },
     showEvent({nativeEvent, event}) {
       const open = () => {
@@ -167,7 +141,7 @@ export default {
       nativeEvent.stopPropagation();
     },
     eventDate(item) {
-      return new Date(item.deadline).toISOString().substr(0, 10)
+      return new Date(item.deadline).toISOString().substr(0, 10);
     },
     async getEvents() {
       try {
@@ -186,11 +160,11 @@ export default {
         });
         this.newEvents = newEvents;
       } catch (error) {
-        handleError(error)
+        handleError(error);
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

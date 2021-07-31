@@ -17,9 +17,9 @@ export const getters = {
   userRole(state) {
     if (state.profile.role === ROLES.INVITED) {
       return "Zaproszony";
-    } else if (state.profile.role === ROLES.CLIENT) {
+    } else if (state.profile.role === ROLES.USER) {
       return "Klient";
-    } else if (state.profile.role === ROLES.CLIENT_ADMIN) {
+    } else if (state.profile.role === ROLES.USER_ADMIN) {
       return "Klient z uprawnieniemiami Administratora";
     } else if (state.profile.role === ROLES.PORTAL_ADMIN) {
       return "Administarator Portalu";
@@ -30,8 +30,8 @@ export const getters = {
   legalAppKeyAvailable: state => !!state.profile.legalAppDataAccessKey,
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
-  client: (state, getters) => getters.authenticated && state.profile.role === ROLES.CLIENT,
-  clientAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.CLIENT_ADMIN || getters.portalAdmin),
+  client: (state, getters) => getters.authenticated && state.profile.role === ROLES.USER,
+  clientAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.USER_ADMIN || getters.portalAdmin),
   portalAdmin: (state, getters) => getters.authenticated && state.profile.role === ROLES.PORTAL_ADMIN,
   legalAppAllowed: (state, getters) => getters.authenticated && state.profile.legalAppAllowed === true,
 };
@@ -55,18 +55,23 @@ export const mutations = {
 };
 
 export const actions = {
-  async initialize({commit}) {
+  async initialize({commit, getters}) {
     try {
       let profile = await this.$axios.$get('/api/users/me');
-      console.warn('User Profile: ', profile);
       commit('saveProfile', {profile});
-
-      let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
-      console.warn('Related Users: ', users);
-      commit('saveRelatedUsers', {users});
-
     } catch (error) {
       console.error("Not authorized");
+    }
+
+    if (getters.clientAdmin) {
+      try {
+        let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
+        commit('saveRelatedUsers', {users});
+      } catch (error) {
+        console.error("No related users");
+      }
+    } else {
+      console.warn("Related users not visible");
     }
   },
   async reloadProfile({commit}) {

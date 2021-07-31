@@ -28,6 +28,7 @@
               <v-text-field v-model="deadline" label="Wybierz termin" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on" :rules="validation.deadline"></v-text-field>
             </template>
+            <!--            Todo: dodac max date - +10 lat-->
             <v-date-picker v-model="deadline" @input="menu2 = false"></v-date-picker>
           </v-menu>
           <v-text-field v-model="form.message" label="Opis" required :rules="validation.message"></v-text-field>
@@ -41,7 +42,6 @@
           <v-btn text color="primary" @click="addNewDeadline">
             Zapisz
           </v-btn>
-
         </v-card-actions>
       </v-card>
     </v-form>
@@ -62,14 +62,11 @@ export default {
     menu2: false,
     form: {
       message: "",
-
-
     },
     validation: {
       valid: false,
       message: notEmptyAndLimitedRule("Opis nie może byc pusty i może zawierać maksymalnie 200 znaków.", 1, 200),
       deadline: notEmptyRule("Data nie może być pusta!")
-
     },
   }),
 
@@ -85,12 +82,12 @@ export default {
           deadline: new Date(`${this.deadline}T23:59:59`),
           message: this.form.message,
         };
-        let caseId = this.$route.params.case
+        let caseId = this.$route.params.case;
         await this.$axios.$post(createDeadline(caseId), newDeadline);
-        console.warn('nowy termin', newDeadline)
-        this.$nuxt.refresh()
+        console.warn('nowy termin', newDeadline);
+        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Termin dodany pomyślnie!");
-        this.resetForm()
+        this.resetForm();
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
@@ -103,7 +100,7 @@ export default {
       this.$refs.addNewDeadlineForm.resetValidation();
     },
   }
-}
+};
 </script>
 
 <style scoped>

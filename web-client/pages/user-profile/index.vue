@@ -67,21 +67,16 @@ import {formatDateForInvoice, formatDateToLocaleTimeZone} from "@/data/date-exte
 export default {
   components: {LegalappKeyRemove, IfAuth, AccountRemove, PersonalData, MainHeader},
   middleware: ["user", "authenticated"],
-  data: () => ({}),
-
-  fetch() {
-    console.log('profile', this.profile.legalAppDataAccessKeys)
-  },
   computed: {
     ...mapState("auth", ["profile"]),
     ...mapGetters('auth', ['authenticated'])
   },
   methods: {
     formatDateToLocaleTimeZone(date) {
-      return formatDateToLocaleTimeZone(date)
+      return formatDateToLocaleTimeZone(date);
     },
     formatDateForCalendar(date) {
-      return formatDateForInvoice(date)
+      return formatDateForInvoice(date);
     }
   }
 };
