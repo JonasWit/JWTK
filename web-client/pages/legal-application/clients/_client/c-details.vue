@@ -101,7 +101,8 @@ export default {
           route: `/legal-application/clients/${params.client}/accesses`,
           name: 'Dostępy',
           text: 'Dostępy do Klienta',
-          icon: 'mdi-briefcase-account-outline'
+          icon: 'mdi-briefcase-account-outline',
+          adminAccess: true
         },
       ],
     };
