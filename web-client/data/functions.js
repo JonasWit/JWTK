@@ -50,3 +50,9 @@ export function handleError(error) {
   }
 }
 
+export function countNotifications(events, deadlines) {
+  let eventsCount = events.length
+  let deadlinesCount = deadlines.length
+  return eventsCount + deadlinesCount
+}
+

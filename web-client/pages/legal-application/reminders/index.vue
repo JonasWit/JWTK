@@ -30,8 +30,15 @@
                 </v-icon>
               </v-btn>
               <v-spacer></v-spacer>
-              <v-select v-model="type" :items="types" item-text="text" dense outlined hide-details
-                        label="Zmień widok"></v-select>
+              <v-select
+                v-model="type"
+                :items="types"
+                item-text="text"
+                dense
+                outlined
+                hide-details
+                label="Zmień widok"
+              ></v-select>
               <v-spacer></v-spacer>
               <v-btn class="mr-4" color="accent" @click="setToday">
                 Dzisiaj
@@ -44,14 +51,28 @@
                   <v-expansion-panel-content>
                     <v-row>
                       <v-col>
-                        <v-select v-model="selectedCategory" :items="items" item-text="text" :item-value="value"
-                                  return-object label="Wybierz kategorię" dense outlined hide-details
-                                  class="ma-2"></v-select>
+                        <v-select
+                          v-model="selectedCategory"
+                          :items="items"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz kategorię"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
                       </v-col>
                       <v-col>
-                        <v-select v-model="selectedStatus" :items="statuses" item-text="text" :item-value="value"
-                                  return-object label="Wybierz status" dense outlined hide-details
-                                  class="ma-2"></v-select>
+                        <v-select
+                          v-model="selectedStatus"
+                          :items="statuses"
+                          item-text="text" :item-value="value" return-object
+                          label="Wybierz status"
+                          dense
+                          outlined
+                          hide-details
+                          class="ma-2"
+                        ></v-select>
                       </v-col>
                       <v-col>
                         <v-btn color="accent" class="ma-2" @click="filterResults()">
@@ -69,10 +90,12 @@
           </v-col>
         </v-sheet>
         <v-sheet height="600">
-          <v-calendar ref="calendar" v-model="focus" :events="filteredEvents" :type="type" color="primary"
-                      @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="getEvents"
-                      :first-interval=5 :interval-minutes=60 :interval-count=15 locale="pl" :weekdays="weekday"
-                      event-overlap-mode="stack"></v-calendar>
+          <v-calendar ref="calendar" v-model="focus"
+                      :events="filteredEvents"
+                      :type="type" color="primary"
+                      @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
+                      @change="getEvents" :first-interval=5 :interval-minutes=60 :interval-count=15 locale="pl"
+                      :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
           <v-menu v-if="!selectedEvent.signature" v-model="selectedOpen" :close-on-content-click="false"
                   :activator="selectedEvent" offset-x>
             <v-card color="grey lighten-4" min-width="500px" max-width="800px" flat light>
@@ -132,8 +155,7 @@ import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
 import EditReminder from "@/components/legal-app/reminders/edit-reminder";
 import {
   formatDateToLocaleTimeZone,
-  formatDateToLocaleTimeZoneWithoutTime,
-  queryDate,
+  formatDateToLocaleTimeZoneWithoutTime, queryDate,
   todayDate
 } from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
@@ -175,79 +197,79 @@ export default {
     try {
       this.$refs.calendar.checkChange();
       await this.getEvents();
-      this.filteredEvents = this.newEvents;
+      this.filteredEvents = this.newEvents
     } catch (e) {
-      console.error('error in fetching event data', e);
+      console.error('error in fetching event data', e)
     }
   },
   computed: {
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
-        return "Spotkanie";
+        return "Spotkanie"
       }
       if (this.selectedEvent.category === 1) {
-        return "Przypomnienie";
+        return "Przypomnienie"
       }
       if (this.selectedEvent.category === 2) {
-        return "Zadanie";
+        return "Zadanie"
       }
     },
     todayDate() {
-      return todayDate();
+      return todayDate()
     },
     query() {
-      return queryDate(this.todayDate);
+      return queryDate(this.todayDate)
     }
   },
   methods: {
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
-        this.filteredEvents = this.newEvents;
+        this.filteredEvents = this.newEvents
       }
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === true) {
-        this.filteredEvents = this.newEvents.filter((item) => item.public === true);
+        this.filteredEvents = this.newEvents.filter((item) => item.public === true)
       }
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === false) {
-        this.filteredEvents = this.newEvents.filter((item) => item.public === false);
+        this.filteredEvents = this.newEvents.filter((item) => item.public === false)
 
       }
       // Meetings
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === false) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === false)
       }
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === true) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0 && item.public === true)
 
       }
       if (this.selectedCategory.value === 0 && this.selectedStatus.value === null) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 0);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 0)
       }
       // Reminders
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === false) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === false);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === false)
       }
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === true) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === true);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1 && item.public === true)
       }
       if (this.selectedCategory.value === 1 && this.selectedStatus.value === null) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 1);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 1)
       }
       // Tasks
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === false) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === false);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === false)
       }
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === true) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === true);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2 && item.public === true)
       }
       if (this.selectedCategory.value === 2 && this.selectedStatus.value === null) {
-        this.filteredEvents = this.newEvents.filter((item) => item.category === 2);
+        this.filteredEvents = this.newEvents.filter((item) => item.category === 2)
       }
     },
     clearFilterResults() {
-      this.selectedCategory = {text: 'Wszystkie kategorie', value: 3};
-      this.selectedStatus = {text: 'Wszystkie statusy', value: null};
-      this.filteredEvents = this.newEvents;
+      this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+      this.selectedStatus = {text: 'Wszystkie statusy', value: null}
+      this.filteredEvents = this.newEvents
     },
     viewDay({date}) {
       this.focus = date;
@@ -278,8 +300,8 @@ export default {
     },
     async getEvents() {
       try {
-        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${this.query}`);
-        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`);
+        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${this.query}`)
+        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
         let newEvents = [];
         remindersList.forEach(x => {
           newEvents.push({
@@ -308,61 +330,61 @@ export default {
         });
         this.newEvents = newEvents;
       } catch (error) {
-        handleError(error);
+        handleError(error)
       }
     },
     setColor(item) {
       if (item.reminderCategory === 0) {
-        return "blue";
+        return "blue"
       }
       if (item.reminderCategory === 1) {
-        return "orange lighten-1";
+        return "orange lighten-1"
       }
       if (item.reminderCategory === 2) {
-        return "green";
+        return "green"
       }
     },
     deadlineDate(item) {
-      return new Date(item.deadline).toISOString().substr(0, 10);
+      return new Date(item.deadline).toISOString().substr(0, 10)
     },
     eventStartDate(item) {
       if (item.allDayEvent) {
-        const date = new Date(item.start);
-        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime);
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
       } else {
-        const date = new Date(item.start);
-        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-        return formatDateToLocaleTimeZone(isoDateTime);
+        const date = new Date(item.start)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
       }
     },
     eventEndDate(item) {
       if (item.allDayEvent) {
-        const date = new Date(item.end);
-        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime);
+        const date = new Date(item.end)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZoneWithoutTime(isoDateTime)
       } else {
-        const date = new Date(item.end);
-        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-        return formatDateToLocaleTimeZone(isoDateTime);
+        const date = new Date(item.end)
+        const isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        return formatDateToLocaleTimeZone(isoDateTime)
       }
     },
     async actionDone() {
       try {
         await this.getEvents();
-        this.selectedCategory = {text: 'Wszystkie kategorie', value: 3};
-        this.selectedStatus = {text: 'Wszystkie statusy', value: null};
-        this.filteredEvents = this.newEvents;
+        this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
+        this.selectedStatus = {text: 'Wszystkie statusy', value: null}
+        this.filteredEvents = this.newEvents
         this.selectedOpen = false;
       } catch (error) {
-        handleError(error);
+        handleError(error)
       }
     },
     labelCondition(val) {
       if (val) {
-        return "Status publiczny";
+        return "Status publiczny"
       }
-      return "Status prywatny";
+      return "Status prywatny"
     }
   }
 };

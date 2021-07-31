@@ -18,60 +18,36 @@
       </v-btn>
     </template>
     <v-row class="mt-16 direction d-flex">
-      <v-col sm="6">
-        <v-card>
-          <v-toolbar color="error" class="white--text">
-            <v-toolbar-title>Masz zbliżające się terminy</v-toolbar-title>
-          </v-toolbar>
-          <v-virtual-scroll :items="deadlinesList" :item-height="50" height="300">
-            <template v-slot:default="{ item }">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.message }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ formatDateForCalendar(item.deadline) }}</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <nuxt-link to="/legal-application/reminders">
-                    <v-btn depressed small>
-                      Sprawdź
-                      <v-icon color="red darken-4" right>
+      <v-card width="400">
+        <v-toolbar color="error" class="white--text">
+          <v-toolbar-title>Plany na dzisiaj i jutro</v-toolbar-title>
+        </v-toolbar>
+        <v-virtual-scroll :items="newEvents" :item-height="50" height="300" item-height="77">
+          <template v-slot:default="{ item }">
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-bold">{{ categoryToDisplay(item) }}</v-list-item-title>
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ formatDateForCalendar(item.deadline) }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <nuxt-link class="nav-item" to="/legal-application/reminders">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon small color="error" v-bind="attrs" v-on="on">
                         mdi-open-in-new
                       </v-icon>
-                    </v-btn>
-                  </nuxt-link>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-virtual-scroll>
-        </v-card>
-      </v-col>
-      <v-col sm="6">
-        <v-card>
-          <v-toolbar color="warning" class="white--text">
-            <v-toolbar-title>Plany na dzisiaj i jutro</v-toolbar-title>
-          </v-toolbar>
-          <v-virtual-scroll :items="eventsList" :item-height="50" height="300">
-            <template v-slot:default="{ item }">
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ categoryToDisplay(item) }}</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <nuxt-link to="/legal-application/reminders">
-                    <v-btn depressed small>
-                      Sprawdź
-                      <v-icon color="red darken-4" right>
-                        mdi-open-in-new
-                      </v-icon>
-                    </v-btn>
-                  </nuxt-link>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-virtual-scroll>
-        </v-card>
-      </v-col>
+                    </template>
+                    <span>Sprawdź</span>
+                  </v-tooltip>
+                </nuxt-link>
+              </v-list-item-action>
+            </v-list-item>
+            <v-divider></v-divider>
+          </template>
+        </v-virtual-scroll>
+      </v-card>
     </v-row>
   </v-speed-dial>
 </template>
@@ -82,7 +58,6 @@ import {
   queryDateForFloatingBell,
   todayDate
 } from "@/data/date-extensions";
-import {handleError} from "@/data/functions";
 
 export default {
   name: "reminders-floating-icon",
@@ -97,13 +72,12 @@ export default {
     bottom: false,
     left: false,
     transition: 'scale',
-    deadlinesList: [],
-    eventsList: [],
     notifications: 0,
+    newEvents: []
   }),
+
   async fetch() {
-    await this.getComingDeadlines()
-    await this.getEventsList()
+    await this.createEvents()
     await this.countNotifications()
   },
   computed: {
@@ -113,50 +87,67 @@ export default {
     query() {
       return queryDateForFloatingBell(this.todayDate)
     },
-
   },
 
   methods: {
-    async getComingDeadlines() {
+    async createEvents() {
       try {
-        this.deadlinesList = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${this.query}`)
-        console.log('upcoming deadlines', this.deadlinesList)
-      } catch (error) {
-        handleError(error)
+        let query = this.query
+        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${query}`)
+        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list/limit${query}`)
+        let newEvents = [];
+        console.log('terminy', deadlines)
+        console.log('eventy', remindersList)
+        remindersList.forEach(x => {
+          newEvents.push({
+            name: x.name,
+            details: x.message,
+            deadline: x.start,
+            category: x.reminderCategory,
+            id: x.id,
+          });
+        });
+        deadlines.forEach(x => {
+          newEvents.push({
+            name: x.case.name,
+            details: x.message,
+            deadline: x.deadline,
+            category: 4,
+            id: x.id,
+          });
+        });
+        newEvents.sort((a, b) => {
+          const dateA = new Date(a.deadline)
+          const dateB = new Date(b.deadline)
+          return dateA - dateB
+        });
+        this.newEvents = newEvents;
+        console.log('eventy', this.newEvents)
+      } catch (e) {
+        console.log('error', e)
       }
+    },
 
-    },
-    async getEventsList() {
-      try {
-        this.eventsList = await this.$axios.$get(`/api/legal-app-reminders/list/limit${this.query}`)
-        console.log('events all', this.eventsList)
-      } catch (error) {
-        handleError(error)
-      }
-    },
     categoryToDisplay(item) {
-      if (item.reminderCategory === 0) {
+      if (item.category === 0) {
         return "Spotkanie"
       }
-      if (item.reminderCategory === 1) {
+      if (item.category === 1) {
         return "Przypomnienie"
       }
-      if (item.reminderCategory === 2) {
+      if (item.category === 2) {
         return "Zadanie"
+      } else {
+        return "Termin"
       }
     },
-
     formatDateForCalendar(date) {
       return formatDate(date)
     },
 
-    async countNotifications() {
-      let eventsCount = this.eventsList.length
-      let deadlinesCount = this.deadlinesList.length
-      this.notifications = eventsCount + deadlinesCount
+    countNotifications() {
+      return this.notifications = this.newEvents.length
     }
-
-
   }
 }
 
@@ -166,10 +157,14 @@ export default {
 
 .direction {
   position: absolute;
-  right: 10%;
-  bottom: 15%;
+  bottom: 45%;
   width: 800px;
 }
+
+@media only screen and (max-width: 780px) {
+
+}
+
 
 .reminder-bell {
   -webkit-animation: ring 4s .7s ease-in-out infinite;

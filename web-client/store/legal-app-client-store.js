@@ -64,10 +64,10 @@ export const getters = {
 
   //Access allowed users
   allowedUsers(state) {
-    return state.allowedUsersList;
+    return state.allowedUsersList
   },
   eligibleUsers(state) {
-    return state.eligibleUsersList;
+    return state.eligibleUsersList
   },
 
 };
@@ -80,7 +80,7 @@ export const mutations = {
 
   //CONTACT ITEMS
   updateContactItemsList(state, {contactItemsFromFetch}) {
-    state.contactItemsFromFetch = contactItemsFromFetch;
+    state.contactItemsFromFetch = contactItemsFromFetch
   },
 
   //Contact-details and add-email dialogs
@@ -114,37 +114,37 @@ export const mutations = {
 
   //Notes list for cases
   updateNotesListForCases(state, {notesListForCases}) {
-    state.notesListForCases = notesListForCases;
+    state.notesListForCases = notesListForCases
   },
   updateNotesTitlesListFromFetch(state, {clientNotesList}) {
-    state.clientNotesList = clientNotesList;
+    state.clientNotesList = clientNotesList
   },
-  //USER ACCESS - GET ALLOWED & ELIGIBLE USERS
+  //CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
   updateAllowedUsersList(state, {allowedUsersList}) {
-    state.allowedUsersList = allowedUsersList;
+    state.allowedUsersList = allowedUsersList
   },
   updateEligibleUsersList(state, {eligibleUsersList}) {
-    state.eligibleUsersList = eligibleUsersList;
+    state.eligibleUsersList = eligibleUsersList
   },
 
   //CASES
   updateClientCaseDetails(state, {clientCaseDetails}) {
-    state.clientCaseDetails = clientCaseDetails;
+    state.clientCaseDetails = clientCaseDetails
   },
 
   updateGroupedCases(state, {groupedCases}) {
-    state.groupedCases = groupedCases;
+    state.groupedCases = groupedCases
   },
   updateAllowedUsersForCase(state, {allowedUsersForCase}) {
-    state.allowedUsersForCase = allowedUsersForCase;
+    state.allowedUsersForCase = allowedUsersForCase
   },
   updateEligibleUsersForCase(state, {eligibleUsersForCase}) {
-    state.eligibleUsersForCase = eligibleUsersForCase;
+    state.eligibleUsersForCase = eligibleUsersForCase
   },
 
   //CASE DEADLINES LIST
   updateCaseDeadlinesList(state, {deadlines}) {
-    state.deadlines = deadlines;
+    state.deadlines = deadlines
   }
 };
 
@@ -152,10 +152,10 @@ export const actions = {
   //Contact-details and add-email dialogs
   async getContactDetailsFromFetch({commit}, {clientId, contactId}) {
     try {
-      let contactDetailsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`);
+      let contactDetailsFromFetch = await this.$axios.$get(`/api/legal-app-client-contacts/client/${clientId}/contact/${contactId}`)
       commit('updateContactDetailsList', {contactDetailsFromFetch});
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
 
   },
@@ -208,46 +208,47 @@ export const actions = {
   //Notes list for cases
   async getNotesListForCases({commit}, {caseId}) {
     try {
-      let response = await this.$axios.$get(`/api/legal-app-cases-notes/case/${caseId}/list`);
+      let response = await this.$axios.$get(`/api/legal-app-cases-notes/case/${caseId}/list`)
       response.sort((a, b) => {
-        const dateA = new Date(a.created);
-        const dateB = new Date(b.created);
-        return dateB - dateA;
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
       });
       response.forEach(x => {
-        x.caseCreatedDate = formatDateToMonth(x.created);
+        x.caseCreatedDate = formatDateToMonth(x.created)
       });
-      const notesListForCases = groupByKey(response, 'caseCreatedDate');
+      const notesListForCases = groupByKey(response, 'caseCreatedDate')
       commit('updateNotesListForCases', {notesListForCases});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
   },
 
-  //USER Notes - list of titles
+  //CLIENT Notes - list of titles
 
   async getClientsNotes({commit}, clientId) {
     try {
-      let response = await this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`);
+      let response = await this.$axios.$get(`/api/legal-app-clients-notes/client/${clientId}/notes/titles-list`)
       response.sort((a, b) => {
-        const dateA = new Date(a.created);
-        const dateB = new Date(b.created);
-        return dateB - dateA;
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
       });
       response.forEach(x => {
-        x.caseCreatedDate = formatDateToMonth(x.created);
+        x.caseCreatedDate = formatDateToMonth(x.created)
       });
-      const clientNotesList = groupByKey(response, 'caseCreatedDate');
+      const clientNotesList = groupByKey(response, 'caseCreatedDate')
       commit('updateNotesTitlesListFromFetch', {clientNotesList});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
+
   },
-  // USER ACCESS - GET ALLOWED & ELIGIBLE USERS
+  // CLIENT ACCESS - GET ALLOWED & ELIGIBLE USERS
 
   async getAllowedUsers({commit}, {clientId}) {
     try {
-      let allowedUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/allowed-users`);
+      let allowedUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/allowed-users`)
       commit('updateAllowedUsersList', {allowedUsersList});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
@@ -256,7 +257,7 @@ export const actions = {
 
   async getEligibleUsersList({commit}, {clientId}) {
     try {
-      let eligibleUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/eligible-users`);
+      let eligibleUsersList = await this.$axios.$get(`/api/legal-app-client-access/client/${clientId}/eligible-users`)
       commit('updateEligibleUsersList', {eligibleUsersList});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
@@ -266,25 +267,25 @@ export const actions = {
   //CASES
   async getCaseDetails({commit}, {caseId}) {
     try {
-      let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`);
+      let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`)
       commit('updateClientCaseDetails', {clientCaseDetails});
-      console.warn('case details:', clientCaseDetails);
+      console.warn('case details:', clientCaseDetails)
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
   },
 
   async getListOfGroupedCases({commit}, {clientId}) {
     try {
-      let response = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`);
+      let response = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`)
       response.sort((a, b) => {
-        const dateA = new Date(a.created);
-        const dateB = new Date(b.created);
-        return dateB - dateA;
-      });
-      const groupedCases = groupByKey(response, 'group');
+        const dateA = new Date(a.created)
+        const dateB = new Date(b.created)
+        return dateB - dateA
+      })
+      const groupedCases = groupByKey(response, 'group')
       commit('updateGroupedCases', {groupedCases});
-      console.warn('list of cases', groupedCases);
+      console.warn('list of cases', groupedCases)
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
@@ -293,7 +294,7 @@ export const actions = {
 
   async getAllowedUsersForCase({commit}, {caseId}) {
     try {
-      let allowedUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/allowed-users`);
+      let allowedUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/allowed-users`)
       commit('updateAllowedUsersForCase', {allowedUsersForCase});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
@@ -302,7 +303,7 @@ export const actions = {
 
   async getEligibleUsersForCase({commit}, {caseId}) {
     try {
-      let eligibleUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/eligible-users`);
+      let eligibleUsersForCase = await this.$axios.$get(`/api/legal-app-case-access/case/${caseId}/eligible-users`)
       commit('updateEligibleUsersForCase', {eligibleUsersForCase});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
@@ -312,18 +313,17 @@ export const actions = {
   //CASE DEADLINES
   async getCaseDeadlines({commit}, {caseId, query}) {
     try {
-      let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/case/${caseId}/list${query}`);
-      console.warn('deadlines input', deadlines);
+      let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/case/${caseId}/list${query}`)
       deadlines.sort((a, b) => {
-        const dateA = new Date(a.deadline);
-        const dateB = new Date(b.deadline);
-        return dateA - dateB;
+        const dateA = new Date(a.deadline)
+        const dateB = new Date(b.deadline)
+        return dateA - dateB
       });
-      console.warn('deadlines', deadlines);
-      commit('updateCaseDeadlinesList', {deadlines});
+      console.warn('deadlines', deadlines)
+      commit('updateCaseDeadlinesList', {deadlines})
 
     } catch (e) {
-      console.error('error', e);
+      console.error('error', e)
 
     }
 
@@ -334,14 +334,15 @@ export const actions = {
     try {
       let contactItemsFromFetch = await this.$axios.$get(getContacts(clientId));
       contactItemsFromFetch.sort((a, b) => {
-        let contactA = new Date(a.created);
-        let contactB = new Date(b.created);
+        let contactA = new Date(a.created)
+        let contactB = new Date(b.created)
         return contactB - contactA;
-      });
-      commit('updateContactItemsList', {contactItemsFromFetch});
+      })
+      commit('updateContactItemsList', {contactItemsFromFetch})
+      this.contactList = this.contactItemsFromFetch;
     } catch (error) {
-      console.error('creating contact error', error);
-      this.$notifier.showErrorMessage(error.response.data);
+      console.error('creating contact error', error)
+      this.$notifier.showErrorMessage(error.response.data)
     }
   },
 

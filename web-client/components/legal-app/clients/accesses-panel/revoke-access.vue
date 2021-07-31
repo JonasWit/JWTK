@@ -41,10 +41,7 @@ export default {
     userForAction: {
       required: true
     },
-    clientItemForAction: {
-      type: Object,
-      required: true
-    }
+
   },
   data: () => ({
     dialog: false
@@ -57,7 +54,7 @@ export default {
         userId: this.userForAction.id
       }
       try {
-        let clientId = this.clientItemForAction.id
+        let clientId = this.$route.params.client
         console.warn('user id:', payload)
         await this.$axios.$post(revokeAccess(clientId), payload)
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
@@ -65,7 +62,7 @@ export default {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-        let clientId = this.clientItemForAction.id
+        let clientId = this.$route.params.client;
         await this.getAllowedUsers({clientId})
         await this.getEligibleUsersList({clientId})
       }

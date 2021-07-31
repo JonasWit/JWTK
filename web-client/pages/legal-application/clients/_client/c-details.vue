@@ -96,6 +96,13 @@ export default {
           icon: 'mdi-briefcase-account-outline',
           adminAccess: true
         },
+        {
+          id: '6',
+          route: `/legal-application/clients/${params.client}/accesses`,
+          name: 'Dostępy',
+          text: 'Dostępy do Klienta',
+          icon: 'mdi-briefcase-account-outline'
+        },
       ],
     };
   },
