@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.Portal.DataAccess
 {
     [Route("/api/portal-admin/key-admin")]
-    [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
+    [Authorize(SystemyWpConstants.Policies.UserAdmin)]
     public class AccessKeyController : ApiController
     {
         public AccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
@@ -42,6 +42,9 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
                 {
                     assignedLegalAppKey?.Users.RemoveAll(x => x.Id.Equals(user.Id));
                     assignedMedicalAppKey?.Users.RemoveAll(x => x.Id.Equals(user.Id));
+                    
+                    _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(userId)));
+                    _context.RemoveRange(_context.MedicalAppDataAccesses.Where(x => x.UserId.Equals(userId)));
                     
                     var result = await _context.SaveChangesAsync();
 
