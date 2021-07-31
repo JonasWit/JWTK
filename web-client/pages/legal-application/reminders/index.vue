@@ -203,7 +203,6 @@ export default {
     }
   },
   computed: {
-
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
         return "Spotkanie"
@@ -220,11 +219,9 @@ export default {
     },
     query() {
       return queryDate(this.todayDate)
-    },
-
+    }
   },
   methods: {
-
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
