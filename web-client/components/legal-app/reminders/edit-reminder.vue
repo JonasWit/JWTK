@@ -23,26 +23,21 @@
             <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="form.dateFrom" persistent width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
+                              readonly v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
               </template>
-              <v-date-picker v-model="form.dateFrom" scrollable>
+              <v-date-picker v-model="form.dateFrom" scrollable @change="$refs.dialogFrom.save(form.dateFrom)">
                 <v-btn text color="error" @click="modalFrom = false">
                   Anuluj
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="$refs.dialogFrom.save(form.dateFrom)">
-                  Wybierz
-                </v-btn>
               </v-date-picker>
             </v-dialog>
             <v-dialog v-if="!form.switcher" ref="dialogTimeFrom" v-model="modalTimeFrom"
-                      :return-value.sync="form.timeFrom"
-                      width="290px">
+                      :return-value.sync="form.timeFrom" width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.timeFrom" label="Picker in dialog"
-                              prepend-icon="mdi-clock-time-four-outline"
-                              readonly v-bind="attrs" v-on="on" :rules="validation.time"></v-text-field>
+                              prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on"
+                              :rules="validation.time"></v-text-field>
               </template>
               <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width format="24hr">
                 <v-btn text color="error" @click="modalTimeFrom = false">
@@ -56,20 +51,16 @@
             </v-dialog>
           </v-row>
           <v-row class="d-flex justify=space-between">
-            <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
-                      width="290px">
+            <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
                               v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
               </template>
-              <v-date-picker v-model="form.dateTo" scrollable>
+              <v-date-picker v-model="form.dateTo" scrollable @change="$refs.dialogTo.save(form.dateTo)">
                 <v-btn text color="error" @click="modalTo = false">
                   Anuluj
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="$refs.dialogTo.save(form.dateTo)">
-                  Wybierz
-                </v-btn>
               </v-date-picker>
             </v-dialog>
             <v-dialog v-if="!form.switcher" ref="dialogTimeTo" v-model="modalTimeTo" :return-value.sync="form.timeTo"
@@ -182,50 +173,50 @@ export default {
   computed: {
     selectedDefault() {
       if (this.eventForAction.category === 0) {
-        return {text: 'Spotkanie', value: 0}
+        return {text: 'Spotkanie', value: 0};
       }
       if (this.eventForAction.category === 1) {
-        return {text: 'Przypomnienie', value: 1}
+        return {text: 'Przypomnienie', value: 1};
       }
       if (this.eventForAction.category === 1) {
-        return {text: 'Zadanie', value: 2}
+        return {text: 'Zadanie', value: 2};
       }
     },
 
     submittableDateStart() {
       if (this.form.switcher) {
-        return new Date(this.form.dateFrom)
+        return new Date(this.form.dateFrom);
       } else {
-        const date = new Date(this.form.dateFrom)
+        const date = new Date(this.form.dateFrom);
         if (typeof this.form.timeFrom === 'string') {
-          const hours = this.form.timeFrom.split(':')[0]
-          const minutes = this.form.timeFrom.split(':')[1]
-          date.setHours(hours)
-          date.setMinutes(minutes)
+          const hours = this.form.timeFrom.split(':')[0];
+          const minutes = this.form.timeFrom.split(':')[1];
+          date.setHours(hours);
+          date.setMinutes(minutes);
         } else {
-          date.setHours(this.form.timeFrom.getHours())
-          date.setMinutes(this.form.timeFrom.getMinutes())
+          date.setHours(this.form.timeFrom.getHours());
+          date.setMinutes(this.form.timeFrom.getMinutes());
         }
-        console.log('UTC data start', date)
-        return date
+        console.log('UTC data start', date);
+        return date;
       }
     },
     submittableDateEnd() {
       if (this.form.switcher) {
-        return new Date(this.form.dateTo)
+        return new Date(this.form.dateTo);
       } else {
-        const date = new Date(this.form.dateTo)
+        const date = new Date(this.form.dateTo);
         if (typeof this.form.timeTo === 'string') {
-          const hours = this.form.timeTo.split(':')[0]
-          const minutes = this.form.timeTo.split(':')[1]
-          date.setHours(hours)
-          date.setMinutes(minutes)
+          const hours = this.form.timeTo.split(':')[0];
+          const minutes = this.form.timeTo.split(':')[1];
+          date.setHours(hours);
+          date.setMinutes(minutes);
         } else {
-          date.setHours(this.form.timeTo.getHours())
-          date.setMinutes(this.form.timeTo.getMinutes())
+          date.setHours(this.form.timeTo.getHours());
+          date.setMinutes(this.form.timeTo.getMinutes());
         }
-        console.log('UTC data end', date)
-        return date
+        console.log('UTC data end', date);
+        return date;
       }
     }
   },
@@ -233,7 +224,7 @@ export default {
     async saveChanges() {
       if (!this.$refs.editCalendarEventForm.validate()) return;
       if (this.submittableDateStart > this.submittableDateEnd) {
-        return this.alert = true
+        return this.alert = true;
       } else {
         if (this.loading) return;
         this.loading = true;
@@ -249,13 +240,13 @@ export default {
             allDayEvent: this.form.switcher
           };
           let reminderId = this.eventForAction.id;
-          console.warn('edited reminder', newReminder)
+          console.warn('edited reminder', newReminder);
           await this.$axios.$put(updateReminder(reminderId), newReminder);
-          this.resetForm()
+          this.resetForm();
           this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
         } catch (error) {
           this.$notifier.showErrorMessage("Wystąpił bład. Spróbuj ponownie!");
-          handleError(error)
+          handleError(error);
         } finally {
           this.$emit('action-completed');
           this.loading = false;
@@ -272,7 +263,7 @@ export default {
 
     }
   }
-}
+};
 </script>
 
 <style scoped>

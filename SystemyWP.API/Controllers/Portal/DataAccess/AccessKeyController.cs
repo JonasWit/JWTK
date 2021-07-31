@@ -21,6 +21,7 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
         }
 
         [HttpPost("user/revoke/access-key/{userId}")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
         public async Task<IActionResult> RevokeDataAccessKey(string userId, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
@@ -31,11 +32,9 @@ namespace SystemyWP.API.Controllers.Portal.DataAccess
                 if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var assignedLegalAppKey = _context.LegalAppAccessKeys
-                    .Include(x => x.Users)
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
                 
                 var assignedMedicalAppKey = _context.MedicalAccessKeys
-                    .Include(x => x.Users)
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
                 if (assignedLegalAppKey is not null || assignedMedicalAppKey is not null)

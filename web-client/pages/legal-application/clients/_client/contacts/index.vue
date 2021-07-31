@@ -5,9 +5,8 @@
         <v-toolbar-title class="mr-3">
           Lista Kontaktów
         </v-toolbar-title>
-        <v-autocomplete flat hide-no-data hide-details label="Wyszukaj kontakt"
-                        solo-inverted return-object clearable v-model="searchResult"
-                        prepend-inner-icon="mdi-magnify" :items="contactItems"
+        <v-autocomplete flat hide-no-data hide-details label="Wyszukaj kontakt" solo-inverted return-object clearable
+                        v-model="searchResult" prepend-inner-icon="mdi-magnify" :items="contactItems"
                         :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
@@ -42,7 +41,6 @@
                 <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
                 <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
               </v-col>
-
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -62,7 +60,7 @@ import DeleteContactDialog from "@/components/legal-app/contacts/dialogs/delete-
 import ContactListDetails from "@/components/legal-app/contacts/contact-list-details";
 import {formatDate} from "@/data/date-extensions";
 import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 
 const searchItemFactory = (name, id) => ({
@@ -78,7 +76,6 @@ export default {
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
-    contactItemsFromFetch: [],
     contactList: [],
     searchResult: "",
     finished: false,
@@ -87,11 +84,9 @@ export default {
   }),
 
   async fetch() {
-    let clientId = this.$route.params.client
-    await this.getContactsList({clientId})
-    setTimeout(() => {
-      this.alertMessage = true
-    }, 500)
+    let clientId = this.$route.params.client;
+    await this.getContactsList({clientId});
+    this.contactList = this.contactItemsFromFetch;
   },
 
   watch: {
@@ -105,6 +100,7 @@ export default {
     },
   },
   computed: {
+    ...mapState('legal-app-client-store', ['contactItemsFromFetch']),
     contactItems() {
       return []
         .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));
@@ -114,17 +110,18 @@ export default {
     ...mapActions('legal-app-client-store', ['getContactsList']),
     async actionDone() {
       try {
-        let clientId = this.$route.params.client
+        let clientId = this.$route.params.client;
         await this.getContactsList({clientId});
+        this.contactList = this.contactItemsFromFetch;
       } catch (error) {
-        handleError(error)
+        handleError(error);
       }
     },
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
     },
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
   }
 };

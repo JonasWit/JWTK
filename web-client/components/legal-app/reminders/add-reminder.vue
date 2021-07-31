@@ -23,30 +23,24 @@
             <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="form.dateFrom" persistent width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
+                              readonly v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
               </template>
-              <v-date-picker v-model="form.dateFrom" scrollable locale="pl">
+              <v-date-picker v-model="form.dateFrom" scrollable locale="pl"
+                             @change="$refs.dialogFrom.save(form.dateFrom)">
 
                 <v-btn text color="error" @click="modalFrom = false">
                   Anuluj
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="$refs.dialogFrom.save(form.dateFrom)">
-                  Wybierz
-                </v-btn>
               </v-date-picker>
             </v-dialog>
             <v-dialog v-if="!form.switcher" ref="dialogTimeFrom" v-model="modalTimeFrom"
-                      :return-value.sync="form.timeFrom"
-                      width="290px">
+                      :return-value.sync="form.timeFrom" width="290px">
               <template v-slot:activator="{ on, attrs }">
-                <v-text-field v-model="form.timeFrom" label="Wybierz godzinę"
-                              prepend-icon="mdi-clock-time-four-outline"
+                <v-text-field v-model="form.timeFrom" label="Wybierz godzinę" prepend-icon="mdi-clock-time-four-outline"
                               readonly v-bind="attrs" v-on="on" :rules="validation.time"></v-text-field>
               </template>
               <v-time-picker v-if="modalTimeFrom" v-model="form.timeFrom" full-width format="24hr">
-
                 <v-btn text color="error" @click="modalTimeFrom = false">
                   Anuluj
                 </v-btn>
@@ -58,20 +52,16 @@
             </v-dialog>
           </v-row>
           <v-row class="d-flex justify=space-between">
-            <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent
-                      width="290px">
+            <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="form.dateTo" persistent width="290px">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="form.dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
                               v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
               </template>
-              <v-date-picker v-model="form.dateTo" scrollable locale="pl">
-                <v-spacer></v-spacer>
+              <v-date-picker v-model="form.dateTo" scrollable locale="pl" @change="$refs.dialogTo.save(form.dateTo)">
                 <v-btn text color="error" @click="modalTo = false">
                   Anuluj
                 </v-btn>
-                <v-btn text color="primary" @click="$refs.dialogTo.save(form.dateTo)">
-                  Wybierz
-                </v-btn>
+                <v-spacer></v-spacer>
               </v-date-picker>
             </v-dialog>
             <v-dialog v-if="!form.switcher" ref="dialogTimeTo" v-model="modalTimeTo" :return-value.sync="form.timeTo"
@@ -164,38 +154,38 @@ export default {
   computed: {
     submittableDateStart() {
       if (this.form.switcher) {
-        return new Date(this.form.dateFrom)
+        return new Date(this.form.dateFrom);
       } else {
-        const date = new Date(this.form.dateFrom)
+        const date = new Date(this.form.dateFrom);
         if (typeof this.form.timeFrom === 'string') {
-          const hours = this.form.timeFrom.match(/^(\d+)/)[1]
-          const minutes = this.form.timeFrom.match(/:(\d+)/)[1]
-          date.setHours(hours)
-          date.setMinutes(minutes)
+          const hours = this.form.timeFrom.match(/^(\d+)/)[1];
+          const minutes = this.form.timeFrom.match(/:(\d+)/)[1];
+          date.setHours(hours);
+          date.setMinutes(minutes);
         } else {
-          date.setHours(this.form.timeFrom.getHours())
-          date.setMinutes(this.form.timeFrom.getMinutes())
+          date.setHours(this.form.timeFrom.getHours());
+          date.setMinutes(this.form.timeFrom.getMinutes());
         }
-        console.log('UTC data start', date)
-        return date
+        console.log('UTC data start', date);
+        return date;
       }
     },
     submittableDateEnd() {
       if (this.form.switcher) {
-        return new Date(this.form.dateTo)
+        return new Date(this.form.dateTo);
       } else {
-        const date = new Date(this.form.dateTo)
+        const date = new Date(this.form.dateTo);
         if (typeof this.form.timeTo === 'string') {
-          const hours = this.form.timeTo.match(/^(\d+)/)[1]
-          const minutes = this.form.timeTo.match(/:(\d+)/)[1]
-          date.setHours(hours)
-          date.setMinutes(minutes)
+          const hours = this.form.timeTo.match(/^(\d+)/)[1];
+          const minutes = this.form.timeTo.match(/:(\d+)/)[1];
+          date.setHours(hours);
+          date.setMinutes(minutes);
         } else {
-          date.setHours(this.form.timeTo.getHours())
-          date.setMinutes(this.form.timeTo.getMinutes())
+          date.setHours(this.form.timeTo.getHours());
+          date.setMinutes(this.form.timeTo.getMinutes());
         }
-        console.log('UTC data end', date)
-        return date
+        console.log('UTC data end', date);
+        return date;
       }
     }
   },
@@ -204,7 +194,7 @@ export default {
     addNewReminder: async function () {
       if (!this.$refs.addNewReminderForm.validate()) return;
       if (this.submittableDateStart > this.submittableDateEnd) {
-        return this.alert = true
+        return this.alert = true;
       } else {
         if (this.loading) return;
         this.loading = true;
@@ -224,7 +214,7 @@ export default {
           await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
           this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
           Object.assign(this.$data, this.$options.data());
-          this.resetForm()
+          this.resetForm();
         } catch (e) {
           console.error('error reminders', e);
         } finally {
