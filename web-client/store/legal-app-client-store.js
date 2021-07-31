@@ -31,7 +31,9 @@ const initState = () => ({
   allowedUsersForCase: [],
   eligibleUsersForCase: [],
   notesListForCases: [],
-  deadlines: []
+  deadlines: [],
+  deadlinesList: [],
+  eventsList: []
 
 
 });
@@ -69,6 +71,12 @@ export const getters = {
   eligibleUsers(state) {
     return state.eligibleUsersList
   },
+//Notifications
+//   countNotifications(state) {
+//     let eventsCount = state.eventsList.length
+//     let deadlinesCount = state.deadlinesList.length
+//     return eventsCount + deadlinesCount
+//   }
 
 };
 
@@ -145,7 +153,18 @@ export const mutations = {
   //CASE DEADLINES LIST
   updateCaseDeadlinesList(state, {deadlines}) {
     state.deadlines = deadlines
-  }
+  },
+
+  // //Notifications
+  // updateLimitedDeadlinesList(state, {deadlinesList}) {
+  //   state.deadlinesList = deadlinesList
+  // },
+  //
+  // updateLimitedEventsList(state, {eventsList}) {
+  //   state.eventsList = eventsList
+  // }
+
+
 };
 
 export const actions = {
@@ -345,5 +364,27 @@ export const actions = {
       this.$notifier.showErrorMessage(error.response.data)
     }
   },
+
+  // //Notifications
+  // async getComingDeadlines({commit}, {query}) {
+  //   try {
+  //     let deadlinesList = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${query}`)
+  //     commit('updateLimitedDeadlinesList', {deadlinesList})
+  //     console.log('upcoming deadlines', deadlinesList)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  //
+  // },
+  // async getEventsList({commit}, {query}) {
+  //   try {
+  //     let eventsList = await this.$axios.$get(`/api/legal-app-reminders/list/limit${query}`)
+  //     commit('updateLimitedEventsList', {eventsList})
+  //     console.log('events all', eventsList)
+  //   } catch (error) {
+  //     handleError(error)
+  //   }
+  // },
+
 
 };

@@ -76,6 +76,13 @@ export default {
           text: 'Lista zarchiwizowanych Spraw',
           icon: 'mdi-briefcase-account-outline'
         },
+        {
+          id: '6',
+          route: `/legal-application/clients/${params.client}/accesses`,
+          name: 'Dostępy',
+          text: 'Dostępy do Klienta',
+          icon: 'mdi-briefcase-account-outline'
+        },
       ],
     }
   },
