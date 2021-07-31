@@ -1,15 +1,25 @@
 ﻿<template>
   <v-dialog v-model="dialog" persistent width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn text depressed color="error" v-bind="attrs" v-on="on">Usuń</v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn color="error" icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon>
+              mdi-delete
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Usuń dane</span>
+      </v-tooltip>
     </template>
     <v-card>
-      <v-card-title class="error--text justify-center">Usunięcie danych jest trwałe i nieodwracalne!</v-card-title>
+      <v-card-title class="justify-center">Usuń dane</v-card-title>
+      <v-alert type="error">Usunięcie danych jest trwałe i nieodwracalne!</v-alert>
       <v-divider/>
       <v-card-actions>
-        <v-btn text color="error" @click="deleteData">Usuń</v-btn>
+        <v-btn text color="primary" @click="dialog = false">Anuluj</v-btn>
         <v-spacer/>
-        <v-btn text color="success" @click="dialog = false">Anuluj</v-btn>
+        <v-btn text color="error" @click="deleteData">Usuń</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -17,6 +27,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "confirm-personal-data-delete",
@@ -29,17 +40,17 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['initialize']),
-    deleteData() {
-      if (this.loading) return;
-      this.loading = true;
-
-      return this.$axios.$delete(`/api/users/personal-data/clear/${this.profile.id}`)
-        .catch((e) => {
-        }).finally(() => {
-          this.loading = false;
-          this.initialize();
-          this.dialog = false;
-        });
+    async deleteData() {
+      try {
+        let profileId = this.profile.id
+        await this.$axios.$delete(`/api/users/personal-data/clear/${profileId}`)
+        this.$notifier.showSuccessMessage("Dane zostały usuniete");
+      } catch (error) {
+        handleError(error)
+      } finally {
+        await this.initialize();
+        this.dialog = false;
+      }
     }
   }
 };

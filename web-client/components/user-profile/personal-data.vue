@@ -1,48 +1,71 @@
 ﻿<template>
-  <v-card>
-    <v-card-title class="d-flex justify-center"> Dane Personalne</v-card-title>
-    <v-card-text class="py-0">
-      <strong>Nazwa Użytkownika:</strong> {{ profile.username }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Status:</strong> {{ userRole }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Telefon:</strong> {{ profile.phoneNumber }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Firma:</strong> {{ profile.companyFullName }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Imię:</strong> {{ profile.name }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Nazwisko:</strong> {{ profile.surname }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Adres:</strong> {{ profile.address }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>Adres Korespondencyjny:</strong>
-      {{ profile.addressCorrespondence }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>NIP:</strong> {{ profile.nip }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>REGON:</strong> {{ profile.regon }}
-    </v-card-text>
-    <v-card-text class="py-0">
-      <strong>KRS:</strong> {{ profile.krs }}
-    </v-card-text>
-    <v-divider class="my-2"/>
-    <v-card-actions class="pt-0">
-      <personal-data-edit-dialog v-on:action-completed="initialize"/>
-      <v-btn text @click="downloadPersonalData">Pobierz</v-btn>
-      <v-spacer/>
-      <confirm-personal-data-delete v-on:action-completed=""/>
+  <div>
+    <v-card flat>
+      <v-toolbar color="primary" dense>
+        <v-toolbar-title-title class="white--text">Dane podstawowe</v-toolbar-title-title>
+      </v-toolbar>
+
+      <v-card-text>
+        <div class="text--primary"><strong>Nazwa Użytkownika:</strong> {{ profile.username }}</div>
+        <div class="text--primary">
+          <strong>Status:</strong> {{ userRole }}
+        </div>
+        <div class="text--primary">
+          <strong>Imię:</strong> {{ profile.name }}
+        </div>
+        <div class="text--primary">
+          <strong>Nazwisko:</strong> {{ profile.surname }}
+        </div>
+      </v-card-text>
+    </v-card>
+    <v-card flat>
+      <v-toolbar color="primary" dense>
+        <v-toolbar-title class="white--text">Twoja firma</v-toolbar-title>
+      </v-toolbar>
+
+      <v-card-text>
+        <div class="text--primary">
+          <strong>Nazwa firmy:</strong> {{ profile.companyFullName }}
+        </div>
+        <div class="text--primary">
+          <strong>Adres:</strong> {{ profile.address }}
+        </div>
+        <div class="text--primary">
+          <strong>Adres Korespondencyjny:</strong>
+          {{ profile.addressCorrespondence }}
+        </div>
+        <div class="text--primary">
+          <strong>NIP:</strong> {{ profile.nip }}
+        </div>
+        <div class="text--primary">
+          <strong>REGON:</strong> {{ profile.regon }}
+        </div>
+        <div class="text--primary">
+          <strong>KRS:</strong> {{ profile.krs }}
+        </div>
+        <div class="text--primary">
+          <strong>Telefon:</strong> {{ profile.phoneNumber }}
+        </div>
+      </v-card-text>
+    </v-card>
+    <v-toolbar color="primary" dense>
+      <v-toolbar-title class="white--text">Opcje</v-toolbar-title>
+    </v-toolbar>
+    <v-card-actions>
+      <v-card-text class="mb-1 d-flex justify-space-between">
+        <personal-data-edit-dialog v-on:action-completed="actionDone"/>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Pobierz dane</span>
+        </v-tooltip>
+        <confirm-personal-data-delete v-on:action-completed=""/>
+      </v-card-text>
     </v-card-actions>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -102,6 +125,11 @@ export default {
       );
       a.dispatchEvent(e);
     },
+    async actionDone() {
+      await this.initialize()
+    }
+
+
   },
 };
 </script>

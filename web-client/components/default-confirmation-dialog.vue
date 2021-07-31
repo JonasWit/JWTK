@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn v-if="!icon" text :color="buttonColor" v-on="{ ...tooltip, ...dialog }">{{
+          <v-btn v-if="!icon" outlined :color="buttonColor" v-on="{ ...tooltip, ...dialog }">{{
               buttonText
             }}
           </v-btn>

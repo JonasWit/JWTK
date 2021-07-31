@@ -94,7 +94,7 @@
                       :events="filteredEvents"
                       :type="type" color="primary"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
-                      @change="getEvents" :first-interval=7 :interval-minutes=60 :interval-count=12 locale="pl"
+                      @change="getEvents" :first-interval=5 :interval-minutes=60 :interval-count=15 locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
           <v-menu v-if="!selectedEvent.signature" v-model="selectedOpen" :close-on-content-click="false"
                   :activator="selectedEvent" offset-x>

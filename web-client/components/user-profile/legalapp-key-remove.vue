@@ -1,19 +1,26 @@
 ﻿<template>
-  <div>
-    <v-card class="mb-2">
-      <v-card-title class="d-flex justify-center error--text">Usunięcie Danych Kancelarii</v-card-title>
-      <v-col class="d-flex justify-center" cols="12">
-        <div class="d-flex flex-column">
-          <v-card-subtitle>
-            Możesz trawale usunąć wszystkie dane wprowadzone dla Twojej Kancelarii.
-          </v-card-subtitle>
-          <default-confirmation-dialog button-color="error" v-on:action-confirmed="deleteLegalAppKey" title="Usuń Dane"
-                                       button-text="Usuń Dane"
-                                       message="Czy na pewno chcesz trwale usunąć wszystkie dane?"/>
-        </div>
-      </v-col>
-    </v-card>
-  </div>
+  <v-card flat class="mb-2">
+    <v-toolbar color="primary" dense>
+      <v-toolbar-title class="white--text">Usunięcie Danych Kancelarii</v-toolbar-title>
+    </v-toolbar>
+    <v-col class="d-flex justify-center" cols="12">
+      <div class="d-flex flex-column">
+        <v-card-subtitle>
+          Wybierajac opcję 'USUŃ DANE' możesz trawale usunąć wszystkie dane wprowadzone w aplikacji 'Twoja Kancelaria'
+          dla
+          Twojej firmy. Tym samym usuniesz dostęp do aplikacji dla wszystkich powiązanych użytkowników. Upewnij się, że
+          nikt
+          nie potrzebuje wglądu we wprowadzone dane, ponieważ odzyskanie ich nie będzie możliwe.
+        </v-card-subtitle>
+        <v-divider class="my-4"></v-divider>
+        <default-confirmation-dialog button-color="error"
+                                     v-on:action-confirmed="deleteLegalAppKey" title="Usuń Dane"
+                                     button-text="Usuń Dane"
+                                     message="Czy na pewno chcesz trwale usunąć wszystkie dane?"
+                                     tooltip-message="Usuń dane"/>
+      </div>
+    </v-col>
+  </v-card>
 </template>
 
 <script>

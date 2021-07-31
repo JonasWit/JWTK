@@ -124,4 +124,10 @@ export function queryDate(date) {
   return `?from=${fromDate}&to=${toDate}`;
 }
 
+export function queryDateForFloatingBell(date) {
+  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+  let toDate = (addDays(date, 2)).toISOString().substr(0, 10)
+  return `?from=${fromDate}&to=${toDate}`;
+}
+
 
