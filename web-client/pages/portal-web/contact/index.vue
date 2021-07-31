@@ -7,8 +7,8 @@
           <h5>
             Zapraszamy do kontaktu!
           </h5>
-          <h5>Nasz adres email to: <a href="mailto:biuro@systemywp.pl">biuro@systemywp.pl</a></h5>
-          <h5>Możesz również zostawić nam swój numer telefonu, a oddzwonimy w ciągu 24 godzin.</h5>
+          <h5>Nasz adres email to: <a href="mailto:kontakt@systemywp.pl">kontakt@systemywp.pl</a></h5>
+          <h5>Możesz również zostawić nam swój numer telefonu, a skontaktujemy się w ciągu 24 godzin.</h5>
         </div>
       </div>
     </section>
