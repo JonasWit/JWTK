@@ -3,8 +3,9 @@
     <section class="first-section">
       <v-row class="d-flex justify-space-between mx-9">
         <v-col sm="12" xs="12" md="6" class="content">
-          <h1>Tworzymy aplikacje przyszłości</h1>
-          <h5 class="text--secondary">Naszą misją jest optymalizacja każdego aspektu pracy Twojej firmy.</h5>
+          <h1>Systemy Wspomagania Pracy</h1>
+          <h5 class="text--secondary">Zwiększ efektywność swojego biznesu poprzez automatyzację zarządzania i
+            procesów.</h5>
           <h5 class="text--secondary">Zawsze używany najnowszej dostępnej wersji technologii, dlatego możesz mieć
             pewność, że z nami nigdy nie
             zostaniesz w tyle!</h5>

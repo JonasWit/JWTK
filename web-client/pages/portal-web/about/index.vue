@@ -98,13 +98,15 @@ export default {
           img: `${require('~/assets/images/vutify.png')}`,
 
         },
-
-
         {
           id: 6,
           url: 'https://wordpress.com/',
           img: `${require('~/assets/images/icons8-wordpress-48.png')}`,
-
+        },
+        {
+          id: 7,
+          url: 'https://www.postgresql.org/',
+          img: `${require('~/assets/images/icons8-postgresql-48.png')}`,
         },
       ]
 
