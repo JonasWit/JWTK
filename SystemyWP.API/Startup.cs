@@ -84,6 +84,7 @@ namespace SystemyWP.API
                     MinimumSameSitePolicy = SameSiteMode.Strict
                 });
 
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(NuxtJsApp);
             app.UseAuthentication();
