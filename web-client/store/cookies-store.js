@@ -19,24 +19,24 @@ export const mutations = {
 };
 
 export const actions = {
-  turnOnLegalAppTooltips({dispatch}) {
+  turnOnLegalAppTooltips({commit}) {
     if (checkCookie(COOKIE_NAME.LAPP_TIPS)) {
       setCookie(COOKIE_NAME.LAPP_TIPS, "", 0);
       setCookie(COOKIE_NAME.LAPP_TIPS, "true", 365);
-      commit('updateLegalAppAccessKeysList', {option: true});
+      commit('setLegalAppTooltipsOption', {option: true});
     } else {
       setCookie("lapp-tooltips", "true", 365);
-      commit('updateLegalAppAccessKeysList', {option: true});
+      commit('setLegalAppTooltipsOption', {option: true});
     }
   },
-  turnOffLegalAppTooltips({dispatch}) {
+  turnOffLegalAppTooltips({commit}) {
     if (checkCookie(COOKIE_NAME.LAPP_TIPS)) {
       setCookie(COOKIE_NAME.LAPP_TIPS, "", 0);
       setCookie(COOKIE_NAME.LAPP_TIPS, "false", 365);
-      commit('updateLegalAppAccessKeysList', {option: false});
+      commit('setLegalAppTooltipsOption', {option: false});
     } else {
       setCookie(COOKIE_NAME.LAPP_TIPS, "false", 365);
-      commit('updateLegalAppAccessKeysList', {option: false});
+      commit('setLegalAppTooltipsOption', {option: false});
     }
   },
 };
