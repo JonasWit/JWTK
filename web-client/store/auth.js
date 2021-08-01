@@ -4,7 +4,6 @@ import {getGDPRConsent} from "~/data/cookie-handlers";
 const initState = () => ({
   profile: null,
   relatedUsers: [],
-  darkThemeStored: false
 });
 
 export const state = initState;
@@ -42,12 +41,6 @@ export const mutations = {
   },
   saveRelatedUsers(state, {users}) {
     state.relatedUsers = users;
-  },
-  setLightTheme(state) {
-    state.darkThemeStored = false;
-  },
-  setDarkTheme(state) {
-    state.darkThemeStored = true;
   },
   reset(state) {
     Object.assign(state, initState());

@@ -2,7 +2,8 @@
 import {COOKIE_NAME} from "@/data/enums";
 
 const initState = () => ({
-  legalAppTooltips: false
+  legalAppTooltips: false,
+  darkThemeStored: false
 });
 
 export const state = initState;
@@ -15,7 +16,13 @@ export const mutations = {
   },
   setLegalAppTooltipsOption(state, {option}) {
     state.legalAppTooltips = option;
-  }
+  },
+  setLightTheme(state) {
+    state.darkThemeStored = false;
+  },
+  setDarkTheme(state) {
+    state.darkThemeStored = true;
+  },
 };
 
 export const actions = {

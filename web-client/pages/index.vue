@@ -40,7 +40,7 @@ export default {
     videoLight: `${require('~/assets/images/home-video-light.mp4')}`,
   }),
   computed: {
-    ...mapState('auth', ['darkThemeStored']),
+    ...mapState('cookies-store', ['darkThemeStored']),
   },
 };
 </script>

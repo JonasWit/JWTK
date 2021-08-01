@@ -85,7 +85,7 @@
 
 <script>
 import {COOKIE_NAME} from "@/data/enums";
-import {mapActions, mapGetters, mapMutations, mapState,} from "vuex";
+import {mapActions, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
@@ -143,20 +143,19 @@ export default {
             }
           }
         }
-
         this.goDark = this.darkThemeStored;
       }
     }
   },
   computed: {
-    ...mapState('auth', ['profile', 'darkThemeStored']),
-    ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin', 'authenticated']),
+    ...mapState('auth', ['profile']),
+    ...mapState('cookies-store', ['darkThemeStored']),
     isDarkTheme() {
       return this.$vuetify.theme.dark = this.goDark;
     }
   },
   methods: {
-    ...mapMutations('auth', ['setLightTheme', 'setDarkTheme']),
+    ...mapMutations('cookies-store', ['setLightTheme', 'setDarkTheme']),
     ...mapActions('auth', ['logout', 'initialize', 'changePassword']),
   }
 };
