@@ -41,3 +41,8 @@ export const SERVER_LOG_TYPES = {
   WARNING: "Warning",
 };
 
+export const COOKIE_NAME = {
+  THEME: "custom-color-theme",
+  LAPP_TIPS: "lapp-tips",
+};
+

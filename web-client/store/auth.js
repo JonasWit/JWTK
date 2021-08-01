@@ -60,7 +60,7 @@ export const actions = {
       let profile = await this.$axios.$get('/api/users/me');
       commit('saveProfile', {profile});
     } catch (error) {
-      console.error("Not authorized");
+      console.warn("Not authorized");
     }
 
     if (getters.clientAdmin) {
@@ -68,7 +68,7 @@ export const actions = {
         let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
         commit('saveRelatedUsers', {users});
       } catch (error) {
-        console.error("No related users");
+        console.warn("No related users");
       }
     } else {
       console.warn("Related users not visible");
@@ -79,7 +79,7 @@ export const actions = {
       let profile = await this.$axios.$get('/api/users/me');
       commit('saveProfile', {profile});
     } catch (error) {
-      console.error("Not authorized");
+      console.warn("Not authorized");
     }
   },
   login() {
@@ -91,21 +91,28 @@ export const actions = {
   },
   changePassword() {
     if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
     const returnUrl = encodeURIComponent(location.href);
     window.location = `${this.$config.auth.changePassPath}?returnUrl=${returnUrl}`;
   },
   logout({commit}) {
     if (process.server) return;
+
     commit('reset');
     window.location = this.$config.auth.logoutPath;
   },
   deleteAccount({commit}) {
     if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
     commit('reset');
     window.location = this.$config.auth.deletePath;
   },
   async deleteLegalAppKey({dispatch}) {
     if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
     try {
       await this.$axios.$get(this.$config.auth.deleteLeglaAppKeyPath);
       this.$notifier.showSuccessMessage("Dane zostały usunięte!");

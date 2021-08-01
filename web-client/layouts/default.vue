@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import {COOKIE_NAME} from "@/data/enums";
 import {mapActions, mapGetters, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
@@ -99,7 +100,7 @@ export default {
   created() {
     let themeEnabled;
     if (process.server) {
-      themeEnabled = getCookieFromRequest("custom-color-theme", this.$nuxt.context.req.headers.cookie) === 'dark';
+      themeEnabled = getCookieFromRequest(COOKIE_NAME.THEME, this.$nuxt.context.req.headers.cookie) === 'dark';
     } else {
       themeEnabled = this.darkThemeStored === true;
     }
@@ -121,11 +122,11 @@ export default {
           this.setLightTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie("custom-color-theme")) {
-              setCookie("custom-color-theme", "", 0);
-              setCookie("custom-color-theme", "light", 365);
+            if (checkCookie(COOKIE_NAME.THEME)) {
+              setCookie(COOKIE_NAME.THEME, "", 0);
+              setCookie(COOKIE_NAME.THEME, "light", 365);
             } else {
-              setCookie("custom-color-theme", "light", 365);
+              setCookie(COOKIE_NAME.THEME, "light", 365);
             }
           }
         } else {
@@ -134,11 +135,11 @@ export default {
           this.setDarkTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie("custom-color-theme")) {
-              setCookie("custom-color-theme", "", 0);
-              setCookie("custom-color-theme", "dark", 365);
+            if (checkCookie(COOKIE_NAME.THEME)) {
+              setCookie(COOKIE_NAME.THEME, "", 0);
+              setCookie(COOKIE_NAME.THEME, "dark", 365);
             } else {
-              setCookie("custom-color-theme", "dark", 365);
+              setCookie(COOKIE_NAME.THEME, "dark", 365);
             }
           }
         }
