@@ -3,7 +3,6 @@
     <v-row no-gutters>
       <v-col cols="12" class="my-5">
         <breadcrumbs/>
-        <reminders-floating-icon/>
         <slot name="content">
         </slot>
 
