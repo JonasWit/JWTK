@@ -1,6 +1,6 @@
-﻿### migrations
+﻿### migrations - use from Data path
 
-dotnet ef migrations add <name> -c AppDbContext -s ..\SystemyWP.Data -o .\Migrations
+dotnet ef migrations add <name> -c AppDbContext -s ..\SystemyWP.API -o .\Migrations
 
 ### migration script -- full migration every time
 
