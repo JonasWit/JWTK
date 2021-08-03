@@ -10,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
         <PackageReference Include="AWSSDK.S3" Version="3.7.1.17" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.8" />

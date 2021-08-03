@@ -7,6 +7,7 @@ using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
 using SystemyWP.Data;
+using AspNetCoreRateLimit;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -37,6 +38,13 @@ namespace SystemyWP.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.AddMemoryCache();
+
+            services.Configure<IpRateLimitOptions>(_configuration.GetSection("IpRateLimiting"));
+            services.Configure<IpRateLimitPolicies>(_configuration.GetSection("IpRateLimitPolicies"));
+            services.AddInMemoryRateLimiting();
+            
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
 
@@ -61,6 +69,8 @@ namespace SystemyWP.API
                 .WithOrigins(_configuration.GetValue("CorsSettings:PortalUrl", ""))
                 .AllowAnyMethod()
                 .AllowCredentials()));
+
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -77,6 +87,7 @@ namespace SystemyWP.API
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseIpRateLimiting();
             app.UseCookiePolicy(
                 new CookiePolicyOptions
                 {
