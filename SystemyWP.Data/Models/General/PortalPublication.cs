@@ -10,7 +10,7 @@ namespace SystemyWP.Data.Models.General
         [MaxLength(200)]
         public string Title { get; set; }
         [Required]
-        [MaxLength(10000)]
+        [MaxLength(5000)]
         public string News { get; set; }
         
         public string Image { get; set; }
