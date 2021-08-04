@@ -75,7 +75,7 @@
     <v-main>
       <v-container fluid>
         <nuxt/>
-        <reminders-floating-icon/>
+        <options-floating-icon/>
       </v-container>
 
     </v-main>
@@ -91,10 +91,11 @@ import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
 import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
+import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
 
 export default {
   name: "default",
-  components: {RemindersFloatingIcon, SnackbarNotifier, IfAuth},
+  components: {OptionsFloatingIcon, RemindersFloatingIcon, SnackbarNotifier, IfAuth},
   data: () => ({
     goDark: false,
     themeSwitch: false
