@@ -33,6 +33,7 @@
 export default {
   name: "options-floating-icon",
   data: () => ({
+    dialog: false,
     alertsOn: true
   }),
 

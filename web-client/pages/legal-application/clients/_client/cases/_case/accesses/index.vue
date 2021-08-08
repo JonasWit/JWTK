@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
           </v-toolbar>
-          <v-alert elevation="5" text type="info">
+          <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
             W panelu dostępów możesz nadać lub usunąć dostęp do wybranej sprawy. Użyj opcji "Nadaj dostęp",
             aby zobaczyć listę użytkowników, którzy mogą uzyskać dostęp do Sprawy.
           </v-alert>
