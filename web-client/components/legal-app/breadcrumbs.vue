@@ -19,12 +19,16 @@ export default {
   name: "breadcrumbs",
   fetch() {
     let clientId = this.$route.params.client
+    let caseId = this.$route.params.case;
     if (clientId) {
       return this.getClientData({clientId})
     }
+    if (caseId) {
+      return this.getCaseDetails({caseId})
+    }
   },
   computed: {
-    ...mapState('legal-app-client-store', ['clientDataFromFetch']),
+    ...mapState('legal-app-client-store', ['clientDataFromFetch', 'clientCaseDetails']),
     crumbs() {
       const fullPath = this.$route.fullPath
       const params = fullPath.substring(1).split('/')
@@ -33,8 +37,10 @@ export default {
 
       params.forEach((param, index, {length}) => {
         path = `${path}/${param}`
+        console.log('path', path)
         const match = this.$router.match(path)
         if (match.name !== 'index') {
+          console.log('match name', match.name)
           if (index === length - 1) {
             crumbs.push({
               text: this.pathName(match.name),
@@ -51,9 +57,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getClientData']),
+    ...mapActions('legal-app-client-store', ['getClientData', 'getCaseDetails']),
     pathName(name, path) {
-      if (name === null) {
+      let clientId = this.$route.params.client;
+      let caseId = this.$route.params.case;
+      if (path === `/legal-application/clients/${clientId}` && name === null) {
         return {
           text: this.clientDataFromFetch.name,
           disabled: true,
@@ -130,7 +138,44 @@ export default {
           href: path + '/',
         }
       }
-    }
+      if (path === `/legal-application/clients/${clientId}/cases/${caseId}` && name == null) {
+        return {
+          text: this.clientCaseDetails.name,
+          disabled: true,
+          href: path + '/',
+        }
+      }
+      if (name === 'legal-application-clients-client-cases-case-deadlines') {
+        return {
+          text: 'Terminy procesowe',
+          disabled: false,
+          href: path + '/',
+        }
+      }
+      if (name === 'legal-application-clients-client-cases-case-details') {
+        return {
+          text: 'Szczegóły sprawy',
+          disabled: false,
+          href: path + '/',
+        }
+      }
+      if (name === 'legal-application-clients-client-cases-case-notes') {
+        return {
+          text: 'Notatki',
+          disabled: false,
+          href: path + '/',
+        }
+      }
+      if (name === 'legal-application-clients-client-cases-case-accesses') {
+        return {
+          text: 'Dostępy',
+          disabled: false,
+          href: path + '/',
+        }
+      }
+
+    },
+
   }
 }
 </script>

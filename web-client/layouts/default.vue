@@ -11,6 +11,8 @@
         <span class="d-flex d-md-none">SWP</span>
       </nuxt-link>
       <home-navbar/>
+
+
       <v-spacer></v-spacer>
       <div class="mr-5">
         <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="themeSwitch"/>
@@ -69,11 +71,11 @@
           </v-btn>
         </template>
       </if-auth>
-
     </v-app-bar>
     <v-main>
       <v-container fluid>
         <nuxt/>
+
       </v-container>
 
     </v-main>
@@ -89,10 +91,12 @@ import {mapActions, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
+import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
+import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
 
 export default {
   name: "default",
-  components: {SnackbarNotifier, IfAuth},
+  components: {OptionsFloatingIcon, RemindersFloatingIcon, SnackbarNotifier, IfAuth},
   data: () => ({
     goDark: false,
     themeSwitch: false

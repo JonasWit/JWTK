@@ -32,7 +32,7 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <nuxt-link class="nav-item" to="/legal-application/reminders">
+                <nuxt-link class="nav-item" :to="eventLink(item)">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small color="error" v-bind="attrs" v-on="on">
@@ -88,7 +88,6 @@ export default {
       return queryDateForFloatingBell(this.todayDate)
     },
   },
-
   methods: {
     async createEvents() {
       try {
@@ -105,6 +104,10 @@ export default {
             deadline: x.start,
             category: x.reminderCategory,
             id: x.id,
+            case: 'none',
+            client: 'none',
+            type: 'event',
+
           });
         });
         deadlines.forEach(x => {
@@ -114,6 +117,9 @@ export default {
             deadline: x.deadline,
             category: 4,
             id: x.id,
+            case: x.case.id,
+            client: x.case.legalAppClientId,
+            type: 'deadline',
           });
         });
         newEvents.sort((a, b) => {
@@ -127,7 +133,16 @@ export default {
         console.log('error', e)
       }
     },
-
+    eventLink(item) {
+      if (item.type === 'deadline') {
+        let clientId = item.client
+        let caseId = item.case
+        return `/legal-application/clients/${clientId}/cases/${caseId}/deadlines`
+      }
+      if (item.type === 'event') {
+        return '/legal-application/reminders'
+      }
+    },
     categoryToDisplay(item) {
       if (item.category === 0) {
         return "Spotkanie"
@@ -144,7 +159,6 @@ export default {
     formatDateForCalendar(date) {
       return formatDate(date)
     },
-
     countNotifications() {
       return this.notifications = this.newEvents.length
     }
