@@ -53,7 +53,7 @@
   </layout>
 </template>
 <script>
-import {formatDate, queryDateExtended, todayDate} from "@/data/date-extensions";
+import {formatDate, queryDateExtended, queryDateForFloatingBell, todayDate} from "@/data/date-extensions";
 import Layout from "@/components/legal-app/layout";
 import AddDeadline from "@/components/legal-app/clients/cases/deadlines/add-deadline";
 import {mapActions, mapState} from "vuex";
@@ -83,14 +83,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getCaseDetails', 'getCaseDeadlines']),
+    ...mapActions('legal-app-client-store', ['getCaseDetails', 'getCaseDeadlines', 'getEventsForNotifications']),
+
     formatDate(date) {
       return formatDate(date);
     },
     async actionDone() {
       let caseId = this.$route.params.case;
       let query = this.query;
+      let dates = queryDateForFloatingBell(todayDate())
       await this.getCaseDeadlines({caseId, query});
+      await this.getEventsForNotifications({dates});
     }
   }
 };

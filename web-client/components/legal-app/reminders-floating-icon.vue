@@ -11,8 +11,8 @@
         <v-badge
           color="primary"
           bottom
-          :content="notificationsCount"
-          :value="notificationsCount"
+          :content="newEvents.length"
+          :value="newEvents.length"
         >
         </v-badge>
       </v-btn>
@@ -79,9 +79,10 @@ export default {
   }),
 
   async fetch() {
-    let query = this.query
+    let dates = this.query
     // await this.createEvents()
-    await this.getEventsForNotifications({query})
+    await this.getEventsForNotifications({dates})
+    console.log('count', this.newEvents.length)
     // await this.countNotifications()
   },
   computed: {

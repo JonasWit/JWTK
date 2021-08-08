@@ -363,10 +363,10 @@ export const actions = {
     }
   },
 
-  async getEventsForNotifications({commit}, {query}) {
+  async getEventsForNotifications({commit}, {dates}) {
     try {
-      let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(query))
-      let remindersList = await this.$axios.$get(getRemindersFromTo(query))
+      let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(dates))
+      let remindersList = await this.$axios.$get(getRemindersFromTo(dates))
       let newEvents = [];
       remindersList.forEach(x => {
         newEvents.push({
