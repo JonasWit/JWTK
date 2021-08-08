@@ -1,4 +1,4 @@
-﻿import {checkCookie, setCookie} from "@/data/cookie-handlers";
+﻿import {checkCookie, getCookie, setCookie} from "@/data/cookie-handlers";
 import {COOKIE_NAME} from "@/data/enums";
 
 const initState = () => ({
@@ -26,6 +26,17 @@ export const mutations = {
 };
 
 export const actions = {
+  readStatusOfLegalAppTooltips({commit}) {
+    if (checkCookie(COOKIE_NAME.LAPP_TIPS)) {
+      if (getCookie(COOKIE_NAME.LAPP_TIPS) === 'true') {
+        commit('setLegalAppTooltipsOption', {option: true});
+      } else {
+        commit('setLegalAppTooltipsOption', {option: false});
+      }
+    } else {
+      commit('setLegalAppTooltipsOption', {option: false});
+    }
+  },
   turnOnLegalAppTooltips({commit}) {
     if (checkCookie(COOKIE_NAME.LAPP_TIPS)) {
       setCookie(COOKIE_NAME.LAPP_TIPS, "", 0);
