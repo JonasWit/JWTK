@@ -20,24 +20,41 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-container class="px-4" fluid>
-        <v-switch
-          v-model="alertsOn"
-          label="Pokaż/ukryj podpowiedzi"
-        ></v-switch>
+        <v-switch v-model="alertsOn" label="Pokaż/ukryj podpowiedzi"></v-switch>
       </v-container>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "options-floating-icon",
   data: () => ({
     dialog: false,
     alertsOn: true
   }),
-
-}
+  beforeMount() {
+    this.readStatusOfLegalAppTooltips();
+    this.alertsOn = this.legalAppTooltips;
+  },
+  watch: {
+    alertsOn(val) {
+      if (val) {
+        this.turnOnLegalAppTooltips();
+      } else {
+        this.turnOffLegalAppTooltips();
+      }
+    }
+  },
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
+  },
+  methods: {
+    ...mapActions('cookies-store', ['readStatusOfLegalAppTooltips', 'turnOnLegalAppTooltips', 'turnOffLegalAppTooltips'])
+  },
+};
 
 </script>
 
