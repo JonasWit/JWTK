@@ -17,19 +17,26 @@ import {mapActions, mapState} from "vuex";
 
 export default {
   name: "breadcrumbs",
-  fetch() {
+  data: () => ({
+    crumbs: [],
+  }),
+  async fetch() {
     let clientId = this.$route.params.client
     let caseId = this.$route.params.case;
     if (clientId) {
-      return this.getClientData({clientId})
+      await this.getClientData({clientId})
     }
     if (caseId) {
-      return this.getCaseDetails({caseId})
+      await this.getCaseDetails({caseId})
     }
+    this.crumbs = this.refreshCrumbs();
   },
   computed: {
     ...mapState('legal-app-client-store', ['clientDataFromFetch', 'clientCaseDetails']),
-    crumbs() {
+  },
+  methods: {
+    ...mapActions('legal-app-client-store', ['getClientData', 'getCaseDetails']),
+    refreshCrumbs() {
       const fullPath = this.$route.fullPath
       const params = fullPath.substring(1).split('/')
       const crumbs = []
@@ -40,7 +47,9 @@ export default {
         console.log('path', path)
         const match = this.$router.match(path)
         if (match.name !== 'index') {
+          console.log('match', match)
           console.log('match name', match.name)
+
           if (index === length - 1) {
             crumbs.push({
               text: this.pathName(match.name),
@@ -55,12 +64,10 @@ export default {
       })
       return crumbs
     },
-  },
-  methods: {
-    ...mapActions('legal-app-client-store', ['getClientData', 'getCaseDetails']),
     pathName(name, path) {
       let clientId = this.$route.params.client;
       let caseId = this.$route.params.case;
+
       if (path === `/legal-application/clients/${clientId}` && name === null) {
         return {
           text: this.clientDataFromFetch.name,

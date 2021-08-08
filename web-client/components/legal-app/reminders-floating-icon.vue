@@ -11,8 +11,8 @@
         <v-badge
           color="primary"
           bottom
-          :content="notifications"
-          :value="notifications"
+          :content="notificationsCount"
+          :value="notificationsCount"
         >
         </v-badge>
       </v-btn>
@@ -24,7 +24,7 @@
         </v-toolbar>
         <v-virtual-scroll :items="newEvents" :item-height="50" height="300" item-height="77">
           <template v-slot:default="{ item }">
-            <v-list-item>
+            <v-list-item :style="backgroundColor(item)">
               <v-list-item-content>
                 <v-list-item-title class="font-weight-bold">{{ categoryToDisplay(item) }}</v-list-item-title>
                 <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -58,6 +58,8 @@ import {
   queryDateForFloatingBell,
   todayDate
 } from "@/data/date-extensions";
+import {getAllRemindersFromTo, getRemindersFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "reminders-floating-icon",
@@ -72,15 +74,19 @@ export default {
     bottom: false,
     left: false,
     transition: 'scale',
-    notifications: 0,
-    newEvents: []
+    // notifications: 0,
+    // newEvents: []
   }),
 
   async fetch() {
-    await this.createEvents()
-    await this.countNotifications()
+    let query = this.query
+    // await this.createEvents()
+    await this.getEventsForNotifications({query})
+    // await this.countNotifications()
   },
   computed: {
+    ...mapState('legal-app-client-store', ['newEvents']),
+    ...mapGetters('legal-app-client-store', ['notificationsCount']),
     todayDate() {
       return todayDate()
     },
@@ -89,50 +95,53 @@ export default {
     },
   },
   methods: {
-    async createEvents() {
-      try {
-        let query = this.query
-        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${query}`)
-        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list/limit${query}`)
-        let newEvents = [];
-        console.log('terminy', deadlines)
-        console.log('eventy', remindersList)
-        remindersList.forEach(x => {
-          newEvents.push({
-            name: x.name,
-            details: x.message,
-            deadline: x.start,
-            category: x.reminderCategory,
-            id: x.id,
-            case: 'none',
-            client: 'none',
-            type: 'event',
-
-          });
-        });
-        deadlines.forEach(x => {
-          newEvents.push({
-            name: x.case.name,
-            details: x.message,
-            deadline: x.deadline,
-            category: 4,
-            id: x.id,
-            case: x.case.id,
-            client: x.case.legalAppClientId,
-            type: 'deadline',
-          });
-        });
-        newEvents.sort((a, b) => {
-          const dateA = new Date(a.deadline)
-          const dateB = new Date(b.deadline)
-          return dateA - dateB
-        });
-        this.newEvents = newEvents;
-        console.log('eventy', this.newEvents)
-      } catch (e) {
-        console.log('error', e)
-      }
-    },
+    ...mapActions('legal-app-client-store', ['getEventsForNotifications']),
+    // async createEvents() {
+    //   try {
+    //     let query = this.query
+    //     let deadlines = await this.$axios.$get(getAllRemindersFromTo(query))
+    //     let remindersList = await this.$axios.$get(getRemindersFromTo(query))
+    //     let newEvents = [];
+    //     console.log('terminy', deadlines)
+    //     console.log('eventy', remindersList)
+    //     remindersList.forEach(x => {
+    //       newEvents.push({
+    //         name: x.name,
+    //         details: x.message,
+    //         deadline: x.start,
+    //         category: x.reminderCategory,
+    //         id: x.id,
+    //         case: 'none',
+    //         client: 'none',
+    //         type: 'event',
+    //
+    //       });
+    //     });
+    //     deadlines.forEach(x => {
+    //       newEvents.push({
+    //         name: x.case.name,
+    //         details: x.message,
+    //         deadline: x.deadline,
+    //         category: 4,
+    //         id: x.id,
+    //         case: x.case.id,
+    //         client: x.case.legalAppClientId,
+    //         type: 'deadline',
+    //       });
+    //     });
+    //     let ordering = {}, // map for efficient lookup of sortIndex
+    //       sortOrder = ['deadline', 'event'];
+    //     for (let i = 0; i < sortOrder.length; i++)
+    //       ordering[sortOrder[i]] = i;
+    //     newEvents.sort(function (a, b) {
+    //       return (ordering[a.type] - ordering[b.type]) || a.deadline.localeCompare(b.deadline);
+    //     });
+    //     this.newEvents = newEvents;
+    //     console.log('eventy', this.newEvents)
+    //   } catch (e) {
+    //     console.log('error', e)
+    //   }
+    // },
     eventLink(item) {
       if (item.type === 'deadline') {
         let clientId = item.client
@@ -159,9 +168,27 @@ export default {
     formatDateForCalendar(date) {
       return formatDate(date)
     },
-    countNotifications() {
-      return this.notifications = this.newEvents.length
+    // countNotifications() {
+    //   return this.notifications = this.newEvents.length
+    // },
+
+    backgroundColor(item) {
+      if (item.category === 4) {
+        return "border-left: solid 5px red"
+      }
+      if (item.category === 0) {
+        return "border-left: solid 5px blue"
+      }
+      if (item.category === 1) {
+        return "border-left: solid 5px orange"
+      }
+      if (item.category === 2) {
+        return "border-left: solid 5px green"
+      }
+
+
     }
+
   }
 }
 
