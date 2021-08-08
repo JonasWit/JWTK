@@ -75,7 +75,7 @@
     <v-main>
       <v-container fluid>
         <nuxt/>
-        <options-floating-icon/>
+
       </v-container>
 
     </v-main>

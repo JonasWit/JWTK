@@ -1,10 +1,27 @@
 ﻿<template>
-  <v-container>
-    <v-row class="mt-10">
-      <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
-        <if-auth v-if="item.adminAccess">
-          <template v-slot:allowed="{portalAdmin, clientAdmin}">
-            <v-col v-if="(portalAdmin || clientAdmin)">
+  <layout>
+    <template v-slot:content>
+      <v-container>
+        <v-row class="mt-10">
+          <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
+            <if-auth v-if="item.adminAccess">
+              <template v-slot:allowed="{portalAdmin, clientAdmin}">
+                <v-col v-if="(portalAdmin || clientAdmin)">
+                  <v-hover v-slot="{ hover }">
+                    <nuxt-link class="nav-item" :to="item.route">
+                      <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
+                        <v-row class="d-flex ma-3" align="center">
+                          <v-icon>{{ item.icon }}</v-icon>
+                          <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
+                        </v-row>
+                        <v-card-text class="font-weight-light">{{ item.text }}</v-card-text>
+                      </v-card>
+                    </nuxt-link>
+                  </v-hover>
+                </v-col>
+              </template>
+            </if-auth>
+            <v-col v-else>
               <v-hover v-slot="{ hover }">
                 <nuxt-link class="nav-item" :to="item.route">
                   <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
@@ -17,29 +34,19 @@
                 </nuxt-link>
               </v-hover>
             </v-col>
-          </template>
-        </if-auth>
-        <v-col v-else>
-          <v-hover v-slot="{ hover }">
-            <nuxt-link class="nav-item" :to="item.route">
-              <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
-                <v-row class="d-flex ma-3" align="center">
-                  <v-icon>{{ item.icon }}</v-icon>
-                  <v-card-title class="text-uppercase justify-center">{{ item.name }}</v-card-title>
-                </v-row>
-                <v-card-text class="font-weight-light">{{ item.text }}</v-card-text>
-              </v-card>
-            </nuxt-link>
-          </v-hover>
-        </v-col>
-      </div>
-    </v-row>
-  </v-container>
+          </div>
+        </v-row>
+      </v-container>
+    </template>
+  </layout>
+
 </template>
 
 <script>
+import Layout from "@/components/legal-app/layout";
 
 export default {
+  components: {Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   async asyncData({params}) {
     return {
