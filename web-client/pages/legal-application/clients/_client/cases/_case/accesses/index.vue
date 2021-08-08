@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
           </v-toolbar>
-          <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          <v-alert elevation="5" text type="info">
             W panelu dostępów możesz nadać lub usunąć dostęp do wybranej sprawy. Użyj opcji "Nadaj dostęp",
             aby zobaczyć listę użytkowników, którzy mogą uzyskać dostęp do Sprawy.
           </v-alert>
@@ -50,6 +50,7 @@ export default {
     console.warn('case details', this.clientCaseDetails)
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['allowedUsersForCase', 'clientCaseDetails']),
     ...mapGetters('auth', ['clientAdmin']),
   },

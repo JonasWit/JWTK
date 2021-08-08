@@ -9,7 +9,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>Nazwa klienta: {{ clientDataFromFetch.name }}</v-toolbar-title>
           </v-toolbar>
-          <v-alert elevation="5" text type="info">
+          <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
             W panelu dostępów możesz nadać lub usunąć dostęp do Klienta. Użyj opcji "Nadaj dostęp",
             aby
             zobaczyć listę użytkowników, którzy mogą uzyskać dostęp do Klienta.
@@ -44,6 +44,7 @@ export default {
   },
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientDataFromFetch']),
     ...mapGetters('auth', ['clientAdmin']),
 

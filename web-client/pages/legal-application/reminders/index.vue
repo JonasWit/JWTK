@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
-      <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
+      <v-alert v-if="" elevation="5" text type="info" v-if="legalAppTooltips">
         Witaj w panelu przypomnień! Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ"
         powrócisz do dziejszej daty.
         Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
@@ -129,7 +129,8 @@
                 <v-card-subtitle>Opis: {{ selectedEvent.name }}</v-card-subtitle>
                 <v-card-subtitle>Termin: {{ selectedEvent.start }}</v-card-subtitle>
                 <v-card-subtitle>Sygnatura: {{ selectedEvent.signature }}</v-card-subtitle>
-                <v-alert dense elevation="5" text type="info">Zarządzanie terminami dla spraw nie jest możliwe z poziomu
+                <v-alert v-if="legalAppTooltips" dense elevation="5" text type="info">Zarządzanie terminami dla spraw
+                  nie jest możliwe z poziomu
                   kalendarza. Kalendarz stanowi
                   jedynie podgląd zbliżających się terminów. Proszę wejść w panel sprawy, a następnie w zakładkę
                   'TERMINY', aby dokonać zmian.
@@ -159,6 +160,7 @@ import {
   todayDate
 } from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
+import {mapState} from "vuex";
 
 export default {
   name: "index",
@@ -203,6 +205,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     categoryToDisplay() {
       if (this.selectedEvent.category === 0) {
         return "Spotkanie"
