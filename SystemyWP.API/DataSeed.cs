@@ -157,7 +157,7 @@ namespace SystemyWP.API
                             UpdatedBy = "system"
                         };
 
-                        for (var i = -10; i < 20; i++)
+                        for (var i = -1; i < 4; i++)
                         {
                             newCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
                             {
@@ -318,7 +318,7 @@ namespace SystemyWP.API
                 });
 
                 //Seed Reminders
-                for (var i = -10; i < 10; i++)
+                for (var i = -2; i < 4; i++)
                 {
                     context.Add(new LegalAppReminder
                     {
@@ -363,7 +363,7 @@ namespace SystemyWP.API
                     });
                     
                     //Seed Reminders
-                    for (var i = -10; i < 10; i++)
+                    for (var i = -2; i < 2; i++)
                     {
                         context.Add(new LegalAppReminder
                         {
