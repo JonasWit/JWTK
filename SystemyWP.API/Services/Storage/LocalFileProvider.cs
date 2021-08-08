@@ -18,7 +18,14 @@ namespace SystemyWP.API.Services.Storage
             _webHostEnvironment = webHostEnvironment;
             _settings = fileSettingsMonitor.CurrentValue;
         }
-        
+
+        public async Task<string> SavePortalPublicationImageAsync(Stream fileStream)
+        {
+            var fileName = SystemyWpConstants.Files.GeneratePortalPublicationFileName();
+            await SaveFile(fileStream, fileName);
+            return $"{_settings.ImageUrl}/{fileName}";
+        }
+
         public async Task<string> SaveProfileImageAsync(Stream fileStream)
         {
             var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
@@ -26,7 +33,7 @@ namespace SystemyWP.API.Services.Storage
             return $"{_settings.ImageUrl}/{fileName}";
         }
 
-        public Task<string> DeleteProfileImageAsync(string filePath)
+        public Task<string> DeleteFileAsync(string filePath)
         {
             throw new System.NotImplementedException();
         }

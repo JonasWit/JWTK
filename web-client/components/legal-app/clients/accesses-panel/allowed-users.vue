@@ -7,7 +7,7 @@
           Nazwa użytkownika: {{ item.username }}
         </v-card-subtitle>
         <v-card-subtitle>Adres email: {{ item.email }}</v-card-subtitle>
-        <revoke-access :user-for-action="item" :client-item-for-action="clientItemForAction"/>
+        <revoke-access :user-for-action="item"/>
       </v-row>
     </v-card>
   </v-card-text>
@@ -21,15 +21,10 @@ import {mapActions, mapGetters} from "vuex";
 export default {
   name: "allowed-users",
   components: {RevokeAccess, GrantAccess},
-  props: {
-    clientItemForAction: {
-      type: Object,
-      required: true
-    }
-  },
+
 
   async fetch() {
-    let clientId = this.clientItemForAction.id;
+    let clientId = this.$route.params.client;
     await this.getAllowedUsers({clientId})
   },
   computed: {

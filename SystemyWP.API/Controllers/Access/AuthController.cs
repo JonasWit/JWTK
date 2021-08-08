@@ -46,7 +46,7 @@ namespace SystemyWP.API.Controllers.Access
                 await signInManager.SignOutAsync();
 
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteProfileImageAsync(userProfile.Image);
+                if (!string.IsNullOrEmpty(userProfile?.Image)) await fileManager.DeleteFileAsync(userProfile.Image);
 
                 if (userProfile is not null) _context.Remove(userProfile);
                 await _context.SaveChangesAsync();

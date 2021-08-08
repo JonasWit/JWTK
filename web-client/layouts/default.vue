@@ -84,7 +84,8 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations, mapState,} from "vuex";
+import {COOKIE_NAME} from "@/data/enums";
+import {mapActions, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
@@ -99,7 +100,7 @@ export default {
   created() {
     let themeEnabled;
     if (process.server) {
-      themeEnabled = getCookieFromRequest("custom-color-theme", this.$nuxt.context.req.headers.cookie) === 'dark';
+      themeEnabled = getCookieFromRequest(COOKIE_NAME.THEME, this.$nuxt.context.req.headers.cookie) === 'dark';
     } else {
       themeEnabled = this.darkThemeStored === true;
     }
@@ -121,11 +122,11 @@ export default {
           this.setLightTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie("custom-color-theme")) {
-              setCookie("custom-color-theme", "", 0);
-              setCookie("custom-color-theme", "light", 365);
+            if (checkCookie(COOKIE_NAME.THEME)) {
+              setCookie(COOKIE_NAME.THEME, "", 0);
+              setCookie(COOKIE_NAME.THEME, "light", 365);
             } else {
-              setCookie("custom-color-theme", "light", 365);
+              setCookie(COOKIE_NAME.THEME, "light", 365);
             }
           }
         } else {
@@ -134,28 +135,27 @@ export default {
           this.setDarkTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie("custom-color-theme")) {
-              setCookie("custom-color-theme", "", 0);
-              setCookie("custom-color-theme", "dark", 365);
+            if (checkCookie(COOKIE_NAME.THEME)) {
+              setCookie(COOKIE_NAME.THEME, "", 0);
+              setCookie(COOKIE_NAME.THEME, "dark", 365);
             } else {
-              setCookie("custom-color-theme", "dark", 365);
+              setCookie(COOKIE_NAME.THEME, "dark", 365);
             }
           }
         }
-
         this.goDark = this.darkThemeStored;
       }
     }
   },
   computed: {
-    ...mapState('auth', ['profile', 'darkThemeStored']),
-    ...mapGetters('auth', ['client', 'clientAdmin', 'portalAdmin', 'authenticated']),
+    ...mapState('auth', ['profile']),
+    ...mapState('cookies-store', ['darkThemeStored']),
     isDarkTheme() {
       return this.$vuetify.theme.dark = this.goDark;
     }
   },
   methods: {
-    ...mapMutations('auth', ['setLightTheme', 'setDarkTheme']),
+    ...mapMutations('cookies-store', ['setLightTheme', 'setDarkTheme']),
     ...mapActions('auth', ['logout', 'initialize', 'changePassword']),
   }
 };

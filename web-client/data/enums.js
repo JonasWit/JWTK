@@ -18,8 +18,8 @@ export const REMINDER_TYPES = {
 
 export const ROLES = {
   INVITED: "Invited",
-  CLIENT: "User",
-  CLIENT_ADMIN: "UserAdmin",
+  USER: "User",
+  USER_ADMIN: "UserAdmin",
   PORTAL_ADMIN: "PortalAdmin",
 };
 
@@ -39,5 +39,10 @@ export const SERVER_LOG_TYPES = {
   CRITICAL: "Critical",
   NONE: "None",
   WARNING: "Warning",
+};
+
+export const COOKIE_NAME = {
+  THEME: "custom-color-theme",
+  LAPP_TIPS: "lapp-tips",
 };
 

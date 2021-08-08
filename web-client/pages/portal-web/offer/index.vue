@@ -5,7 +5,8 @@
         <div>
           <h1>Nasza oferta</h1>
           <h5>
-            Tworzymy zarówno statyczne strony internetowe jak również aplikacje webowe. Zamów u nas stronę lub aplikację
+            Tworzymy aplikacje webowe, aplikacje desktopowe oraz klasyczne strony internetowe. Zamów u nas stronę lub
+            aplikację
             a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym
             przejmować! </h5>
         </div>
@@ -99,7 +100,8 @@ export default {
           bullet: [
             ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii'],
             ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
-            ['Zapewniamy wsparcie techniczne w ciągu maksimum 4 godzin od zgłoszenia'],
+            ['Zapewniamy wsparcie techniczne i szkolenia'],
+            ['Wprowadzamy zmiany i ulepszenia na życzenie Klientów, w przypadku większych zmian przedstawiamy darmową wycenę'],
           ],
         },
         {
@@ -108,9 +110,9 @@ export default {
           title: 'Strony Internetowe',
           price: 'od 600 PLN netto',
           bullet: [
-            ['Statyczne strony internetowe - wizytówki'],
+            ['Statyczne strony internetowe'],
             ['Możliwość dodania dodatkowych funkcjonalności'],
-            ['Możliwość zastosowania CMS'],
+            ['Możliwość zastosowania CMS (Wordpress)'],
           ],
         },
         {
@@ -120,7 +122,11 @@ export default {
           price: 'od 2000 PLN netto',
           bullet: [
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Aplikacje desktopowe w technologii: .NET5+, WPF lub WinForms, możliwość integracji z bazą danych'],
+            ['Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET'],
+            ['Aplikacje WPF'],
+            ['Aplikacje WinForms'],
+            ['Aplikacje MAUI'],
+            ['Integracja z bazą danych'],
           ],
         },
         {
@@ -132,7 +138,7 @@ export default {
             ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
             ['Aplikacje do obługi firmy, sklepy internetowe'],
             ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
-            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5+, PostgreSQL'],
+            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
           ],
         },
         {

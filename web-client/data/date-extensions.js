@@ -72,7 +72,7 @@ export function addHoursToDate(date, hours) {
 }
 
 export function formatDateForCalendar(date) {
-  const eventDate = new Date(date).toUTCString()
+  const eventDate = new Date(date).toUTCString();
   const month = (eventDate.getUTCMonth() + 1).padStart(2, '0');
   const day = (eventDate.getUTCDate()).padStart(2, '0');
   const year = eventDate.getUTCFullYear();
@@ -86,7 +86,7 @@ export function formatDateToLocaleTimeZone(date) {
     day = '' + d.getDate(),
     year = d.getFullYear(),
     hours = d.getHours(),
-    minutes = d.getMinutes()
+    minutes = d.getMinutes();
 
   if (month.length < 2) {
     month = '0' + month;
@@ -115,12 +115,24 @@ export function formatDateToLocaleTimeZoneWithoutTime(date) {
 }
 
 export function todayDate() {
-  return (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+  return (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
 }
 
 export function queryDate(date) {
-  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
-  let toDate = (addDays(date, 30)).toISOString().substr(0, 10)
+  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+  let toDate = (addDays(date, 36000)).toISOString().substr(0, 10);
+  return `?from=${fromDate}&to=${toDate}`;
+}
+
+export function queryDateExtended(date, addedDays) {
+  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+  let toDate = (addDays(date, addedDays)).toISOString().substr(0, 10);
+  return `?from=${fromDate}&to=${toDate}`;
+}
+
+export function queryDateForFloatingBell(date) {
+  let fromDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+  let toDate = (addDays(date, 2)).toISOString().substr(0, 10);
   return `?from=${fromDate}&to=${toDate}`;
 }
 

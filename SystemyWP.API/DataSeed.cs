@@ -36,7 +36,7 @@ namespace SystemyWP.API
         {
             if (!identityContext.Users.Any(x => x.UserName.Equals("MarzenaWitek")))
             {
-                var admin = new IdentityUser("admin") {Email = "marzena.witekk@gmail.com"};
+                var admin = new IdentityUser("admin") {Email = "marzena.witek@systemywp.pl"};
                 userManager
                     .CreateAsync(admin, config
                         .GetSection("AdminPassword").Value)

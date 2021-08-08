@@ -11,16 +11,20 @@ namespace SystemyWP.API.Services.Storage
         {
             _s3Client = s3Client;
         }
-        
+
+        public Task<string> SavePortalPublicationImageAsync(Stream fileStream)
+        {
+            var fileName = SystemyWpConstants.Files.GeneratePortalPublicationFileName();
+            return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
+        }
+
         public Task<string> SaveProfileImageAsync(Stream fileStream)
         {
             var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
             return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
         }
 
-        public Task<string> DeleteProfileImageAsync(string filePath)
-        {
-            return _s3Client.DeleteFile(filePath);
-        }
+        public Task<string> DeleteFileAsync(string filePath) => 
+            _s3Client.DeleteFile(filePath);
     }
 }

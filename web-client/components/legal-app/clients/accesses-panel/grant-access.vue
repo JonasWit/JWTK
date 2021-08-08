@@ -68,12 +68,7 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "grant-access",
-  props: {
-    clientItem: {
-      type: Object,
-      required: true
-    }
-  },
+
   data: () => ({
     selectedUser: [],
     dialog: false,
@@ -81,7 +76,7 @@ export default {
   }),
 
   async fetch() {
-    let clientId = this.clientItem.id;
+    let clientId = this.$route.params.client;
     await this.getEligibleUsersList({clientId})
     console.warn('eligible users list:', this.eligibleUsers)
   },
@@ -99,7 +94,7 @@ export default {
         userId: this.selectedUser.id
       }
       try {
-        let clientId = this.clientItem.id;
+        let clientId = this.$route.params.client;
         console.warn('user id', payload)
         await this.$axios.$post(grantAccess(clientId), payload)
         this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
@@ -108,7 +103,7 @@ export default {
         this.$notifier.showErrorMessage(error);
       } finally {
         Object.assign(this.$data, this.$options.data.call(this));
-        let clientId = this.clientItem.id;
+        let clientId = this.$route.params.client;
         console.warn('client id:', clientId)
         await this.getAllowedUsers({clientId})
         await this.getEligibleUsersList({clientId})

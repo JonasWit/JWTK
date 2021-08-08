@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 {
     [Route("/api/portal-admin/key-admin/legal-app")]
-    [Authorize(SystemyWpConstants.Policies.User)]
+    [Authorize]
     public class LegalAppAccessKeyController : ApiController
     {
         public LegalAppAccessKeyController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,

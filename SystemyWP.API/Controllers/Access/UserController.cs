@@ -150,7 +150,7 @@ namespace SystemyWP.API.Controllers.Access
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
                 if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteProfileImageAsync(user.Image);
+                if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteFileAsync(user.Image);
 
                 await using (var stream = new MemoryStream())
                 using (var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))

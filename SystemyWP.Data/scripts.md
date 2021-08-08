@@ -1,4 +1,4 @@
-﻿### migrations
+﻿### migrations - use from Data path
 
 dotnet ef migrations add <name> -c AppDbContext -s ..\SystemyWP.API -o .\Migrations
 
@@ -15,3 +15,10 @@ dotnet ef migrations script -i -c ApiIdentityDbContext -o .\Scripts\script.sql
 ### just update
 
 dotnet ef database update -c ApiIdentityDbContext
+
+
+
+
+
+
+
