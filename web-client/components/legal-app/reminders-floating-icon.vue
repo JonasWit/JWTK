@@ -24,7 +24,7 @@
         </v-toolbar>
         <v-virtual-scroll :items="newEvents" :item-height="50" height="300" item-height="77">
           <template v-slot:default="{ item }">
-            <v-list-item>
+            <v-list-item :style="backgroundColor(item)">
               <v-list-item-content>
                 <v-list-item-title class="font-weight-bold">{{ categoryToDisplay(item) }}</v-list-item-title>
                 <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -122,10 +122,12 @@ export default {
             type: 'deadline',
           });
         });
-        newEvents.sort((a, b) => {
-          const dateA = new Date(a.deadline)
-          const dateB = new Date(b.deadline)
-          return dateA - dateB
+        let ordering = {}, // map for efficient lookup of sortIndex
+          sortOrder = ['deadline', 'event'];
+        for (let i = 0; i < sortOrder.length; i++)
+          ordering[sortOrder[i]] = i;
+        newEvents.sort(function (a, b) {
+          return (ordering[a.type] - ordering[b.type]) || a.deadline.localeCompare(b.deadline);
         });
         this.newEvents = newEvents;
         console.log('eventy', this.newEvents)
@@ -161,7 +163,25 @@ export default {
     },
     countNotifications() {
       return this.notifications = this.newEvents.length
+    },
+
+    backgroundColor(item) {
+      if (item.category === 4) {
+        return "border-left: solid 5px red"
+      }
+      if (item.category === 0) {
+        return "border-left: solid 5px blue"
+      }
+      if (item.category === 1) {
+        return "border-left: solid 5px orange"
+      }
+      if (item.category === 2) {
+        return "border-left: solid 5px green"
+      }
+
+
     }
+
   }
 }
 

@@ -6,14 +6,13 @@
         <v-spacer></v-spacer>
         <add-reminder v-on:action-completed="actionDone"/>
       </v-toolbar>
-      <v-alert v-if="" elevation="5" text type="info" v-if="legalAppTooltips">
+      <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
         Witaj w panelu przypomnień! Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ"
         powrócisz do dziejszej daty.
         Aby zmienić widok kalendarza użyj guzika po prawej stronie z listą dostępnych widoków.
       </v-alert>
       <div class="mt-7">
         <v-sheet tile>
-
           <v-col>
             <v-row>
               <v-btn icon small color="primary" @click="prev" class="mx-2">
