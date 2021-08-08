@@ -88,7 +88,7 @@
             </v-row>
           </v-col>
         </v-sheet>
-        <v-sheet height="600">
+        <v-sheet height="900">
           <v-calendar ref="calendar" v-model="focus"
                       :events="filteredEvents"
                       :type="type" color="primary"
@@ -155,11 +155,12 @@ import DeleteReminder from "@/components/legal-app/reminders/delete-reminder";
 import EditReminder from "@/components/legal-app/reminders/edit-reminder";
 import {
   formatDateToLocaleTimeZone,
-  formatDateToLocaleTimeZoneWithoutTime, queryDate,
+  formatDateToLocaleTimeZoneWithoutTime, queryDate, queryDateForFloatingBell,
   todayDate
 } from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
+import {getAllDeadlinesFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
 export default {
   name: "index",
@@ -224,6 +225,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('legal-app-client-store', ['getEventsForNotifications']),
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
@@ -302,7 +304,7 @@ export default {
     },
     async getEvents() {
       try {
-        let deadlines = await this.$axios.$get(`/api/legal-app-cases/deadlines/list-all${this.query}`)
+        let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(this.query))
         let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
         let newEvents = [];
         remindersList.forEach(x => {
@@ -373,7 +375,9 @@ export default {
     },
     async actionDone() {
       try {
+        let query = queryDateForFloatingBell(todayDate())
         await this.getEvents();
+        await this.getEventsForNotifications({query})
         this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
         this.selectedStatus = {text: 'Wszystkie statusy', value: null}
         this.filteredEvents = this.newEvents

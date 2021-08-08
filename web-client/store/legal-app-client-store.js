@@ -1,6 +1,11 @@
 ﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
 import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {
+  getAllDeadlinesFromTo,
+  getAllRemindersFromTo,
+  getRemindersFromTo
+} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
 const initState = () => ({
   //Clients
@@ -31,7 +36,11 @@ const initState = () => ({
   allowedUsersForCase: [],
   eligibleUsersForCase: [],
   notesListForCases: [],
-  deadlines: []
+  deadlines: [],
+
+  //Reminders
+
+  newEvents: []
 
 
 });
@@ -69,6 +78,10 @@ export const getters = {
   eligibleUsers(state) {
     return state.eligibleUsersList
   },
+  notificationsCount(state) {
+    return state.newEvents.length
+
+  }
 
 };
 
@@ -145,6 +158,10 @@ export const mutations = {
   //CASE DEADLINES LIST
   updateCaseDeadlinesList(state, {deadlines}) {
     state.deadlines = deadlines
+  },
+
+  updateNewEventsForNotifications(state, {newEvents}) {
+    state.newEvents = newEvents
   }
 };
 
@@ -269,7 +286,7 @@ export const actions = {
     try {
       let clientCaseDetails = await this.$axios.$get(`/api/legal-app-cases/case/${caseId}`)
       commit('updateClientCaseDetails', {clientCaseDetails});
-      console.warn('case details:', clientCaseDetails)
+      console.warn('case details - action from store:', clientCaseDetails)
     } catch (error) {
       handleError(error)
     }
@@ -343,6 +360,51 @@ export const actions = {
     } catch (error) {
       console.error('creating contact error', error)
       this.$notifier.showErrorMessage(error.response.data)
+    }
+  },
+
+  async getEventsForNotifications({commit}, {query}) {
+    try {
+      let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(query))
+      let remindersList = await this.$axios.$get(getRemindersFromTo(query))
+      let newEvents = [];
+      remindersList.forEach(x => {
+        newEvents.push({
+          name: x.name,
+          details: x.message,
+          deadline: x.start,
+          category: x.reminderCategory,
+          id: x.id,
+          case: 'none',
+          client: 'none',
+          type: 'event',
+
+        });
+      });
+      deadlines.forEach(x => {
+        newEvents.push({
+          name: x.case.name,
+          details: x.message,
+          deadline: x.deadline,
+          category: 4,
+          id: x.id,
+          case: x.case.id,
+          client: x.case.legalAppClientId,
+          type: 'deadline',
+        });
+      });
+      let ordering = {}, // map for efficient lookup of sortIndex
+        sortOrder = ['deadline', 'event'];
+      for (let i = 0; i < sortOrder.length; i++)
+        ordering[sortOrder[i]] = i;
+      newEvents.sort(function (a, b) {
+        return (ordering[a.type] - ordering[b.type]) || a.deadline.localeCompare(b.deadline);
+      });
+
+      commit('updateNewEventsForNotifications', {newEvents})
+      console.warn('eventy ze stora', newEvents)
+    } catch (e) {
+      console.log('error', e)
     }
   },
 
