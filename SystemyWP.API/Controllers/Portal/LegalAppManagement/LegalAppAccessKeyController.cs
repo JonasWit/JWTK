@@ -141,9 +141,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 
         [HttpPost("user/grant/access-key")]
         [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
-        public async Task<IActionResult> GrantDataAccessKey(
-            [FromBody] GrantDataAccessKeyForm form,
-            [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GrantDataAccessKey([FromBody] GrantDataAccessKeyForm form, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
@@ -161,6 +159,40 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                 if (result > 0)
                     return Ok();
                 return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
+        [HttpPost("revoke/{userId}")]
+        [Authorize(SystemyWpConstants.Policies.UserAdmin)]
+        public async Task<IActionResult> RevokeLegalAppDataAccessKey(string userId, [FromServices] UserManager<IdentityUser> userManager)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
+
+                if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                var assignedLegalAppKey = _context.LegalAppAccessKeys
+                    .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
+
+                if (assignedLegalAppKey is not null)
+                {
+                    assignedLegalAppKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
+                    _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(userId)));
+
+                    var result = await _context.SaveChangesAsync();
+
+                    if (result > 0) return Ok();
+                    return BadRequest();
+                }
+                
+                return BadRequest();
             }
             catch (Exception e)
             {
