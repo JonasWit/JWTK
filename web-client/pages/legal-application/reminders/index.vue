@@ -375,9 +375,9 @@ export default {
     },
     async actionDone() {
       try {
-        let query = queryDateForFloatingBell(todayDate())
+        let dates = queryDateForFloatingBell(todayDate())
         await this.getEvents();
-        await this.getEventsForNotifications({query})
+        await this.getEventsForNotifications({dates})
         this.selectedCategory = {text: 'Wszystkie kategorie', value: 3}
         this.selectedStatus = {text: 'Wszystkie statusy', value: null}
         this.filteredEvents = this.newEvents

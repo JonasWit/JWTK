@@ -4,12 +4,12 @@ export const getReminders = () => {
   return `/api/legal-app-reminders/list`;//GET
 };
 
-export const getRemindersFromTo = (query) => {
-  return `/api/legal-app-reminders/list/limit/${query}`;//GET
+export const getRemindersFromTo = (dates) => {
+  return `/api/legal-app-reminders/list/limit/${dates}`;//GET
 };
 
-export const getAllDeadlinesFromTo = (query) => {
-  return `/api/legal-app-cases/deadlines/list-all${query}`
+export const getAllDeadlinesFromTo = (dates) => {
+  return `/api/legal-app-cases/deadlines/list-all${dates}`
 
 };
 
