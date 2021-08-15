@@ -17,7 +17,7 @@
             Dodaj notatkę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Każda nowa notatka jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
           Jeśli chcesz, aby notatka była widoczna dla innych, oznacz ją jako publiczną.
         </v-alert>
@@ -46,7 +46,7 @@
 <script>
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {createNoteForClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "add-note",
@@ -64,7 +64,9 @@ export default {
       message: notEmptyAndLimitedRule("Notatka nie może byc pusta i może zawierać maksymalnie 1000 znaków.", 4, 1000),
     },
   }),
-
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
+  },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async save() {

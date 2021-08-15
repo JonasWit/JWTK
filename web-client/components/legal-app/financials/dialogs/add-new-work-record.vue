@@ -23,8 +23,8 @@
                         label="Dodaj liczbę minut"></v-text-field>
           <v-text-field v-model="form.rate" required :rules="validation.numberOnly"
                         label="Dodaj stawkę godzinową brutto"></v-text-field>
-          <v-text-field v-model="form.vat" required :rules="validation.numberOnly"
-                        label="Dodaj stawkę VAT"></v-text-field>
+          <v-select :items="items" v-model="form.vat" label="Dodaj stawkę VAT" item-text="text" :item-value="value"
+                    return-object></v-select>
           <v-dialog
             ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -45,7 +45,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn text color="primary" @click="resetForm()">
+          <v-btn text color="error" @click="resetForm()">
             Wyczyść
 
           </v-btn>
@@ -61,58 +61,63 @@
 
 <script>
 
-import {lengthRule, notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
-import {mapActions} from "vuex";
+import {hoursValidation, lengthRule, notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 import {createWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "add-new-work-record",
   data: () => ({
-    dialog: false,
-    loading: false,
-    form: {
-      name: "",
-      description: "",
-      hours: "",
-      minutes: "",
-      rate: "",
-      eventDate: "",
-      vat: "",
-      lawyerName: '',
-    },
-    modal: false,
-    date: new Date().toISOString().substr(0, 10),
-    validation: {
-      valid: false,
-      numberOnly: numberOnly(),
-      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 50),
-      length: lengthRule('Maksymalna liczba znaków to 300 znaków', 5, 300)
-    },
+      dialog: false,
+      loading: false,
+      items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
+      value: null,
+      form: {
+        name: "",
+        description: "",
+        hours: "",
+        minutes: "",
+        rate: "",
+        eventDate: "",
+        vat: "",
+        lawyerName: '',
+      },
+      modal: false,
+      date: new Date().toISOString().substr(0, 10),
+      validation: {
+        valid: false,
+        numberOnly: numberOnly(),
+        name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 50),
+        length: lengthRule('Maksymalna liczba znaków to 300 znaków', 5, 300),
+        hours: hoursValidation()
+      },
 
-  }),
+    }
+  ),
 
   computed: {
     hoursSpent() {
       return parseInt(this.form.hours);
-    },
+    }
+    ,
     minutesSpent() {
       return parseInt(this.form.minutes);
-    },
+    }
+    ,
     givenRate() {
       return (parseFloat(this.form.rate));
-    },
-    givenVat() {
-      return (parseInt(this.form.vat));
-    },
+    }
+    ,
+    // givenVat() {
+    //   return (parseInt(this.value));
+    // }
+    // ,
     calculatedAmount() {
       return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate)
-    }
+    },
   },
 
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
-
     async handleSubmit() {
       if (!this.$refs.createClientWorkForm.validate()) return;
       if (this.loading) return;
@@ -125,7 +130,7 @@ export default {
         minutes: this.minutesSpent,
         rate: this.givenRate,
         eventDate: this.form.eventDate,
-        vat: this.givenVat,
+        vat: this.form.vat.value,
         amount: this.calculatedAmount,
         lawyerName: this.form.lawyerName,
 
@@ -140,17 +145,17 @@ export default {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-        let clientId = this.$route.params.client
-        await this.getAllWorkRecordsOnFetch({clientId});
         this.loading = false;
         this.dialog = false;
 
       }
-    },
+    }
+    ,
     resetForm() {
       this.$refs.createClientWorkForm.reset();
       this.$refs.createClientWorkForm.resetValidation();
-    },
+    }
+    ,
   }
 
 

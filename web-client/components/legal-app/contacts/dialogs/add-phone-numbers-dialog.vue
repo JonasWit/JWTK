@@ -61,7 +61,7 @@ export default {
     validation: {
       valid: false,
       number: phoneNumberRule(),
-      comment: notEmptyAndLimitedRule("Nazwa jest wymagana. Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
+      comment: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalna liczba znaków to 50", 1, 50),
     },
   }),
   methods: {

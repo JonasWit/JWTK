@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
       <v-icon color="white">mdi-briefcase-account-outline</v-icon>
     </v-toolbar>
-    <v-alert v-if="" elevation="5" text type="info" dismissible close-text="Zamknij">
+    <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
       Aby odzyskać dostęp do zarchiwizowanej Sprawy użyj opcji 'PRZYWRÓĆ'.
     </v-alert>
     <v-card tile v-for="item in archivedCasesList" :key="item.id">
@@ -29,6 +29,7 @@ import Layout from "@/components/legal-app/layout";
 import {archiveCase, getArchivedCases} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {formatDate} from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
+import {mapState} from "vuex";
 
 export default {
   name: "archived-cases",
@@ -41,7 +42,9 @@ export default {
     await this.getArchivedCasesList()
     console.warn('archived cases', this.archivedCasesList)
   },
-
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
+  },
   methods: {
     async getArchivedCasesList() {
       try {

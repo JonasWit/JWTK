@@ -59,8 +59,8 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      email: emailRule("Proszę podać poprawny format adresu email."),
-      comment: notEmptyAndLimitedRule("Nazwa jest wymagana. Dopuszczalna liczba znaków pomiędzy 4 a 50!", 4, 50),
+      email: emailRule("Proszę podać poprawny format adresu email np. jan-kowalski@gmail.com"),
+      comment: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalan liczba znaków to 50", 1, 50),
     },
   }),
 

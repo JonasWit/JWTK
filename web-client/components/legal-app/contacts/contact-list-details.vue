@@ -29,7 +29,7 @@
     </v-tab>
     <v-tab-item>
       <v-card flat>
-        <v-alert elevation="5" text type="info">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           W tym miejscu mozesz usunąć cały kontakt lub edytować główne dane. Szczegóły kontaku takie jak adresy email,
           telefony lub adresy można dodawać w odpowednich zakładkach.
         </v-alert>
@@ -44,7 +44,7 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
-        <v-alert v-if="!this.emailsList.length" elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Nie posiadasz jeszcze żadnych adresów email? Użyj zielonej ikonki "+", aby dodać nowy email.
         </v-alert>
         <v-card-text v-for="item in emailsList" :key="item.id">
@@ -61,8 +61,7 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
-        <v-alert v-if="!this.phoneNumbersList" elevation="5" text type="info" dismissible
-                 close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Nie posiadasz jeszcze żadnych numerów telefonów? Użyj zielonej ikonki "+", aby dodać numery.
         </v-alert>
         <v-card-text v-for="item in phoneNumbersList" :key="item.id">
@@ -79,7 +78,7 @@
     </v-tab-item>
     <v-tab-item>
       <v-card flat>
-        <v-alert v-if="!this.addressesList" elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Nie posiadasz jeszcze żadnych adresów? Użyj zielonej ikonki "+", aby dodać adresy.
         </v-alert>
         <v-card-text v-for="item in addressesList" :key="item.id">
@@ -135,6 +134,7 @@ export default {
     await this.updateContactLIst()
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['contactDetailsFromFetch']),
   },
   methods: {

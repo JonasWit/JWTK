@@ -17,21 +17,18 @@
             Edytuj notatkę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
-          Placeholder
-        </v-alert>
         <v-card-text>
           <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
           <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="success" text @click="dialog = false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveChanges()">
             Zapisz zmianę
-          </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
           </v-btn>
         </v-card-actions>
       </v-card>

@@ -6,7 +6,7 @@
       <v-icon color="white">mdi-account-tie</v-icon>
       <v-icon color="white">mdi-archive</v-icon>
     </v-toolbar>
-    <v-alert v-if="archivedClientsList" elevation="5" text type="info" dismissible close-text="Zamknij">
+    <v-alert v-if="legalAppTooltips" elevation="5" text type="info" dismissible close-text="Zamknij">
       Aby odzyskać dostęp do zarchiwizowanego Klienta i jego danych oraz spraw użyj opcji 'PRZYWRÓĆ'.
     </v-alert>
     <v-card tile v-for="item in archivedClientsList" :key="item.id">
@@ -31,6 +31,7 @@ import Layout from "@/components/legal-app/layout";
 import {archiveClient, getArchivedClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {formatDate} from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
+import {mapState} from "vuex";
 
 export default {
   name: "archived-clients",
@@ -42,6 +43,9 @@ export default {
 
   fetch() {
     return this.getArchivedClientsFromFetch()
+  },
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
   },
   methods: {
     formatDate(date) {

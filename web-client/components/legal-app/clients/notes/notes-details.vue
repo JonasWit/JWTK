@@ -15,16 +15,20 @@
             <v-toolbar-title>{{ noteDetails.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+          <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
             Jeśli chcesz zmodyfikować treść notatki, użyj guzika "EDYTUJ". W nowym okienku będziesz mógł dokonać zmian.
             Jeśli już nie potrzebujesz tej notatki, użyj guzika "USUŃ" i potwierdź operację.
           </v-alert>
-          <v-subheader class="mx-2"><span class="font-weight-bold">Utworzono: </span>
-            {{ formatDateWithHours(noteDetails.created) }}
-          </v-subheader>
-          <v-subheader class="mx-2"><span class="font-weight-bold">Utworzone przez: </span> {{ noteDetails.createdBy }}
-          </v-subheader>
           <v-row class="mx-2 my-2 d-flex align-center">
+            <v-subheader class="mx-2"><span class="font-weight-bold">Utworzono: </span>
+              {{ formatDateWithHours(noteDetails.created) }}
+            </v-subheader>
+            <v-subheader class="mx-2">
+              <span class="font-weight-bold">Utworzone przez: </span> {{ noteDetails.createdBy }}
+            </v-subheader>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row class="mx-2 mb-4 my-4 d-flex align-center">
             <v-card-title>Treść notatki</v-card-title>
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
             <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
@@ -34,15 +38,14 @@
           <v-card-text>
             {{ noteDetails.message }}
           </v-card-text>
-          <v-row class="mx-2 mb-4 d-flex align-center">
+          <v-divider></v-divider>
+          <v-row class="mx-2 mb-4 my-4 d-flex align-center">
             <v-card-subtitle><span class="font-weight-bold">Edytowano:</span>
               {{ formatDateWithHours(noteDetails.updated) }}
             </v-card-subtitle>
             <v-card-subtitle><span class="font-weight-bold">Edytowane przez:</span> {{ noteDetails.updatedBy }}
             </v-card-subtitle>
           </v-row>
-          <v-divider></v-divider>
-
         </v-card>
       </v-dialog>
     </v-row>
@@ -56,7 +59,7 @@ import {formatDate, formatDateWithHours} from "@/data/date-extensions";
 import EditNoteDialog from "@/components/legal-app/clients/notes/edit-note-dialog";
 import DeleteNoteDialog from "@/components/legal-app/clients/notes/delete-note-dialog";
 import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "notes-details",
@@ -80,6 +83,9 @@ export default {
         this.getNotesDetails();
       }
     }
+  },
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),

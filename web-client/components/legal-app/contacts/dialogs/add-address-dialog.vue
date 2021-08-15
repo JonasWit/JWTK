@@ -22,13 +22,13 @@
                         required></v-text-field>
           <v-text-field v-model="form.street" :rules="validation.street" label="Ulica"
                         required></v-text-field>
-          <v-text-field v-model="form.building" label="Numer budynki i lokalu"
+          <v-text-field v-model="form.building" label="Numer budynki i lokalu*"
                         required></v-text-field>
-          <v-text-field v-model="form.city" label="Miasto"
+          <v-text-field v-model="form.city" label="Miasto*"
                         required></v-text-field>
           <v-text-field v-model="form.postCode" label="Kod pocztowy*"
                         :rules="validation.postal"></v-text-field>
-          <v-text-field v-model="form.country" label="Państwo"
+          <v-text-field v-model="form.country" label="Państwo*"
                         required></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
@@ -75,9 +75,10 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      street: notEmptyAndLimitedRule("Nazwa ulicy jest wymagana! Maksymalna liczba znaków to 50", 2, 50),
-      comment: notEmptyAndLimitedRule("Pole jest wymagane. Maksymalna liczba znaków to 50", 0, 50),
+      street: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalna liczba znaków to 50", 1, 50),
+      comment: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalna liczba znaków to 50", 1, 50),
       postal: postalCode(),
+      city: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalna liczba znaków to 50", 1, 50)
     },
   }),
 

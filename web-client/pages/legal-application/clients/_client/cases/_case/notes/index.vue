@@ -7,9 +7,7 @@
         <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
         <case-add-note/>
       </v-toolbar>
-      <v-alert v-if="Object.keys(notesListForCases).length === 0" elevation="5" text type="info"
-               dismissible
-               close-text="Zamknij">
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
         Zarządzaj notatkami dla Sprawy! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
       </v-alert>
@@ -69,6 +67,7 @@ export default {
 
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['notesListForCases', 'clientCaseDetails'])
   },
   methods: {

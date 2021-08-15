@@ -20,7 +20,7 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-container class="px-4" fluid>
-        <v-switch v-model="alertsOn" label="Pokaż/ukryj podpowiedzi"></v-switch>
+        <v-switch v-model="alertsOn" label="Pokaż podpowiedzi"></v-switch>
       </v-container>
     </v-card>
   </v-dialog>

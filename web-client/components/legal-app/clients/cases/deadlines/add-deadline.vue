@@ -17,7 +17,7 @@
             Dodaj Termin
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Nowy termin będzie widoczny w widoku listy oraz w kalendarzyu terminów. Lista pokazuje terminy w porządku od
           najbliższego.
         </v-alert>
@@ -50,7 +50,7 @@
 
 <script>
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {createDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 
 export default {
@@ -69,7 +69,9 @@ export default {
       deadline: notEmptyRule("Data nie może być pusta!")
     },
   }),
-
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
+  },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
 

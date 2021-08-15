@@ -3,7 +3,7 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn fab class="mx-2" v-on="{ ...tooltip, ...dialog }">
+          <v-btn fab class="mx-2" light v-on="{ ...tooltip, ...dialog }">
             <v-icon color="success" x-large>mdi-plus</v-icon>
           </v-btn>
         </template>
@@ -17,7 +17,7 @@
             Dodaj Sprawę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Każda nowa sprawa jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
           Jeśli chcesz, aby sprawa była widoczna dla innych, oznacz ją jako publiczną.
         </v-alert>
@@ -28,7 +28,7 @@
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required
                       :rules="validation.description"></v-textarea>
-          <!--          <v-checkbox v-model="form.public" label="Sprawa publiczna" color="red darken-3"></v-checkbox>-->
+          <v-checkbox v-model="form.public" label="Sprawa publiczna" color="red darken-3"></v-checkbox>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
         <v-divider></v-divider>
@@ -49,7 +49,7 @@
 
 <script>
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {createCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 
 export default {
@@ -71,6 +71,9 @@ export default {
       description: lengthRule("Liczba znaków nie może przekraczać 1000", 0, 1000)
     },
   }),
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
+  },
 
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),

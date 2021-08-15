@@ -10,7 +10,7 @@
         <span>Nadaj dostęp</span>
       </v-tooltip>
     </template>
-    <v-card min-height="400px">
+    <v-card>
       <v-toolbar color="primary" dark class="mb-3">
         <v-toolbar-title>
           Nadaj dostęp do klienta
@@ -28,8 +28,7 @@
                 persistent-placeholder
                 outlined
       ></v-select>
-      <v-alert v-if="selectedUser.length === 0" elevation="5" text type="info" dismissible
-               close-text="Zamknij">
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
         Z listy powyżej wybierz użytkownika, któremu chcesz nadać dostęp do klienta. Upoważniona osoba będzie miała
         dostęp do panelu klienta, w którym będzie mogła zarządzać swoimi notatkami, rozliczeniami oraz sprawami.
       </v-alert>
@@ -81,6 +80,7 @@ export default {
   },
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['eligibleUsersForCase']),
   },
 

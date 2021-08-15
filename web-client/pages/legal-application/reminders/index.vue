@@ -93,7 +93,7 @@
                       :events="filteredEvents"
                       :type="type" color="primary"
                       @click:event="showEvent" @click:more="viewDay" @click:date="viewDay"
-                      @change="getEvents" :first-interval=5 :interval-minutes=60 :interval-count=15 locale="pl"
+                      @change="getEvents" locale="pl"
                       :weekdays="weekday" event-overlap-mode="stack"></v-calendar>
           <v-menu v-if="!selectedEvent.signature" v-model="selectedOpen" :close-on-content-click="false"
                   :activator="selectedEvent" offset-x>
@@ -128,11 +128,16 @@
                 <v-card-subtitle>Opis: {{ selectedEvent.name }}</v-card-subtitle>
                 <v-card-subtitle>Termin: {{ selectedEvent.start }}</v-card-subtitle>
                 <v-card-subtitle>Sygnatura: {{ selectedEvent.signature }}</v-card-subtitle>
-                <v-alert v-if="legalAppTooltips" dense elevation="5" text type="info">Zarządzanie terminami dla spraw
+                <nuxt-link class="nav-item" :to="eventLink(selectedEvent)">
+                  <v-btn small color="error">
+                    Przejdź do terminarza sprawy
+                  </v-btn>
+                </nuxt-link>
+                <v-alert v-if="legalAppTooltips" dense elevation="5" text type="info" class="mt-5">Zarządzanie terminami
+                  dla spraw
                   nie jest możliwe z poziomu
                   kalendarza. Kalendarz stanowi
-                  jedynie podgląd zbliżających się terminów. Proszę wejść w panel sprawy, a następnie w zakładkę
-                  'TERMINY', aby dokonać zmian.
+                  jedynie podgląd zbliżających się terminów. Przejdź do terminarza sprawy klikając guzik powyżej.
                 </v-alert>
               </v-card-text>
               <v-card-actions>
@@ -226,6 +231,13 @@ export default {
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getEventsForNotifications']),
+    eventLink(selectedEvent) {
+      console.log('selected event', selectedEvent)
+      let clientId = selectedEvent.client
+      let caseId = selectedEvent.case
+      return `/legal-application/clients/${clientId}/cases/${caseId}/deadlines`
+
+    },
     filterResults() {
       //All
       if (this.selectedCategory.value === 3 && this.selectedStatus.value === null) {
@@ -317,7 +329,9 @@ export default {
             id: x.id,
             public: x.public,
             category: x.reminderCategory,
-            timed: x.allDayEvent
+            timed: x.allDayEvent,
+            case: 'none',
+            client: 'none',
           });
         });
         deadlines.forEach(x => {
@@ -329,7 +343,9 @@ export default {
             end: this.deadlineDate(x),
             color: 'error',
             id: x.id,
-            timed: false
+            timed: false,
+            case: x.case.id,
+            client: x.case.legalAppClientId,
           });
         });
         this.newEvents = newEvents;
