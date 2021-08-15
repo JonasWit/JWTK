@@ -30,9 +30,8 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn text color="primary" @click="resetForm()">
+              <v-btn text color="error" @click="resetForm()">
                 Wyczyść
-
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="handleSubmit()">

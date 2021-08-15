@@ -17,7 +17,7 @@
             Edytuj notatkę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Każda nowa notatka jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
           Jeśli chcesz, aby notatka była widoczna dla innych, oznacz ją jako publiczną.
         </v-alert>
@@ -28,13 +28,15 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
+          <v-btn color="success" text @click="dialog = false">
+            Anuluj
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveChanges()">
             Zapisz zmianę
           </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
-          </v-btn>
+
+
         </v-card-actions>
       </v-card>
     </v-form>
@@ -44,7 +46,7 @@
 
 <script>
 import {updateNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "edit-note-dialog",
@@ -66,6 +68,9 @@ export default {
     this.form.title = this.noteForAction.title;
     this.form.message = this.noteForAction.message;
     this.form.public = this.noteForAction.public;
+  },
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),

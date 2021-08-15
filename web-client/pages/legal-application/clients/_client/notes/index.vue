@@ -6,8 +6,7 @@
         <v-spacer></v-spacer>
         <add-note/>
       </v-toolbar>
-      <v-alert v-if="Object.keys(clientNotesList).length === 0" elevation="5" text type="info" dismissible
-               close-text="Zamknij">
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
         Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
       </v-alert>
@@ -66,6 +65,7 @@ export default {
     return this.getClientsNotes(this.$route.params.client);
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientNotesList'])
   },
   methods: {

@@ -13,31 +13,35 @@
     <v-form ref="editWorkRecordForm">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="workRecord.name" label="Edytuj nazwę"
+          <v-text-field v-model="form.name" label="Edytuj nazwę"
                         required :rules="validation.name"></v-text-field>
-          <v-text-field v-model="workRecord.description" label="Edytuj szczególy"
+          <v-text-field v-model="form.description" label="Edytuj opis"
           ></v-text-field>
-          <v-text-field v-model="workRecord.eventDate" label="Edytuj datę zdarzenia"
+          <v-text-field v-model="form.eventDate" label="Edytuj datę zdarzenia"
           ></v-text-field>
-          <v-text-field v-model="workRecord.hours" :rules=validation.numberOnly label="Edytuj godziny"
+          <v-text-field v-model="form.hours" :rules=validation.numberOnly label="Edytuj godziny"
           ></v-text-field>
-          <v-text-field v-model="workRecord.minutes" :rules=validation.numberOnly label="Edytuj minuty"
+          <v-text-field v-model="form.minutes" :rules=validation.numberOnly label="Edytuj minuty"
           ></v-text-field>
-          <v-text-field v-model="workRecord.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"
+          <v-text-field v-model="form.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"
           ></v-text-field>
-          <v-text-field v-model="workRecord.vat" :rules=validation.numberOnly label="Edytuj wartość VAT"
-          ></v-text-field>
+          <!--          <v-text-field v-model="workRecord.vat" :rules=validation.numberOnly label="Edytuj wartość VAT"-->
+          <!--          ></v-text-field>-->
+          <v-select :items="items" v-model="form.vat" label="Edytuj wartość VAT" item-text="text" :item-value="value"
+                    return-object></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-spacer></v-spacer>
 
+          <v-btn color="error" text @click="dialog = false">
+            Anuluj
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-btn text color="primary" @click="saveWorkRecordChange()">
             Zapisz zmianę
           </v-btn>
-          <v-btn color="success" text @click="dialog = false">
-            Anuluj
-          </v-btn>
+
+
         </v-card-actions>
       </v-card>
     </v-form>
@@ -62,6 +66,8 @@ export default {
     workRecord: null,
     dialog: false,
     loading: false,
+    items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
+    value: null,
     form: {
       name: "",
       eventDate: "",
@@ -82,7 +88,33 @@ export default {
 
   fetch() {
     this.workRecord = this.selectedFinancialRecord
+    console.log(this.selectedFinancialRecord)
+    this.form.name = this.workRecord.name
+    this.form.hours = this.workRecord.hours
+    this.form.minutes = this.workRecord.minutes
+    this.form.vat = this.selectedDefault
+    this.form.rate = this.workRecord.rate
+    this.form.amount = this.workRecord.amount
+    this.form.eventDate = this.workRecord.eventDate
+    this.form.description = this.workRecord.description
 
+  },
+  computed: {
+    selectedDefault() {
+      if (this.selectedFinancialRecord.vat === 0) {
+        return {text: '0%', value: 0};
+      }
+      if (this.selectedFinancialRecord.vat === 5) {
+        return {text: '5%', value: 5};
+      }
+      if (this.selectedFinancialRecord.vat === 8) {
+        return {text: '8%', value: 8};
+      }
+      if (this.selectedFinancialRecord.vat === 23) {
+        return {text: '23%', value: 23};
+      }
+
+    },
   },
 
   methods: {

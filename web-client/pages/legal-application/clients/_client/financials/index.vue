@@ -24,7 +24,7 @@
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
             <v-card flat>
-              <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Kliknij guzik "DODAJ NOWE DANE",
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ NOWE DANE",
                 aby dodać dane dotyczące Twojej działalności - take jak nazwa, adres, numer NIP itd. Te dane będą
                 widoczne na raporcie rozliczeniowym. W tym miejscu możesz również edytować lub usunąć wcześniej
                 uzupełnione dane.
@@ -36,7 +36,7 @@
 
           <v-tab-item :value="'tab-2'">
             <v-card flat>
-              <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Kliknij guzik "ZAREJESTRUJ NOWE
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "ZAREJESTRUJ NOWE
                 ROZLICZENIE", aby dodać nowy rekord. Wszystkie Twoje rozliczenia będą widoczne w zakładce "MOJE
                 ROZLICZENIA".
               </v-alert>
@@ -45,7 +45,7 @@
           </v-tab-item>
           <v-tab-item :value="'tab-3'">
             <v-card flat>
-              <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Wybierz datę początkową i
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz datę początkową i
                 końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
                 możesz usunąć lub edytować dodane rozliczenia.
               </v-alert>
@@ -57,7 +57,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-      <button-to-go-up/>
+
     </template>
   </layout>
 </template>
@@ -65,7 +65,6 @@
 <script>
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
-import ButtonToGoUp from "../../../../../components/legal-app/button-to-go-up";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
 import AddNewWorkRecord from "@/components/legal-app/financials/dialogs/add-new-work-record";
 import GenerateInvoice from "@/components/legal-app/financials/generate-invoice";
@@ -73,7 +72,7 @@ import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-recor
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {handleError} from "@/data/functions";
 
 export default {
@@ -86,7 +85,6 @@ export default {
     GenerateInvoice,
     AddNewWorkRecord,
     InvoiceTemplate,
-    ButtonToGoUp,
     Layout,
   },
   middleware: ['legal-app-permission', 'user', 'authenticated'],
@@ -105,6 +103,7 @@ export default {
     return this.searchFinancialRecords();
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     query() {
       let convertedDateTo = new Date(this.dateTo);
       convertedDateTo.setDate(convertedDateTo.getDate() + 1);
@@ -130,14 +129,15 @@ export default {
       this.loading = true;
       console.warn('handle logs fired', this.query);
       try {
-        let apiQuery = `/api/legal-app-clients-work/client/${this.$route.params.client}/work-records${this.query}`;
+        let clientId = this.$route.params.client
+        let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
         this.financialRecords = await this.$axios.$get(apiQuery);
       } catch (error) {
         handleError(error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        let clientId = this.$route.params.client
-        await this.getAllWorkRecordsOnFetch({clientId});
+        // let clientId = this.$route.params.client
+        // await this.getAllWorkRecordsOnFetch({clientId});
         this.loading = false;
       }
     },

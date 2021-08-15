@@ -1,28 +1,22 @@
 <template>
-  <v-list>
-    <v-list-item v-for="item in billingDataFromFetch" :key="item.id">
+  <div>
+    <v-card flat v-for="item in billingDataFromFetch" :key="item.id">
+      <v-row class="d-flex mx-2 mt-4 mb-2">
+        <edit-billing-data :selected-billing-record="item"/>
+        <delete-billing-data :selected-billing-record="item"/>
+      </v-row>
       <v-col>
         <v-list-item-content>
           <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
           <v-list-item-subtitle>Ulica: {{ item.street }}, Nr: {{ item.address }}</v-list-item-subtitle>
-          <v-list-item-subtitle>Tel.: {{ item.phone }}, Fax: {{ item.fax }}</v-list-item-subtitle>
+          <v-list-item-subtitle>Miasto: {{ item.city }}, Kod pocztowy: {{ item.postalCode }}</v-list-item-subtitle>
+          <v-list-item-subtitle>Tel.: {{ item.phoneNumber }}, Fax: {{ item.faxNumber }}</v-list-item-subtitle>
           <v-list-item-subtitle>NIP: {{ item.nip }}, REGON: {{ item.regon }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-col>
-      <v-col>
-        <v-list-item-content>
-          <v-list-item>
-            <edit-billing-data :selected-billing-record="item"/>
-          </v-list-item>
-          <v-list-item>
-            <delete-billing-data :selected-billing-record="item"/>
-          </v-list-item>
-          <v-list-item>
-          </v-list-item>
-        </v-list-item-content>
-      </v-col>
-    </v-list-item>
-  </v-list>
+
+    </v-card>
+  </div>
 </template>
 <script>
 import EditBillingData from "@/components/legal-app/financials/dialogs/edit-billing-data";
@@ -37,7 +31,8 @@ export default {
     await this.getBillingDataFromFetch();
   },
   computed: {
-    ...mapState('legal-app-client-store', ['billingDataFromFetch'])
+    ...mapState('legal-app-client-store', ['billingDataFromFetch']),
+
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),

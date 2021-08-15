@@ -35,5 +35,10 @@ export const postalCode = () => [
 
 ];
 
+export const hoursValidation = () => [
+  v => /^(?:(?:2[01]|[01]?\d):[0-5]\d|360)$/.test(v) || 'Dozwolone tylko liczby!',
+
+];
+
 
 

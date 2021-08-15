@@ -32,7 +32,6 @@
 <script>
 
 
-import {mapActions} from "vuex";
 import {deleteWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
@@ -50,8 +49,6 @@ export default {
   }),
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
-
     async deleteFinancialRecord() {
       try {
         let clientId = this.$route.params.client
@@ -63,8 +60,7 @@ export default {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-        let clientId = this.$route.params.client
-        await this.getAllWorkRecordsOnFetch({clientId});
+
         this.dialog = false;
         this.loading = false;
       }

@@ -3,8 +3,8 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn icon v-on="{ ...tooltip, ...dialog }">
-            <v-icon medium color="error">mdi-delete</v-icon>
+          <v-btn elevation="2" small class="mx-2" color="error" v-on="{ ...tooltip, ...dialog }">
+            Usuń
           </v-btn>
         </template>
         <span>Usuń dane</span>

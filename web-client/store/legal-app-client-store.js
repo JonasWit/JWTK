@@ -3,7 +3,6 @@ import {formatDateToMonth} from "@/data/date-extensions";
 import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {
   getAllDeadlinesFromTo,
-  getAllRemindersFromTo,
   getRemindersFromTo
 } from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
@@ -193,15 +192,15 @@ export const actions = {
         console.warn('error in getFinancialRecordsFromFetch', e);
       });
   },
-  async getAllWorkRecordsOnFetch({commit}, {clientId}) {
-    try {
-      console.warn("Getting data from store - legal-app-client-store - getAllWorkRecordsOnFetch");
-      let fullWorkRecordsList = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records`);
-      commit('updateFullWorkRecordsList', {fullWorkRecordsList});
-    } catch (e) {
-      console.warn('error in getAllWorkRecordsOnFetch', e);
-    }
-  },
+  // async getAllWorkRecordsOnFetch({commit}, {clientId}) {
+  //   try {
+  //     console.warn("Getting data from store - legal-app-client-store - getAllWorkRecordsOnFetch");
+  //     let fullWorkRecordsList = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records`);
+  //     commit('updateFullWorkRecordsList', {fullWorkRecordsList});
+  //   } catch (e) {
+  //     console.warn('error in getAllWorkRecordsOnFetch', e);
+  //   }
+  // },
   //Billing data
   async getBillingDataFromFetch({commit}) {
     try {
