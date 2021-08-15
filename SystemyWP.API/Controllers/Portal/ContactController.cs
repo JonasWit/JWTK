@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Portal;
 using SystemyWP.API.Services.Email;
@@ -7,6 +8,7 @@ using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
+using SystemyWP.API.Forms.LegalApp.Support;
 
 namespace SystemyWP.API.Controllers.Portal
 {
@@ -28,6 +30,28 @@ namespace SystemyWP.API.Controllers.Portal
                     SystemyWpConstants.Emails.ContactAddress,
                     "Contact Request",
                     $"Name: {contactForm.Name}, Email: {contactForm.Email}, Phone: {contactForm.Phone}");
+                
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
+        [HttpPost("lapp/support-request")]
+        [Authorize(SystemyWpConstants.Policies.User)]
+        public async Task<IActionResult> LegaAppSupportRequest(
+            [FromBody] LegalAppSupportRequestForm form,
+            [FromServices] EmailClient emailClient)
+        {
+            try
+            {
+                await emailClient.SendEmailAsync(
+                    SystemyWpConstants.Emails.SupportAddress,
+                    $"Legal App: {form.Subject} |{Username}|{UserEmail}",
+                    form.Body);
                 
                 return Ok();
             }

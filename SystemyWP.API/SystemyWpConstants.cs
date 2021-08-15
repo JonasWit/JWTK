@@ -54,6 +54,7 @@ namespace SystemyWP.API
         
         public struct Emails
         {
+            public const string SupportAddress = "wsparcie@systemywp.pl";
             public const string ContactAddress = "kontakt@systemywp.pl";
             public const string OfficeAddress = "biuro@systemywp.pl";
         }

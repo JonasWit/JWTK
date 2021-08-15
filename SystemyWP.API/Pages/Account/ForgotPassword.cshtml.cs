@@ -52,7 +52,8 @@ namespace SystemyWP.API.Pages.Account
 
                 await emailSender.SendEmailAsync(
                     Input.Email,
-                    "Systemywp.pl - Reset Hasła", EmailTemplates.PasswordResetEmailBody(callbackUrl));
+                    "Systemywp.pl - Reset Hasła", 
+                    EmailTemplates.PasswordResetEmailBody(callbackUrl));
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
