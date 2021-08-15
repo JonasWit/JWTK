@@ -13,8 +13,8 @@
           {{ formatDate(keyItem.expireDate) }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-chip close @click:close="revokeKeyForClient(user)" v-for="(user, index) in keyItem.users" class="ma-2"
-                  small :key="`chip-key-index-${index}`">
+          <v-chip close @click:close="revokeKeyForUser(user)" v-for="(user, index) in keyItem.users" class="ma-2" small
+                  :key="`chip-key-index-${index}`">
             {{ user.email }}
           </v-chip>
           <div class="d-flex justify-end">
@@ -74,13 +74,13 @@ export default {
   },
   methods: {
     ...mapActions('portal-admin-store', ['getLegalAppAccessKeys']),
-    async revokeKeyForClient(client) {
+    async revokeKeyForUser(user) {
       try {
         if (this.loading) return;
         this.loading = !this.loading;
 
-        await this.$axios.post(`/api/portal-admin/key-admin/user/revoke/access-key/${client.id}`);
-        this.$notifier.showErrorMessage("User removed from key!");
+        await this.$axios.post(`/api/portal-admin/key-admin/legal-app/revoke/${user.id}`);
+        this.$notifier.showSuccessMessage("User removed from key!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
