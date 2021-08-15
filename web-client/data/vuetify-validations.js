@@ -25,8 +25,8 @@ export const lengthRule = (message, min, max) => [
 ];
 
 export const phoneNumberRule = () => [
-  v => /^\+(?:[0-9]•?){6,14}[0-9]$/.test(v) || 'Podaj numer telefonu w formacie bez spacji np. +48676676676.',
-  v => (v && v.length) >= 12 || 'Minimalna liczba znaków to 12 '
+  v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+  v => (v?.length >= 7 && v?.length <= 20) || 'Dopuszcalna liczba znaków pomiędzy 7, a 20',
 ];
 
 export const postalCode = () => [

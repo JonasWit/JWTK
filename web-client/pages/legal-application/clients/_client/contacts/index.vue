@@ -18,8 +18,7 @@
           <add-contact-dialog v-on:action-completed="actionDone"/>
         </template>
       </v-toolbar>
-      <v-alert :value="alertMessage" v-if="!contactList" elevation="5" text type="info" dismissible
-               close-text="Zamknij">
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
         Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
         Następnie wybierz sekcję, którą chcesz uzupełnić.
       </v-alert>
@@ -80,7 +79,7 @@ export default {
     searchResult: "",
     finished: false,
     loading: false,
-    alertMessage: false
+
   }),
 
   async fetch() {
@@ -100,6 +99,7 @@ export default {
     },
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['contactItemsFromFetch']),
     contactItems() {
       return []

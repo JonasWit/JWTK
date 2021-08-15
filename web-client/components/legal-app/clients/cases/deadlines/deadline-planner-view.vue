@@ -42,7 +42,7 @@
         </v-menu>
       </v-toolbar>
     </v-sheet>
-    <v-alert v-if="deadlines.length > 2" elevation="5" text type="info" dismissible close-text="Zamknij">
+    <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
       Używając strzałek przejdziesz do kolejnych miesięcy. Używając guzika "DZISIAJ" powrócisz do dziejszej daty. Aby
       zmienić widok kalendarza użyj guzika po prawej stronie z
       listą dostępnych widoków.
@@ -109,6 +109,7 @@ export default {
   }),
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['deadlines']),
   },
   methods: {

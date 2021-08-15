@@ -18,8 +18,7 @@
           <add-case/>
         </template>
       </v-toolbar>
-      <v-alert elevation="5" text type="info" dismissible
-               close-text="Zamknij">
+      <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
         Witaj w bazie spraw Klienta! Użyj zielonej ikonki "+", aby dodać pierwszą sprawę.
       </v-alert>
       <v-expansion-panels>
@@ -39,6 +38,7 @@
                   <v-card-text>
                     <div class="font-weight-bold">Nazwa:{{ object.name }}</div>
                     <div> Sygnatura: {{ object.signature }}</div>
+                    <div style="color: #B41946">Status: dodać status - sprawa publiczna lub prywatna</div>
                   </v-card-text>
                 </v-col>
                 <v-col cols="5">
@@ -50,7 +50,6 @@
                 </v-col>
                 <v-col cols="3">
                   <go-to-case-details :selected-case="object" :client-item="clientNumber"/>
-                  <!--                  <case-details-comp :selected-case="object" :client-item="clientNumber"/>-->
                 </v-col>
               </v-row>
             </v-card>
@@ -64,16 +63,15 @@
 <script>
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
-import CaseDetails from "@/components/legal-app/clients/cases/case-details";
+
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
 import {mapActions, mapState} from "vuex";
 import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
-import CaseDetailsComp from "@/components/legal-app/clients/cases/case-details";
 
 
 export default {
   name: "index",
-  components: {CaseDetailsComp, GoToCaseDetails, AddCase, CaseDetails, Layout},
+  components: {GoToCaseDetails, AddCase, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
@@ -89,6 +87,7 @@ export default {
   },
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['groupedCases']),
     clientNumber() {
       return this.$route.params.client

@@ -17,7 +17,7 @@
             Dodaj kontakt
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
           Dodaj nowy punkt kontaktu dla Klienta, a następie utwórz swoją bazę adresową. Po dodaniu nazwy głównej
           uzyskasz dostęp do szczegółowych sekcji adresowych.
         </v-alert>
@@ -50,6 +50,7 @@
 <script>
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapState} from "vuex";
 
 export default {
   name: "add-contact-dialog",
@@ -66,13 +67,17 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      title: notEmptyAndLimitedRule("Nazwa nie może być pusta. Maksymalan liczba znaków to 50!", 0, 50),
-      name: lengthRule("Maksymalan liczba znaków to 50!", 0, 50),
-      surname: lengthRule("Maksymalan liczba znaków to 50!", 0, 50),
-      comment: lengthRule("Maksymalan liczba znaków to 200!", 0, 200)
+      title: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalan liczba znaków to 50", 1, 50),
+      name: lengthRule("Maksymalan liczba znaków to 50", 0, 50),
+      surname: lengthRule("Maksymalan liczba znaków to 50", 0, 50),
+      comment: lengthRule("Maksymalan liczba znaków to 200", 0, 200)
     },
 
   }),
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips'])
+  },
+
   methods: {
 
     async handleSubmit() {

@@ -64,8 +64,8 @@ export default {
     loading: false,
     validation: {
       valid: false,
-      fieldLength: lengthRule("Dozwolona liczba znaków pomiędzy 50", 0, 50),
-      comment: lengthRule("Maksymalna liczba znaków to 200!", 0, 200)
+      fieldLength: lengthRule("Dozwolona liczba znaków to 50", 0, 50),
+      comment: lengthRule("Maksymalna liczba znaków to 200", 0, 200)
     },
 
   }),
