@@ -6,7 +6,7 @@ namespace SystemyWP.API.Forms.LegalApp.Support.Validation
     {
         public LegalAppSupportRequestFormValidation()
         {
-            RuleFor(x => x.Subject).NotEmpty().MaximumLength(500);
+            RuleFor(x => x.Subject).NotEmpty().MaximumLength(150);
             RuleFor(x => x.Body).NotEmpty().MaximumLength(5000);
         }
     }

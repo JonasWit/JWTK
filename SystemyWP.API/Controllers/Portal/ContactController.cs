@@ -50,7 +50,7 @@ namespace SystemyWP.API.Controllers.Portal
             {
                 await emailClient.SendEmailAsync(
                     SystemyWpConstants.Emails.SupportAddress,
-                    $"Legal App: {form.Subject} |{Username}|{UserEmail}",
+                    $"Support Request - Legal App |{Username}|{UserEmail}| {form.Subject}",
                     form.Body);
                 
                 return Ok();
