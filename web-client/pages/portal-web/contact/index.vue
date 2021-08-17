@@ -4,11 +4,7 @@
       <div class="content white--text text-center d-flex align-center">
         <div>
           <h1>Zainteresowała Cię nasza oferta?</h1>
-          <h5>
-            Zapraszamy do kontaktu!
-          </h5>
-          <h5>Nasz adres email to: <a href="mailto:kontakt@systemywp.pl">kontakt@systemywp.pl</a></h5>
-          <h5>Możesz również zostawić nam swój numer telefonu, a skontaktujemy się w ciągu 24 godzin.</h5>
+          <h5>Prześlij nam prośbę o kontakt, odezwiemy się w ciągu 24 godzin.</h5>
         </div>
       </div>
     </section>
@@ -77,7 +73,7 @@ export default {
           this.$refs.contactForm.reset();
         })
         .catch((e) => {
-          console.log('error - contact form', e);
+          console.log('error - contact form', e.response.data);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie.");
         }).finally(() => {
           this.loading = false;
