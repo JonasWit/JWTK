@@ -44,6 +44,9 @@ namespace SystemyWP.API
             services.Configure<IpRateLimitOptions>(_configuration.GetSection("IpRateLimiting"));
             services.Configure<IpRateLimitPolicies>(_configuration.GetSection("IpRateLimitPolicies"));
             services.AddInMemoryRateLimiting();
+            services.AddMvc();
+            
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
@@ -75,6 +78,8 @@ namespace SystemyWP.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseIpRateLimiting();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -86,8 +91,7 @@ namespace SystemyWP.API
                     serviceProvider.GetRequiredService<AppDbContext>()));
                 app.UseExceptionHandler("/Error");
             }
-
-            app.UseIpRateLimiting();
+            
             app.UseCookiePolicy(
                 new CookiePolicyOptions
                 {
