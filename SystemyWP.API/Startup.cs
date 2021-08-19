@@ -75,8 +75,6 @@ namespace SystemyWP.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseIpRateLimiting();
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -99,6 +97,7 @@ namespace SystemyWP.API
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(NuxtJsApp);
+            app.UseIpRateLimiting();
             app.UseAuthentication();
             app.UseAuthorization();
 

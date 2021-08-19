@@ -65,11 +65,14 @@ export default {
           email: this.email,
           phone: this.phone
         };
-        let result = await this.$axios.$post("/api/portal/contact/request", payload);
-        console.log("RESULT", result);
+        await this.$axios.$post("/api/portal/contact/request", payload);
         this.$notifier.showSuccessMessage("Forma wysłana pomyślnie!");
       } catch (e) {
-        this.$notifier.showWarningMessage("Wystąpił błąd, spróbuj ponownie.");
+        if (e?.response?.status === 429) {
+          this.$notifier.showWarningMessage("Spróbuj ponownie za chwilę");
+        } else {
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie");
+        }
       } finally {
         this.loading = false;
         this.$refs.contactForm.reset();
