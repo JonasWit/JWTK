@@ -28,7 +28,6 @@
 import Layout from "@/components/legal-app/layout";
 import {archiveCase, getArchivedCases} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {formatDate} from "@/data/date-extensions";
-import {handleError} from "@/data/functions";
 import {mapState} from "vuex";
 
 export default {
@@ -39,8 +38,7 @@ export default {
 
   }),
   async fetch() {
-    await this.getArchivedCasesList()
-    console.warn('archived cases', this.archivedCasesList)
+    await this.getArchivedCasesList();
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -49,28 +47,27 @@ export default {
     async getArchivedCasesList() {
       try {
         let clientId = this.$route.params.client;
-        this.archivedCasesList = await this.$axios.$get(getArchivedCases(clientId))
+        this.archivedCasesList = await this.$axios.$get(getArchivedCases(clientId));
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       }
     },
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
     async removeFromArchive(caseId) {
       try {
-        await this.$axios.$put(archiveCase(caseId))
-        console.warn(caseId)
+        await this.$axios.$put(archiveCase(caseId));
         this.$notifier.showSuccessMessage("Sprawa został pomyślnie usunięta z archiwum!");
       } catch (error) {
-        handleError(error)
+        this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        await this.getArchivedCasesList()
+        await this.getArchivedCasesList();
       }
     }
 
   }
-}
+};
 </script>
 
 <style scoped>

@@ -41,6 +41,11 @@ export const SERVER_LOG_TYPES = {
   WARNING: "Warning",
 };
 
+export const SNACKBAR_MESSAGES = {
+  TRY_AGAIN: "Wystąpił bład. Spróbój ponownie.",
+  SUCCESS: "Zadanie wykonane",
+};
+
 export const COOKIE_NAME = {
   THEME: "custom-color-theme",
   LAPP_TIPS: "lapp-tips",

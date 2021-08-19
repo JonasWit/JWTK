@@ -1,4 +1,4 @@
-﻿import {round} from 'mathjs'
+﻿import {round} from 'mathjs';
 
 export const hasOccurrences = (searchIndex, query) => {
   const queryParts = query.toLowerCase().split(' ');
@@ -13,21 +13,19 @@ export const vatRate = (vat) => {
 };
 
 export const vatAmount = (vat, amount) => {
-  let vatAmountRounded = ((vat / 100) * amount)
-  return round(vatAmountRounded, 2)
+  let vatAmountRounded = ((vat / 100) * amount);
+  return round(vatAmountRounded, 2);
 };
 
 
 export const rateNet = (rate, vat) => {
-  let netRounded = (rate - ((rate * (vat / 100))))
-  console.log('rounded invoiceRateNet:', netRounded)
-  return round(netRounded, 2)
+  let netRounded = (rate - ((rate * (vat / 100))));
+  return round(netRounded, 2);
 };
 
 export const amountNet = (amount, vat) => {
-    let roundedAmount = ((amount - (amount * (vat / 100))))
-    console.log('rounded amount:', roundedAmount)
-    return round(roundedAmount, 2)
+    let roundedAmount = ((amount - (amount * (vat / 100))));
+    return round(roundedAmount, 2);
   }
 ;
 
@@ -46,13 +44,13 @@ export function handleError(error) {
   if (error.response.data) {
     console.log(error.response.data);
   } else {
-    console.log(error)
+    console.log(error);
   }
 }
 
 export function countNotifications(events, deadlines) {
-  let eventsCount = events.length
-  let deadlinesCount = deadlines.length
-  return eventsCount + deadlinesCount
+  let eventsCount = events.length;
+  let deadlinesCount = deadlines.length;
+  return eventsCount + deadlinesCount;
 }
 

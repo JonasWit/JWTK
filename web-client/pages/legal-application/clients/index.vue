@@ -6,9 +6,8 @@
           Lista Klientów
         </v-toolbar-title>
         <v-autocomplete flat hide-no-data hide-details label="Wyszukaj klienta" solo-inverted return-object clearable
-                        v-model="searchResult"
-                        placeholder="Wpisz nazwę klienta" prepend-inner-icon="mdi-magnify" :items="clientItems"
-                        :filter="searchFilter">
+                        v-model="searchResult" placeholder="Wpisz nazwę klienta" prepend-inner-icon="mdi-magnify"
+                        :items="clientItems" :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
               <v-list-item-content>{{ item.name }}</v-list-item-content>
@@ -20,8 +19,7 @@
         </template>
       </v-toolbar>
       <div v-scroll="onScroll" class="my-6">
-        <v-alert v-if="clientList.length === 0" elevation="5" text type="info" dismissible
-                 close-text="Zamknij">
+        <v-alert v-if="clientList.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">
           Witaj w bazie Klientów! Użyj zielonej ikonki "+", aby dodać pierwszego klienta.
         </v-alert>
         <v-expansion-panels>
@@ -125,11 +123,8 @@ export default {
     this.cursor = 0;
     this.clientList = [];
     this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
-    console.log('lista klientów', this.clientSearchItems)
     await this.handleFeed();
-
   },
-
   watch: {
     searchResult() {
       if (this.searchResult) {
@@ -209,7 +204,7 @@ export default {
         });
     },
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     }
   }
 };
