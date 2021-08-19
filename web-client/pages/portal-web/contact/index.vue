@@ -53,31 +53,27 @@ export default {
     }
   }),
   methods: {
-    submit() {
+    async submit() {
       if (!this.$refs.contactForm.validate()) return;
       console.warn("Sending contact form");
       if (this.loading) return;
       this.loading = true;
 
-      const payload = {
-        name: this.name,
-        email: this.email,
-        phone: this.phone
-      };
-
-      return this.$axios.$post("/api/portal/contact/request", payload)
-        .then((result) => {
-          console.log("SUCCESS!", result);
-          this.$notifier.showSuccessMessage("Forma wysłana pomyślnie!");
-          this.loading = false;
-          this.$refs.contactForm.reset();
-        })
-        .catch((e) => {
-          console.log('error - contact form', e.response.data);
-          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie.");
-        }).finally(() => {
-          this.loading = false;
-        });
+      try {
+        const payload = {
+          name: this.name,
+          email: this.email,
+          phone: this.phone
+        };
+        let result = await this.$axios.$post("/api/portal/contact/request", payload);
+        console.log("RESULT", result);
+        this.$notifier.showSuccessMessage("Forma wysłana pomyślnie!");
+      } catch (e) {
+        this.$notifier.showWarningMessage("Wystąpił błąd, spróbuj ponownie.");
+      } finally {
+        this.loading = false;
+        this.$refs.contactForm.reset();
+      }
     },
     reset() {
       this.$refs.contactForm.reset();

@@ -44,10 +44,7 @@ namespace SystemyWP.API
             services.Configure<IpRateLimitOptions>(_configuration.GetSection("IpRateLimiting"));
             services.Configure<IpRateLimitPolicies>(_configuration.GetSection("IpRateLimitPolicies"));
             services.AddInMemoryRateLimiting();
-            services.AddMvc();
-            
-            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            
+
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
 

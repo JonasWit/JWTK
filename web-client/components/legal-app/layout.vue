@@ -24,7 +24,6 @@ export default {
   name: "layout",
   components: {OptionsFloatingIcon, RemindersFloatingIcon, Breadcrumbs, NavigationDrawer},
   beforeMount() {
-    console.warn('reading tooltip cookies');
     return this.readStatusOfLegalAppTooltips();
   },
   methods: {
