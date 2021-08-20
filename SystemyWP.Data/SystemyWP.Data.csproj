@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <Folder Include="Models\Abstractions\MedicalAppAbstractions" />
-      <Folder Include="Scripts" />
     </ItemGroup>
     
 </Project>
