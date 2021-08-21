@@ -37,7 +37,8 @@
                 końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
                 możesz usunąć lub edytować dodane rozliczenia.
               </v-alert>
-              <my-work-records-search/>
+              <my-work-date-picker/>
+
             </v-card>
           </v-tab-item>
           <v-tab-item :value="'tab-4'">
@@ -56,20 +57,18 @@ import {formatDate} from "@/data/date-extensions";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
 import AddNewWorkRecord from "@/components/legal-app/financials/dialogs/add-new-work-record";
 import GenerateInvoice from "@/components/legal-app/financials/generate-invoice";
-import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-records-search";
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
-import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
 import {mapState} from "vuex";
 import {handleError} from "@/data/functions";
+import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
 
 export default {
   name: "index",
   components: {
-    MyWorkRecordsList,
+    MyWorkDatePicker,
     BillingDetailsList,
     AddBillingDetails,
-    MyWorkRecordsSearch,
     GenerateInvoice,
     AddNewWorkRecord,
     InvoiceTemplate,

@@ -107,26 +107,8 @@ export default {
       return (parseFloat(this.form.rate));
     }
     ,
-    // givenVat() {
-    //   return (parseInt(this.value));
-    // }
-    // ,
     calculatedAmount() {
       return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate)
-    },
-    query() {
-      let convertedDateTo = new Date();
-      convertedDateTo.setDate(convertedDateTo.getDate() + 1);
-      convertedDateTo = convertedDateTo.toISOString().substr(0, 10);
-
-      let convertedDateFrom = new Date();
-      convertedDateFrom = convertedDateFrom.toISOString().substr(0, 10);
-
-      let fromDate = convertedDateFrom;
-      let toDate = convertedDateTo;
-
-      return `?from=${fromDate}&to=${toDate}`;
-
     },
   },
 
@@ -160,9 +142,7 @@ export default {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-        let query = this.query
-        let clientId = this.$route.params.client
-        await this.getFinancialRecordsFromFetch({clientId, query})
+        this.$emit('action-completed');
         this.loading = false;
         this.dialog = false;
 

@@ -47,6 +47,7 @@
             </v-card-subtitle>
           </v-row>
         </v-card>
+        <options-floating-icon/>
       </v-dialog>
     </v-row>
 
@@ -60,10 +61,12 @@ import EditNoteDialog from "@/components/legal-app/clients/notes/edit-note-dialo
 import DeleteNoteDialog from "@/components/legal-app/clients/notes/delete-note-dialog";
 import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions, mapState} from "vuex";
+import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
+import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
 
 export default {
   name: "notes-details",
-  components: {DeleteNoteDialog, EditNoteDialog},
+  components: {OptionsFloatingIcon, RemindersFloatingIcon, DeleteNoteDialog, EditNoteDialog},
   props: {
     selectedNote: {
       required: true,

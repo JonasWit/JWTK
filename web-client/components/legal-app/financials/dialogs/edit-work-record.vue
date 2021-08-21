@@ -17,16 +17,26 @@
                         required :rules="validation.name"></v-text-field>
           <v-text-field v-model="form.description" label="Edytuj opis"
           ></v-text-field>
-          <v-text-field v-model="form.eventDate" label="Edytuj datę zdarzenia"
-          ></v-text-field>
+          <v-text-field v-model="form.lawyerName" :rules="validation.name" label="Prawnik"></v-text-field>
+          <v-dialog ref="dialogTo" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field v-model="form.eventDate" label="Wybierz datę zdarzenia" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on" :rules="validation.date"></v-text-field>
+            </template>
+            <v-date-picker v-model="form.eventDate" scrollable @change="$refs.dialogTo.save(form.eventDate)">
+              <v-btn text color="error" @click="modal = false">
+                Anuluj
+              </v-btn>
+              <v-spacer></v-spacer>
+            </v-date-picker>
+          </v-dialog>
           <v-text-field v-model="form.hours" :rules=validation.numberOnly label="Edytuj godziny"
           ></v-text-field>
           <v-text-field v-model="form.minutes" :rules=validation.numberOnly label="Edytuj minuty"
           ></v-text-field>
           <v-text-field v-model="form.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"
           ></v-text-field>
-          <!--          <v-text-field v-model="workRecord.vat" :rules=validation.numberOnly label="Edytuj wartość VAT"-->
-          <!--          ></v-text-field>-->
+
           <v-select :items="items" v-model="form.vat" label="Edytuj wartość VAT" item-text="text" :item-value="value"
                     return-object></v-select>
         </v-card-text>
@@ -78,9 +88,10 @@ export default {
       rate: "",
       description: "",
     },
+    modal: false,
     validation: {
       valid: false,
-      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 5, 10),
+      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 1, 10),
       numberOnly: numberOnly(),
 
     },
@@ -95,8 +106,9 @@ export default {
     this.form.vat = this.selectedDefault
     this.form.rate = this.workRecord.rate
     this.form.amount = this.workRecord.amount
-    this.form.eventDate = this.workRecord.eventDate
+    this.form.eventDate = (this.workRecord.eventDate).substr(0, 10)
     this.form.description = this.workRecord.description
+    this.form.lawyerName = this.workRecord.lawyerName
 
   },
   computed: {
@@ -125,25 +137,28 @@ export default {
       this.loading = true;
 
       const workRecord = {
-        name: this.workRecord.name,
-        hours: this.workRecord.hours,
-        minutes: this.workRecord.minutes,
-        vat: this.workRecord.vat,
-        rate: this.workRecord.rate,
-        amount: this.workRecord.amount,
-        eventDate: this.workRecord.eventDate,
-        description: this.workRecord.description,
+        name: this.form.name,
+        hours: this.form.hours,
+        minutes: this.form.minutes,
+        vat: this.form.vat.value,
+        rate: this.form.rate,
+        amount: this.form.amount,
+        eventDate: this.form.eventDate,
+        description: this.form.description,
+        lawyerName: this.form.lawyerName,
       }
+      console.warn('workRecord', workRecord)
+      console.warn('workRecord', this.selectedFinancialRecord.id)
       try {
         let clientId = this.$route.params.client
         let workRecordId = this.selectedFinancialRecord.id
         await this.$axios.$put(updateWorkRecord(clientId, workRecordId), workRecord)
-        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Rekord zmieniony pomyślnie!");
       } catch (error) {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
+        this.$emit('action-completed');
         this.dialog = false;
         this.loading = false;
       }

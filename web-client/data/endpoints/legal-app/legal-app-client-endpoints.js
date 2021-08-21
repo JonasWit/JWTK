@@ -106,6 +106,7 @@ export const createWorkRecord = (clientId) => {
 
 export const updateWorkRecord = (clientId, workRecordId) => {
   return `/api/legal-app-clients-work/client/${clientId}/work-record/${workRecordId}`;//PUT
+
 };
 
 export const deleteWorkRecord = (clientId, workRecordId) => {

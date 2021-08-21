@@ -49,6 +49,7 @@ export default {
   }),
 
   methods: {
+
     async deleteFinancialRecord() {
       try {
         let clientId = this.$route.params.client
@@ -60,7 +61,7 @@ export default {
         console.error(error)
         this.$notifier.showErrorMessage(error);
       } finally {
-
+        this.$emit('action-completed');
         this.dialog = false;
         this.loading = false;
       }

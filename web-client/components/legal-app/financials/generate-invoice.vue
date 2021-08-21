@@ -25,7 +25,7 @@
               a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp
               do wybranych rozliczeń.
             </v-alert>
-            <my-work-date-picker/>
+            <generate-report-date-picker/>
             <v-select v-model="selectedWorkRecords" :items="sortedFinancialRecords" item-text="name"
                       :menu-props="{ maxHeight: '400' }"
                       label="Wybierz rozliczenia"
@@ -153,13 +153,13 @@
 <script>
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
-import MyWorkRecordsList from "@/components/legal-app/financials/my-work-records-list";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
+import GenerateReportDatePicker from "@/components/legal-app/financials/dialogs/generate-report-date-picker";
 
 export default {
   name: "generate-invoice",
-  components: {MyWorkDatePicker, MyWorkRecordsList, InvoiceTemplate, AddBillingDetails},
+  components: {GenerateReportDatePicker, MyWorkDatePicker, InvoiceTemplate, AddBillingDetails},
   data: () => ({
     dialog: false,
     selectedBillingData: [],
