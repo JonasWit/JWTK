@@ -104,7 +104,7 @@
               <td>{{ formatDateForInvoice(item.eventDate) }}</td>
               <td>{{ item.lawyerName }}</td>
               <td>{{ item.description }}</td>
-              <td>{{ item.hours }}h {{ item.minutes }}min</td>
+              <td>{{ item.hours }}godz. {{ item.minutes }}min.</td>
               <td>PLN {{ item.invoiceRateNet.toFixed(2) }}</td>
               <td>PLN {{ item.invoiceAmountNet.toFixed(2) }}</td>
               <td>{{ item.vat }}%</td>

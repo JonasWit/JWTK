@@ -1,5 +1,8 @@
 <template>
   <div>
+    <v-toolbar color="primary" dark v-if="workRecordsList.length > 0">
+      <v-toolbar-title>Lista rozliczeń</v-toolbar-title>
+    </v-toolbar>
     <v-card v-for="item in workRecordsList" :key="item.id">
       <v-row class="d-flex justify-space-between">
         <v-col>
@@ -18,9 +21,9 @@
           <v-list class="d-flex justify-space-between">
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-subtitle>Hours: {{ item.hours }}</v-list-item-subtitle>
-                <v-list-item-subtitle>Minutes: {{ item.minutes }}</v-list-item-subtitle>
-                <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
+                <p>Godziny: {{ item.hours }} godz.</p>
+                <p>Minuty: {{ item.minutes }} min.</p>
+                <p>Stawka godzinowa brutto: {{ item.rate.toLocaleString('pl') }}PLN</p>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -28,10 +31,10 @@
         <v-col>
           <v-list class="d-flex justify-space-between">
             <v-list-item>
-              <v-list-item-content>
-                <v-list-item-subtitle>Rate: {{ item.rate }}</v-list-item-subtitle>
-                <v-list-item-subtitle>VAT: {{ item.vat }}</v-list-item-subtitle>
-                <v-list-item-subtitle>Amount: {{ item.amount }}</v-list-item-subtitle>
+              <v-list-item-content class="text--primary">
+                <p>Stawka VAT: {{ item.vat }}%</p>
+                <p>Kwota VAT: {{ item.invoiceVatAmount.toLocaleString('pl') }}PLN</p>
+                <p>Kwota brutto: {{ item.amount.toLocaleString('pl') }}PLN</p>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -55,12 +58,14 @@ import DeleteWorkRecord from "@/components/legal-app/financials/dialogs/delete-w
 import EditWorkRecord from "@/components/legal-app/financials/dialogs/edit-work-record";
 import {mapGetters, mapMutations} from "vuex";
 import {formatDate} from "@/data/date-extensions";
+import AddNewWorkRecord from "~/components/legal-app/financials/dialogs/add-new-work-record";
 
 export default {
   name: "my-work-records-list",
-  components: {EditWorkRecord, DeleteWorkRecord},
+  components: {AddNewWorkRecord, EditWorkRecord, DeleteWorkRecord},
   computed: {
     ...mapGetters('legal-app-client-store', ['workRecordsList']),
+
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['updateFinancialRecordsFromFetch']),

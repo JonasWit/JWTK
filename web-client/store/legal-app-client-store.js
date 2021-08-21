@@ -173,31 +173,29 @@ export const actions = {
 
   },
 //Financials records
-  getFinancialRecordsFromFetch({commit}, {clientId, query}) {
-    return this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`)
-      .then((financialRecordsFromFetch) => {
-        financialRecordsFromFetch.forEach(x => {
-          x.invoiceVatAmount = vatAmount(x.amount, x.vat);
-          x.invoiceDecimalVat = vatRate(x.vat);
-          x.invoiceRateNet = rateNet(x.rate, x.vat);
-          x.invoiceAmountNet = amountNet(x.amount, x.vat);
-        });
-        console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch);
-        commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch});
-
-      }).catch((e) => {
-        console.warn('error in getFinancialRecordsFromFetch', e);
+  async getFinancialRecordsFromFetch({commit}, {clientId, query}) {
+    let financialRecordsFromFetch = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`)
+    try {
+      financialRecordsFromFetch.sort((a, b) => {
+        const dateA = new Date(a.created);
+        const dateB = new Date(b.created);
+        return dateB - dateA;
       });
+      financialRecordsFromFetch.forEach(x => {
+        x.invoiceVatAmount = vatAmount(x.amount, x.vat);
+        x.invoiceDecimalVat = vatRate(x.vat);
+        x.invoiceRateNet = rateNet(x.rate, x.vat);
+        x.invoiceAmountNet = amountNet(x.amount, x.vat);
+      });
+      console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch);
+      commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch});
+
+    } catch (error) {
+      this.$notifier.showErrorMessage(error.response.data);
+    }
+
   },
-  // async getAllWorkRecordsOnFetch({commit}, {clientId}) {
-  //   try {
-  //     console.warn("Getting data from store - legal-app-client-store - getAllWorkRecordsOnFetch");
-  //     let fullWorkRecordsList = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records`);
-  //     commit('updateFullWorkRecordsList', {fullWorkRecordsList});
-  //   } catch (e) {
-  //     console.warn('error in getAllWorkRecordsOnFetch', e);
-  //   }
-  // },
+
   //Billing data
   async getBillingDataFromFetch({commit}) {
     try {

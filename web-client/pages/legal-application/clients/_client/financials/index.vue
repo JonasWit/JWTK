@@ -9,10 +9,6 @@
             <v-icon>mdi-account-box-multiple</v-icon>
           </v-tab>
           <v-tab href="#tab-2">
-            Dodaj nowe rozliczenie
-            <v-icon>mdi-clock</v-icon>
-          </v-tab>
-          <v-tab href="#tab-3">
             Moje rozliczenia
             <v-icon>mdi-clipboard-text-search</v-icon>
           </v-tab>
@@ -33,19 +29,11 @@
               <billing-details-list/>
             </v-card>
           </v-tab-item>
-
           <v-tab-item :value="'tab-2'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "ZAREJESTRUJ NOWE
-                ROZLICZENIE", aby dodać nowy rekord. Wszystkie Twoje rozliczenia będą widoczne w zakładce "MOJE
-                ROZLICZENIA".
-              </v-alert>
-              <add-new-work-record/>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item :value="'tab-3'">
-            <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz datę początkową i
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ ROZLICZENIE", aby
+                dodać nowy rekord.
+                Wybierz datę początkową i
                 końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
                 możesz usunąć lub edytować dodane rozliczenia.
               </v-alert>
@@ -72,7 +60,7 @@ import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-recor
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
-import {mapActions, mapState} from "vuex";
+import {mapState} from "vuex";
 import {handleError} from "@/data/functions";
 
 export default {
@@ -123,7 +111,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
     async searchFinancialRecords() {
       if (this.loading) return;
       this.loading = true;
@@ -136,8 +123,6 @@ export default {
         handleError(error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        // let clientId = this.$route.params.client
-        // await this.getAllWorkRecordsOnFetch({clientId});
         this.loading = false;
       }
     },
