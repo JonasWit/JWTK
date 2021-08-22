@@ -148,6 +148,7 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+    <progress-bar v-if="loader"/>
   </v-container>
 </template>
 <script>
@@ -156,12 +157,15 @@ import InvoiceTemplate from "@/components/legal-app/financials/invoice-template"
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
 import GenerateReportDatePicker from "@/components/legal-app/financials/dialogs/generate-report-date-picker";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "generate-invoice",
-  components: {GenerateReportDatePicker, MyWorkDatePicker, InvoiceTemplate, AddBillingDetails},
+  components: {ProgressBar, GenerateReportDatePicker, MyWorkDatePicker, InvoiceTemplate, AddBillingDetails},
   data: () => ({
     dialog: false,
+    loader: false,
     selectedBillingData: [],
     selectedWorkRecords: [],
     form: {
@@ -172,7 +176,15 @@ export default {
     e1: 1,
   }),
   async fetch() {
-    await this.getBillingDataFromFetch()
+    this.loader = true
+    try {
+      await this.getBillingDataFromFetch()
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
 
   computed: {
@@ -201,7 +213,8 @@ export default {
         }
       })
     },
-    async handleSubmit() {
+    handleSubmit() {
+      this.loader = true
       try {
         const details = {
           number: this.form.invoiceNumber,
@@ -210,10 +223,10 @@ export default {
         return this.invoiceDetails = details
         this.$notifier.showSuccessMessage("Dodano pomyślnie!");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         this.dialog = false;
+        this.loader = false
       }
     }
   },

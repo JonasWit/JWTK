@@ -50,11 +50,10 @@
           <v-btn text color="primary" @click="saveWorkRecordChange()">
             Zapisz zmianę
           </v-btn>
-
-
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -62,9 +61,12 @@
 
 import {notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 import {updateWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-work-record",
+  components: {ProgressBar},
   props: {
     selectedFinancialRecord: {
       required: true,
@@ -75,7 +77,7 @@ export default {
   data: () => ({
     workRecord: null,
     dialog: false,
-    loading: false,
+    loader: false,
     items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
     value: null,
     form: {
@@ -99,7 +101,6 @@ export default {
 
   fetch() {
     this.workRecord = this.selectedFinancialRecord
-    console.log(this.selectedFinancialRecord)
     this.form.name = this.workRecord.name
     this.form.hours = this.workRecord.hours
     this.form.minutes = this.workRecord.minutes
@@ -133,8 +134,7 @@ export default {
 
     async saveWorkRecordChange() {
       if (!this.$refs.editWorkRecordForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      this.loader = true;
 
       const workRecord = {
         name: this.form.name,
@@ -155,12 +155,11 @@ export default {
         await this.$axios.$put(updateWorkRecord(clientId, workRecordId), workRecord)
         this.$notifier.showSuccessMessage("Rekord zmieniony pomyślnie!");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         this.$emit('action-completed');
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetForm() {

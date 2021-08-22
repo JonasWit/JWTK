@@ -46,7 +46,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
 
-
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -56,14 +56,28 @@ import {mapActions, mapState} from "vuex";
 import {formatDate, formatDateToMonth} from "@/data/date-extensions";
 import CaseAddNote from "@/components/legal-app/clients/cases/notes/case-add-note";
 import CaseNotesDetails from "@/components/legal-app/clients/cases/notes/case-notes-details";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {CaseNotesDetails, CaseAddNote, Layout},
+  components: {ProgressBar, CaseNotesDetails, CaseAddNote, Layout},
+  data: () => ({
+    loader: false
+  }),
+
   async fetch() {
-    let caseId = this.$route.params.case
-    await this.getNotesListForCases({caseId});
-    await this.getCaseDetails({caseId})
+    this.loader = true
+    try {
+      let caseId = this.$route.params.case
+      await this.getNotesListForCases({caseId});
+      await this.getCaseDetails({caseId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
 
   },
   computed: {

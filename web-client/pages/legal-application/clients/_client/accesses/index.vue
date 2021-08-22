@@ -21,6 +21,7 @@
             <allowed-users/>
           </v-row>
         </v-card>
+        <progress-bar v-if="loader"/>
       </v-container>
     </template>
   </layout>
@@ -32,15 +33,26 @@ import Layout from "@/components/legal-app/layout";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import {mapActions, mapGetters, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {GrantAccess, AllowedUsers, Layout},
+  components: {ProgressBar, GrantAccess, AllowedUsers, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
-
+  data: () => ({
+    loader: false
+  }),
   async fetch() {
-    let clientId = this.$route.params.client
-    await this.getClientData({clientId})
+    this.loader = true
+    try {
+      let clientId = this.$route.params.client
+      await this.getClientData({clientId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
   },
 
   computed: {

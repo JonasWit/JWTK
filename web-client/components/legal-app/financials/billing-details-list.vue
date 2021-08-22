@@ -16,19 +16,32 @@
       </v-col>
 
     </v-card>
+    <progress-bar v-if="loader"/>
   </div>
 </template>
 <script>
 import EditBillingData from "@/components/legal-app/financials/dialogs/edit-billing-data";
 import DeleteBillingData from "@/components/legal-app/financials/dialogs/delete-billing-data";
 import {mapActions, mapMutations, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "billing-details-list",
-  components: {DeleteBillingData, EditBillingData},
-
+  components: {ProgressBar, DeleteBillingData, EditBillingData},
+  data: () => ({
+    loader: true
+  }),
   async fetch() {
-    await this.getBillingDataFromFetch();
+    this.loader = true
+    try {
+      await this.getBillingDataFromFetch();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('legal-app-client-store', ['billingDataFromFetch']),

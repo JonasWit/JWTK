@@ -28,15 +28,19 @@
 
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {deleteNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-note-dialog",
+  components: {ProgressBar},
   props: {
     noteForAction: {
       required: true,
@@ -46,23 +50,26 @@ export default {
 
   data: () => ({
     dialog: false,
+    loader: false
   }),
 
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async deleteClientNote() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
         await this.$axios.$delete(deleteNote(clientId, noteId));
 
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         let clientId = this.$route.params.client;
         await this.getClientsNotes(clientId);
         this.dialog = false;
         this.$emit('delete-completed');
+        this.loader = false
       }
     }
   }

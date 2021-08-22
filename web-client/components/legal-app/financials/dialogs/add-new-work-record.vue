@@ -48,6 +48,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -62,12 +63,15 @@ import {
 } from "@/data/vuetify-validations";
 import {createWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-new-work-record",
+  components: {ProgressBar},
   data: () => ({
       dialog: false,
-      loading: false,
+      loader: false,
       items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
       value: null,
       form: {
@@ -117,9 +121,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
     async handleSubmit() {
       if (!this.$refs.createClientWorkForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
-
+      this.loader = true
       const workRecord = {
         name: this.form.name,
         description: this.form.description,
@@ -132,28 +134,24 @@ export default {
         lawyerName: this.form.lawyerName,
 
       };
-      console.warn('work record:', workRecord)
       try {
         let clientId = this.$route.params.client
         await this.$axios.$post(createWorkRecord(clientId), workRecord)
         this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
         this.resetForm();
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
 
       }
-    }
-    ,
+    },
     resetForm() {
       this.$refs.createClientWorkForm.reset();
       this.$refs.createClientWorkForm.resetValidation();
-    }
-    ,
+    },
   }
 
 

@@ -105,6 +105,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 
@@ -114,9 +115,11 @@
 import {updateReminder} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 import {handleError} from "@/data/functions";
 import {lengthRule, notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "edit-reminder",
+  components: {ProgressBar},
   props: {
     eventForAction: {
       required: true,
@@ -124,7 +127,7 @@ export default {
     }
   },
   data: () => ({
-    loading: false,
+    loader: false,
     dialog: false,
     menu2: false,
     form: {
@@ -226,8 +229,7 @@ export default {
       if (this.submittableDateStart > this.submittableDateEnd) {
         return this.alert = true;
       } else {
-        if (this.loading) return;
-        this.loading = true;
+        this.loader = true;
         try {
           const newReminder = {
             active: true,
@@ -249,7 +251,7 @@ export default {
           handleError(error);
         } finally {
           this.$emit('action-completed');
-          this.loading = false;
+          this.loader = false;
           this.dialog = false;
         }
       }

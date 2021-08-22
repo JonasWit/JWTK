@@ -28,15 +28,19 @@
 
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {mapActions} from "vuex";
 import {deleteBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-billing-data",
+  components: {ProgressBar},
   props: {
     selectedBillingRecord: {
       required: true,
@@ -47,7 +51,7 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
     billingRecord: null,
   }),
   async fetch() {
@@ -57,17 +61,17 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async deleteBillingRecord() {
+      this.loader = true
       try {
         let billingRecordId = this.billingRecord.id
         await this.$axios.$delete(deleteBillingData(billingRecordId))
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         await this.getBillingDataFromFetch()
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     }
   }

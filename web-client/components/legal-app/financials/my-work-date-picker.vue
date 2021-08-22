@@ -101,7 +101,7 @@
         </v-col>
       </v-row>
     </v-card>
-
+    <progress-bar v-if="loader"/>
   </div>
 </template>
 
@@ -111,12 +111,14 @@ import AddNewWorkRecord from "~/components/legal-app/financials/dialogs/add-new-
 import {formatDate} from "@/data/date-extensions";
 import DeleteWorkRecord from "@/components/legal-app/financials/dialogs/delete-work-record";
 import EditWorkRecord from "@/components/legal-app/financials/dialogs/edit-work-record";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "my-work-date-picker",
-  components: {AddNewWorkRecord, EditWorkRecord, DeleteWorkRecord},
+  components: {ProgressBar, AddNewWorkRecord, EditWorkRecord, DeleteWorkRecord},
   data: () => ({
-      loading: false,
+      loader: false,
       dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       modalFrom: false,
@@ -156,18 +158,15 @@ export default {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
 
     async searchFinancialRecords() {
-      if (this.loading) return;
-      this.loading = true;
-      console.warn('handle logs fired', this.query);
+      this.loader = true;
       try {
         let clientId = this.$route.params.client;
         let query = this.query;
         await this.getFinancialRecordsFromFetch({clientId, query});
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetAll() {
@@ -177,9 +176,15 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
-    actionDone() {
-      return this.searchFinancialRecords()
-
+    async actionDone() {
+      this.loader = true
+      try {
+        return this.searchFinancialRecords()
+      } catch (error) {
+        handleError(error);
+      } finally {
+        this.loader = false
+      }
     }
   },
 }

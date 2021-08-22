@@ -1,15 +1,16 @@
 <template>
   <div>
     <template>
-      <v-progress-linear
-        :active="loading"
-        :color="color"
-        :indeterminate="true"
-        class="ma-0"
-        height="4"
-        style="top: -2px;"
-      >Loading...
-      </v-progress-linear>
+      <div class="text-center">
+        <v-overlay color="grey lighten-5">
+          <v-progress-circular
+            size="70"
+            width="7"
+            color="light-blue darken-4"
+            indeterminate
+          ></v-progress-circular>
+        </v-overlay>
+      </div>
     </template>
   </div>
 
@@ -23,8 +24,7 @@ export default {
     loading: Boolean,
     color: String,
   },
-  data: () => ({}
-  ),
+
 }
 </script>
 

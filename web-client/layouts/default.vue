@@ -74,6 +74,9 @@
     </v-app-bar>
     <v-main>
       <v-container fluid>
+
+        <progress-bar v-if="loader"/>
+
         <nuxt/>
 
       </v-container>
@@ -93,29 +96,39 @@ import SnackbarNotifier from "@/components/snackbar";
 import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
 import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
 import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "default",
   components: {OptionsFloatingIcon, RemindersFloatingIcon, SnackbarNotifier, IfAuth},
   data: () => ({
     goDark: false,
-    themeSwitch: false
+    themeSwitch: false,
+    loader: true,
   }),
-  created() {
-    let themeEnabled;
-    if (process.server) {
-      themeEnabled = getCookieFromRequest(COOKIE_NAME.THEME, this.$nuxt.context.req.headers.cookie) === 'dark';
-    } else {
-      themeEnabled = this.darkThemeStored === true;
-    }
-    this.goDark = themeEnabled;
+  async created() {
+    try {
+      let themeEnabled;
+      if (process.server) {
+        themeEnabled = getCookieFromRequest(COOKIE_NAME.THEME, this.$nuxt.context.req.headers.cookie) === 'dark';
+      } else {
+        themeEnabled = this.darkThemeStored === true;
+      }
+      this.goDark = themeEnabled;
 
-    if (this.goDark) {
-      this.setDarkTheme();
-    } else {
-      this.setLightTheme();
-      this.themeSwitch = true;
+      if (this.goDark) {
+        this.setDarkTheme();
+      } else {
+        this.setLightTheme();
+        this.themeSwitch = true;
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
     }
+
+
   },
   watch: {
     themeSwitch: function (val) {

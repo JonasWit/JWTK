@@ -26,14 +26,18 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {deleteDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-deadline",
+  components: {ProgressBar},
   props: {
     deadlineForAction: {
       required: true,
@@ -42,19 +46,22 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false
   }),
   methods: {
     async deleteDeadline() {
+      this.loader = true
       try {
         let caseId = this.$route.params.case;
         let deadlineId = this.deadlineForAction.id;
         await this.$axios.$delete(deleteDeadline(caseId, deadlineId));
         this.$notifier.showSuccessMessage("Termin został usunięty!");
-      } catch (e) {
-        console.error('error', e);
+      } catch (error) {
+        handleError(error);
       } finally {
         this.dialog = false;
         this.$emit('delete-completed');
+        this.loader = false
       }
     }
   }

@@ -41,6 +41,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -49,9 +50,12 @@
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import {mapActions} from "vuex";
 import {updateBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-billing-data",
+  components: {ProgressBar},
   props: {
     selectedBillingRecord: {
       required: true,
@@ -62,7 +66,7 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
     billingRecord: null,
     modal: false,
     form: {
@@ -87,7 +91,7 @@ export default {
 
     }
   }),
-  async fetch() {
+  fetch() {
     this.billingRecord = this.selectedBillingRecord
     this.form.name = this.billingRecord.name
     this.form.street = this.billingRecord.street
@@ -104,9 +108,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async saveBillingDataChange() {
       if (!this.$refs.editBillingDataForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
-
+      this.loader = true;
       const data = {
         name: this.form.name,
         street: this.form.street,
@@ -123,12 +125,11 @@ export default {
         await this.$axios.$put(updateBillingData(billingRecordId), data);
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         await this.getBillingDataFromFetch()
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     }
   },

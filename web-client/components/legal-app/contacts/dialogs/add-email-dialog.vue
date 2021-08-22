@@ -34,15 +34,19 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 <script>
 
 import {emailRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-email-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -56,7 +60,7 @@ export default {
       name: "",
       comment: "",
     },
-    loading: false,
+    loader: false,
     validation: {
       valid: false,
       email: emailRule("Proszę podać poprawny format adresu email np. jan-kowalski@gmail.com"),
@@ -65,10 +69,11 @@ export default {
   }),
 
   methods: {
+
     async saveNewEmail() {
       if (!this.$refs.addNewEmailForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
 
       const email = {
         comment: this.form.comment,
@@ -81,11 +86,10 @@ export default {
         this.$notifier.showSuccessMessage("Adres email dodany pomyślnie!");
         this.resetForm();
       } catch (error) {
-        console.error('creating contact error', error);
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
     },

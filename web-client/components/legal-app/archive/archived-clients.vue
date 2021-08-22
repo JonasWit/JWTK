@@ -23,6 +23,7 @@
         </v-list-item>
       </v-list>
     </v-card>
+    <progress-bar v-if="loader"/>
   </div>
 </template>
 
@@ -32,17 +33,26 @@ import {archiveClient, getArchivedClient} from "@/data/endpoints/legal-app/legal
 import {formatDate} from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
 import {mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "archived-clients",
-  components: {Layout},
+  components: {ProgressBar, Layout},
   data: () => ({
     archivedClientsList: [],
+    loader: false
 
   }),
 
-  fetch() {
-    return this.getArchivedClientsFromFetch()
+  async fetch() {
+    this.loader = true
+    try {
+      await this.getArchivedClientsFromFetch()
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips'])
@@ -52,14 +62,17 @@ export default {
       return formatDate(date)
     },
     async getArchivedClientsFromFetch() {
+      this.loader = true
       try {
         this.archivedClientsList = await this.$axios.$get(getArchivedClient())
-        console.log('zarchiwizowani klienci', this.archivedClientsList)
       } catch (error) {
-        handleError(error)
+        handleError(error);
+      } finally {
+        this.loader = false
       }
     },
     async removeFromArchive(clientId) {
+      this.loader = true
       try {
         await this.$axios.$put(archiveClient(clientId))
         console.warn(clientId)
@@ -68,6 +81,7 @@ export default {
         handleError(error)
       } finally {
         await this.getArchivedClientsFromFetch()
+        this.loader = false
       }
     }
   },

@@ -35,15 +35,19 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {notEmptyAndLimitedRule, phoneNumberRule} from "@/data/vuetify-validations";
 import {createContactPhoneNumber} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-phone-numbers-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -53,7 +57,7 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
     form: {
       number: "",
       comment: "",
@@ -67,8 +71,8 @@ export default {
   methods: {
     async saveNewPhoneNumber() {
       if (!this.$refs.addNewPhoneNumberForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
 
       const phone = {
         comment: this.form.comment,
@@ -81,11 +85,10 @@ export default {
         this.$notifier.showSuccessMessage("Numer dodany pomyślnie!");
         this.resetForm();
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
     },

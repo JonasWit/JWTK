@@ -44,9 +44,10 @@
 
 <script>
 import Layout from "@/components/legal-app/layout";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
-  components: {Layout},
+  components: {ProgressBar, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   async asyncData({params}) {
     return {
@@ -74,6 +75,14 @@ export default {
           icon: 'mdi-archive',
           text: 'Lista zarchiwzowanych klinetów',
           adminAccess: true
+        },
+        {
+          id: '4',
+          route: '/legal-application/help',
+          name: 'Pomoc',
+          icon: 'mdi-help',
+          text: 'Pomoc',
+          adminAccess: false
         },
       ],
     };

@@ -33,6 +33,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -40,9 +41,12 @@
 import {mapMutations} from "vuex";
 import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {updateClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-client-name-dialog",
+  components: {ProgressBar},
   props: {
     selectedClient: {
       required: true,
@@ -53,6 +57,7 @@ export default {
   data: () => ({
     client: null,
     dialog: false,
+    loader: false,
     form: {
       name: "",
 
@@ -70,8 +75,8 @@ export default {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
     async saveClientNameChange() {
       if (!this.$refs.editClientNameForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
       const payload = {
         name: this.client.name,
       };
@@ -80,10 +85,11 @@ export default {
         await this.$axios.$put(updateClient(clientId), payload)
         this.$notifier.showSuccessMessage("Nazwa klienta updatowana pomyślnie!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
+        this.loader = false
       }
     },
   }

@@ -46,7 +46,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -62,10 +62,12 @@ import BillingDetailsList from "@/components/legal-app/financials/billing-detail
 import {mapState} from "vuex";
 import {handleError} from "@/data/functions";
 import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "index",
   components: {
+    ProgressBar,
     MyWorkDatePicker,
     BillingDetailsList,
     AddBillingDetails,
@@ -84,10 +86,19 @@ export default {
       modalTo: false,
       alert: false,
       tab: null,
+      loader: false
     }
   ),
-  fetch() {
-    return this.searchFinancialRecords();
+  async fetch() {
+    this.loader = true
+    try {
+      await this.searchFinancialRecords();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -111,9 +122,8 @@ export default {
   },
   methods: {
     async searchFinancialRecords() {
-      if (this.loading) return;
-      this.loading = true;
-      console.warn('handle logs fired', this.query);
+      if (this.loader) return;
+      this.loader = true;
       try {
         let clientId = this.$route.params.client
         let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
@@ -122,7 +132,7 @@ export default {
         handleError(error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.loading = false;
+        this.loader = false;
       }
     },
     formatDate(date) {

@@ -48,6 +48,7 @@
           </v-row>
         </v-card>
         <options-floating-icon/>
+        <progress-bar v-if="loader"/>
       </v-dialog>
     </v-row>
 
@@ -63,10 +64,12 @@ import {getNote} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions, mapState} from "vuex";
 import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
 import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "notes-details",
-  components: {OptionsFloatingIcon, RemindersFloatingIcon, DeleteNoteDialog, EditNoteDialog},
+  components: {ProgressBar, OptionsFloatingIcon, RemindersFloatingIcon, DeleteNoteDialog, EditNoteDialog},
   props: {
     selectedNote: {
       required: true,
@@ -75,6 +78,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false,
     noteDetails: null,
     value: 'Treść notatki...',
     noteForAction: null,
@@ -93,20 +97,31 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async getNotesDetails() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client;
         let noteId = this.selectedNote.id;
         this.noteDetails = await this.$axios.$get(getNote(clientId, noteId));
         this.noteForAction = this.selectedNote.id;
       } catch (error) {
-        this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie");
+        handleError(error);
+      } finally {
+        this.loader = false
       }
     },
     async editDone() {
-      await this.getNotesDetails();
-      return this.getClientsNotes(this.$route.params.client);
+      this.loader = true
+      try {
+        await this.getNotesDetails();
+        await this.getClientsNotes(this.$route.params.client);
+      } catch (error) {
+        handleError(error);
+      } finally {
+        this.loader = false
+      }
+
     },
-    async deleteDone() {
+    deleteDone() {
       this.dialog = false;
     },
     formatDate(date) {

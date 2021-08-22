@@ -26,14 +26,18 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {archiveCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "archive-case",
+  components: {ProgressBar},
   props: {
     caseForAction: {
       required: true,
@@ -42,18 +46,21 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false
   }),
   methods: {
     async addToCaseArchive() {
+      this.loader = true
       try {
         let caseId = this.caseForAction.id;
         await this.$axios.put(archiveCase(caseId));
         this.$notifier.showSuccessMessage("Sprawa została dodana do archiwum!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.dialog = false;
         this.$emit('delete-completed');
+        this.loader = false
       }
     }
   }

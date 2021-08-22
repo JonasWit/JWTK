@@ -49,6 +49,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-tabs>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -59,19 +60,30 @@ import AddDeadline from "@/components/legal-app/clients/cases/deadlines/add-dead
 import {mapActions, mapState} from "vuex";
 import DeleteDeadline from "@/components/legal-app/clients/cases/deadlines/delete-deadline";
 import DeadlinePlannerView from "@/components/legal-app/clients/cases/deadlines/deadline-planner-view";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {DeadlinePlannerView, DeleteDeadline, AddDeadline, Layout},
+  components: {ProgressBar, DeadlinePlannerView, DeleteDeadline, AddDeadline, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     tab: null,
+    loader: false
   }),
   async fetch() {
-    let caseId = this.$route.params.case;
-    let query = this.query;
-    await this.getCaseDeadlines({caseId, query});
-    await this.getCaseDetails({caseId});
+    this.loader = true
+    try {
+      let caseId = this.$route.params.case;
+      let query = this.query;
+      await this.getCaseDeadlines({caseId, query});
+      await this.getCaseDetails({caseId});
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
@@ -89,11 +101,19 @@ export default {
       return formatDate(date);
     },
     async actionDone() {
-      let caseId = this.$route.params.case;
-      let query = this.query;
-      let dates = queryDateForFloatingBell(todayDate())
-      await this.getCaseDeadlines({caseId, query});
-      await this.getEventsForNotifications({dates});
+      this.loader = true
+      try {
+        let caseId = this.$route.params.case;
+        let query = this.query;
+        let dates = queryDateForFloatingBell(todayDate())
+        await this.getCaseDeadlines({caseId, query});
+        await this.getEventsForNotifications({dates});
+      } catch (error) {
+        handleError(error);
+      } finally {
+        this.loader = false
+      }
+
     }
   }
 };

@@ -28,6 +28,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -35,9 +36,12 @@
 
 import {mapMutations} from "vuex";
 import {archiveClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "archive-client-dialog",
+  components: {ProgressBar},
   props: {
     selectedClient: {
       required: true,
@@ -48,7 +52,7 @@ export default {
   data: () => ({
     dialog: false,
     tooltipVisible: false,
-    loading: false,
+    loader: false,
     form: {
       userId: ""
     },
@@ -57,19 +61,20 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
     async archiveClient() {
+      this.loader = true
       try {
         let clientId = this.selectedClient.id
         await this.$axios.$put(archiveClient(clientId))
         this.$notifier.showSuccessMessage("Klient został pomyślnie dodany do archiwum!");
         Object.assign(this.$data, this.$options.data.call(this)); // total data reset (all returning to default data)
         this.$nuxt.refresh();
-
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
         this.tooltipVisible = true;
+        this.loader = false
       }
     }
   }

@@ -56,6 +56,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -67,11 +68,13 @@ import {formatDate} from "@/data/date-extensions";
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
 import {mapActions, mapState} from "vuex";
 import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 
 export default {
   name: "index",
-  components: {GoToCaseDetails, AddCase, Layout},
+  components: {ProgressBar, GoToCaseDetails, AddCase, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
@@ -79,11 +82,20 @@ export default {
     name: "",
     signature: "",
     description: "",
-    dialog: false
+    dialog: false,
+    loader: true
   }),
   async fetch() {
-    let clientId = this.$route.params.client
-    await this.getListOfGroupedCases({clientId})
+    try {
+      let clientId = this.$route.params.client
+      await this.getListOfGroupedCases({clientId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+
+    }
+
   },
 
   computed: {

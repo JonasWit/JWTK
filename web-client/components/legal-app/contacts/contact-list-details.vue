@@ -1,101 +1,128 @@
 <template>
-  <v-tabs vertical>
-    <v-tab class="d-flex justify-start" icons-and-text>
-      <v-icon left>
-        mdi-cog-outline
-      </v-icon>
-      Opcje
-    </v-tab>
-    <v-tab class="d-flex justify-space-between" icons-and-text>
-      <v-icon left>
-        mdi-email
-      </v-icon>
-      Email
-      <add-email-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-    </v-tab>
-    <v-tab class="d-flex justify-space-between">
-      <v-icon left>
-        mdi-phone
-      </v-icon>
-      Telefony
-      <add-phone-numbers-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-    </v-tab>
-    <v-tab class="d-flex justify-space-between">
-      <v-icon left>
-        mdi-mail
-      </v-icon>
-      Adresy
-      <add-address-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-    </v-tab>
-    <v-tab-item>
-      <v-card flat>
-        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-          W tym miejscu mozesz usunąć cały kontakt lub edytować główne dane. Szczegóły kontaku takie jak adresy email,
-          telefony lub adresy można dodawać w odpowednich zakładkach.
-        </v-alert>
-        <v-card-text>
-          <v-row class="d-flex flex-sm-column flex-md-row">
-            <delete-contact-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-            <v-spacer></v-spacer>
-            <edit-contact-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
-    <v-tab-item>
-      <v-card flat>
-        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-          Nie posiadasz jeszcze żadnych adresów email? Użyj zielonej ikonki "+", aby dodać nowy email.
-        </v-alert>
-        <v-card-text v-for="item in emailsList" :key="item.id">
-          <v-row class="d-flex flex-sm-column flex-md-row">
-            <v-col>Nazwa: {{ item.comment }}</v-col>
-            <v-col>Adres email: {{ item.email }}</v-col>
-            <v-col>
-              <delete-email-dialog :selected-email="item" :selected-contact="selectedContact"
-                                   v-on:action-completed="actionDone"/>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
-    <v-tab-item>
-      <v-card flat>
-        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-          Nie posiadasz jeszcze żadnych numerów telefonów? Użyj zielonej ikonki "+", aby dodać numery.
-        </v-alert>
-        <v-card-text v-for="item in phoneNumbersList" :key="item.id">
-          <v-row class="d-flex flex-sm-column flex-md-row">
-            <v-col>Nazwa: {{ item.comment }}</v-col>
-            <v-col>Numer telefonu: {{ item.number }}</v-col>
-            <v-col>
-              <delete-phone-number-dialog :selected-phone-number="item" :selected-contact="selectedContact"
-                                          v-on:action-completed="actionDone"/>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
-    <v-tab-item>
-      <v-card flat>
-        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-          Nie posiadasz jeszcze żadnych adresów? Użyj zielonej ikonki "+", aby dodać adresy.
-        </v-alert>
-        <v-card-text v-for="item in addressesList" :key="item.id">
-          <v-row class="d-flex flex-sm-column flex-md-row">
-            <v-col>Nazwa: {{ item.comment }}</v-col>
-            <v-col>Ulica i Nr: {{ item.street }} {{ item.building }}</v-col>
-            <v-col>Miasto i kod: {{ item.city }} {{ item.postCode }}</v-col>
-            <v-col>Państwo: {{ item.country }}</v-col>
-            <v-col>
-              <delete-address-dialog :selected-address="item" :selected-contact="selectedContact"
-                                     v-on:action-completed="actionDone"/>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
-  </v-tabs>
+  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn color="primary" dark v-bind="attrs" v-on="on">
+        Otwórz
+      </v-btn>
+    </template>
+
+    <v-card>
+      <v-toolbar dark color="primary">
+        <v-btn icon dark @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>{{ selectedContact.title }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-title>{{ selectedContact.name }} {{ selectedContact.surname }}</v-toolbar-title>
+      </v-toolbar>
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+        Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
+        Następnie wybierz sekcję, którą chcesz uzupełnić.
+      </v-alert>
+      <v-tabs vertical>
+        <v-tab class="d-flex justify-start" icons-and-text>
+          <v-icon left>
+            mdi-cog-outline
+          </v-icon>
+          Opcje
+        </v-tab>
+        <v-tab class="d-flex justify-space-between" icons-and-text>
+          <v-icon left>
+            mdi-email
+          </v-icon>
+          Email
+          <add-email-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
+        </v-tab>
+        <v-tab class="d-flex justify-space-between">
+          <v-icon left>
+            mdi-phone
+          </v-icon>
+          Telefony
+          <add-phone-numbers-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
+        </v-tab>
+        <v-tab class="d-flex justify-space-between">
+          <v-icon left>
+            mdi-mail
+          </v-icon>
+          Adresy
+          <add-address-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
+        </v-tab>
+        <v-tab-item>
+          <v-card flat>
+            <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+              W tym miejscu mozesz usunąć cały kontakt lub edytować główne dane. Szczegóły kontaku takie jak adresy
+              email,
+              telefony lub adresy można dodawać w odpowednich zakładkach.
+            </v-alert>
+            <v-card-text>
+              <v-row class="d-flex flex-sm-column flex-md-row">
+                <delete-contact-dialog :selected-contact="selectedContact" v-on:delete-completed="deleteDone"/>
+                <v-spacer></v-spacer>
+                <edit-contact-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+              Nie posiadasz jeszcze żadnych adresów email? Użyj zielonej ikonki "+", aby dodać nowy email.
+            </v-alert>
+            <v-card-text v-for="item in emailsList" :key="item.id">
+              <v-row class="d-flex flex-sm-column flex-md-row">
+                <v-col>Nazwa: {{ item.comment }}</v-col>
+                <v-col>Adres email: {{ item.email }}</v-col>
+                <v-col>
+                  <delete-email-dialog :selected-email="item" :selected-contact="selectedContact"
+                                       v-on:action-completed="actionDone"/>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+              Nie posiadasz jeszcze żadnych numerów telefonów? Użyj zielonej ikonki "+", aby dodać numery.
+            </v-alert>
+            <v-card-text v-for="item in phoneNumbersList" :key="item.id">
+              <v-row class="d-flex flex-sm-column flex-md-row">
+                <v-col>Nazwa: {{ item.comment }}</v-col>
+                <v-col>Numer telefonu: {{ item.number }}</v-col>
+                <v-col>
+                  <delete-phone-number-dialog :selected-phone-number="item" :selected-contact="selectedContact"
+                                              v-on:action-completed="actionDone"/>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card flat>
+            <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+              Nie posiadasz jeszcze żadnych adresów? Użyj zielonej ikonki "+", aby dodać adresy.
+            </v-alert>
+            <v-card-text v-for="item in addressesList" :key="item.id">
+              <v-row class="d-flex flex-sm-column flex-md-row">
+                <v-col>Nazwa: {{ item.comment }}</v-col>
+                <v-col>Ulica i Nr: {{ item.street }} {{ item.building }}</v-col>
+                <v-col>Miasto i kod: {{ item.city }} {{ item.postCode }}</v-col>
+                <v-col>Państwo: {{ item.country }}</v-col>
+                <v-col>
+                  <delete-address-dialog :selected-address="item" :selected-contact="selectedContact"
+                                         v-on:action-completed="actionDone"/>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
+    <progress-bar v-if="loader"/>
+
+  </v-dialog>
+
+
 </template>
 <script>
 import DeleteContactDialog from "~/components/legal-app/contacts/dialogs/delete-contact-dialog";
@@ -108,10 +135,12 @@ import AddAddressDialog from "@/components/legal-app/contacts/dialogs/add-addres
 import DeleteAddressDialog from "@/components/legal-app/contacts/dialogs/delete-address-dialog";
 import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
 import {handleError} from "~/data/functions";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "contact-list-details",
   components: {
+    ProgressBar,
     EditContactDialog,
     DeleteAddressDialog,
     AddAddressDialog,
@@ -127,11 +156,21 @@ export default {
   data: () => ({
     emailsList: [],
     phoneNumbersList: [],
-    addressesList: []
+    addressesList: [],
+    dialog: false,
+    loader: false
   }),
 
   async fetch() {
-    await this.updateContactLIst()
+    this.loader = true
+    try {
+      await this.updateContactLIst()
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -139,10 +178,11 @@ export default {
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['updateContactDetailsList']),
-    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch']),
+    ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch', 'getContactsList']),
     async updateContactLIst() {
+      this.loader = true
       try {
-        let clientId = this.$route.params.client;
+        let clientId = this.$route.params.client
         let contactId = this.selectedContact.id;
         await this.getContactDetailsFromFetch({clientId, contactId});
         this.emailsList = this.contactDetailsFromFetch.emails
@@ -150,14 +190,22 @@ export default {
         this.addressesList = this.contactDetailsFromFetch.physicalAddresses
       } catch (error) {
         handleError(error)
+      } finally {
+        this.loader = false
       }
     },
     async actionDone() {
+      this.loader = true
       try {
         await this.updateContactLIst();
       } catch (error) {
         handleError(error)
+      } finally {
+        this.loader = false
       }
+    },
+    deleteDone() {
+      this.dialog = false;
     },
   }
 };

@@ -45,6 +45,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -52,11 +53,14 @@
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {mapActions, mapState} from "vuex";
 import {createDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-deadline",
+  components: {ProgressBar},
   data: () => ({
-    loading: false,
+    loader: false,
     dialog: false,
     deadline: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu2: false,
@@ -77,8 +81,8 @@ export default {
 
     async addNewDeadline() {
       if (!this.$refs.addNewDeadlineForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
       try {
         const newDeadline = {
           deadline: new Date(`${this.deadline}T23:59:59`),
@@ -86,15 +90,14 @@ export default {
         };
         let caseId = this.$route.params.case;
         await this.$axios.$post(createDeadline(caseId), newDeadline);
-        console.warn('nowy termin', newDeadline);
         this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Termin dodany pomyślnie!");
         this.resetForm();
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetForm() {

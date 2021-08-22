@@ -160,6 +160,7 @@
     <v-btn color="error" block @click="generateReport">
       Generuj rozliczenie
     </v-btn>
+    <progress-bar v-if="loader"/>
   </div>
 
 </template>
@@ -167,10 +168,13 @@
 <script>
 import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 
 export default {
   name: "invoice-template",
+  components: {ProgressBar},
   props: {
     selectedBillingData: {
       required: true,
@@ -185,10 +189,21 @@ export default {
       default: null
     }
   },
+  data: () => ({
+    loader: true
+  }),
 
   async fetch() {
-    let clientId = this.$route.params.client;
-    await this.getClientData({clientId})
+    this.loader = true
+    try {
+      let clientId = this.$route.params.client;
+      await this.getClientData({clientId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapGetters('legal-app-client-store', ['clientData']),

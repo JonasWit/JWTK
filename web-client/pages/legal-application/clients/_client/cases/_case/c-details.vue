@@ -37,27 +37,39 @@
           </div>
         </v-row>
       </v-container>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
 <script>
 import Layout from "@/components/legal-app/layout";
 import {mapActions, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "c-details",
-  components: {Layout},
+  components: {ProgressBar, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     client: null,
     case: null,
+    loader: false
   }),
   async fetch() {
-    this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`);
-    this.case = await this.$axios.$get(`/api/legal-app-cases/case/${this.$route.params.case}`);
-    let caseId = this.$route.params.case;
-    await this.getCaseDetails({caseId});
+    this.loader = true
+    try {
+      this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`);
+      this.case = await this.$axios.$get(`/api/legal-app-cases/case/${this.$route.params.case}`);
+      let caseId = this.$route.params.case;
+      await this.getCaseDetails({caseId});
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   async asyncData({params}) {
     return {

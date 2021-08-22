@@ -48,7 +48,7 @@
       </v-alert>
 
     </v-row>
-
+    <progress-bar v-if="loader"/>
   </div>
 
 </template>
@@ -57,13 +57,14 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {formatDate} from "@/data/date-extensions";
 import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "generate-report-date-picker",
   components: {ProgressBar},
   data: () => ({
 
-      loading: false,
+      loader: false,
       dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       modalFrom: false,
@@ -73,7 +74,15 @@ export default {
     }
   ),
   async fetch() {
-    return this.searchFinancialRecords();
+    this.loader = true
+    try {
+      await this.searchFinancialRecords();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
 
   computed: {
@@ -103,20 +112,15 @@ export default {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
 
     async searchFinancialRecords() {
-      if (this.loading) return;
-      this.progressBar = true;
-      this.loading = true;
-      console.warn('handle logs fired', this.query);
+      this.loader = true;
       try {
         let clientId = this.$route.params.client;
         let query = this.query;
         await this.getFinancialRecordsFromFetch({clientId, query});
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
-        this.loading = false;
-        this.progressBar = false
+        this.loader = false;
       }
     },
     resetAll() {

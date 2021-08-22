@@ -27,6 +27,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -34,9 +35,12 @@
 <script>
 import {revokeAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "revoke-access",
+  components: {ProgressBar},
   props: {
     userForAction: {
       required: true
@@ -44,30 +48,29 @@ export default {
 
   },
   data: () => ({
-    dialog: false
+    dialog: false,
+    loader: false
   }),
   methods: {
     ...mapActions('legal-app-client-store', ['getAllowedUsers']),
     ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
     async revokeAccess() {
+      this.loader = true
       const payload = {
         userId: this.userForAction.id
       }
       try {
         let clientId = this.$route.params.client
-        console.warn('user id:', payload)
         await this.$axios.$post(revokeAccess(clientId), payload)
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         let clientId = this.$route.params.client;
         await this.getAllowedUsers({clientId})
         await this.getEligibleUsersList({clientId})
+        this.loader = false
       }
-
-
     }
   }
 

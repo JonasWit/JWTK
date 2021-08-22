@@ -18,35 +18,26 @@
           <add-contact-dialog v-on:action-completed="actionDone"/>
         </template>
       </v-toolbar>
-      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-        Zarządzaj kontaktami dla Klienta! Użyj zielonej ikonki "+", aby uzupełnić pierwszy kontakt.
-        Następnie wybierz sekcję, którą chcesz uzupełnić.
-      </v-alert>
-      <v-expansion-panels focusable multiple class="expansion">
-        <v-expansion-panel v-for="item in contactList" :key="item.id">
-          <v-expansion-panel-header>
-            <template v-slot:actions>
-              <v-icon color="primary">
-                $expand
-              </v-icon>
-            </template>
-            <v-row class="d-flex align-center">
-              <v-col>
-                <v-col> Nazwa: {{ item.title }}</v-col>
-                <v-col> Imię i nazwisko: {{ item.name }} {{ item.surname }}</v-col>
-              </v-col>
-              <v-spacer></v-spacer>
-              <v-col>
-                <v-col class="hidden-sm-and-down">Komentarz: {{ item.comment }}</v-col>
-                <v-col class="hidden-sm-and-down">Dodano: {{ formatDate(item.created) }}</v-col>
-              </v-col>
-            </v-row>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <contact-list-details :selected-contact="item"/>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+      <v-list v-for="item in contactList" :key="item.id" flat>
+        <v-card class="index-card">
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-avatar color="orange" size="56" class="white--text">
+                {{ initials(item) }}
+              </v-avatar>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title> {{ item.title }} {{ item.name }} {{ item.surname }}</v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <contact-list-details :selected-contact="item"/>
+            </v-list-item-action>
+          </v-list-item>
+        </v-card>
+      </v-list>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -60,6 +51,7 @@ import ContactListDetails from "@/components/legal-app/contacts/contact-list-det
 import {formatDate} from "@/data/date-extensions";
 import EditContactDialog from "@/components/legal-app/contacts/dialogs/edit-contact-dialog";
 import {mapActions, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 
 const searchItemFactory = (name, id) => ({
@@ -71,21 +63,26 @@ const searchItemFactory = (name, id) => ({
 
 export default {
   name: "index",
-  components: {EditContactDialog, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
+  components: {ProgressBar, EditContactDialog, ContactListDetails, DeleteContactDialog, AddContactDialog, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
   data: () => ({
     contactList: [],
     searchResult: "",
     finished: false,
-    loading: false,
-
+    loader: true
   }),
-
   async fetch() {
-    let clientId = this.$route.params.client;
-    await this.getContactsList({clientId});
-    this.contactList = this.contactItemsFromFetch;
+    try {
+      let clientId = this.$route.params.client;
+      await this.getContactsList({clientId});
+      this.contactList = this.contactItemsFromFetch;
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
 
   watch: {
@@ -105,16 +102,29 @@ export default {
       return []
         .concat(this.contactItemsFromFetch.map(x => searchItemFactory(x.name, x.id)));
     },
+
+
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getContactsList']),
+    initials(item) {
+      if (item.name) {
+        return item.name[0][0].toUpperCase()
+      } else {
+        return item.title[0][0].toUpperCase()
+      }
+
+    },
     async actionDone() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client;
         await this.getContactsList({clientId});
         this.contactList = this.contactItemsFromFetch;
       } catch (error) {
         handleError(error);
+      } finally {
+        this.loader = false
       }
     },
     searchFilter(item, queryText) {

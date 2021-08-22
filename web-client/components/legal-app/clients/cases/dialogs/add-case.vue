@@ -44,6 +44,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -51,11 +52,14 @@
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {mapActions, mapState} from "vuex";
 import {createCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-case",
+  components: {ProgressBar},
   data: () => ({
-    loading: false,
+    loader: false,
     dialog: false,
     form: {
       name: "",
@@ -79,8 +83,8 @@ export default {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async addNewCase() {
       if (!this.$refs.addCaseForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
       try {
         const newCase = {
           name: this.form.name,
@@ -93,11 +97,10 @@ export default {
         this.$nuxt.refresh()
         this.$notifier.showSuccessMessage("Sprawa dodana pomyślnie!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
-
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetForm() {
