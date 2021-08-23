@@ -111,13 +111,12 @@ export default {
   },
   middleware: ['legal-app-permission', 'user', 'authenticated'],
 
-
   data: () => ({
     searchResult: "",
     clientList: [],
     clientSearchItems: [],
     finished: false,
-    loader: true,
+    loader: false,
     searchConditionsProvided: false,
     cursor: 0,
     takeAmount: 30,
@@ -131,9 +130,8 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      this.loader = false;
     }
-
   },
   watch: {
     searchResult() {
