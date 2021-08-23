@@ -36,7 +36,7 @@ namespace SystemyWP.API
         {
             if (!identityContext.Users.Any(x => x.UserName.Equals("MarzenaWitek")))
             {
-                var admin = new IdentityUser("admin") {Email = "marzena.witek@systemywp.pl"};
+                var admin = new IdentityUser("MarzenaWitek") { Email = "marzena.witek@systemywp.pl", EmailConfirmed = true };
                 userManager
                     .CreateAsync(admin, config
                         .GetSection("AdminPassword").Value)
@@ -166,7 +166,7 @@ namespace SystemyWP.API
                                 Deadline = DateTime.UtcNow.AddDays(i)
                             });
                         }
-                        
+
                         for (var i = 0; i < 5; i++)
                         {
                             newCase.LegalAppCaseNotes.Add(new LegalAppCaseNote
@@ -177,7 +177,7 @@ namespace SystemyWP.API
                                 CreatedBy = "system",
                             });
                         }
-                        
+
                         newClient.LegalAppCases.Add(newCase);
                     }
                 }
@@ -192,11 +192,11 @@ namespace SystemyWP.API
         {
             identityContext.Database.EnsureDeleted();
             identityContext.Database.EnsureCreated();
-            
+
             var random = new Random();
 
             var databaseCreator =
-                (RelationalDatabaseCreator) context.Database.GetService<IDatabaseCreator>();
+                (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
             databaseCreator.CreateTables();
 
             //Seed Portal Admins
@@ -225,7 +225,7 @@ namespace SystemyWP.API
                     CreatedBy = "system"
                 });
             }
-            
+
             //Admin User with no key
             var identityUser = new IdentityUser($"clientadmin-nokey")
             {
@@ -250,7 +250,7 @@ namespace SystemyWP.API
                 Id = identityUser.Id,
                 CreatedBy = "system"
             });
-            
+
             //User with no key
             identityUser = new IdentityUser($"client-nokey")
             {
@@ -289,7 +289,7 @@ namespace SystemyWP.API
                 };
                 context.LegalAppAccessKeys.Add(key);
                 context.SaveChanges();
-                
+
                 var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
 
                 var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
@@ -333,7 +333,7 @@ namespace SystemyWP.API
                         End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
                     });
                 }
- 
+
                 //Seed Clients
                 for (var userNumber = 0; userNumber < 3; userNumber++)
                 {
@@ -361,7 +361,7 @@ namespace SystemyWP.API
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });
-                    
+
                     //Seed Reminders
                     for (var i = -2; i < 2; i++)
                     {
