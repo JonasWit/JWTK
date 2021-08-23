@@ -35,15 +35,19 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {lengthRule} from "@/data/vuetify-validations";
 import {updateContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-contact-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -61,7 +65,7 @@ export default {
       comment: "",
 
     },
-    loading: false,
+    loader: false,
     validation: {
       valid: false,
       fieldLength: lengthRule("Dozwolona liczba znaków to 50", 0, 50),
@@ -78,27 +82,23 @@ export default {
   methods: {
     async saveContactChange() {
       if (!this.$refs.editContactNameForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
-
+      this.loader = true
       const contact = {
         title: this.form.title,
         name: this.form.name,
         surname: this.form.surname,
         comment: this.form.comment,
       }
-
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
         await this.$axios.$put(updateContact(clientId, contactId), contact)
         this.$notifier.showSuccessMessage("Kontakt zmieniony pomyślnie!");
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.$nuxt.refresh()
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
     },

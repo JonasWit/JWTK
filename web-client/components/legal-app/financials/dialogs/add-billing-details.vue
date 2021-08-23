@@ -42,6 +42,7 @@
         </v-form>
       </v-dialog>
     </v-toolbar>
+    <progress-bar v-if="loader"/>
   </v-card>
 
 </template>
@@ -53,13 +54,15 @@ import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-val
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import {mapActions} from "vuex";
 import {addBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-billing-details",
-  components: {BillingDetailsList},
+  components: {ProgressBar, BillingDetailsList},
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
     billingData: [],
     modal: false,
     name: '',
@@ -118,9 +121,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async handleSubmit() {
       if (!this.$refs.addBillingDataForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
-
+      this.loader = true;
       const data = {
         name: this.name,
         street: this.street,
@@ -136,12 +137,11 @@ export default {
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
         this.resetForm()
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         await this.getBillingDataFromFetch();
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetForm() {

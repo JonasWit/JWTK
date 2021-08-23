@@ -21,15 +21,20 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 
 import {deleteContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-contact-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -39,21 +44,24 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false,
   }),
   methods: {
+    ...mapActions('legal-app-client-store', ['getContactsList']),
     async deleteContact() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
         await this.$axios.delete(deleteContact(clientId, contactId))
+        this.$nuxt.refresh()
         this.$notifier.showSuccessMessage("Kontakt usunięty pomyślnie!");
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
-        this.$emit('action-completed');
-        this.loading = false;
         this.dialog = false;
+        this.$emit('delete-completed');
+        this.loader = false
       }
 
     }

@@ -28,7 +28,7 @@
           ></v-text-field>
           <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
           ></v-text-field>
-          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
+          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj komentarz*"
           ></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
@@ -44,6 +44,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -51,10 +52,12 @@
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-contact-dialog",
-
+  components: {ProgressBar},
   data: () => ({
     dialog: false,
     form: {
@@ -64,7 +67,7 @@ export default {
       comment: "",
 
     },
-    loading: false,
+    loader: false,
     validation: {
       valid: false,
       title: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalan liczba znaków to 50", 1, 50),
@@ -82,8 +85,8 @@ export default {
 
     async handleSubmit() {
       if (!this.$refs.addNewContactForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
 
       const contact = {
         title: this.form.title,
@@ -95,15 +98,13 @@ export default {
         let clientId = this.$route.params.client
         await this.$axios.$post(createContact(clientId), contact)
         this.$notifier.showSuccessMessage("Kontakt dodany pomyślnie!");
-        this.resetForm();
-
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
+        this.resetForm();
         this.$emit('action-completed');
         Object.assign(this.$data, this.$options.data.call(this));
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
     },

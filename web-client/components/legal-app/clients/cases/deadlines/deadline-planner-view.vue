@@ -75,15 +75,18 @@
 
 
     </v-sheet>
+    <progress-bar v-if="loader"/>
   </div>
 </template>
 
 <script>
 import {mapActions, mapState} from "vuex";
 import {handleError} from "@/data/functions";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "deadline-planner-view",
+  components: {ProgressBar},
   data: () => ({
     focus: '',
     type: 'month',
@@ -106,6 +109,7 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+    loader: false
   }),
 
   computed: {
@@ -145,6 +149,7 @@ export default {
       return new Date(item.deadline).toISOString().substr(0, 10);
     },
     async getEvents() {
+      this.loader = true
       try {
         let newEvents = [];
         this.deadlines.forEach(x => {
@@ -162,6 +167,8 @@ export default {
         this.newEvents = newEvents;
       } catch (error) {
         handleError(error);
+      } finally {
+        this.loader = false
       }
     },
   },

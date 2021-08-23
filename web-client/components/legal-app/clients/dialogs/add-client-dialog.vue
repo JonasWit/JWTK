@@ -37,6 +37,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -45,11 +46,15 @@
 
 import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-client-dialog",
+  components: {ProgressBar},
   data: () => ({
     dialog: false,
+    loader: false,
     form: {
       name: "",
     },
@@ -61,7 +66,7 @@ export default {
   methods: {
     async handleSubmit() {
       if (!this.$refs.addNewClientForm.validate()) return;
-
+      this.loader = true
       const client = {
         name: this.form.name,
       };
@@ -72,10 +77,11 @@ export default {
         this.resetForm();
 
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         Object.assign(this.$data, this.$options.data.call(this));
         this.$nuxt.refresh();
+        this.loader = false
       }
     },
     resetForm() {

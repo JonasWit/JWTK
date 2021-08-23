@@ -30,15 +30,19 @@
 
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {mapMutations} from "vuex";
 import {deleteClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-client-dialog",
+  components: {ProgressBar},
   props: {
     selectedClient: {
       required: true,
@@ -48,7 +52,7 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
     form: {
       userId: ""
     },
@@ -57,15 +61,17 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['setClientForAction']),
     async deleteClient() {
+      this.loader = true
       try {
         let clientId = this.selectedClient.id
         await this.$axios.$delete(deleteClient(clientId))
         this.$notifier.showSuccessMessage("Klient usunięty pomyślnie!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.setClientForAction(this.selectedClient);
         this.dialog = false;
+        this.loader = false
       }
     }
   }

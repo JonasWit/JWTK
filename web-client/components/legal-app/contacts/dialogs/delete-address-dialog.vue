@@ -26,6 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -33,9 +34,12 @@
 import {
   deleteContactPhysicalAddress
 } from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-address-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -50,10 +54,12 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false
   }),
 
   methods: {
     async deleteAddress() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
@@ -61,11 +67,10 @@ export default {
         await this.$axios.delete(deleteContactPhysicalAddress(clientId, contactId, itemId))
         this.$notifier.showSuccessMessage("Adres usunięty pomyślnie!");
       } catch (error) {
-        console.error('creating contact error', error)
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
 

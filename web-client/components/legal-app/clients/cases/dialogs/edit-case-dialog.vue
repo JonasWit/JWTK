@@ -43,6 +43,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -52,9 +53,12 @@
 import {mapActions, mapState} from "vuex";
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {updateCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-case-dialog",
+  components: {ProgressBar},
   props: {
     caseForAction: {
       required: true,
@@ -63,6 +67,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false,
     form: {
       name: "",
       signature: "",
@@ -77,13 +82,20 @@ export default {
       description: lengthRule("Liczba znaków nie może przekraczać 1000", 0, 1000)
     },
   }),
-  beforeMount() {
-    console.log('case for action', this.caseForAction.name)
-    this.form.name = this.caseForAction.name
-    this.form.signature = this.caseForAction.signature
-    this.form.description = this.caseForAction.description
-    this.form.group = this.caseForAction.group
-    this.form.public = this.caseForAction.public
+  async beforeMount() {
+    this.loader = true
+    try {
+      this.form.name = this.caseForAction.name
+      this.form.signature = this.caseForAction.signature
+      this.form.description = this.caseForAction.description
+      this.form.group = this.caseForAction.group
+      this.form.public = this.caseForAction.public
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -91,6 +103,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails']),
     async saveChanges() {
+      this.loader = true
       try {
         const newCase = {
           name: this.form.name,
@@ -100,16 +113,16 @@ export default {
           public: this.form.public
         };
         let caseId = this.caseForAction.id;
-        console.warn('caseId', caseId)
         await this.$axios.$put(updateCase(caseId), newCase);
         this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         let caseId = this.caseForAction.id;
         await this.getCaseDetails({caseId})
-        this.$emit('action-completed');
         this.dialog = false;
+        this.loader = false
+        this.$emit('action-completed');
       }
     }
   }

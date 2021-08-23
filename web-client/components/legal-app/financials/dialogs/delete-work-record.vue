@@ -26,6 +26,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -33,9 +34,12 @@
 
 
 import {deleteWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-work-record",
+  components: {ProgressBar},
   props: {
     selectedFinancialRecord: {
       required: true,
@@ -45,11 +49,13 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
+    loader: false,
   }),
 
   methods: {
+
     async deleteFinancialRecord() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client
         let workRecordId = this.selectedFinancialRecord.id
@@ -57,12 +63,11 @@ export default {
         console.warn('Rekord usunięty pomyślnie');
         this.$notifier.showSuccessMessage("Rekord usunięty pomyślnie!");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
-
+        this.$emit('action-completed');
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
 
     }

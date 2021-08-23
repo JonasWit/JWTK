@@ -36,7 +36,17 @@ export const postalCode = () => [
 ];
 
 export const hoursValidation = () => [
-  v => /^(?:(?:2[01]|[01]?\d):[0-5]\d|360)$/.test(v) || 'Dozwolone tylko liczby!',
+  v => !!v || "Pole obowiązkowe.",
+  v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+  v => (v && v <= 360) || "Maksymalna liczba godzin nie może przekraczać 360 godzin",
+
+
+];
+export const minutesValidation = () => [
+  v => !!v || "Pole obowiązkowe.",
+  v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+  v => (v && v <= 59) || "Maksymalna liczba minut nie może przekraczać 59 minut",
+
 
 ];
 

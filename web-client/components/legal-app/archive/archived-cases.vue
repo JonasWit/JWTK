@@ -22,6 +22,7 @@
         </v-list-item>
       </v-list>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-container>
 </template>
 <script>
@@ -29,40 +30,55 @@ import Layout from "@/components/legal-app/layout";
 import {archiveCase, getArchivedCases} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {formatDate} from "@/data/date-extensions";
 import {mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "archived-cases",
-  components: {Layout},
+  components: {ProgressBar, Layout},
   data: () => ({
-    archivedCasesList: []
-
+    archivedCasesList: [],
+    loader: false
   }),
   async fetch() {
-    await this.getArchivedCasesList();
+    this.loader = true
+    try {
+      await this.getArchivedCasesList();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
   },
   methods: {
     async getArchivedCasesList() {
+      this.loader = true
       try {
         let clientId = this.$route.params.client;
         this.archivedCasesList = await this.$axios.$get(getArchivedCases(clientId));
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
+      } finally {
+        this.loader = false
       }
     },
     formatDate(date) {
       return formatDate(date);
     },
     async removeFromArchive(caseId) {
+      this.loader = true
       try {
         await this.$axios.$put(archiveCase(caseId));
         this.$notifier.showSuccessMessage("Sprawa został pomyślnie usunięta z archiwum!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         await this.getArchivedCasesList();
+        this.loader = false
       }
     }
 

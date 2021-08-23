@@ -58,25 +58,36 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {grantAccess} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {mapActions, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "case-grant-access",
+  components: {ProgressBar},
   data: () => ({
     selectedUser: [],
     dialog: false,
-    loading: false,
+    loader: false,
   }),
 
   async fetch() {
-    let caseId = this.$route.params.case
-    await this.getEligibleUsersForCase({caseId})
-    console.warn('eligible users list:', this.eligibleUsersForCase)
+    this.loader = true
+    try {
+      let caseId = this.$route.params.case
+      await this.getEligibleUsersForCase({caseId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
 
   computed: {
@@ -89,6 +100,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getEligibleUsersForCase']),
 
     async grantAccess() {
+      this.loader = true
       const payload = {
         userId: this.selectedUser.id
       }
@@ -98,15 +110,14 @@ export default {
         await this.$axios.$post(grantAccess(caseId), payload)
         this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
       } finally {
         Object.assign(this.$data, this.$options.data.call(this));
         let caseId = this.$route.params.case
-        console.warn('case id:', caseId)
         await this.getAllowedUsersForCase({caseId})
         await this.getEligibleUsersForCase({caseId})
         this.dialog = false
+        this.loader = false
 
       }
     }

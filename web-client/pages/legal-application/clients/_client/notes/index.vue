@@ -44,6 +44,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -55,14 +56,27 @@ import {formatDate, formatDateToMonth} from "@/data/date-extensions";
 import NotesDetails from "@/components/legal-app/clients/notes/notes-details";
 import AddNote from "@/components/legal-app/clients/notes/add-note";
 import {mapActions, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {AddNote, NotesDetails, Layout},
+  components: {ProgressBar, AddNote, NotesDetails, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
+  data: () => ({
+    loader: true
+  }),
 
-  fetch() {
-    return this.getClientsNotes(this.$route.params.client);
+  async fetch() {
+    this.loader = true
+    try {
+      let clientId = this.$route.params.client
+      await this.getClientsNotes(clientId);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),

@@ -44,6 +44,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -51,9 +52,11 @@
 import {notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import {createContactPhysicalAddress} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {handleError} from "~/data/functions";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "add-address-dialog",
+  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,
@@ -72,7 +75,7 @@ export default {
       country: ""
 
     },
-    loading: false,
+    loader: false,
     validation: {
       valid: false,
       street: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalna liczba znaków to 50", 1, 50),
@@ -85,8 +88,8 @@ export default {
   methods: {
     async saveNewAddress() {
       if (!this.$refs.addNewAddressForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
       const address = {
         comment: this.form.comment,
         street: this.form.street,
@@ -99,7 +102,6 @@ export default {
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
-        console.log('nowy adres', address)
         await this.$axios.$post(createContactPhysicalAddress(clientId, contactId), address)
         this.$notifier.showSuccessMessage("Kontakt dodany pomyślnie!");
         this.resetForm();
@@ -107,7 +109,7 @@ export default {
         handleError(error)
       } finally {
         this.$emit('action-completed');
-        this.loading = false;
+        this.loader = false;
         this.dialog = false;
       }
     },

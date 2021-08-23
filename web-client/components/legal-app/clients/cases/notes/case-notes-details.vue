@@ -47,6 +47,7 @@
           </v-row>
 
         </v-card>
+        <progress-bar v-if="loader"/>
       </v-dialog>
     </v-row>
 
@@ -62,10 +63,12 @@ import {getNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import CaseEditNoteDialog from "@/components/legal-app/clients/cases/notes/case-edit-note-dialog";
 import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/case-delete-note-dialog";
 import {mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "case-notes-details",
-  components: {CaseDeleteNoteDialog, CaseEditNoteDialog, DeleteNoteDialog, EditNoteDialog},
+  components: {ProgressBar, CaseDeleteNoteDialog, CaseEditNoteDialog, DeleteNoteDialog, EditNoteDialog},
   props: {
     selectedNote: {
       required: true,
@@ -74,6 +77,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false,
     noteDetails: null,
     value: 'Treść notatki...',
     noteForAction: null,
@@ -91,21 +95,30 @@ export default {
 
   methods: {
     async getNotesDetails() {
+      this.loader = true
       try {
         let caseId = this.$route.params.case
         let noteId = this.selectedNote.id;
         this.noteDetails = await this.$axios.$get(getNote(caseId, noteId));
         this.noteForAction = this.selectedNote.id;
-        console.log('notes details', this.noteDetails)
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error);
+      } finally {
+        this.loader = false
       }
     },
     async editDone() {
-      await this.getNotesDetails();
+      this.loader = true
+      try {
+        await this.getNotesDetails();
+      } catch (error) {
+        handleError(error);
+      } finally {
+        this.loader = false
+      }
+
     },
-    async deleteDone() {
+    deleteDone() {
       this.dialog = false;
     },
     formatDate(date) {

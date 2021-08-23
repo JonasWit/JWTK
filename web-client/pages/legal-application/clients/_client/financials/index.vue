@@ -9,10 +9,6 @@
             <v-icon>mdi-account-box-multiple</v-icon>
           </v-tab>
           <v-tab href="#tab-2">
-            Dodaj nowe rozliczenie
-            <v-icon>mdi-clock</v-icon>
-          </v-tab>
-          <v-tab href="#tab-3">
             Moje rozliczenia
             <v-icon>mdi-clipboard-text-search</v-icon>
           </v-tab>
@@ -33,23 +29,16 @@
               <billing-details-list/>
             </v-card>
           </v-tab-item>
-
           <v-tab-item :value="'tab-2'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "ZAREJESTRUJ NOWE
-                ROZLICZENIE", aby dodać nowy rekord. Wszystkie Twoje rozliczenia będą widoczne w zakładce "MOJE
-                ROZLICZENIA".
-              </v-alert>
-              <add-new-work-record/>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item :value="'tab-3'">
-            <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz datę początkową i
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ ROZLICZENIE", aby
+                dodać nowy rekord.
+                Wybierz datę początkową i
                 końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
                 możesz usunąć lub edytować dodane rozliczenia.
               </v-alert>
-              <my-work-records-search/>
+              <my-work-date-picker/>
+
             </v-card>
           </v-tab-item>
           <v-tab-item :value="'tab-4'">
@@ -57,7 +46,7 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -68,20 +57,20 @@ import {formatDate} from "@/data/date-extensions";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
 import AddNewWorkRecord from "@/components/legal-app/financials/dialogs/add-new-work-record";
 import GenerateInvoice from "@/components/legal-app/financials/generate-invoice";
-import MyWorkRecordsSearch from "@/components/legal-app/financials/my-work-records-search";
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
-import MyWorkRecordsList from "~/components/legal-app/financials/my-work-records-list";
-import {mapActions, mapState} from "vuex";
+import {mapState} from "vuex";
 import {handleError} from "@/data/functions";
+import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "index",
   components: {
-    MyWorkRecordsList,
+    ProgressBar,
+    MyWorkDatePicker,
     BillingDetailsList,
     AddBillingDetails,
-    MyWorkRecordsSearch,
     GenerateInvoice,
     AddNewWorkRecord,
     InvoiceTemplate,
@@ -97,10 +86,19 @@ export default {
       modalTo: false,
       alert: false,
       tab: null,
+      loader: false
     }
   ),
-  fetch() {
-    return this.searchFinancialRecords();
+  async fetch() {
+    this.loader = true
+    try {
+      await this.searchFinancialRecords();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -123,11 +121,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getAllWorkRecordsOnFetch']),
     async searchFinancialRecords() {
-      if (this.loading) return;
-      this.loading = true;
-      console.warn('handle logs fired', this.query);
+      if (this.loader) return;
+      this.loader = true;
       try {
         let clientId = this.$route.params.client
         let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
@@ -136,9 +132,7 @@ export default {
         handleError(error)
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        // let clientId = this.$route.params.client
-        // await this.getAllWorkRecordsOnFetch({clientId});
-        this.loading = false;
+        this.loader = false;
       }
     },
     formatDate(date) {

@@ -104,12 +104,12 @@
               <td>{{ formatDateForInvoice(item.eventDate) }}</td>
               <td>{{ item.lawyerName }}</td>
               <td>{{ item.description }}</td>
-              <td>{{ item.hours }}h {{ item.minutes }}min</td>
-              <td>PLN {{ item.invoiceRateNet.toFixed(2) }}</td>
-              <td>PLN {{ item.invoiceAmountNet.toFixed(2) }}</td>
+              <td>{{ item.hours }}godz. {{ item.minutes }}min.</td>
+              <td>PLN {{ item.invoiceRateNet.toLocaleString('pl') }}</td>
+              <td>PLN {{ item.invoiceAmountNet.toLocaleString('pl') }}</td>
               <td>{{ item.vat }}%</td>
-              <td>PLN {{ item.invoiceVatAmount.toFixed(2) }}</td>
-              <td>PLN {{ item.amount.toFixed(2) }}</td>
+              <td>PLN {{ item.invoiceVatAmount.toLocaleString('pl') }}</td>
+              <td>PLN {{ item.amount.toLocaleString('pl') }}</td>
             </tr>
             </tbody>
           </template>
@@ -160,19 +160,21 @@
     <v-btn color="error" block @click="generateReport">
       Generuj rozliczenie
     </v-btn>
+    <progress-bar v-if="loader"/>
   </div>
 
 </template>
 
 <script>
-import MyWorkRecordsList from "@/components/legal-app/financials/my-work-records-list";
 import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 
 export default {
   name: "invoice-template",
-  components: {MyWorkRecordsList},
+  components: {ProgressBar},
   props: {
     selectedBillingData: {
       required: true,
@@ -187,10 +189,21 @@ export default {
       default: null
     }
   },
+  data: () => ({
+    loader: true
+  }),
 
   async fetch() {
-    let clientId = this.$route.params.client;
-    await this.getClientData({clientId})
+    this.loader = true
+    try {
+      let clientId = this.$route.params.client;
+      await this.getClientData({clientId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapGetters('legal-app-client-store', ['clientData']),
@@ -198,21 +211,21 @@ export default {
       const totalNetValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceAmountNet;
       }, 0)
-      return totalNetValue.toFixed(2)
+      return totalNetValue.toLocaleString('pl')
     },
 
     sumVat() {
       const totalVatValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceVatAmount;
       }, 0)
-      return totalVatValue.toFixed(2)
+      return totalVatValue.toLocaleString('pl')
     },
 
     sumGross() {
       const totalGrossValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.amount;
       }, 0)
-      return totalGrossValue.toFixed(2)
+      return totalGrossValue.toLocaleString('pl')
     }
   },
   methods: {

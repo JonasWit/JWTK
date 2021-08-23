@@ -69,6 +69,7 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 
@@ -77,7 +78,7 @@
 <script>
 
 import AddClientDialog from "@/components/legal-app/clients/dialogs/add-client-dialog";
-import {hasOccurrences} from "@/data/functions";
+import {handleError, hasOccurrences} from "@/data/functions";
 import {mapGetters, mapState} from "vuex";
 import Layout from "@/components/legal-app/layout";
 import ButtonToGoUp from "@/components/legal-app/button-to-go-up";
@@ -90,6 +91,7 @@ import {formatDate} from "@/data/date-extensions";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import IfAuth from "@/components/auth/if-auth";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -101,6 +103,7 @@ const searchItemFactory = (name, id) => ({
 export default {
   name: "index",
   components: {
+    ProgressBar,
     GoToClientPanel,
     EditClientNameDialog,
     ArchiveClientDialog,
@@ -114,21 +117,28 @@ export default {
     clientList: [],
     clientSearchItems: [],
     finished: false,
-    loading: false,
+    loader: true,
     searchConditionsProvided: false,
     cursor: 0,
     takeAmount: 30,
   }),
   async fetch() {
-    this.cursor = 0;
-    this.clientList = [];
-    this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
-    await this.handleFeed();
+    try {
+      this.cursor = 0;
+      this.clientList = [];
+      this.clientSearchItems = await this.$axios.$get(getClientsBasicList());
+      await this.handleFeed();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   watch: {
     searchResult() {
       if (this.searchResult) {
-        this.loading = true;
+        this.loader = true;
         this.$axios.$get(`/api/legal-app-clients/client/${this.searchResult.id}`)
           .then(clientFound => {
             if (clientFound) {
@@ -139,7 +149,7 @@ export default {
             }
 
           })
-          .finally(() => this.loading = false);
+          .finally(() => this.loader = false);
       } else {
         this.clientList = [];
         this.handleFeed();
@@ -184,8 +194,8 @@ export default {
     }
     ,
     handleFeed() {
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
 
       return this.$axios.$get(`${getClients()}?${this.query}`)
         .then(clientsFeed => {
@@ -200,7 +210,7 @@ export default {
           console.warn('ERROR', e);
         })
         .finally(() => {
-          this.loading = false;
+          this.loader = false;
         });
     },
     formatDate(date) {

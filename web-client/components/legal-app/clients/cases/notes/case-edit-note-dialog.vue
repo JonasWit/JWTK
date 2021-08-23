@@ -33,6 +33,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -40,9 +41,12 @@
 <script>
 import {updateNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "case-edit-note-dialog",
+  components: {ProgressBar},
   props: {
     noteForAction: {
       required: true,
@@ -51,6 +55,7 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false,
     form: {
       title: "",
       message: "",
@@ -63,6 +68,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async saveChanges() {
+      this.loader = true
       try {
         const note = {
           title: this.form.title,
@@ -70,15 +76,14 @@ export default {
         };
         let caseId = this.$route.params.case
         let noteId = this.noteForAction.id;
-        console.warn('notka', note)
         await this.$axios.$put(updateNote(caseId, noteId), note);
         this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
-
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
         this.dialog = false;
         this.$emit('action-completed');
+        this.loader = false
       }
     }
   }

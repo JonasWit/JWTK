@@ -26,14 +26,18 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {deleteReminder} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-reminder",
+  components: {ProgressBar},
   props: {
     eventForAction: {
       required: true,
@@ -42,19 +46,22 @@ export default {
   },
   data: () => ({
     dialog: false,
+    loader: false
   }),
   methods: {
     async deleteEvent() {
+      this.loader = true
       try {
         let reminderId = this.eventForAction.id
         console.warn('reminder id', reminderId)
         await this.$axios.$delete(deleteReminder(reminderId));
         this.$notifier.showSuccessMessage("Przypomnienie zostało usunięte!");
-      } catch (e) {
-        console.error('error', e)
+      } catch (error) {
+        handleError(error);
       } finally {
         this.$emit('delete-completed');
         this.dialog = false;
+        this.loader = false
 
       }
     }

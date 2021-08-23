@@ -59,26 +59,35 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
 import {grantAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions, mapGetters} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "grant-access",
-
+  components: {ProgressBar},
   data: () => ({
     selectedUser: [],
     dialog: false,
-    loading: false,
+    loader: false,
   }),
 
   async fetch() {
-    let clientId = this.$route.params.client;
-    await this.getEligibleUsersList({clientId})
-    console.warn('eligible users list:', this.eligibleUsers)
+    this.loader = true
+    try {
+      let clientId = this.$route.params.client;
+      await this.getEligibleUsersList({clientId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
   },
 
   computed: {
@@ -90,6 +99,7 @@ export default {
     ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
 
     async grantAccess() {
+      this.loader = true
       const payload = {
         userId: this.selectedUser.id
       }
@@ -107,8 +117,8 @@ export default {
         console.warn('client id:', clientId)
         await this.getAllowedUsers({clientId})
         await this.getEligibleUsersList({clientId})
+        this.loader = false
         this.dialog = false
-
       }
     }
   }

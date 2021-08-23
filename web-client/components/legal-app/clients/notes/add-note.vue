@@ -40,6 +40,7 @@
         </v-card-actions>
       </v-card>
     </v-form>
+    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -47,11 +48,14 @@
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {createNoteForClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions, mapState} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "add-note",
+  components: {ProgressBar},
   data: () => ({
-    loading: false,
+    loader: false,
     dialog: false,
     form: {
       title: "",
@@ -71,8 +75,8 @@ export default {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async save() {
       if (!this.$refs.addNoteForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
+      if (this.loader) return;
+      this.loader = true;
       try {
         const note = {
           title: this.form.title,
@@ -83,11 +87,12 @@ export default {
         await this.$axios.$post(createNoteForClient(clientId), note);
         this.$notifier.showSuccessMessage("Notatka dodana pomyślnie!");
       } catch (error) {
-        this.$notifier.showErrorMessage(error.response.data);
+        handleError(error);
       } finally {
-        await this.getClientsNotes(this.$route.params.client);
+        let clientId = this.$route.params.client
+        await this.getClientsNotes(clientId);
         this.dialog = false;
-        this.loading = false;
+        this.loader = false;
       }
     },
     resetForm() {

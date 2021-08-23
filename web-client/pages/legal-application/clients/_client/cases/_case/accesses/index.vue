@@ -29,6 +29,7 @@
           </v-card-text>
         </v-card>
       </v-container>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -37,17 +38,30 @@ import {mapActions, mapGetters, mapState} from "vuex";
 import CaseGrantAccess from "@/components/legal-app/clients/cases/access-panel/case-grant-access";
 import CaseRevokeAccess from "@/components/legal-app/clients/cases/access-panel/case-revoke-access";
 import Layout from "@/components/legal-app/layout";
+import ProgressBar from "@/components/legal-app/progress-bar";
+import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {Layout, CaseRevokeAccess, CaseGrantAccess},
+  components: {ProgressBar, Layout, CaseRevokeAccess, CaseGrantAccess},
   middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
 
+  data: () => ({
+    loader: false
+  }),
+
   async fetch() {
-    let caseId = this.$route.params.case
-    await this.getAllowedUsersForCase({caseId})
-    await this.getCaseDetails({caseId})
-    console.warn('case details', this.clientCaseDetails)
+    this.loader = true
+    try {
+      let caseId = this.$route.params.case
+      await this.getAllowedUsersForCase({caseId})
+      await this.getCaseDetails({caseId})
+    } catch (error) {
+      handleError(error);
+    } finally {
+      this.loader = false
+    }
+
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
