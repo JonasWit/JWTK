@@ -100,7 +100,8 @@ export default {
           bullet: [
             ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii'],
             ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
-            ['Zapewniamy wsparcie techniczne i szkolenia'],
+            ['Zapewniamy wsparcie techniczne'],
+            ['Bezpłatne szkolenie on-line z obsługi aplikacji'],
             ['Wprowadzamy zmiany i ulepszenia na życzenie Klientów, w przypadku większych zmian przedstawiamy darmową wycenę'],
           ],
         },
