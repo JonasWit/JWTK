@@ -1,8 +1,35 @@
 <template>
   <layout>
     <template v-slot:content>
-      Placeholder - pomoc techniczna
-
+      <v-toolbar color="primary" dark>
+        <v-toolbar-title>
+          Pomoc
+        </v-toolbar-title>
+      </v-toolbar>
+      <v-container>
+        <v-form ref="contactForm" v-model="validation.valid">
+          <v-card elevation="2" class="py-7 px-7" outlined>
+            <v-select v-model="form.selectedCategory" :items="items" item-text="text" :item-value="value" return-object
+                      label="Wybierz temat" required></v-select>
+            <v-textarea v-model="form.message" label="Wiadomość" required :rules="validation.message" name="input-7-1"
+                        filled
+                        auto-grow></v-textarea>
+            <v-checkbox v-model="checkbox"
+                        label="Wyrażam zgodę na przetwarzanie moich danych osobowych i akceptuję Politykę prywatności"
+                        required :rules="validation.checkboxRules" color="success"></v-checkbox>
+            <v-card-actions>
+              <v-btn class="mt-3" @click="reset" color="warning">
+                Wyczyść
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn :disabled="!valid" @click.prevent="submit" class="mr-4 mt-3" color="error">
+                Wyślij
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-form>
+      </v-container>
+      <progress-bar v-if="loader"/>
     </template>
   </layout>
 
@@ -10,10 +37,60 @@
 
 <script>
 import Layout from "@/components/legal-app/layout";
+import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "index",
-  components: {Layout}
+  components: {ProgressBar, Layout},
+  data: () => ({
+    loader: false,
+    items: [
+      {text: 'Zgłaszam błąd'},
+      {text: 'Potrzebuję pomocy'},
+      {text: 'Proszę o zmianę funkcjonalności'},
+      {text: 'Proszę o nową funkcjonalność'}
+    ],
+    checkbox: false,
+    valid: true,
+    value: null,
+    validation: {
+      message: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 5000", 4, 5000),
+      checkboxRules: notEmptyRule("Proszę wyrazić zgodę, aby kontynuować")
+    },
+    form: {
+      selectedCategory: null,
+      message: null,
+    },
+  }),
+  methods: {
+    async submit() {
+      if (!this.$refs.contactForm.validate()) return;
+      this.loader = true;
+      try {
+        const payload = {
+          subject: this.form.selectedCategory.text,
+          body: this.form.message,
+        };
+        console.log('payload', payload)
+        await this.$axios.$post('/lapp/support-request', payload);
+        this.$notifier.showSuccessMessage("Wiadomość wysłana pomyślnie!");
+      } catch (e) {
+        if (e?.response?.status === 429) {
+          this.$notifier.showWarningMessage("Spróbuj ponownie za chwilę");
+        } else {
+          console.warn('error', e)
+          this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie");
+        }
+      } finally {
+        this.loader = false;
+        this.$refs.contactForm.reset();
+      }
+    },
+    reset() {
+      this.$refs.contactForm.reset();
+    }
+  }
 }
 </script>
 

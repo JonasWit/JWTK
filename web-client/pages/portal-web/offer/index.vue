@@ -22,14 +22,19 @@
       </v-card>
     </v-row>
     <section class="section-2">
-      <div class="content text-center white--text">
-        <h1 class="mt-5">Cennik</h1>
-        <h5 class="mx-7">
-          Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
+      <div class="">
+        <div class="content text-center white--text">
+          <h1 class="mt-5">Cennik</h1>
+          <h5 class="mx-7">
+            Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
+        </div>
+
+
         <v-container class="my-6">
+          <h1 class="content text-h4 my-5 text-center white--text">Nasze Systemy</h1>
           <v-row align-content="center" justify="center">
             <v-col align-self="center" v-for=" plan in plans" :key="plan.id">
-              <v-card elevation="" height="550px" width="350px" class="d-flex flex-column align-center mx-auto">
+              <v-card elevation="" height="650px" width="350px" class="d-flex flex-column align-center mx-auto">
                 <h2 class="text-center header">{{ plan.title }}</h2>
                 <v-list disabled>
                   <v-list-item-group>
@@ -43,9 +48,33 @@
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
-                <v-card-actions class="card-actions py-9">
+                <v-card-actions class="card-actions py-9 text-center ">
                   <h2>
                     {{ plan.price }} </h2>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+          <h1 class="content text-h4 my-5 text-center white--text">Pozostałe usługi</h1>
+          <v-row align-content="center" justify="center">
+            <v-col align-self="center" v-for=" item in others" :key="item.id">
+              <v-card elevation="" height="650px" width="350px" class="d-flex flex-column align-center mx-auto">
+                <h2 class="text-center header">{{ item.title }}</h2>
+                <v-list disabled>
+                  <v-list-item-group>
+                    <v-list-item v-for="(bullet, i) in item.bullet" :key="i">
+                      <v-list-item-icon>
+                        <v-icon small color="green">mdi-check</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        {{ bullet[0] }}
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+                <v-card-actions class="card-actions py-9">
+                  <h2>
+                    {{ item.price }} </h2>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -108,6 +137,45 @@ export default {
         {
           id: 2,
           img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Utrzymanie Hostingu',
+          price: 'od 300 PLN netto / miesiąc za aplikację',
+          bullet: [
+            ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
+            ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
+            ['Monitorowanie stanu aplikacji'],
+            ['Regularne instalowanie łatek systemu'],
+          ],
+        },
+        {
+          id: 3,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Utrzymanie Aplikacji',
+          price: 'od 200 PLN netto / miesiąc za aplikację',
+          bullet: [
+            ['Pomoc techniczna w przypadku błędów'],
+            ['Wprowadzanie nowych funkcjonalności'],
+            ['Zmiany istniejących funkcjonalności'],
+            ['Monitorowanie stanu aplikacji'],
+            ['Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie']
+          ],
+        },
+      ],
+      others: [
+        {
+          id: 1,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Webowe',
+          price: 'od 2500 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Aplikacje do obługi firmy, sklepy internetowe'],
+            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
+            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
+          ],
+        },
+        {
+          id: 2,
+          img: `${require('~/assets/images/background.jpg')}`,
           title: 'Strony Internetowe',
           price: 'od 600 PLN netto',
           bullet: [
@@ -130,42 +198,7 @@ export default {
             ['Integracja z bazą danych'],
           ],
         },
-        {
-          id: 4,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Webowe',
-          price: 'od 2500 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Aplikacje do obługi firmy, sklepy internetowe'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
-            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
-          ],
-        },
-        {
-          id: 5,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Utrzymanie Hostingu',
-          price: 'od 300 PLN netto / miesiąc za aplikację',
-          bullet: [
-            ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
-            ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
-            ['Monitorowanie stanu aplikacji'],
-            ['Regularne instalowanie łatek systemu'],
-          ],
-        },
-        {
-          id: 6,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Utrzymanie Aplikacji',
-          price: 'od 200 PLN netto / miesiąc za aplikację. Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie',
-          bullet: [
-            ['Pomoc techniczna w przypadku błędów'],
-            ['Wprowadzanie nowych funkcjonalności'],
-            ['Zmiany istniejących funkcjonalności'],
-            ['Monitorowanie stanu aplikacji'],
-          ],
-        },
+
       ],
 
     });

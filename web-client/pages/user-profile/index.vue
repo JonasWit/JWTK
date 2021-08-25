@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-container class="mt-6" v-if="authenticated">
+  <v-container class="my-7" v-if="authenticated">
     <v-toolbar flat color="primary" dark>
       <v-toolbar-title>Profil użytkownika</v-toolbar-title>
     </v-toolbar>
@@ -34,6 +34,15 @@
         <v-card>
           <if-auth>
             <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
+              <div class="mt-4">
+                <remove-users/>
+              </div>
+            </template>
+          </if-auth>
+        </v-card>
+        <v-card>
+          <if-auth>
+            <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
               <div v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable" class="mt-4">
                 <legalapp-key-remove/>
               </div>
@@ -63,9 +72,10 @@ import AccountRemove from "@/components/user-profile/account-remove";
 import IfAuth from "@/components/auth/if-auth";
 import LegalappKeyRemove from "@/components/user-profile/legalapp-key-remove";
 import {formatDateForInvoice, formatDateToLocaleTimeZone} from "@/data/date-extensions";
+import RemoveUsers from "@/components/user-profile/remove-users";
 
 export default {
-  components: {LegalappKeyRemove, IfAuth, AccountRemove, PersonalData, MainHeader},
+  components: {RemoveUsers, LegalappKeyRemove, IfAuth, AccountRemove, PersonalData, MainHeader},
   middleware: ["user", "authenticated"],
   computed: {
     ...mapState("auth", ["profile"]),

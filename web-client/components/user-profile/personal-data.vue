@@ -2,7 +2,7 @@
   <div>
     <v-card flat>
       <v-toolbar color="primary" dense>
-        <v-toolbar-title-title class="white--text">Dane podstawowe</v-toolbar-title-title>
+        <v-toolbar-title class="white--text">Dane podstawowe</v-toolbar-title>
       </v-toolbar>
 
       <v-card-text>
