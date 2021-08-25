@@ -11,8 +11,8 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.1.24" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
+        <PackageReference Include="AWSSDK.S3" Version="3.7.1.26" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
