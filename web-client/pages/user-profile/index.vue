@@ -34,7 +34,7 @@
         <v-card>
           <if-auth>
             <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-              <div class="mt-4">
+              <div class="mt-4" v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable">
                 <remove-users/>
               </div>
             </template>

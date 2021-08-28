@@ -21,6 +21,7 @@
       </v-toolbar>
       <v-container class="px-4" fluid>
         <v-switch v-model="alertsOn" label="Pokaż podpowiedzi"></v-switch>
+
       </v-container>
     </v-card>
   </v-dialog>
@@ -28,6 +29,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+
 
 export default {
   name: "options-floating-icon",
@@ -49,10 +51,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('cookies-store', ['legalAppTooltips'])
+    ...mapState('cookies-store', ['legalAppTooltips']),
+    ...mapState("auth", ["profile"]),
   },
   methods: {
-    ...mapActions('cookies-store', ['readStatusOfLegalAppTooltips', 'turnOnLegalAppTooltips', 'turnOffLegalAppTooltips'])
+    ...mapActions('cookies-store', ['readStatusOfLegalAppTooltips', 'turnOnLegalAppTooltips', 'turnOffLegalAppTooltips']),
+
   },
 };
 

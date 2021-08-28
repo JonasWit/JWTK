@@ -7,7 +7,7 @@
       <v-col class="d-flex justify-center" cols="12">
         <div class="d-flex flex-column">
           <v-card-subtitle>
-            Możesz usunąc powiązanych użytkowników. Ta akcja jest nieodwracalna i spowoduje utratę dostępu do usług
+            Możesz usunąć powiązanych użytkowników. Ta akcja jest nieodwracalna i spowoduje utratę dostępu do usług
             związanych z portalem. W celu ponownego uzyskania dostępu konieczne będzie przesłanie prośby o utworzenie
             nowego konta i otrzymanie nowego zaproszenia.
           </v-card-subtitle>

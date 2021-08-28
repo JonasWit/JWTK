@@ -55,6 +55,7 @@ export default {
       const payload = {
         userId: this.userForAction.id
       }
+      console.log('user for action', payload)
       try {
         await this.$axios.$post('/api/portal-admin/user-admin/user/revoke/legal-app', payload)
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
