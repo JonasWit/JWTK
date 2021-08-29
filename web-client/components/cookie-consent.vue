@@ -5,15 +5,15 @@
         <v-row align="center">
           <v-col>
             <slot>
-              Używamy cookies i podobnych technologii m.in. w celach: świadczenia usług, statystyk. Korzystanie
+              Używamy ciasteczek m.in. w celach: świadczenia usług, statystyk. Korzystanie
               z witryny bez zmiany ustawień Twojej przeglądarki oznacza, że będą one umieszczane w Twoim urządzeniu
               końcowym. Pamiętaj, że zawsze możesz zmienić te ustawienia. Szczegóły znajdziesz w
               <nuxt-link class="cookie__link" to="/portal-web/privacy-policy">Polityce Prywatności.</nuxt-link>
             </slot>
           </v-col>
           <v-col class="shrink d-flex justify-end" cols="12" md="3">
-            <v-btn class="ma-2" @click="accept">{{ buttonTextAccept }}</v-btn>
-            <v-btn class="ma-2" text @click="deny">{{ buttonTextDeny }}</v-btn>
+            <v-btn color="success" class="ma-2" @click="accept">{{ buttonTextAccept }}</v-btn>
+            <v-btn color="error" class="ma-2" text @click="deny">{{ buttonTextDeny }}</v-btn>
           </v-col>
         </v-row>
       </v-alert>

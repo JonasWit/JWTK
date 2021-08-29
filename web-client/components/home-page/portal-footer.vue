@@ -8,7 +8,7 @@
       </div>
 
       <div class="pa-2">
-        {{ new Date().getFullYear() }} — <strong>SystemyWp</strong>
+        {{ new Date().getFullYear() }} — <strong>SystemyWP</strong>
       </div>
     </v-row>
   </v-footer>
@@ -37,18 +37,11 @@ export default {
       },
       {
         id: '4',
-        route: '/portal-web/contact',
-        name: 'Kontakt'
-      },
-      {
-        id: '5',
         route: '/portal-web/sources',
         name: 'Źródła'
       },
-
     ],
   }),
-
 };
 </script>
 

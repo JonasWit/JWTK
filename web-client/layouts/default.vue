@@ -5,14 +5,11 @@
     </client-only>
     <snackbar/>
     <v-app-bar app>
-
       <nuxt-link class="text-h5 text--primary mr-2" style="text-decoration: none;" to="/">
         <span class="d-none d-md-flex">SystemyWP</span>
         <span class="d-flex d-md-none">SWP</span>
       </nuxt-link>
       <home-navbar/>
-
-
       <v-spacer></v-spacer>
       <div class="mr-5">
         <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="themeSwitch"/>
@@ -74,17 +71,11 @@
     </v-app-bar>
     <v-main>
       <v-container fluid>
-
         <progress-bar v-if="loader"/>
-
         <nuxt/>
-
       </v-container>
-
     </v-main>
-
     <portal-footer/>
-
   </v-app>
 </template>
 
@@ -125,10 +116,8 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      this.loader = false;
     }
-
-
   },
   watch: {
     themeSwitch: function (val) {

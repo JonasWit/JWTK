@@ -118,7 +118,6 @@ export default {
           title: 'Indywidualne rozwiązania',
           text: 'Szukasz innych rozwiązań? Sprawdź co jeszcze możemy dla Ciebie zrobić. Chętnie poznamy Twój biznes i stworzymy propozycję dostosowaną do Twoich potrzeb.'
         },
-
       ],
       plans: [
         {
@@ -127,15 +126,54 @@ export default {
           title: 'Twoja Kancelaria',
           price: '100 PLN netto / miesiąc za Użytkownika',
           bullet: [
-            ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii'],
-            ['Skontaktuj się z nami, aby skorzystać z 14-dniowowego dostępu testowego'],
+            ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii Radcowskiej, Adwokackiej lub Notarialnej'],
+            ['Skontaktuj się z nami, aby skorzystać z miesięcznego dostępu testowego'],
             ['Zapewniamy wsparcie techniczne'],
             ['Bezpłatne szkolenie on-line z obsługi aplikacji'],
             ['Wprowadzamy zmiany i ulepszenia na życzenie Klientów, w przypadku większych zmian przedstawiamy darmową wycenę'],
           ],
         },
+      ],
+      others: [
+        {
+          id: 1,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Webowe',
+          price: 'od 3500 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Aplikacje do obługi firmy, sklepy internetowe'],
+            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
+            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
+          ],
+        },
         {
           id: 2,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Strony Internetowe',
+          price: 'od 1500 PLN netto',
+          bullet: [
+            ['Statyczne strony internetowe'],
+            ['Możliwość dodania dodatkowych funkcjonalności'],
+            ['Możliwość zastosowania CMS (Wordpress)'],
+          ],
+        },
+        {
+          id: 3,
+          img: `${require('~/assets/images/background.jpg')}`,
+          title: 'Aplikacje Desktopowe',
+          price: 'od 4000 PLN netto',
+          bullet: [
+            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
+            ['Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET'],
+            ['Aplikacje WPF'],
+            ['Aplikacje WinForms'],
+            ['Aplikacje MAUI'],
+            ['Integracja z bazą danych'],
+          ],
+        },
+        {
+          id: 4,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Utrzymanie Hostingu',
           price: 'od 300 PLN netto / miesiąc za aplikację',
@@ -147,7 +185,7 @@ export default {
           ],
         },
         {
-          id: 3,
+          id: 5,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Utrzymanie Aplikacji',
           price: 'od 200 PLN netto / miesiąc za aplikację',
@@ -160,47 +198,6 @@ export default {
           ],
         },
       ],
-      others: [
-        {
-          id: 1,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Webowe',
-          price: 'od 2500 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Aplikacje do obługi firmy, sklepy internetowe'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
-            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
-          ],
-        },
-        {
-          id: 2,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Strony Internetowe',
-          price: 'od 600 PLN netto',
-          bullet: [
-            ['Statyczne strony internetowe'],
-            ['Możliwość dodania dodatkowych funkcjonalności'],
-            ['Możliwość zastosowania CMS (Wordpress)'],
-          ],
-        },
-        {
-          id: 3,
-          img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Aplikacje Desktopowe',
-          price: 'od 2000 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET'],
-            ['Aplikacje WPF'],
-            ['Aplikacje WinForms'],
-            ['Aplikacje MAUI'],
-            ['Integracja z bazą danych'],
-          ],
-        },
-
-      ],
-
     });
   },
 };

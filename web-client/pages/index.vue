@@ -6,7 +6,8 @@
           <h1>Systemy Wspomagania Pracy</h1>
           <h5 class="text--secondary">Zwiększ efektywność swojego biznesu poprzez automatyzację zarządzania i
             procesów.</h5>
-          <h5 class="text--secondary">Zawsze używany najnowszej dostępnej wersji technologii, dlatego możesz mieć
+          <h5 class="text--secondary">Utrzymujemy nasze produkty w najnowszej dostępnej wersji danej technologii,
+            dlatego możesz mieć
             pewność, że z nami nigdy nie
             zostaniesz w tyle!</h5>
           <v-divider class="mt-4 mb-4"/>
