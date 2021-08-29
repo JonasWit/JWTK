@@ -51,23 +51,23 @@ export default {
   }),
   methods: {
     async revokeAccess() {
-      this.loader = true
+      this.loader = true;
       const payload = {
         userId: this.userForAction.id
-      }
-      console.log('user for action', payload)
+      };
+      console.log('user for action', payload);
       try {
-        await this.$axios.$post('/api/portal-admin/user-admin/user/revoke/legal-app', payload)
+        await this.$axios.$post('/api/portal-admin/key-admin/legal-app/access-key/revoke', payload);
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
         handleError(error);
       } finally {
-        this.loader = false
+        this.loader = false;
       }
     }
   }
 
-}
+};
 </script>
 
 <style scoped>

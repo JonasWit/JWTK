@@ -75,6 +75,14 @@ export const actions = {
       console.warn("Not authorized");
     }
   },
+  async reloadRelatedUsers({commit}) {
+    try {
+      let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
+      commit('saveRelatedUsers', {users});
+    } catch (error) {
+      console.warn("Not authorized");
+    }
+  },
   login() {
     if (process.server) return;
     if (getGDPRConsent() === false) return;

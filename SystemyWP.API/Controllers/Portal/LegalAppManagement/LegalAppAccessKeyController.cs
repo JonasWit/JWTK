@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.API.Forms.Admin;
 
 namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
 {
@@ -167,13 +168,13 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
             }
         }
         
-        [HttpPost("revoke/{userId}")]
+        [HttpPost("access-key/revoke")]
         [Authorize(SystemyWpConstants.Policies.UserAdmin)]
-        public async Task<IActionResult> RevokeLegalAppDataAccessKey(string userId, [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> RevokeLegalAppDataAccessKey([FromBody] UserIdForm form, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
-                var user = await userManager.FindByIdAsync(userId);
+                var user = await userManager.FindByIdAsync(form.UserId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
                 if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
@@ -184,7 +185,7 @@ namespace SystemyWP.API.Controllers.Portal.LegalAppManagement
                 if (assignedLegalAppKey is not null)
                 {
                     assignedLegalAppKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
-                    _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(userId)));
+                    _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(form.UserId)));
 
                     var result = await _context.SaveChangesAsync();
 

@@ -6,7 +6,6 @@
         <reminders-floating-icon/>
         <options-floating-icon/>
         <slot name="content"></slot>
-
       </v-col>
     </v-row>
   </v-container>
