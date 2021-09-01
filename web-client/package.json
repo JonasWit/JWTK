@@ -12,7 +12,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
-    "core-js": "^3.16.3",
+    "core-js": "^3.16.4",
     "mathjs": "^9.4.4",
     "nuxt": "^2.15.8",
     "vue-client-only": "^2.1.0",
