@@ -86,8 +86,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                 var newBilling = new LegalAppBillingRecord
                 {
                     LegalAppAccessKey = admin.LegalAppAccessKey,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail,
+                    CreatedBy = Username,
+                    UpdatedBy = Username,
                     Name = form.Name,
                     Street = form.Street,
                     Address = form.Address,
@@ -128,7 +128,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                 if (result is null) return BadRequest();
                 
                 result.Updated = DateTime.UtcNow;
-                result.UpdatedBy = UserEmail;
+                result.UpdatedBy = Username;
                 result.Name = form.Name;
                 result.Street = form.Street;
                 result.Address = form.Address;

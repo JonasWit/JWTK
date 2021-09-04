@@ -12,10 +12,10 @@
             przesłanie prośby o ponowne dodanie.
           </v-card-subtitle>
           <v-divider></v-divider>
-          <v-card-text v-if="relatedUsers.length > 0">
+          <v-card-text v-if="otherRelatedUsers.length > 0">
             <v-card-title>Lista powiązanych użytkowników</v-card-title>
 
-            <v-chip v-for="(user, index) in relatedUsers" :key="user.id" class="ma-2" close color="red"
+            <v-chip v-for="(user, index) in otherRelatedUsers" :key="user.id" class="ma-2" close color="red"
                     text-color="white" @click:close="revokeAccess(user)">
               {{ user.email }}
             </v-chip>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import RevokeAccessRelatedUsers from "@/components/portal-admin/users-management/revoke-access-related-users";
 import {handleError} from "@/data/functions";
@@ -41,7 +41,7 @@ export default {
   name: "remove-users",
   components: {RevokeAccessRelatedUsers, AllowedUsers},
   computed: {
-    ...mapState('auth', ['relatedUsers'])
+    ...mapGetters('auth', ['otherRelatedUsers'])
   },
   methods: {
     ...mapActions('auth', ['reloadRelatedUsers']),

@@ -120,8 +120,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     LegalAppAccessKey = user.LegalAppAccessKey,
                     Name = form.Name,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail
+                    CreatedBy = Username,
+                    UpdatedBy = Username
                 };
                 _context.Add(newClient);
                 await _context.SaveChangesAsync();
@@ -135,7 +135,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         UserId = UserId,
                         ItemId = newClient.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient,
-                        CreatedBy = UserEmail
+                        CreatedBy = Username
                     });
                     await _context.SaveChangesAsync();
                 }
@@ -160,7 +160,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 if (client is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                client.UpdatedBy = UserEmail;
+                client.UpdatedBy = Username;
                 client.Updated = DateTime.UtcNow;
                 client.Name = form.Name;
 
@@ -198,7 +198,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                             .Any(x => x.Id == dataAccess.ItemId)));
 
                 legalAppClient.Active = !legalAppClient.Active;
-                legalAppClient.UpdatedBy = UserEmail;
+                legalAppClient.UpdatedBy = Username;
                 legalAppClient.Updated = DateTime.UtcNow;
 
                 foreach (var legalAppCase in legalAppClient.LegalAppCases)

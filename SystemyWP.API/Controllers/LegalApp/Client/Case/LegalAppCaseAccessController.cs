@@ -97,7 +97,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     {
                         LegalAppAccessKey = admin.LegalAppAccessKey,
                         UserId = form.UserId,
-                        CreatedBy = UserEmail,
+                        CreatedBy = Username,
                         ItemId = lappCase.LegalAppClientId,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient
                     });
@@ -107,7 +107,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     LegalAppAccessKey = admin.LegalAppAccessKey,
                     UserId = form.UserId,
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     ItemId = caseId,
                     LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase
                 });

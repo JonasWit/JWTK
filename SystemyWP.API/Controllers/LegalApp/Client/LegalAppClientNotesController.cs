@@ -74,10 +74,10 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     Public = form.Public,
                     AuthorId = UserId,
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     Title = form.Title,
                     Message = form.Message,
-                    UpdatedBy = UserEmail,
+                    UpdatedBy = Username,
                     Updated = DateTime.UtcNow
                 };
 
@@ -105,7 +105,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 note.Public = form.Public;
                 note.Title = form.Title;
                 note.Message = form.Message;
-                note.UpdatedBy = UserEmail;
+                note.UpdatedBy = Username;
                 note.Updated = DateTime.UtcNow;
                 
                 await _context.SaveChangesAsync();

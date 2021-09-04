@@ -88,7 +88,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     LegalAppAccessKey = admin.LegalAppAccessKey,
                     UserId = form.UserId,
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     ItemId = clientId,
                     LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient
                 });

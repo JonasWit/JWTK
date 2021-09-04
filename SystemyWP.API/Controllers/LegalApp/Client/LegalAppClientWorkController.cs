@@ -69,7 +69,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     EventDate = form.EventDate,
                     Vat = form.Vat,
                     UserId = UserId,
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                 };
 
                 client.LegalAppClientWorkRecords.Add(newEntity);
@@ -99,7 +99,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 legalAppClientWorkRecord.Rate = form.Rate;
                 legalAppClientWorkRecord.EventDate = form.EventDate;
                 legalAppClientWorkRecord.UserId = UserId;
-                legalAppClientWorkRecord.CreatedBy = UserEmail;
+                legalAppClientWorkRecord.CreatedBy = Username;
                 legalAppClientWorkRecord.Vat = form.Vat;
 
                 await _context.SaveChangesAsync();

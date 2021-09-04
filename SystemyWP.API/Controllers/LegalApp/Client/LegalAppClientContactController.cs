@@ -35,7 +35,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
 
                 var newEntity = new LegalAppContactDetail
                 {
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     Name = form.Name,
                     Comment = form.Comment,
                     Surname = form.Surname,
@@ -105,7 +105,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 
                 var newEmail = new LegalAppEmailAddress
                 {
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     Comment = form.Comment,
                     Email = form.Email
                 };
@@ -157,7 +157,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 
                 var newPhone = new LegalAppPhoneNumber()
                 {
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     Number = form.Number,
                     Comment = form.Comment
                 };
@@ -209,7 +209,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 
                 var newEntity = new LegalAppPhysicalAddress()
                 {
-                    CreatedBy = UserEmail,
+                    CreatedBy = Username,
                     Building = form.Building,
                     Comment = form.Comment,
                     Country = form.Country,

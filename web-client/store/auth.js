@@ -13,6 +13,9 @@ export const APP_ACCESS = {
 };
 
 export const getters = {
+  otherRelatedUsers(state) {
+    return state.relatedUsers.filter(x => x.id !== state.profile.id);
+  },
   userRole(state) {
     if (state.profile.role === ROLES.INVITED) {
       return "Zaproszony";
@@ -48,18 +51,16 @@ export const mutations = {
 };
 
 export const actions = {
-  async initialize({commit, getters}) {
+  async initialize({getters, dispatch}) {
     try {
-      let profile = await this.$axios.$get('/api/users/me');
-      commit('saveProfile', {profile});
+      await dispatch('reloadProfile');
     } catch (error) {
       console.warn("Not authorized");
     }
 
     if (getters.clientAdmin) {
       try {
-        let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
-        commit('saveRelatedUsers', {users});
+        await dispatch('reloadRelatedUsers');
       } catch (error) {
         console.warn("No related users");
       }

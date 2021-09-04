@@ -75,8 +75,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     Title = form.Title,
                     Message = form.Message,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail
+                    CreatedBy = Username,
+                    UpdatedBy = Username
                 });
 
                 await _context.SaveChangesAsync();
@@ -120,7 +120,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     .FirstOrDefault();
                 if (legalAppCaseNote is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                legalAppCaseNote.UpdatedBy = UserEmail;
+                legalAppCaseNote.UpdatedBy = Username;
                 legalAppCaseNote.Updated = DateTime.UtcNow;
                 legalAppCaseNote.Message = form.Message;
                 legalAppCaseNote.Title = form.Title;

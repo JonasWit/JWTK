@@ -131,8 +131,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                     End = form.End,
                     Message = form.Message,
                     Public = form.Public,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail,
+                    CreatedBy = Username,
+                    UpdatedBy = Username,
                     AuthorId = UserId
                 };
 
@@ -164,7 +164,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                 reminder.ReminderCategory = form.ReminderCategory;
                 reminder.Active = form.Active;
                 reminder.Updated = DateTime.UtcNow;
-                reminder.UpdatedBy = UserEmail;
+                reminder.UpdatedBy = Username;
                 reminder.Public = form.Public;
                 reminder.Name = form.Name;
                 reminder.Message = form.Message;

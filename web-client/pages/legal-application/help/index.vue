@@ -12,8 +12,7 @@
             <v-select v-model="form.selectedCategory" :items="items" item-text="text" :item-value="value" return-object
                       label="Wybierz temat" required></v-select>
             <v-textarea v-model="form.message" label="Wiadomość" required :rules="validation.message" name="input-7-1"
-                        filled
-                        auto-grow></v-textarea>
+                        filled auto-grow></v-textarea>
             <v-card-actions>
               <v-btn class="mt-3" @click="reset" color="warning">
                 Wyczyść
@@ -45,6 +44,7 @@ export default {
     items: [
       {text: 'Zgłaszam błąd'},
       {text: 'Potrzebuję pomocy'},
+      {text: 'Proszę o dodanie użytkownika'},
       {text: 'Proszę o zmianę funkcjonalności'},
       {text: 'Proszę o nową funkcjonalność'}
     ],
@@ -68,14 +68,14 @@ export default {
           subject: this.form.selectedCategory.text,
           body: this.form.message,
         };
-        console.log('payload', payload)
+        console.log('payload', payload);
         await this.$axios.$post('/lapp/support-request', payload);
         this.$notifier.showSuccessMessage("Wiadomość wysłana pomyślnie!");
       } catch (e) {
         if (e?.response?.status === 429) {
           this.$notifier.showWarningMessage("Spróbuj ponownie za chwilę");
         } else {
-          console.warn('error', e)
+          console.warn('error', e);
           this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj ponownie");
         }
       } finally {
@@ -87,7 +87,7 @@ export default {
       this.$refs.contactForm.reset();
     }
   }
-}
+};
 </script>
 
 <style scoped>

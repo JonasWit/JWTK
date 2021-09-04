@@ -106,8 +106,8 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                     Description = form.Description,
                     Signature = form.Signature,
                     Name = form.Name,
-                    CreatedBy = UserEmail,
-                    UpdatedBy = UserEmail
+                    CreatedBy = Username,
+                    UpdatedBy = Username
                 };
                 
                 legalAppClient.LegalAppCases.Add(newCase);
@@ -122,7 +122,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                         UserId = UserId,
                         ItemId = newCase.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase,
-                        CreatedBy = UserEmail
+                        CreatedBy = Username
                     });
                     await _context.SaveChangesAsync();
                 }
@@ -151,7 +151,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 legalAppCase.Name = form.Name;
                 legalAppCase.Signature = form.Signature;
                 legalAppCase.Group = form.Group;
-
+                legalAppCase.UpdatedBy = Username;
+                legalAppCase.Updated = DateTime.UtcNow;
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }

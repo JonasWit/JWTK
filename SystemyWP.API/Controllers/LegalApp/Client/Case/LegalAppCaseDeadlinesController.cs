@@ -111,7 +111,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     Deadline = form.Deadline,
                     Message = form.Message,
-                    CreatedBy = UserEmail
+                    CreatedBy = Username
                 });
 
                 await _context.SaveChangesAsync();
