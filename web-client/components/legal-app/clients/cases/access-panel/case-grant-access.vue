@@ -85,9 +85,9 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
+      this.dialog = false;
       this.loader = false
     }
-
   },
 
   computed: {
@@ -112,13 +112,14 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        Object.assign(this.$data, this.$options.data.call(this));
-        let caseId = this.$route.params.case
-        await this.getAllowedUsersForCase({caseId})
-        await this.getEligibleUsersForCase({caseId})
-        this.dialog = false
-        this.loader = false
-
+        setTimeout(() => {
+          Object.assign(this.$data, this.$options.data.call(this));
+          let caseId = this.$route.params.case
+          this.getAllowedUsersForCase({caseId})
+          this.getEligibleUsersForCase({caseId})
+          this.dialog = false
+          this.loader = false
+        }, 1500)
       }
     }
   }

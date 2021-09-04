@@ -65,13 +65,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let caseId = this.$route.params.case
-        await this.getAllowedUsersForCase({caseId})
-        await this.getEligibleUsersForCase({caseId})
-        this.loader = false
+        setTimeout(() => {
+          let caseId = this.$route.params.case
+          this.getAllowedUsersForCase({caseId})
+          this.getEligibleUsersForCase({caseId})
+          this.loader = false
+        }, 1500)
       }
-
-
     }
   }
 

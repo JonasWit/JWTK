@@ -89,10 +89,12 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let clientId = this.$route.params.client
-        await this.getClientsNotes(clientId);
-        this.dialog = false;
-        this.loader = false;
+        setTimeout(() => {
+          let clientId = this.$route.params.client
+          this.getClientsNotes(clientId);
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
       }
     },
     resetForm() {

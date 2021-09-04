@@ -58,9 +58,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.dialog = false;
-        this.$emit('delete-completed');
-        this.loader = false
+        setTimeout(() => {
+          this.$emit('delete-completed');
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
       }
     }
   }

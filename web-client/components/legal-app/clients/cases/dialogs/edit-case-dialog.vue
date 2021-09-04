@@ -118,11 +118,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let caseId = this.caseForAction.id;
-        await this.getCaseDetails({caseId})
-        this.dialog = false;
-        this.loader = false
-        this.$emit('action-completed');
+        setTimeout(() => {
+          let caseId = this.caseForAction.id;
+          this.getCaseDetails({caseId})
+          this.$emit('action-completed');
+          this.dialog = false;
+          this.loader = false
+        }, 1500)
       }
     }
   }

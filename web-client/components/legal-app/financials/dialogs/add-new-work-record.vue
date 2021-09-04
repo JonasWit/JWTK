@@ -138,14 +138,15 @@ export default {
         let clientId = this.$route.params.client
         await this.$axios.$post(createWorkRecord(clientId), workRecord)
         this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
-        this.resetForm();
       } catch (error) {
         handleError(error);
       } finally {
-        this.$emit('action-completed');
-        this.loader = false;
-        this.dialog = false;
-
+        setTimeout(() => {
+          this.$emit('action-completed');
+          this.loader = false;
+          this.dialog = false;
+          this.resetForm();
+        }, 1500)
       }
     },
     resetForm() {

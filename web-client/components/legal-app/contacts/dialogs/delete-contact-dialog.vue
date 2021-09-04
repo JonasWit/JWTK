@@ -59,14 +59,16 @@ export default {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
         await this.$axios.delete(deleteContact(clientId, contactId))
-        this.$nuxt.refresh()
         this.$notifier.showSuccessMessage("Kontakt usunięty pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        this.dialog = false;
-        this.$emit('delete-completed');
-        this.loader = false
+        setTimeout(() => {
+          this.$nuxt.refresh()
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
+
       }
 
     }

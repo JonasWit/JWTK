@@ -250,9 +250,11 @@ export default {
           this.$notifier.showErrorMessage("Wystąpił bład. Spróbuj ponownie!");
           handleError(error);
         } finally {
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
+          setTimeout(() => {
+            this.$emit('action-completed');
+            this.loader = false;
+            this.dialog = false;
+          }, 1500)
         }
       }
     },

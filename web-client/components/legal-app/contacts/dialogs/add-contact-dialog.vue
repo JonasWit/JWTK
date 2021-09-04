@@ -101,11 +101,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.resetForm();
-        this.$emit('action-completed');
-        Object.assign(this.$data, this.$options.data.call(this));
-        this.loader = false;
-        this.dialog = false;
+        setTimeout(() => {
+          this.resetForm();
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.$emit('action-completed');
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
       }
     },
     resetForm() {

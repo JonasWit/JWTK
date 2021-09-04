@@ -81,9 +81,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.dialog = false;
-        this.$emit('action-completed');
-        this.loader = false
+        setTimeout(() => {
+          this.$emit('action-completed');
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
       }
     }
   }

@@ -225,8 +225,10 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.dialog = false;
-        this.loader = false
+        setTimeout(() => {
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
       }
     }
   },

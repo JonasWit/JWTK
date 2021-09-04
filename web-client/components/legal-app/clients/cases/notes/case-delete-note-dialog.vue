@@ -21,11 +21,9 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
     <progress-bar v-if="loader"/>
@@ -62,11 +60,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let caseId = this.$route.params.case
-        await this.getNotesListForCases({caseId});
-        this.$emit('delete-completed');
-        this.dialog = false;
-        this.loader = false
+        setTimeout(() => {
+          let caseId = this.$route.params.case
+          this.getNotesListForCases({caseId});
+          this.$emit('delete-completed');
+          this.dialog = false;
+          this.loader = false
+        }, 1500)
       }
     }
   }

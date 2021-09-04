@@ -14,9 +14,6 @@
             <v-textarea v-model="form.message" label="Wiadomość" required :rules="validation.message" name="input-7-1"
                         filled
                         auto-grow></v-textarea>
-            <v-checkbox v-model="checkbox"
-                        label="Wyrażam zgodę na przetwarzanie moich danych osobowych i akceptuję Politykę prywatności"
-                        required :rules="validation.checkboxRules" color="success"></v-checkbox>
             <v-card-actions>
               <v-btn class="mt-3" @click="reset" color="warning">
                 Wyczyść
@@ -51,7 +48,6 @@ export default {
       {text: 'Proszę o zmianę funkcjonalności'},
       {text: 'Proszę o nową funkcjonalność'}
     ],
-    checkbox: false,
     valid: true,
     value: null,
     validation: {

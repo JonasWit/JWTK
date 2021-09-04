@@ -74,11 +74,12 @@ export default {
       if (!this.$refs.addNewEmailForm.validate()) return;
       if (this.loader) return;
       this.loader = true;
-
       const email = {
         comment: this.form.comment,
         email: this.form.email,
       };
+
+
       try {
         let clientId = this.$route.params.client;
         let contactId = this.selectedContact.id;
@@ -88,9 +89,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.$emit('action-completed');
-        this.loader = false;
-        this.dialog = false;
+        setTimeout(() => {
+          this.$emit('action-completed');
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
+
+
       }
     },
     resetForm() {

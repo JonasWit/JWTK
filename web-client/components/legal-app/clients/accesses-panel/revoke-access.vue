@@ -66,10 +66,12 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let clientId = this.$route.params.client;
-        await this.getAllowedUsers({clientId})
-        await this.getEligibleUsersList({clientId})
-        this.loader = false
+        setTimeout(() => {
+          let clientId = this.$route.params.client;
+          this.getAllowedUsers({clientId})
+          this.getEligibleUsersList({clientId})
+          this.loader = false
+        }, 1500)
       }
     }
   }

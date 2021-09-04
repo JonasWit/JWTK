@@ -25,12 +25,6 @@
         Następnie wybierz sekcję, którą chcesz uzupełnić.
       </v-alert>
       <v-tabs vertical>
-        <v-tab class="d-flex justify-start" icons-and-text>
-          <v-icon left>
-            mdi-cog-outline
-          </v-icon>
-          Opcje
-        </v-tab>
         <v-tab class="d-flex justify-space-between" icons-and-text>
           <v-icon left>
             mdi-email
@@ -52,21 +46,6 @@
           Adresy
           <add-address-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
         </v-tab>
-        <v-tab-item>
-          <v-card flat>
-            <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-              W tym miejscu mozesz usunąć cały kontakt lub edytować główne dane. Szczegóły kontaku takie jak adresy
-              email,
-              telefony lub adresy można dodawać w odpowednich zakładkach.
-            </v-alert>
-            <v-card-text>
-              <v-row class="d-flex flex-sm-column flex-md-row">
-                <delete-contact-dialog :selected-contact="selectedContact" v-on:delete-completed="deleteDone"/>
-                <edit-contact-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
         <v-tab-item>
           <v-card flat>
             <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
@@ -172,9 +151,10 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      setTimeout(() => {
+        this.loader = false;
+      }, 1500)
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -195,7 +175,9 @@ export default {
       } catch (error) {
         handleError(error)
       } finally {
-        this.loader = false
+        setTimeout(() => {
+          this.loader = false;
+        }, 1500)
       }
     },
     async actionDone() {

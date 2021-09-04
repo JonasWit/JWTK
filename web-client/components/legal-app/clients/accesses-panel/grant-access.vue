@@ -86,7 +86,9 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      setTimeout(() => {
+        this.loader = false;
+      }, 1500)
     }
   },
 
@@ -105,20 +107,21 @@ export default {
       }
       try {
         let clientId = this.$route.params.client;
-        console.warn('user id', payload)
         await this.$axios.$post(grantAccess(clientId), payload)
         this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
       } catch (error) {
-        console.error(error)
-        this.$notifier.showErrorMessage(error);
+        handleError(error)
       } finally {
-        Object.assign(this.$data, this.$options.data.call(this));
-        let clientId = this.$route.params.client;
-        console.warn('client id:', clientId)
-        await this.getAllowedUsers({clientId})
-        await this.getEligibleUsersList({clientId})
-        this.loader = false
-        this.dialog = false
+        setTimeout(() => {
+          Object.assign(this.$data, this.$options.data.call(this));
+          let clientId = this.$route.params.client;
+          this.getAllowedUsers({clientId})
+          this.getEligibleUsersList({clientId})
+          this.loader = false
+          this.dialog = false
+        }, 1500)
+
+
       }
     }
   }

@@ -217,13 +217,15 @@ export default {
           await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
           this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
           Object.assign(this.$data, this.$options.data());
-          this.resetForm();
         } catch (error) {
           handleError(error);
         } finally {
-          this.$emit('action-completed');
-          this.dialog = false;
-          this.loader = false;
+          setTimeout(() => {
+            this.$emit('action-completed');
+            this.dialog = false;
+            this.loader = false;
+            this.resetForm();
+          }, 1500)
         }
       }
     },

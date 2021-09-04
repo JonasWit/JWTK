@@ -83,13 +83,15 @@ export default {
         let contactId = this.selectedContact.id
         await this.$axios.$post(createContactPhoneNumber(clientId, contactId), phone)
         this.$notifier.showSuccessMessage("Numer dodany pomyślnie!");
-        this.resetForm();
       } catch (error) {
         handleError(error);
       } finally {
-        this.$emit('action-completed');
-        this.loader = false;
-        this.dialog = false;
+        setTimeout(() => {
+          this.$emit('action-completed');
+          this.dialog = false;
+          this.resetForm();
+          this.loader = false;
+        }, 1500)
       }
     },
     resetForm() {

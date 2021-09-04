@@ -65,9 +65,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.$emit('action-completed');
-        this.dialog = false;
-        this.loader = false;
+        setTimeout(() => {
+          this.$emit('action-completed');
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
       }
 
     }

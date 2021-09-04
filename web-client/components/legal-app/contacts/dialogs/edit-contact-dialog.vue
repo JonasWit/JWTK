@@ -102,9 +102,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.$nuxt.refresh()
-        this.loader = false;
-        this.dialog = false;
+        setTimeout(() => {
+          this.$nuxt.refresh()
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
       }
     },
     resetForm() {

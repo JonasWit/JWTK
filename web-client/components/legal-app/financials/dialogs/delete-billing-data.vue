@@ -69,9 +69,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        await this.getBillingDataFromFetch()
-        this.dialog = false;
-        this.loader = false;
+        setTimeout(() => {
+          this.getBillingDataFromFetch()
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
       }
     }
   }

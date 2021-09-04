@@ -87,9 +87,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.setClientForAction(this.selectedClient);
-        this.dialog = false;
-        this.loader = false
+        setTimeout(() => {
+          this.setClientForAction(this.selectedClient);
+          this.dialog = false;
+          this.loader = false
+        }, 1500)
       }
     },
   }

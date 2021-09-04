@@ -90,14 +90,16 @@ export default {
         };
         let caseId = this.$route.params.case;
         await this.$axios.$post(createDeadline(caseId), newDeadline);
-        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Termin dodany pomyślnie!");
-        this.resetForm();
       } catch (error) {
         handleError(error);
       } finally {
-        this.dialog = false;
-        this.loader = false;
+        setTimeout(() => {
+          this.$nuxt.refresh();
+          this.dialog = false;
+          this.resetForm();
+          this.loader = false;
+        }, 1500)
       }
     },
     resetForm() {

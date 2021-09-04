@@ -84,10 +84,12 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        let caseId = this.$route.params.case
-        await this.getNotesListForCases({caseId});
-        this.dialog = false;
-        this.loader = false;
+        setTimeout(() => {
+          let caseId = this.$route.params.case
+          this.getNotesListForCases({caseId});
+          this.dialog = false;
+          this.loader = false;
+        }, 1500)
       }
     },
     resetForm() {

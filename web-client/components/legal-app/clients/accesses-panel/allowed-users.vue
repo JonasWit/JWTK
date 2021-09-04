@@ -38,7 +38,9 @@ export default {
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      setTimeout(() => {
+        this.loader = false;
+      }, 1500)
     }
 
   },

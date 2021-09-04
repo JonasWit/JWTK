@@ -79,9 +79,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        Object.assign(this.$data, this.$options.data.call(this));
-        this.$nuxt.refresh();
-        this.loader = false
+        setTimeout(() => {
+          Object.assign(this.$data, this.$options.data.call(this));
+          this.$nuxt.refresh();
+          this.loader = false
+        }, 1500)
       }
     },
     resetForm() {

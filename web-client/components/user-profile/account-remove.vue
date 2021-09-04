@@ -23,9 +23,11 @@
 
 <script>
 import {mapActions} from "vuex";
+import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "account-remove",
+  components: {ProgressBar},
   methods: {
     ...mapActions('auth', ['deleteAccount'])
   }

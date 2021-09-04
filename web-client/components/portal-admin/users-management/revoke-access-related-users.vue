@@ -13,8 +13,7 @@
     <v-card>
       <v-card-title class="justify-center my-1">Usuń dostęp do aplikacji</v-card-title>
       <v-card-subtitle>Potwierdzając operację usuniesz dostęp do aplikacji dla wybranego powiązanego użytkownika.
-        Odzyskanie dostępu
-        jest możliwe po ponownyn nadaniu dostępu. Zatwierdź operację używjąc guzika 'POTWIERDŹ'
+        Odzyskanie dostępu jest możliwe po ponownyn nadaniu dostępu. Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
@@ -62,7 +61,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.loader = false;
+
+        setTimeout(() => {
+          this.loader = false;
+          this.dialog = false;
+        }, 1500)
       }
     }
   }
