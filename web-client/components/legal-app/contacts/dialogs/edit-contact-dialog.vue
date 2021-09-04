@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
-      <v-btn color="primary" class="mx-2" medium v-on="{ ...dialog }">
-        Edytuj kontakt
-      </v-btn>
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="success">mdi-file-document-edit</v-icon>
+          </v-btn>
+        </template>
+        <span>Edytuj Kontakt</span>
+      </v-tooltip>
     </template>
     <v-form ref="editContactNameForm">
       <v-card>

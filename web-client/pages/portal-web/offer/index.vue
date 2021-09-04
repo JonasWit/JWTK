@@ -22,20 +22,23 @@
       </v-card>
     </v-row>
     <section class="section-2">
-      <div class="">
+      <div>
         <div class="content text-center white--text">
           <h1 class="mt-5">Cennik</h1>
           <h5 class="mx-7">
             Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
         </div>
-
-
         <v-container class="my-6">
-          <h1 class="content text-h4 my-5 text-center white--text">Nasze Systemy</h1>
+          <h1 class="content text-h4 my-5 text-center white--text">Nasze Aplikacje</h1>
           <v-row align-content="center" justify="center">
             <v-col align-self="center" v-for=" plan in plans" :key="plan.id">
-              <v-card elevation="" height="650px" width="350px" class="d-flex flex-column align-center mx-auto">
-                <h2 class="text-center header">{{ plan.title }}</h2>
+              <v-card width="100vw" class="d-flex flex-column align-center mx-auto pb-5">
+                <h1 class="text-center header">{{ plan.title }}</h1>
+
+                <h2 class="price">
+                  {{ plan.price }} </h2>
+                <v-card-subtitle class="text-center">Miesięczna kwota za dostęp dla jednego użytkownika
+                </v-card-subtitle>
                 <v-list disabled>
                   <v-list-item-group>
                     <v-list-item v-for="(bullet, i) in plan.bullet" :key="i">
@@ -48,18 +51,26 @@
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
-                <v-card-actions class="card-actions py-9 text-center ">
-                  <h2>
-                    {{ plan.price }} </h2>
+                <v-card-actions>
+                  <nuxt-link to="/portal-web/contact" class="text-decoration-none">
+                    <v-btn outlined color="primary">Przejdź do formy kontaktowej</v-btn>
+                  </nuxt-link>
                 </v-card-actions>
+
               </v-card>
             </v-col>
           </v-row>
+        </v-container>
+        <v-container class="my-6">
           <h1 class="content text-h4 my-5 text-center white--text">Pozostałe usługi</h1>
           <v-row align-content="center" justify="center">
             <v-col align-self="center" v-for=" item in others" :key="item.id">
-              <v-card elevation="" height="650px" width="350px" class="d-flex flex-column align-center mx-auto">
-                <h2 class="text-center header">{{ item.title }}</h2>
+              <v-card elevation="" height="600px" width="350px" class="d-flex flex-column align-center mx-auto">
+                <h2 class="text-center header mb-4">{{ item.title }}</h2>
+                <h2 class="price">
+                  {{ item.price }} </h2>
+                <v-card-subtitle class="text-center"> {{ item.subtitle }}</v-card-subtitle>
+
                 <v-list disabled>
                   <v-list-item-group>
                     <v-list-item v-for="(bullet, i) in item.bullet" :key="i">
@@ -72,10 +83,6 @@
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
-                <v-card-actions class="card-actions py-9">
-                  <h2>
-                    {{ item.price }} </h2>
-                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
@@ -124,13 +131,13 @@ export default {
           id: 1,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Twoja Kancelaria',
-          price: '100 PLN netto / miesiąc za Użytkownika',
+          price: '100 PLN netto',
           bullet: [
             ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii Radcowskiej, Adwokackiej lub Notarialnej'],
-            ['Skontaktuj się z nami, aby skorzystać z miesięcznego dostępu testowego'],
             ['Zapewniamy wsparcie techniczne'],
             ['Bezpłatne szkolenie on-line z obsługi aplikacji'],
             ['Wprowadzamy zmiany i ulepszenia na życzenie Klientów, w przypadku większych zmian przedstawiamy darmową wycenę'],
+            ['Skontaktuj się z nami, aby uzyskać miesięczny dostęp testowy do aplikacji'],
           ],
         },
       ],
@@ -176,7 +183,8 @@ export default {
           id: 4,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Utrzymanie Hostingu',
-          price: 'od 300 PLN netto / miesiąc za aplikację',
+          price: 'od 300 PLN netto',
+          subtitle: 'Kwota miesięczna za aplikację',
           bullet: [
             ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
             ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
@@ -188,7 +196,8 @@ export default {
           id: 5,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Utrzymanie Aplikacji',
-          price: 'od 200 PLN netto / miesiąc za aplikację',
+          price: 'od 200 PLN netto',
+          subtitle: 'Kwota miesięczna za aplikację',
           bullet: [
             ['Pomoc techniczna w przypadku błędów'],
             ['Wprowadzanie nowych funkcjonalności'],
@@ -204,20 +213,29 @@ export default {
 </script>
 
 <style scoped>
-
-.card-actions {
-  position: absolute;
-  bottom: 0;
-
+.price {
+  display: inline-block;
+  box-sizing: border-box;
+  border: cornflowerblue solid 2px;
+  background-color: cornflowerblue;
+  border-radius: 20px;
+  color: #FCFCFC;
+  padding: 5px 10px;
 }
+
+/*.card-actions {*/
+/*  position: absolute;*/
+/*  bottom: 0;*/
+
+/*}*/
 
 .icon {
   padding: 20px;
 }
 
 .header {
-  letter-spacing: -.03em !important;
-  font-weight: 800 !important;
+  letter-spacing: .05em !important;
+  font-weight: 600 !important;
   font-size: 25px;
   padding-top: 30px;
 }
@@ -252,6 +270,7 @@ h5 {
     margin-top: 5px;
 
   }
+
 }
 
 section {
@@ -260,10 +279,8 @@ section {
   height: 45vh;
   display: flex;
   justify-content: center;
-  /*align-items: center;*/
   overflow: hidden;
-  /*background-color: azure;*/
-  /*background: linear-gradient(45deg, midnightblue, #000000)*/
+
 }
 
 section .content {
@@ -280,7 +297,6 @@ section:before {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: black;*/
   background: linear-gradient(45deg, cornflowerblue, #000000);
   border-radius: 0 0 50% 50%/0 0 100% 100%;
   transform: scaleX(1.5);
@@ -289,6 +305,7 @@ section:before {
 .section-2 {
   width: 100%;
   height: 100%;
+
 }
 
 .section-2:before {
@@ -298,7 +315,6 @@ section:before {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: black;*/
   background: linear-gradient(45deg, cornflowerblue, #000000);
   border-radius: 0 !important;
   transform: scaleX(1.5);

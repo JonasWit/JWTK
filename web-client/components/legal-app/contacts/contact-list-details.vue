@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark v-bind="attrs" v-on="on">
-        Otwórz
-      </v-btn>
+    <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon large color="primary">mdi-arrow-right-bold-box</v-icon>
+          </v-btn>
+        </template>
+        <span>Przejdź do szczegółów</span>
+      </v-tooltip>
     </template>
 
     <v-card>
@@ -57,7 +62,6 @@
             <v-card-text>
               <v-row class="d-flex flex-sm-column flex-md-row">
                 <delete-contact-dialog :selected-contact="selectedContact" v-on:delete-completed="deleteDone"/>
-                <v-spacer></v-spacer>
                 <edit-contact-dialog :selected-contact="selectedContact" v-on:action-completed="actionDone"/>
               </v-row>
             </v-card-text>

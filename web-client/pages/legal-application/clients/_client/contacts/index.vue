@@ -18,25 +18,32 @@
           <add-contact-dialog v-on:action-completed="actionDone"/>
         </template>
       </v-toolbar>
-      <v-list v-for="item in contactList" :key="item.id" flat>
-        <v-card class="index-card">
+
+      <v-card v-for="item in contactList" :key="item.id" class="card">
+        <v-list flat>
           <v-list-item>
             <v-list-item-avatar>
               <v-avatar color="orange" size="56" class="white--text">
                 {{ initials(item) }}
               </v-avatar>
             </v-list-item-avatar>
-
             <v-list-item-content>
               <v-list-item-title> {{ item.title }} {{ item.name }} {{ item.surname }}</v-list-item-title>
             </v-list-item-content>
-
             <v-list-item-action>
-              <contact-list-details :selected-contact="item"/>
+              <v-col class="mx-2">
+                <v-list class="d-flex justify-md-end justify-sm-space-between">
+                  <contact-list-details :selected-contact="item"/>
+                  <delete-contact-dialog :selected-contact="item"/>
+                  <edit-contact-dialog :selected-contact="item" v-on:action-completed="actionDone"/>
+                </v-list>
+              </v-col>
             </v-list-item-action>
           </v-list-item>
-        </v-card>
-      </v-list>
+        </v-list>
+      </v-card>
+
+
       <progress-bar v-if="loader"/>
     </template>
   </layout>
@@ -138,5 +145,9 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  margin: 10px 0px;
+  border-left: 3px solid #B41946 !important;
+}
 
 </style>
