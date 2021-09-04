@@ -37,7 +37,8 @@
 
                 <h2 class="price">
                   {{ plan.price }} </h2>
-                <v-card-subtitle class="text-center">Miesięczna kwota za dostęp dla jednego użytkownika
+                <v-card-subtitle class="text-center">Miesięczna kwota za dostęp dla jednego użytkownika. Usługa dostępna
+                  od 01/10/2021.
                 </v-card-subtitle>
                 <v-list disabled>
                   <v-list-item-group>
@@ -131,7 +132,7 @@ export default {
           id: 1,
           img: `${require('~/assets/images/background.jpg')}`,
           title: 'Twoja Kancelaria',
-          price: '100 PLN netto',
+          price: '75 PLN netto',
           bullet: [
             ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii Radcowskiej, Adwokackiej lub Notarialnej'],
             ['Zapewniamy wsparcie techniczne'],
