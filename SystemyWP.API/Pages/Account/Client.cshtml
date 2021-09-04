@@ -24,8 +24,8 @@
     <div>
          <div class="reg"><input asp-for="Form.RulesAccepted"/>Akceptuję <a href=@Model.PortalPrivacyUrl target="_blank">Politykę Prywatności</a> oraz <a href=@Model.PortalTermsOfServiceUrl target="_blank">Regulamin</a></div>
           <div class="reg"><span class="val-text" asp-validation-for="Form.RulesAccepted"></span></div>
-           <div class="reg"><input asp-for="Form.InvoiceAccepted"/> Wyrażam zgodę na otrzymywanie faktur w formie elektronicznej<div>
-           <div class="reg"><span class="val-text" asp-validation-for="Form.InvoiceAccepted"></span><div>
+           <div class="reg"><input asp-for="Form.InvoiceAccepted"> Wyrażam zgodę na otrzymywanie faktur w formie elektronicznej</div>
+           <div class="reg"><span class="val-text" asp-validation-for="Form.InvoiceAccepted"></span></div>
     </div>
     @if (Model.CustomErrors.Count > 0)
     {
