@@ -5,7 +5,7 @@
       <v-container>
         <v-card>
           <v-toolbar class="mb-2 white--text" color="primary">
-            <v-toolbar-title>Panel dostępów do sprawy</v-toolbar-title>
+            <v-toolbar-title>Panel dostępów do klienta</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-title>Nazwa klienta: {{ clientDataFromFetch.name }}</v-toolbar-title>
           </v-toolbar>
@@ -44,14 +44,14 @@ export default {
     loader: false
   }),
   async fetch() {
-    this.loader = true
+    this.loader = true;
     try {
-      let clientId = this.$route.params.client
-      await this.getClientData({clientId})
+      let clientId = this.$route.params.client;
+      await this.getClientData({clientId});
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      this.loader = false;
     }
   },
 
@@ -64,7 +64,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getClientData'])
   }
-}
+};
 </script>
 
 <style scoped>

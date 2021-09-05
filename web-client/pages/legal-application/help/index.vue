@@ -68,7 +68,7 @@ export default {
           body: this.form.message,
         };
         console.log('payload', payload);
-        await this.$axios.$post('/lapp/support-request', payload);
+        await this.$axios.$post('/api/portal/contact/lapp/support-request', payload);
         this.$notifier.showSuccessMessage("Wiadomość wysłana pomyślnie!");
       } catch (e) {
         if (e?.response?.status === 429) {
