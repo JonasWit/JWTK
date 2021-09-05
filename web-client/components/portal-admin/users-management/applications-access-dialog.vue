@@ -38,14 +38,10 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
   }),
   methods: {
     ...mapActions('portal-admin-store', ['getUsers']),
     async grantLegalAppAccess() {
-      if (this.loading) return;
-      this.loading = true;
-
       try {
         await this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access granted");
@@ -53,14 +49,10 @@ export default {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
-        this.loading = false;
         this.dialog = false;
       }
     },
     async revokeLegalAppAccess() {
-      if (this.loading) return;
-      this.loading = true;
-
       try {
         await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access revoked");
@@ -68,7 +60,6 @@ export default {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getUsers();
-        this.loading = false;
         this.dialog = false;
       }
     },

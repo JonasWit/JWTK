@@ -87,9 +87,6 @@ export default {
           this.maxDate = dates[1];
         }
       }
-
-      console.log('fromDate', this.minDate);
-      console.log('toDate', this.maxDate);
     }
   },
   computed: {

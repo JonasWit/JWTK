@@ -9,13 +9,13 @@
       <v-card-title class="justify-center">Roles Management</v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn v-if="selectedUser.role === 'Client'" color="warning" text @click="switchRole('ClientAdmin')">
+        <v-btn v-if="selectedUser.role === 'User'" color="warning" text @click="switchRole('UserAdmin')">
           <v-icon medium color="warning">mdi-arrow-up-thick</v-icon>
-          Client Admin
+          User Admin
         </v-btn>
-        <v-btn v-if="selectedUser.role === 'ClientAdmin'" color="warning" text @click="switchRole('Client')">
+        <v-btn v-if="selectedUser.role === 'UserAdmin'" color="warning" text @click="switchRole('User')">
           <v-icon medium color="warning">mdi-arrow-down-thick</v-icon>
-          Client
+          User
         </v-btn>
         <v-spacer/>
         <v-btn color="success" text @click="dialog = false">

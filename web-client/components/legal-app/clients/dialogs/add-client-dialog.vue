@@ -66,7 +66,7 @@ export default {
   methods: {
     async handleSubmit() {
       if (!this.$refs.addNewClientForm.validate()) return;
-      this.loader = true
+      this.loader = true;
       const client = {
         name: this.form.name,
       };
@@ -75,15 +75,14 @@ export default {
         await this.$axios.$post(createClient(), client);
         this.$notifier.showSuccessMessage("Klient dodany");
         this.resetForm();
-
       } catch (error) {
         handleError(error);
       } finally {
         setTimeout(() => {
           Object.assign(this.$data, this.$options.data.call(this));
           this.$nuxt.refresh();
-          this.loader = false
-        }, 1500)
+          this.loader = false;
+        }, 1500);
       }
     },
     resetForm() {

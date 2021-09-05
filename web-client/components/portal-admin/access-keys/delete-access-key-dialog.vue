@@ -39,23 +39,18 @@ export default {
   },
   data: () => ({
     dialog: null,
-    loading: false
   }),
   methods: {
     ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
     async deleteKey() {
-      if (this.loading) return;
-      this.loading = true;
-
       try {
         await this.$axios.$delete(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/delete/${this.selectedKey.id}`);
         this.$notifier.showSuccessMessage("Key deleted!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.getLegalAppAccessKeys();
-        this.loading = false;
         this.dialog = false;
+        this.getLegalAppAccessKeys();
       }
     }
   }

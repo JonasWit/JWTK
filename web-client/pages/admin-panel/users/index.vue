@@ -18,10 +18,7 @@
         </template>
       </v-autocomplete>
     </div>
-    <div v-if="loading" class="text-center">
-      <v-progress-circular :size="70" :width="7" indeterminate color="primary"></v-progress-circular>
-    </div>
-    <v-list v-else>
+    <v-list>
       <template v-for="(user, index) in usersList">
         <v-list-item :key="user.id">
           <v-list-item-content>
@@ -100,15 +97,11 @@ export default {
   middleware: ["portal-admin"],
   name: "index",
   data: () => ({
-    showDataAccessKeyDialog: false,
-    showLockDialog: false,
     selectedUser: null,
-    loading: true,
     searchResult: "",
   }),
   async fetch() {
     await this.getUsers();
-    this.loading = false;
   },
   computed: {
     ...mapState('portal-admin-store', ['users']),

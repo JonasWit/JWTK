@@ -40,20 +40,13 @@ export default {
   data: () => ({
     select: null,
     dialog: null,
-    loading: false,
   }),
-  async fetch() {
-    await this.getUsers();
-  },
   computed: {
     ...mapGetters('portal-admin-store', ['usersAvailableForKey'])
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getUsers', 'getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getUsers', 'getLegalAppAccessKeys']),
     async grantKey() {
-      if (this.loading) return;
-      this.loading = true;
-
       const payload = {
         keyId: this.selectedKey.id,
         UserId: this.select.id
@@ -65,12 +58,10 @@ export default {
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.getLegalAppAccessKeys();
-        this.getMedicalAppAccessKeys();
-        this.getUsers();
         this.select = null;
-        this.loading = false;
         this.dialog = false;
+        this.getLegalAppAccessKeys();
+        this.getUsers();
       }
     }
   }

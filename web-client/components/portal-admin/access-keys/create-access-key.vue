@@ -39,7 +39,6 @@ export default {
     }
   },
   data: () => ({
-    loading: false,
     form: {
       keyName: "",
       expireDate: ""
@@ -59,8 +58,6 @@ export default {
     ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
     async addKey() {
       if (!this.$refs.createDataAccessKeyForm.validate()) return;
-      if (this.loading) return;
-      this.loading = true;
 
       const payload = {
         keyName: this.form.keyName,
@@ -75,7 +72,6 @@ export default {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.getLegalAppAccessKeys();
-        this.loading = false;
       }
     },
     resetForm() {

@@ -40,42 +40,37 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loading: false,
-    form: {
-      userId: ""
-    },
   }),
   methods: {
     ...mapActions('portal-admin-store', ['getUsers']),
     async lock() {
-      if (this.loading) return;
-      this.loading = true;
+      let payload = {
+        userId: this.selectedUser.id
+      };
 
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/lock", this.form);
+        await this.$axios.$post("/api/portal-admin/user-admin/user/lock", payload);
         this.$notifier.showSuccessMessage("User locked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.getUsers();
-        this.loading = false;
         this.dialog = false;
+        this.getUsers();
       }
     },
     async unlock() {
-      if (this.loading) return;
-      this.loading = true;
+      let payload = {
+        userId: this.selectedUser.id
+      };
 
       try {
-        this.form.userId = this.selectedUser.id;
-        await this.$axios.$post("/api/portal-admin/user-admin/user/unlock", this.form);
+        await this.$axios.$post("/api/portal-admin/user-admin/user/unlock", payload);
         this.$notifier.showSuccessMessage("User unlocked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.getUsers();
-        this.loading = false;
         this.dialog = false;
+        this.getUsers();
       }
     },
   }
