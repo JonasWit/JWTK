@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using SystemyWP.API.CustomAttributes;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
@@ -16,18 +17,24 @@ namespace SystemyWP.API.Services.Logging
         {
             _context = appDbContext;
         }
-
-        public async Task Log(LogType logType, string endpoint, string userId, string userEmail, string description = "", Exception ex = null)
+        
+        public async Task Log(PortalLogRecord logRecord)
+        {
+            _context.PortalLogs.Add(logRecord);
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task Log(string endpoint, IdentityUser user, LogType logType, string description, string createdBy)
         {
             _context.PortalLogs.Add(new PortalLogRecord
             {
-                LogType = logType,
-                Description = description,
-                UserEmail = string.IsNullOrEmpty(userEmail) ? "" : userEmail,
                 Endpoint = endpoint,
-                ExceptionMessage = ex is not null ? ex.Message : null,
-                ExceptionStackTrace = ex is not null ? ex.StackTrace : null,
-                CreatedBy = string.IsNullOrEmpty(userId) ? "" : userId,
+                LogType = LogType.Access,
+                Description = description,
+                CreatedBy = createdBy,
+                UserEmail = user.Email,
+                UserName = user.UserName,
+                UserId = user.Id,
             });
             await _context.SaveChangesAsync();
         }

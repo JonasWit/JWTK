@@ -7,6 +7,7 @@ using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {
@@ -31,7 +32,17 @@ namespace SystemyWP.API.Controllers.BaseClases
 
         protected Task HandleException(Exception ex)
         {
-            return _portalLogger.Log(LogType.Exception, HttpContext.Request.Path.Value, UserId, UserEmail, "Exception In Controller.", ex);
+            return _portalLogger.Log(new PortalLogRecord
+            {
+                LogType = LogType.Exception,
+                ExceptionMessage = ex.Message,
+                ExceptionStackTrace = ex.StackTrace,
+                Endpoint = HttpContext.Request.Path.Value,
+                UserEmail = UserEmail,
+                UserId = UserId,
+                UserName = Username,
+                Description = "Exception in Controller"
+            });
         }
  
         private string GetClaim(string claimType) => User.Claims

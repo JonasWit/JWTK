@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data.Enums;
 
 namespace SystemyWP.API.Pages.Account
 {
@@ -52,7 +54,8 @@ namespace SystemyWP.API.Pages.Account
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(
+            [FromServices] PortalLogger portalLogger)
         {
             if (!ModelState.IsValid)
             {
@@ -69,8 +72,13 @@ namespace SystemyWP.API.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                await portalLogger.Log(HttpContext.Request.Path.Value, user, LogType.Access, "Reset hasła powiódł się",
+                    "ResetPassword Page");
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
+            
+            await portalLogger.Log(HttpContext.Request.Path.Value, user, LogType.Access, "Reset hasła nie powiódł się",
+                "ResetPassword Page");
 
             foreach (var error in result.Errors)
             {

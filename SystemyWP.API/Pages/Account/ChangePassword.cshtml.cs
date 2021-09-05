@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data.Enums;
+using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Pages.Account
 {
@@ -61,29 +64,28 @@ namespace SystemyWP.API.Pages.Account
             return Page();
         }
         
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(
+            [FromServices] PortalLogger portalLogger)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
+            if (!ModelState.IsValid)  return Page();
+            
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            var changePasswordResult =
-                await _userManager.ChangePasswordAsync(user, Form.OldPassword, Form.NewPassword);
+            if (user == null) return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Form.OldPassword, Form.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
+                await portalLogger.Log(HttpContext.Request.Path.Value, user, LogType.Access, "Zmiana hasła nie powiodła się",
+                    "ChangePassword Page");
                 foreach (var error in changePasswordResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
                 return Page();
             }
+
+            await portalLogger.Log(HttpContext.Request.Path.Value, user, LogType.Access, "Zmiana hasła powiodła się",
+                "ChangePassword Page");
 
             await _signInManager.RefreshSignInAsync(user);
             return RedirectToPage("./Login",new {returnUrl = Form.ReturnUrl});

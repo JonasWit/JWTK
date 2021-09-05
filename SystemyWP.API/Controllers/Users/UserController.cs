@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
@@ -29,20 +30,21 @@ namespace SystemyWP.API.Controllers.Users
         }
 
         [HttpGet("me")]
-        public async Task<IActionResult> GetMe()
+        public async Task<IActionResult> GetMe(
+            [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
-                await _portalLogger.Log(LogType.Access, HttpContext.Request.Path.Value, UserId, UserEmail, "Logging in");
-                
                 var user = await _context.Users
                     .Include(x => x.LegalAppAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
+                var identityUser = await userManager.FindByIdAsync(UserId);
+                await _portalLogger.Log(HttpContext.Request.Path.Value, identityUser, LogType.Access, "Pobieranie Profilu", "Auth Controller");
+                
                 if (user is not null)
                 {
                     user.LastLogin = DateTime.UtcNow;
-
                     await _context.SaveChangesAsync();
                     return Ok(UserProjections
                         .LegalAppUserProjection(Role, LegalAppAllowed)

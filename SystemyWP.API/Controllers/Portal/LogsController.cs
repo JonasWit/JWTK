@@ -30,14 +30,24 @@ namespace SystemyWP.API.Controllers.Portal
         }
 
         [HttpGet("logs/split")]
-        public IEnumerable<object> ListPortalLogRecords(int cursor, int take)
+        public async Task<IActionResult> ListPortalLogRecords(int cursor, int take)
         {
-            return _context.PortalLogs
-                .OrderByDescending(x => x.Created)
-                .Skip(cursor)
-                .Take(take)
-                .Select(PortalLogRecordProjections.StandardProjection)
-                .ToList();
+            try
+            {
+                var result =  _context.PortalLogs
+                    .OrderByDescending(x => x.Created)
+                    .Skip(cursor)
+                    .Take(take)
+                    .Select(PortalLogRecordProjections.StandardProjection)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
         }
 
         [HttpPost("logs/delete/{id}")]
@@ -49,7 +59,7 @@ namespace SystemyWP.API.Controllers.Portal
             {
                 _context.Remove(logRecord);
                 await _context.SaveChangesAsync();
-                return Ok();  
+                return Ok();
             }
 
             return BadRequest();
@@ -76,7 +86,7 @@ namespace SystemyWP.API.Controllers.Portal
                     .ToList();
             return new List<object>();
         }
-        
+
         [HttpGet("logs/server")]
         public IEnumerable<object> ListApiLogRecords()
         {
@@ -95,7 +105,7 @@ namespace SystemyWP.API.Controllers.Portal
                 .Select(ApiLogRecordProjections.StandardProjection)
                 .ToList();
         }
-        
+
         [HttpGet("logs/server/split/dates/")]
         public IEnumerable<object> ListApiLogRecords(string from, string to,
             int cursor, int take, bool information, bool critical, bool debug, bool error, bool none, bool trace,

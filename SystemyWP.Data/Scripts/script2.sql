@@ -589,3 +589,36 @@ BEGIN
 END $$;
 COMMIT;
 
+START TRANSACTION;
+
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20210905102800_logs-update') THEN
+    ALTER TABLE "PortalLogs" ALTER COLUMN "UserEmail" DROP NOT NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20210905102800_logs-update') THEN
+    ALTER TABLE "PortalLogs" ADD "UserId" character varying(512) NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20210905102800_logs-update') THEN
+    ALTER TABLE "PortalLogs" ADD "UserName" character varying(200) NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20210905102800_logs-update') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20210905102800_logs-update', '5.0.9');
+    END IF;
+END $$;
+COMMIT;
+
