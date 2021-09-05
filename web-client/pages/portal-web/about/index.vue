@@ -23,7 +23,8 @@
       <div class="content white--text text-center">
         <h1>Technologie</h1>
         <h5>
-          Wykorzystujemy sprawdzoną technologię. Więcej informacji możesz uzyskać na oficjlanych stronach podlinkowanych
+          Więcej informacji na temat technologii, które wykorzystujemy, możesz uzyskać na oficjlanych stronach
+          podlinkowanych
           poniżej. </h5>
         <v-row class="d-flex justify-space-between">
           <v-card elevation="0" class="icon-card mx-auto" v-for="item in icons" :key="item.id">

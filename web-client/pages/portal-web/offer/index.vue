@@ -7,8 +7,7 @@
           <h5>
             Tworzymy aplikacje webowe, aplikacje desktopowe oraz klasyczne strony internetowe. Zamów u nas stronę lub
             aplikację
-            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu. Nie będziesz musiał się niczym
-            przejmować! </h5>
+            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu.</h5>
         </div>
       </div>
     </section>
