@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.API.Services.Storage;
-using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.API.Services.Storage;
+using SystemyWP.Data;
 
-namespace SystemyWP.API.Controllers.Access
+namespace SystemyWP.API.Controllers.Users
 {
     [Route("api/auth")]
     [Authorize]

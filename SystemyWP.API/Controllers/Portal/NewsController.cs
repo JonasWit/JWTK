@@ -49,11 +49,6 @@ namespace SystemyWP.API.Controllers.Portal
                     user.Image = await saveImage;
                 }
 
-
-                
-                
-                
-                
                 await _context.SaveChangesAsync();
                 return Ok();
             }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
 
-namespace SystemyWP.API.Controllers.Portal.MedicalAppManagement
+namespace SystemyWP.API.Controllers.MedApp.MedicalAppManagement
 {
     [Route("/api/portal-admin/key-admin/medical-app")]
     [Authorize(SystemyWpConstants.Policies.PortalAdmin)]

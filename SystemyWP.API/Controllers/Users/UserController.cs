@@ -2,6 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Projections;
@@ -10,15 +17,8 @@ using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Processing;
 
-namespace SystemyWP.API.Controllers.Access
+namespace SystemyWP.API.Controllers.Users
 {
     [Route("api/users")]
     [Authorize]

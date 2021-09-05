@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.Data.Models.General;

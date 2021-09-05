@@ -1,5 +1,4 @@
-﻿using SystemyWP.Data.Models.MedicalAppModels.Access;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.Data.ContextBuilders
 {

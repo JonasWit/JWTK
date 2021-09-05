@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Patients;
 

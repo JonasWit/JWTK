@@ -33,7 +33,7 @@
 
 <script>
 import Layout from "@/components/legal-app/layout";
-import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
+import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
@@ -51,8 +51,7 @@ export default {
     valid: true,
     value: null,
     validation: {
-      message: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 5000", 4, 5000),
-      checkboxRules: notEmptyRule("Proszę wyrazić zgodę, aby kontynuować")
+      message: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 5000", 4, 5000)
     },
     form: {
       selectedCategory: null,

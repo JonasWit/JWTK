@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.LegalAppModels.Access;
-using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 
 namespace SystemyWP.Data.Models.Abstractions
 {

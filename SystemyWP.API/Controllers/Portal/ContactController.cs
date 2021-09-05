@@ -6,7 +6,6 @@ using SystemyWP.API.Forms.Portal;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Forms.LegalApp.Support;
 

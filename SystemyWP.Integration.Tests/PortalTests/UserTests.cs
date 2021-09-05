@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SystemyWP.API;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
-using SystemyWP.API.Forms.Admin;
-using SystemyWP.API.Projections;
-using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
-using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.API.Controllers.BaseClases;
+using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
+using SystemyWP.API.Forms.Admin;
+using SystemyWP.API.Projections;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.Data;
+using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 
-namespace SystemyWP.API.Controllers.LegalApp
+namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
 {
     [Route("/api/legal-app-admin/general")]
     [Authorize(SystemyWpConstants.Policies.UserAdmin)]
