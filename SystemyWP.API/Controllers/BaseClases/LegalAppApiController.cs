@@ -26,11 +26,7 @@ namespace SystemyWP.API.Controllers.BaseClases
             try
             {
                 var user = _context.Users.Include(x => x.LegalAppAccessKey).FirstOrDefault(x => x.Id.Equals(UserId));
-                if (user?.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow)
-                {
-                    return true;
-                }
-
+                if (user?.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return true;
                 return false;
             }
             catch (Exception e)
@@ -43,7 +39,6 @@ namespace SystemyWP.API.Controllers.BaseClases
         protected async Task<List<UserBasic>> GetOnlyNormalUsers(List<User> users, UserManager<IdentityUser> userManager)
         {
             var output = new List<UserBasic>();
-
             foreach (var user in users)
             {
                 var userClaims = await userManager.GetClaimsAsync(await userManager.FindByIdAsync(user.Id)) as List<Claim> ?? new List<Claim>();
