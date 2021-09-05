@@ -51,7 +51,6 @@ export default {
         keyId: this.selectedKey.id,
         UserId: this.select.id
       };
-
       try {
         await this.$axios.post(`/api/portal-admin/key-admin/${this.keyType}/user/grant/access-key`, payload);
         this.$notifier.showSuccessMessage("Granted!");

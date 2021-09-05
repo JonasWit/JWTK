@@ -46,6 +46,7 @@ export default {
   }),
   async fetch() {
     await this.getLegalAppAccessKeys();
+    await this.getUsers();
   },
   computed: {
     ...mapState('portal-admin-store', ['legalAppAccessKeys']),
@@ -67,7 +68,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getUsers']),
     async revokeKeyForUser(user) {
       try {
         await this.$axios.post('/api/portal-admin/key-admin/legal-app/access-key/revoke', {userId: user.id});
