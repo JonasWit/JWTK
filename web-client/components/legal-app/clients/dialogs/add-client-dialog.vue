@@ -37,21 +37,15 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
-
 </template>
-
 <script>
-
 import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "add-client-dialog",
-  components: {ProgressBar},
   data: () => ({
     dialog: false,
     loader: false,
@@ -60,30 +54,25 @@ export default {
     },
     validation: {
       valid: false,
-      name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
+      name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 1, a 50", 1, 50),
     },
   }),
   methods: {
     async handleSubmit() {
       if (!this.$refs.addNewClientForm.validate()) return;
-      this.loader = true
       const client = {
         name: this.form.name,
       };
-
       try {
         await this.$axios.$post(createClient(), client);
         this.$notifier.showSuccessMessage("Klient dodany");
-        this.resetForm();
-
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          Object.assign(this.$data, this.$options.data.call(this));
-          this.$nuxt.refresh();
-          this.loader = false
-        }, 1500)
+        Object.assign(this.$data, this.$options.data.call(this));
+        this.$nuxt.refresh();
+        this.resetForm();
+        this.dialog = false
       }
     },
     resetForm() {

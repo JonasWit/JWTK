@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
 import {deleteClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -59,9 +58,7 @@ export default {
 
   }),
   methods: {
-    ...mapMutations('legal-app-client-store', ['setClientForAction']),
     async deleteClient() {
-      this.loader = true
       try {
         let clientId = this.selectedClient.id
         await this.$axios.$delete(deleteClient(clientId))
@@ -69,11 +66,8 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.setClientForAction(this.selectedClient);
-          this.dialog = false;
-          this.loader = false
-        }, 1500)
+        this.$nuxt.refresh()
+        this.dialog = false
       }
     }
   }
