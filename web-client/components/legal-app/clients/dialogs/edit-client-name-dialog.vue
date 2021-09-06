@@ -18,7 +18,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-text-field v-model="client.name" :rules="validation.name" label="Edytuj nazwę Klienta"
+          <v-text-field v-model="form.name" label="Edytuj nazwę Klienta" :rules="[v => !!v||'Nazwa jest wymagana']"
                         required></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
@@ -33,13 +33,10 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
-import {mapMutations} from "vuex";
-import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {updateClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -57,28 +54,22 @@ export default {
   data: () => ({
     client: null,
     dialog: false,
-    loader: false,
     form: {
       name: "",
-
     },
     validation: {
       valid: false,
-      name: notEmptyAndLimitedRule("Nazwa jest wymagana. Dozwolona liczba znaków pomiędzy 4, a 50", 4, 50),
     },
-    loading: false,
   }),
   fetch() {
+    this.form.name = this.selectedClient.name;
     this.client = this.selectedClient;
   },
   methods: {
-    ...mapMutations('legal-app-client-store', ['setClientForAction']),
     async saveClientNameChange() {
       if (!this.$refs.editClientNameForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       const payload = {
-        name: this.client.name,
+        name: this.form.name,
       };
       try {
         let clientId = this.selectedClient.id
@@ -87,11 +78,8 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.setClientForAction(this.selectedClient);
-          this.dialog = false;
-          this.loader = false
-        }, 1500)
+        this.$nuxt.refresh()
+        this.dialog = false
       }
     },
   }

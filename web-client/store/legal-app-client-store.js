@@ -1,13 +1,12 @@
 ﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
-import {getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
+import {getClientsBasicList, getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {getAllDeadlinesFromTo, getRemindersFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
 const initState = () => ({
   //Clients
-  clientForAction: null,
-  contactForAction: null,
   clientDataFromFetch: [],
+  basicClientsListFromFetch: [],
 
   //Contact-details and add-email dialogs
   contactDetailsFromFetch: null,
@@ -44,6 +43,10 @@ const initState = () => ({
 export const state = initState;
 
 export const getters = {
+  //Basic Clients List
+  basicClientsInfo(state) {
+    return state.basicClientsListFromFetch;
+  },
   //Financials records
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
@@ -82,9 +85,10 @@ export const getters = {
 };
 
 export const mutations = {
+  //CLIENTS
 
-  setClientForAction(state, client) {
-    state.clientForAction = client;
+  updateBasicClientsListFromFetch(state, {basicClientsListFromFetch}) {
+    state.basicClientsListFromFetch = basicClientsListFromFetch
   },
 
   //CONTACT ITEMS
@@ -162,6 +166,18 @@ export const mutations = {
 };
 
 export const actions = {
+  //Get Basic list of clients
+
+  async getBasicListOfClients({commit}) {
+    try {
+      let basicClientsListFromFetch = await this.$axios.$get(getClientsBasicList());
+      commit('updateBasicClientsListFromFetch', {basicClientsListFromFetch})
+      console.log('Lista klientow ze stora', basicClientsListFromFetch)
+    } catch (error) {
+      handleError(error)
+    }
+  },
+
   //Contact-details and add-email dialogs
   async getContactDetailsFromFetch({commit}, {clientId, contactId}) {
     try {
