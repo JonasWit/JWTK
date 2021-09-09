@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     ...mapActions('cookies-store', ['readStatusOfLegalAppTooltips', 'turnOnLegalAppTooltips', 'turnOffLegalAppTooltips']),
-
   },
 };
 

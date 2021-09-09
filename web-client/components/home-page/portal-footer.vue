@@ -1,6 +1,6 @@
 ﻿<template>
   <v-footer padless>
-    <v-row no-gutters class="d-flex justify-center ma-2 pa-3">
+    <v-row no-gutters class="d-flex justify-center">
 
       <div class="btn-link pa-2" v-for="link in links" :key="link.id" text rounded>
         <nuxt-link class="link" text :to="link.route">{{ link.name }}
