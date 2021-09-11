@@ -1,17 +1,18 @@
 ﻿<template>
-  <v-container>
-    <v-row class="my-6">
-      <v-col cols="12">
-        <navigation-drawer/>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <reminders-floating-icon/>
-        <options-floating-icon/>
-        <slot name="content"></slot>
-      </v-col>
-    </v-row>
+  <v-container fluid class="mx-3 my-4">
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="2">
+          <navigation-drawer/>
+        </v-col>
+        <v-col cols="9">
+          <slot name="content"></slot>
+          <reminders-floating-icon/>
+          <options-floating-icon/>
+        </v-col>
+      </v-row>
+    </v-container>
+
   </v-container>
 </template>
 <script>
