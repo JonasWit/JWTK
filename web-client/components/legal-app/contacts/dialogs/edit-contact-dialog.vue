@@ -18,21 +18,14 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-text-field v-model="form.title" label="Dodaj nazwę"
-                        required
+          <v-text-field v-model="form.title" label="Dodaj nazwę" required
                         :rules="[v => (v && v.length <= 50) || 'Dozwolona liczba znaków to 50']"></v-text-field>
-          <v-text-field v-model="form.name"
-                        :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
-                        label="Dodaj imię"
-          ></v-text-field>
-          <v-text-field v-model="form.surname"
-                        :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
-                        label="Dodaj nazwisko"
-          ></v-text-field>
-          <v-text-field v-model="form.comment"
-                        :rules="[v => (v.length <= 200) || 'Dozwolona liczba znaków to 200']"
-                        label="Dodaj szczególy*"
-          ></v-text-field>
+          <v-text-field v-model="form.name" :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
+                        label="Dodaj imię"></v-text-field>
+          <v-text-field v-model="form.surname" :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
+                        label="Dodaj nazwisko"></v-text-field>
+          <v-text-field v-model="form.comment" :rules="[v => (v.length <= 200) || 'Dozwolona liczba znaków to 200']"
+                        label="Dodaj szczególy*"></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
         <v-divider></v-divider>
@@ -81,10 +74,11 @@ export default {
 
   }),
   fetch() {
-    this.form.title = this.selectedContact.title;
-    this.form.name = this.selectedContact.name;
-    this.form.surname = this.selectedContact.surname;
-    this.form.comment = this.selectedContact.comment;
+    this.form.title = this.selectedContact.title ? this.selectedContact.title : "";
+    this.form.name = this.selectedContact.name ? this.selectedContact.name : "";
+    this.form.surname = this.selectedContact.surname ? this.selectedContact.surname : "";
+    this.form.comment = this.selectedContact.comment ? this.selectedContact.comment : "";
+    console.warn("FORM", this.form);
   },
   methods: {
     async saveContactChange() {
@@ -94,16 +88,16 @@ export default {
         name: this.form.name,
         surname: this.form.surname,
         comment: this.form.comment,
-      }
+      };
       try {
-        let clientId = this.$route.params.client
-        let contactId = this.selectedContact.id
-        await this.$axios.$put(updateContact(clientId, contactId), contact)
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        await this.$axios.$put(updateContact(clientId, contactId), contact);
         this.$notifier.showSuccessMessage("Kontakt zmieniony pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        this.$nuxt.refresh()
+        this.$nuxt.refresh();
         this.dialog = false;
 
       }
@@ -113,7 +107,7 @@ export default {
       this.$refs.editContactNameForm.resetValidation();
     },
   }
-}
+};
 </script>
 
 <style scoped>
