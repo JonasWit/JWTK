@@ -1,8 +1,12 @@
 ﻿<template>
   <v-container>
-    <v-row no-gutters>
-      <v-col cols="12" class="my-5">
-        <breadcrumbs/>
+    <v-row class="my-6">
+      <v-col cols="12">
+        <navigation-drawer/>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <reminders-floating-icon/>
         <options-floating-icon/>
         <slot name="content"></slot>
@@ -13,15 +17,14 @@
 <script>
 
 
-import NavigationDrawer from "./navigation-drawer";
-import Breadcrumbs from "@/components/legal-app/breadcrumbs";
 import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
 import {mapActions} from "vuex";
 import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
+import NavigationDrawer from "@/components/legal-app/navigation-drawer";
 
 export default {
   name: "layout",
-  components: {OptionsFloatingIcon, RemindersFloatingIcon, Breadcrumbs, NavigationDrawer},
+  components: {NavigationDrawer, OptionsFloatingIcon, RemindersFloatingIcon},
   beforeMount() {
     return this.readStatusOfLegalAppTooltips();
   },

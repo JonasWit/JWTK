@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :value="selectedContact" persistent width="500">
+  <v-dialog v-model="dialog1" :value="selectedContact" persistent width="500">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -21,12 +21,11 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-        <v-btn color="success" text @click="dialog = false">
+        <v-btn color="success" text @click="dialog1 = false">
           Anuluj
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -52,12 +51,10 @@ export default {
   },
 
   data: () => ({
-    dialog: false,
-    loader: false
+    dialog1: false,
   }),
   methods: {
     async deletePhoneNumber() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
@@ -67,16 +64,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.dialog1 = false;
       }
     }
-
   }
-
 }
 </script>
 

@@ -19,12 +19,19 @@
         </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
-                        required :rules="validation.fieldLength"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.fieldLength" label="Dodaj imię"
+                        required
+                        :rules="[v => (v && v.length <= 50) || 'Dozwolona liczba znaków to 50']"></v-text-field>
+          <v-text-field v-model="form.name"
+                        :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
+                        label="Dodaj imię"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.fieldLength" label="Dodaj nazwisko"
+          <v-text-field v-model="form.surname"
+                        :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
+                        label="Dodaj nazwisko"
           ></v-text-field>
-          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj szczególy*"
+          <v-text-field v-model="form.comment"
+                        :rules="[v => (v.length <= 200) || 'Dozwolona liczba znaków to 200']"
+                        label="Dodaj szczególy*"
           ></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
@@ -40,12 +47,10 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
-import {lengthRule} from "@/data/vuetify-validations";
 import {updateContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -70,11 +75,8 @@ export default {
       comment: "",
 
     },
-    loader: false,
     validation: {
       valid: false,
-      fieldLength: lengthRule("Dozwolona liczba znaków to 50", 0, 50),
-      comment: lengthRule("Maksymalna liczba znaków to 200", 0, 200)
     },
 
   }),
@@ -87,7 +89,6 @@ export default {
   methods: {
     async saveContactChange() {
       if (!this.$refs.editContactNameForm.validate()) return;
-      this.loader = true
       const contact = {
         title: this.form.title,
         name: this.form.name,
@@ -102,11 +103,9 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$nuxt.refresh()
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        this.$nuxt.refresh()
+        this.dialog = false;
+
       }
     },
     resetForm() {

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog v-model="dialog1" max-width="500px">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -34,7 +34,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn text color="error" @click="dialog=false">
+          <v-btn text color="error" @click="dialog1=false">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
@@ -65,7 +65,7 @@ export default {
     }
   },
   data: () => ({
-    dialog: false,
+    dialog1: false,
     form: {
       comment: "",
       street: "",
@@ -88,8 +88,6 @@ export default {
   methods: {
     async saveNewAddress() {
       if (!this.$refs.addNewAddressForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       const address = {
         comment: this.form.comment,
         street: this.form.street,
@@ -108,11 +106,8 @@ export default {
       } catch (error) {
         handleError(error)
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.dialog1 = false;
       }
     },
     resetForm() {

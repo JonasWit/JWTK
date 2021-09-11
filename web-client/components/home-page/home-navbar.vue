@@ -67,6 +67,7 @@ export default {
 
 .nav-list {
   background: transparent !important;
+
 }
 
 .nav-item {
@@ -81,5 +82,6 @@ export default {
   transition: opacity 0.5s ease;
 
 }
+
 
 </style>

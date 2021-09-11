@@ -363,6 +363,7 @@ export const actions = {
       });
       commit('updateContactItemsList', {contactItemsFromFetch});
       this.contactList = this.contactItemsFromFetch;
+
     } catch (error) {
       console.error('creating contact error', error);
       this.$notifier.showErrorMessage(error.response.data);

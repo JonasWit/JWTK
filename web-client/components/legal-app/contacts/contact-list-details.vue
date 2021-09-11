@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+  <v-dialog v-model="dialog" fullscreen hide-overlay>
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -101,11 +101,7 @@
         </v-tab-item>
       </v-tabs>
     </v-card>
-    <progress-bar v-if="loader"/>
-
   </v-dialog>
-
-
 </template>
 <script>
 import DeleteContactDialog from "~/components/legal-app/contacts/dialogs/delete-contact-dialog";
@@ -141,19 +137,13 @@ export default {
     phoneNumbersList: [],
     addressesList: [],
     dialog: false,
-    loader: false
   }),
 
   async fetch() {
-    this.loader = true
     try {
       await this.updateContactLIst()
     } catch (error) {
       handleError(error);
-    } finally {
-      setTimeout(() => {
-        this.loader = false;
-      }, 1500)
     }
   },
   computed: {
@@ -164,7 +154,6 @@ export default {
     ...mapMutations('legal-app-client-store', ['updateContactDetailsList']),
     ...mapActions('legal-app-client-store', ['getContactDetailsFromFetch', 'getContactsList']),
     async updateContactLIst() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id;
@@ -174,20 +163,13 @@ export default {
         this.addressesList = this.contactDetailsFromFetch.physicalAddresses
       } catch (error) {
         handleError(error)
-      } finally {
-        setTimeout(() => {
-          this.loader = false;
-        }, 1500)
       }
     },
     async actionDone() {
-      this.loader = true
       try {
         await this.updateContactLIst();
       } catch (error) {
         handleError(error)
-      } finally {
-        this.loader = false
       }
     },
     deleteDone() {

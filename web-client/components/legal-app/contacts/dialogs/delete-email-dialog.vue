@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :value="selectedContact" persistent width="500">
+  <v-dialog v-model="dialog1" :value="selectedContact" persistent width="500">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -26,7 +26,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -52,13 +51,11 @@ export default {
     }
   },
   data: () => ({
-    dialog: false,
-    loader: false
+    dialog1: false,
   }),
 
   methods: {
     async deleteEmail() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
@@ -68,11 +65,8 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.dialog1 = false;
       }
     }
   }

@@ -23,14 +23,11 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -51,7 +48,6 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false,
     form: {
       userId: ""
     },

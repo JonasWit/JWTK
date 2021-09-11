@@ -26,7 +26,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -49,12 +48,10 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false,
   }),
   methods: {
     ...mapActions('legal-app-client-store', ['getContactsList']),
     async deleteContact() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client
         let contactId = this.selectedContact.id
@@ -63,14 +60,9 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$nuxt.refresh()
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
-
+        this.$nuxt.refresh()
+        this.dialog = false;
       }
-
     }
   }
 }

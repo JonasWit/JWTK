@@ -34,7 +34,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn text color="error" @click="dialog=false">
+          <v-btn text color="error" @click="resetForm()">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
@@ -85,9 +85,6 @@ export default {
 
     async handleSubmit() {
       if (!this.$refs.addNewContactForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
-
       const contact = {
         title: this.form.title,
         name: this.form.name,
@@ -101,18 +98,16 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.resetForm();
-          Object.assign(this.$data, this.$options.data.call(this));
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.$refs.addNewContactForm.reset();
+        this.$refs.addNewContactForm.resetValidation();
+        this.$nuxt.refresh()
+        this.dialog = false;
       }
     },
     resetForm() {
       this.$refs.addNewContactForm.reset();
       this.$refs.addNewContactForm.resetValidation();
+      this.dialog = false;
     },
   }
 }
