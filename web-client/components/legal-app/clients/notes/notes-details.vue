@@ -1,23 +1,28 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Otwórz
-          </v-btn>
+      <v-dialog v-model="dialog" fullscreen hide-overlay>
+        <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+          <v-tooltip bottom>
+            <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+              <v-btn icon v-on="{ ...tooltip, ...dialog }">
+                <v-icon large color="primary">mdi-arrow-right-bold-box</v-icon>
+              </v-btn>
+            </template>
+            <span>Przejdź do szczegółów</span>
+          </v-tooltip>
         </template>
         <v-card v-if="noteDetails">
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="dialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>{{ noteDetails.title }}</v-toolbar-title>
+            <v-toolbar-title>Tytuł: {{ noteDetails.title }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-            Jeśli chcesz zmodyfikować treść notatki, użyj guzika "EDYTUJ". W nowym okienku będziesz mógł dokonać zmian.
-            Jeśli już nie potrzebujesz tej notatki, użyj guzika "USUŃ" i potwierdź operację.
+            Jeśli chcesz zmodyfikować treść notatki, użyj ikonki "EDYTUJ". W nowym okienku będziesz mógł dokonać zmian.
+            Jeśli już nie potrzebujesz tej notatki, użyj ikonki "USUŃ" i potwierdź operację.
           </v-alert>
           <v-row class="mx-2 my-2 d-flex align-center">
             <v-subheader class="mx-2"><span class="font-weight-bold">Utworzono: </span>
@@ -32,8 +37,7 @@
             <v-card-title>Treść notatki</v-card-title>
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
             <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
-            <v-checkbox v-model="checkbox" :label="labelCondition(noteDetails.public)" :value="noteDetails.public" value
-                        disabled></v-checkbox>
+            <v-card-subtitle>Status: {{ labelCondition(noteDetails.public) }}</v-card-subtitle>
           </v-row>
           <v-card-text>
             {{ noteDetails.message }}

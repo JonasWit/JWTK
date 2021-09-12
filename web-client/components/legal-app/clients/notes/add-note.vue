@@ -29,7 +29,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn color="error" text @click="dialog = false">
+          <v-btn color="error" text @click="resetForm">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
@@ -40,7 +40,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -75,8 +74,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async save() {
       if (!this.$refs.addNoteForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       try {
         const note = {
           title: this.form.title,
@@ -89,17 +86,15 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          let clientId = this.$route.params.client
-          this.getClientsNotes(clientId);
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        let clientId = this.$route.params.client
+        await this.getClientsNotes(clientId);
+        this.resetForm();
       }
     },
     resetForm() {
       this.$refs.addNoteForm.reset();
       this.$refs.addNoteForm.resetValidation();
+      this.dialog = false;
     },
   }
 }

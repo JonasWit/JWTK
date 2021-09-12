@@ -10,7 +10,7 @@
         <span>Edytuj Kontakt</span>
       </v-tooltip>
     </template>
-    <v-form ref="editContactNameForm">
+    <v-form ref="editContactNameForm" v-model="validation.valid">
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
@@ -98,13 +98,15 @@ export default {
         handleError(error);
       } finally {
         this.$nuxt.refresh();
-        this.dialog = false;
+        this.resetForm();
+
 
       }
     },
     resetForm() {
       this.$refs.editContactNameForm.reset();
       this.$refs.editContactNameForm.resetValidation();
+      this.dialog = false;
     },
   }
 };

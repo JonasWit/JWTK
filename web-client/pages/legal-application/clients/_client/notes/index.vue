@@ -21,6 +21,7 @@
             <v-list-item-title>{{ object.title }}</v-list-item-title>
             <v-list-item-subtitle>Dodano: {{ formatDate(object.created) }}</v-list-item-subtitle>
             <v-list-item-subtitle>Ostatnia modyfikacja: {{ formatDate(object.updated) }}</v-list-item-subtitle>
+            <v-list-item-subtitle>Status: {{ labelCondition(object.public) }}</v-list-item-subtitle>
             <v-list-item-action>
               <notes-details :selected-note="object"/>
             </v-list-item-action>
@@ -69,6 +70,12 @@ export default {
     formatDate(date) {
       return formatDate(date);
     },
+    labelCondition(val) {
+      if (val) {
+        return "Notatka publiczna";
+      }
+      return "Notatka prywatna";
+    }
   }
 };
 </script>

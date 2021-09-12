@@ -10,7 +10,7 @@
         <span>Edytuj nazwę klienta</span>
       </v-tooltip>
     </template>
-    <v-form ref="editClientNameForm">
+    <v-form ref="editClientNameForm" v-model="validation.valid">
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
@@ -80,6 +80,7 @@ export default {
       } finally {
         this.$nuxt.refresh()
         this.dialog = false
+        this.$refs.editClientNameForm.resetValidation();
       }
     },
   }

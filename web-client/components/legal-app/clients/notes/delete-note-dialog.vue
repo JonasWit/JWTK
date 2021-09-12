@@ -3,11 +3,11 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="error" v-on="{ ...tooltip, ...dialog }">
-            Usuń
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
-        <span>Usuń klienta</span>
+        <span>Usuń notatkę</span>
       </v-tooltip>
     </template>
     <v-card>
@@ -21,14 +21,11 @@
           Potwierdź
         </v-btn>
         <v-spacer/>
-
         <v-btn color="success" text @click="dialog = false">
           Anuluj
         </v-btn>
-
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -50,13 +47,11 @@ export default {
 
   data: () => ({
     dialog: false,
-    loader: false
   }),
 
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async deleteClientNote() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client;
         let noteId = this.noteForAction.id;
@@ -65,13 +60,10 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          let clientId = this.$route.params.client;
-          this.getClientsNotes(clientId);
-          this.dialog = false;
-          this.$emit('delete-completed');
-          this.loader = false
-        }, 1500)
+        let clientId = this.$route.params.client;
+        await this.getClientsNotes(clientId);
+        this.$emit('delete-completed');
+        this.dialog = false;
       }
     }
   }
