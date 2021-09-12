@@ -32,18 +32,6 @@
               </v-list>
             </v-col>
             <v-col class="mx-2">
-              <v-list class="d-flex justify-space-between">
-                <v-list-item-content>
-                  <v-list-item-subtitle>Dodano: {{ formatDate(clientItem.created) }}
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>Dodane przez: {{ clientItem.createdBy }}</v-list-item-subtitle>
-                  <v-list-item-subtitle>Edytowano: {{ formatDate(clientItem.updated) }}
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>Edytowane przez: {{ clientItem.updatedBy }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list>
-            </v-col>
-            <v-col class="mx-2">
               <v-list class="d-flex justify-md-end justify-sm-space-between">
                 <go-to-client-panel :client-item="clientItem"/>
                 <edit-client-name-dialog :selected-client="clientItem"/>
@@ -69,7 +57,6 @@ import DeleteClientDialog from "@/components/legal-app/clients/dialogs/delete-cl
 import ArchiveClientDialog from "@/components/legal-app/clients/dialogs/archive-client-dialog";
 import GoToClientPanel from "@/components/legal-app/clients/go-to-client-panel";
 import EditClientNameDialog from "@/components/legal-app/clients/dialogs/edit-client-name-dialog";
-import {formatDate} from "@/data/date-extensions";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import IfAuth from "@/components/auth/if-auth";
@@ -139,9 +126,6 @@ export default {
   methods: {
     ...mapMutations('legal-app-client-store', ['updateBasicClientsListFromFetch']),
     ...mapActions('legal-app-client-store', ['getBasicListOfClients']),
-    formatDate(date) {
-      return formatDate(date);
-    },
     searchFilter(item, queryText) {
       return hasOccurrences(item.searchIndex, queryText);
     }
