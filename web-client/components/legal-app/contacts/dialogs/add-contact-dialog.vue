@@ -23,12 +23,16 @@
         </v-alert>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę"
-                        required :rules="validation.title"></v-text-field>
-          <v-text-field v-model="form.name" :rules="validation.name" label="Dodaj imię*"
+                        required :rules="[validation.mandatory, validation.counter]"
           ></v-text-field>
-          <v-text-field v-model="form.surname" :rules="validation.surname" label="Dodaj nazwisko*"
+          <v-text-field v-model="form.name" :rules="[validation.counter]"
+                        label="Dodaj imię*"
           ></v-text-field>
-          <v-text-field v-model="form.comment" :rules="validation.comment" label="Dodaj komentarz*"
+          <v-text-field v-model="form.surname" :rules="[validation.counter]"
+                        label="Dodaj nazwisko*"
+          ></v-text-field>
+          <v-text-field v-model="form.comment" :rules="[validation.maximum]"
+                        label="Dodaj komentarz*"
           ></v-text-field>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
@@ -49,7 +53,6 @@
 </template>
 
 <script>
-import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContact} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapState} from "vuex";
 import ProgressBar from "@/components/legal-app/progress-bar";
@@ -70,20 +73,39 @@ export default {
     loader: false,
     validation: {
       valid: false,
-      title: notEmptyAndLimitedRule("Pole obowiązkowe. Maksymalan liczba znaków to 50", 1, 50),
-      name: lengthRule("Maksymalan liczba znaków to 50", 0, 50),
-      surname: lengthRule("Maksymalan liczba znaków to 50", 0, 50),
-      comment: lengthRule("Maksymalan liczba znaków to 200", 0, 200)
+      mandatory: v => !!v || 'Pole obowiązkowe',
+      counter: v => {
+        if (v) return v.length <= 50 || 'Dozwolona liczba znaków 50';
+        else return true;
+      },
+      maximum: v => {
+        if (v) return v.length <= 200 || 'Dozwolona liczba znaków 200';
+        else return true;
+      },
     },
 
   }),
+  watch: {
+    dialog(visible) {
+      this.$nextTick(() => {
+        if (visible) {
+          // Clear the form and reset the validation when the dialog is opening
+          this.$refs.addNewContactForm.reset();
+          this.$refs.addNewContactForm.resetValidation();
+        } else {
+          // Do stuff when the dialog is closing
+        }
+      })
+    },
+  },
+
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips'])
   },
 
   methods: {
 
-    async handleSubmit() {
+    handleSubmit: async function () {
       if (!this.$refs.addNewContactForm.validate()) return;
       const contact = {
         title: this.form.title,
@@ -98,10 +120,11 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.$refs.addNewContactForm.reset();
-        this.$refs.addNewContactForm.resetValidation();
         this.$nuxt.refresh()
         this.dialog = false;
+        this.$refs.addNewContactForm.reset();
+        this.$refs.addNewContactForm.resetValidation();
+
       }
     },
     resetForm() {

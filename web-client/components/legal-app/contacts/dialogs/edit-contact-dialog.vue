@@ -19,7 +19,7 @@
         </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.title" label="Dodaj nazwę" required
-                        :rules="[v => (v && v.length <= 50) || 'Dozwolona liczba znaków to 50']"></v-text-field>
+                        :rules="[v => !!v, v => (v && v.length <= 50) || 'Pole obowiązkowe. Dozwolona liczba znaków to 50']"></v-text-field>
           <v-text-field v-model="form.name" :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
                         label="Dodaj imię"></v-text-field>
           <v-text-field v-model="form.surname" :rules="[v => (v.length <= 50) || 'Dozwolona liczba znaków to 50']"
