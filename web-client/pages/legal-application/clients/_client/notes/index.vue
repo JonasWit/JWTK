@@ -2,10 +2,9 @@
   <layout>
     <template v-slot:content>
       <v-toolbar class="mb-4 white--text" color="primary">
-        <add-note/>
-        <v-spacer></v-spacer>
         <v-toolbar-title>Moje notatki</v-toolbar-title>
-
+        <v-spacer></v-spacer>
+        <add-note/>
       </v-toolbar>
       <!--      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">-->
       <!--        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej-->
