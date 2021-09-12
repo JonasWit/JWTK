@@ -36,7 +36,6 @@
           <v-row class="mx-2 mb-4 my-4 d-flex align-center">
             <v-card-title>Treść notatki</v-card-title>
             <edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
-            <delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
             <v-card-subtitle>Status: {{ labelCondition(noteDetails.public) }}</v-card-subtitle>
           </v-row>
           <v-card-text>
@@ -124,9 +123,6 @@ export default {
         this.loader = false
       }
 
-    },
-    deleteDone() {
-      this.dialog = false;
     },
     formatDate(date) {
       return formatDate(date);

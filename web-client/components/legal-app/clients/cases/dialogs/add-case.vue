@@ -44,7 +44,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -59,7 +58,6 @@ export default {
   name: "add-case",
   components: {ProgressBar},
   data: () => ({
-    loader: false,
     dialog: false,
     form: {
       name: "",
@@ -83,8 +81,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async addNewCase() {
       if (!this.$refs.addCaseForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       try {
         const newCase = {
           name: this.form.name,
@@ -99,15 +95,13 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.resetForm()
       }
     },
     resetForm() {
       this.$refs.addCaseForm.reset();
       this.$refs.addCaseForm.resetValidation();
+      this.dialog = false;
     },
   }
 }

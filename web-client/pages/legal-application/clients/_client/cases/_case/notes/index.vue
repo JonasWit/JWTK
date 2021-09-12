@@ -5,48 +5,34 @@
         <v-toolbar-title>Notes sprawy</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
+        <v-spacer></v-spacer>
         <case-add-note/>
       </v-toolbar>
       <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
         Zarządzaj notatkami dla Sprawy! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
       </v-alert>
-      <v-expansion-panels focusable>
-        <v-expansion-panel v-for="item in notesListForCases" :key="item[0].created" class="expansion">
-          <v-expansion-panel-header class="text-uppercase">
-            {{ formatDateToMonth(item[0].created) }}
-            <template v-slot:actions>
-              <v-icon color="primary">
-                $expand
-              </v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card v-for="object in item" :key="object.id" class="my-4">
-              <v-row class="d-flex align-center">
-                <v-col cols="4">
-                  <v-card-subtitle>
-                    <div class="font-weight-bold">Dodano: {{ formatDate(object.created) }}</div>
-                    <div> Ostatnia modyfikacja: {{ formatDate(object.updated) }}</div>
-                    <div>Użytkownik: {{ object.updatedBy }}</div>
-                  </v-card-subtitle>
-                </v-col>
-                <v-col cols="5">
-                  <v-card-text>
-                    <div class="font-weight-bold">Tytuł:</div>
-                    <div>{{ object.title }}</div>
-                  </v-card-text>
-                </v-col>
-                <v-col cols="3">
-                  <case-notes-details :selected-note="object"/>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+      <v-list class="expansion">
+        <v-list-group :value="false" prepend-icon="mdi-clipboard-text" v-for="item in notesListForCases"
+                      :key="item[0].created" no-action>
+          <template v-slot:activator>
+            <v-list-item-title> {{ formatDateToMonth(item[0].created) }}</v-list-item-title>
+          </template>
+          <v-list-item v-for="object in item" :key="object.id" link>
+            <v-list-item-title>{{ object.title }}</v-list-item-title>
+            <v-list-item-subtitle>Dodano: {{ formatDate(object.created) }}</v-list-item-subtitle>
+            <v-list-item-subtitle>Ostatnia modyfikacja: {{ formatDate(object.updated) }}</v-list-item-subtitle>
+            <v-list-item-action>
+              <case-notes-details :selected-note="object"/>
+            </v-list-item-action>
+            <v-list-item-action>
+              <case-delete-note-dialog :note-for-action="object"/>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
 
-      <progress-bar v-if="loader"/>
+
     </template>
   </layout>
 </template>
@@ -58,10 +44,11 @@ import CaseAddNote from "@/components/legal-app/clients/cases/notes/case-add-not
 import CaseNotesDetails from "@/components/legal-app/clients/cases/notes/case-notes-details";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
+import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/case-delete-note-dialog";
 
 export default {
   name: "index",
-  components: {ProgressBar, CaseNotesDetails, CaseAddNote, Layout},
+  components: {CaseDeleteNoteDialog, ProgressBar, CaseNotesDetails, CaseAddNote, Layout},
   data: () => ({
     loader: false
   }),

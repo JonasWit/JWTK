@@ -3,14 +3,14 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="secondary" v-on="{ ...tooltip, ...dialog }">
-            Edytuj
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="success">mdi-file-document-edit</v-icon>
           </v-btn>
         </template>
-        <span>Edytuj treść</span>
+        <span>Edytuj opis sprawy</span>
       </v-tooltip>
     </template>
-    <v-form ref="editNoteForm">
+    <v-form ref="editCaseForm" v-model="validation.valid">
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
@@ -43,7 +43,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -67,7 +66,6 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false,
     form: {
       name: "",
       signature: "",
@@ -83,19 +81,15 @@ export default {
     },
   }),
   async beforeMount() {
-    this.loader = true
     try {
-      this.form.name = this.caseForAction.name
-      this.form.signature = this.caseForAction.signature
-      this.form.description = this.caseForAction.description
-      this.form.group = this.caseForAction.group
-      this.form.public = this.caseForAction.public
+      this.form.name = this.caseForAction.name ? this.caseForAction.name : "";
+      this.form.signature = this.caseForAction.signature ? this.caseForAction.signature : "";
+      this.form.description = this.caseForAction.description ? this.caseForAction.description : "";
+      this.form.group = this.caseForAction.group ? this.caseForAction.group : "";
+      this.form.public = this.caseForAction.public ? this.caseForAction.public : "";
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -103,7 +97,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails']),
     async saveChanges() {
-      this.loader = true
+      if (!this.$refs.editCaseForm.validate()) return;
       try {
         const newCase = {
           name: this.form.name,
@@ -118,13 +112,10 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          let caseId = this.caseForAction.id;
-          this.getCaseDetails({caseId})
-          this.$emit('action-completed');
-          this.dialog = false;
-          this.loader = false
-        }, 1500)
+        let caseId = this.caseForAction.id;
+        await this.getCaseDetails({caseId})
+        this.$emit('action-completed');
+        this.dialog = false;
       }
     }
   }

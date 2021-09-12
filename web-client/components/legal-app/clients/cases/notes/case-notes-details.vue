@@ -1,11 +1,16 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on">
-            Otwórz
-          </v-btn>
+      <v-dialog v-model="dialog" fullscreen hide-overlay>
+        <template #activator="{ on: dialog }" v-slot:activator="{ on }">
+          <v-tooltip bottom>
+            <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+              <v-btn icon v-on="{ ...tooltip, ...dialog }">
+                <v-icon large color="primary">mdi-arrow-right-bold-box</v-icon>
+              </v-btn>
+            </template>
+            <span>Przejdź do szczegółów</span>
+          </v-tooltip>
         </template>
         <v-card v-if="noteDetails">
           <v-toolbar dark color="primary">
@@ -32,7 +37,6 @@
           <v-row class="mx-2 my-2 d-flex align-center">
             <v-card-title>Treść notatki</v-card-title>
             <case-edit-note-dialog :note-for-action="noteDetails" v-on:action-completed="editDone"/>
-            <case-delete-note-dialog :note-for-action="noteDetails" v-on:delete-completed="deleteDone"/>
           </v-row>
           <v-card-text>
             {{ noteDetails.message }}
@@ -45,9 +49,7 @@
             <v-card-subtitle><span class="font-weight-bold">Edytowane przez:</span> {{ noteDetails.updatedBy }}
             </v-card-subtitle>
           </v-row>
-
         </v-card>
-        <progress-bar v-if="loader"/>
       </v-dialog>
     </v-row>
 
@@ -77,7 +79,6 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false,
     noteDetails: null,
     value: 'Treść notatki...',
     noteForAction: null,
@@ -95,7 +96,6 @@ export default {
 
   methods: {
     async getNotesDetails() {
-      this.loader = true
       try {
         let caseId = this.$route.params.case
         let noteId = this.selectedNote.id;
@@ -103,25 +103,14 @@ export default {
         this.noteForAction = this.selectedNote.id;
       } catch (error) {
         handleError(error);
-      } finally {
-        setTimeout(() => {
-          this.loader = false;
-        }, 1500)
       }
     },
     async editDone() {
-      this.loader = true
       try {
         await this.getNotesDetails();
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
-
-    },
-    deleteDone() {
-      this.dialog = false;
     },
     formatDate(date) {
       return formatDate(date);

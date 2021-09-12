@@ -3,14 +3,14 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="secondary" v-on="{ ...tooltip, ...dialog }">
-            Edytuj
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="success">mdi-file-document-edit</v-icon>
           </v-btn>
         </template>
-        <span>Edytuj treść</span>
+        <span>Edytuj treść notatki</span>
       </v-tooltip>
     </template>
-    <v-form ref="editNoteForm">
+    <v-form ref="editNoteForm" v-model="validation.valid">
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
@@ -18,12 +18,14 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-text-field v-model="form.title" label="Tytuł" required></v-text-field>
-          <v-textarea outlined v-model="form.message" label="Treść notatki"></v-textarea>
+          <v-text-field v-model="form.title" label="Tytuł" required
+                        :rules="[v => !!v, v => (v && v.length <= 50) || 'Pole obowiązkowe. Dozwolona liczba znaków to 50']"></v-text-field>
+          <v-textarea outlined v-model="form.message" label="Treść notatki"
+                      :rules="[v => !!v, v => (v && v.length <= 1000) || 'Pole obowiązkowe. Dozwolona liczba znaków to 1000']"></v-textarea>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn color="success" text @click="dialog = false">
+          <v-btn color="error" text @click="dialog = false">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
@@ -60,6 +62,9 @@ export default {
       title: "",
       message: "",
     },
+    validation: {
+      valid: false,
+    },
   }),
   fetch() {
     this.form.title = this.noteForAction.title;
@@ -68,7 +73,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getClientsNotes']),
     async saveChanges() {
-      this.loader = true
+      if (!this.$refs.editNoteForm.validate()) return;
       try {
         const note = {
           title: this.form.title,
@@ -81,13 +86,15 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.resetForm();
       }
-    }
+    },
+    resetForm() {
+      this.$refs.editNoteForm.reset();
+      this.$refs.editNoteForm.resetValidation();
+      this.dialog = false;
+    },
   }
 };
 </script>

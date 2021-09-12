@@ -78,7 +78,7 @@ export default {
           id: '1',
           route: `/legal-application/clients/${params.client}/cases/${params.case}/details`,
           name: 'Szczegóły',
-          text: 'Szczegóły sprawy',
+          text: 'Opis sprawy',
           icon: 'mdi-card-account-mail-outline',
           adminAccess: false
         },

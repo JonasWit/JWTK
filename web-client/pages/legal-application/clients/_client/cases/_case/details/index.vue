@@ -2,7 +2,7 @@
   <layout>
     <template v-slot:content>
       <v-row justify="center">
-        <v-card v-if="clientCaseDetails" width="100vw">
+        <v-card v-if="clientCaseDetails" width="100vw" class="mt-6">
           <v-toolbar dark color="primary light">
             <v-toolbar-title>
               Tytuł sprawy: {{ clientCaseDetails.name }}
@@ -31,8 +31,6 @@
             <v-row class="mx-2 my-2 d-flex align-center">
               <v-card-title>Opis sprawy</v-card-title>
               <edit-case-dialog :case-for-action="clientCaseDetails" v-on:action-completed="editDone"/>
-              <delete-case v-if="clientAdmin" :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
-              <archive-case v-if="clientAdmin" :case-for-action="clientCaseDetails" v-on:delete-completed="deleteDone"/>
             </v-row>
             <v-card-text>
               <p class=" mx-2 text--primary"> {{ clientCaseDetails.description }}</p>

@@ -3,11 +3,11 @@
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-          <v-btn elevation="2" small class="mx-2" color="error" v-on="{ ...tooltip, ...dialog }">
-            Usuń
+          <v-btn icon v-on="{ ...tooltip, ...dialog }">
+            <v-icon medium color="error">mdi-delete</v-icon>
           </v-btn>
         </template>
-        <span>Usuń notatkę</span>
+        <span>Usuń sprawę</span>
       </v-tooltip>
     </template>
     <v-card>
@@ -26,7 +26,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -46,11 +45,9 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false
   }),
   methods: {
     async deleteClientCase() {
-      this.loader = true
       try {
         let caseId = this.caseForAction.id;
         await this.$axios.$delete(deleteCase(caseId));
@@ -58,11 +55,8 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('delete-completed');
-          this.dialog = false;
-          this.loader = false
-        }, 1500)
+        this.$nuxt.refresh()
+        this.dialog = false;
       }
     }
   }

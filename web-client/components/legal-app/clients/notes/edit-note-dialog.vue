@@ -96,10 +96,15 @@ export default {
         handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.dialog = false;
+        this.resetForm();
 
       }
-    }
+    },
+    resetForm() {
+      this.$refs.editNoteForm.reset();
+      this.$refs.editNoteForm.resetValidation();
+      this.dialog = false;
+    },
   }
 };
 </script>

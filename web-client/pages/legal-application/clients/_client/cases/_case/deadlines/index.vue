@@ -4,6 +4,8 @@
       <v-toolbar class="white--text" color="primary">
         <v-toolbar-title>Terminy procesowe</v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-toolbar-title>Tytuł sprawy: {{ clientCaseDetails.name }}</v-toolbar-title>
+        <v-spacer></v-spacer>
         <add-deadline/>
       </v-toolbar>
       <v-alert v-if="deadlines.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">
@@ -39,7 +41,7 @@
                   </v-card-text>
                 </v-col>
                 <v-col>
-                  <delete-deadline :deadline-for-action="item" v-on:delete-completed="actionDone"/>
+                  <delete-deadline :deadline-for-action="item"/>
                 </v-col>
               </v-row>
             </v-card>
@@ -49,7 +51,6 @@
           </v-tab-item>
         </v-tabs-items>
       </v-tabs>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -69,10 +70,8 @@ export default {
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     tab: null,
-    loader: false
   }),
   async fetch() {
-    this.loader = true
     try {
       let caseId = this.$route.params.case;
       let query = this.query;
@@ -80,13 +79,11 @@ export default {
       await this.getCaseDetails({caseId});
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   computed: {
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
+    ...mapState('legal-app-client-store', ['notesListForCases', 'clientCaseDetails']),
     todayDate() {
       return todayDate();
     },
@@ -101,7 +98,6 @@ export default {
       return formatDate(date);
     },
     async actionDone() {
-      this.loader = true
       try {
         let caseId = this.$route.params.case;
         let query = this.query;
@@ -110,10 +106,7 @@ export default {
         await this.getEventsForNotifications({dates});
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
-
     }
   }
 };

@@ -62,7 +62,7 @@ export default {
       } finally {
         let clientId = this.$route.params.client;
         await this.getClientsNotes(clientId);
-        this.$emit('delete-completed');
+        this.$nuxt.refresh()
         this.dialog = false;
       }
     }
