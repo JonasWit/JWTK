@@ -2,49 +2,31 @@
   <layout>
     <template v-slot:content>
       <v-toolbar class="mb-4 white--text" color="primary">
-        <v-toolbar-title>Moje notatki</v-toolbar-title>
-        <v-spacer></v-spacer>
         <add-note/>
+        <v-spacer></v-spacer>
+        <v-toolbar-title>Moje notatki</v-toolbar-title>
+
       </v-toolbar>
-      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
-        notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
-      </v-alert>
-      <v-expansion-panels focusable>
-        <v-expansion-panel v-for="item in clientNotesList" :key="item[0].created" class="expansion">
-          <v-expansion-panel-header class="text-uppercase">
-            {{ formatDateToMonth(item[0].created) }}
-            <template v-slot:actions>
-              <v-icon color="primary">
-                $expand
-              </v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card v-for="object in item" :key="object.id" class="my-4">
-              <v-row class="d-flex align-center">
-                <v-col cols="4">
-                  <v-card-subtitle>
-                    <div class="font-weight-bold">Dodano: {{ formatDate(object.created) }}</div>
-                    <div> Ostatnia modyfikacja: {{ formatDate(object.updated) }}</div>
-                    <div>Użytkownik: {{ object.updatedBy }}</div>
-                  </v-card-subtitle>
-                </v-col>
-                <v-col cols="5">
-                  <v-card-text>
-                    <div class="font-weight-bold">Tytuł:</div>
-                    <div>{{ object.title }}</div>
-                  </v-card-text>
-                </v-col>
-                <v-col cols="3">
-                  <notes-details :selected-note="object"/>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <progress-bar v-if="loader"/>
+      <!--      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">-->
+      <!--        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej-->
+      <!--        notatki? Użyj ikonki "plus", aby dodać pierwszą notkę.-->
+      <!--      </v-alert>-->
+      <v-list>
+        <v-list-group :value="true" prepend-icon="mdi-clipboard-text" v-for="item in clientNotesList"
+                      :key="item[0].created" no-action>
+          <template v-slot:activator>
+            <v-list-item-title> {{ formatDateToMonth(item[0].created) }}</v-list-item-title>
+          </template>
+          <v-list-item v-for="object in item" :key="object.id" link>
+            <v-list-item-title>{{ object.title }}</v-list-item-title>
+            <v-list-item-subtitle>Dodano: {{ formatDate(object.created) }}</v-list-item-subtitle>
+            <v-list-item-subtitle>Ostatnia modyfikacja: {{ formatDate(object.updated) }}</v-list-item-subtitle>
+            <v-list-item-action>
+              <notes-details :selected-note="object"/>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
     </template>
   </layout>
 </template>
@@ -68,14 +50,11 @@ export default {
   }),
 
   async fetch() {
-    this.loader = true
     try {
       let clientId = this.$route.params.client
       await this.getClientsNotes(clientId);
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
   },
   computed: {

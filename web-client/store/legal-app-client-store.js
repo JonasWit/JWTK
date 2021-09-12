@@ -265,6 +265,7 @@ export const actions = {
         x.caseCreatedDate = formatDateToMonth(x.created);
       });
       const clientNotesList = groupByKey(response, 'caseCreatedDate');
+      // const clientNotesList = response;
       commit('updateNotesTitlesListFromFetch', {clientNotesList});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
