@@ -38,7 +38,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -53,7 +52,6 @@ export default {
   name: "case-add-note",
   components: {ProgressBar},
   data: () => ({
-    loader: false,
     dialog: false,
     form: {
       title: "",
@@ -69,10 +67,7 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getNotesListForCases']),
     async save() {
-
       if (!this.$refs.addNoteForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       try {
         const note = {
           title: this.form.title,
@@ -84,17 +79,15 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          let caseId = this.$route.params.case
-          this.getNotesListForCases({caseId});
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        let caseId = this.$route.params.case
+        await this.getNotesListForCases({caseId});
+        this.resetForm()
       }
     },
     resetForm() {
       this.$refs.addNoteForm.reset();
       this.$refs.addNoteForm.resetValidation();
+      this.dialog = false;
     },
   }
 }

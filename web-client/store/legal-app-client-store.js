@@ -28,6 +28,7 @@ const initState = () => ({
   //Cases
   clientCaseDetails: null,
   groupedCases: [],
+  fullListOfCases: [],
   allowedUsersForCase: [],
   eligibleUsersForCase: [],
   notesListForCases: [],
@@ -148,6 +149,11 @@ export const mutations = {
   updateGroupedCases(state, {groupedCases}) {
     state.groupedCases = groupedCases;
   },
+
+  updateFullListOfCases(state, {fullListOfCases}) {
+    state.fullListOfCases = fullListOfCases
+  },
+
   updateAllowedUsersForCase(state, {allowedUsersForCase}) {
     state.allowedUsersForCase = allowedUsersForCase;
   },
@@ -313,11 +319,26 @@ export const actions = {
       });
       const groupedCases = groupByKey(response, 'group');
       commit('updateGroupedCases', {groupedCases});
-      console.warn('list of cases', groupedCases);
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
   },
+
+  async getFullListOfCases({commit}, {clientId}) {
+    try {
+      let fullListOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`);
+      fullListOfCases.sort((a, b) => {
+        const dateA = new Date(a.created);
+        const dateB = new Date(b.created);
+        return dateB - dateA;
+      });
+      commit('updateFullListOfCases', {fullListOfCases});
+      console.warn('list of cases from store', fullListOfCases);
+    } catch (error) {
+      handleError(error)
+    }
+  },
+
   // CASE ACCESS - GET ALLOWED & ELIGIBLE USERS
 
   async getAllowedUsersForCase({commit}, {caseId}) {

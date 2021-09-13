@@ -46,11 +46,8 @@
               </v-card-subtitle>
             </v-row>
           </v-card>
-
         </v-card>
-
       </v-row>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -72,18 +69,14 @@ export default {
   data: () => ({
     caseForAction: null,
     tab: null,
-    loader: false
   }),
 
   async fetch() {
-    this.loader = true
     try {
       let caseId = this.$route.params.case
       await this.getCaseDetails({caseId})
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
 
   },
@@ -101,27 +94,13 @@ export default {
       return formatDateWithHours(date)
     },
     async editDone() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client;
         await this.getListOfGroupedCases({clientId});
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
 
-    },
-    async deleteDone() {
-      this.loader = true
-      try {
-        let clientId = this.$route.params.client;
-        await this.getListOfGroupedCases({clientId});
-      } catch (error) {
-      } finally {
-        await this.$router.push(`/legal-application/clients/${this.$route.params.client}/cases/`)
-        this.loader = false
-      }
     },
   }
 }

@@ -31,8 +31,6 @@
           </v-list-item>
         </v-list-group>
       </v-list>
-
-
     </template>
   </layout>
 </template>
@@ -49,23 +47,16 @@ import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/cas
 export default {
   name: "index",
   components: {CaseDeleteNoteDialog, ProgressBar, CaseNotesDetails, CaseAddNote, Layout},
-  data: () => ({
-    loader: false
-  }),
+  data: () => ({}),
 
   async fetch() {
-    this.loader = true
     try {
       let caseId = this.$route.params.case
       await this.getNotesListForCases({caseId});
       await this.getCaseDetails({caseId})
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),

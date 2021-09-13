@@ -64,7 +64,7 @@ import DeleteNoteDialog from "@/components/legal-app/clients/notes/delete-note-d
 import {getNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import CaseEditNoteDialog from "@/components/legal-app/clients/cases/notes/case-edit-note-dialog";
 import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/case-delete-note-dialog";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
@@ -80,7 +80,6 @@ export default {
   data: () => ({
     dialog: false,
     noteDetails: null,
-    value: 'Treść notatki...',
     noteForAction: null,
   }),
   watch: {
@@ -95,6 +94,7 @@ export default {
   },
 
   methods: {
+    ...mapActions('legal-app-client-store', ['getNotesListForCases']),
     async getNotesDetails() {
       try {
         let caseId = this.$route.params.case
@@ -107,6 +107,8 @@ export default {
     },
     async editDone() {
       try {
+        let caseId = this.$route.params.case
+        await this.getNotesListForCases({caseId});
         await this.getNotesDetails();
       } catch (error) {
         handleError(error);

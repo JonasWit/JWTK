@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog v-model="dialog1" max-width="500px">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
@@ -25,7 +25,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn color="error" text @click="dialog = false">
+          <v-btn color="error" text @click="dialog1 = false">
             Anuluj
           </v-btn>
           <v-spacer></v-spacer>
@@ -35,7 +35,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -56,8 +55,7 @@ export default {
     }
   },
   data: () => ({
-    dialog: false,
-    loader: false,
+    dialog1: false,
     form: {
       title: "",
       message: "",
@@ -87,7 +85,8 @@ export default {
         handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.resetForm();
+        this.$refs.editNoteForm.resetValidation();
+        this.dialog1 = false;
       }
     },
     resetForm() {

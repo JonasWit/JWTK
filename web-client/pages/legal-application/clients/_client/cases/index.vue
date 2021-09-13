@@ -6,8 +6,8 @@
           Lista Spraw
         </v-toolbar-title>
         <v-autocomplete flat hide-no-data hide-details label="Wyszukaj sprawę" solo-inverted return-object clearable
-                        placeholder="Wpisz sygnaturę sprawy" prepend-inner-icon="mdi-magnify" :items="listOfCases"
-        >
+                        placeholder="Wpisz sygnaturę sprawy" prepend-inner-icon="mdi-magnify" :items="caseItems"
+                        v-model="searchResult" :filter="searchFilter">
           <template v-slot:item="{item ,on , attrs}">
             <v-list-item v-on="on" :attrs="attrs">
               <v-list-item-content>{{ item.name }}</v-list-item-content>
@@ -43,6 +43,7 @@
               <archive-case :case-for-action="object"/>
             </v-list-item-action>
           </v-list-item>
+          <v-divider></v-divider>
         </v-list-group>
       </v-list>
     </template>
@@ -56,10 +57,16 @@ import {formatDate} from "@/data/date-extensions";
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
 import {mapActions, mapState} from "vuex";
 import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
-import {handleError} from "@/data/functions";
+import {handleError, hasOccurrences} from "@/data/functions";
 import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case";
 import ArchiveCase from "@/components/legal-app/clients/cases/dialogs/archive-case";
 
+const searchItemFactory = (name, id) => ({
+  id,
+  name,
+  searchIndex: (name).toLowerCase(),
+  text: name
+});
 
 export default {
   name: "index",
@@ -68,33 +75,56 @@ export default {
 
   data: () => ({
     listOfCases: [],
-    name: "",
-    signature: "",
-    description: "",
+    searchResult: "",
+    caseSearchItems: [],
     dialog: false,
+    searchConditionsProvided: false,
   }),
   async fetch() {
     try {
       let clientId = this.$route.params.client
       await this.getListOfGroupedCases({clientId})
+      await this.getFullListOfCases({clientId})
+      this.caseSearchItems = this.fullListOfCases
+      this.listOfCases = this.fullListOfCases
+      console.log('list of cases', this.listOfCases)
+      console.log('caseSearchItems', this.caseSearchItems)
     } catch (error) {
       handleError(error);
     }
   },
-
+  watch: {
+    searchResult() {
+      if (this.searchResult) {
+        this.listOfCases = [];
+        this.listOfCases.push(this.fullListOfCases.find(object => object.id === this.searchResult.id));
+      } else {
+        this.listOfCases = this.caseSearchItems;
+      }
+    },
+  },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
-    ...mapState('legal-app-client-store', ['groupedCases']),
+    ...mapState('legal-app-client-store', ['groupedCases', 'fullListOfCases']),
     clientNumber() {
       return this.$route.params.client
-    }
+    },
+    caseItems() {
+      return []
+        .concat(this.caseSearchItems.map(x => searchItemFactory(x.name, x.id)));
+    },
+
   },
 
   methods: {
-    ...mapActions('legal-app-client-store', ['getListOfGroupedCases']),
+    ...mapActions('legal-app-client-store', ['getListOfGroupedCases', 'getFullListOfCases']),
     formatDate(date) {
       return formatDate(date)
-    }
+    },
+
+    searchFilter(object, queryText) {
+      return hasOccurrences(object.searchIndex, queryText);
+    },
   },
 }
 </script>
