@@ -78,7 +78,6 @@ export default {
     this.form.name = this.selectedContact.name ? this.selectedContact.name : "";
     this.form.surname = this.selectedContact.surname ? this.selectedContact.surname : "";
     this.form.comment = this.selectedContact.comment ? this.selectedContact.comment : "";
-    console.warn("FORM", this.form);
   },
   methods: {
     async saveContactChange() {
@@ -98,15 +97,11 @@ export default {
         handleError(error);
       } finally {
         this.$nuxt.refresh();
-        this.resetForm();
+        this.$refs.editContactNameForm.resetValidation();
+        this.dialog = false;
 
 
       }
-    },
-    resetForm() {
-      this.$refs.editContactNameForm.reset();
-      this.$refs.editContactNameForm.resetValidation();
-      this.dialog = false;
     },
   }
 };
