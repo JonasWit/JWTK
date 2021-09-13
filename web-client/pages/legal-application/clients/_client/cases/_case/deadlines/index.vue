@@ -8,9 +8,9 @@
         <v-spacer></v-spacer>
         <add-deadline/>
       </v-toolbar>
-      <v-alert v-if="deadlines.length === 0" elevation="5" text type="info" dismissible close-text="Zamknij">
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info" dismissible close-text="Zamknij">
         Zarządzaj terminami dla Sprawy! Dodawaj terminy procesowe i inne. Skorzystaj z widoku listy lub kalendarza, aby
-        sprawdzić nadchodzące terminy. Nie masz jeszcze żadnego terminu. Użyj ikonki "plus", aby dodać pierwszy termin.
+        sprawdzić nadchodzące terminy. Nie masz jeszcze żadnego terminu? Użyj ikonki "plus", aby dodać pierwszy termin.
       </v-alert>
       <v-tabs v-model="tab" centered dark icons-and-text background-color="primary">
         <v-tabs-slider></v-tabs-slider>
@@ -82,6 +82,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientCaseDetails', 'deadlines']),
     ...mapState('legal-app-client-store', ['notesListForCases', 'clientCaseDetails']),
     todayDate() {
