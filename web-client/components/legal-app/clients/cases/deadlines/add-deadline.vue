@@ -45,12 +45,11 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
 <script>
-import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
+import {dateValidation, notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {mapActions, mapState} from "vuex";
 import {createDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
@@ -60,7 +59,6 @@ export default {
   name: "add-deadline",
   components: {ProgressBar},
   data: () => ({
-    loader: false,
     dialog: false,
     deadline: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu2: false,
@@ -70,7 +68,7 @@ export default {
     validation: {
       valid: false,
       message: notEmptyAndLimitedRule("Opis nie może byc pusty i może zawierać maksymalnie 200 znaków.", 1, 200),
-      deadline: notEmptyRule("Data nie może być pusta!")
+      deadline: dateValidation()
     },
   }),
   computed: {
@@ -81,8 +79,6 @@ export default {
 
     async addNewDeadline() {
       if (!this.$refs.addNewDeadlineForm.validate()) return;
-      if (this.loader) return;
-      this.loader = true;
       try {
         const newDeadline = {
           deadline: new Date(`${this.deadline}T23:59:59`),
