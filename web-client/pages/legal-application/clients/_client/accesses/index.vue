@@ -10,18 +10,29 @@
             <v-toolbar-title>Nazwa klienta: {{ clientDataFromFetch.name }}</v-toolbar-title>
           </v-toolbar>
           <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
-            W panelu dostępów możesz nadać lub usunąć dostęp do Klienta. Użyj opcji "Nadaj dostęp",
-            aby
-            zobaczyć listę użytkowników, którzy mogą uzyskać dostęp do Klienta.
+            W panelu dostępów możesz nadać lub usunąć dostęp do Klienta. Rzwiń listę, aby zobaczyć listę użytkowników,
+            którzy mogą uzyskać dostęp do Klienta. Z listy poniżej wybierz użytkownika, któremu chcesz nadać dostęp do
+            klienta. Upoważniona osoba będzie
+            miała
+            dostęp do panelu klienta, w którym będzie mogła zarządzać swoimi notatkami, rozliczeniami oraz sprawami.
           </v-alert>
-          <v-card-text class="d-flex justify-space-between mx-3 my-5">
-            <grant-access v-if="clientAdmin"/>
-          </v-card-text>
-          <v-row class="mb-3">
-            <allowed-users/>
-          </v-row>
+          <v-card class="mx-2" flat v-if="clientAdmin">
+            <v-card-title>Lista użytkowników uprawnionych do uzyskania dostępu</v-card-title>
+            <v-select @change="grantAccess(value)" v-model="value" :items="eligibleUsersList" chips
+                      label="Wybierz użytkownika" solo item-text="email" item-value="email" return-object
+                      outlined persistent-hint>
+
+            </v-select>
+            <v-card-title v-if="allowedUsersList.length > 0">Lista użytkowników z dostępem do klienta</v-card-title>
+            <v-alert v-if="allowedUsersList.length > 0 && legalAppTooltips" elevation="5" text type="info">
+              Aby usunąć dostęp dla wybranego użytkonwika kliknij "krzyżyk" obok odpowiedniego adresu email.
+            </v-alert>
+            <v-chip v-for="(item) in allowedUsersList" :key="item.id" class="ma-2" close color="red"
+                    text-color="white" @click:close="revokeAccess(item)">
+              {{ item.email }}
+            </v-chip>
+          </v-card>
         </v-card>
-        <progress-bar v-if="loader"/>
       </v-container>
     </template>
   </layout>
@@ -30,28 +41,29 @@
 
 <script>
 import Layout from "@/components/legal-app/layout";
-import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
-import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import {mapActions, mapGetters, mapState} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
+import {grantAccess, revokeAccess} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "index",
-  components: {ProgressBar, GrantAccess, AllowedUsers, Layout},
+  components: {Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
-    loader: false
+    value: null,
+    allowedUsersList: [],
+    eligibleUsersList: []
   }),
   async fetch() {
-    this.loader = true;
     try {
       let clientId = this.$route.params.client;
       await this.getClientData({clientId});
+      await this.getAllowedUsers({clientId});
+      await this.getEligibleUsersList({clientId})
+      this.allowedUsersList = this.allowedUsers
+      this.eligibleUsersList = this.eligibleUsers
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false;
     }
   },
 
@@ -59,10 +71,40 @@ export default {
     ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientDataFromFetch']),
     ...mapGetters('auth', ['clientAdmin']),
+    ...mapGetters('legal-app-client-store', ['allowedUsers', 'eligibleUsers'])
 
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getClientData'])
+    ...mapActions('legal-app-client-store', ['getClientData', 'getEligibleUsersList', 'getAllowedUsers']),
+    async grantAccess(item) {
+      const payload = {
+        userId: item.id
+      }
+      try {
+        let clientId = this.$route.params.client;
+        await this.$axios.$post(grantAccess(clientId), payload)
+        this.$notifier.showSuccessMessage("Dostęp nadany pomyślnie");
+      } catch (error) {
+        handleError(error)
+      } finally {
+        this.$nuxt.refresh()
+      }
+    },
+    async revokeAccess(item) {
+      const payload = {
+        userId: item.id
+      }
+      try {
+        let clientId = this.$route.params.client
+        await this.$axios.$post(revokeAccess(clientId), payload)
+        this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
+      } catch (error) {
+        handleError(error);
+      } finally {
+        this.$nuxt.refresh()
+
+      }
+    }
   }
 };
 </script>

@@ -29,7 +29,6 @@
           </v-card-text>
         </v-card>
       </v-container>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -46,22 +45,16 @@ export default {
   components: {ProgressBar, Layout, CaseRevokeAccess, CaseGrantAccess},
   middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
 
-  data: () => ({
-    loader: false
-  }),
+  data: () => ({}),
 
   async fetch() {
-    this.loader = true
     try {
       let caseId = this.$route.params.case
       await this.getAllowedUsersForCase({caseId})
       await this.getCaseDetails({caseId})
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),

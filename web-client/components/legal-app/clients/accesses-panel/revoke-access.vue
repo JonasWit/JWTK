@@ -27,7 +27,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -55,10 +54,11 @@ export default {
     ...mapActions('legal-app-client-store', ['getAllowedUsers']),
     ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
     async revokeAccess() {
-      this.loader = true
       const payload = {
         userId: this.userForAction.id
+
       }
+      console.log(payload)
       try {
         let clientId = this.$route.params.client
         await this.$axios.$post(revokeAccess(clientId), payload)
@@ -66,12 +66,10 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          let clientId = this.$route.params.client;
-          this.getAllowedUsers({clientId})
-          this.getEligibleUsersList({clientId})
-          this.loader = false
-        }, 1500)
+        let clientId = this.$route.params.client;
+        await this.getAllowedUsers({clientId})
+        await this.getEligibleUsersList({clientId})
+
       }
     }
   }
