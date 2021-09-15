@@ -25,7 +25,7 @@
               <notes-details :selected-note="object"/>
             </v-list-item-action>
             <v-list-item-action>
-              <delete-note-dialog :note-for-action="object" v-on:delete-completed="deleteDone"/>
+              <delete-note-dialog :note-for-action="object"/>
             </v-list-item-action>
           </v-list-item>
         </v-list-group>

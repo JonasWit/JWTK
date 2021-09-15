@@ -19,8 +19,8 @@
           <v-card class="mx-2" flat v-if="clientAdmin">
             <v-card-title>Lista użytkowników uprawnionych do uzyskania dostępu</v-card-title>
             <v-select @change="grantAccess(value)" v-model="value" :items="eligibleUsersList" chips
-                      label="Wybierz użytkownika" solo item-text="email" item-value="email" return-object
-                      outlined persistent-hint>
+                      label="Wybierz użytkownika" item-text="email" item-value="email" return-object
+            >
 
             </v-select>
             <v-card-title v-if="allowedUsersList.length > 0">Lista użytkowników z dostępem do klienta</v-card-title>
