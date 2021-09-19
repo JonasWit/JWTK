@@ -31,7 +31,8 @@
             <v-list-item-subtitle class="error--text" v-else>Legal App: Forbidden</v-list-item-subtitle>
 
             <div v-if="user.legalAppDataAccessKey">
-              <v-list-item-subtitle class="success--text"> Legal App Data Access Key: {{
+              <v-list-item-subtitle class="success--text">
+                Legal App Data Access Key: {{
                   user.legalAppDataAccessKey.name
                 }}
               </v-list-item-subtitle>
@@ -47,8 +48,8 @@
             <v-list-item-subtitle class="error--text" v-else>Medical App: Forbidden</v-list-item-subtitle>
 
             <div v-if="user.medicalAppDataAccessKey">
-              <v-list-item-subtitle :class="colorDate(user.medicalAppDataAccessKey.expireDate)"> Medical App Data Access
-                Key: {{
+              <v-list-item-subtitle :class="colorDate(user.medicalAppDataAccessKey.expireDate)">
+                Medical App Data Access Key: {{
                   user.medicalAppDataAccessKey.name
                 }}
               </v-list-item-subtitle>
@@ -56,6 +57,24 @@
                 {{ formatDate(user.medicalAppDataAccessKey.expireDate) }}
               </v-list-item-subtitle>
             </div>
+
+            <v-divider/>
+
+            <v-list-item-subtitle class="success--text" v-if="user.restaurnatAppAllowed">Restaurant App: Allowed
+            </v-list-item-subtitle>
+            <v-list-item-subtitle class="error--text" v-else>Restaurant App: Forbidden</v-list-item-subtitle>
+
+            <div v-if="user.restaurantAppDataAccessKey">
+              <v-list-item-subtitle :class="colorDate(user.restaurantAppDataAccessKey.expireDate)">
+                Restaurant App Data Key: {{
+                  user.restaurantAppDataAccessKey.name
+                }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle class="success--text"> Restaurant App Expiration:
+                {{ formatDate(user.restaurantAppDataAccessKey.expireDate) }}
+              </v-list-item-subtitle>
+            </div>
+
           </v-list-item-content>
           <v-spacer/>
           <v-list-item-content>

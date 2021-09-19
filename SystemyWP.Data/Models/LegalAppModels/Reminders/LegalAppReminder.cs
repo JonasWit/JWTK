@@ -17,7 +17,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Reminders
         public string AuthorId { get; set; }
         
         [Required]
-        public LegalAppAccessKey LegalAppAccessKey { get; set; }
+        public LegalAccessKey LegalAccessKey { get; set; }
         [Required]
         public int LegalAppAccessKeyId { get; set; }
     }

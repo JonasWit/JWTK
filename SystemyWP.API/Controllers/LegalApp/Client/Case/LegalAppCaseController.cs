@@ -96,7 +96,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 if (legalAppClient is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
                 var user = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
                 if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                 
@@ -118,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     _context.Add(new LegalAppDataAccess
                     {
-                        LegalAppAccessKeyId = user.LegalAppAccessKey.Id,
+                        LegalAppAccessKeyId = user.LegalAccessKey.Id,
                         UserId = UserId,
                         ItemId = newCase.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase,

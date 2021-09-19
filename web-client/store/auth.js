@@ -30,12 +30,16 @@ export const getters = {
     }
   },
   legalAppKeyAvailable: state => !!state.profile.legalAppDataAccessKey,
+  legalAppAllowed: (state, getters) => getters.authenticated && state.profile.legalAppAllowed === true,
+  medicalAppKeyAvailable: state => !!state.profile.medicalAppDataAccessKey,
+  medicalAppAllowed: (state, getters) => getters.authenticated && state.profile.medicalAppAllowed === true,
+  restaurantAppKeyAvailable: state => !!state.profile.restaurantAppDataAccessKey,
+  restaurantAppAllowed: (state, getters) => getters.authenticated && state.profile.restaurantAppAllowed === true,
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
   client: (state, getters) => getters.authenticated && state.profile.role === ROLES.USER,
   clientAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.USER_ADMIN || getters.portalAdmin),
   portalAdmin: (state, getters) => getters.authenticated && state.profile.role === ROLES.PORTAL_ADMIN,
-  legalAppAllowed: (state, getters) => getters.authenticated && state.profile.legalAppAllowed === true,
 };
 
 export const mutations = {
@@ -71,6 +75,7 @@ export const actions = {
   async reloadProfile({commit}) {
     try {
       let profile = await this.$axios.$get('/api/users/me');
+      console.warn("User Profile: ", profile);
       commit('saveProfile', {profile});
     } catch (error) {
       console.warn("Not authorized");

@@ -25,8 +25,8 @@ namespace SystemyWP.API.Controllers.BaseClases
         {
             try
             {
-                var user = _context.Users.Include(x => x.LegalAppAccessKey).FirstOrDefault(x => x.Id.Equals(UserId));
-                if (user?.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return true;
+                var user = _context.Users.Include(x => x.LegalAccessKey).FirstOrDefault(x => x.Id.Equals(UserId));
+                if (user?.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return true;
                 return false;
             }
             catch (Exception e)

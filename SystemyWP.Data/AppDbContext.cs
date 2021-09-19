@@ -10,6 +10,9 @@ using SystemyWP.Data.Models.MedicalAppModels.Access;
 using SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Patients;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.Data.Models.LegalAppModels.Billings;
+using SystemyWP.Data.Models.RestaurantAppModels.Access;
+using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
 
 namespace SystemyWP.Data
 {
@@ -40,7 +43,7 @@ namespace SystemyWP.Data
         #region LegalApp
 
         //Access
-        public DbSet<LegalAppAccessKey> LegalAppAccessKeys { get; set; }
+        public DbSet<LegalAccessKey> LegalAppAccessKeys { get; set; }
 
         //General
         public DbSet<LegalAppReminder> LegalAppReminders { get; set; }
@@ -79,12 +82,12 @@ namespace SystemyWP.Data
 
             modelBuilder.Entity<LegalAppDataAccess>()
                 .HasIndex(x => x.ItemId);
-            
             modelBuilder.Entity<MedicalAppDataAccess>()
+                .HasIndex(x => x.ItemId);
+            modelBuilder.Entity<RestaurantAppDataAccess>()
                 .HasIndex(x => x.ItemId);
             
             //General
-
             modelBuilder.Entity<User>()
                 .HasMany(x => x.LegalAppDataAccesses)
                 .WithOne(x => x.User)
@@ -94,55 +97,17 @@ namespace SystemyWP.Data
                 .HasMany(x => x.MedicalAppDataAccesses)
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            //Legal
             
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(c => c.LegalAppDataAccesses)
-                .WithOne(e => e.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(c => c.Users)
-                .WithOne(e => e.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(x => x.LegalAppClients)
-                .WithOne(x => x.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(x => x.LegalAppReminders)
-                .WithOne(x => x.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<LegalAppAccessKey>()
-                .HasMany(x => x.LegalAppClientBillingData)
-                .WithOne(x => x.LegalAppAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            //Medical
-            
-            modelBuilder.Entity<MedicalAccessKey>()
-                .HasMany(c => c.MedicalAppDataAccesses)
-                .WithOne(e => e.MedicalAccessKey)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<MedicalAccessKey>()
-                .HasMany(c => c.Users)
-                .WithOne(e => e.MedicalAccessKey)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<MedicalAccessKey>()
-                .HasMany(x => x.MedicalAppPatients)
-                .WithOne(x => x.MedicalAccessKey)
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.RestaurantAppDataAccesses)
+                .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
             modelBuilder.ConfigureLegalApp();
             modelBuilder.ConfigureMedicalApp();
+            modelBuilder.ConfigureRestaurantApp();
         }
     }
 }

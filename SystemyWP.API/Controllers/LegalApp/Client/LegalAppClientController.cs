@@ -110,15 +110,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             try
             {
                 var user = await _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
-                if (user?.LegalAppAccessKey is null || user.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow)
+                if (user?.LegalAccessKey is null || user.LegalAccessKey?.ExpireDate <= DateTime.UtcNow)
                     return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var newClient = new LegalAppClient
                 {
-                    LegalAppAccessKey = user.LegalAppAccessKey,
+                    LegalAccessKey = user.LegalAccessKey,
                     Name = form.Name,
                     CreatedBy = Username,
                     UpdatedBy = Username
@@ -131,7 +131,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     _context.Add(new LegalAppDataAccess
                     {
-                        LegalAppAccessKeyId = user.LegalAppAccessKey.Id,
+                        LegalAppAccessKeyId = user.LegalAccessKey.Id,
                         UserId = UserId,
                         ItemId = newClient.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient,
@@ -267,14 +267,14 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
             {
                 var user = await _context.Users
                     .Where(x => x.Id.Equals(UserId))
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync();
 
                 var result = await _context.LegalAppClients
                     .Include(x =>
                         x.LegalAppCases)
                     .Where(x =>
-                        x.LegalAppAccessKeyId == user.LegalAppAccessKey.Id)
+                        x.LegalAppAccessKeyId == user.LegalAccessKey.Id)
                     .Select(LegalAppClientProjections.Projection)
                     .ToListAsync();
 

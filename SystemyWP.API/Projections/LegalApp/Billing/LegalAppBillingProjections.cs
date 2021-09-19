@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.LegalAppModels.Access;
+using SystemyWP.Data.Models.LegalAppModels.Billings;
 
 namespace SystemyWP.API.Projections.LegalApp.Billing
 {

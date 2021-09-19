@@ -7,6 +7,8 @@ using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.MedicalAppModels.Access;
 using SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers;
 using Microsoft.AspNetCore.Identity;
+using SystemyWP.Data.Models.RestaurantAppModels.Access;
+using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
 
 namespace SystemyWP.Data.Models.General
 {
@@ -21,9 +23,6 @@ namespace SystemyWP.Data.Models.General
         [Required]
         [MaxLength(265)]
         public string Username { get; set; }
-        
-        public LegalAppAccessKey LegalAppAccessKey { get; set; }
-        public MedicalAccessKey MedicalAccessKey { get; set; }
 
         [ProtectedPersonalData]
         public string PhoneNumber { get; set; }
@@ -53,9 +52,13 @@ namespace SystemyWP.Data.Models.General
         public string Krs { get; set; }
         
         public DateTime? LastLogin  { get; set; }  
+        
+        public LegalAccessKey LegalAccessKey { get; set; }
+        public MedicalAccessKey MedicalAccessKey { get; set; }
+        public RestaurantAccessKey RestaurantAccessKey { get; set; }
 
         public List<LegalAppDataAccess> LegalAppDataAccesses { get; set; } = new ();
-        
         public List<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; } = new ();
+        public List<RestaurantAppDataAccess> RestaurantAppDataAccesses { get; set; } = new ();
     }
 }

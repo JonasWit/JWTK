@@ -37,6 +37,8 @@ namespace SystemyWP.API
             public static readonly Claim UserAdminClaim = new (Role, Roles.UserAdmin);
             public static readonly Claim PortalAdminClaim = new (Role, Roles.PortalAdmin);
             public static readonly Claim LegalAppAccessClaim = new (AppAccess, Apps.LegalApp);
+            public static readonly Claim MedicalAppAccessClaim = new (AppAccess, Apps.MedicalApp);
+            public static readonly Claim RestaurantAppAccessClaim = new (AppAccess, Apps.RestaurantApp);
         }
 
         public struct Roles
@@ -50,6 +52,8 @@ namespace SystemyWP.API
         public struct Apps
         {
             public const string LegalApp = nameof(LegalApp);
+            public const string MedicalApp = nameof(MedicalApp);
+            public const string RestaurantApp = nameof(RestaurantApp);
         }
         
         public struct Emails

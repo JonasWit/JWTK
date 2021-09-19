@@ -53,7 +53,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
                 if (_context.LegalAppAccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
                     return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
-                _context.Add(new LegalAppAccessKey
+                _context.Add(new LegalAccessKey
                 {
                     Name = form.KeyName,
                     ExpireDate = form.ExpireDate,
@@ -103,11 +103,11 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
             try
             {
                 var user = await _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-                if (user?.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (user?.LegalAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                _context.LegalAppAccessKeys.Remove(user.LegalAppAccessKey);
+                _context.LegalAppAccessKeys.Remove(user.LegalAccessKey);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

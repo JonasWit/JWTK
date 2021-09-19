@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
 using SystemyWP.Data.Models.General;
+using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
 
 namespace SystemyWP.API.Projections
 {
@@ -24,15 +25,23 @@ namespace SystemyWP.API.Projections
                 Role = role
             };
         
-        public static Expression<Func<User, object>> LegalAppUserProjection(string role, bool legalAppAllowed) =>
+        public static Expression<Func<User, object>> LegalAppUserProjection(
+            string role, 
+            bool legalAppAllowed,
+            bool medicalAppAllowed,
+            bool restaurantAppAllowed) =>
             user => new
             {
                 user.Id,
                 user.Username,
                 user.Image,
                 Role = role,
-                LegalAppDataAccessKey = user.LegalAppAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAppAccessKey),
+                LegalAppDataAccessKey = user.LegalAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.LegalAccessKey),
+                RestaurantAppDataAccessKey = user.RestaurantAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.RestaurantAccessKey),
+                MedicalAppDataAccessKey = user.MedicalAccessKey == null ? null : AccessKeyProjection.CreateFlat(user.MedicalAccessKey),
+                MedicalAppAllowed = medicalAppAllowed,
                 LegalAppAllowed = legalAppAllowed,
+                RestaurantAppAllowed = restaurantAppAllowed,
                 user.PhoneNumber,
                 user.Address,
                 user.City,

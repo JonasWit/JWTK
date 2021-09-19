@@ -36,7 +36,7 @@ namespace SystemyWP.API.Controllers.Users
             try
             {
                 var user = await _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
                 var identityUser = await userManager.FindByIdAsync(UserId);
@@ -47,7 +47,7 @@ namespace SystemyWP.API.Controllers.Users
                     user.LastLogin = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                     return Ok(UserProjections
-                        .LegalAppUserProjection(Role, LegalAppAllowed)
+                        .LegalAppUserProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
                         .Compile()
                         .Invoke(user));
                 }
@@ -65,7 +65,7 @@ namespace SystemyWP.API.Controllers.Users
                 await _context.SaveChangesAsync();
 
                 return Ok(UserProjections
-                    .LegalAppUserProjection(Role, LegalAppAllowed)
+                    .LegalAppUserProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
                     .Compile()
                     .Invoke(newUser));
             }

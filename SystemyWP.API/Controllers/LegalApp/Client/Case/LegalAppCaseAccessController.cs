@@ -65,13 +65,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
                 if (admin is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
                     
                 // Eligible users
                 var users = _context.Users
-                    .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
+                    .Where(x => x.LegalAccessKey.Id == admin.LegalAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(form.UserId))) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
@@ -95,7 +95,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     _context.LegalAppDataAccesses.Add(new LegalAppDataAccess
                     {
-                        LegalAppAccessKey = admin.LegalAppAccessKey,
+                        LegalAccessKey = admin.LegalAccessKey,
                         UserId = form.UserId,
                         CreatedBy = Username,
                         ItemId = lappCase.LegalAppClientId,
@@ -105,7 +105,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
 
                 _context.LegalAppDataAccesses.Add(new LegalAppDataAccess
                 {
-                    LegalAppAccessKey = admin.LegalAppAccessKey,
+                    LegalAccessKey = admin.LegalAccessKey,
                     UserId = form.UserId,
                     CreatedBy = Username,
                     ItemId = caseId,
@@ -136,12 +136,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 if (lappCase is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
 
                 // Eligible users
                 var users = _context.Users
-                    .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
+                    .Where(x => x.LegalAccessKey.Id == admin.LegalAccessKey.Id)
                     .ToList();
                 var result = await GetOnlyNormalUsers(users, userManager);
                 if (!result.Any(x => x.Id.Equals(form.UserId))) return StatusCode(StatusCodes.Status403Forbidden);
@@ -169,12 +169,12 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var users = _context.Users
-                    .Where(x => x.LegalAppAccessKey.Id == admin.LegalAppAccessKey.Id)
+                    .Where(x => x.LegalAccessKey.Id == admin.LegalAccessKey.Id)
                     .ToList();
 
                 var currentAllowed = _context.LegalAppDataAccesses

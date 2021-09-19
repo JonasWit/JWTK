@@ -10,6 +10,7 @@ using SystemyWP.Data.Models.LegalAppModels.Access;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.Data.Models.LegalAppModels.Billings;
 
 namespace SystemyWP.API.Controllers.LegalApp.Billing
 {
@@ -27,13 +28,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAppAccessKey.Id)
+                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id)
                     .Select(LegalAppBillingProjections.Projection)
                     .ToList();
 
@@ -52,13 +53,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAppAccessKey.Id &&
+                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .Select(LegalAppBillingProjections.Projection)
                     .FirstOrDefault();
@@ -79,13 +80,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var newBilling = new LegalAppBillingRecord
                 {
-                    LegalAppAccessKey = admin.LegalAppAccessKey,
+                    LegalAccessKey = admin.LegalAccessKey,
                     CreatedBy = Username,
                     UpdatedBy = Username,
                     Name = form.Name,
@@ -116,13 +117,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAppAccessKey.Id &&
+                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .FirstOrDefault();
                 if (result is null) return BadRequest();
@@ -155,13 +156,13 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
             try
             {
                 var admin = _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefault(x => x.Id.Equals(UserId));
-                if (admin?.LegalAppAccessKey is null || admin.LegalAppAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
+                if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAppAccessKey.Id &&
+                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .FirstOrDefault();
                 if (result is null) return BadRequest();

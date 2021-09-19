@@ -51,5 +51,13 @@ namespace SystemyWP.API.Controllers.BaseClases
         protected bool LegalAppAllowed => User.Claims
             .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
                       x.Value.Equals(SystemyWpConstants.Apps.LegalApp));
+        
+        protected bool MedicalAppAllowed => User.Claims
+            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
+                      x.Value.Equals(SystemyWpConstants.Apps.MedicalApp));
+        
+        protected bool RestaurantAppAllowed => User.Claims
+            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
+                      x.Value.Equals(SystemyWpConstants.Apps.RestaurantApp));
     }
 }

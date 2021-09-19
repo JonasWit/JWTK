@@ -117,15 +117,15 @@ namespace SystemyWP.API.Controllers.LegalApp.Reminders
                 if (form.Start > form.End) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectParameters);
                 
                 var user = await _context.Users
-                    .Include(x => x.LegalAppAccessKey)
+                    .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-                if (user?.LegalAppAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
+                if (user?.LegalAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
                 var reminder = new LegalAppReminder
                 {
                     AllDayEvent = form.AllDayEvent,
                     ReminderCategory = form.ReminderCategory,
-                    LegalAppAccessKey = user.LegalAppAccessKey,
+                    LegalAccessKey = user.LegalAccessKey,
                     Name = form.Name,
                     Start = form.Start,
                     End = form.End,

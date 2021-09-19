@@ -50,7 +50,7 @@ namespace SystemyWP.API
             }
         }
 
-        public static void DevDataSeedLegalApp(AppDbContext context, string userId, LegalAppAccessKey legalAppAccessKey)
+        public static void DevDataSeedLegalApp(AppDbContext context, string userId, LegalAccessKey legalAccessKey)
         {
             var random = new Random();
 
@@ -59,7 +59,7 @@ namespace SystemyWP.API
             {
                 var newClient = new LegalAppClient
                 {
-                    LegalAppAccessKey = legalAppAccessKey,
+                    LegalAccessKey = legalAccessKey,
                     Name = $"Test Client - {clientNumber}",
                     Active = true,
                     CreatedBy = "system",
@@ -74,7 +74,7 @@ namespace SystemyWP.API
                         AuthorId = userId,
                         UpdatedBy = "system",
                         CreatedBy = "system",
-                        Title = $"Note Title {clientNoteNumber} Key: {legalAppAccessKey.Name}",
+                        Title = $"Note Title {clientNoteNumber} Key: {legalAccessKey.Name}",
                         Message = GenerateText(random.Next(50, 1000)),
                         Created = DateTime.UtcNow.AddDays(clientNoteNumber * 5 * -1),
                         Updated = DateTime.UtcNow.AddDays(clientNoteNumber * 5 * -1)
@@ -86,7 +86,7 @@ namespace SystemyWP.API
                 {
                     var contact = new LegalAppContactDetail();
                     contact.Comment = $"Comment for Contact {contactDetailsNumber}";
-                    contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber} Key: {legalAppAccessKey.Name}";
+                    contact.Name = $"Contact {clientNumber} -- {contactDetailsNumber} Key: {legalAccessKey.Name}";
                     contact.Title = $"Title {clientNumber} -- {contactDetailsNumber}";
                     contact.CreatedBy = "system";
 
@@ -134,7 +134,7 @@ namespace SystemyWP.API
                     financeRecord.Minutes = random.Next(1, 59);
                     financeRecord.Vat = random.Next(0, 23);
 
-                    financeRecord.Name = $"TEST -- {workflowNumber} Key: {legalAppAccessKey.Name}";
+                    financeRecord.Name = $"TEST -- {workflowNumber} Key: {legalAccessKey.Name}";
                     financeRecord.EventDate = DateTime.UtcNow.AddDays(workflowNumber * -1);
 
                     financeRecord.CreatedBy = "system";
@@ -149,7 +149,7 @@ namespace SystemyWP.API
                     {
                         var newCase = new LegalAppCase
                         {
-                            Name = $"Test Case - {caseNumber} - Key: {legalAppAccessKey.Name}",
+                            Name = $"Test Case - {caseNumber} - Key: {legalAccessKey.Name}",
                             Signature = $"XYZ-{caseNumber}-XYZ-{caseNumber}",
                             Group = $"Group number {groupNumber}",
                             Description = GenerateText(random.Next(50, 1000)),
@@ -161,7 +161,7 @@ namespace SystemyWP.API
                         {
                             newCase.LegalAppCaseDeadlines.Add(new LegalAppCaseDeadline
                             {
-                                Message = $"Deadline {i} Key: {legalAppAccessKey.Name}",
+                                Message = $"Deadline {i} Key: {legalAccessKey.Name}",
                                 CreatedBy = "system",
                                 Deadline = DateTime.UtcNow.AddDays(i)
                             });
@@ -171,7 +171,7 @@ namespace SystemyWP.API
                         {
                             newCase.LegalAppCaseNotes.Add(new LegalAppCaseNote
                             {
-                                Title = $"Note {i} Key: {legalAppAccessKey.Name}",
+                                Title = $"Note {i} Key: {legalAccessKey.Name}",
                                 Message = GenerateText(random.Next(50, 1000)),
                                 UpdatedBy = "system",
                                 CreatedBy = "system",
@@ -279,7 +279,7 @@ namespace SystemyWP.API
             //Seed Client Admins
             for (var adminNumber = -2; adminNumber < 3; adminNumber++)
             {
-                var key = new LegalAppAccessKey
+                var key = new LegalAccessKey
                 {
                     Name = $"access-key for {adminNumber}",
                     ExpireDate = DateTime.UtcNow.AddDays(adminNumber),
@@ -312,7 +312,7 @@ namespace SystemyWP.API
                 {
                     Username = testClientAdmin.UserName,
                     Email = testClientAdmin.Email,
-                    LegalAppAccessKey = accKey,
+                    LegalAccessKey = accKey,
                     Id = testClientAdmin.Id,
                     CreatedBy = "system"
                 });
@@ -325,7 +325,7 @@ namespace SystemyWP.API
                         ReminderCategory = ReminderCategory.Memo,
                         AuthorId = testClientAdmin.Id,
                         Name = $"Test reminder from {testClientAdmin.Email} for Key: {accKey?.Name}",
-                        LegalAppAccessKey = accKey,
+                        LegalAccessKey = accKey,
                         UpdatedBy = "system",
                         CreatedBy = "system",
                         Message = $"Generated message",
@@ -357,7 +357,7 @@ namespace SystemyWP.API
                     {
                         Username = testClient.UserName,
                         Email = testClient.Email,
-                        LegalAppAccessKey = accKey,
+                        LegalAccessKey = accKey,
                         Id = testClient.Id,
                         CreatedBy = "system"
                     });
@@ -369,7 +369,7 @@ namespace SystemyWP.API
                         {
                             AuthorId = testClient.Id,
                             Name = $"Test reminder from {testClient.Email} for Key: {accKey?.Name}",
-                            LegalAppAccessKey = accKey,
+                            LegalAccessKey = accKey,
                             UpdatedBy = "system",
                             CreatedBy = "system",
                             Message = $"Generated message",

@@ -21,7 +21,7 @@ namespace SystemyWP.Data.Models.LegalAppModels.Clients
         public List<LegalAppClientNote> LegalAppClientNotes { get; set; } = new();
         
         [Required]
-        public LegalAppAccessKey LegalAppAccessKey { get; set; }
+        public LegalAccessKey LegalAccessKey { get; set; }
         [Required]
         public int LegalAppAccessKeyId { get; set; }
     }

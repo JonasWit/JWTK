@@ -2,6 +2,7 @@
 using SystemyWP.Data.Models.LegalAppModels.Clients.Cases;
 using SystemyWP.Data.Models.LegalAppModels.Contacts;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.Data.Models.LegalAppModels.Access;
 
 namespace SystemyWP.Data.ContextBuilders
 {
@@ -61,6 +62,35 @@ namespace SystemyWP.Data.ContextBuilders
             modelBuilder.Entity<LegalAppCase>()
                 .HasMany(c => c.LegalAppCaseDeadlines)
                 .WithOne(e => e.LegalAppCase)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Legal App Access Key
+            
+            modelBuilder.Entity<LegalAccessKey>()
+                .HasMany(c => c.LegalAppDataAccesses)
+                .WithOne(e => e.LegalAccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<LegalAccessKey>()
+                .HasMany(c => c.Users)
+                .WithOne(e => e.LegalAccessKey)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<LegalAccessKey>()
+                .HasMany(x => x.LegalAppClients)
+                .WithOne(x => x.LegalAccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<LegalAccessKey>()
+                .HasMany(x => x.LegalAppReminders)
+                .WithOne(x => x.LegalAccessKey)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<LegalAccessKey>()
+                .HasMany(x => x.LegalAppClientBillingData)
+                .WithOne(x => x.LegalAccessKey)
                 .OnDelete(DeleteBehavior.Cascade);
             
             #endregion
