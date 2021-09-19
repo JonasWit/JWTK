@@ -23,7 +23,6 @@
                 :menu-props="{ maxHeight: '200' }"
                 return-object
                 small-chips
-                deletable-chips
                 label="Wybierz użytkownika"
                 persistent-placeholder
                 outlined
@@ -59,7 +58,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -75,20 +73,15 @@ export default {
   data: () => ({
     selectedUser: [],
     dialog: false,
-    loader: false,
   }),
 
   async fetch() {
-    this.loader = true
     try {
       let clientId = this.$route.params.client;
       await this.getEligibleUsersList({clientId})
+      console.log('eligible users list from compo', this.eligibleUsers)
     } catch (error) {
       handleError(error);
-    } finally {
-      setTimeout(() => {
-        this.loader = false;
-      }, 1500)
     }
   },
 
@@ -101,7 +94,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getEligibleUsersList']),
 
     async grantAccess() {
-      this.loader = true
       const payload = {
         userId: this.selectedUser.id
       }
@@ -112,16 +104,10 @@ export default {
       } catch (error) {
         handleError(error)
       } finally {
-        setTimeout(() => {
-          Object.assign(this.$data, this.$options.data.call(this));
-          let clientId = this.$route.params.client;
-          this.getAllowedUsers({clientId})
-          this.getEligibleUsersList({clientId})
-          this.loader = false
-          this.dialog = false
-        }, 1500)
-
-
+        let clientId = this.$route.params.client;
+        await this.getAllowedUsers({clientId})
+        await this.getEligibleUsersList({clientId})
+        this.dialog = false
       }
     }
   }

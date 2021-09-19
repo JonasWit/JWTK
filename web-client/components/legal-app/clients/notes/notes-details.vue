@@ -50,8 +50,6 @@
             </v-card-subtitle>
           </v-row>
         </v-card>
-        <options-floating-icon/>
-        <progress-bar v-if="loader"/>
       </v-dialog>
     </v-row>
 

@@ -12,7 +12,6 @@
         </v-row>
       </v-card>
     </v-card-text>
-    <progress-bar v-if="loader"/>
   </div>
 </template>
 
@@ -26,21 +25,14 @@ import {handleError} from "@/data/functions";
 export default {
   name: "allowed-users",
   components: {ProgressBar, RevokeAccess, GrantAccess},
-  data: () => ({
-    loader: true
-  }),
+  data: () => ({}),
 
   async fetch() {
-    this.loader = true
     try {
       let clientId = this.$route.params.client;
       await this.getAllowedUsers({clientId})
     } catch (error) {
       handleError(error);
-    } finally {
-      setTimeout(() => {
-        this.loader = false;
-      }, 1500)
     }
 
   },
