@@ -34,7 +34,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id)
+                        x.LegalAccessKeyId == admin.LegalAccessKey.Id)
                     .Select(LegalAppBillingProjections.Projection)
                     .ToList();
 
@@ -59,7 +59,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
+                        x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .Select(LegalAppBillingProjections.Projection)
                     .FirstOrDefault();
@@ -123,7 +123,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
+                        x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .FirstOrDefault();
                 if (result is null) return BadRequest();
@@ -162,7 +162,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
 
                 var result = _context.LegalAppBillingData
                     .Where(x =>
-                        x.LegalAppAccessKeyId == admin.LegalAccessKey.Id &&
+                        x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
                     .FirstOrDefault();
                 if (result is null) return BadRequest();

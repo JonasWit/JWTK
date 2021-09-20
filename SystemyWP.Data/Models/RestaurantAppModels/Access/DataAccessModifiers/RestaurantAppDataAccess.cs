@@ -13,6 +13,6 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers
         public string UserId { get; set; }
 
         public RestaurantAccessKey RestaurantAccessKey { get; set; }
-        public int RestaurantAppAccessKeyId { get; set; }
+        public int RestaurantAccessKeyId { get; set; }
     }
 }

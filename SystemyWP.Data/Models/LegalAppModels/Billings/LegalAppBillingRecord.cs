@@ -9,6 +9,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Billings
         [Required]
         public LegalAccessKey LegalAccessKey { get; set; }
         [Required]
-        public int LegalAppAccessKeyId { get; set; }
+        public int LegalAccessKeyId { get; set; }
     }
 }

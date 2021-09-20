@@ -16,14 +16,14 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                     source = source.Where(lappReminder =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
                     source = source.Where(lappReminder =>
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -31,7 +31,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
             }
@@ -49,7 +49,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -57,7 +57,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -66,7 +66,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         ((lappReminder.End >= from && lappReminder.End <= to) || (lappReminder.Start <= to && lappReminder.Start >= from)) &&
                         lappReminder.Active == active &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
             }
@@ -84,7 +84,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -92,7 +92,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -101,7 +101,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Reminders
                         lappReminder.Active == active &&
                         lappReminder.Id == reminderId &&
                         (lappReminder.AuthorId.Equals(userId) || lappReminder.Public) &&
-                        lappReminder.LegalAppAccessKeyId == context.Users
+                        lappReminder.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
             }

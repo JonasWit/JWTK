@@ -21,7 +21,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClientId == clientId &&
                         lappWorkRecord.EventDate >= from && lappWorkRecord.EventDate <= to &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -30,7 +30,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClientId == clientId &&
                         lappWorkRecord.EventDate >= from && lappWorkRecord.EventDate <= to &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -40,7 +40,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.EventDate >= from && lappWorkRecord.EventDate <= to &&
                         lappWorkRecord.UserId.Equals(userId) &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id &&
                         context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
@@ -64,7 +64,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClientId == clientId &&
                         lappWorkRecord.Id == workRecordId &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -73,7 +73,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.LegalAppClientId == clientId &&
                         lappWorkRecord.Id == workRecordId &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -83,7 +83,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients
                         lappWorkRecord.UserId.Equals(userId) &&
                         lappWorkRecord.Id == workRecordId &&
                         lappWorkRecord.Active == active &&
-                        lappWorkRecord.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        lappWorkRecord.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id &&
                         context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&

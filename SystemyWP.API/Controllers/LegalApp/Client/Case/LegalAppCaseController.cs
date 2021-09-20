@@ -118,7 +118,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client.Case
                 {
                     _context.Add(new LegalAppDataAccess
                     {
-                        LegalAppAccessKeyId = user.LegalAccessKey.Id,
+                        LegalAccessKeyId = user.LegalAccessKey.Id,
                         UserId = UserId,
                         ItemId = newCase.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppCase,

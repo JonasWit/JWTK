@@ -131,7 +131,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                 {
                     _context.Add(new LegalAppDataAccess
                     {
-                        LegalAppAccessKeyId = user.LegalAccessKey.Id,
+                        LegalAccessKeyId = user.LegalAccessKey.Id,
                         UserId = UserId,
                         ItemId = newClient.Id,
                         LegalAppRestrictedType = LegalAppRestrictedType.LegalAppClient,
@@ -274,7 +274,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                     .Include(x =>
                         x.LegalAppCases)
                     .Where(x =>
-                        x.LegalAppAccessKeyId == user.LegalAccessKey.Id)
+                        x.LegalAccessKeyId == user.LegalAccessKey.Id)
                     .Select(LegalAppClientProjections.Projection)
                     .ToListAsync();
 

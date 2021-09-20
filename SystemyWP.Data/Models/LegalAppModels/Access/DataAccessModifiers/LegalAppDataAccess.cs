@@ -12,6 +12,6 @@ namespace SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers
         public string UserId { get; set; }
 
         public LegalAccessKey LegalAccessKey { get; set; }
-        public int LegalAppAccessKeyId { get; set; }
+        public int LegalAccessKeyId { get; set; }
     }
 }

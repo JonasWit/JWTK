@@ -20,7 +20,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -28,7 +28,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -36,7 +36,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.ExpireDate >= DateTime.UtcNow &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id &&
                         context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
@@ -61,7 +61,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         legalAppCaseNote.Id == noteId &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.PortalAdmin:
@@ -70,7 +70,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         legalAppCaseNote.Id == noteId &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
                 case SystemyWpConstants.Roles.User:
@@ -79,7 +79,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                         legalAppCaseNote.Id == noteId &&
                         legalAppCaseNote.LegalAppCaseId == caseId &&
                         legalAppCaseNote.Active == active &&
-                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAppAccessKeyId == context.Users
+                        legalAppCaseNote.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id &&
                         context.LegalAppDataAccesses.Any(dataAccess =>
                             dataAccess.UserId.Equals(userId) &&
