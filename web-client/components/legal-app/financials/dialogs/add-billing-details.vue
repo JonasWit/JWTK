@@ -7,8 +7,8 @@
         <template #activator="{ on: dialog }" v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-              <v-btn class="mx-3" color="primary" v-on="{ ...tooltip, ...dialog }">
-                Dodaj dane do rozliczenia
+              <v-btn color="white" class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
+                <v-icon color="success">mdi-plus</v-icon>
               </v-btn>
             </template>
             <span>Dodaj dane do rozliczenia</span>
@@ -42,11 +42,8 @@
         </v-form>
       </v-dialog>
     </v-toolbar>
-    <progress-bar v-if="loader"/>
   </v-card>
-
 </template>
-
 <script>
 
 
@@ -54,12 +51,11 @@ import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-val
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import {mapActions} from "vuex";
 import {addBillingData} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "add-billing-details",
-  components: {ProgressBar, BillingDetailsList},
+  components: {BillingDetailsList},
   data: () => ({
     dialog: false,
     loader: false,
@@ -121,7 +117,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getBillingDataFromFetch']),
     async handleSubmit() {
       if (!this.$refs.addBillingDataForm.validate()) return;
-      this.loader = true;
       const data = {
         name: this.name,
         street: this.street,
@@ -135,15 +130,13 @@ export default {
       try {
         await this.$axios.$post(addBillingData(), data);
         this.$notifier.showSuccessMessage("Dane zostały uzupełnione pomyślnie");
-        this.resetForm()
+        this.resetForm();
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.getBillingDataFromFetch();
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        this.getBillingDataFromFetch();
+        this.dialog = false;
+        this.$refs.addBillingDataForm.reset();
       }
     },
     resetForm() {

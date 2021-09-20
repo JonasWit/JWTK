@@ -1,10 +1,17 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <template #activator="{ on: dialog }" v-slot:activator="{ on }">
-      <v-btn color="error" v-on="{ ...dialog }">
-        Dodaj rozliczenie
-      </v-btn>
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn color="error" fab v-on="{ ...tooltip, ...dialog }">
+            <v-icon>mdi-note-plus</v-icon>
+          </v-btn>
+        </template>
+        <span>Dodaj rozliczenie</span>
+      </v-tooltip>
     </template>
+
+
     <v-form ref="createClientWorkForm" v-model="validation.valid">
       <v-card>
         <v-card-text>
@@ -20,12 +27,10 @@
                         label="Dodaj stawkę godzinową brutto"></v-text-field>
           <v-select :items="items" v-model="form.vat" label="Dodaj stawkę VAT" item-text="text" :item-value="value"
                     return-object></v-select>
-          <v-dialog
-            ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
+          <v-dialog ref="dialog" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field v-model="form.eventDate" required label="Wybierz datę zdarzenia" prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs" v-on="on"></v-text-field>
+                            readonly v-bind="attrs" v-on="on"></v-text-field>
             </template>
             <v-date-picker v-model="date" scrollable @change="$refs.dialog.save(date)" locale="pl">
               <v-btn text color="error" @click="modal = false">
@@ -48,7 +53,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -63,15 +67,12 @@ import {
 } from "@/data/vuetify-validations";
 import {createWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "add-new-work-record",
-  components: {ProgressBar},
   data: () => ({
       dialog: false,
-      loader: false,
       items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
       value: null,
       form: {
@@ -112,7 +113,7 @@ export default {
     }
     ,
     calculatedAmount() {
-      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate)
+      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate);
     },
   },
 
@@ -121,7 +122,6 @@ export default {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
     async handleSubmit() {
       if (!this.$refs.createClientWorkForm.validate()) return;
-      this.loader = true
       const workRecord = {
         name: this.form.name,
         description: this.form.description,
@@ -135,28 +135,25 @@ export default {
 
       };
       try {
-        let clientId = this.$route.params.client
-        await this.$axios.$post(createWorkRecord(clientId), workRecord)
+        let clientId = this.$route.params.client;
+        await this.$axios.$post(createWorkRecord(clientId), workRecord);
         this.$notifier.showSuccessMessage("Czas zarejestrowany pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.loader = false;
-          this.dialog = false;
-          this.resetForm();
-        }, 1500)
+        this.$emit('action-completed');
+        this.loader = false;
+        this.$refs.createClientWorkForm.reset();
       }
     },
     resetForm() {
-      this.$refs.createClientWorkForm.reset();
+
       this.$refs.createClientWorkForm.resetValidation();
     },
   }
 
 
-}
+};
 </script>
 
 <style scoped>

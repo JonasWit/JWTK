@@ -2,7 +2,7 @@
   <layout>
     <template v-slot:content>
       <v-card>
-        <v-tabs v-model="tab" background-color="indigo accent-4" centered dark icons-and-text>
+        <v-tabs v-model="tab" background-color="primary" centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
           <v-tab href="#tab-1">
             Twoje dane
@@ -20,7 +20,8 @@
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ NOWE DANE",
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij zielony guzik "DODAJ DO
+                ROZLICZENIA",
                 aby dodać dane dotyczące Twojej działalności - take jak nazwa, adres, numer NIP itd. Te dane będą
                 widoczne na raporcie rozliczeniowym. W tym miejscu możesz również edytować lub usunąć wcześniej
                 uzupełnione dane.
@@ -90,13 +91,13 @@ export default {
     }
   ),
   async fetch() {
-    this.loader = true
+    this.loader = true;
     try {
       await this.searchFinancialRecords();
     } catch (error) {
       handleError(error);
     } finally {
-      this.loader = false
+      this.loader = false;
     }
 
   },
@@ -125,11 +126,11 @@ export default {
       if (this.loader) return;
       this.loader = true;
       try {
-        let clientId = this.$route.params.client
+        let clientId = this.$route.params.client;
         let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
         this.financialRecords = await this.$axios.$get(apiQuery);
       } catch (error) {
-        handleError(error)
+        handleError(error);
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.loader = false;
@@ -139,7 +140,7 @@ export default {
       return formatDate(date);
     },
   },
-}
+};
 </script>
 
 <style scoped>

@@ -13,10 +13,8 @@
     <v-form ref="editWorkRecordForm">
       <v-card>
         <v-card-text>
-          <v-text-field v-model="form.name" label="Edytuj nazwę"
-                        required :rules="validation.name"></v-text-field>
-          <v-text-field v-model="form.description" label="Edytuj opis"
-          ></v-text-field>
+          <v-text-field v-model="form.name" label="Edytuj nazwę" required :rules="validation.name"></v-text-field>
+          <v-text-field v-model="form.description" label="Edytuj opis"></v-text-field>
           <v-text-field v-model="form.lawyerName" :rules="validation.name" label="Prawnik"></v-text-field>
           <v-dialog ref="dialogTo" v-model="modal" :return-value.sync="form.eventDate" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
@@ -30,12 +28,9 @@
               <v-spacer></v-spacer>
             </v-date-picker>
           </v-dialog>
-          <v-text-field v-model="form.hours" :rules=validation.numberOnly label="Edytuj godziny"
-          ></v-text-field>
-          <v-text-field v-model="form.minutes" :rules=validation.numberOnly label="Edytuj minuty"
-          ></v-text-field>
-          <v-text-field v-model="form.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"
-          ></v-text-field>
+          <v-text-field v-model="form.hours" :rules=validation.numberOnly label="Edytuj godziny"></v-text-field>
+          <v-text-field v-model="form.minutes" :rules=validation.numberOnly label="Edytuj minuty"></v-text-field>
+          <v-text-field v-model="form.rate" :rules=validation.numberOnly label="Edytuj stawkę godzinową"></v-text-field>
 
           <v-select :items="items" v-model="form.vat" label="Edytuj wartość VAT" item-text="text" :item-value="value"
                     return-object></v-select>
@@ -53,7 +48,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -61,12 +55,10 @@
 
 import {notEmptyAndLimitedRule, numberOnly} from "@/data/vuetify-validations";
 import {updateWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "edit-work-record",
-  components: {ProgressBar},
   props: {
     selectedFinancialRecord: {
       required: true,
@@ -77,7 +69,6 @@ export default {
   data: () => ({
     workRecord: null,
     dialog: false,
-    loader: false,
     items: [{text: '0%', value: 0}, {text: '5%', value: 5}, {text: '8%', value: 8}, {text: '23%', value: 23}],
     value: null,
     form: {
@@ -100,16 +91,16 @@ export default {
   }),
 
   fetch() {
-    this.workRecord = this.selectedFinancialRecord
-    this.form.name = this.workRecord.name
-    this.form.hours = this.workRecord.hours
-    this.form.minutes = this.workRecord.minutes
-    this.form.vat = this.selectedDefault
-    this.form.rate = this.workRecord.rate
-    this.form.amount = this.workRecord.amount
-    this.form.eventDate = (this.workRecord.eventDate).substr(0, 10)
-    this.form.description = this.workRecord.description
-    this.form.lawyerName = this.workRecord.lawyerName
+    this.workRecord = this.selectedFinancialRecord;
+    this.form.name = this.workRecord.name;
+    this.form.hours = this.workRecord.hours;
+    this.form.minutes = this.workRecord.minutes;
+    this.form.vat = this.selectedDefault;
+    this.form.rate = this.workRecord.rate;
+    this.form.amount = this.workRecord.amount;
+    this.form.eventDate = (this.workRecord.eventDate).substr(0, 10);
+    this.form.description = this.workRecord.description;
+    this.form.lawyerName = this.workRecord.lawyerName;
 
   },
   computed: {
@@ -134,8 +125,6 @@ export default {
 
     async saveWorkRecordChange() {
       if (!this.$refs.editWorkRecordForm.validate()) return;
-      this.loader = true;
-
       const workRecord = {
         name: this.form.name,
         hours: this.form.hours,
@@ -146,29 +135,26 @@ export default {
         eventDate: this.form.eventDate,
         description: this.form.description,
         lawyerName: this.form.lawyerName,
-      }
-      console.warn('workRecord', workRecord)
-      console.warn('workRecord', this.selectedFinancialRecord.id)
+      };
+      console.warn('workRecord', workRecord);
+      console.warn('workRecord', this.selectedFinancialRecord.id);
       try {
-        let clientId = this.$route.params.client
-        let workRecordId = this.selectedFinancialRecord.id
-        await this.$axios.$put(updateWorkRecord(clientId, workRecordId), workRecord)
+        let clientId = this.$route.params.client;
+        let workRecordId = this.selectedFinancialRecord.id;
+        await this.$axios.$put(updateWorkRecord(clientId, workRecordId), workRecord);
         this.$notifier.showSuccessMessage("Rekord zmieniony pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.dialog = false;
-          this.loader = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.dialog = false;
       }
     },
     resetForm() {
       this.$refs.editWorkRecordForm.resetValidation();
     },
   }
-}
+};
 </script>
 
 <style scoped>
