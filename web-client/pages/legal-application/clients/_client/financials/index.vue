@@ -20,7 +20,7 @@
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij zielony guzik "DODAJ DO
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz czerwony guzik "DODAJ DANE DO
                 ROZLICZENIA",
                 aby dodać dane dotyczące Twojej działalności - take jak nazwa, adres, numer NIP itd. Te dane będą
                 widoczne na raporcie rozliczeniowym. W tym miejscu możesz również edytować lub usunąć wcześniej
@@ -32,11 +32,11 @@
           </v-tab-item>
           <v-tab-item :value="'tab-2'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ ROZLICZENIE", aby
-                dodać nowy rekord.
-                Wybierz datę początkową i
-                końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
-                możesz usunąć lub edytować dodane rozliczenia.
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz czerwoną ikonkę "DODAJ
+                ROZLICZENIE", aby
+                dodać nowy rekord. Wybierz datę początkową i końcową, a następnie użyj niebieskiej ikonki 'WYSZUKAJ
+                ROZLICZENIA', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
+                możesz również usunąć lub edytować dodane rozliczenia.
               </v-alert>
               <my-work-date-picker/>
 
@@ -47,7 +47,6 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -80,26 +79,20 @@ export default {
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
       financialRecords: [],
-      loading: false,
       dateFrom: null,
       dateTo: null,
       modalFrom: false,
       modalTo: false,
       alert: false,
       tab: null,
-      loader: false
     }
   ),
   async fetch() {
-    this.loader = true;
     try {
       await this.searchFinancialRecords();
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false;
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -123,8 +116,6 @@ export default {
   },
   methods: {
     async searchFinancialRecords() {
-      if (this.loader) return;
-      this.loader = true;
       try {
         let clientId = this.$route.params.client;
         let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
@@ -132,8 +123,6 @@ export default {
       } catch (error) {
         handleError(error);
         this.$notifier.showErrorMessage(error.response.data);
-      } finally {
-        this.loader = false;
       }
     },
     formatDate(date) {

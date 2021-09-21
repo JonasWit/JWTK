@@ -147,7 +147,6 @@ export default {
       }
     },
     resetForm() {
-
       this.$refs.createClientWorkForm.resetValidation();
     },
   }

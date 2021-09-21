@@ -7,8 +7,8 @@
         <template #activator="{ on: dialog }" v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-              <v-btn color="white" class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
-                <v-icon color="success">mdi-plus</v-icon>
+              <v-btn color="error" class="mx-3" fab v-on="{ ...tooltip, ...dialog }">
+                <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
             <span>Dodaj dane do rozliczenia</span>
@@ -58,7 +58,6 @@ export default {
   components: {BillingDetailsList},
   data: () => ({
     dialog: false,
-    loader: false,
     billingData: [],
     modal: false,
     name: '',

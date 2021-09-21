@@ -20,8 +20,8 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-card class="mb-12" elevation="0">
-            <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Wybierz datę początkową i końcową,
+          <v-card class="mb-12" elevation="0" flat>
+            <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Wybierz datę początkową i końcową,
               a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp
               do wybranych rozliczeń.
             </v-alert>
@@ -52,7 +52,7 @@
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Wybierz Twoje dane. Zostaną one
+          <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Wybierz Twoje dane. Zostaną one
             dodane do dokumentu. Jeśli jeszcze nie dodałeś danych
             rozliczeniowych wejdź w zakładkę 'TWOJE DANE'.
           </v-alert>
@@ -86,7 +86,7 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card class="mb-12" elevation="0">
-            <v-alert elevation="5" text type="info" close-text="Zamknij" class="mb-12">
+            <v-alert elevation="5" text type="info" v-if="legalAppTooltips" class="mb-12">
               Uzupełnij poniższe dane, jeśli rozliczenie jest powiązane z wystawioną fakturą VAT.
             </v-alert>
             <v-dialog v-model="dialog" max-width="500px">
@@ -154,7 +154,7 @@
 <script>
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
 import GenerateReportDatePicker from "@/components/legal-app/financials/dialogs/generate-report-date-picker";
 import ProgressBar from "@/components/legal-app/progress-bar";
@@ -188,6 +188,7 @@ export default {
   },
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapGetters('legal-app-client-store', ['billingDataList', 'workRecordsList', 'sortedFinancialRecords']),
     selectAllRecords() {
       return this.selectedWorkRecords.length === this.sortedFinancialRecords.length

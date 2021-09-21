@@ -1,58 +1,50 @@
 <template>
   <div>
-    <v-row class="d-flex align-center my-3 mx-4">
-      <v-col cols="12" md="3">
-        <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
-                          v-bind="attrs" v-on="on"></v-text-field>
-          </template>
-          <v-date-picker v-model="dateFrom" scrollable @change="$refs.dialogFrom.save(dateFrom)" locale="pl">
-            <v-btn text color="error" @click="modalFrom = false">
-              Anuluj
-            </v-btn>
-            <v-spacer></v-spacer>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-      <v-col cols="12" md="3">
-        <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent width="290px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field v-model="dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
-                          v-bind="attrs" v-on="on"></v-text-field>
-          </template>
-          <v-date-picker v-model="dateTo" scrollable @change="$refs.dialogTo.save(dateTo)" locale="pl">
-            <v-btn text color="error" @click="modalTo = false">
-              Anuluj
-            </v-btn>
-            <v-spacer></v-spacer>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-      <v-col cols="12" md="2">
-        <v-tooltip bottom>
-          <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-            <v-btn color="primary" icon v-on="{ ...tooltip }" @click="searchFinancialRecords">
-              <v-icon>mdi-clipboard-text-search</v-icon>
-            </v-btn>
-          </template>
-          <span>Wyszukaj rozliczenia</span>
-        </v-tooltip>
-      </v-col>
-      <v-col cols="12" md="2">
-        <v-tooltip bottom>
-          <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
-            <v-btn color="amber" icon v-on="{ ...tooltip }" @click="resetAll">
-              <v-icon>mdi-close-circle</v-icon>
-            </v-btn>
-          </template>
-          <span>Wyczyść rezultaty</span>
-        </v-tooltip>
 
-      </v-col>
-      <v-col cols="12" md="2">
-        <add-new-work-record v-on:action-completed="actionDone"/>
-      </v-col>
+    <v-row class="d-flex align-center justify-space-between my-5 mx-5">
+
+      <add-new-work-record v-on:action-completed="actionDone"/>
+      <v-divider vertical class="mx-4"></v-divider>
+      <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field v-model="dateFrom" label="Wybierz datę początkową" prepend-icon="mdi-calendar" readonly
+                        v-bind="attrs" v-on="on"></v-text-field>
+        </template>
+        <v-date-picker v-model="dateFrom" scrollable @change="$refs.dialogFrom.save(dateFrom)" locale="pl">
+          <v-btn text color="error" @click="modalFrom = false">
+            Anuluj
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-date-picker>
+      </v-dialog>
+      <v-dialog ref="dialogTo" v-model="modalTo" :return-value.sync="dateTo" persistent width="290px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field v-model="dateTo" label="Wybierz datę końcową" prepend-icon="mdi-calendar" readonly
+                        v-bind="attrs" v-on="on"></v-text-field>
+        </template>
+        <v-date-picker v-model="dateTo" scrollable @change="$refs.dialogTo.save(dateTo)" locale="pl">
+          <v-btn text color="error" @click="modalTo = false">
+            Anuluj
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-date-picker>
+      </v-dialog>
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn color="primary" icon v-on="{ ...tooltip }" @click="searchFinancialRecords">
+            <v-icon>mdi-clipboard-text-search</v-icon>
+          </v-btn>
+        </template>
+        <span>Wyszukaj rozliczenia</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }" v-slot:activator="{ on }">
+          <v-btn color="amber" icon v-on="{ ...tooltip }" @click="resetAll">
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Wyczyść rezultaty</span>
+      </v-tooltip>
 
       <v-alert width="100%" v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
         Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."

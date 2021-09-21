@@ -1,15 +1,16 @@
 <template>
   <div>
-    <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Poniżej znajduje się podgląd rozliczenia.
+    <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Poniżej znajduje się podgląd rozliczenia.
       Sprawdź dane i kliknij 'GENERUJ ROZLICZENIE'. Jeśli
       chcesz dokonać zmian, cofnij się do poprzednich kroków.
     </v-alert>
     <v-divider></v-divider>
     <v-card id="pdfTemplate" elevation="0">
+      <v-card-title class="text-center">Wykaz czynności objętych fakturą</v-card-title>
+      <v-card-subtitle class="font-italic text-center">Invoice details</v-card-subtitle>
       <v-row class="d-flex justify-space-between my-4 ">
         <v-col>
-          <v-card-title>Wykaz czynności objętych fakturą</v-card-title>
-          <v-card-subtitle class="font-italic">Invoice details</v-card-subtitle>
+
           <v-list-item>
             <v-list-item-content>
               <v-list-item-subtitle>Numer faktury <span
@@ -151,7 +152,7 @@
       </v-row>
     </v-card>
 
-    <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">
+    <v-alert elevation="5" text type="warning" color="orange" v-if="legalAppTooltips">
       Po naciśnięciu przycisku 'GENERUJ RAPORT' pojawi się 'Podgląd wydruku'. Jeśli chcesz zapisać rozliczenie w formie
       pdf w oknie podgląd wybierz opcję 'Zapisz jako pdf'. Jeśli chcesz wydrukować rozliczenie postępuj zgodnie z
       instrukcją drukowania. Pamiętaj, że jakośc wydruku zależy od indywidualnych ustawień.
@@ -167,7 +168,7 @@
 
 <script>
 import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
@@ -206,6 +207,7 @@ export default {
 
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapGetters('legal-app-client-store', ['clientData']),
     sumNet() {
       const totalNetValue = this.selectedWorkRecords.reduce((acc, cur) => {
