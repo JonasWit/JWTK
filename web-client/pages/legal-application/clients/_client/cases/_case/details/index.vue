@@ -57,14 +57,13 @@ import Layout from "@/components/legal-app/layout";
 import ArchiveCase from "@/components/legal-app/clients/cases/dialogs/archive-case";
 import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case";
 import EditCaseDialog from "@/components/legal-app/clients/cases/dialogs/edit-case-dialog";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {formatDateWithHours} from "@/data/date-extensions";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {ProgressBar, ArchiveCase, DeleteCase, EditCaseDialog, Layout,},
+  components: {ArchiveCase, DeleteCase, EditCaseDialog, Layout,},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     caseForAction: null,
@@ -84,7 +83,7 @@ export default {
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientCaseDetails']),
-    ...mapGetters('auth', ['clientAdmin']),
+
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails']),

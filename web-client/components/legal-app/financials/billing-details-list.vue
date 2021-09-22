@@ -26,7 +26,6 @@ import {handleError} from "@/data/functions";
 export default {
   name: "billing-details-list",
   components: {DeleteBillingData, EditBillingData},
-  data: () => ({}),
   async fetch() {
     try {
       await this.getBillingDataFromFetch();
@@ -36,7 +35,6 @@ export default {
   },
   computed: {
     ...mapState('legal-app-client-store', ['billingDataFromFetch']),
-
   },
   methods: {
     ...mapMutations('legal-app-client-store', ['updateBillingDataFromFetch']),

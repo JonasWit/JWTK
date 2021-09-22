@@ -6,10 +6,10 @@
         <v-spacer></v-spacer>
         <add-note/>
       </v-toolbar>
-      <!--      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">-->
-      <!--        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej-->
-      <!--        notatki? Użyj ikonki "plus", aby dodać pierwszą notkę.-->
-      <!--      </v-alert>-->
+      <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
+        Zarządzaj notatkami dla Klienta! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
+        notatki? Użyj ikonki "plus", aby dodać pierwszą notkę.
+      </v-alert>
       <v-list class="expansion">
         <v-list-group :value="false" prepend-icon="mdi-clipboard-text" v-for="item in clientNotesList"
                       :key="item[0].created" no-action>

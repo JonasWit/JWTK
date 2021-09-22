@@ -42,12 +42,10 @@
 <script>
 import {updateNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import {mapActions} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "case-edit-note-dialog",
-  components: {ProgressBar},
   props: {
     noteForAction: {
       required: true,

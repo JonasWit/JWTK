@@ -5,32 +5,16 @@
         <v-tabs v-model="tab" background-color="primary" centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
           <v-tab href="#tab-1">
-            Twoje dane
-            <v-icon>mdi-account-box-multiple</v-icon>
-          </v-tab>
-          <v-tab href="#tab-2">
             Moje rozliczenia
             <v-icon>mdi-clipboard-text-search</v-icon>
           </v-tab>
-          <v-tab href="#tab-4">
+          <v-tab href="#tab-2">
             Generuj raport
             <v-icon>mdi-file-chart</v-icon>
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
-            <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz czerwony guzik "DODAJ DANE DO
-                ROZLICZENIA",
-                aby dodać dane dotyczące Twojej działalności - take jak nazwa, adres, numer NIP itd. Te dane będą
-                widoczne na raporcie rozliczeniowym. W tym miejscu możesz również edytować lub usunąć wcześniej
-                uzupełnione dane.
-              </v-alert>
-              <add-billing-details/>
-              <billing-details-list/>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item :value="'tab-2'">
             <v-card flat>
               <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz czerwoną ikonkę "DODAJ
                 ROZLICZENIE", aby
@@ -42,7 +26,7 @@
 
             </v-card>
           </v-tab-item>
-          <v-tab-item :value="'tab-4'">
+          <v-tab-item :value="'tab-2'">
             <generate-invoice/>
           </v-tab-item>
         </v-tabs-items>

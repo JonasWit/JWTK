@@ -13,7 +13,8 @@ import ArchivedCases from "@/components/legal-app/archive/archived-cases";
 export default {
   name: "index",
   components: {ArchivedCases, Layout},
-  middleware: ['legal-app-permission', 'userAdmin', 'authenticated'],
+  middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
+
 }
 </script>
 

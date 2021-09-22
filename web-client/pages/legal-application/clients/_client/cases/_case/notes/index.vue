@@ -40,13 +40,13 @@ import {mapActions, mapState} from "vuex";
 import {formatDate, formatDateToMonth} from "@/data/date-extensions";
 import CaseAddNote from "@/components/legal-app/clients/cases/notes/case-add-note";
 import CaseNotesDetails from "@/components/legal-app/clients/cases/notes/case-notes-details";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/case-delete-note-dialog";
 
 export default {
   name: "index",
-  components: {CaseDeleteNoteDialog, ProgressBar, CaseNotesDetails, CaseAddNote, Layout},
+  components: {CaseDeleteNoteDialog, CaseNotesDetails, CaseAddNote, Layout},
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({}),
 
   async fetch() {

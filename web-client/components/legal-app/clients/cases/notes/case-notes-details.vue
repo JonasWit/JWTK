@@ -65,12 +65,11 @@ import {getNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import CaseEditNoteDialog from "@/components/legal-app/clients/cases/notes/case-edit-note-dialog";
 import CaseDeleteNoteDialog from "@/components/legal-app/clients/cases/notes/case-delete-note-dialog";
 import {mapActions, mapState} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "case-notes-details",
-  components: {ProgressBar, CaseDeleteNoteDialog, CaseEditNoteDialog, DeleteNoteDialog, EditNoteDialog},
+  components: {CaseDeleteNoteDialog, CaseEditNoteDialog, DeleteNoteDialog, EditNoteDialog},
   props: {
     selectedNote: {
       required: true,

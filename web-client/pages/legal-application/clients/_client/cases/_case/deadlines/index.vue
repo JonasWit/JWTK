@@ -61,12 +61,11 @@ import AddDeadline from "@/components/legal-app/clients/cases/deadlines/add-dead
 import {mapActions, mapState} from "vuex";
 import DeleteDeadline from "@/components/legal-app/clients/cases/deadlines/delete-deadline";
 import DeadlinePlannerView from "@/components/legal-app/clients/cases/deadlines/deadline-planner-view";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "index",
-  components: {ProgressBar, DeadlinePlannerView, DeleteDeadline, AddDeadline, Layout},
+  components: {DeadlinePlannerView, DeleteDeadline, AddDeadline, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     tab: null,

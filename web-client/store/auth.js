@@ -37,8 +37,8 @@ export const getters = {
   restaurantAppAllowed: (state, getters) => getters.authenticated && state.profile.restaurantAppAllowed === true,
   authenticated: state => state.profile != null,
   invited: (state, getters) => getters.authenticated && state.profile.role === ROLES.INVITED,
-  client: (state, getters) => getters.authenticated && state.profile.role === ROLES.USER,
-  clientAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.USER_ADMIN || getters.portalAdmin),
+  user: (state, getters) => getters.authenticated && state.profile.role === ROLES.USER,
+  userAdmin: (state, getters) => getters.authenticated && (state.profile.role === ROLES.USER_ADMIN || getters.portalAdmin),
   portalAdmin: (state, getters) => getters.authenticated && state.profile.role === ROLES.PORTAL_ADMIN,
 };
 
@@ -62,7 +62,7 @@ export const actions = {
       console.warn("Not authorized");
     }
 
-    if (getters.clientAdmin) {
+    if (getters.userAdmin) {
       try {
         await dispatch('reloadRelatedUsers');
       } catch (error) {

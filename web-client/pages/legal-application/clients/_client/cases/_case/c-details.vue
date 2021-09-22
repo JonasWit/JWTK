@@ -5,8 +5,8 @@
         <v-row>
           <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
             <if-auth v-if="item.adminAccess">
-              <template v-slot:allowed="{portalAdmin, clientAdmin}">
-                <v-col v-if="(portalAdmin || clientAdmin)">
+              <template v-slot:allowed="{portalAdmin, userAdmin}">
+                <v-col v-if="(portalAdmin || userAdmin)">
                   <v-hover v-slot="{ hover }">
                     <nuxt-link class="nav-item" :to="item.route">
                       <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
@@ -37,7 +37,6 @@
           </div>
         </v-row>
       </v-container>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -55,10 +54,9 @@ export default {
   data: () => ({
     client: null,
     case: null,
-    loader: false
+
   }),
   async fetch() {
-    this.loader = true
     try {
       this.client = await this.$axios.$get(`/api/legal-app-clients/client/${this.$route.params.client}`);
       this.case = await this.$axios.$get(`/api/legal-app-cases/case/${this.$route.params.case}`);
@@ -66,10 +64,7 @@ export default {
       await this.getCaseDetails({caseId});
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   async asyncData({params}) {
     return {

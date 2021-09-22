@@ -22,7 +22,6 @@
         </v-list-item>
       </v-list>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-container>
 </template>
 <script>
@@ -38,39 +37,31 @@ export default {
   components: {ProgressBar, Layout},
   data: () => ({
     archivedCasesList: [],
-    loader: false
   }),
   async fetch() {
-    this.loader = true
+    console.log('archived-cases fetch')
     try {
       await this.getArchivedCasesList();
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
   },
   methods: {
     async getArchivedCasesList() {
-      this.loader = true
       try {
         let clientId = this.$route.params.client;
         this.archivedCasesList = await this.$axios.$get(getArchivedCases(clientId));
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
     },
     formatDate(date) {
       return formatDate(date);
     },
     async removeFromArchive(caseId) {
-      this.loader = true
       try {
         await this.$axios.$put(archiveCase(caseId));
         this.$notifier.showSuccessMessage("Sprawa został pomyślnie usunięta z archiwum!");
@@ -78,7 +69,6 @@ export default {
         handleError(error);
       } finally {
         await this.getArchivedCasesList();
-        this.loader = false
       }
     }
 

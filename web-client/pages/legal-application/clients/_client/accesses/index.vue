@@ -16,7 +16,7 @@
             miała
             dostęp do panelu klienta, w którym będzie mogła zarządzać swoimi notatkami, rozliczeniami oraz sprawami.
           </v-alert>
-          <v-card class="mx-2" flat v-if="clientAdmin">
+          <v-card class="mx-2" flat v-if="userAdmin">
             <v-card-title>Lista użytkowników uprawnionych do uzyskania dostępu</v-card-title>
             <v-select @change="grantAccess(value)" v-model="value" :items="eligibleUsersList" chips
                       label="Wybierz użytkownika" item-text="email" item-value="email" return-object
@@ -48,7 +48,7 @@ import {grantAccess, revokeAccess} from "@/data/endpoints/legal-app/legal-app-cl
 export default {
   name: "index",
   components: {Layout},
-  middleware: ['legal-app-permission', 'user', 'authenticated'],
+  middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
   data: () => ({
     value: null,
     allowedUsersList: [],
@@ -70,7 +70,7 @@ export default {
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['clientDataFromFetch']),
-    ...mapGetters('auth', ['clientAdmin']),
+    ...mapGetters('auth', ['userAdmin']),
     ...mapGetters('legal-app-client-store', ['allowedUsers', 'eligibleUsers'])
 
   },

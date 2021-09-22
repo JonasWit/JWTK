@@ -1,8 +1,6 @@
 <template>
   <div>
-
     <v-row class="d-flex align-center justify-space-between my-5 mx-5">
-
       <add-new-work-record v-on:action-completed="actionDone"/>
       <v-divider vertical class="mx-4"></v-divider>
       <v-dialog ref="dialogFrom" v-model="modalFrom" :return-value.sync="dateFrom" persistent width="290px">
@@ -45,11 +43,9 @@
         </template>
         <span>Wyczyść rezultaty</span>
       </v-tooltip>
-
       <v-alert width="100%" v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
         Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
       </v-alert>
-
     </v-row>
     <v-toolbar color="primary" dark v-if="workRecordsList.length > 0">
       <v-toolbar-title>Lista rozliczeń</v-toolbar-title>
@@ -90,7 +86,6 @@
             </v-list-item>
           </v-list>
         </v-col>
-
         <v-col>
           <v-list class="d-flex justify-md-end justify-sm-space-between">
             <v-list-item>
@@ -121,13 +116,11 @@ export default {
       modalFrom: false,
       modalTo: false,
       alert: false,
-
     }
   ),
   async fetch() {
     return this.searchFinancialRecords();
   },
-
   computed: {
     ...mapGetters('legal-app-client-store', ['workRecordsList']),
     query() {
@@ -147,9 +140,7 @@ export default {
         this.alert = true;
       }
     },
-
   },
-
   methods: {
     ...mapMutations('legal-app-client-store', ['updateFinancialRecordsFromFetch', 'reset']),
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),

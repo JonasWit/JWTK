@@ -15,7 +15,7 @@
         <v-switch prepend-icon="mdi-theme-light-dark" hide-details="hide-details" v-model="themeSwitch"/>
       </div>
       <if-auth>
-        <template v-slot:allowed="{portalAdmin, legalAppAllowed, client}">
+        <template v-slot:allowed="{portalAdmin, legalAppAllowed, user}">
           <div class="d-flex align-center">
             <v-menu offset-y>
               <template v-slot:activator="{ on, attrs }">
@@ -71,7 +71,6 @@
     </v-app-bar>
     <v-main>
       <v-container fluid>
-        <progress-bar v-if="loader"/>
         <nuxt/>
       </v-container>
     </v-main>
@@ -95,7 +94,6 @@ export default {
   data: () => ({
     goDark: false,
     themeSwitch: false,
-    loader: true,
   }),
   async created() {
     try {
@@ -115,13 +113,11 @@ export default {
       }
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false;
     }
   },
   watch: {
     themeSwitch: function (val) {
-      if (process.client && this.darkThemeStored !== !val) {
+      if (process.user && this.darkThemeStored !== !val) {
         if (val) {
           this.$vuetify.theme.light = true;
           this.$vuetify.theme.dark = false;

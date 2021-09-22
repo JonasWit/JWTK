@@ -49,18 +49,15 @@
         </template>
         <span>Wyczyść rezultaty</span>
       </v-tooltip>
-
       <v-alert width="100%" v-model="alert" border="left" close-text="Zamknij" type="error" outlined dismissible>
         Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
       </v-alert>
-
     </v-row>
   </div>
-
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import {formatDate} from "@/data/date-extensions";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -69,30 +66,22 @@ export default {
   name: "generate-report-date-picker",
   components: {ProgressBar},
   data: () => ({
-
-      loader: false,
       dateFrom: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       dateTo: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       modalFrom: false,
       modalTo: false,
       alert: false,
-
     }
   ),
   async fetch() {
-    this.loader = true
     try {
       await this.searchFinancialRecords();
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
 
   computed: {
-
     ...mapGetters('legal-app-client-store', ['workRecordsList']),
     query() {
       let convertedDateTo = new Date(this.dateTo);
@@ -119,15 +108,12 @@ export default {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
 
     async searchFinancialRecords() {
-      this.loader = true;
       try {
         let clientId = this.$route.params.client;
         let query = this.query;
         await this.getFinancialRecordsFromFetch({clientId, query});
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false;
       }
     },
     resetAll() {

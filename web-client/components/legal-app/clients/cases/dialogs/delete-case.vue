@@ -31,12 +31,10 @@
 
 <script>
 import {deleteCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "delete-case",
-  components: {ProgressBar},
   props: {
     caseForAction: {
       required: true,

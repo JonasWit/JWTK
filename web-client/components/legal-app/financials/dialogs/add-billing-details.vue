@@ -1,8 +1,7 @@
 <template>
-
-  <v-card>
-    <v-toolbar>
-      <v-toolbar-title>Twoje dane do rozliczenia</v-toolbar-title>
+  <div class="my-5">
+    <v-toolbar flat>
+      <v-toolbar-title>Dodaj dane do rozliczenia</v-toolbar-title>
       <v-dialog v-model="dialog" max-width="500px">
         <template #activator="{ on: dialog }" v-slot:activator="{ on }">
           <v-tooltip bottom>
@@ -42,11 +41,9 @@
         </v-form>
       </v-dialog>
     </v-toolbar>
-  </v-card>
+  </div>
 </template>
 <script>
-
-
 import {lengthRule, notEmptyAndLimitedRule, postalCode} from "@/data/vuetify-validations";
 import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 import {mapActions} from "vuex";

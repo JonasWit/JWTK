@@ -5,8 +5,8 @@
         <v-row class="mt-10">
           <div class="d-flex justify-space-between pa-3" v-for="item in items" :key="item.id">
             <if-auth v-if="item.adminAccess">
-              <template v-slot:allowed="{portalAdmin, clientAdmin}">
-                <v-col v-if="(portalAdmin || clientAdmin)">
+              <template v-slot:allowed="{portalAdmin, userAdmin}">
+                <v-col v-if="(portalAdmin || userAdmin)">
                   <v-hover v-slot="{ hover }">
                     <nuxt-link class="nav-item" :to="item.route">
                       <v-card class="mx-auto index-card" width="340" outlined :elevation="hover ? 12 : 2">
