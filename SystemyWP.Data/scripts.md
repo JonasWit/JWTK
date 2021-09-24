@@ -2,8 +2,6 @@
 
 dotnet ef migrations add <name> -c AppDbContext -s ..\SystemyWP.API -o .\Migrations
 
-### migration script -- full migration every time
-
 dotnet ef migrations script -i -c AppDbContext -s ..\SystemyWP.API -o script.sql
 
 ### identity migrations & update
