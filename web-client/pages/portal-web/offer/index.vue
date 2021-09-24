@@ -56,7 +56,9 @@
                     <v-btn outlined color="primary">Przejdź do formy kontaktowej</v-btn>
                   </nuxt-link>
                 </v-card-actions>
-
+                <v-card-subtitle>W przypadku nie wyrażenia zgody na przesyłanie faktur elektronicznych zostaną naliczone
+                  dodatkowe opłaty.
+                </v-card-subtitle>
               </v-card>
             </v-col>
           </v-row>

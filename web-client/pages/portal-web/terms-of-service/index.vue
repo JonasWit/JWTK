@@ -1,8 +1,9 @@
 <template>
   <v-container>
     <h1>REGULAMIN USŁUGI</h1>
-    <p style="color: #B41946">Świadczonej przez Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
-      nazwą ________ ul. __ , __-____ Kraków, NIP: ___, REGON: ____, e-mail: ______ , +48________
+    <p>Świadczonej przez Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
+      nazwą Systemy Wspomagania Pracy, Os. 2 Pułku Lotniczego 28, 31-869 Kraków, NIP: 7343144682, REGON: 388896441,
+      e-mail: biuro@systemywp.pl , +48 534 127 160
     </p>
     <ol type="1">
       <h2>
@@ -20,20 +21,21 @@
         <li>
           Abonament — opłata, którą Abonent jest zobowiązany uiszczać na rzecz Operatora z tytułu korzystania z Usługi;
         </li>
-        <li style="color: #B41946">
-          Cennik — informacja o Abonamencie, dostępna pod adresem www HYPERLINK
-          "http://www._______.pl/cennik"._______.pl/cennik;
+        <li>
+          Cennik — informacja o Abonamencie, dostępne
+          <nuxt-link to="/portal-web/offer">TUTAJ</nuxt-link>
         </li>
         <li>
-          Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod nazwą ________ ul. __ , __-____
-          Kraków, NIP: ___, REGON: ____, e-mail: ______ , +48________;
+          Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
+          nazwą Systemy Wspomagania Pracy, Os. 2 Pułku Lotniczego 28, 31-869 Kraków, NIP: 7343144682, REGON: 388896441,
+          e-mail: biuro@systemywp.pl , +48 534 127 160;
         </li>
         <li>
           Regulamin — niniejszy regulamin;
         </li>
-        <li style="color: #B41946">
+        <li>
           Serwis — aplikacja internetowa dostępna pod adresem https://portal.systemywp.pl, domena główna
-          https://systemywp.pl;
+          https://portal.systemywp.pl;
         </li>
         <li>
           Umowa — umowa o korzystanie z Usługi zawarta pomiędzy Operatorem a Abonentem;
@@ -70,7 +72,7 @@
         Serwisu należą do Operatora. Udostępniając Serwis Abonentowi Operator nie przenosi na Abonenta praw do
         Serwisu.
       </p>
-      <p style="color: #B41946">
+      <p>
         2.2. Serwis udostępniany jest Abonentowi w formule SaaS (Software as a Service — tj. oprogramowanie jako
         usługa). Operator nie upoważnia Abonenta do zwielokrotniania programu komputerowego dostępnego w ramach
         Serwisu. Korzystanie z Serwisu nie wymaga dodatkowej zgody Operatora w postaci licencji lub przeniesienia
@@ -83,7 +85,7 @@
           Zakres usług świadczonych za pośrednictwem Serwisu
         </li>
       </h2>
-      <p style="color: #B41946">
+      <p>
         3.1. Serwis umożliwia:
         • zarządzanie sprawami, kalendarzem, kontaktami i dokumentami Abonenta, rejestrację czasu pracy i wydatków,
         dostęp do danych dla klientów Abonenta. Funkcjonalności Serwisu dostępne w ramach poszczególnych
@@ -138,9 +140,10 @@
           Dostęp do Serwisu i zawarcie Umowy
         </li>
       </h2>
-      <p style="color: #B41946">
-        4.1. Rozpoczęcie korzystania z Usługi wymaga utworzenia przez Operatora konta dla Abonenta, zgodnie z
-        instrukcją zawartą na stronie www.______ .
+      <p>
+        4.1. Rozpoczęcie korzystania z Usługi wymaga utworzenia przez Operatora konta dla Abonenta. Abonent kontaktując
+        się z operatorem może poprosić o utworzenie konta. Jako potwierdzenie Abonent otrzyma zaproszenie drogą
+        elektorniczną.
       </p>
       <p>
         4.2. Utworzenie konta dla Abonenta wymaga podania co najmniej następujących danych Abonenta:</p>
@@ -168,7 +171,7 @@
       </p>
       <p>
         4.4. Poza przypadkiem zawarcia Umowy wyłącznie w celu przetestowania Serwisu, Umowa jest zawierana na czas
-        określony. <span style="color: #B41946">Operator standardowo zawiera umowy na jeden miesiąc, jeden rok albo na dwa lub trzy lata. </span>Abonent
+        określony. Operator standardowo zawiera umowy na jeden miesiąc, jeden rok albo na dwa lub trzy lata. Abonent
         deklaruje oczekiwany okres obowiązywania Umowy podczas zamawiania Usługi. Zawarcie Umowy następuje z chwilą
         przyjęcia oferty Operatora przez Abonenta.
       </p>
@@ -188,18 +191,19 @@
         pierwszy dzień obowiązywania Umowy po jej automatycznym przedłużeniu oraz według zasad wynikających z
         Regulaminu, w brzmieniu obowiązującym na ten dzień (pierwszy dzień nowego okresu umownego). Przedłużona w
         ten sposób Umowa ulegać będzie na tych samych zasadach kolejnym przedłużeniom na kolejne okresy miesięczne.
-        <span style="color: #B41946">Cennik oraz Regulamin znajdujące zastosowanie do Umowy po jej przedłużeniu będą w każdym przypadku
-        dostępne na stronie ________ .</span>
+        Cennik oraz Regulamin znajdujące zastosowanie do Umowy po jej przedłużeniu będą w każdym przypadku
+        dostępne
+        <nuxt-link to="/portal-web/offer">TUTAJ</nuxt-link>
+        .
 
       </p>
       <p>
         4.7. Z tytułu przedłużenia Umowy na warunkach określonych w punkcie poprzednim, Operator wystawi fakturę i
         doręczy ją Abonentowi, na adres e-mail Abonenta, wskazany przez Abonenta w Serwisie.
       </p>
-      <p style="color: #B41946">
+      <p>
         4.8. Abonent może w dowolnym momencie usunąć konto Abonenta – następuje to poprzez wybranie opcji 'usuń
-        konto' na
-        stronie "Mój profil".
+        konto' na stronie "Mój profil".
       </p>
       <p>
         W następstwie usunięcia konta przez Abonenta nie zostaną usunięte wszystkie dane wprowadzone przez Abonenta
@@ -212,7 +216,7 @@
       <p>
         W przypadku omyłkowego usunięcia konta przez Abonent, w sytuacji , w której Abonent zamierzał usunąć wszystkie
         wprowadzone przez siebie oraz Użytkowników możliwe jest usunięcie danych poprzez bezpośredni (e-mail) kontakt z
-        <span style="color: #B41946"> Admintratorem Serwisu pod adresem: ___</span></p>
+        Admintratorem Serwisu pod adresem: kontakt@systemywp.pl</p>
       <p>Usunięcie konta nie skutkuje rozwiązaniem Umowy i nie uprawnia do żądania zwrotu zapłaty w jakiejkolwiek
         części, z uwagi na dostępność Serwisu dla Abonenta przez czas na jaki Umowa została zawarta.
       </p>
@@ -242,7 +246,7 @@
         lub Użytkownika działającego z ramienia Abonenta, zalecana jest również w takim przypadku natychmiastowa
         zmiana hasła przez Abonenta.
       </p>
-      <p style="color: #B41946">
+      <p>
         5.2. Operator przesyła Abonentowi na podany przez niego adres e-mail wiadomości związane z funkcjonowaniem
         Serwisu, w tym m.in. komunikaty dotyczące funkcjonowania Serwisu, materiały szkoleniowe, informacje o nowych
         funkcjonalnościach Serwisu oraz zmianach treści Regulaminu lub Cennika.
@@ -254,7 +258,9 @@
       </h2>
       <p>
         6.1. Szczegółowe informacje na temat poszczególnych planów taryfowych (Abonamentu) oraz opłat pobieranych
-        przez Operatora za korzystanie z Serwisu znajdują się w Cenniku.
+        przez Operatora za korzystanie z Serwisu znajdują się w
+        <nuxt-link to="/portal-web/offer">Cenniku</nuxt-link>
+        .
       </p>
       <p>
         6.2. W przypadku opóźnienia z zapłatą z tytułu faktury, Operator ma prawo do zablokowania Abonentowi konta
@@ -265,10 +271,10 @@
       <p>
         6.3. W przypadku bezskutecznego upływu terminu do uiszczenia przez Abonenta wszelkich zaległych płatności,
         Operator będzie uprawniony do usunięcia konta Abonenta oraz wszelkich danych wprowadzonych do Serwisu przez
-        Abonenta oraz Użytkowników działających z ramienia Abonenta. <span style="color: #B41946">Usunięcie konta Abonenta oraz wszelkich danych
+        Abonenta oraz Użytkowników działających z ramienia Abonenta. Usunięcie konta Abonenta oraz wszelkich danych
         wprowadzonych do Serwisu w ramach tego konta, nastąpi w dniu następującym po ostatnim dniu wskazanym jako
         termin płatności określonym w przesłanym Abonentowi wezwaniu do zapłaty. Z chwilą usunięcia przez Operatora
-        konta Abonenta w trybie postanowień niniejszego ustępu — Umowa wygasa.</span>
+        konta Abonenta w trybie postanowień niniejszego ustępu — Umowa wygasa.
       </p>
       <p>
         6.4. Operator gwarantuje Abonentowi niezmienność wysokości Abonamentu przez okres obowiązywania Umowy.
@@ -279,15 +285,15 @@
         6.5. Abonent upoważnia Operatora do wystawiania i wysyłania faktur elektronicznych (w tym faktur korygujących
         oraz duplikatów), na adres e-mail Abonenta, wskazany przez Abonenta w Serwisie, bez podpisu wystawcy, w
         zamkniętym pliku o formacie PDF. Operator zapewnia autentyczność pochodzenia, integralność i czytelność
-        treści faktury. <span style="color: #B41946">Operator oświadcza, że faktury elektroniczne będą przesyłane z adresu e-mail:
-        faktury@_______.</span> W przypadku wystawienia faktury korygującej Abonent zobowiązuje się bezzwłocznie
-        przesłać
-        potwierdzenie jej otrzymania na adres e-mail nadawcy. Abonent i Operator zobowiązują się powiadamiać się
+        treści faktury. Operator oświadcza, że faktury elektroniczne będą przesyłane z adresu e-mail:
+        biuro@systemywp.pl.W przypadku wystawienia faktury korygującej Abonent zobowiązuje się bezzwłocznie
+        przesłać potwierdzenie jej otrzymania na adres e-mail nadawcy. Abonent i Operator zobowiązują się
+        powiadamiać się
         wzajemnie z co najmniej 5-dniowym uprzedzeniem o wszelkich zmianach danych do faktury. Abonent może cofnąć
         zgodę na otrzymywanie faktur elektronicznych z co najmniej 5-dniowym uprzedzeniem, składając pisemne
         zawiadomienie Operatorowi. W takim przypadku Operator ma prawo żądać dodatkowej opłaty związanej z
-        przesłaniem faktury drogą tradycyjną.<span style="color: #B41946"> Opłata obowiązuje w wysokości wskazanej w Cenniku wg stanu na dzień
-        cofnięcia przez Abonenta zgody na otrzymywanie faktur elektronicznych.</span>
+        przesłaniem faktury drogą tradycyjną. Opłata obowiązuje w wysokości wskazanej w Cenniku wg stanu na dzień
+        cofnięcia przez Abonenta zgody na otrzymywanie faktur elektronicznych.
       </p>
       <h2>
         <li>
@@ -311,11 +317,11 @@
         7.4. Podanie przez Abonenta danych osobowych wymaganych do utworzenia konta Abonenta jest dobrowolne, jednakże
         stanowi ono warunek konieczny do utworzenia konta Abonenta oraz korzystania z Usługi.
       </p>
-      <p style="color: #B41946">
-        7.5. Dane osobowe Abonenta przetwarzane są przez Operatora w zbiorze danych osobowych zarejestrowanym przez
-        Generalnego Inspektora Ochrony Danych Osobowych. - wlasnie chyba juz nie trzeba - trzeba potwierdzić
-      </p>
-      <p style="color: #B41946">
+      <!--      <p style="color: #B41946">-->
+      <!--        7.5. Dane osobowe Abonenta przetwarzane są przez Operatora w zbiorze danych osobowych zarejestrowanym przez-->
+      <!--        Generalnego Inspektora Ochrony Danych Osobowych. - wlasnie chyba juz nie trzeba - trzeba potwierdzić-->
+      <!--      </p>-->
+      <p>
         7.6. Na ochronę danych Abonenta składają się w szczególności:</p>
       <ol type="a">
         <li>
@@ -363,9 +369,9 @@
       </p>
       <p>
         7.12. W zakresie dopuszczalnym przez obowiązujące przepisy prawa polskiego, odpowiedzialność Operatora
-        względem Abonenta jest ograniczona do zakresu odpowiedzialności <span style="color: #B41946">LINODE LLC względem Operatora, wynikające-
+        względem Abonenta jest ograniczona do zakresu odpowiedzialności LINODE LLC względem Operatora, wynikające-
         go z treści Warunków Korzystania z Serwisu („Terms of Service”) dostępnych pod adresem:
-        https://manager-cf.linode.com/tos</span>
+        <a href="https://manager-cf.linode.com/tos" target="_blank"></a>https://manager-cf.linode.com/tos
       </p>
       <h2>
         <li>
@@ -397,12 +403,12 @@
         </li>
       </ol>
 
-      <p style="color: #B41946">
+      <p>
         8.3. Serwis może zawierać linki do stron internetowych osób trzecich (np. reklamodawców), które nie są
         własnością i nie są kontrolowane przez Operatora. Operator nie ponosi odpowiedzialności za tego rodzaju
         linki, strony lub informacje, materiały albo oferowane tą drogą produkty lub usługi.
       </p>
-      <p style="color: #B41946">
+      <p>
         8.4. Serwis umożliwia Abonentowi dodawanie i przesyłanie informacji, tekstu, grafiki lub innych materiałów,
         które pozostają własnością Abonenta. Operator nie ponosi odpowiedzialności za treści przesyłane i
         publikowane przez Abonentów w Serwisie. - czy to nie odnosi sie wlasnie do danych ktore mozna sobie uzupelniac
@@ -434,7 +440,7 @@
           publikowania linków o złośliwej zawartości przeznaczonej do uszkodzenia lub zakłócenia działania sprzętu
           lub oprogramowania osób trzecich lub zagrażającej ich prywatności;
         </li>
-        <li style="color: #B41946">
+        <li>
           udostępniania Serwisu przez Abonenta innym podmiotom niż inny upoważniony Użytkownik albo klient Abonenta
           (w przypadku, gdy Abonent korzysta z funkcjonalności dedykowanych do udostępniania odpowiedniej części
           Serwisu klientom);
@@ -456,8 +462,8 @@
           Reklamacje
         </li>
       </h2>
-      <p style="color: #B41946">
-        10.1. Reklamacje związane z korzystaniem z Serwisu należy przesyłać na adres e-mail: _____.
+      <p>
+        10.1. Reklamacje związane z korzystaniem z Serwisu należy przesyłać na adres e-mail: biuro@systemywp.pl.
 
       </p>
       <p>
@@ -508,8 +514,10 @@
         12.1. W sprawach nieuregulowanych w Regulaminie zastosowanie znajdują przepisy powszechnie obowiązującego
         prawa polskiego.
       </p>
-      <p style="color: #B41946">
-        12.2. Regulamin udostępniony jest pod adresem _____/regulamin-uslugi, w sposób umożliwiający jego zapisanie,
+      <p>
+        12.2. Regulamin udostępniony
+        <nuxt-link to="/portal-web/terms-of-service">TUTAJ</nuxt-link>
+        , w sposób umożliwiający jego zapisanie,
         przechowywanie oraz odtwarzanie na urządzeniu Abonenta.
       </p>
       <p>
