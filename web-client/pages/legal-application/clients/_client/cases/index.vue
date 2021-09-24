@@ -53,7 +53,6 @@
 <script>
 import Layout from "../../../../../components/legal-app/layout";
 import {formatDate} from "@/data/date-extensions";
-
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
 import {mapActions, mapState} from "vuex";
 import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";

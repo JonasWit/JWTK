@@ -5,14 +5,10 @@
         <v-tabs v-model="tab" background-color="primary" centered dark icons-and-text>
           <v-tabs-slider></v-tabs-slider>
           <v-tab href="#tab-1">
-            Twoje dane
-            <v-icon>mdi-account-box-multiple</v-icon>
-          </v-tab>
-          <v-tab href="#tab-2">
             Moje rozliczenia
             <v-icon>mdi-clipboard-text-search</v-icon>
           </v-tab>
-          <v-tab href="#tab-4">
+          <v-tab href="#tab-2">
             Generuj raport
             <v-icon>mdi-file-chart</v-icon>
           </v-tab>
@@ -20,34 +16,21 @@
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">
             <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij zielony guzik "DODAJ DO
-                ROZLICZENIA",
-                aby dodać dane dotyczące Twojej działalności - take jak nazwa, adres, numer NIP itd. Te dane będą
-                widoczne na raporcie rozliczeniowym. W tym miejscu możesz również edytować lub usunąć wcześniej
-                uzupełnione dane.
-              </v-alert>
-              <add-billing-details/>
-              <billing-details-list/>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item :value="'tab-2'">
-            <v-card flat>
-              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Kliknij guzik "DODAJ ROZLICZENIE", aby
-                dodać nowy rekord.
-                Wybierz datę początkową i
-                końcową, a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
-                możesz usunąć lub edytować dodane rozliczenia.
+              <v-alert v-if="legalAppTooltips" elevation="5" text type="info">Wybierz czerwoną ikonkę "DODAJ
+                ROZLICZENIE", aby
+                dodać nowy rekord. Wybierz datę początkową i końcową, a następnie użyj niebieskiej ikonki 'WYSZUKAJ
+                ROZLICZENIA', aby uzyskać dostęp do wybranych rozliczeń. W tym miejscu
+                możesz również usunąć lub edytować dodane rozliczenia.
               </v-alert>
               <my-work-date-picker/>
 
             </v-card>
           </v-tab-item>
-          <v-tab-item :value="'tab-4'">
+          <v-tab-item :value="'tab-2'">
             <generate-invoice/>
           </v-tab-item>
         </v-tabs-items>
       </v-card>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -80,26 +63,20 @@ export default {
   middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
       financialRecords: [],
-      loading: false,
       dateFrom: null,
       dateTo: null,
       modalFrom: false,
       modalTo: false,
       alert: false,
       tab: null,
-      loader: false
     }
   ),
   async fetch() {
-    this.loader = true;
     try {
       await this.searchFinancialRecords();
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false;
     }
-
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
@@ -123,8 +100,6 @@ export default {
   },
   methods: {
     async searchFinancialRecords() {
-      if (this.loader) return;
-      this.loader = true;
       try {
         let clientId = this.$route.params.client;
         let apiQuery = `/api/legal-app-clients-work/client/${clientId}/work-records${this.query}`;
@@ -132,8 +107,6 @@ export default {
       } catch (error) {
         handleError(error);
         this.$notifier.showErrorMessage(error.response.data);
-      } finally {
-        this.loader = false;
       }
     },
     formatDate(date) {

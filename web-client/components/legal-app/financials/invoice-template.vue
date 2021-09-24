@@ -1,15 +1,17 @@
 <template>
   <div>
-    <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Poniżej znajduje się podgląd rozliczenia.
+    <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Poniżej znajduje się podgląd rozliczenia.
       Sprawdź dane i kliknij 'GENERUJ ROZLICZENIE'. Jeśli
       chcesz dokonać zmian, cofnij się do poprzednich kroków.
     </v-alert>
     <v-divider></v-divider>
-    <v-card id="pdfTemplate" elevation="0">
+    <v-card id="pdfTemplate" elevation="0" flat>
+      <div class="my-5">
+        <h2 class="text-center mt-6">Wykaz czynności objętych fakturą <span class="font-italic">(Invoice details)</span>
+        </h2>
+      </div>
       <v-row class="d-flex justify-space-between my-4 ">
-        <v-col>
-          <v-card-title>Wykaz czynności objętych fakturą</v-card-title>
-          <v-card-subtitle class="font-italic">Invoice details</v-card-subtitle>
+        <div class="my-3">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-subtitle>Numer faktury <span
@@ -21,11 +23,11 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </v-col>
-        <v-col>
+        </div>
+        <div>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-subtitle>Wygenerowano przez:</v-list-item-subtitle>
+              <v-list-item-subtitle>Wygenerowane przez:</v-list-item-subtitle>
               <v-list-item-title class="text-h6 my-1">
                 {{ selectedBillingData.name }}
               </v-list-item-title>
@@ -39,14 +41,9 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </v-col>
-        <v-col>
-          <v-card-title>Data wygenerowania: {{ getTimeStamp() }}</v-card-title>
-        </v-col>
-      </v-row>
-      <v-row class="d-flex justify-space-between my-4">
-        <v-col cols="4">
-          <v-list-item class="d-flex justify-end">
+        </div>
+        <div>
+          <v-list-item>
             <v-list-item-content>
               <v-list-item-subtitle>Wygenerowano dla:</v-list-item-subtitle>
               <v-list-item-title class="text-h6 my-1">
@@ -54,7 +51,7 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-col>
+        </div>
       </v-row>
       <v-row>
         <v-simple-table>
@@ -148,10 +145,10 @@
             </tbody>
           </v-simple-table>
         </v-col>
+        <v-card-title>Data wygenerowania: {{ getTimeStamp() }}</v-card-title>
       </v-row>
     </v-card>
-
-    <v-alert elevation="5" text type="warning" color="orange" dark dismissible close-text="Zamknij">
+    <v-alert elevation="5" text type="warning" color="orange" v-if="legalAppTooltips">
       Po naciśnięciu przycisku 'GENERUJ RAPORT' pojawi się 'Podgląd wydruku'. Jeśli chcesz zapisać rozliczenie w formie
       pdf w oknie podgląd wybierz opcję 'Zapisz jako pdf'. Jeśli chcesz wydrukować rozliczenie postępuj zgodnie z
       instrukcją drukowania. Pamiętaj, że jakośc wydruku zależy od indywidualnych ustawień.
@@ -160,21 +157,15 @@
     <v-btn color="error" block @click="generateReport">
       Generuj rozliczenie
     </v-btn>
-    <progress-bar v-if="loader"/>
   </div>
-
 </template>
-
 <script>
 import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {handleError} from "@/data/functions";
-
 
 export default {
   name: "invoice-template",
-  components: {ProgressBar},
   props: {
     selectedBillingData: {
       required: true,
@@ -189,23 +180,16 @@ export default {
       default: null
     }
   },
-  data: () => ({
-    loader: true
-  }),
-
   async fetch() {
-    this.loader = true
     try {
       let clientId = this.$route.params.client;
       await this.getClientData({clientId})
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapGetters('legal-app-client-store', ['clientData']),
     sumNet() {
       const totalNetValue = this.selectedWorkRecords.reduce((acc, cur) => {
@@ -213,14 +197,12 @@ export default {
       }, 0)
       return totalNetValue.toLocaleString('pl')
     },
-
     sumVat() {
       const totalVatValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceVatAmount;
       }, 0)
       return totalVatValue.toLocaleString('pl')
     },
-
     sumGross() {
       const totalGrossValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.amount;
@@ -231,15 +213,12 @@ export default {
   methods: {
     ...mapActions('legal-app-client-store', ['getClientData']),
     ...mapMutations('legal-app-client-store', ['updateClientDataFromFetch']),
-
     formatDateForInvoice(date) {
       return formatDateForInvoice(date);
     },
-
     getTimeStamp() {
       return timeStamp();
     },
-
     generateReport() {
       try {
         const printContents = document.getElementById('pdfTemplate').innerHTML;

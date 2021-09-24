@@ -20,8 +20,8 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-card class="mb-12" elevation="0">
-            <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Wybierz datę początkową i końcową,
+          <v-card class="mb-12" elevation="0" flat>
+            <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Wybierz datę początkową i końcową,
               a następnie użyj guzika 'Wyszukaj', aby uzyskać dostęp
               do wybranych rozliczeń.
             </v-alert>
@@ -52,31 +52,30 @@
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">Wybierz Twoje dane. Zostaną one
-            dodane do dokumentu. Jeśli jeszcze nie dodałeś danych
-            rozliczeniowych wejdź w zakładkę 'TWOJE DANE'.
+          <v-alert elevation="5" text type="info" v-if="legalAppTooltips">Wybierz Twoje dane. Zostaną one
+            dodane do dokumentu. Jeśli jeszcze nie posiadasz zapisanych danych, użyj opcji "Dodaj dane do rozliczenia".
           </v-alert>
-          <v-card class="mb-12 pa-4" elevation="0">
-            <v-select v-model="selectedBillingData" :items="billingDataList" item-text="name"
-                      :menu-props="{ maxHeight: '400' }"
-                      label="Wybierz Twoje dane rozliczeniowe" persistent-hint
-                      return-object></v-select>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title class="text-h6 my-1">
-                  {{ selectedBillingData.name }}
-                </v-list-item-title>
-                <v-list-item-subtitle>Adres: {{ selectedBillingData.street }} {{ selectedBillingData.address }},
-                  {{ selectedBillingData.postalCode }}, {{ selectedBillingData.city }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>Tel.: {{ selectedBillingData.phoneNumber }}, Fax:
-                  {{ selectedBillingData.faxNumber }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>NIP: {{ selectedBillingData.nip }}, REGON: {{ selectedBillingData.regon }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
+          <add-billing-details/>
+          <v-select v-model="selectedBillingData" :items="billingDataList" item-text="name"
+                    :menu-props="{ maxHeight: '400' }"
+                    label="Wybierz Twoje dane rozliczeniowe" persistent-hint
+                    return-object></v-select>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-h6 my-1">
+                {{ selectedBillingData.name }}
+              </v-list-item-title>
+              <v-list-item-subtitle>Adres: {{ selectedBillingData.street }} {{ selectedBillingData.address }},
+                {{ selectedBillingData.postalCode }}, {{ selectedBillingData.city }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>Tel.: {{ selectedBillingData.phoneNumber }}, Fax:
+                {{ selectedBillingData.faxNumber }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>NIP: {{ selectedBillingData.nip }}, REGON: {{ selectedBillingData.regon }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-btn color="primary" @click="e1 = 3">
             Przejdź dalej
           </v-btn>
@@ -86,7 +85,7 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card class="mb-12" elevation="0">
-            <v-alert elevation="5" text type="info" close-text="Zamknij" class="mb-12">
+            <v-alert elevation="5" text type="info" v-if="legalAppTooltips" class="mb-12">
               Uzupełnij poniższe dane, jeśli rozliczenie jest powiązane z wystawioną fakturą VAT.
             </v-alert>
             <v-dialog v-model="dialog" max-width="500px">
@@ -137,7 +136,7 @@
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-card class="mb-12" elevation="0">
+          <v-card class="mb-12" elevation="0" flat>
             <invoice-template :selected-billing-data="selectedBillingData"
                               :selected-work-records="selectedWorkRecords"
                               :invoice-details="invoiceDetails"/>
@@ -148,24 +147,24 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-    <progress-bar v-if="loader"/>
   </v-container>
 </template>
 <script>
 import AddBillingDetails from "@/components/legal-app/financials/dialogs/add-billing-details";
 import InvoiceTemplate from "@/components/legal-app/financials/invoice-template";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import MyWorkDatePicker from "@/components/legal-app/financials/my-work-date-picker";
 import GenerateReportDatePicker from "@/components/legal-app/financials/dialogs/generate-report-date-picker";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
+import BillingDetailsList from "@/components/legal-app/financials/billing-details-list";
 
 export default {
   name: "generate-invoice",
-  components: {ProgressBar, GenerateReportDatePicker, MyWorkDatePicker, InvoiceTemplate, AddBillingDetails},
+  components: {
+    BillingDetailsList, GenerateReportDatePicker, MyWorkDatePicker, InvoiceTemplate, AddBillingDetails
+  },
   data: () => ({
     dialog: false,
-    loader: false,
     selectedBillingData: [],
     selectedWorkRecords: [],
     form: {
@@ -176,18 +175,15 @@ export default {
     e1: 1,
   }),
   async fetch() {
-    this.loader = true
     try {
       await this.getBillingDataFromFetch()
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
-
   },
 
   computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapGetters('legal-app-client-store', ['billingDataList', 'workRecordsList', 'sortedFinancialRecords']),
     selectAllRecords() {
       return this.selectedWorkRecords.length === this.sortedFinancialRecords.length
@@ -214,7 +210,6 @@ export default {
       })
     },
     handleSubmit() {
-      this.loader = true
       try {
         const details = {
           number: this.form.invoiceNumber,
@@ -225,10 +220,7 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        setTimeout(() => {
-          this.loader = false;
-          this.dialog = false;
-        }, 1500)
+        this.dialog = false;
       }
     }
   },

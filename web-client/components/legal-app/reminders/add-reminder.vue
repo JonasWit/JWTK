@@ -108,7 +108,6 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 </template>
 
@@ -116,14 +115,11 @@
 
 import {lengthRule, notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {mapState} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "add-reminder",
-  components: {ProgressBar},
   data: () => ({
-    loader: false,
     dialog: false,
     menu2: false,
     form: {
@@ -201,7 +197,6 @@ export default {
       if (this.submittableDateStart > this.submittableDateEnd) {
         return this.alert = true;
       } else {
-        this.loader = true;
         try {
           const newReminder = {
             active: true,
@@ -220,12 +215,9 @@ export default {
         } catch (error) {
           handleError(error);
         } finally {
-          setTimeout(() => {
-            this.$emit('action-completed');
-            this.dialog = false;
-            this.loader = false;
-            this.resetForm();
-          }, 1500)
+          this.$emit('action-completed');
+          this.dialog = false;
+          this.resetForm();
         }
       }
     },

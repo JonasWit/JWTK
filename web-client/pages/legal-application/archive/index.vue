@@ -13,6 +13,7 @@ import ArchivedClients from "@/components/legal-app/archive/archived-clients";
 export default {
   name: "index",
   components: {ArchivedClients, Layout},
+  middleware: ['legal-app-permission', 'user-admin', 'authenticated'],
 
 }
 

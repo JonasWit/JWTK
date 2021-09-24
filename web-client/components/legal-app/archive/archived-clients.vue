@@ -2,11 +2,8 @@
   <div>
     <v-toolbar color="primary" class="white--text">
       <v-toolbar-title>Archiwum Klientów</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-icon color="white">mdi-account-tie</v-icon>
-      <v-icon color="white">mdi-archive</v-icon>
     </v-toolbar>
-    <v-alert v-if="legalAppTooltips" elevation="5" text type="info" dismissible close-text="Zamknij">
+    <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
       Aby odzyskać dostęp do zarchiwizowanego Klienta i jego danych oraz spraw użyj opcji 'PRZYWRÓĆ'.
     </v-alert>
     <v-card tile v-for="item in archivedClientsList" :key="item.id">
@@ -23,7 +20,6 @@
         </v-list-item>
       </v-list>
     </v-card>
-    <progress-bar v-if="loader"/>
   </div>
 </template>
 
@@ -40,12 +36,9 @@ export default {
   components: {ProgressBar, Layout},
   data: () => ({
     archivedClientsList: [],
-    loader: false
-
   }),
 
   async fetch() {
-    this.loader = true
     try {
       await this.getArchivedClientsFromFetch()
     } catch (error) {
@@ -62,26 +55,21 @@ export default {
       return formatDate(date)
     },
     async getArchivedClientsFromFetch() {
-      this.loader = true
       try {
         this.archivedClientsList = await this.$axios.$get(getArchivedClient())
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
     },
     async removeFromArchive(clientId) {
-      this.loader = true
       try {
         await this.$axios.$put(archiveClient(clientId))
         console.warn(clientId)
-        this.$notifier.showSuccessMessage("Klient został pomyślnie usuniety z archiwum!");
+        this.$notifier.showSuccessMessage("Klient został pomyślnie usunięty z archiwum!");
       } catch (error) {
         handleError(error)
       } finally {
         await this.getArchivedClientsFromFetch()
-        this.loader = false
       }
     }
   },

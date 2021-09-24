@@ -149,7 +149,6 @@
           </v-menu>
         </v-sheet>
       </div>
-      <progress-bar v-if="loader"/>
     </template>
   </layout>
 </template>
@@ -167,11 +166,11 @@ import {
 import {handleError} from "@/data/functions";
 import {mapActions, mapState} from "vuex";
 import {getAllDeadlinesFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "index",
-  components: {ProgressBar, EditReminder, DeleteReminder, AddReminder, Layout},
+  components: {EditReminder, DeleteReminder, AddReminder, Layout},
+  middleware: ['legal-app-permission', 'user', 'authenticated'],
   data: () => ({
     focus: '',
     selectedCategory: {text: 'Wszystkie kategorie', value: 3},
@@ -204,15 +203,12 @@ export default {
 
   }),
   async mounted() {
-    this.loader = true
     try {
       this.$refs.calendar.checkChange();
       await this.getEvents();
       this.filteredEvents = this.newEvents
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
   },
   computed: {
@@ -321,7 +317,6 @@ export default {
       nativeEvent.stopPropagation();
     },
     async getEvents() {
-      this.loader = true
       try {
         let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(this.query))
         let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
@@ -358,8 +353,6 @@ export default {
         this.newEvents = newEvents;
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
     },
     setColor(item) {
@@ -399,7 +392,6 @@ export default {
       }
     },
     async actionDone() {
-      this.loader = true
       try {
         let dates = queryDateForFloatingBell(todayDate())
         await this.getEvents();
@@ -410,8 +402,6 @@ export default {
         this.selectedOpen = false;
       } catch (error) {
         handleError(error);
-      } finally {
-        this.loader = false
       }
     },
     labelCondition(val) {

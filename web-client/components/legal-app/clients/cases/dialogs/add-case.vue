@@ -17,10 +17,6 @@
             Dodaj Sprawę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
-          Każda nowa sprawa jest prywatna, co oznacza, że będzie widoczna tylko dla użytkownika, który ją stworzył.
-          Jeśli chcesz, aby sprawa była widoczna dla innych, oznacz ją jako publiczną.
-        </v-alert>
         <v-card-text>
           <v-text-field v-model="form.name" label="Tytuł sprawy" required :rules="validation.name"></v-text-field>
           <v-text-field v-model="form.group" label="Kategoria sprawy" required :rules="validation.group"></v-text-field>
@@ -28,7 +24,6 @@
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required
                       :rules="validation.description"></v-textarea>
-          <v-checkbox v-model="form.public" label="Sprawa publiczna" color="red darken-3"></v-checkbox>
           <small class="grey--text">* Dane opcjonalne</small>
         </v-card-text>
         <v-divider></v-divider>

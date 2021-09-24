@@ -17,7 +17,7 @@
             Dodaj notatkę
           </v-toolbar-title>
         </v-toolbar>
-        <v-alert elevation="5" text type="info" dismissible close-text="Zamknij">
+        <v-alert elevation="5" text type="info" v-if="legalAppTooltips">
           Każda dodana notatka będzie widoczna dla użytkowników, którzy mają dostęp do sprawy.
         </v-alert>
         <v-card-text>
@@ -43,7 +43,7 @@
 
 <script>
 import {notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {createNote} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -63,7 +63,9 @@ export default {
       message: notEmptyAndLimitedRule("Notatka nie może byc pusta i może zawierać maksymalnie 1000 znaków.", 4, 1000),
     },
   }),
-
+  computed: {
+    ...mapState('cookies-store', ['legalAppTooltips']),
+  },
   methods: {
     ...mapActions('legal-app-client-store', ['getNotesListForCases']),
     async save() {

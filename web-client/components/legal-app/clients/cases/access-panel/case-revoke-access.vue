@@ -27,7 +27,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <progress-bar v-if="loader"/>
   </v-dialog>
 
 </template>
@@ -48,7 +47,6 @@ export default {
   },
   data: () => ({
     dialog: false,
-    loader: false
   }),
   methods: {
     ...mapActions('legal-app-client-store', ['getAllowedUsersForCase']),

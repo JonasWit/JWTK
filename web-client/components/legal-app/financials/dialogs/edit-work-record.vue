@@ -136,8 +136,6 @@ export default {
         description: this.form.description,
         lawyerName: this.form.lawyerName,
       };
-      console.warn('workRecord', workRecord);
-      console.warn('workRecord', this.selectedFinancialRecord.id);
       try {
         let clientId = this.$route.params.client;
         let workRecordId = this.selectedFinancialRecord.id;
@@ -148,6 +146,7 @@ export default {
       } finally {
         this.$emit('action-completed');
         this.dialog = false;
+        this.$refs.editWorkRecordForm.resetValidation();
       }
     },
     resetForm() {

@@ -95,29 +95,23 @@ export default {
         hours: hoursValidation(),
         minutes: minutesValidation()
       },
-
     }
   ),
 
   computed: {
     hoursSpent() {
       return parseInt(this.form.hours);
-    }
-    ,
+    },
     minutesSpent() {
       return parseInt(this.form.minutes);
-    }
-    ,
+    },
     givenRate() {
       return (parseFloat(this.form.rate));
-    }
-    ,
+    },
     calculatedAmount() {
       return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate);
     },
   },
-
-
   methods: {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
     async handleSubmit() {
@@ -132,7 +126,6 @@ export default {
         vat: this.form.vat.value,
         amount: this.calculatedAmount,
         lawyerName: this.form.lawyerName,
-
       };
       try {
         let clientId = this.$route.params.client;
@@ -142,12 +135,11 @@ export default {
         handleError(error);
       } finally {
         this.$emit('action-completed');
-        this.loader = false;
+        this.dialog = false;
         this.$refs.createClientWorkForm.reset();
       }
     },
     resetForm() {
-
       this.$refs.createClientWorkForm.resetValidation();
     },
   }
