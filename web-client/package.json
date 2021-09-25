@@ -12,15 +12,15 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
-    "core-js": "^3.16.4",
-    "mathjs": "^9.4.4",
+    "core-js": "^3.18.0",
+    "mathjs": "^9.5.0",
     "nuxt": "^2.15.8",
     "vue-client-only": "^2.1.0",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1",
-    "axios": "^0.21.1"
+    "axios": "^0.21.4"
   },
   "eslintConfig": {
     "root": true,
