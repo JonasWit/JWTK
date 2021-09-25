@@ -1,22 +1,20 @@
 ﻿<template>
-  <v-overlay v-if="isOpen" class="cookie">
-    <v-card>
-      <v-alert prominent type="warning" border="bottom" colored-border class="px-3">
-        <v-row align="center">
-          <v-col>
-            <slot>
-              Używamy ciasteczek m.in. w celach: świadczenia usług, statystyk. Korzystanie
-              z witryny bez zmiany ustawień Twojej przeglądarki oznacza, że będą one umieszczane w Twoim urządzeniu
-              końcowym. Pamiętaj, że zawsze możesz zmienić te ustawienia. Szczegóły znajdziesz w
-              <nuxt-link class="cookie__link" to="/portal-web/privacy-policy">Polityce Prywatności.</nuxt-link>
-            </slot>
-          </v-col>
-          <v-col class="shrink d-flex justify-end" cols="12" md="3">
-            <v-btn color="success" class="ma-2" @click="accept">Akceptuję</v-btn>
-          </v-col>
-        </v-row>
-      </v-alert>
-    </v-card>
+  <v-overlay v-if="isOpen">
+    <v-alert prominent type="warning" border="bottom" colored-border class="px-3 cookie">
+      <v-row align="center">
+        <v-col>
+          <slot>
+            Używamy ciasteczek m.in. w celach: świadczenia usług, statystyk. Korzystanie
+            z witryny bez zmiany ustawień Twojej przeglądarki oznacza, że będą one umieszczane w Twoim urządzeniu
+            końcowym. Pamiętaj, że zawsze możesz zmienić te ustawienia. Szczegóły znajdziesz w
+            <nuxt-link class="cookie__link" to="/portal-web/privacy-policy">Polityce Prywatności.</nuxt-link>
+          </slot>
+        </v-col>
+        <v-col class="shrink d-flex justify-end" cols="12" md="3">
+          <v-btn color="success" class="ma-2" @click="accept">Akceptuję</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
   </v-overlay>
 </template>
 <script>
@@ -48,17 +46,23 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-.cookie
-  z-index: 1
-  position: fixed
-  bottom: 0
+<style scoped>
+.cookie {
+  position: fixed;
+  margin: auto;
+  bottom: 0;
+  left: 0
 
-  &__link
-    color: #ffffff
-    text-decoration: underline
-    transition: all .25s
 
-    &:hover
-      text-decoration: none
+}
+
+.cookie__link:link {
+  text-decoration: none;
+}
+
+.cookie__link:hover {
+  text-decoration: underline;
+}
+
+
 </style>

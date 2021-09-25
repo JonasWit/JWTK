@@ -1,22 +1,11 @@
 <template>
-  <div>
-    <template>
-      <div class="text-center">
-        <v-overlay color="grey lighten-5">
-          <v-progress-circular
-            size="70"
-            width="7"
-            color="light-blue darken-4"
-            indeterminate
-          ></v-progress-circular>
-        </v-overlay>
-      </div>
-    </template>
-  </div>
-
-
+  <v-progress-circular
+    size="70"
+    width="7"
+    color="light-blue darken-4"
+    indeterminate
+  ></v-progress-circular>
 </template>
-
 <script>
 
 export default {

@@ -36,7 +36,6 @@
           <v-btn text color="primary" @click="addNewCase">
             Zapisz
           </v-btn>
-
         </v-card-actions>
       </v-card>
     </v-form>

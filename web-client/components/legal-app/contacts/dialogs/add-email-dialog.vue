@@ -40,12 +40,10 @@
 
 import {emailRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {createContactEmail} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "add-email-dialog",
-  components: {ProgressBar},
   props: {
     selectedContact: {
       required: true,

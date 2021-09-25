@@ -1,19 +1,14 @@
 <template>
   <v-speed-dial v-model="fab" fixed bottom right class="mr-8 mb-8" transition="slide-x-transition">
     <template v-slot:activator>
-      <v-btn v-model="fab" color="error" dark fab>
+      <v-btn v-model="fab" :color="bellColor" dark fab>
         <v-icon v-if="fab">
           mdi-close
         </v-icon>
-        <v-icon v-else class="reminder-bell">
+        <v-icon v-else :class="bellClass">
           mdi-bell
         </v-icon>
-        <v-badge
-          color="primary"
-          bottom
-          :content="newEvents.length"
-          :value="newEvents.length"
-        >
+        <v-badge color="primary" bottom :content="newEvents.length" :value="newEvents.length">
         </v-badge>
       </v-btn>
     </template>
@@ -94,6 +89,21 @@ export default {
     query() {
       return queryDateForFloatingBell(this.todayDate)
     },
+
+    bellColor() {
+      if (this.newEvents.length === 0) {
+        return 'green'
+      } else {
+        return 'red'
+      }
+    },
+    bellClass() {
+      if (this.newEvents.length > 0) {
+        return 'reminder-bell'
+      } else {
+        return ''
+      }
+    }
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getEventsForNotifications']),
@@ -152,11 +162,6 @@ export default {
   bottom: 45%;
   width: 800px;
 }
-
-@media only screen and (max-width: 780px) {
-
-}
-
 
 .reminder-bell {
   -webkit-animation: ring 4s .7s ease-in-out infinite;

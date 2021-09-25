@@ -493,7 +493,7 @@
         obowiązującymi na nich politykami prywatności oraz cookies. Administrator nie ponosi odpowiedzialności za zasady
         ochrony danych stosowane przez inne strony i serwisy.
       </li>
-      <li style="color: #B41946">
+      <li>
         W sprawach związanych z ochroną Twoich danych osobowych zawsze możesz skontaktować się z Administratorem na
         adres kontakt@systemywp.pl lub na adres korespondencyjny jak również możesz skontaktować się z Prezesem Urzędu
         Ochrony
