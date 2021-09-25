@@ -22,10 +22,9 @@
         Witaj w bazie spraw Klienta! Użyj zielonej ikonki "+", aby dodać pierwszą sprawę.
       </v-alert>
 
-      <v-list class="expansion">
-        <v-list-group :value="false" prepend-icon="mdi-text-box-multiple-outline" v-for="item in groupedCases"
-                      :key="item[0].group"
-                      no-action>
+      <v-list>
+        <v-list-group :value="false" prepend-icon="mdi-text-box-multiple-outline" v-for="item in listOfCases"
+                      :key="item[0].group" no-action>
           <template v-slot:activator>
             <v-list-item-title> {{ item[0].group }}</v-list-item-title>
           </template>
@@ -46,6 +45,7 @@
           <v-divider></v-divider>
         </v-list-group>
       </v-list>
+
     </template>
   </layout>
 </template>
@@ -56,7 +56,7 @@ import {formatDate} from "@/data/date-extensions";
 import AddCase from "@/components/legal-app/clients/cases/dialogs/add-case";
 import {mapActions, mapState} from "vuex";
 import GoToCaseDetails from "@/components/legal-app/clients/cases/go-to-case-details";
-import {handleError, hasOccurrences} from "@/data/functions";
+import {groupByKey, handleError, hasOccurrences} from "@/data/functions";
 import DeleteCase from "@/components/legal-app/clients/cases/dialogs/delete-case";
 import ArchiveCase from "@/components/legal-app/clients/cases/dialogs/archive-case";
 
@@ -66,28 +66,23 @@ const searchItemFactory = (name, id) => ({
   searchIndex: (name).toLowerCase(),
   text: name
 });
-
 export default {
   name: "index",
   components: {ArchiveCase, DeleteCase, GoToCaseDetails, AddCase, Layout},
   middleware: ['legal-app-permission', 'user', 'authenticated'],
-
   data: () => ({
     listOfCases: [],
-    searchResult: "",
+    searchResult: null,
     caseSearchItems: [],
     dialog: false,
     searchConditionsProvided: false,
   }),
   async fetch() {
     try {
-      let clientId = this.$route.params.client
-      await this.getListOfGroupedCases({clientId})
-      await this.getFullListOfCases({clientId})
-      this.caseSearchItems = this.fullListOfCases
-      this.listOfCases = this.fullListOfCases
-      console.log('list of cases', this.listOfCases)
-      console.log('caseSearchItems', this.caseSearchItems)
+      let clientId = this.$route.params.client;
+      await this.getFullListOfCases({clientId});
+      this.caseSearchItems = this.fullListOfCases;
+      this.listOfCases = groupByKey(this.fullListOfCases, 'group');
     } catch (error) {
       handleError(error);
     }
@@ -95,10 +90,11 @@ export default {
   watch: {
     searchResult() {
       if (this.searchResult) {
-        this.listOfCases = [];
-        this.listOfCases.push(this.fullListOfCases.find(object => object.id === this.searchResult.id));
+        let tempArray = [];
+        tempArray.push(this.fullListOfCases.find(object => object.id === this.searchResult.id));
+        this.listOfCases = groupByKey(tempArray, 'group');
       } else {
-        this.listOfCases = this.caseSearchItems;
+        this.listOfCases = groupByKey(this.fullListOfCases, 'group');
       }
     },
   },
@@ -106,26 +102,22 @@ export default {
     ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapState('legal-app-client-store', ['groupedCases', 'fullListOfCases']),
     clientNumber() {
-      return this.$route.params.client
+      return this.$route.params.client;
     },
     caseItems() {
-      return []
-        .concat(this.caseSearchItems.map(x => searchItemFactory(x.name, x.id)));
+      return [].concat(this.caseSearchItems.map(x => searchItemFactory(x.name, x.id)));
     },
-
   },
-
   methods: {
     ...mapActions('legal-app-client-store', ['getListOfGroupedCases', 'getFullListOfCases']),
     formatDate(date) {
-      return formatDate(date)
+      return formatDate(date);
     },
-
     searchFilter(object, queryText) {
       return hasOccurrences(object.searchIndex, queryText);
     },
   },
-}
+};
 </script>
 
 <style scoped>

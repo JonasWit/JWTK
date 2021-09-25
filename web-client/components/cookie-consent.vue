@@ -12,8 +12,7 @@
             </slot>
           </v-col>
           <v-col class="shrink d-flex justify-end" cols="12" md="3">
-            <v-btn color="success" class="ma-2" @click="accept">{{ buttonTextAccept }}</v-btn>
-            <v-btn color="error" class="ma-2" text @click="deny">{{ buttonTextDeny }}</v-btn>
+            <v-btn color="success" class="ma-2" @click="accept">Akceptuję</v-btn>
           </v-col>
         </v-row>
       </v-alert>
@@ -23,29 +22,10 @@
 <script>
 export default {
   name: "CookieMessage",
-  props: {
-    buttonTextAccept: {
-      type: String,
-      default: "Akceptuję"
-    },
-    buttonTextDeny: {
-      type: String,
-      default: "Odmawiam"
-    },
-    position: {
-      type: String,
-      default: "top"
-    }
-  },
   data() {
     return {
       isOpen: false
     };
-  },
-  computed: {
-    containerPosition() {
-      return `cookie--${this.position}`;
-    }
   },
   created() {
     if (!this.getGDPR() === true) {
@@ -64,12 +44,6 @@ export default {
         localStorage.setItem("GDPR:accepted", true);
       }
     },
-    deny() {
-      if (process.browser) {
-        this.isOpen = false;
-        localStorage.setItem("GDPR:accepted", false);
-      }
-    }
   }
 };
 </script>

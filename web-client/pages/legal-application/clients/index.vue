@@ -91,11 +91,11 @@ export default {
   }),
   async fetch() {
     try {
-      await this.getBasicListOfClients()
-      this.clientSearchItems = this.basicClientsInfo
-      this.clientList = this.clientSearchItems
+      await this.getBasicListOfClients();
+      this.clientSearchItems = this.basicClientsInfo;
+      this.clientList = this.clientSearchItems;
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
   },
   watch: {
@@ -107,20 +107,18 @@ export default {
               this.clientList = [];
               this.clientList.push(clientFound);
             }
-          })
+          });
       else {
-        this.clientList = this.clientSearchItems
+        this.clientList = this.clientSearchItems;
       }
     },
   },
-
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
     ...mapGetters('legal-app-client-store', ['basicClientsInfo']),
     ...mapGetters('auth', ['userAdmin']),
     clientItems() {
-      return []
-        .concat(this.clientSearchItems.map(x => searchItemFactory(x.name, x.id)));
+      return [].concat(this.clientSearchItems.map(x => searchItemFactory(x.name, x.id)));
     },
   },
   methods: {

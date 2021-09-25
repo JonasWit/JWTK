@@ -19,7 +19,10 @@
         </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.name" label="Tytuł sprawy" required :rules="validation.name"></v-text-field>
-          <v-text-field v-model="form.group" label="Kategoria sprawy" required :rules="validation.group"></v-text-field>
+
+          <v-combobox v-model="form.group" :items="getCasesGroups"
+                      label="Wybierz Kategorię sprawy lub dodaj nową"></v-combobox>
+
           <v-text-field v-model="form.signature" label="Sygnatura sprawy" required
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required
@@ -44,7 +47,7 @@
 
 <script>
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import {createCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
@@ -70,6 +73,7 @@ export default {
   }),
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
+    ...mapGetters('legal-app-client-store', ['getCasesGroups'])
   },
 
   methods: {
@@ -85,12 +89,12 @@ export default {
         };
         let clientId = this.$route.params.client;
         await this.$axios.$post(createCase(clientId), newCase);
-        this.$nuxt.refresh()
+        this.$nuxt.refresh();
         this.$notifier.showSuccessMessage("Sprawa dodana pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        this.resetForm()
+        this.resetForm();
       }
     },
     resetForm() {
@@ -99,7 +103,7 @@ export default {
       this.dialog = false;
     },
   }
-}
+};
 </script>
 
 <style scoped>

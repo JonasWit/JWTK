@@ -27,7 +27,6 @@ const initState = () => ({
 
   //Cases
   clientCaseDetails: null,
-  groupedCases: [],
   fullListOfCases: [],
   allowedUsersForCase: [],
   eligibleUsersForCase: [],
@@ -44,6 +43,13 @@ const initState = () => ({
 export const state = initState;
 
 export const getters = {
+  //Cases related
+  getCasesGroups(state) {
+    if (state.fullListOfCases) {
+      return [...new Set(state.fullListOfCases.map(item => item.group))];
+    }
+    return [];
+  },
   //Basic Clients List
   basicClientsInfo(state) {
     return state.basicClientsListFromFetch;
@@ -89,7 +95,7 @@ export const mutations = {
   //CLIENTS
 
   updateBasicClientsListFromFetch(state, {basicClientsListFromFetch}) {
-    state.basicClientsListFromFetch = basicClientsListFromFetch
+    state.basicClientsListFromFetch = basicClientsListFromFetch;
   },
 
   //CONTACT ITEMS
@@ -151,7 +157,7 @@ export const mutations = {
   },
 
   updateFullListOfCases(state, {fullListOfCases}) {
-    state.fullListOfCases = fullListOfCases
+    state.fullListOfCases = fullListOfCases;
   },
 
   updateAllowedUsersForCase(state, {allowedUsersForCase}) {
@@ -177,10 +183,10 @@ export const actions = {
   async getBasicListOfClients({commit}) {
     try {
       let basicClientsListFromFetch = await this.$axios.$get(getClientsBasicList());
-      commit('updateBasicClientsListFromFetch', {basicClientsListFromFetch})
-      console.log('Lista klientow ze stora', basicClientsListFromFetch)
+      commit('updateBasicClientsListFromFetch', {basicClientsListFromFetch});
+      console.log('Lista klientow ze stora', basicClientsListFromFetch);
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
   },
 
@@ -196,7 +202,7 @@ export const actions = {
   },
 //Financials records
   async getFinancialRecordsFromFetch({commit}, {clientId, query}) {
-    let financialRecordsFromFetch = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`)
+    let financialRecordsFromFetch = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`);
     try {
       financialRecordsFromFetch.sort((a, b) => {
         const dateA = new Date(a.created);
@@ -309,21 +315,6 @@ export const actions = {
     }
   },
 
-  async getListOfGroupedCases({commit}, {clientId}) {
-    try {
-      let response = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`);
-      response.sort((a, b) => {
-        const dateA = new Date(a.created);
-        const dateB = new Date(b.created);
-        return dateB - dateA;
-      });
-      const groupedCases = groupByKey(response, 'group');
-      commit('updateGroupedCases', {groupedCases});
-    } catch (error) {
-      this.$notifier.showErrorMessage(error.response.data);
-    }
-  },
-
   async getFullListOfCases({commit}, {clientId}) {
     try {
       let fullListOfCases = await this.$axios.$get(`/api/legal-app-cases/client/${clientId}/cases`);
@@ -333,9 +324,8 @@ export const actions = {
         return dateB - dateA;
       });
       commit('updateFullListOfCases', {fullListOfCases});
-      console.warn('list of cases from store', fullListOfCases);
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
   },
 
