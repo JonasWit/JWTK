@@ -5,7 +5,7 @@
         <v-card v-if="clientCaseDetails" width="100vw" class="mt-6">
           <v-toolbar dark color="primary light">
             <v-toolbar-title>
-              Tytuł sprawy: {{ clientCaseDetails.name }}
+              Nazwa: {{ clientCaseDetails.name }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-title>
@@ -20,8 +20,8 @@
             </v-alert>
             <v-row class="mx-2 my-2 d-flex align-center">
               <v-card-title> Sygnatura: {{ clientCaseDetails.signature }}</v-card-title>
-              <v-subheader class="mx-2"><span
-                class="font-weight-bold">Utworzono: </span> {{ formatDateWithHours(clientCaseDetails.created) }}
+              <v-subheader class="mx-2"><span class="font-weight-bold">Utworzono: </span>
+                {{ formatDateWithHours(clientCaseDetails.created) }}
               </v-subheader>
               <v-subheader class="mx-2"><span class="font-weight-bold">Utworzone przez: </span>
                 {{ clientCaseDetails.createdBy }}
@@ -29,7 +29,7 @@
             </v-row>
             <v-divider></v-divider>
             <v-row class="mx-2 my-2 d-flex align-center">
-              <v-card-title>Opis sprawy</v-card-title>
+              <v-card-title>Opis</v-card-title>
               <edit-case-dialog :case-for-action="clientCaseDetails" v-on:action-completed="editDone"/>
             </v-row>
             <v-card-text>
@@ -72,8 +72,8 @@ export default {
 
   async fetch() {
     try {
-      let caseId = this.$route.params.case
-      await this.getCaseDetails({caseId})
+      let caseId = this.$route.params.case;
+      await this.getCaseDetails({caseId});
     } catch (error) {
       handleError(error);
     }
@@ -86,23 +86,22 @@ export default {
 
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getCaseDetails']),
-    ...mapActions('legal-app-client-store', ['getListOfGroupedCases']),
+    ...mapActions('legal-app-client-store', ['getCaseDetails', 'getFullListOfCases']),
+    ...mapActions('legal-app-client-store', ['getlis']),
 
     formatDateWithHours(date) {
-      return formatDateWithHours(date)
+      return formatDateWithHours(date);
     },
     async editDone() {
       try {
         let clientId = this.$route.params.client;
-        await this.getListOfGroupedCases({clientId});
+        await this.getFullListOfCases({clientId});
       } catch (error) {
         handleError(error);
       }
-
     },
   }
-}
+};
 </script>
 
 <style scoped>

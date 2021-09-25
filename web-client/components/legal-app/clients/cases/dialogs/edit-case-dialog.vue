@@ -14,12 +14,13 @@
       <v-card>
         <v-toolbar color="primary" dark>
           <v-toolbar-title>
-            Edytuj notatkę
+            Edytuj dane sprawy
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.name" label="Tytuł sprawy" required :rules="validation.name"></v-text-field>
-          <v-text-field v-model="form.group" label="Kategoria sprawy" required :rules="validation.group"></v-text-field>
+          <v-combobox v-model="form.group" :items="getCasesGroups" required :rules="validation.group"
+                      label="Wybierz Kategorię sprawy lub dodaj nową"></v-combobox>
           <v-text-field v-model="form.signature" label="Sygnatura sprawy" required
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required
@@ -44,7 +45,7 @@
 
 <script>
 
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import {lengthRule, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {updateCase} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
@@ -87,6 +88,7 @@ export default {
   },
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
+    ...mapGetters('legal-app-client-store', ['getCasesGroups'])
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getCaseDetails']),
@@ -106,7 +108,7 @@ export default {
         handleError(error);
       } finally {
         let caseId = this.caseForAction.id;
-        await this.getCaseDetails({caseId})
+        await this.getCaseDetails({caseId});
         this.$emit('action-completed');
         this.dialog = false;
       }

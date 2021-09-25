@@ -19,10 +19,8 @@
         </v-toolbar>
         <v-card-text>
           <v-text-field v-model="form.name" label="Tytuł sprawy" required :rules="validation.name"></v-text-field>
-
           <v-combobox v-model="form.group" :items="getCasesGroups"
                       label="Wybierz Kategorię sprawy lub dodaj nową"></v-combobox>
-
           <v-text-field v-model="form.signature" label="Sygnatura sprawy" required
                         :rules="validation.signature"></v-text-field>
           <v-textarea outlined v-model="form.description" label="Opis sprawy" required

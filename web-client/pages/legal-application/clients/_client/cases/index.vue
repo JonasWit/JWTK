@@ -29,7 +29,7 @@
             <v-list-item-title> {{ item[0].group }}</v-list-item-title>
           </template>
           <v-list-item v-for="object in item" :key="object.id" link>
-            <v-list-item-title>Nazwa:{{ object.name }}</v-list-item-title>
+            <v-list-item-title>{{ object.name }}</v-list-item-title>
             <v-list-item-subtitle>Sygnatura: {{ object.signature }}</v-list-item-subtitle>
             <v-list-item-subtitle>Dodano: {{ formatDate(object.created) }}</v-list-item-subtitle>
             <v-list-item-action class="mx-1">
@@ -109,7 +109,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getListOfGroupedCases', 'getFullListOfCases']),
+    ...mapActions('legal-app-client-store', ['getFullListOfCases']),
     formatDate(date) {
       return formatDate(date);
     },
