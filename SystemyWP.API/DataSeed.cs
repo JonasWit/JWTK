@@ -318,68 +318,68 @@ namespace SystemyWP.API
                 });
 
                 //Seed Reminders
-                for (var i = -2; i < 4; i++)
-                {
-                    context.Add(new LegalAppReminder
-                    {
-                        ReminderCategory = ReminderCategory.Memo,
-                        AuthorId = testClientAdmin.Id,
-                        Name = $"Test reminder from {testClientAdmin.Email} for Key: {accKey?.Name}",
-                        LegalAccessKey = accKey,
-                        UpdatedBy = "system",
-                        CreatedBy = "system",
-                        Message = $"Generated message",
-                        Start = DateTime.UtcNow.AddDays(i),
-                        End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
-                    });
-                }
+                // for (var i = -2; i < 4; i++)
+                // {
+                //     context.Add(new LegalAppReminder
+                //     {
+                //         ReminderCategory = ReminderCategory.Memo,
+                //         AuthorId = testClientAdmin.Id,
+                //         Name = $"Test reminder from {testClientAdmin.Email} for Key: {accKey?.Name}",
+                //         LegalAccessKey = accKey,
+                //         UpdatedBy = "system",
+                //         CreatedBy = "system",
+                //         Message = $"Generated message",
+                //         Start = DateTime.UtcNow.AddDays(i),
+                //         End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
+                //     });
+                // }
 
                 //Seed Clients
-                for (var userNumber = 0; userNumber < 3; userNumber++)
-                {
-                    var testClient = new IdentityUser($"client{userNumber}{adminNumber}")
-                    {
-                        Email = $"client{userNumber}{adminNumber}@test.com",
-                        LockoutEnabled = true,
-                        EmailConfirmed = true
-                    };
-                    userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
-                    userManager
-                        .AddClaimsAsync(testClient, new[]
-                        {
-                            SystemyWpConstants.Claims.UserClaim,
-                            SystemyWpConstants.Claims.LegalAppAccessClaim
-                        })
-                        .GetAwaiter()
-                        .GetResult();
+                // for (var userNumber = 0; userNumber < 3; userNumber++)
+                // {
+                //     var testClient = new IdentityUser($"client{userNumber}{adminNumber}")
+                //     {
+                //         Email = $"client{userNumber}{adminNumber}@test.com",
+                //         LockoutEnabled = true,
+                //         EmailConfirmed = true
+                //     };
+                //     userManager.CreateAsync(testClient, "password").GetAwaiter().GetResult();
+                //     userManager
+                //         .AddClaimsAsync(testClient, new[]
+                //         {
+                //             SystemyWpConstants.Claims.UserClaim,
+                //             SystemyWpConstants.Claims.LegalAppAccessClaim
+                //         })
+                //         .GetAwaiter()
+                //         .GetResult();
+                //
+                //     context.Add(new User
+                //     {
+                //         Username = testClient.UserName,
+                //         Email = testClient.Email,
+                //         LegalAccessKey = accKey,
+                //         Id = testClient.Id,
+                //         CreatedBy = "system"
+                //     });
+                //
+                //     //Seed Reminders
+                //     for (var i = -2; i < 2; i++)
+                //     {
+                //         context.Add(new LegalAppReminder
+                //         {
+                //             AuthorId = testClient.Id,
+                //             Name = $"Test reminder from {testClient.Email} for Key: {accKey?.Name}",
+                //             LegalAccessKey = accKey,
+                //             UpdatedBy = "system",
+                //             CreatedBy = "system",
+                //             Message = $"Generated message",
+                //             Start = DateTime.UtcNow.AddDays(i),
+                //             End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
+                //         });
+                //     }
+                // }
 
-                    context.Add(new User
-                    {
-                        Username = testClient.UserName,
-                        Email = testClient.Email,
-                        LegalAccessKey = accKey,
-                        Id = testClient.Id,
-                        CreatedBy = "system"
-                    });
-
-                    //Seed Reminders
-                    for (var i = -2; i < 2; i++)
-                    {
-                        context.Add(new LegalAppReminder
-                        {
-                            AuthorId = testClient.Id,
-                            Name = $"Test reminder from {testClient.Email} for Key: {accKey?.Name}",
-                            LegalAccessKey = accKey,
-                            UpdatedBy = "system",
-                            CreatedBy = "system",
-                            Message = $"Generated message",
-                            Start = DateTime.UtcNow.AddDays(i),
-                            End = DateTime.UtcNow.AddDays(i + random.Next(1, 10)),
-                        });
-                    }
-                }
-
-                DevDataSeedLegalApp(context, testClientAdmin.Id, key);
+                //DevDataSeedLegalApp(context, testClientAdmin.Id, key);
                 context.SaveChanges();
             }
         }
