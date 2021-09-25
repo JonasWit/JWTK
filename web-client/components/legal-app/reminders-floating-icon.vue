@@ -49,7 +49,6 @@
         </v-virtual-scroll>
       </v-card>
     </v-row>
-    <progress-bar v-if="loader"/>
   </v-speed-dial>
 </template>
 
@@ -60,12 +59,10 @@ import {
   todayDate
 } from "@/data/date-extensions";
 import {mapActions, mapGetters, mapState} from "vuex";
-import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
 
 export default {
   name: "reminders-floating-icon",
-  components: {ProgressBar},
   data: () => ({
     direction: 'top',
     fab: false,
@@ -81,14 +78,11 @@ export default {
   }),
 
   async fetch() {
-    this.loader = true
     try {
       let dates = this.query
       await this.getEventsForNotifications({dates})
     } catch (error) {
       handleError(error);
-    } finally {
-      this.loader = false
     }
   },
   computed: {

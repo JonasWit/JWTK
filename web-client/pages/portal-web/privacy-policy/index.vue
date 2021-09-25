@@ -12,15 +12,16 @@
     <h2>Informacje ogólne</h2>
     <ol type="1">
       <li>
-        Administratorem Twoich danych osobowych i jednocześnie operatorem serwisu https://systemywp.pl, za którego
+        Administratorem Twoich danych osobowych i jednocześnie operatorem serwisu https://portal.systemywp.pl, za
+        którego
         pośrednictwem zbierane są informacje i dane osobowe jest Marzena Witek prowadząca jednoosobową działalność
-        gospodarczą pod nazwą <span style="color: crimson ">Systemy Wspomagania Pracy, Kraków, NIP: 7343144682, REGON: 388896441</span>,
-        zwana dalej
+        gospodarczą pod nazwą Systemy Wspomagania Pracy, Kraków, NIP: 7343144682, REGON: 388896441 zwana dalej
         Administratorem.
       </li>
       <li>
         Administratorem w odniesieniu do danych osobowych klientów czy pracowników jest osoba korzystająca z serwisu
-        https://systemywp.pl . My zaś przetwarzamy te dane w Twoim imieniu wyłącznie na Twoje udokumentowane polecenie,
+        https://portal.systemywp.pl . My zaś przetwarzamy te dane w Twoim imieniu wyłącznie na Twoje udokumentowane
+        polecenie,
         a bez takiego polecenia tylko w przypadku, gdyby zobowiązywało nas do tego prawo.
       </li>
       <li>
@@ -28,9 +29,10 @@
         tym miejscu.
       </li>
       <li>
-        Kontakt z Administratorem Twoich danych osobowych i operatorem serwisu możliwy jest poprzez <span
-        style="color: crimson">e-mail: ________ lub
-        </span>korespondencyjnie na adres siedziby podany w pkt. 1 powyżej.
+        Kontakt z Administratorem Twoich danych osobowych i operatorem serwisu możliwy jest poprzez e-mail:
+        kontakt@systemywp.pl lub
+        korespondencyjnie na adres korespondencyjny: Systemy Wspomagania Pracy, FUP Kraków 28, Os. Urocze 5, 31-955
+        Kraków, Skrytka pocztowa 44.
       </li>
       <li>
         Dane osobowe zbierane przez Administratora za pośrednictwem serwisu są przetwarzane zgodnie z Rozporządzeniem
@@ -54,7 +56,7 @@
     <ol type="1">
       <li>
         Nadrzędnym celem przetwarzania Twoich danych osobowych jest realizacja usług świadczonych drogą elektroniczną, w
-        zgodzie z postanowieniami regulaminu serwisu, a w szczególności świadczenie usług oferowanych w Serwisie.
+        zgodzie z postanowieniami regulaminu serwisu, a w szczególności świadczenie usług oferowanych w Serwisie.
       </li>
       <li>
         <p>Szczegółowe cele przetwarzania to:</p>
@@ -100,37 +102,37 @@
         1 lit. b RODO),
       </li>
       <li>
-        ciążący na nas obowiązek prawny, np. związany z rachunkowością (art. 6 ust. 1 lit. c RODO),
+        ciążący na nas obowiązek prawny, np. związany z rachunkowością (art. 6 ust. 1 lit. c RODO),
       </li>
-      <li>nasz prawnie uzasadniony interes, polegający na przetwarzaniu w celu ustalenia, dochodzenia lub obrony
+      <li>nasz prawnie uzasadniony interes, polegający na przetwarzaniu w celu ustalenia, dochodzenia lub obrony
         ewentualnych roszczeń (art. 6 ust. 1 lit. f RODO),
       </li>
     </ol>
     <h3>Podanie danych:</h3>
     <ol type="a">
       <li>
-        dobrowolne, ale w niektórych przypadkach może być konieczne do zawarcia umowy
+        dobrowolne, ale w niektórych przypadkach może być konieczne do zawarcia umowy
       </li>
     </ol>
     <h3>
       Skutek niepodania danych:
     </h3>
-    <p>W zależności od celu, w jakim dane są podawane:</p>
+    <p>W zależności od celu, w jakim dane są podawane:</p>
     <ol type="a">
       <li>
-        brak możliwości zarejestrowania się w Serwisie,
+        brak możliwości zarejestrowania się w Serwisie,
       </li>
       <li>
-        brak możliwości korzystania z usług Serwisu,
+        brak możliwości korzystania z usług Serwisu,
       </li>
     </ol>
-    <h3>Możliwość cofnięcia zgody: </h3>
+    <h3>Możliwość cofnięcia zgody:</h3>
     <ol type="a">
       <li>
-        w każdej chwili
+        w każdej chwili
       </li>
     </ol>
-    <p>Przetwarzanie danych do momentu cofnięcia przez Ciebie zgody pozostaje zgodne z prawem.</p>
+    <p>Przetwarzanie danych do momentu cofnięcia przez Ciebie zgody pozostaje zgodne z prawem.</p>
     <h2>III. Jakie dane przetwarzamy oraz w jaki sposób je pozyskujemy</h2>
     <p>Dane osobowe i informacje możemy pozyskać poprzez:</p>
     <ol type="1">
@@ -173,7 +175,7 @@
             Wszelkie inne dane – w momencie, kiedy zdecydujesz się dobrowolnie je podać w serwisie. Zalecamy zachowanie
             ostrożności w nadmiernym ujawnianiu własnych danych osobowych i zachowaniu szczególnego bezpieczeństwa w tym
             zakresie.
-            <p style="color: crimson">W trakcie korzystania z usług portalu Użytkownik, w ramach korzystania z
+            <p>W trakcie korzystania z usług portalu Użytkownik, w ramach korzystania z
               zakupionej usługi może podać,
               dla własnych potrzeb oraz w celu pełnego korzystania z usługi: Imiona, Nazwiska, Sygnatury Spraw, Adresy,
               Adresy E-Mail, Numery Telefonów - Administratorem w odniesieniu do danych osobowych klientów czy
@@ -290,10 +292,10 @@
           na podstawie zgody przed jej cofnięciem – na podstawie art. 7 ust. 3 RODO.
         </li>
       </ol>
-      <li style="color: #B41946">
-        W każdej z wyżej wymienionych spraw możesz się z nami skontaktować na adres _________ lub
-        korespondencyjnie
-        na adres siedziby Administratora podany w pkt. I ppkt. 1. Dołożymy wszelkich starań, aby zrealizować Twoje
+      <li>
+        W każdej z wyżej wymienionych spraw możesz się z nami skontaktować na adres kontakt@systemywp.pl lub
+        korespondencyjnie na adres korespondencyjny Administratora podany w pkt. I ppkt. 1. Dołożymy wszelkich starań,
+        aby zrealizować Twoje
         prawa w ciągu 30 dni, w przeciwnym razie skontaktujemy się informując o przyczynach i terminie realizacji
         Twoich praw.
       </li>
@@ -428,36 +430,36 @@
       </li>
       <ol type="a">
         <li>
-          Edge - https://support.microsoft.com/pl-pl/help/4468242/microsoft-edge-browsing-data-and-privacy
+          Edge - https://support.microsoft.com/pl-pl/help/4468242/microsoft-edge-browsing-data-and-privacy
         </li>
         <li>
           Internet Explorer
-          - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
+          - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
         </li>
         <li>
-          Chrome - https://support.google.com/chrome/answer/95647?hl=pl
+          Chrome - https://support.google.com/chrome/answer/95647?hl=pl
         </li>
         <li>
-          Safari - https://support.apple.com/pl-pl/guide/safari/sfri11471/mac
+          Safari - https://support.apple.com/pl-pl/guide/safari/sfri11471/mac
         </li>
         <li>
-          Firefox - https://support.mozilla.org/pl/kb/ciasteczka
+          Firefox - https://support.mozilla.org/pl/kb/ciasteczka
         </li>
         <li>
-          Opera - https://help.opera.com/pl/latest/web-preferences/#cookies
+          Opera - https://help.opera.com/pl/latest/web-preferences/#cookies
         </li>
 
       </ol>
       <span> Urządzenia mobilne:</span>
       <ol type="a">
         <li>
-          Android - https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DAndroid&hl=pl
+          Android - https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DAndroid&hl=pl
         </li>
         <li>
-          Safari (iOS) - https://support.apple.com/pl-pl/HT201265
+          Safari (iOS) - https://support.apple.com/pl-pl/HT201265
         </li>
         <li>
-          Windows Phone - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
+          Windows Phone - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
         </li>
       </ol>
       <li>
@@ -479,7 +481,8 @@
       <li>
         W przypadku zmian w przepisach prawa, rozwoju serwisu i usług Administratora niniejsza polityka prywatności może
         ulec zmianie, o czym Administrator poinformuje z wyprzedzeniem, a jej aktualizacja pojawi się w
-        serwisie:  https://systemywp.pl/privacy
+        serwisie:
+        <nuxt-link to="/portal-web/terms-of-service">polityka prywatności</nuxt-link>
       </li>
       <li>
         Administrator nigdy nie prosi w jakiejkolwiek formie o podanie swoich haseł dostępowych ani innych danych
@@ -492,7 +495,8 @@
       </li>
       <li style="color: #B41946">
         W sprawach związanych z ochroną Twoich danych osobowych zawsze możesz skontaktować się z Administratorem na
-        adres  __________ lub na adres korespondencyjny jak również możesz skontaktować się z Prezesem Urzędu Ochrony
+        adres kontakt@systemywp.pl lub na adres korespondencyjny jak również możesz skontaktować się z Prezesem Urzędu
+        Ochrony
         Danych Osobowych pod adresem: ul. Stawki 2, 00-193 Warszawa.
       </li>
     </ol>

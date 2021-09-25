@@ -117,7 +117,7 @@ export default {
   },
   watch: {
     themeSwitch: function (val) {
-      if (process.user && this.darkThemeStored !== !val) {
+      if (process.client && this.darkThemeStored !== !val) {
         if (val) {
           this.$vuetify.theme.light = true;
           this.$vuetify.theme.dark = false;
