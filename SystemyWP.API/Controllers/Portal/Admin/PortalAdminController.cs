@@ -37,7 +37,7 @@ namespace SystemyWP.API.Controllers.Portal.Admin
 
         [HttpPost("clients")]
         public async Task<IActionResult> InviteUser(
-            IConfiguration configuration,
+            [FromServices] IConfiguration configuration,
             [FromBody] InviteClientForm form,
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] EmailClient emailClient)
