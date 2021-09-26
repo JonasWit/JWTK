@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Services.Email;
@@ -36,6 +37,7 @@ namespace SystemyWP.API.Controllers.Portal.Admin
 
         [HttpPost("clients")]
         public async Task<IActionResult> InviteUser(
+            IConfiguration configuration,
             [FromBody] InviteClientForm form,
             [FromServices] UserManager<IdentityUser> userManager,
             [FromServices] EmailClient emailClient)
@@ -65,7 +67,7 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                 await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
                 var code = await userManager.GeneratePasswordResetTokenAsync(client);
 
-                var link = Url.Page("/Account/Client", "Get", new
+                var link = Url.Page($"{configuration.GetValue("CorsSettings:ServiceUrl", "")}/Account/Client", "Get", new
                 {
                     email = form.Email,
                     returnUrl = form.ReturnUrl,
