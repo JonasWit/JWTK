@@ -27,7 +27,7 @@ namespace SystemyWP.API.Controllers.Users
             [FromServices] IWebHostEnvironment env)
         {
             await signInManager.SignOutAsync();
-            return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "/");
+            return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "https://portal.systemywp.pl/");
         }
 
         [HttpGet("delete")]
