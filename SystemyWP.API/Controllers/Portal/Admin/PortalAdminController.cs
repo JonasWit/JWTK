@@ -67,7 +67,7 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                 await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
                 var code = await userManager.GeneratePasswordResetTokenAsync(client);
 
-                var link = Url.Page($"{configuration.GetValue("CorsSettings:ServiceUrl", "")}/Account/Client", "Get", new
+                var link = Url.Page("/Account/Client", "Get", new
                 {
                     email = form.Email,
                     returnUrl = form.ReturnUrl,

@@ -34,6 +34,8 @@ namespace SystemyWP.API.Controllers.BaseClases
         {
             return _portalLogger.Log(new PortalLogRecord
             {
+                Created = DateTime.UtcNow,
+                CreatedBy = UserEmail,
                 LogType = LogType.Exception,
                 ExceptionMessage = ex.Message,
                 ExceptionStackTrace = ex.StackTrace,
