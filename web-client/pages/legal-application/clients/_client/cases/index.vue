@@ -23,7 +23,8 @@
       </v-alert>
 
       <v-list>
-        <v-list-group :value="false" prepend-icon="mdi-text-box-multiple-outline" v-for="item in listOfCases"
+        <v-list-group class="expansion" :value="false" prepend-icon="mdi-text-box-multiple-outline"
+                      v-for="item in listOfCases"
                       :key="item[0].group" no-action>
           <template v-slot:activator>
             <v-list-item-title> {{ item[0].group }}</v-list-item-title>
