@@ -87,14 +87,13 @@ namespace SystemyWP.API
                 app.UseExceptionHandler("/Error");
             }
             
+            app.UseCors(NuxtJsApp);
             app.UseCookiePolicy(
                 new CookiePolicyOptions
                 {
                     Secure = CookieSecurePolicy.Always,
                     MinimumSameSitePolicy = SameSiteMode.Strict
                 });
-
-            app.UseCors(NuxtJsApp);
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIpRateLimiting();
