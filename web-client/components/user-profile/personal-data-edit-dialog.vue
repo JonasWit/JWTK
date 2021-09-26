@@ -46,7 +46,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <progress-bar v-if="loader"/>
   </div>
 </template>
 
@@ -60,7 +59,6 @@ export default {
   name: "personal-data-edit-dialog",
   components: {ProgressBar},
   data: () => ({
-    loader: false,
     dialog: false,
     form: {
       userId: "",
@@ -112,7 +110,6 @@ export default {
   },
   methods: {
     async saveData() {
-      this.loader = true;
       try {
         this.form.userId = this.profile.id;
         await this.$axios.$put("/api/users/personal-data/update", this.form)
@@ -120,11 +117,8 @@ export default {
       } catch (error) {
         handleError(error)
       } finally {
-        setTimeout(() => {
-          this.$emit('action-completed');
-          this.closeDialog();
-          this.loader = false;
-        }, 1500)
+        this.$emit('action-completed');
+        this.closeDialog();
       }
 
     },

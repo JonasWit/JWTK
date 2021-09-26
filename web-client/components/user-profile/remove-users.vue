@@ -46,9 +46,6 @@ export default {
   methods: {
     ...mapActions('auth', ['reloadRelatedUsers']),
     async revokeAccess(user) {
-
-      this.loader = true;
-
       const payload = {
         userId: user.id
       };
@@ -61,7 +58,6 @@ export default {
       } finally {
         this.reloadRelatedUsers();
         this.$nuxt.refresh();
-        this.loader = false;
       }
     }
   }

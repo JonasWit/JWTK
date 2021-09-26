@@ -24,20 +24,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <progress-bar v-if="loader"/>
   </div>
 </template>
 <script>
 import {mapActions, mapState} from "vuex";
 import {handleError} from "@/data/functions";
-import ProgressBar from "@/components/legal-app/progress-bar";
 
 export default {
   name: "confirm-personal-data-delete",
-  components: {ProgressBar},
   data: () => ({
     dialog: false,
-    loader: false
   }),
   computed: {
     ...mapState('auth', ['profile']),
@@ -45,7 +41,6 @@ export default {
   methods: {
     ...mapActions('auth', ['initialize']),
     async deleteData() {
-      this.loader = true
       try {
         let profileId = this.profile.id
         await this.$axios.$delete(`/api/users/personal-data/clear/${profileId}`)
@@ -53,10 +48,8 @@ export default {
       } catch (error) {
         handleError(error)
       } finally {
-        setTimeout(() => {
-          this.initialize();
-          this.dialog = false;
-        }, 1500)
+        await this.initialize();
+        this.dialog = false;
       }
     }
   }

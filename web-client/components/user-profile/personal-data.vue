@@ -2,28 +2,33 @@
   <div>
     <v-card flat>
       <v-toolbar color="primary" dense>
-        <v-toolbar-title class="white--text">Dane podstawowe</v-toolbar-title>
+        <v-toolbar-title class="white--text">Twoje dane</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <personal-data-edit-dialog v-on:action-completed="actionDone"/>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>Pobierz dane</span>
+        </v-tooltip>
+        <confirm-personal-data-delete v-on:action-completed=""/>
       </v-toolbar>
-
       <v-card-text>
         <div class="text--primary"><strong>Nazwa Użytkownika:</strong> {{ profile.username }}</div>
         <div class="text--primary">
           <strong>Status:</strong> {{ userRole }}
         </div>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
         <div class="text--primary">
           <strong>Imię:</strong> {{ profile.name }}
         </div>
         <div class="text--primary">
           <strong>Nazwisko:</strong> {{ profile.surname }}
         </div>
-      </v-card-text>
-    </v-card>
-    <v-card flat>
-      <v-toolbar color="primary" dense>
-        <v-toolbar-title class="white--text">Twoja firma</v-toolbar-title>
-      </v-toolbar>
-
-      <v-card-text>
         <div class="text--primary">
           <strong>Nazwa firmy:</strong> {{ profile.companyFullName }}
         </div>
@@ -48,23 +53,6 @@
         </div>
       </v-card-text>
     </v-card>
-    <v-toolbar color="primary" dense>
-      <v-toolbar-title class="white--text">Opcje</v-toolbar-title>
-    </v-toolbar>
-    <v-card-actions>
-      <v-card-text class="mb-1 d-flex justify-space-between">
-        <personal-data-edit-dialog v-on:action-completed="actionDone"/>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="success" icon @click="downloadPersonalData" v-bind="attrs" v-on="on">
-              <v-icon>mdi-download</v-icon>
-            </v-btn>
-          </template>
-          <span>Pobierz dane</span>
-        </v-tooltip>
-        <confirm-personal-data-delete v-on:action-completed=""/>
-      </v-card-text>
-    </v-card-actions>
   </div>
 </template>
 
