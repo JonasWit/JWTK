@@ -37,14 +37,12 @@ namespace SystemyWP.API
             if (!identityContext.Users.Any(x => x.UserName.Equals("MarzenaWitek")))
             {
                 var admin = new IdentityUser("MarAdm") { Email = "marzena.witek@systemywp.pl", EmailConfirmed = true };
-                userManager
-                    .CreateAsync(admin, config
-                        .GetSection("AdminPassword").Value)
-                    .GetAwaiter()
-                    .GetResult();
-                userManager
-                    .AddClaimAsync(admin, new Claim(SystemyWpConstants.Claims.Role,
-                        SystemyWpConstants.Roles.PortalAdmin))
+                userManager.CreateAsync(admin, config.GetSection("AdminPassword").Value).GetAwaiter().GetResult();
+                userManager.AddClaimsAsync(admin, new[]
+                    {
+                        SystemyWpConstants.Claims.LegalAppAccessClaim,
+                        SystemyWpConstants.Claims.PortalAdminClaim
+                    })
                     .GetAwaiter()
                     .GetResult();
             }
