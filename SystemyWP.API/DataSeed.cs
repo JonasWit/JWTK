@@ -34,7 +34,7 @@ namespace SystemyWP.API
         public static void ProdAdminSeed(ApiIdentityDbContext identityContext, UserManager<IdentityUser> userManager,
             IConfiguration config)
         {
-            if (!identityContext.Users.Any(x => x.UserName.Equals("MarzenaWitek")))
+            if (!identityContext.Users.Any(x => x.UserName.Equals("MarAdm")))
             {
                 var admin = new IdentityUser("MarAdm") { Email = "marzena.witek@systemywp.pl", EmailConfirmed = true };
                 userManager.CreateAsync(admin, config.GetSection("AdminPassword").Value).GetAwaiter().GetResult();
