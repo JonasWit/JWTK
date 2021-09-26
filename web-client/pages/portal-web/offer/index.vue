@@ -225,12 +225,6 @@ export default {
   padding: 5px 10px;
 }
 
-/*.card-actions {*/
-/*  position: absolute;*/
-/*  bottom: 0;*/
-
-/*}*/
-
 .icon {
   padding: 20px;
 }
@@ -278,7 +272,7 @@ h5 {
 section {
   position: relative;
   width: 100%;
-  height: 45vh;
+  height: 47vh;
   display: flex;
   justify-content: center;
   overflow: hidden;

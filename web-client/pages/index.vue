@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
-    <section class="first-section">
+    <section class="first-section" v-if="$vuetify.breakpoint.smAndUp">
       <v-row class="d-flex justify-space-between mx-9">
-        <v-col sm="12" xs="12" md="6" class="content">
+        <v-col md="6" class="content">
           <h1>Systemy Wspomagania Pracy</h1>
           <h5 class="text--secondary">Zwiększ efektywność swojego biznesu poprzez automatyzację zarządzania i
             procesów.</h5>
@@ -21,7 +21,36 @@
             </nuxt-link>
           </div>
         </v-col>
-        <v-col sm="12" xs="12" md="6" class="content-video">
+        <v-col md="6" class="content-video">
+          <video v-if="darkThemeStored" :src="videoDark" autoplay="true" loop="true" muted></video>
+          <video v-else :src="videoLight" autoplay="true" loop="true" muted></video>
+        </v-col>
+      </v-row>
+    </section>
+    <section class="first-section" v-else>
+
+
+      <v-row class="d-flex justify-space-between mx-9">
+        <v-col cols="12" class="content">
+          <h1>Systemy Wspomagania Pracy</h1>
+          <h5 class="text--secondary">Zwiększ efektywność swojego biznesu poprzez automatyzację zarządzania i
+            procesów.</h5>
+          <h5 class="text--secondary">Utrzymujemy nasze produkty w najnowszej dostępnej wersji danej technologii,
+            dlatego możesz mieć
+            pewność, że z nami nigdy nie
+            zostaniesz w tyle!</h5>
+          <v-divider class="mt-4 mb-4"/>
+          <div class="d-flex ">
+            <nuxt-link to="/portal-web/offer" class="text-decoration-none">
+              <v-btn class="my-3 ml-7" outlined color="primary">Oferta</v-btn>
+            </nuxt-link>
+            <v-spacer></v-spacer>
+            <nuxt-link to="/portal-web/contact" class="text-decoration-none">
+              <v-btn class="my-3 mr-7" outlined color="#00a38b">Kontakt</v-btn>
+            </nuxt-link>
+          </div>
+        </v-col>
+        <v-col cols="12" class="content-video">
           <video v-if="darkThemeStored" :src="videoDark" autoplay="true" loop="true" muted></video>
           <video v-else :src="videoLight" autoplay="true" loop="true" muted></video>
         </v-col>
@@ -38,6 +67,11 @@ export default {
     videoDark: `${require('~/assets/images/home-page-video.mp4')}`,
     videoLight: `${require('~/assets/images/home-video-light.mp4')}`,
   }),
+
+  mounted() {
+    console.log('viewport', this.$vuetify.breakpoint.width)
+  },
+
   computed: {
     ...mapState('cookies-store', ['darkThemeStored']),
   },

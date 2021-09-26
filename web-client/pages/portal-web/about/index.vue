@@ -184,10 +184,6 @@ h5 {
 }
 
 @media only screen and (max-width: 780px) {
-  section {
-
-  }
-
   .content h1 {
     font-size: 30px;
     line-height: 30px;
@@ -206,20 +202,17 @@ h5 {
 section {
   position: relative;
   width: 100%;
-  height: 45vh;
+  height: 47vh;
   display: flex;
   justify-content: center;
-  /*align-items: center;*/
   overflow: hidden;
-  /*background-color: azure;*/
-  /*background: linear-gradient(45deg, midnightblue, #000000)*/
 }
 
 section .content {
   position: relative;
   z-index: 1;
   text-align: left;
-  margin-top: 25px;
+  margin-top: 20px;
 
 }
 
@@ -229,14 +222,12 @@ section .content {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
   overflow: hidden;
 }
 
 .section-2 .content {
   margin-bottom: 25px;
 }
-
 
 section:before {
   content: '';
@@ -245,7 +236,6 @@ section:before {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: black;*/
   background: linear-gradient(45deg, cornflowerblue, #000000);
   border-radius: 0 0 50% 50%/0 0 100% 100%;
   transform: scaleX(1.5);
@@ -258,7 +248,6 @@ section:before {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: black;*/
   background: linear-gradient(45deg, cornflowerblue, #000000);
   border-radius: 0 !important;
   transform: scaleX(1.5);
