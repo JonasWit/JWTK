@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Scripts" />
         <Folder Include="ViewModels\LegalApp" />
     </ItemGroup>
 

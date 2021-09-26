@@ -38,13 +38,13 @@ namespace SystemyWP.API
             {
                 var admin = new IdentityUser("MarAdm") { Email = "marzena.witek@systemywp.pl", EmailConfirmed = true };
                 userManager.CreateAsync(admin, config.GetSection("AdminPassword").Value).GetAwaiter().GetResult();
-                userManager.AddClaimsAsync(admin, new[]
-                    {
-                        SystemyWpConstants.Claims.LegalAppAccessClaim,
-                        SystemyWpConstants.Claims.PortalAdminClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
+                // userManager.AddClaimsAsync(admin, new[]
+                //     {
+                //         SystemyWpConstants.Claims.LegalAppAccessClaim,
+                //         SystemyWpConstants.Claims.PortalAdminClaim
+                //     })
+                //     .GetAwaiter()
+                //     .GetResult();
             }
         }
 
