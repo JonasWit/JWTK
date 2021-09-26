@@ -51,8 +51,8 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                     Email = form.Email
                 };
 
-                var randomPart = new Random().Next(1000000000, int.MaxValue);
-                var createResult = await userManager.CreateAsync(client, $"{randomPart}a1!A");
+                var randomPart = new Random().Next(10000000, int.MaxValue);
+                var createResult = await userManager.CreateAsync(client, $"{randomPart}aba@#a1!A");
 
                 if (!createResult.Succeeded)
                 {
