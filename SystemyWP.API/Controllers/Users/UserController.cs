@@ -173,5 +173,7 @@ namespace SystemyWP.API.Controllers.Users
                 return ServerError;
             }
         }
+        
+        //todo: endpoint to only remove picture
     }
 }
