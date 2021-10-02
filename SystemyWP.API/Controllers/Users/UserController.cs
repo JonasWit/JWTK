@@ -38,9 +38,7 @@ namespace SystemyWP.API.Controllers.Users
                 var user = await _context.Users
                     .Include(x => x.LegalAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
-
-                var identityUser = await userManager.FindByIdAsync(UserId);
-
+                
                 if (user is not null)
                 {
                     user.LastLogin = DateTime.UtcNow;

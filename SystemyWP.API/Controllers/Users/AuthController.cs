@@ -10,6 +10,7 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 
 namespace SystemyWP.API.Controllers.Users
 {
@@ -23,10 +24,15 @@ namespace SystemyWP.API.Controllers.Users
 
         [HttpGet("logout")]
         public async Task<IActionResult> Logout(
+            [FromServices] UserManager<IdentityUser> userManager,
+            [FromServices] PortalLogger portalLogger,
             [FromServices] SignInManager<IdentityUser> signInManager,
             [FromServices] IWebHostEnvironment env)
         {
+            var user = await userManager.FindByIdAsync(UserId);
             await signInManager.SignOutAsync();
+            await portalLogger.Log(HttpContext.Request.Path.Value, user, LogType.Access, "Wylogowano",
+                "Logout Endpoint");
             return Redirect(env.IsDevelopment() ? "https://localhost:3000/" : "https://portal.systemywp.pl/");
         }
 
