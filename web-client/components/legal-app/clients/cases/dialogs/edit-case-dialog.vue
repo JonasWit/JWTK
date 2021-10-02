@@ -102,6 +102,7 @@ export default {
           group: this.form.group,
         };
         let caseId = this.caseForAction.id;
+        console.log(newCase);
         await this.$axios.$put(updateCase(caseId), newCase);
         this.$notifier.showSuccessMessage("Zmiany zostały zapisane!");
       } catch (error) {

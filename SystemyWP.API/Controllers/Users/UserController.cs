@@ -40,8 +40,7 @@ namespace SystemyWP.API.Controllers.Users
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
 
                 var identityUser = await userManager.FindByIdAsync(UserId);
-                await _portalLogger.Log(HttpContext.Request.Path.Value, identityUser, LogType.Access, "Pobieranie Profilu", "Auth Controller");
-                
+
                 if (user is not null)
                 {
                     user.LastLogin = DateTime.UtcNow;
