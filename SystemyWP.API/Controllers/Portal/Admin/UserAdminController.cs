@@ -223,11 +223,11 @@ namespace SystemyWP.API.Controllers.Portal.Admin
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
-                var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
+                var legalAppClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaim is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || legalAppClaims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                if (legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                if (legalAppClaims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                            x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                     return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
 
@@ -253,11 +253,11 @@ namespace SystemyWP.API.Controllers.Portal.Admin
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
-                var legalAppClaim = await userManager.GetClaimsAsync(user) as List<Claim>;
+                var legalAppClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaim is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || legalAppClaims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                if (!legalAppClaim.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                if (!legalAppClaims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                             x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                     return BadRequest("User already does not have access!");
 
