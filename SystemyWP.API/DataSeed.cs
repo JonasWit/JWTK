@@ -285,10 +285,10 @@ namespace SystemyWP.API
                     CreatedBy = "system",
                     UpdatedBy = "system",
                 };
-                context.LegalAppAccessKeys.Add(key);
+                context.LegalAccessKeys.Add(key);
                 context.SaveChanges();
 
-                var accKey = context.LegalAppAccessKeys.FirstOrDefault(x => x.Id == key.Id);
+                var accKey = context.LegalAccessKeys.FirstOrDefault(x => x.Id == key.Id);
 
                 var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
                 {

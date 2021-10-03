@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using SystemyWP.Data.Models.LegalAppModels.Billings;
 using SystemyWP.Data.Models.RestaurantAppModels.Access;
 using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
+using SystemyWP.Data.Models.RestaurantAppModels.Menus;
 
 namespace SystemyWP.Data
 {
@@ -32,24 +33,16 @@ namespace SystemyWP.Data
 
         #endregion
 
-        #region Applications
-
-        //Access
-        public DbSet<LegalAppDataAccess> LegalAppDataAccesses { get; set; }
-        public DbSet<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; }
-
-        #endregion
-
         #region LegalApp
-
-        //Access
-        public DbSet<LegalAccessKey> LegalAppAccessKeys { get; set; }
+        
+        public DbSet<LegalAppDataAccess> LegalAppDataAccesses { get; set; }
+        public DbSet<LegalAccessKey> LegalAccessKeys { get; set; }
 
         //General
         public DbSet<LegalAppReminder> LegalAppReminders { get; set; }
 
         //Client Tree
-        public DbSet<LegalAppBillingRecord> LegalAppBillingData { get; set; }
+        public DbSet<LegalAppBillingRecord> LegalAppBillingRecords { get; set; }
         public DbSet<LegalAppClient> LegalAppClients { get; set; }
         public DbSet<LegalAppClientWorkRecord> LegalAppClientWorkRecords { get; set; }
         public DbSet<LegalAppClientNote> LegalAppClientNotes { get; set; }
@@ -68,12 +61,22 @@ namespace SystemyWP.Data
         #endregion
 
         #region Medical App
-
-        //Access
+        
+        public DbSet<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; }
         public DbSet<MedicalAccessKey> MedicalAccessKeys { get; set; }
 
         public DbSet<MedicalAppPatient> MedicalAppPatients { get; set; }
 
+        #endregion
+
+        #region Restaurant App
+        
+        public DbSet<RestaurantAppDataAccess> RestaurantAppDataAccesses { get; set; }
+        public DbSet<RestaurantAccessKey> RestaurantAccessKeys { get; set; }
+        
+        //Data
+        public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
+        
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

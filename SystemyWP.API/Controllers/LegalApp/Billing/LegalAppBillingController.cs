@@ -32,7 +32,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                     .FirstOrDefault(x => x.Id.Equals(UserId));
                 if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
-                var result = _context.LegalAppBillingData
+                var result = _context.LegalAppBillingRecords
                     .Where(x =>
                         x.LegalAccessKeyId == admin.LegalAccessKey.Id)
                     .Select(LegalAppBillingProjections.Projection)
@@ -57,7 +57,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                     .FirstOrDefault(x => x.Id.Equals(UserId));
                 if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
-                var result = _context.LegalAppBillingData
+                var result = _context.LegalAppBillingRecords
                     .Where(x =>
                         x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
@@ -121,7 +121,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                     .FirstOrDefault(x => x.Id.Equals(UserId));
                 if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
-                var result = _context.LegalAppBillingData
+                var result = _context.LegalAppBillingRecords
                     .Where(x =>
                         x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)
@@ -160,7 +160,7 @@ namespace SystemyWP.API.Controllers.LegalApp.Billing
                     .FirstOrDefault(x => x.Id.Equals(UserId));
                 if (admin?.LegalAccessKey is null || admin.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return BadRequest();
 
-                var result = _context.LegalAppBillingData
+                var result = _context.LegalAppBillingRecords
                     .Where(x =>
                         x.LegalAccessKeyId == admin.LegalAccessKey.Id &&
                         x.Id == billingId)

@@ -39,7 +39,19 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                     var userClaims = await userManager.GetClaimsAsync(identityUser) as List<Claim>
                                      ?? new List<Claim>();
 
-                    var accessKey = _context.LegalAppAccessKeys
+                    var legalAccessKey = _context.LegalAccessKeys
+                        .Include(x => x.Users)
+                        .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
+                        .Select(AccessKeyProjection.FullProjection)
+                        .FirstOrDefault();
+                    
+                    var medicalAccessKey = _context.MedicalAccessKeys
+                        .Include(x => x.Users)
+                        .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
+                        .Select(AccessKeyProjection.FullProjection)
+                        .FirstOrDefault();
+                    
+                    var restaurantAccessKey = _context.RestaurantAccessKeys
                         .Include(x => x.Users)
                         .Where(x => x.Users.Any(y => y.Id.Equals(identityUser.Id)))
                         .Select(AccessKeyProjection.FullProjection)
@@ -51,10 +63,19 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                         Username = identityUser.UserName,
                         Email = identityUser.Email,
                         LegalAppAllowed = userClaims
-                            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess)),
+                            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
+                                      x.Value.Equals(SystemyWpConstants.Apps.LegalApp)),
+                        MedicalAppAllowed = userClaims
+                            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
+                                      x.Value.Equals(SystemyWpConstants.Apps.MedicalApp)),
+                        RestaurantAppAllowed = userClaims
+                            .Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) && 
+                                      x.Value.Equals(SystemyWpConstants.Apps.RestaurantApp)),
                         Image = _context.Users
                             .FirstOrDefault(x => x.Id.Equals(identityUser.Id))?.Image,
-                        LegalAppDataAccessKey = accessKey,
+                        LegalAppDataAccessKey = legalAccessKey,
+                        MedicalAppDataAccessKey = medicalAccessKey,
+                        RestaurantAppDataAccessKey = restaurantAccessKey,
                         Role = userClaims
                             .FirstOrDefault(x =>
                                 x.Type.Equals(SystemyWpConstants.Claims.Role))?.Value,

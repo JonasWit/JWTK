@@ -30,7 +30,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
         {
             try
             {
-                var results = _context.LegalAppAccessKeys
+                var results = _context.LegalAccessKeys
                     .Include(x => x.Users)
                     .Select(AccessKeyProjection.FullProjection)
                     .ToList();
@@ -50,7 +50,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
         {
             try
             {
-                if (_context.LegalAppAccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
+                if (_context.LegalAccessKeys.Any(x => x.Name.ToLower().Equals(form.KeyName.ToLower())))
                     return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
 
                 _context.Add(new LegalAccessKey
@@ -77,7 +77,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
         {
             try
             {
-                var keyToUpdate = _context.LegalAppAccessKeys
+                var keyToUpdate = _context.LegalAccessKeys
                     .FirstOrDefault(x => x.Id == keyId);
                 if (keyToUpdate is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
@@ -107,7 +107,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
                 if (user?.LegalAccessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
 
-                _context.LegalAppAccessKeys.Remove(user.LegalAccessKey);
+                _context.LegalAccessKeys.Remove(user.LegalAccessKey);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -124,11 +124,11 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
         {
             try
             {
-                var keyToDelete = _context.LegalAppAccessKeys
+                var keyToDelete = _context.LegalAccessKeys
                     .FirstOrDefault(x => x.Id == id);
                 if (keyToDelete is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                _context.LegalAppAccessKeys.Remove(keyToDelete);
+                _context.LegalAccessKeys.Remove(keyToDelete);
 
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -150,7 +150,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id == user.Id);
                 if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                var accessKey = _context.LegalAppAccessKeys
+                var accessKey = _context.LegalAccessKeys
                     .FirstOrDefault(x => x.Id == form.KeyId);
                 if (accessKey is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
@@ -179,7 +179,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
 
                 if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                var assignedLegalAppKey = _context.LegalAppAccessKeys
+                var assignedLegalAppKey = _context.LegalAccessKeys
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
                 if (assignedLegalAppKey is not null)

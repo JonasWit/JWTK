@@ -94,8 +94,11 @@ namespace SystemyWP.API.Projections
             public bool RulesAccepted { get; set; } 
             public object LegalAppDataAccessKey { get; set; }
             public object MedicalAppDataAccessKey { get; set; }
+            public object RestaurantAppDataAccessKey { get; set; }
             public bool  LegalAppAllowed { get; set; }
             public bool  MedicalAppAllowed { get; set; }
+            public bool  RestaurantAppAllowed { get; set; }
+            
             public bool Locked { get; set; }
         }
     }
