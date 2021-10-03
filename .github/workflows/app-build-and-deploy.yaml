@@ -3,7 +3,7 @@
 on:
   workflow_dispatch:
     branches:
-      - Release
+      - to-be-released
 jobs:
   build:
     name: Build our App
