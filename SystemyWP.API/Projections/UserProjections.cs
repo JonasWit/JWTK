@@ -25,7 +25,7 @@ namespace SystemyWP.API.Projections
                 Role = role
             };
         
-        public static Expression<Func<User, object>> LegalAppUserProjection(
+        public static Expression<Func<User, object>> UserProfileProjection(
             string role, 
             bool legalAppAllowed,
             bool medicalAppAllowed,

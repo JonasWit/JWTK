@@ -23,13 +23,20 @@
     },
     {
       id: '4',
+      route: '/admin-panel/restaurant-app-keys',
+      name: 'Restaurant App Keys',
+      icon: `mdi-key-change`,
+      text: 'Create, Update, Edit Access Keys',
+    },
+    {
+      id: '5',
       route: '/admin-panel/log-api',
       name: 'API Log',
       icon: 'mdi-math-log',
       text: 'Logs from API application'
     },
     {
-      id: '5',
+      id: '6',
       route: '/admin-panel/log-portal',
       name: 'Portal Log',
       icon: 'mdi-math-log',

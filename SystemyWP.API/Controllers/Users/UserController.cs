@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.Users
                     user.LastLogin = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                     return Ok(UserProjections
-                        .LegalAppUserProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
+                        .UserProfileProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
                         .Compile()
                         .Invoke(user));
                 }
@@ -62,7 +62,7 @@ namespace SystemyWP.API.Controllers.Users
                 await _context.SaveChangesAsync();
 
                 return Ok(UserProjections
-                    .LegalAppUserProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
+                    .UserProfileProjection(Role, LegalAppAllowed, MedicalAppAllowed, RestaurantAppAllowed)
                     .Compile()
                     .Invoke(newUser));
             }
