@@ -1,7 +1,8 @@
 ﻿const initState = () => ({
   users: [],
   legalAppAccessKeys: [],
-  medicalAppAccessKeys: []
+  medicalAppAccessKeys: [],
+  restaurantAppAccessKeys: [],
 });
 
 export const state = initState;
@@ -34,6 +35,7 @@ export const actions = {
   async getUsers({commit}) {
     try {
       let users = await this.$axios.$get("/api/portal-admin/user-admin/users");
+      console.warn("Users: ", users);
       commit('updateUsersList', {users});
     } catch (error) {
       console.error("getUsers - Error", error);
@@ -49,6 +51,12 @@ export const actions = {
     }
   },
   async getMedicalAppAccessKeys({commit}) {
+    try {
+    } catch (error) {
+
+    }
+  },
+  async getRestaurantAppAccessKeys({commit}) {
     try {
     } catch (error) {
 
