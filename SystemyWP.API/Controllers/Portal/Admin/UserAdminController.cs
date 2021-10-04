@@ -244,11 +244,11 @@ namespace SystemyWP.API.Controllers.Portal.Admin
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
-                var legalAppClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                if (legalAppClaims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                if (claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                            x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                     return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
 
@@ -256,7 +256,6 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                     .AddClaimAsync(user, SystemyWpConstants.Claims.LegalAppAccessClaim);
 
                 if (result.Succeeded) return Ok("Claim Added!");
-
                 return BadRequest("Error when adding claim!");
             }
             catch (Exception e)
@@ -274,11 +273,11 @@ namespace SystemyWP.API.Controllers.Portal.Admin
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
-                var legalAppClaims = await userManager.GetClaimsAsync(user) as List<Claim>;
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
 
-                if (user is null || legalAppClaims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                if (!legalAppClaims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                if (!claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
                                             x.Value.Equals(SystemyWpConstants.Apps.LegalApp)))
                     return BadRequest("User already does not have access!");
 
@@ -286,7 +285,122 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                     .RemoveClaimAsync(user, SystemyWpConstants.Claims.LegalAppAccessClaim);
 
                 if (result.Succeeded) return Ok("Claim Removed!");
+                return BadRequest("Error when removing claim!");
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
+        [HttpPost("user/grant/medical-app")]
+        public async Task<IActionResult> GrantMedicalAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(form.UserId);
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
 
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                if (claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                           x.Value.Equals(SystemyWpConstants.Apps.MedicalApp)))
+                    return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
+
+                var result = await userManager
+                    .AddClaimAsync(user, SystemyWpConstants.Claims.MedicalAppAccessClaim);
+
+                if (result.Succeeded) return Ok("Claim Added!");
+                return BadRequest("Error when adding claim!");
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+
+        [HttpPost("user/revoke/medical-app")]
+        public async Task<IActionResult> RevokeMedicalAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(form.UserId);
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
+
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                if (!claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                            x.Value.Equals(SystemyWpConstants.Apps.MedicalApp)))
+                    return BadRequest("User already does not have access!");
+
+                var result = await userManager
+                    .RemoveClaimAsync(user, SystemyWpConstants.Claims.MedicalAppAccessClaim);
+
+                if (result.Succeeded) return Ok("Claim Removed!");
+                return BadRequest("Error when removing claim!");
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
+        [HttpPost("user/grant/restaurant-app")]
+        public async Task<IActionResult> GrantRestaurantAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(form.UserId);
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
+
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                if (claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                           x.Value.Equals(SystemyWpConstants.Apps.RestaurantApp)))
+                    return BadRequest(SystemyWpConstants.ResponseMessages.AlreadyGranted);
+
+                var result = await userManager
+                    .AddClaimAsync(user, SystemyWpConstants.Claims.RestaurantAppAccessClaim);
+
+                if (result.Succeeded) return Ok("Claim Added!");
+                return BadRequest("Error when adding claim!");
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+
+        [HttpPost("user/revoke/restaurant-app")]
+        public async Task<IActionResult> RevokeRestaurantAppAccess(
+            [FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(form.UserId);
+                var claims = await userManager.GetClaimsAsync(user) as List<Claim>;
+
+                if (user is null || claims is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                if (!claims.Any(x => x.Type.Equals(SystemyWpConstants.Claims.AppAccess) &&
+                                            x.Value.Equals(SystemyWpConstants.Apps.RestaurantApp)))
+                    return BadRequest("User already does not have access!");
+
+                var result = await userManager
+                    .RemoveClaimAsync(user, SystemyWpConstants.Claims.RestaurantAppAccessClaim);
+
+                if (result.Succeeded) return Ok("Claim Removed!");
                 return BadRequest("Error when removing claim!");
             }
             catch (Exception e)
