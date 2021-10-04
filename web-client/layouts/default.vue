@@ -83,7 +83,7 @@ import {COOKIE_NAME} from "@/data/enums";
 import {mapActions, mapMutations, mapState,} from "vuex";
 import IfAuth from "@/components/auth/if-auth";
 import SnackbarNotifier from "@/components/snackbar";
-import {checkCookie, getCookieFromRequest, getGDPRConsent, setCookie} from "@/data/cookie-handlers";
+import {getCookieFromRequest, getGDPRConsent} from "@/data/cookie-handlers";
 import RemindersFloatingIcon from "@/components/legal-app/reminders-floating-icon";
 import OptionsFloatingIcon from "@/components/legal-app/options-floating-icon";
 import {handleError} from "@/data/functions";
@@ -124,12 +124,12 @@ export default {
           this.setLightTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie(COOKIE_NAME.THEME)) {
-              setCookie(COOKIE_NAME.THEME, "", 0);
-              setCookie(COOKIE_NAME.THEME, "light", 365);
-            } else {
-              setCookie(COOKIE_NAME.THEME, "light", 365);
-            }
+            this.$cookies.remove(COOKIE_NAME.THEME);
+            this.$cookies.set(COOKIE_NAME.THEME, "light", {
+              path: '/',
+              maxAge: 60 * 60 * 24 * 360,
+              sameSite: true
+            });
           }
         } else {
           this.$vuetify.theme.light = false;
@@ -137,12 +137,12 @@ export default {
           this.setDarkTheme();
 
           if (getGDPRConsent()) {
-            if (checkCookie(COOKIE_NAME.THEME)) {
-              setCookie(COOKIE_NAME.THEME, "", 0);
-              setCookie(COOKIE_NAME.THEME, "dark", 365);
-            } else {
-              setCookie(COOKIE_NAME.THEME, "dark", 365);
-            }
+            this.$cookies.remove(COOKIE_NAME.THEME);
+            this.$cookies.set(COOKIE_NAME.THEME, "dark", {
+              path: '/',
+              maxAge: 60 * 60 * 24 * 360,
+              sameSite: true
+            });
           }
         }
         this.goDark = this.darkThemeStored;
