@@ -4,11 +4,9 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Access
 {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
-using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
+using SystemyWP.API.Projections.General;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
 
 namespace SystemyWP.API.Projections
 {

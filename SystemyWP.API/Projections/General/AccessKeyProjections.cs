@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using SystemyWP.Data.Models.Abstractions;
 
-namespace SystemyWP.API.Projections.LegalApp.LegalAppAdmin
+namespace SystemyWP.API.Projections.General
 {
     public static class AccessKeyProjection
     {

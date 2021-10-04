@@ -45,7 +45,7 @@ export default {
     ...mapGetters('portal-admin-store', ['usersAvailableForKey'])
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getUsers', 'getLegalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getUsers', 'getLegalAppAccessKeys', 'getRestaurantAppAccessKeys', 'getMedicalAppAccessKeys']),
     async grantKey() {
       const payload = {
         keyId: this.selectedKey.id,
@@ -59,7 +59,15 @@ export default {
       } finally {
         this.select = null;
         this.dialog = false;
-        this.getLegalAppAccessKeys();
+        if (this.keyType === "legal-app") {
+          this.getLegalAppAccessKeys();
+        }
+        if (this.keyType === "medical-app") {
+          this.getMedicalAppAccessKeys();
+        }
+        if (this.keyType === "restaurant-app") {
+          this.getRestaurantAppAccessKeys();
+        }
         this.getUsers();
       }
     }

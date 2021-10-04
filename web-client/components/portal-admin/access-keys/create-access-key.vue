@@ -55,7 +55,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys', 'getRestaurantAppAccessKeys']),
     async addKey() {
       if (!this.$refs.createDataAccessKeyForm.validate()) return;
 
@@ -71,7 +71,15 @@ export default {
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
-        this.getLegalAppAccessKeys();
+        if (this.keyType === "legal-app") {
+          this.getLegalAppAccessKeys();
+        }
+        if (this.keyType === "medical-app") {
+          this.getMedicalAppAccessKeys();
+        }
+        if (this.keyType === "restaurant-app") {
+          this.getRestaurantAppAccessKeys();
+        }
       }
     },
     resetForm() {

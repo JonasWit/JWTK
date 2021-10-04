@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Forms.GeneralApp.Access;
-using SystemyWP.API.Projections.LegalApp.LegalAppAdmin;
+using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using SystemyWP.Data.Models.LegalAppModels.Access;
