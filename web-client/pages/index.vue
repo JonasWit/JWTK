@@ -28,8 +28,6 @@
       </v-row>
     </section>
     <section class="first-section" v-else>
-
-
       <v-row class="d-flex justify-space-between mx-9">
         <v-col cols="12" class="content">
           <h1>Systemy Wspomagania Pracy</h1>
@@ -69,7 +67,7 @@ export default {
   }),
 
   mounted() {
-    console.log('viewport', this.$vuetify.breakpoint.width)
+    console.log('viewport', this.$vuetify.breakpoint.width);
   },
 
   computed: {

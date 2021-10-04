@@ -43,7 +43,6 @@ const config = {
   css: [
     '@/assets/css/main.scss'
   ],
-
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/axios',
@@ -83,6 +82,7 @@ const config = {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    ['cookie-universal-nuxt', {alias: 'cookies'}],
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
