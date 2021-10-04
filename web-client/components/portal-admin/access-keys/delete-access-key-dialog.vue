@@ -41,7 +41,7 @@ export default {
     dialog: null,
   }),
   methods: {
-    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys', 'getRestaurantAppAccessKeys']),
     async deleteKey() {
       try {
         await this.$axios.$delete(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/delete/${this.selectedKey.id}`);
@@ -50,7 +50,15 @@ export default {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.dialog = false;
-        this.getLegalAppAccessKeys();
+        if (this.selectedKey.keyType === "legal-app") {
+          this.getLegalAppAccessKeys();
+        }
+        if (this.selectedKey.keyType === "medical-app") {
+          this.getMedicalAppAccessKeys();
+        }
+        if (this.selectedKey.keyType === "restaurant-app") {
+          this.getRestaurantAppAccessKeys();
+        }
       }
     }
   }

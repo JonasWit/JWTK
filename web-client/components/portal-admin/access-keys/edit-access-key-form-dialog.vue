@@ -75,7 +75,7 @@ export default {
     this.form.expireDate = this.selectedKey.expireDate.substr(0, 10);
   },
   methods: {
-    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys']),
+    ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys', 'getRestaurantAppAccessKeys']),
     async editKey() {
       if (!this.$refs.editDataAccessKeyForm.validate()) return;
       const payload = {
@@ -90,7 +90,15 @@ export default {
         this.$notifier.showErrorMessage(error.response.data);
       } finally {
         this.dialog = false;
-        this.getLegalAppAccessKeys();
+        if (this.selectedKey.keyType === "legal-app") {
+          this.getLegalAppAccessKeys();
+        }
+        if (this.selectedKey.keyType === "medical-app") {
+          this.getMedicalAppAccessKeys();
+        }
+        if (this.selectedKey.keyType === "restaurant-app") {
+          this.getRestaurantAppAccessKeys();
+        }
       }
     },
   }

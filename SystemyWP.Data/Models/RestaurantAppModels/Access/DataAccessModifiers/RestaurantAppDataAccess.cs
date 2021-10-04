@@ -1,6 +1,5 @@
 ﻿using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.General;
-using SystemyWP.Data.Models.MedicalAppModels.Access;
 
 namespace SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers
 {

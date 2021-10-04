@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Pages.Account
 {

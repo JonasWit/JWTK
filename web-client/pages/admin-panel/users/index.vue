@@ -60,7 +60,7 @@
 
             <v-divider/>
 
-            <v-list-item-subtitle class="success--text" v-if="user.restaurnatAppAllowed">Restaurant App: Allowed
+            <v-list-item-subtitle class="success--text" v-if="user.restaurantAppAllowed">Restaurant App: Allowed
             </v-list-item-subtitle>
             <v-list-item-subtitle class="error--text" v-else>Restaurant App: Forbidden</v-list-item-subtitle>
 

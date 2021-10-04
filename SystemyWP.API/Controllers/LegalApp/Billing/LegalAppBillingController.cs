@@ -6,7 +6,6 @@ using SystemyWP.API.Forms.LegalApp.Billing;
 using SystemyWP.API.Projections.LegalApp.Billing;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Models.LegalAppModels.Access;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

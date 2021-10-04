@@ -16,7 +16,6 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Users

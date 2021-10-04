@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using SystemyWP.API.Services.Email;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Pages.Account
 {

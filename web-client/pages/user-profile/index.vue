@@ -58,7 +58,6 @@
             </template>
           </if-auth>
         </v-card>
-
       </v-col>
     </v-row>
   </v-container>
