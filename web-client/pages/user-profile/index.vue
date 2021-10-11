@@ -20,11 +20,31 @@
               <strong>Ostatnie logowanie:</strong> {{ formatDateToLocaleTimeZone(profile.lastLogin) }}
             </div>
             <if-auth>
-              <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-                <div v-if="legalAppAllowed && legalAppKeyAvailable" class="mt-4">
+              <template v-slot:allowed="{portalAdmin, legalAppAllowed, userAdmin, legalAppKeyAvailable}">
+                <div v-if="legalAppKeyAvailable" class="mt-4">
                   <div class="text--primary py-1">
-                    <strong>Klucz do Twoja Kancelaria jest ważny do:</strong>
+                    <strong>Klucz do 'Moja Kancelaria' jest ważny do:</strong>
                     {{ formatDateForCalendar(profile.legalAppDataAccessKey.expireDate) }}
+                  </div>
+                </div>
+              </template>
+            </if-auth>
+            <if-auth>
+              <template v-slot:allowed="{portalAdmin, medicalAppAllowed, userAdmin, medicalAppKeyAvailable}">
+                <div v-if="medicalAppKeyAvailable" class="mt-4">
+                  <div class="text--primary py-1">
+                    <strong>Klucz do 'Mój Gabinet' jest ważny do:</strong>
+                    {{ formatDateForCalendar(profile.medicalAppDataAccessKey.expireDate) }}
+                  </div>
+                </div>
+              </template>
+            </if-auth>
+            <if-auth>
+              <template v-slot:allowed="{portalAdmin, restaurantAppAllowed, userAdmin, restaurantAppKeyAvailable}">
+                <div v-if="restaurantAppKeyAvailable" class="mt-4">
+                  <div class="text--primary py-1">
+                    <strong>Klucz do 'Moja Restauracja' jest ważny do:</strong>
+                    {{ formatDateForCalendar(profile.restaurantAppDataAccessKey.expireDate) }}
                   </div>
                 </div>
               </template>
@@ -33,8 +53,8 @@
         </v-card>
         <v-card>
           <if-auth>
-            <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-              <div class="mt-4" v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable">
+            <template v-slot:allowed="{portalAdmin, legalAppAllowed, userAdmin, legalAppKeyAvailable}">
+              <div class="mt-4" v-if="legalAppAllowed && (portalAdmin || userAdmin) && legalAppKeyAvailable">
                 <remove-users/>
               </div>
             </template>
@@ -42,8 +62,8 @@
         </v-card>
         <v-card>
           <if-auth>
-            <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
-              <div v-if="legalAppAllowed && (portalAdmin || clientAdmin) && legalAppKeyAvailable" class="mt-4">
+            <template v-slot:allowed="{portalAdmin, legalAppAllowed, userAdmin, legalAppKeyAvailable}">
+              <div v-if="legalAppAllowed && (portalAdmin || userAdmin) && legalAppKeyAvailable" class="mt-4">
                 <legalapp-key-remove/>
               </div>
             </template>
@@ -51,7 +71,7 @@
         </v-card>
         <v-card>
           <if-auth>
-            <template v-slot:allowed="{portalAdmin, legalAppAllowed, clientAdmin, legalAppKeyAvailable}">
+            <template v-slot:allowed="{portalAdmin, user, userAdmin}">
               <div class="mt-4">
                 <account-remove/>
               </div>
