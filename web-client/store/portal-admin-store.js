@@ -8,10 +8,18 @@
 export const state = initState;
 
 export const getters = {
-  usersAvailableForKey(state) {
+  usersAvailableForLegalKey(state) {
     return state.users.filter(mainUser =>
-      !state.legalAppAccessKeys.some(key => key.users.some(user => mainUser.id === user.id)) &&
-      !state.medicalAppAccessKeys.some(key => key.users.some(user => mainUser.id === user.id)) &&
+      !state.legalAppAccessKeys.some(key => key.users.some(user => mainUser.id === user.id))
+    );
+  },
+  usersAvailableForMedicalKey(state) {
+    return state.users.filter(mainUser =>
+      !state.medicalAppAccessKeys.some(key => key.users.some(user => mainUser.id === user.id))
+    );
+  },
+  usersAvailableForRestaurantKey(state) {
+    return state.users.filter(mainUser =>
       !state.restaurantAppAccessKeys.some(key => key.users.some(user => mainUser.id === user.id))
     );
   }

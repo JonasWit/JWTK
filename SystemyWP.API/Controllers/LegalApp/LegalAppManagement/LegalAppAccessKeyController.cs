@@ -142,7 +142,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
 
         [HttpPost("user/grant/access-key")]
         [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
-        public async Task<IActionResult> GrantDataAccessKey([FromBody] GrantDataAccessKeyForm form, [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GrantAccessKey([FromBody] GrantDataAccessKeyForm form, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
         
         [HttpPost("access-key/revoke")]
         [Authorize(SystemyWpConstants.Policies.UserAdmin)]
-        public async Task<IActionResult> RevokeLegalAppDataAccessKey([FromBody] UserIdForm form, [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> RevokeAccessKey([FromBody] UserIdForm form, [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
@@ -179,12 +179,12 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
 
                 if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
-                var assignedLegalAppKey = _context.LegalAccessKeys
+                var assignedKey = _context.LegalAccessKeys
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
 
-                if (assignedLegalAppKey is not null)
+                if (assignedKey is not null)
                 {
-                    assignedLegalAppKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
+                    assignedKey.Users.RemoveAll(x => x.Id.Equals(user.Id));
                     _context.RemoveRange(_context.LegalAppDataAccesses.Where(x => x.UserId.Equals(form.UserId)));
 
                     var result = await _context.SaveChangesAsync();

@@ -9,7 +9,7 @@
       <v-card-title class="justify-center">Grant Access Key</v-card-title>
       <v-divider/>
       <v-card-text>
-        <v-combobox v-model="select" item-text="email" :items="usersAvailableForKey" label="Select User"></v-combobox>
+        <v-combobox v-model="select" item-text="email" :items="allowedUsers" label="Select User"></v-combobox>
       </v-card-text>
       <v-card-actions>
         <v-btn text color="warning" @click="grantKey">Grant</v-btn>
@@ -40,9 +40,21 @@ export default {
   data: () => ({
     select: null,
     dialog: null,
+    allowedUsers: []
   }),
+  async fetch() {
+    if (this.keyType === "legal-app") {
+      this.allowedUsers = this.usersAvailableForLegalKey;
+    }
+    if (this.keyType === "medical-app") {
+      this.allowedUsers = this.usersAvailableForMedicalKey;
+    }
+    if (this.keyType === "restaurant-app") {
+      this.allowedUsers = this.usersAvailableForRestaurantKey;
+    }
+  },
   computed: {
-    ...mapGetters('portal-admin-store', ['usersAvailableForKey'])
+    ...mapGetters('portal-admin-store', ['usersAvailableForRestaurantKey', 'usersAvailableForLegalKey', 'usersAvailableForMedicalKey'])
   },
   methods: {
     ...mapActions('portal-admin-store', ['getUsers', 'getLegalAppAccessKeys', 'getRestaurantAppAccessKeys', 'getMedicalAppAccessKeys']),
