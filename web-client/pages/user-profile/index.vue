@@ -62,9 +62,9 @@
         </v-card>
         <v-card>
           <if-auth>
-            <template v-slot:allowed="{portalAdmin, legalAppAllowed, userAdmin, legalAppKeyAvailable}">
-              <div v-if="legalAppAllowed && (portalAdmin || userAdmin) && legalAppKeyAvailable" class="mt-4">
-                <legalapp-key-remove/>
+            <template v-slot:allowed="{portalAdmin, userAdmin}">
+              <div class="mt-4">
+                <key-remove/>
               </div>
             </template>
           </if-auth>
@@ -88,13 +88,13 @@ import {mapGetters, mapState} from "vuex";
 import MainHeader from "@/components/user-profile/main-header";
 import PersonalData from "@/components/user-profile/personal-data";
 import AccountRemove from "@/components/user-profile/account-remove";
+import KeyRemove from "@/components/user-profile/key-remove";
 import IfAuth from "@/components/auth/if-auth";
-import LegalappKeyRemove from "@/components/user-profile/legalapp-key-remove";
 import {formatDateForInvoice, formatDateToLocaleTimeZone} from "@/data/date-extensions";
 import RemoveUsers from "@/components/user-profile/remove-users";
 
 export default {
-  components: {RemoveUsers, LegalappKeyRemove, IfAuth, AccountRemove, PersonalData, MainHeader},
+  components: {RemoveUsers, KeyRemove, IfAuth, AccountRemove, PersonalData, MainHeader},
   middleware: ["user", "authenticated"],
   computed: {
     ...mapState("auth", ["profile"]),

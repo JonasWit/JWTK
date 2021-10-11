@@ -30,6 +30,36 @@ namespace SystemyWP.API
         public static void DevSeed(AppDbContext context, ApiIdentityDbContext identityContext,
             UserManager<IdentityUser> userManager)
         {
+            if (identityContext.Users.Count(x => x.UserName.Contains("user")) < 10)
+            {
+                for (var i = 0; i < 15; i++)
+                {
+                    var identityUser = new IdentityUser($"user{i}")
+                    {
+                        Email = $"user{i}@test.com",
+                        LockoutEnabled = true,
+                        EmailConfirmed = true
+                    };
+                    userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
+                    userManager
+                        .AddClaimsAsync(identityUser, new[]
+                        {
+                            SystemyWpConstants.Claims.UserClaim,
+                            SystemyWpConstants.Claims.LegalAppAccessClaim
+                        })
+                        .GetAwaiter()
+                        .GetResult();
+
+                    context.Add(new User
+                    {
+                        Username = identityUser.UserName,
+                        Email = identityUser.Email,
+                        Id = identityUser.Id,
+                        CreatedBy = "system"
+                    });
+                }           
+            }
+            
             if (!identityContext.Users.Any(x => x.UserName.Equals("portaladmin1")))
             {
                 //Seed Portal Admins
@@ -83,32 +113,7 @@ namespace SystemyWP.API
                     Id = identityUser.Id,
                     CreatedBy = "system"
                 });
-
-                //User with no key
-                identityUser = new IdentityUser($"client-nokey")
-                {
-                    Email = $"client-nokey@test.com",
-                    LockoutEnabled = true,
-                    EmailConfirmed = true
-                };
-                userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(identityUser, new[]
-                    {
-                        SystemyWpConstants.Claims.UserClaim,
-                        SystemyWpConstants.Claims.LegalAppAccessClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                context.Add(new User
-                {
-                    Username = identityUser.UserName,
-                    Email = identityUser.Email,
-                    Id = identityUser.Id,
-                    CreatedBy = "system"
-                });
-
+                
                 //Seed Client Admins
                 for (var adminNumber = -2; adminNumber < 3; adminNumber++)
                 {

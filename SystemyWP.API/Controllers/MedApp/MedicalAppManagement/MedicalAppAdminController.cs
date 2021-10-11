@@ -12,13 +12,13 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 
-namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
+namespace SystemyWP.API.Controllers.MedApp.MedicalAppManagement
 {
-    [Route("/api/restaurant-app-admin/general")]
+    [Route("/api/medical-app-admin/general")]
     [Authorize(SystemyWpConstants.Policies.UserAdmin)]
-    public class RestaurantAppAdminController : ApiController
+    public class MedicalAppAdminController : ApiController
     {
-        public RestaurantAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public MedicalAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
         }
         
@@ -31,16 +31,16 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
             {
                 //Get current admin who made request
                 var adminUser = _context.Users
-                    .Include(x => x.RestaurantAccessKey)
+                    .Include(x => x.MedicalAccessKey)
                     .FirstOrDefault(x => x.Id == UserId);
                 if (adminUser is null) return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
-                if (adminUser.RestaurantAccessKey is null) return Ok(result);
+                if (adminUser.MedicalAccessKey is null) return Ok(result);
 
                 //Get related users with the same data access key
                 var relatedUsers = _context.Users
-                    .Include(x => x.RestaurantAccessKey)
-                    .Where(x => x.RestaurantAccessKey.Id == adminUser.RestaurantAccessKey.Id)
-                    .Include(x => x.RestaurantAppDataAccesses)
+                    .Include(x => x.MedicalAccessKey)
+                    .Where(x => x.MedicalAccessKey.Id == adminUser.MedicalAccessKey.Id)
+                    .Include(x => x.MedicalAppDataAccesses)
                     .ToList();
 
                 if (relatedUsers.Count == 0) return Ok(result);
@@ -66,6 +66,5 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                 return ServerError;
             }
         }
-        
     }
 }

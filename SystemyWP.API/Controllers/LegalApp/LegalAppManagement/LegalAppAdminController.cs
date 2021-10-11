@@ -56,7 +56,7 @@ namespace SystemyWP.API.Controllers.LegalApp.LegalAppManagement
                         .FirstOrDefault(x => x.Type.Equals(SystemyWpConstants.Claims.Role))?
                         .Value;
                     result.Add(UserProjections
-                        .RelatedLegalAppUserProjection(role)
+                        .RelatedUserProjection(role)
                         .Compile()
                         .Invoke(relatedUser));
                 }

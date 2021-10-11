@@ -2,20 +2,20 @@
   <div>
     <v-card flat class="mt-2">
       <v-toolbar color="primary" dense>
-        <v-toolbar-title class="white--text">Usunięcie powiązanych użytkowników</v-toolbar-title>
+        <v-toolbar-title class="white--text">Usunięcie powiązanych użytkowników z Kancelarii</v-toolbar-title>
       </v-toolbar>
       <v-col class="d-flex justify-center" cols="12">
         <div class="d-flex flex-column">
           <v-card-subtitle>
             Możesz usunąć powiązanych użytkowników. Ta akcja jest nieodwracalna i spowoduje utratę dostępu do danych
-            kancekarii przez usuniętego użytjoiwnika. W celu ponownego uzyskania przez niego dostępu konieczne będzie
+            kancekarii przez usuniętego użytkownika. W celu ponownego uzyskania przez niego dostępu konieczne będzie
             przesłanie prośby o ponowne dodanie.
           </v-card-subtitle>
           <v-divider></v-divider>
-          <v-card-text v-if="otherRelatedUsers.length > 0">
+          <v-card-text v-if="otherLegalRelatedUsers.length > 0">
             <v-card-title>Lista powiązanych użytkowników</v-card-title>
 
-            <v-chip v-for="(user, index) in otherRelatedUsers" :key="user.id" class="ma-2" close color="red"
+            <v-chip v-for="(user, index) in otherLegalRelatedUsers" :key="user.id" class="ma-2" close color="red"
                     text-color="white" @click:close="revokeAccess(user)">
               {{ user.email }}
             </v-chip>
@@ -41,10 +41,10 @@ export default {
   name: "remove-users",
   components: {RevokeAccessRelatedUsers, AllowedUsers},
   computed: {
-    ...mapGetters('auth', ['otherRelatedUsers'])
+    ...mapGetters('auth', ['otherLegalRelatedUsers'])
   },
   methods: {
-    ...mapActions('auth', ['reloadRelatedUsers']),
+    ...mapActions('auth', ['reloadLegalAppRelatedUsers']),
     async revokeAccess(user) {
       const payload = {
         userId: user.id
@@ -56,7 +56,7 @@ export default {
       } catch (error) {
         handleError(error);
       } finally {
-        this.reloadRelatedUsers();
+        this.reloadLegalAppRelatedUsers();
         this.$nuxt.refresh();
       }
     }
