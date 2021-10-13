@@ -16,22 +16,22 @@
             miała
             dostęp do panelu klienta, w którym będzie mogła zarządzać swoimi notatkami, rozliczeniami oraz sprawami.
           </v-alert>
-          <v-card class="mx-2" flat v-if="userAdmin">
+          <v-card class="mx-0" flat v-if="userAdmin">
             <v-card-title>Lista użytkowników uprawnionych do uzyskania dostępu</v-card-title>
-            <v-select @change="grantAccess(value)" v-model="value" :items="eligibleUsersList" chips
-                      label="Wybierz użytkownika" item-text="email" item-value="email" return-object
-            >
+            <v-select class="mx-5" @change="grantAccess(value)" v-model="value" :items="eligibleUsersList" chips
+                      label="Wybierz użytkownika" item-text="email" item-value="email" return-object>
 
             </v-select>
             <v-card-title v-if="allowedUsersList.length > 0">Lista użytkowników z dostępem do klienta</v-card-title>
             <v-alert v-if="allowedUsersList.length > 0 && legalAppTooltips" elevation="5" text type="info">
               Aby usunąć dostęp dla wybranego użytkonwika kliknij "krzyżyk" obok odpowiedniego adresu email.
             </v-alert>
-            <v-chip v-for="(item) in allowedUsersList" :key="item.id" class="ma-2" close color="red"
+            <v-chip v-for="(item) in allowedUsersList" :key="item.id" class="mx-5 my-3" close color="red"
                     text-color="white" @click:close="revokeAccess(item)">
               {{ item.email }}
             </v-chip>
           </v-card>
+
         </v-card>
       </v-container>
     </template>
@@ -98,6 +98,7 @@ export default {
         let clientId = this.$route.params.client
         await this.$axios.$post(revokeAccess(clientId), payload)
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
+        this.value = null
       } catch (error) {
         handleError(error);
       } finally {
