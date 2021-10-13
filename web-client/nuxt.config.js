@@ -10,7 +10,9 @@ const config = {
       changePassPath: process.env.PASSWORD_CHANGE_PATH,
       logoutPath: process.env.LOGOUT_PATH,
       deletePath: process.env.DELETE_PATH,
-      deleteLeglaAppKeyPath: process.env.DELETE_LAPP_KEY_PATH
+      deleteLegalAppKeyPath: process.env.DELETE_LAPP_KEY_PATH,
+      deleteMedicalAppKeyPath: process.env.DELETE_MAPP_KEY_PATH,
+      deleteRestaurantAppKeyPath: process.env.DELETE_RAPP_KEY_PATH,
     },
     axios: {
       baseURL: process.env.BROWSER_SIDE_URL,

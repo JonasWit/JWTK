@@ -57,7 +57,7 @@ namespace SystemyWP.API.Projections
                 user.LastLogin
             };
         
-        public static Expression<Func<User, object>> RelatedLegalAppUserProjection(string role) =>
+        public static Expression<Func<User, object>> RelatedUserProjection(string role) =>
             user => new
             {
                 user.Id,

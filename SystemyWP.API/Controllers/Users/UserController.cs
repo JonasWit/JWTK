@@ -36,6 +36,8 @@ namespace SystemyWP.API.Controllers.Users
             {
                 var user = await _context.Users
                     .Include(x => x.LegalAccessKey)
+                    .Include(x => x.MedicalAccessKey)
+                    .Include(x => x.RestaurantAccessKey)
                     .FirstOrDefaultAsync(x => x.Id.Equals(UserId));
                 
                 if (user is not null)

@@ -132,7 +132,7 @@ export default {
         {
           id: 1,
           img: `${require('~/assets/images/background.jpg')}`,
-          title: 'Twoja Kancelaria',
+          title: 'Moja Kancelaria',
           price: '75 PLN netto',
           bullet: [
             ['Nowoczesne narzędzie stworzone do zarządzania pracą Kancelarii Radcowskiej, Adwokackiej lub Notarialnej'],

@@ -3,7 +3,9 @@ import {getGDPRConsent} from "~/data/cookie-handlers";
 
 const initState = () => ({
   profile: null,
-  relatedUsers: [],
+  legalRelatedUsers: [], //todo: split this users per app
+  medicalRelatedUsers: [], //todo: split this users per app
+  restaurantRelatedUsers: [], //todo: split this users per app
 });
 
 export const state = initState;
@@ -13,8 +15,14 @@ export const APP_ACCESS = {
 };
 
 export const getters = {
-  otherRelatedUsers(state) {
-    return state.relatedUsers.filter(x => x.id !== state.profile.id);
+  otherLegalRelatedUsers(state) {
+    return state.legalRelatedUsers.filter(x => x.id !== state.profile.id);
+  },
+  otherMedicalRelatedUsers(state) {
+    return state.medicalRelatedUsers.filter(x => x.id !== state.profile.id);
+  },
+  otherRestaurantRelatedUsers(state) {
+    return state.restaurantRelatedUsers.filter(x => x.id !== state.profile.id);
   },
   userRole(state) {
     if (state.profile.role === ROLES.INVITED) {
@@ -46,8 +54,14 @@ export const mutations = {
   saveProfile(state, {profile}) {
     state.profile = profile;
   },
-  saveRelatedUsers(state, {users}) {
-    state.relatedUsers = users;
+  saveLegalAppRelatedUsers(state, {users}) {
+    state.legalRelatedUsers = users;
+  },
+  saveMedicalAppRelatedUsers(state, {users}) {
+    state.medicalRelatedUsers = users;
+  },
+  saveRestaurantAppRelatedUsers(state, {users}) {
+    state.restaurantRelatedUsers = users;
   },
   reset(state) {
     Object.assign(state, initState());
@@ -61,10 +75,11 @@ export const actions = {
     } catch (error) {
       console.warn("Not authorized");
     }
-
     if (getters.userAdmin) {
       try {
-        await dispatch('reloadRelatedUsers');
+        await dispatch('reloadLegalAppRelatedUsers');
+        await dispatch('reloadMedicalAppRelatedUsers');
+        await dispatch('reloadRestaurantAppRelatedUsers');
       } catch (error) {
         console.warn("No related users");
       }
@@ -81,10 +96,26 @@ export const actions = {
       console.warn("Not authorized");
     }
   },
-  async reloadRelatedUsers({commit}) {
+  async reloadLegalAppRelatedUsers({commit}) {
     try {
       let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
-      commit('saveRelatedUsers', {users});
+      commit('saveLegalAppRelatedUsers', {users});
+    } catch (error) {
+      console.warn("Not authorized");
+    }
+  },
+  async reloadMedicalAppRelatedUsers({commit}) {
+    try {
+      let users = await this.$axios.$get('/api/medical-app-admin/general/all-related-users');
+      commit('saveMedicalAppRelatedUsers', {users});
+    } catch (error) {
+      console.warn("Not authorized");
+    }
+  },
+  async reloadRestaurantAppRelatedUsers({commit}) {
+    try {
+      let users = await this.$axios.$get('/api/restaurant-app-admin/general/all-related-users');
+      commit('saveRestaurantAppRelatedUsers', {users});
     } catch (error) {
       console.warn("Not authorized");
     }
@@ -121,7 +152,35 @@ export const actions = {
     if (getGDPRConsent() === false) return;
 
     try {
-      await this.$axios.$get(this.$config.auth.deleteLeglaAppKeyPath);
+      await this.$axios.$get(this.$config.auth.deleteLegalAppKeyPath);
+      this.$notifier.showSuccessMessage("Dane zostały usunięte!");
+    } catch (error) {
+      this.$notifier.showErrorMessage("Błąd podczas usuwania danych!");
+      console.error('Data delete error!', error);
+    } finally {
+      dispatch('reloadProfile');
+    }
+  },
+  async deleteMedicalAppKey({dispatch}) {
+    if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
+    try {
+      await this.$axios.$get(this.$config.auth.deleteMedicalAppKeyPath);
+      this.$notifier.showSuccessMessage("Dane zostały usunięte!");
+    } catch (error) {
+      this.$notifier.showErrorMessage("Błąd podczas usuwania danych!");
+      console.error('Data delete error!', error);
+    } finally {
+      dispatch('reloadProfile');
+    }
+  },
+  async deleteRestaurantAppKey({dispatch}) {
+    if (process.server) return;
+    if (getGDPRConsent() === false) return;
+
+    try {
+      await this.$axios.$get(this.$config.auth.deleteRestaurantAppKeyPath);
       this.$notifier.showSuccessMessage("Dane zostały usunięte!");
     } catch (error) {
       this.$notifier.showErrorMessage("Błąd podczas usuwania danych!");
