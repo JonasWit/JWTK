@@ -6,8 +6,7 @@
           <h1>Nasza oferta</h1>
           <h5>
             Tworzymy aplikacje webowe, aplikacje desktopowe oraz klasyczne strony internetowe. Zamów u nas stronę lub
-            aplikację
-            a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu.</h5>
+            aplikację a my zajmiemy się jej stworzeniem i utrzymywaniem jej przy życiu.</h5>
         </div>
       </div>
     </section>
