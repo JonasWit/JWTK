@@ -42,6 +42,7 @@
 <script>
 import Layout from "@/components/legal-app/layout";
 import {handleError} from "@/data/functions";
+import {GetClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 export default {
   name: "c-details",
@@ -53,7 +54,7 @@ export default {
   async fetch() {
     try {
       let clientId = this.$route.params.client
-      this.client = await this.$axios.$get(`/api/legal-app-clients/client/${clientId}`);
+      this.client = await this.$axios.$get(GetClient(clientId));
     } catch (error) {
       handleError(error);
     }

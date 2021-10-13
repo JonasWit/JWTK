@@ -33,6 +33,7 @@
 <script>
 import Layout from "@/components/legal-app/layout";
 import {notEmptyAndLimitedRule} from "@/data/vuetify-validations";
+import {sendMessage} from "@/data/endpoints/legal-app/legal-app-contact";
 
 export default {
   name: "index",
@@ -65,7 +66,7 @@ export default {
           body: this.form.message,
         };
         console.log('payload', payload);
-        await this.$axios.$post('/api/portal/contact/lapp/support-request', payload);
+        await this.$axios.$post(sendMessage(), payload);
         this.$notifier.showSuccessMessage("Wiadomość wysłana pomyślnie!");
       } catch (e) {
         if (e?.response?.status === 429) {

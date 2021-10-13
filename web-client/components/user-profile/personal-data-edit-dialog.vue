@@ -54,6 +54,7 @@
 import {mapGetters, mapState} from "vuex";
 import {handleError} from "@/data/functions";
 import ProgressBar from "@/components/legal-app/progress-bar";
+import {editPersonalData} from "@/data/endpoints/legal-app/user-profile-endpoints";
 
 export default {
   name: "personal-data-edit-dialog",
@@ -112,7 +113,7 @@ export default {
     async saveData() {
       try {
         this.form.userId = this.profile.id;
-        await this.$axios.$put("/api/users/personal-data/update", this.form)
+        await this.$axios.$put(editPersonalData(), this.form)
         this.$notifier.showSuccessMessage("Dane zmienione pomyślnie!");
       } catch (error) {
         handleError(error)

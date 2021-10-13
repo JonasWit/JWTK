@@ -165,7 +165,8 @@ import {
 } from "@/data/date-extensions";
 import {handleError} from "@/data/functions";
 import {mapActions, mapState} from "vuex";
-import {getAllDeadlinesFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
+import {getAllDeadlinesFromTo, getReminders} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
+import {getCaseDeadlinesForClient} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 
 export default {
   name: "index",
@@ -237,7 +238,7 @@ export default {
       console.log('selected event', selectedEvent)
       let clientId = selectedEvent.client
       let caseId = selectedEvent.case
-      return `/legal-application/clients/${clientId}/cases/${caseId}/deadlines`
+      return getCaseDeadlinesForClient(clientId, caseId)
 
     },
     filterResults() {
@@ -319,7 +320,7 @@ export default {
     async getEvents() {
       try {
         let deadlines = await this.$axios.$get(getAllDeadlinesFromTo(this.query))
-        let remindersList = await this.$axios.$get(`/api/legal-app-reminders/list`)
+        let remindersList = await this.$axios.$get(getReminders())
         let newEvents = [];
         remindersList.forEach(x => {
           newEvents.push({

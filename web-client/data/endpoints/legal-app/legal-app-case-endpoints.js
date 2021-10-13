@@ -48,6 +48,10 @@ export const createDeadline = (caseId) => {
 export const deleteDeadline = (caseId, deadlineId) => {
   return `/api/legal-app-cases/deadlines/case/${caseId}/item/${deadlineId}/delete`;//DELETE
 };
+export const getCaseDeadlinesForClient = (clientId, caseId) => {
+  return `/legal-application/clients/${clientId}/cases/${caseId}/deadlines`
+};
+
 
 //Case Notes Controller
 

@@ -53,6 +53,11 @@ import {mapActions, mapGetters} from "vuex";
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import RevokeAccessRelatedUsers from "@/components/portal-admin/users-management/revoke-access-related-users";
 import {handleError} from "@/data/functions";
+import {
+  revokeLegalAppUser,
+  revokeMedAppUser,
+  revokeRestaurantAppUser
+} from "@/data/endpoints/legal-app/user-profile-endpoints";
 
 export default {
   name: "remove-users",
@@ -68,7 +73,7 @@ export default {
       };
       console.log('User Id:', payload);
       try {
-        await this.$axios.$post('/api/portal-admin/key-admin/legal-app/access-key/revoke', payload);
+        await this.$axios.$post(revokeLegalAppUser(), payload);
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
         handleError(error);
@@ -83,7 +88,7 @@ export default {
       };
       console.log('User Id:', payload);
       try {
-        await this.$axios.$post('/api/portal-admin/key-admin/medical-app/access-key/revoke', payload);
+        await this.$axios.$post(revokeMedAppUser(), payload);
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
         handleError(error);
@@ -98,7 +103,7 @@ export default {
       };
       console.log('User Id:', payload);
       try {
-        await this.$axios.$post('/api/portal-admin/key-admin/restaurant-app/access-key/revoke', payload);
+        await this.$axios.$post(revokeRestaurantAppUser(), payload);
         this.$notifier.showSuccessMessage("Dostęp usunięty pomyślnie");
       } catch (error) {
         handleError(error);

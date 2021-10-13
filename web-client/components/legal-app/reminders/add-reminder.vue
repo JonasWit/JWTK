@@ -116,6 +116,7 @@
 import {lengthRule, notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
 import {mapState} from "vuex";
 import {handleError} from "@/data/functions";
+import {createReminder} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
 
 export default {
   name: "add-reminder",
@@ -209,7 +210,7 @@ export default {
             allDayEvent: this.form.switcher
           };
           console.warn('nowy reminder', newReminder);
-          await this.$axios.$post(`/api/legal-app-reminders/reminder`, newReminder);
+          await this.$axios.$post(createReminder(), newReminder);
           this.$notifier.showSuccessMessage("Kalendarz zaktualizowany pomyślnie!");
           Object.assign(this.$data, this.$options.data());
         } catch (error) {

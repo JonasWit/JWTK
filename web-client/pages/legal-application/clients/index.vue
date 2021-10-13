@@ -60,6 +60,7 @@ import EditClientNameDialog from "@/components/legal-app/clients/dialogs/edit-cl
 import AllowedUsers from "@/components/legal-app/clients/accesses-panel/allowed-users";
 import GrantAccess from "@/components/legal-app/clients/accesses-panel/grant-access";
 import IfAuth from "@/components/auth/if-auth";
+import {GetClient} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 
 const searchItemFactory = (name, id) => ({
   id,
@@ -101,7 +102,7 @@ export default {
   watch: {
     searchResult() {
       if (this.searchResult)
-        this.$axios.$get(`/api/legal-app-clients/client/${this.searchResult.id}`)
+        this.$axios.$get(GetClient(this.searchResult.id))
           .then(clientFound => {
             if (clientFound) {
               this.clientList = [];

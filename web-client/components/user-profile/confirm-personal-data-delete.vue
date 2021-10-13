@@ -29,6 +29,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import {handleError} from "@/data/functions";
+import {deleteUser} from "@/data/endpoints/legal-app/user-profile-endpoints";
 
 export default {
   name: "confirm-personal-data-delete",
@@ -43,7 +44,7 @@ export default {
     async deleteData() {
       try {
         let profileId = this.profile.id
-        await this.$axios.$delete(`/api/users/personal-data/clear/${profileId}`)
+        await this.$axios.$delete(deleteUser(profileId))
         this.$notifier.showSuccessMessage("Dane zostały usuniete");
       } catch (error) {
         handleError(error)
