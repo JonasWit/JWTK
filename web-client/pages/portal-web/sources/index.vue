@@ -50,6 +50,7 @@
           </li>
           <li><a href="https://icons8.com/icon/111134/website" target="_blank">Website icon</a></li>
           <li><a href="https://icons8.com/icon/KU6B9rHO21qL/wordpress" target="_blank">WordPress icon</a></li>
+          <li><a href="https://icons8.com/icon/fEvszKDe3hzp/computer">Computer icon</a></li>
         </ul>
       </v-card-text>
 
