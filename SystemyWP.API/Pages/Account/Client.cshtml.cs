@@ -39,11 +39,12 @@ namespace SystemyWP.API.Pages.Account
             [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [RegularExpression(SystemyWpConstants.Patterns.PasswordPattern, 
-                ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
+            ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             public string Password { get; set; }
             
             [DataType(DataType.Password)]
             [Required(ErrorMessage = "Pole jest wymagane")]
+            [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
             

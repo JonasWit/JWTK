@@ -149,7 +149,7 @@ namespace SystemyWP.API
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
-                    options.User.AllowedUserNameCharacters = "ąęźżćłśĄĘĆŚŹŻŚŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
+                    options.User.AllowedUserNameCharacters = "ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
                     options.User.RequireUniqueEmail = true;
 
                     if (_env.IsDevelopment())
