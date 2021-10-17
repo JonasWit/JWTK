@@ -50,7 +50,7 @@ namespace SystemyWP.API.Services.Storage
         private string ObjectRootUrl(string fileName) =>
             $"{_settings.Root}/{fileName}";
 
-        private AmazonS3Client Client => new AmazonS3Client(
+        private AmazonS3Client Client => new(
             _settings.AccessKey, _settings.SecretKey,
             new AmazonS3Config
             {
