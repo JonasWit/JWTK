@@ -28,6 +28,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {changeRole} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "roles-management-dialog",
@@ -51,7 +52,7 @@ export default {
       this.loading = true;
 
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/change-role", {
+        await this.$axios.$post(changeRole(), {
           userId: this.selectedUser.id,
           role: role
         });

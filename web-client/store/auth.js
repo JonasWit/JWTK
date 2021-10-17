@@ -1,11 +1,17 @@
 ﻿import {ROLES} from "@/data/enums";
 import {getGDPRConsent} from "~/data/cookie-handlers";
+import {
+  getCurrentUser,
+  getLegalAppRelatedUsers,
+  getMedicalAppRelatedUsers,
+  getRestaurantAppRelatedUsers
+} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 const initState = () => ({
   profile: null,
-  legalRelatedUsers: [], //todo: split this users per app
-  medicalRelatedUsers: [], //todo: split this users per app
-  restaurantRelatedUsers: [], //todo: split this users per app
+  legalRelatedUsers: [],
+  medicalRelatedUsers: [],
+  restaurantRelatedUsers: [],
 });
 
 export const state = initState;
@@ -89,7 +95,7 @@ export const actions = {
   },
   async reloadProfile({commit}) {
     try {
-      let profile = await this.$axios.$get('/api/users/me');
+      let profile = await this.$axios.$get(getCurrentUser());
       console.warn("User Profile: ", profile);
       commit('saveProfile', {profile});
     } catch (error) {
@@ -98,7 +104,7 @@ export const actions = {
   },
   async reloadLegalAppRelatedUsers({commit}) {
     try {
-      let users = await this.$axios.$get('/api/legal-app-admin/general/all-related-users');
+      let users = await this.$axios.$get(getLegalAppRelatedUsers());
       commit('saveLegalAppRelatedUsers', {users});
     } catch (error) {
       console.warn("Not authorized");
@@ -106,7 +112,7 @@ export const actions = {
   },
   async reloadMedicalAppRelatedUsers({commit}) {
     try {
-      let users = await this.$axios.$get('/api/medical-app-admin/general/all-related-users');
+      let users = await this.$axios.$get(getMedicalAppRelatedUsers());
       commit('saveMedicalAppRelatedUsers', {users});
     } catch (error) {
       console.warn("Not authorized");
@@ -114,7 +120,7 @@ export const actions = {
   },
   async reloadRestaurantAppRelatedUsers({commit}) {
     try {
-      let users = await this.$axios.$get('/api/restaurant-app-admin/general/all-related-users');
+      let users = await this.$axios.$get(getRestaurantAppRelatedUsers());
       commit('saveRestaurantAppRelatedUsers', {users});
     } catch (error) {
       console.warn("Not authorized");
