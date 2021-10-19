@@ -2,7 +2,7 @@
   <v-container>
     <h1>REGULAMIN USŁUGI</h1>
     <p>Świadczonej przez Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
-      nazwą Systemy Wspomagania Pracy, Os. 2 Pułku Lotniczego 28, 31-869 Kraków, NIP: 7343144682, REGON: 388896441,
+      nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
       e-mail: biuro@systemywp.pl , +48 534 127 160
     </p>
     <ol type="1">
@@ -27,7 +27,7 @@
         </li>
         <li>
           Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
-          nazwą Systemy Wspomagania Pracy, Os. 2 Pułku Lotniczego 28, 31-869 Kraków, NIP: 7343144682, REGON: 388896441,
+          nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
           e-mail: biuro@systemywp.pl , +48 534 127 160;
         </li>
         <li>
