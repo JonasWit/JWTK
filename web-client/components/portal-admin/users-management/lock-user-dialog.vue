@@ -28,6 +28,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {lockUser, unlockUser} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "lock-user-dialog",
@@ -49,7 +50,7 @@ export default {
       };
 
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/lock", payload);
+        await this.$axios.$post(lockUser(), payload);
         this.$notifier.showSuccessMessage("User locked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -64,7 +65,7 @@ export default {
       };
 
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/unlock", payload);
+        await this.$axios.$post(unlockUser(), payload);
         this.$notifier.showSuccessMessage("User unlocked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);

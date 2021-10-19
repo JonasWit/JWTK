@@ -32,6 +32,7 @@ import EditAccessKeyFormDialog from "@/components/portal-admin/access-keys/edit-
 import DeleteAccessKeyDialog from "@/components/portal-admin/access-keys/delete-access-key-dialog";
 import {colorDate, formatDate} from "@/data/date-extensions";
 import AddUser from "@/components/portal-admin/access-keys/add-user";
+import {revokeMedicalAppKey} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   middleware: ["portal-admin"],
@@ -71,7 +72,7 @@ export default {
     ...mapActions('portal-admin-store', ['getUsers', 'getMedicalAppAccessKeys']),
     async revokeKeyForUser(user) {
       try {
-        await this.$axios.post('/api/portal-admin/key-admin/medical-app/access-key/revoke', {userId: user.id});
+        await this.$axios.post(revokeMedicalAppKey(), {userId: user.id});
         this.$notifier.showSuccessMessage("User removed from key!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);

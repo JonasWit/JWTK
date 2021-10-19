@@ -163,7 +163,7 @@ namespace SystemyWP.API.Controllers.Users
                 }
 
                 await _context.SaveChangesAsync();
-                return Ok();
+                return Ok("Image deleted");
             }
             catch (Exception e)
             {
@@ -172,6 +172,25 @@ namespace SystemyWP.API.Controllers.Users
             }
         }
         
-        //todo: endpoint to only remove picture
+        [HttpDelete("me/image")]
+        public async Task<IActionResult> DeleteProfileImage([FromServices] IFileProvider fileManager)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(UserId));
+                if (user is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+
+                if (!string.IsNullOrEmpty(user.Image)) await fileManager.DeleteFileAsync(user.Image);
+                user.Image = string.Empty;
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
     }
 }

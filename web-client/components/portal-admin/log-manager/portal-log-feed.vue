@@ -36,6 +36,7 @@
 <script>
 
 import PortalLogItem from "@/components/portal-admin/log-manager/portal-log-item";
+import {getPortalLogs} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "portal-log-feed",
@@ -135,7 +136,7 @@ export default {
       this.loading = true;
 
       try {
-        let response = await this.$axios.$get(`/api/portal-admin/log-admin/logs/split${this.query}`);
+        let response = await this.$axios.$get(getPortalLogs(this.query));
         if (response.length === 0) {
           this.finished = true;
         } else {

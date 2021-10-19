@@ -38,6 +38,7 @@
 <script>
 
 import ApiLogItem from "@/components/portal-admin/log-manager/api-log-item";
+import {getAPILogs} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "api-log-feed",
@@ -145,7 +146,7 @@ export default {
       this.loading = true;
 
       try {
-        let response = await this.$axios.$get(`/api/portal-admin/log-admin/logs/server/split${this.query}`);
+        let response = await this.$axios.$get(getAPILogs(this.query));
         if (response.length === 0) {
           this.finished = true;
         } else {

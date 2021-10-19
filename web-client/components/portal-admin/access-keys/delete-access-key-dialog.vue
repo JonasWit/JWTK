@@ -27,6 +27,7 @@
 
 <script>
 import {mapActions} from "vuex";
+import {deleteAccessKey} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "delete-access-key-dialog",
@@ -44,7 +45,7 @@ export default {
     ...mapActions('portal-admin-store', ['getLegalAppAccessKeys', 'getMedicalAppAccessKeys', 'getRestaurantAppAccessKeys']),
     async deleteKey() {
       try {
-        await this.$axios.$delete(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/delete/${this.selectedKey.id}`);
+        await this.$axios.$delete(deleteAccessKey(this.selectedKey.keyType, this.selectedKey.id));
         this.$notifier.showSuccessMessage("Key deleted!");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);

@@ -1,4 +1,11 @@
-﻿const initState = () => ({
+﻿import {
+  getLegalAppKeys,
+  getMedicalAppKeys,
+  getRestaurantAppKeys,
+  getUsers
+} from "@/data/endpoints/admin/admin-panel-endpoints";
+
+const initState = () => ({
   users: [],
   legalAppAccessKeys: [],
   medicalAppAccessKeys: [],
@@ -46,7 +53,7 @@ export const mutations = {
 export const actions = {
   async getUsers({commit}) {
     try {
-      let users = await this.$axios.$get("/api/portal-admin/user-admin/users");
+      let users = await this.$axios.$get(getUsers());
       console.warn("Users: ", users);
       commit('updateUsersList', {users});
     } catch (error) {
@@ -55,7 +62,7 @@ export const actions = {
   },
   async getLegalAppAccessKeys({commit}) {
     try {
-      let keys = await this.$axios.$get("/api/portal-admin/key-admin/legal-app/access-keys");
+      let keys = await this.$axios.$get(getLegalAppKeys());
       keys.forEach(x => x.keyType = "legal-app");
       commit('updateLegalAppAccessKeysList', {keys});
     } catch (error) {
@@ -64,7 +71,7 @@ export const actions = {
   },
   async getMedicalAppAccessKeys({commit}) {
     try {
-      let keys = await this.$axios.$get("/api/portal-admin/key-admin/medical-app/access-keys");
+      let keys = await this.$axios.$get(getMedicalAppKeys());
       keys.forEach(x => x.keyType = "medical-app");
       commit('updateMedicalAppAccessKeysList', {keys});
     } catch (error) {
@@ -73,7 +80,7 @@ export const actions = {
   },
   async getRestaurantAppAccessKeys({commit}) {
     try {
-      let keys = await this.$axios.$get("/api/portal-admin/key-admin/restaurant-app/access-keys");
+      let keys = await this.$axios.$get(getRestaurantAppKeys());
       keys.forEach(x => x.keyType = "restaurant-app");
       commit('updateRestaurantAppAccessKeysList', {keys});
     } catch (error) {

@@ -37,6 +37,7 @@
 <script>
 
 import {mapActions} from "vuex";
+import {updateAccessKey} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "edit-access-key-form-dialog",
@@ -84,7 +85,7 @@ export default {
       };
 
       try {
-        await this.$axios.$put(`/api/portal-admin/key-admin/${this.selectedKey.keyType}/access-key/update/${this.selectedKey.id}`, payload);
+        await this.$axios.$put(updateAccessKey(this.selectedKey.keyType, this.selectedKey.id), payload);
         this.$notifier.showSuccessMessage("Key modified");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);

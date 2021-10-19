@@ -47,6 +47,14 @@
 
 <script>
 import {mapActions} from "vuex";
+import {
+  grantLegalAppAccessEndpoint,
+  grantMedicalAppAccessEndpoint,
+  grantRestaurantAppAccessEndpoint,
+  revokeLegalAppAccessEndpoint,
+  revokeMedicalAppAccessEndpoint,
+  revokeRestaurantAppAccessEndpoint
+} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "applications-access-dialog",
@@ -64,7 +72,7 @@ export default {
     ...mapActions('portal-admin-store', ['getUsers']),
     async grantLegalAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/grant/legal-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(grantLegalAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access granted");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -75,7 +83,7 @@ export default {
     },
     async revokeLegalAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/legal-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(revokeLegalAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access revoked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -86,7 +94,7 @@ export default {
     },
     async grantMedicalAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/grant/medical-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(grantMedicalAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access granted");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -97,7 +105,7 @@ export default {
     },
     async revokeMedicalAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/medical-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(revokeMedicalAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access revoked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -108,7 +116,7 @@ export default {
     },
     async grantRestaurantAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/grant/restaurant-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(grantRestaurantAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access granted");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
@@ -119,7 +127,7 @@ export default {
     },
     async revokeRestaurantAppAccess() {
       try {
-        await this.$axios.$post("/api/portal-admin/user-admin/user/revoke/restaurant-app", {userId: this.selectedUser.id});
+        await this.$axios.$post(revokeRestaurantAppAccessEndpoint(), {userId: this.selectedUser.id});
         this.$notifier.showSuccessMessage("Access revoked");
       } catch (error) {
         this.$notifier.showErrorMessage(error.response.data);
