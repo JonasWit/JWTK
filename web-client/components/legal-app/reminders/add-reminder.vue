@@ -137,7 +137,7 @@ export default {
     validation: {
       valid: false,
       name: notEmptyAndLimitedRule('Nazwa nie może być pusta i nie może zawierać więcej niż 100 znaków', 1, 100),
-      message: lengthRule("Opis nie może zawierać więcej niż 200 znaków!", 0, 200),
+      message: lengthRule("Opis nie może być pusty i zawierać więcej niż 200 znaków!", 1, 200),
       date: notEmptyRule('Proszę wybrać datę'),
       time: notEmptyRule('Proszę wybrać godzinę'),
       category: notEmptyRule('Proszę wybrać kategorię')
