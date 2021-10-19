@@ -49,11 +49,12 @@
 </template>
 
 <script>
-import {dateValidation, notEmptyAndLimitedRule, notEmptyRule} from "@/data/vuetify-validations";
+import {dateValidation, notEmptyAndLimitedRule} from "@/data/vuetify-validations";
 import {mapActions, mapState} from "vuex";
 import {createDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
+import {queryDateForFloatingBell, todayDate} from "@/data/date-extensions";
 
 export default {
   name: "add-deadline",
@@ -73,9 +74,15 @@ export default {
   }),
   computed: {
     ...mapState('cookies-store', ['legalAppTooltips']),
+    todayDate() {
+      return todayDate()
+    },
+    query() {
+      return queryDateForFloatingBell(this.todayDate)
+    },
   },
   methods: {
-    ...mapActions('legal-app-client-store', ['getClientsNotes']),
+    ...mapActions('legal-app-client-store', ['getClientsNotes', 'getEventsForNotifications']),
 
     async addNewDeadline() {
       if (!this.$refs.addNewDeadlineForm.validate()) return;
@@ -85,7 +92,9 @@ export default {
           message: this.form.message,
         };
         let caseId = this.$route.params.case;
+        let dates = this.query
         await this.$axios.$post(createDeadline(caseId), newDeadline);
+        await this.getEventsForNotifications({dates})
         this.$notifier.showSuccessMessage("Termin dodany pomyślnie!");
       } catch (error) {
         handleError(error);

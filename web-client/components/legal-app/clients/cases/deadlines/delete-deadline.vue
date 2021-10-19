@@ -12,8 +12,7 @@
     </template>
     <v-card>
       <v-card-title class="justify-center">Usuń Termin</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz sprawę. Odzyskanie dostępu będzie niemożliwe.
-        Zatwierdź operację używjąc guzika 'POTWIERDŹ'
+      <v-card-subtitle>Potwierdzając operację usuniesz termin. Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
       <v-card-actions>
@@ -33,6 +32,8 @@
 import {deleteDeadline} from "@/data/endpoints/legal-app/legal-app-case-endpoints";
 import ProgressBar from "@/components/legal-app/progress-bar";
 import {handleError} from "@/data/functions";
+import {mapActions} from "vuex";
+import {queryDateForFloatingBell, todayDate} from "@/data/date-extensions";
 
 export default {
   name: "delete-deadline",
@@ -46,12 +47,23 @@ export default {
   data: () => ({
     dialog: false,
   }),
+  computed: {
+    todayDate() {
+      return todayDate()
+    },
+    query() {
+      return queryDateForFloatingBell(this.todayDate)
+    },
+  },
   methods: {
+    ...mapActions('legal-app-client-store', ['getEventsForNotifications']),
     async deleteDeadline() {
       try {
         let caseId = this.$route.params.case;
         let deadlineId = this.deadlineForAction.id;
+        let dates = this.query;
         await this.$axios.$delete(deleteDeadline(caseId, deadlineId));
+        await this.getEventsForNotifications({dates})
         this.$notifier.showSuccessMessage("Termin został usunięty!");
       } catch (error) {
         handleError(error);

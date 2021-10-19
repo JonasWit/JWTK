@@ -12,9 +12,9 @@
         Zarządzaj notatkami dla Sprawy! Dodawaj notatki ze spotkań, edytuj je lub usuwaj. Nie masz jeszcze żadnej
         notatki. Użyj ikonki "plus", aby dodać pierwszą notkę.
       </v-alert>
-      <v-list class="expansion">
+      <v-list>
         <v-list-group :value="false" prepend-icon="mdi-clipboard-text" v-for="item in notesListForCases"
-                      :key="item[0].created" no-action>
+                      :key="item[0].created" no-action class="expansion">
           <template v-slot:activator>
             <v-list-item-title> {{ formatDateToMonth(item[0].created) }}</v-list-item-title>
           </template>

@@ -2,8 +2,6 @@
   <v-container>
     <v-toolbar color="primary" class="white--text">
       <v-toolbar-title>Archiwum Spraw</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-icon color="white">mdi-briefcase-account-outline</v-icon>
     </v-toolbar>
     <v-alert v-if="legalAppTooltips" elevation="5" text type="info">
       Aby odzyskać dostęp do zarchiwizowanej Sprawy użyj opcji 'PRZYWRÓĆ'.
