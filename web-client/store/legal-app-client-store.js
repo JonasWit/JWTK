@@ -58,6 +58,15 @@ export const getters = {
   workRecordsList(state) {
     return state.financialRecordsFromFetch;
   },
+  // calculatedFinancialRecords(state) {
+  //   return state.financialRecordsFromFetch.map(x => ({
+  //     ...x,
+  //     invoiceVatAmount: vatAmount(x.amount, x.vat),
+  //     invoiceDecimalVat: vatRate(x.vat),
+  //     invoiceRateNet: rateNet(x.rate, x.vat),
+  //     invoiceAmountNet: amountNet(x.amount, x.vat),
+  //   }));
+  // },
   sortedFinancialRecords(state) {
     return [...state.financialRecordsFromFetch].sort((a, b) => {
       if (a.eventDate > b.eventDate) {
@@ -86,9 +95,7 @@ export const getters = {
   },
   notificationsCount(state) {
     return state.newEvents.length;
-
   }
-
 };
 
 export const mutations = {
@@ -108,9 +115,9 @@ export const mutations = {
     state.contactDetailsFromFetch = contactDetailsFromFetch;
   },
 //Financials records
-  updateFinancialRecordsFromFetch(state, {financialRecordsFromFetch}) {
-    console.warn('mutation done for updateFinancialRecordsFromFetch', financialRecordsFromFetch);
-    state.financialRecordsFromFetch = financialRecordsFromFetch;
+  updateFinancialRecordsFromFetch(state, {data}) {
+    console.warn('mutation done for updateFinancialRecordsFromFetch', data);
+    state.financialRecordsFromFetch = data;
   },
   updateFullWorkRecordsList(state, {fullWorkRecordsList}) {
     console.warn('mutation done for updateFullWorkRecordsList', fullWorkRecordsList);
@@ -202,26 +209,24 @@ export const actions = {
   },
 //Financials records
   async getFinancialRecordsFromFetch({commit}, {clientId, query}) {
-    let financialRecordsFromFetch = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`);
     try {
-      financialRecordsFromFetch.sort((a, b) => {
+      const data = await this.$axios.$get(`/api/legal-app-clients-work/client/${clientId}/work-records${query}`);
+      data.sort((a, b) => {
         const dateA = new Date(a.created);
         const dateB = new Date(b.created);
         return dateB - dateA;
       });
-      financialRecordsFromFetch.forEach(x => {
+      data.forEach(x => {
         x.invoiceVatAmount = vatAmount(x.amount, x.vat);
         x.invoiceDecimalVat = vatRate(x.vat);
         x.invoiceRateNet = rateNet(x.rate, x.vat);
         x.invoiceAmountNet = amountNet(x.amount, x.vat);
       });
-      console.warn('Action from store: getFinancialRecordsFromFetch', financialRecordsFromFetch);
-      commit('updateFinancialRecordsFromFetch', {financialRecordsFromFetch});
-
+      console.warn('Action from store: getFinancialRecordsFromFetch', data);
+      commit('updateFinancialRecordsFromFetch', {data});
     } catch (error) {
       this.$notifier.showErrorMessage(error.response.data);
     }
-
   },
 
   //Billing data

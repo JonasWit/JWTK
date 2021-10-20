@@ -84,7 +84,7 @@ export default {
     modal: false,
     validation: {
       valid: false,
-      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 1, 10),
+      name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 1, 50),
       numberOnly: numberOnly(),
 
     },

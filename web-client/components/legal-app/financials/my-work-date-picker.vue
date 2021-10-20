@@ -47,10 +47,10 @@
         Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
       </v-alert>
     </v-row>
-    <v-toolbar color="primary" dark v-if="workRecordsList.length > 0">
+    <v-toolbar color="primary" dark v-if="financialRecordsFromFetch.length > 0">
       <v-toolbar-title>Lista rozliczeń</v-toolbar-title>
     </v-toolbar>
-    <v-card v-for="item in workRecordsList" :key="item.id">
+    <v-card v-for="item in financialRecordsFromFetch" :key="item.id">
       <v-row class="d-flex justify-space-between">
         <v-col>
           <v-list class="d-flex justify-space-between">
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import AddNewWorkRecord from "~/components/legal-app/financials/dialogs/add-new-work-record";
 import {formatDate} from "@/data/date-extensions";
 import DeleteWorkRecord from "@/components/legal-app/financials/dialogs/delete-work-record";
@@ -122,7 +122,7 @@ export default {
     return this.searchFinancialRecords();
   },
   computed: {
-    ...mapGetters('legal-app-client-store', ['workRecordsList']),
+    ...mapState('legal-app-client-store', ['financialRecordsFromFetch']),
     query() {
       let convertedDateTo = new Date(this.dateTo);
       convertedDateTo.setDate(convertedDateTo.getDate() + 1);
@@ -163,7 +163,7 @@ export default {
     },
     async actionDone() {
       try {
-        return this.searchFinancialRecords();
+        await this.searchFinancialRecords();
       } catch (error) {
         handleError(error);
       }

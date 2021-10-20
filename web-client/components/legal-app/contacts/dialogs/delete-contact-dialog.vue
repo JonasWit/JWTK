@@ -12,7 +12,7 @@
     </template>
     <v-card>
       <v-card-title class="justify-center">Usuń Kontakt</v-card-title>
-      <v-card-subtitle>Potwierdzając operację usuniesz wszystkie dane klienta. Odzyskanie dostępu będzie niemożliwe.
+      <v-card-subtitle>Potwierdzając operację usuniesz wybrane dane kontaktowe. Odzyskanie dostępu będzie niemożliwe.
         Zatwierdź operację używjąc guzika 'POTWIERDŹ'
       </v-card-subtitle>
       <v-divider></v-divider>
@@ -53,19 +53,19 @@ export default {
     ...mapActions('legal-app-client-store', ['getContactsList']),
     async deleteContact() {
       try {
-        let clientId = this.$route.params.client
-        let contactId = this.selectedContact.id
-        await this.$axios.delete(deleteContact(clientId, contactId))
+        let clientId = this.$route.params.client;
+        let contactId = this.selectedContact.id;
+        await this.$axios.delete(deleteContact(clientId, contactId));
         this.$notifier.showSuccessMessage("Kontakt usunięty pomyślnie!");
       } catch (error) {
         handleError(error);
       } finally {
-        this.$nuxt.refresh()
+        this.$nuxt.refresh();
         this.dialog = false;
       }
     }
   }
-}
+};
 
 </script>
 

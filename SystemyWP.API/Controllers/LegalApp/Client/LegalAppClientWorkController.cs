@@ -92,7 +92,9 @@ namespace SystemyWP.API.Controllers.LegalApp.Client
                         .GetAllowedWorkRecord(UserId, Role, clientId, workRecordId, _context)
                         .FirstOrDefault();
                 if (legalAppClientWorkRecord is null) return BadRequest(SystemyWpConstants.ResponseMessages.NoAccess);
-                
+
+                legalAppClientWorkRecord.Hours = form.Hours;
+                legalAppClientWorkRecord.Minutes = form.Minutes;
                 legalAppClientWorkRecord.LawyerName = form.LawyerName;
                 legalAppClientWorkRecord.Amount = form.Amount;
                 legalAppClientWorkRecord.Name = form.Name;
