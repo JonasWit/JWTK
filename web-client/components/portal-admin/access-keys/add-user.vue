@@ -22,6 +22,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import {grantAccessKey} from "@/data/endpoints/admin/admin-panel-endpoints";
 
 export default {
   name: "add-user",
@@ -64,6 +65,7 @@ export default {
         UserId: this.select.id
       };
       try {
+        this.$notifier.showSuccessMessage("Grantedting key: ", payload);
         await this.$axios.post(grantAccessKey(this.keyType), payload);
         this.$notifier.showSuccessMessage("Granted!");
       } catch (error) {
