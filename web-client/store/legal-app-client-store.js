@@ -1,4 +1,4 @@
-﻿import {amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
+﻿import {amountGross, amountNet, groupByKey, handleError, rateNet, vatAmount, vatRate} from "@/data/functions";
 import {formatDateToMonth} from "@/data/date-extensions";
 import {getClientsBasicList, getContacts} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {getAllDeadlinesFromTo, getRemindersFromTo} from "@/data/endpoints/legal-app/legal-app-reminders-endpoints";
@@ -217,10 +217,12 @@ export const actions = {
         return dateB - dateA;
       });
       data.forEach(x => {
-        x.invoiceVatAmount = vatAmount(x.amount, x.vat);
+        x.invoiceAmountGross = amountGross(x.hours, x.minutes, x.rate);
+        x.invoiceVatAmount = vatAmount(x.invoiceAmountGross, x.vat);
         x.invoiceDecimalVat = vatRate(x.vat);
         x.invoiceRateNet = rateNet(x.rate, x.vat);
         x.invoiceAmountNet = amountNet(x.amount, x.vat);
+
       });
       console.warn('Action from store: getFinancialRecordsFromFetch', data);
       commit('updateFinancialRecordsFromFetch', {data});

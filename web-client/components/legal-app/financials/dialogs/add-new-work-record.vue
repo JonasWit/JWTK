@@ -108,9 +108,6 @@ export default {
     givenRate() {
       return (parseFloat(this.form.rate));
     },
-    calculatedAmount() {
-      return Math.round((this.hoursSpent + (this.minutesSpent / 60)) * this.givenRate);
-    },
   },
   methods: {
     ...mapActions('legal-app-client-store', ['getFinancialRecordsFromFetch']),
@@ -124,7 +121,6 @@ export default {
         rate: this.givenRate,
         eventDate: this.form.eventDate,
         vat: this.form.vat.value,
-        amount: this.calculatedAmount,
         lawyerName: this.form.lawyerName,
       };
       try {

@@ -81,7 +81,7 @@
               <v-list-item-content class="text--primary">
                 <p>Stawka VAT: {{ item.vat }}%</p>
                 <p>Kwota VAT: {{ item.invoiceVatAmount.toLocaleString('pl') }}PLN</p>
-                <p>Kwota brutto: {{ item.amount.toLocaleString('pl') }}PLN</p>
+                <p>Kwota brutto: {{ item.invoiceAmountGross.toLocaleString('pl') }}PLN</p>
               </v-list-item-content>
             </v-list-item>
           </v-list>

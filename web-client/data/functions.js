@@ -24,10 +24,14 @@ export const rateNet = (rate, vat) => {
 };
 
 export const amountNet = (amount, vat) => {
-    let roundedAmount = ((amount - (amount * (vat / 100))));
-    return round(roundedAmount, 2);
-  }
-;
+  let roundedAmount = ((amount - (amount * (vat / 100))));
+  return round(roundedAmount, 2);
+};
+
+export const amountGross = (hours, minutes, rate) => {
+  let roundedAmount = Math.round((hours + (minutes / 60)) * rate);
+  return round(roundedAmount, 2);
+};
 
 export const groupByKey = (input, key) => {
   return input.reduce((acc, currentValue) => {
