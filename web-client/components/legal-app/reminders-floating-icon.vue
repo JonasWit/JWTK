@@ -17,7 +17,7 @@
         <v-toolbar color="error" class="white--text">
           <v-toolbar-title>Plany na dzisiaj i jutro</v-toolbar-title>
         </v-toolbar>
-        <v-virtual-scroll :items="newEvents" :item-height="50" height="300" item-height="77">
+        <v-virtual-scroll :items="newEvents" height="300" item-height="92">
           <template v-slot:default="{ item }">
             <v-list-item :style="backgroundColor(item)">
               <v-list-item-content>
@@ -162,6 +162,16 @@ export default {
   position: absolute;
   bottom: 45%;
   width: 800px;
+}
+
+@media only screen and (max-width: 600px) {
+  .direction {
+    position: absolute;
+    bottom: 45%;
+    right: -50%;
+    width: 100vw;
+  }
+
 }
 
 .reminder-bell {
