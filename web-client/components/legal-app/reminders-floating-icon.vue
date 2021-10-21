@@ -23,6 +23,7 @@
               <v-list-item-content>
                 <v-list-item-title class="font-weight-bold">{{ categoryToDisplay(item) }}</v-list-item-title>
                 <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ item.details }}</v-list-item-subtitle>
                 <v-list-item-subtitle>{{ formatDateForCalendar(item.deadline) }}
                 </v-list-item-subtitle>
               </v-list-item-content>
