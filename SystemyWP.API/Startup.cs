@@ -21,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Middleware;
 
 namespace SystemyWP.API
 {
@@ -86,7 +87,8 @@ namespace SystemyWP.API
                     serviceProvider.GetRequiredService<AppDbContext>()));
                 app.UseExceptionHandler("/Error");
             }
-            
+
+            app.UseCustomResponseHeaders();
             app.UseCors(NuxtJsApp);
             app.UseCookiePolicy(
                 new CookiePolicyOptions
@@ -179,8 +181,8 @@ namespace SystemyWP.API
                 .AddEntityFrameworkStores<ApiIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<DataProtectionTokenProviderOptions>(o =>
-                o.TokenLifespan = TimeSpan.FromHours(48));
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+                options.TokenLifespan = TimeSpan.FromHours(48));
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
@@ -216,10 +218,21 @@ namespace SystemyWP.API
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
                         SystemyWpConstants.Roles.PortalAdmin));
-
+                
                 options.AddPolicy(SystemyWpConstants.Policies.LegalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess));
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                        SystemyWpConstants.Apps.LegalApp));
+                
+                options.AddPolicy(SystemyWpConstants.Policies.MedicalAppAccess, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                        SystemyWpConstants.Apps.MedicalApp));
+                
+                options.AddPolicy(SystemyWpConstants.Policies.RestaurantAppAccess, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                        SystemyWpConstants.Apps.RestaurantApp));
             });
         }
     }

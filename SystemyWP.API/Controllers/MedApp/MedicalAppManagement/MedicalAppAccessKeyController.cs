@@ -11,7 +11,6 @@ using SystemyWP.API.Forms.GeneralApp.Access;
 using SystemyWP.API.Projections.General;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
-using SystemyWP.Data.Models.LegalAppModels.Access;
 using SystemyWP.Data.Models.MedicalAppModels.Access;
 
 namespace SystemyWP.API.Controllers.MedApp.MedicalAppManagement

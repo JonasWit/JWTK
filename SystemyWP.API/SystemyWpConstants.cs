@@ -26,6 +26,8 @@ namespace SystemyWP.API
             public const string UserAdmin = nameof(UserAdmin);
             public const string PortalAdmin = nameof(PortalAdmin);
             public const string LegalAppAccess = nameof(LegalAppAccess);
+            public const string MedicalAppAccess = nameof(MedicalAppAccess);
+            public const string RestaurantAppAccess = nameof(RestaurantAppAccess);
         }
         
         public struct Claims

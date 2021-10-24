@@ -12,7 +12,7 @@ using SystemyWP.Data.Models.General;
 namespace SystemyWP.API.Controllers.BaseClases
 {
     [ApiController]
-    public class ApiController : ControllerBase
+    public abstract class ApiController : ControllerBase
     {
         protected readonly PortalLogger _portalLogger;
         protected readonly AppDbContext _context;
