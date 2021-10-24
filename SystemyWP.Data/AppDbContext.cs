@@ -65,6 +65,7 @@ namespace SystemyWP.Data
         public DbSet<MedicalAppDataAccess> MedicalAppDataAccesses { get; set; }
         public DbSet<MedicalAccessKey> MedicalAccessKeys { get; set; }
 
+        //Data
         public DbSet<MedicalAppPatient> MedicalAppPatients { get; set; }
 
         #endregion
