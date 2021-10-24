@@ -20,5 +20,17 @@ namespace SystemyWP.API.Projections
                 log.Id,
                 log.UserEmail
             };
+        
+        public static Func<PortalLogRecord, object> CreateUserLog => UserLogProjection.Compile();
+        public static Expression<Func<PortalLogRecord, object>> UserLogProjection =>
+            log => new
+            {
+                log.Description,
+                LogType = log.LogType.ToString(),
+                log.Created,
+                log.Id,
+                log.UserEmail,
+                log.UserName
+            };
     }
 }

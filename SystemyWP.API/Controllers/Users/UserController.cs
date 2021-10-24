@@ -16,6 +16,7 @@ using SystemyWP.API.Projections;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.Data;
+using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Users
@@ -28,9 +29,54 @@ namespace SystemyWP.API.Controllers.Users
         {
         }
 
+        [HttpGet("my-access-logs")]
+        public async Task<IActionResult> GetAccessLogs(int cursor, int take)
+        {
+            try
+            {
+                var result =  _context.PortalLogs
+                    .Where(pl => pl.UserId.Equals(UserId) && pl.LogType == LogType.Access)
+                    .OrderByDescending(x => x.Created)
+                    .Skip(cursor)
+                    .Take(take)
+                    .Select(PortalLogRecordProjections.StandardProjection)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
+        [HttpDelete("my-access-logs")]
+        public async Task<IActionResult> DeleteAccessLog(long logId)
+        {
+            try
+            {
+                var result = _context.PortalLogs
+                    .Where(pl => pl.UserId.Equals(UserId) && pl.LogType == LogType.Access)
+                    .FirstOrDefault(pl => pl.Id == logId);
+
+                if (result is not null)
+                {
+                    _context.Remove(result);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                await HandleException(e);
+                return ServerError;
+            }
+        }
+        
         [HttpGet("me")]
-        public async Task<IActionResult> GetMe(
-            [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GetProfile([FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
