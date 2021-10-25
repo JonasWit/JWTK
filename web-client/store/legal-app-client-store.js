@@ -221,7 +221,7 @@ export const actions = {
         x.invoiceVatAmount = vatAmount(x.invoiceAmountGross, x.vat);
         x.invoiceDecimalVat = vatRate(x.vat);
         x.invoiceRateNet = rateNet(x.rate, x.vat);
-        x.invoiceAmountNet = amountNet(x.amount, x.vat);
+        x.invoiceAmountNet = amountNet(x.invoiceAmountGross, x.vat);
 
       });
       console.warn('Action from store: getFinancialRecordsFromFetch', data);

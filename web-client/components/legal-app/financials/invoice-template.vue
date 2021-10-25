@@ -106,15 +106,14 @@
               <td>PLN {{ item.invoiceAmountNet.toLocaleString('pl') }}</td>
               <td>{{ item.vat }}%</td>
               <td>PLN {{ item.invoiceVatAmount.toLocaleString('pl') }}</td>
-              <td>PLN {{ item.amount.toLocaleString('pl') }}</td>
+              <td>PLN {{ item.invoiceAmountGross.toLocaleString('pl') }}</td>
             </tr>
             </tbody>
           </template>
         </v-simple-table>
       </v-row>
       <v-row class="d-flex justify-end mx-7 my-10">
-        <v-col cols="8">
-        </v-col>
+        <v-col cols="8"></v-col>
         <v-col cols="4">
           <v-simple-table>
             <tbody>
@@ -160,7 +159,7 @@
   </div>
 </template>
 <script>
-import {timeStamp, formatDateForInvoice} from "@/data/date-extensions";
+import {formatDateForInvoice, timeStamp} from "@/data/date-extensions";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {handleError} from "@/data/functions";
 
@@ -183,7 +182,7 @@ export default {
   async fetch() {
     try {
       let clientId = this.$route.params.client;
-      await this.getClientData({clientId})
+      await this.getClientData({clientId});
     } catch (error) {
       handleError(error);
     }
@@ -194,20 +193,20 @@ export default {
     sumNet() {
       const totalNetValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceAmountNet;
-      }, 0)
-      return totalNetValue.toLocaleString('pl')
+      }, 0);
+      return totalNetValue.toLocaleString('pl');
     },
     sumVat() {
       const totalVatValue = this.selectedWorkRecords.reduce((acc, cur) => {
         return acc + cur.invoiceVatAmount;
-      }, 0)
-      return totalVatValue.toLocaleString('pl')
+      }, 0);
+      return totalVatValue.toLocaleString('pl');
     },
     sumGross() {
       const totalGrossValue = this.selectedWorkRecords.reduce((acc, cur) => {
-        return acc + cur.amount;
-      }, 0)
-      return totalGrossValue.toLocaleString('pl')
+        return acc + cur.invoiceAmountGross;
+      }, 0);
+      return totalGrossValue.toLocaleString('pl');
     }
   },
   methods: {
@@ -228,13 +227,13 @@ export default {
         document.body.innerHTML = originalContents;
       } catch (e) {
         this.$notifier.showErrorMessage("Wystąpił błąd, spróbuj jeszcze raz!");
-        console.warn('Print error', e)
+        console.warn('Print error', e);
       } finally {
-        document.location.reload()
+        document.location.reload();
       }
     },
   }
-}
+};
 </script>
 
 <style scoped>

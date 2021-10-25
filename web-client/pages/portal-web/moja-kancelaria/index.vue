@@ -1,30 +1,15 @@
 <template>
-  <layout>
-    <template v-slot:content>
-      <v-row class="mt-9 mb-9 d-flex ">
-        <v-col cols="4">
-          <v-icon x-large color="warning">
-            mdi-alert-outline
-          </v-icon>
-          <h1 class="mt-4">Strona w budowie</h1>
-          <div>
-            Strona prezentująca aplikację Moja Kancelaria jest aktualnie w budowie.
-          </div>
-          <div class="mt-8">Obraz <a
-            href="https://pixabay.com/pl/users/geralt-9301/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2422173">
-            Gerd Altmann</a> z <a
-            href="https://pixabay.com/pl/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2422173">
-            Pixabay</a></div>
-        </v-col>
-        <v-col cols="8">
-          <v-img :src="image">
-          </v-img>
-        </v-col>
-      </v-row>
-    </template>
-  </layout>
+  <v-container>
+    <!--    <v-row class="mt-6" no-gutters v-for="item in videos" :key="item.id">-->
+    <!--      <v-col cols="7" sm="12" md="8">-->
+    <!--        <video :src="videos" width="320" height="240" controls></video>-->
+    <!--      </v-col>-->
+    <!--      <v-col cols="5" sm="12" md="4">-->
+    <!--        Opis tutaj-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
+  </v-container>
 </template>
-
 <script>
 import Layout from "@/components/legal-app/layout";
 
@@ -32,9 +17,14 @@ export default {
   name: "index",
   components: {Layout},
   data: () => ({
-    image: `${require('~/assets/images/legal-app/under-construction.png')}`
+    // videos: [
+    //   {
+    //     id: 1
+    //   }
+    //   `${require('~/assets/videos/client-section.mp4')}`, `${require('~/assets/videos/client-contact.mp4')}`
+    // ]
   })
-}
+};
 </script>
 
 <style scoped>
