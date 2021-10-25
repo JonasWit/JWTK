@@ -23,7 +23,7 @@
                         label="Dodaj liczbę godzin"></v-text-field>
           <v-text-field v-model="form.minutes" required :rules="validation.minutes"
                         label="Dodaj liczbę minut"></v-text-field>
-          <v-text-field v-model="form.rate" required :rules="validation.numberOnly"
+          <v-text-field v-model="form.rate" required :rules="validation.rate"
                         label="Dodaj stawkę godzinową brutto"></v-text-field>
           <v-select :items="items" v-model="form.vat" label="Dodaj stawkę VAT" item-text="text" :item-value="value"
                     return-object></v-select>
@@ -63,7 +63,7 @@ import {
   lengthRule,
   minutesValidation,
   notEmptyAndLimitedRule,
-  numberOnly
+  rateValidation
 } from "@/data/vuetify-validations";
 import {createWorkRecord} from "@/data/endpoints/legal-app/legal-app-client-endpoints";
 import {mapActions} from "vuex";
@@ -89,11 +89,11 @@ export default {
       date: new Date().toISOString().substr(0, 10),
       validation: {
         valid: false,
-        numberOnly: numberOnly(),
         name: notEmptyAndLimitedRule('Nazwa nie może być pusta oraz liczba znaków nie może przekraczać 50 znaków.', 1, 50),
         length: lengthRule('Maksymalna liczba znaków to 300 znaków', 1, 300),
         hours: hoursValidation(),
-        minutes: minutesValidation()
+        minutes: minutesValidation(),
+        rate: rateValidation()
       },
     }
   ),

@@ -54,5 +54,11 @@ export const dateValidation = () => [
   v => v >= (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) || "Data terminu nie może być w przeszłości",
 ];
 
+export const rateValidation = () => [
+  v => !!v || "Pole obowiązkowe.",
+  v => /^[0-9]+$/.test(v) || 'Dozwolone tylko liczby!',
+  v => (v && v <= 10000) || "Stawka godzinowa nie może przekraczać 10 000",
 
+
+];
 
