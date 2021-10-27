@@ -67,6 +67,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                             .ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.Active == true &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
@@ -76,6 +77,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                             .ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.Active == true &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id);
                     break;
@@ -85,6 +87,7 @@ namespace SystemyWP.API.CustomExtensions.LegalAppExtensions.Cases
                             .ExpireDate >= DateTime.UtcNow &&
                         lappDeadline.Deadline >= from && lappDeadline.Deadline <= to &&
                         lappDeadline.Active == active &&
+                        lappDeadline.LegalAppCase.Active == true &&
                         lappDeadline.LegalAppCase.LegalAppClient.LegalAccessKeyId == context.Users
                             .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).LegalAccessKey.Id &&
                         context.LegalAppDataAccesses.Any(dataAccess =>

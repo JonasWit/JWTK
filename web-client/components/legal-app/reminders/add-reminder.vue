@@ -81,8 +81,8 @@
               </v-time-picker>
             </v-dialog>
           </v-row>
-          <v-alert v-if="legalAppTooltips" border="left" type="error" outlined>
-            Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej."
+          <v-alert v-if="alert" border="left" type="error" outlined>
+            Proszę wybrać poprawny zakres dat. Data początkowa nie może być większa od daty końcowej.
           </v-alert>
           <v-text-field v-model="form.name" label="Nazwa" required :rules="validation.name"></v-text-field>
           <v-text-field v-model="form.message" label="Opis" required :rules="validation.message"></v-text-field>
@@ -144,6 +144,7 @@ export default {
     },
     modalFrom: false,
     modalTo: false,
+    alert: false,
     alert2: true,
     checkbox: true,
     items: [{text: 'Spotkanie', value: 0}, {text: 'Przypomnienie', value: 1}, {text: 'Zadanie', value: 2},],
@@ -224,7 +225,7 @@ export default {
     },
     resetForm() {
       this.$refs.addNewReminderForm.resetValidation();
-    }
+    },
   }
 };
 </script>
