@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using SystemyWP.API.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -19,42 +20,42 @@ namespace SystemyWP.API.Pages.Account
         {
             _settings = optionsMonitor.CurrentValue;
         }
-        
+
         public class RegisterForm
         {
-            [Required] 
-            public string ReturnUrl { get; set; }
-            
+            [Required] public string ReturnUrl { get; set; }
+
             [Required(ErrorMessage = "Pole jest wymagane")]
             [DataType(DataType.EmailAddress, ErrorMessage = "Niepoprawny adres email")]
             public string Email { get; set; }
-            
+
             public string Code { get; set; }
-            
+
             [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(20, ErrorMessage = "Nazwa użytkownika może mieć maksymalnie 20 znaków")]
             public string Username { get; set; }
-            
+
             [DataType(DataType.Password)]
             [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
-            [RegularExpression(SystemyWpConstants.Patterns.PasswordPattern, 
-            ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
+            [RegularExpression(SystemyWpConstants.Patterns.PasswordPattern,
+                ErrorMessage = "Hasło musi zawierać małą i duża literę, cyfrę i znak specjalny")]
             public string Password { get; set; }
-            
+
             [DataType(DataType.Password)]
             [Required(ErrorMessage = "Pole jest wymagane")]
             [StringLength(25, ErrorMessage = "Hasło musi mieć od 16 do 25 znaków", MinimumLength = 16)]
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne")]
             public string ConfirmPassword { get; set; }
-            
-            [RegularExpression("(True|true)", ErrorMessage = "Akceptacja polityki prywatności i regulaminu jest wymagana")]
+
+            [RegularExpression("(True|true)",
+                ErrorMessage = "Akceptacja polityki prywatności i regulaminu jest wymagana")]
             public bool RulesAccepted { get; set; }
-            
+
             [RegularExpression("(True|true)", ErrorMessage = "Akceptacja faktur w formie elektronicznej jest wymagana")]
             public bool InvoiceAccepted { get; set; }
         }
-        
+
         public void OnGet(string returnUrl, string code, string email)
         {
             Form = new RegisterForm
@@ -70,34 +71,38 @@ namespace SystemyWP.API.Pages.Account
             [FromServices] SignInManager<IdentityUser> signInManager)
         {
             if (!ModelState.IsValid) return Page();
+            if (Form.Username.Any(c => !SystemyWpConstants.CharacterSets.StandardSet.Contains(c)))
+            {
+                CustomErrors.Add("Nazwa użytkownika nie może zawierać zanków specjalnych ani spacji");
+                return Page();   
+            }
 
             var existingUser = await userManager.FindByNameAsync(Form.Username);
             if (existingUser is not null)
             {
-                CustomErrors.Add("Ta nazwa użytkownika jest już zajęta.");
+                CustomErrors.Add("Ta nazwa użytkownika jest już zajęta");
                 return Page();
             }
-            
+
             var user = await userManager.FindByEmailAsync(Form.Email);
 
             var resetPassword = await userManager
                 .ResetPasswordAsync(user, Form.Code, Form.Password);
-
             if (resetPassword.Succeeded)
             {
                 user.UserName = Form.Username;
                 user.EmailConfirmed = true;
 
                 await userManager.UpdateAsync(user);
-                
+
                 await userManager.RemoveClaimAsync(user, SystemyWpConstants.Claims.InvitedClaim);
-                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserClaim); 
-                
+                await userManager.AddClaimAsync(user, SystemyWpConstants.Claims.UserClaim);
+
                 await signInManager.SignInAsync(user, true);
                 return Redirect(Form.ReturnUrl);
             }
-            
-            CustomErrors.Add("Wystąpił błąd, spróbuj jeszcze raz.");
+
+            CustomErrors.Add("Wystąpił błąd, spróbuj jeszcze raz");
             return Page();
         }
     }

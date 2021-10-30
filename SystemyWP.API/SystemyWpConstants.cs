@@ -5,6 +5,11 @@ namespace SystemyWP.API
 {
     public class SystemyWpConstants
     {
+        public struct CharacterSets
+        {
+            public const string StandardSet = @"ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+        }
+        
         public struct Patterns
         {
             public const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{16,}$";
