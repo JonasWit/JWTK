@@ -12,8 +12,7 @@ dotnet ef migrations script -i -c ApiIdentityDbContext -o .\Scripts\script.sql
 
 ### just update
 
-dotnet ef database update -c ApiIdentityDbContext
-
+dotnet ef database update -c AppDbContext
 
 
 
