@@ -7,7 +7,7 @@
       </v-list-item>
       <v-menu open-on-hover offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn text color="primary" dark v-bind="attrs" v-on="on" class="nav-item pt-3">
+          <v-btn text color="primary" dark v-bind="attrs" v-on="on" class="nav-item pt-3 hidden-sm-and-down">
             Oferta
           </v-btn>
         </template>
@@ -19,7 +19,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-list-item>
+      <v-list-item class="hidden-sm-and-down">
         <nuxt-link class="nav-item" to="/portal-web/contact">
           Kontakt
         </nuxt-link>
@@ -38,6 +38,25 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
+
+      <v-list>
+        <v-list-item v-for="(item, index) in offerItems" :key="index">
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <nuxt-link class="nav-item" :to="item.route">
+            {{ item.name }}
+          </nuxt-link>
+        </v-list-item>
+      </v-list>
+      <v-list-item>
+        <v-list-item-icon>
+          <v-icon>mdi-email</v-icon>
+        </v-list-item-icon>
+        <nuxt-link class="nav-item" to="/portal-web/contact">
+          Kontakt
+        </nuxt-link>
+      </v-list-item>
     </v-navigation-drawer>
   </div>
 </template>
@@ -73,7 +92,7 @@ export default {
         id: '2',
         route: '/portal-web/moja-kancelaria',
         name: 'Moja Kancelaria',
-        icon: 'mdi-tag',
+        icon: 'mdi-scale-balance',
       }
 
     ]
@@ -83,6 +102,14 @@ export default {
 </script>
 
 <style scoped>
+
+.v-btn.v-size--default {
+  font-size: 16px !important;
+}
+
+* {
+  text-transform: none !important;
+}
 
 .nav-list {
   background: transparent !important;
