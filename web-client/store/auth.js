@@ -34,9 +34,9 @@ export const getters = {
     if (state.profile.role === ROLES.INVITED) {
       return "Zaproszony";
     } else if (state.profile.role === ROLES.USER) {
-      return "Klient";
+      return "Użytkownik";
     } else if (state.profile.role === ROLES.USER_ADMIN) {
-      return "Klient z uprawnieniemiami Administratora";
+      return "Użytkownik Administrator";
     } else if (state.profile.role === ROLES.PORTAL_ADMIN) {
       return "Administarator Portalu";
     } else {

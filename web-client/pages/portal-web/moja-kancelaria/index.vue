@@ -116,7 +116,7 @@ export default {
         id: 9,
         video: `${require('~/assets/videos/case-deadline.mp4')}`,
         title: 'Terminy dla sprawy',
-        description: 'W tym miejscu zobaczysz w jaki sposób tworzyć terminy dla wtbranej sprawy i jak nimi zarządzać. Ten komponent pomoże kontrolować ważne terminy, które automatycznie zostaną dodane do głównego kalendarza. Nadchodzące terminy - przypadające na dzisiaj i jutro - będą widoczne pod ikonką dzwonka w prawym dolnym rogu. Czerwona ikonka oznacza nadchodzące terminy lub wydarzenia.'
+        description: 'W tym miejscu zobaczysz w jaki sposób tworzyć terminy dla wybranej sprawy i jak nimi zarządzać. Ten komponent pomoże kontrolować ważne terminy, które automatycznie zostaną dodane do głównego kalendarza. Nadchodzące terminy - przypadające na dzisiaj i jutro - będą widoczne pod ikonką dzwonka w prawym dolnym rogu. Czerwona ikonka oznacza nadchodzące terminy lub wydarzenia.'
       },
       {
         id: 10,
