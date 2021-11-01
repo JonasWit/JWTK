@@ -195,7 +195,7 @@ namespace SystemyWP.API
                 config.LogoutPath = "/api/auth/logout";
                 config.Cookie.Domain = _configuration["CookieDomain"];
                 config.Cookie.Name = "systemywp_id";
-                config.ExpireTimeSpan = TimeSpan.FromHours(8);
+                config.Cookie.HttpOnly = true;
                 config.Cookie.SameSite = SameSiteMode.Strict;
             });
 

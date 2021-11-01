@@ -8,13 +8,12 @@
   //   res.data.status = res.status;
   //   return res;
   // });
-  // $axios.onError(error => {
-  //   if (error.response && error.response.status && error.response.data) {
-  //     const {status, data} = error.response;
-  //     if ((status | 0) === 400) {
-  //       store.dispatch('popup/error', data);
-  //       return {error};
-  //     }
-  //   }
-  // });
+  $axios.onError(error => {
+    if (error.response && error.response.status) {
+      const {status} = error.response;
+      if (status === 401) {
+        store.dispatch('auth/clearLogin');
+      }
+    }
+  });
 }

@@ -124,6 +124,11 @@ export const actions = {
     const returnUrl = encodeURIComponent(location.href);
     window.location = `${this.$config.auth.loginPath}?returnUrl=${returnUrl}`;
   },
+  clearLogin() {
+    if (process.server) return;
+    if (getGDPRConsent() === false) return;
+    window.location = `${this.$config.auth.loginPath}?returnUrl=${process.env.PORTAL_URL}`;
+  },
   changePassword() {
     if (process.server) return;
     if (getGDPRConsent() === false) return;
