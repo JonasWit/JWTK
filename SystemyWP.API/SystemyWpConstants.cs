@@ -10,6 +10,17 @@ namespace SystemyWP.API
             public const string StandardSet = @"ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
         }
         
+        public struct Paths
+        {
+            public const string LoginPath = @"/Account/Login";
+            public const string LogoutPath = @"/api/auth/logout";
+        }
+        
+        public struct CookiesNames
+        {
+            public const string IdCookie = @"systemywp_id";
+        }
+        
         public struct Patterns
         {
             public const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{16,}$";

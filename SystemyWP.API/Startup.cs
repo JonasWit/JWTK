@@ -191,10 +191,10 @@ namespace SystemyWP.API
 
             services.ConfigureApplicationCookie(config =>
             {
-                config.LoginPath = "/Account/Login";
-                config.LogoutPath = "/api/auth/logout";
+                config.LoginPath = SystemyWpConstants.Paths.LoginPath;
+                config.LogoutPath = SystemyWpConstants.Paths.LogoutPath;
                 config.Cookie.Domain = _configuration["CookieDomain"];
-                config.Cookie.Name = "systemywp_id";
+                config.Cookie.Name = SystemyWpConstants.CookiesNames.IdCookie;
                 config.Cookie.HttpOnly = true;
                 config.Cookie.SameSite = SameSiteMode.Strict;
             });
