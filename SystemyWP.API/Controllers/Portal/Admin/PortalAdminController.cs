@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -47,14 +48,14 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                 var existingUser = await userManager.FindByEmailAsync(form.Email);
                 if (existingUser is not null) return BadRequest(SystemyWpConstants.ResponseMessages.DataAlreadyExists);
 
-                var client = new IdentityUser
+                var newUser = new IdentityUser
                 {
-                    UserName = form.Email,
+                    UserName = Regex.Replace(form.Email, "[^a-zA-Z0-9]", "-"),
                     Email = form.Email
                 };
 
                 var randomPart = new Random().Next(10000000, int.MaxValue);
-                var createResult = await userManager.CreateAsync(client, $"{randomPart}aba@#a1!A");
+                var createResult = await userManager.CreateAsync(newUser, $"{randomPart}aba@#a1!A");
 
                 if (!createResult.Succeeded)
                 {
@@ -64,8 +65,8 @@ namespace SystemyWP.API.Controllers.Portal.Admin
                     return BadRequest(errorResponse);
                 }
 
-                await userManager.AddClaimAsync(client, SystemyWpConstants.Claims.InvitedClaim);
-                var code = await userManager.GeneratePasswordResetTokenAsync(client);
+                await userManager.AddClaimAsync(newUser, SystemyWpConstants.Claims.InvitedClaim);
+                var code = await userManager.GeneratePasswordResetTokenAsync(newUser);
 
                 var link = Url.Page("/Account/Client", "Get", new
                 {
