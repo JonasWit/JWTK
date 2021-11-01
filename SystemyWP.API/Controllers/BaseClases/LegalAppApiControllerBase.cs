@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using SystemyWP.Data;
 using SystemyWP.Data.Models.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {
@@ -19,21 +17,6 @@ namespace SystemyWP.API.Controllers.BaseClases
     {
         public LegalAppApiController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
-        }
-
-        protected async Task<bool> ValidateLegalAppKey()
-        {
-            try
-            {
-                var user = _context.Users.Include(x => x.LegalAccessKey).FirstOrDefault(x => x.Id.Equals(UserId));
-                if (user?.LegalAccessKey?.ExpireDate <= DateTime.UtcNow) return true;
-                return false;
-            }
-            catch (Exception e)
-            {
-                await HandleException(e);
-                return false;
-            }
         }
 
         protected async Task<List<UserBasic>> GetOnlyNormalUsers(List<User> users, UserManager<IdentityUser> userManager)

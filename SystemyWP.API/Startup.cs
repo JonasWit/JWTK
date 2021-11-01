@@ -182,7 +182,7 @@ namespace SystemyWP.API
                 .AddDefaultTokenProviders();
 
             services.Configure<DataProtectionTokenProviderOptions>(options =>
-                options.TokenLifespan = TimeSpan.FromHours(48));
+                options.TokenLifespan = TimeSpan.FromHours(24));
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
@@ -195,7 +195,7 @@ namespace SystemyWP.API
                 config.LogoutPath = "/api/auth/logout";
                 config.Cookie.Domain = _configuration["CookieDomain"];
                 config.Cookie.Name = "systemywp_id";
-                config.ExpireTimeSpan = TimeSpan.FromHours(5);
+                config.ExpireTimeSpan = TimeSpan.FromHours(8);
                 config.Cookie.SameSite = SameSiteMode.Strict;
             });
 

@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using SystemyWP.Data.Models.LegalAppModels.Billings;
 using SystemyWP.Data.Models.RestaurantAppModels.Access;
 using SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers;
+using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.Data.Models.RestaurantAppModels.Ingredients;
 using SystemyWP.Data.Models.RestaurantAppModels.Menus;
 
 namespace SystemyWP.Data
@@ -77,6 +79,8 @@ namespace SystemyWP.Data
         
         //Data
         public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
+        public DbSet<RestaurantAppDish> RestaurantAppDishes { get; set; }      
+        public DbSet<RestaurantAppIngredient> RestaurantAppIngredients { get; set; }  
         
         #endregion
 

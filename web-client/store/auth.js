@@ -79,7 +79,6 @@ export const actions = {
     try {
       await dispatch('reloadProfile');
     } catch (error) {
-      console.log("Not authorized");
     }
     if (getters.userAdmin) {
       try {
@@ -87,19 +86,14 @@ export const actions = {
         await dispatch('reloadMedicalAppRelatedUsers');
         await dispatch('reloadRestaurantAppRelatedUsers');
       } catch (error) {
-        console.log("No related users");
       }
-    } else {
-      console.log("Related users not visible");
     }
   },
   async reloadProfile({commit}) {
     try {
       let profile = await this.$axios.$get(getCurrentUser());
-      console.log("User Profile: ", profile);
       commit('saveProfile', {profile});
     } catch (error) {
-      console.log("Not authorized");
     }
   },
   async reloadLegalAppRelatedUsers({commit}) {
@@ -107,7 +101,6 @@ export const actions = {
       let users = await this.$axios.$get(getLegalAppRelatedUsers());
       commit('saveLegalAppRelatedUsers', {users});
     } catch (error) {
-      console.log("Not authorized");
     }
   },
   async reloadMedicalAppRelatedUsers({commit}) {
@@ -115,7 +108,6 @@ export const actions = {
       let users = await this.$axios.$get(getMedicalAppRelatedUsers());
       commit('saveMedicalAppRelatedUsers', {users});
     } catch (error) {
-      console.log("Not authorized");
     }
   },
   async reloadRestaurantAppRelatedUsers({commit}) {
@@ -123,7 +115,6 @@ export const actions = {
       let users = await this.$axios.$get(getRestaurantAppRelatedUsers());
       commit('saveRestaurantAppRelatedUsers', {users});
     } catch (error) {
-      console.log("Not authorized");
     }
   },
   login() {
