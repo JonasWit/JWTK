@@ -51,7 +51,7 @@ namespace SystemyWP.API.Controllers.Users
             }
         }
         
-        [HttpDelete("my-access-logs")]
+        [HttpDelete("my-access-logs/{logId}")]
         public async Task<IActionResult> DeleteAccessLog(long logId)
         {
             try
@@ -123,11 +123,11 @@ namespace SystemyWP.API.Controllers.Users
         [HttpPut("personal-data/update")]
         public async Task<IActionResult> UpdatePersonalData([FromBody] UserPersonalDataForm form)
         {
-            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
-
             try
             {
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+                if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                
                 userProfile.Address = form.Address;
                 userProfile.City = form.City;
                 userProfile.Country = form.Country;
@@ -156,11 +156,11 @@ namespace SystemyWP.API.Controllers.Users
         [HttpDelete("personal-data/clear/{userId}")]
         public async Task<IActionResult> DeletePersonalData(string userId)
         {
-            var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
-            if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
-
             try
             {
+                var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(UserId));
+                if (userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                
                 userProfile.Address = null;
                 userProfile.City = null;
                 userProfile.Country = null;
@@ -177,7 +177,6 @@ namespace SystemyWP.API.Controllers.Users
 
                 await _context.SaveChangesAsync();
                 return Ok();
-
             }
             catch (Exception e)
             {
