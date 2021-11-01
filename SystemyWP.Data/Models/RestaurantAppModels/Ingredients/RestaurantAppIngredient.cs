@@ -12,13 +12,12 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
         [Required]
         [MaxLength(500)]
         public string Name { get; set; }
-        public double Quantity { get; set; }
         public MeasurementUnits MeasurementUnits { get; set; }
-        
-        public List<RestaurantAppDish> RestaurantAppDishes { get; set; } = new();
-        
-        public long RestaurantAppIngredientStackId { get; set; }
-        public RestaurantAppIngredientStack RestaurantAppIngredientStack { get; set; }
+
+        public float PricePerStack { get; set; }
+        public float StackSize { get; set; }
+
+        public List<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; }
         
         [Required]
         public RestaurantAccessKey RestaurantAccessKey { get; set; }

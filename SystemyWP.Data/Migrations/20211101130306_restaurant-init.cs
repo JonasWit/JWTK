@@ -48,9 +48,9 @@ namespace SystemyWP.Data.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Quantity = table.Column<double>(type: "double precision", nullable: false),
                     MeasurementUnits = table.Column<int>(type: "integer", nullable: false),
-                    RestaurantAppIngredientStackId = table.Column<long>(type: "bigint", nullable: false),
+                    PricePerStack = table.Column<float>(type: "real", nullable: false),
+                    StackSize = table.Column<float>(type: "real", nullable: false),
                     RestaurantAccessKeyId = table.Column<int>(type: "integer", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
@@ -94,37 +94,13 @@ namespace SystemyWP.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RestaurantAppDishRestaurantAppIngredient",
-                columns: table => new
-                {
-                    RestaurantAppDishesId = table.Column<long>(type: "bigint", nullable: false),
-                    RestaurantAppIngredientsId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RestaurantAppDishRestaurantAppIngredient", x => new { x.RestaurantAppDishesId, x.RestaurantAppIngredientsId });
-                    table.ForeignKey(
-                        name: "FK_RestaurantAppDishRestaurantAppIngredient_RestaurantAppDishe~",
-                        column: x => x.RestaurantAppDishesId,
-                        principalTable: "RestaurantAppDishes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RestaurantAppDishRestaurantAppIngredient_RestaurantAppIngre~",
-                        column: x => x.RestaurantAppIngredientsId,
-                        principalTable: "RestaurantAppIngredients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RestaurantAppIngredientStack",
+                name: "RestaurantAppUsedIngredients",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StackSize = table.Column<double>(type: "double precision", nullable: false),
-                    PricePerStack = table.Column<double>(type: "double precision", nullable: false),
+                    UsedAmount = table.Column<float>(type: "real", nullable: false),
+                    RestaurantAppDishId = table.Column<long>(type: "bigint", nullable: false),
                     RestaurantAppIngredientId = table.Column<long>(type: "bigint", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
@@ -134,9 +110,15 @@ namespace SystemyWP.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RestaurantAppIngredientStack", x => x.Id);
+                    table.PrimaryKey("PK_RestaurantAppUsedIngredients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RestaurantAppIngredientStack_RestaurantAppIngredients_Resta~",
+                        name: "FK_RestaurantAppUsedIngredients_RestaurantAppDishes_Restaurant~",
+                        column: x => x.RestaurantAppDishId,
+                        principalTable: "RestaurantAppDishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RestaurantAppUsedIngredients_RestaurantAppIngredients_Resta~",
                         column: x => x.RestaurantAppIngredientId,
                         principalTable: "RestaurantAppIngredients",
                         principalColumn: "Id",
@@ -149,11 +131,6 @@ namespace SystemyWP.Data.Migrations
                 column: "RestaurantAccessKeyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RestaurantAppDishRestaurantAppIngredient_RestaurantAppIngre~",
-                table: "RestaurantAppDishRestaurantAppIngredient",
-                column: "RestaurantAppIngredientsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RestaurantAppDishRestaurantAppMenu_RestaurantAppMenusId",
                 table: "RestaurantAppDishRestaurantAppMenu",
                 column: "RestaurantAppMenusId");
@@ -164,22 +141,23 @@ namespace SystemyWP.Data.Migrations
                 column: "RestaurantAccessKeyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RestaurantAppIngredientStack_RestaurantAppIngredientId",
-                table: "RestaurantAppIngredientStack",
-                column: "RestaurantAppIngredientId",
-                unique: true);
+                name: "IX_RestaurantAppUsedIngredients_RestaurantAppDishId",
+                table: "RestaurantAppUsedIngredients",
+                column: "RestaurantAppDishId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantAppUsedIngredients_RestaurantAppIngredientId",
+                table: "RestaurantAppUsedIngredients",
+                column: "RestaurantAppIngredientId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RestaurantAppDishRestaurantAppIngredient");
-
-            migrationBuilder.DropTable(
                 name: "RestaurantAppDishRestaurantAppMenu");
 
             migrationBuilder.DropTable(
-                name: "RestaurantAppIngredientStack");
+                name: "RestaurantAppUsedIngredients");
 
             migrationBuilder.DropTable(
                 name: "RestaurantAppDishes");

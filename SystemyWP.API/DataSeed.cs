@@ -30,22 +30,21 @@ namespace SystemyWP.API
         public static void DevSeed(AppDbContext context, ApiIdentityDbContext identityContext,
             UserManager<IdentityUser> userManager)
         {
-            if (identityContext.Users.Count(x => x.UserName.Contains("user")) < 10)
+            if (identityContext.Users.Count() == 0)
             {
-                for (var i = 0; i < 15; i++)
+                //Seed Portal Admins
+                for (var userNo = 0; userNo < 3; userNo++)
                 {
-                    var identityUser = new IdentityUser($"user{i}")
+                    var identityUser = new IdentityUser($"portaladmin{userNo}")
                     {
-                        Email = $"user{i}@test.com",
-                        LockoutEnabled = true,
+                        Email = $"portaladmin{userNo}@test.com",
                         EmailConfirmed = true
                     };
                     userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
                     userManager
                         .AddClaimsAsync(identityUser, new[]
                         {
-                            SystemyWpConstants.Claims.UserClaim,
-                            SystemyWpConstants.Claims.LegalAppAccessClaim
+                            SystemyWpConstants.Claims.PortalAdminClaim
                         })
                         .GetAwaiter()
                         .GetResult();
@@ -57,107 +56,64 @@ namespace SystemyWP.API
                         Id = identityUser.Id,
                         CreatedBy = "system"
                     });
-                }           
-            }
-            
-            if (!identityContext.Users.Any(x => x.UserName.Equals("portaladmin1")))
-            {
-                //Seed Portal Admins
-                for (var i = 1; i < 2; i++)
+                }
+                
+                //Seed Normal Users
+                for (var userNo = 0; userNo < 5; userNo++)
                 {
-                    var testPortalAdmin = new IdentityUser($"portaladmin{i}")
+                    var identityUser = new IdentityUser($"user{userNo}")
                     {
-                        Email = $"portaladmin{i}@test.com",
+                        Email = $"user{userNo}@test.com",
+                        LockoutEnabled = true,
                         EmailConfirmed = true
                     };
-                    userManager.CreateAsync(testPortalAdmin, "password").GetAwaiter().GetResult();
+                    userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
                     userManager
-                        .AddClaimsAsync(testPortalAdmin, new[]
+                        .AddClaimsAsync(identityUser, new[]
                         {
-                            SystemyWpConstants.Claims.LegalAppAccessClaim,
-                            SystemyWpConstants.Claims.PortalAdminClaim
+                            SystemyWpConstants.Claims.UserClaim,
                         })
                         .GetAwaiter()
                         .GetResult();
 
                     context.Add(new User
                     {
-                        Username = testPortalAdmin.UserName,
-                        Email = testPortalAdmin.Email,
-                        Id = testPortalAdmin.Id,
+                        Username = identityUser.UserName,
+                        Email = identityUser.Email,
+                        Id = identityUser.Id,
                         CreatedBy = "system"
                     });
                 }
-
-                //Admin User with no key
-                var identityUser = new IdentityUser($"clientadmin-nokey")
-                {
-                    Email = $"clientadmin-nokey@test.com",
-                    LockoutEnabled = true,
-                    EmailConfirmed = true
-                };
-                userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
-                userManager
-                    .AddClaimsAsync(identityUser, new[]
-                    {
-                        SystemyWpConstants.Claims.UserAdminClaim,
-                        SystemyWpConstants.Claims.LegalAppAccessClaim
-                    })
-                    .GetAwaiter()
-                    .GetResult();
-
-                context.Add(new User
-                {
-                    Username = identityUser.UserName,
-                    Email = identityUser.Email,
-                    Id = identityUser.Id,
-                    CreatedBy = "system"
-                });
                 
                 //Seed Client Admins
-                for (var adminNumber = -2; adminNumber < 3; adminNumber++)
+                for (var userNo = 0; userNo < 10; userNo++)
                 {
-                    var key = new LegalAccessKey
+                    var identityUser = new IdentityUser($"clientadmin{userNo}")
                     {
-                        Name = $"access-key for {adminNumber}",
-                        ExpireDate = DateTime.UtcNow.AddDays(adminNumber),
-                        Created = DateTime.UtcNow,
-                        CreatedBy = "system",
-                        UpdatedBy = "system",
-                    };
-                    context.LegalAccessKeys.Add(key);
-                    context.SaveChanges();
-
-                    var accKey = context.LegalAccessKeys.FirstOrDefault(x => x.Id == key.Id);
-
-                    var testClientAdmin = new IdentityUser($"clientadmin{adminNumber}")
-                    {
-                        Email = $"clientadmin{adminNumber}@test.com",
+                        Email = $"clientadmin{userNo}@test.com",
                         LockoutEnabled = true,
                         EmailConfirmed = true
                     };
 
-                    userManager.CreateAsync(testClientAdmin, "password").GetAwaiter().GetResult();
+                    userManager.CreateAsync(identityUser, "password").GetAwaiter().GetResult();
                     userManager
-                        .AddClaimsAsync(testClientAdmin, new[]
+                        .AddClaimsAsync(identityUser, new[]
                         {
                             SystemyWpConstants.Claims.UserAdminClaim,
-                            SystemyWpConstants.Claims.LegalAppAccessClaim
                         })
                         .GetAwaiter()
                         .GetResult();
 
                     context.Add(new User
                     {
-                        Username = testClientAdmin.UserName,
-                        Email = testClientAdmin.Email,
-                        LegalAccessKey = accKey,
-                        Id = testClientAdmin.Id,
+                        Username = identityUser.UserName,
+                        Email = identityUser.Email,
+                        Id = identityUser.Id,
                         CreatedBy = "system"
                     });
-
-                    context.SaveChanges();
-                }
+                }          
+                
+                context.SaveChanges();
             }
         }
     }

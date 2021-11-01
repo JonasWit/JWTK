@@ -14,8 +14,4 @@ dotnet ef migrations script -i -c ApiIdentityDbContext -o .\Scripts\script.sql
 
 dotnet ef database update -c AppDbContext
 
-
-
-
-
-
+dotnet ef migrations remove -c AppDbContext -s ..\SystemyWP.API

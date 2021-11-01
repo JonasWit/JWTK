@@ -13,7 +13,7 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Dishes
         [MaxLength(500)]
         public string Name { get; set; }
         
-        public List<RestaurantAppIngredient> RestaurantAppIngredients { get; set; } = new();
+        public List<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; } = new();
         public List<RestaurantAppMenu> RestaurantAppMenus { get; set; } = new();       
         
         [Required]

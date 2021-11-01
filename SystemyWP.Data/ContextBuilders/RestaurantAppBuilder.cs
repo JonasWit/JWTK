@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SystemyWP.Data.Models.RestaurantAppModels.Access;
+using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
 using SystemyWP.Data.Models.RestaurantAppModels.Ingredients;
 using SystemyWP.Data.Models.RestaurantAppModels.Menus;
 
@@ -37,11 +38,15 @@ namespace SystemyWP.Data.ContextBuilders
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
-            
+
+            modelBuilder.Entity<RestaurantAppDish>()
+                .HasMany(x => x.RestaurantAppUsedIngredients)
+                .WithOne(x => x.RestaurantAppDish)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<RestaurantAppIngredient>()
-                .HasOne(x => x.RestaurantAppIngredientStack)
+                .HasMany(x => x.RestaurantAppUsedIngredients)
                 .WithOne(x => x.RestaurantAppIngredient)
-                .HasForeignKey<RestaurantAppIngredientStack>(x => x.RestaurantAppIngredientId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

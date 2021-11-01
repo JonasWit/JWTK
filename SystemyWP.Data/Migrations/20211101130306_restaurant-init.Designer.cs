@@ -10,7 +10,7 @@ using SystemyWP.Data;
 namespace SystemyWP.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211101100440_restaurant-init")]
+    [Migration("20211101130306_restaurant-init")]
     partial class restaurantinit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,21 +20,6 @@ namespace SystemyWP.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("RestaurantAppDishRestaurantAppIngredient", b =>
-                {
-                    b.Property<long>("RestaurantAppDishesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RestaurantAppIngredientsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RestaurantAppDishesId", "RestaurantAppIngredientsId");
-
-                    b.HasIndex("RestaurantAppIngredientsId");
-
-                    b.ToTable("RestaurantAppDishRestaurantAppIngredient");
-                });
 
             modelBuilder.Entity("RestaurantAppDishRestaurantAppMenu", b =>
                 {
@@ -1226,14 +1211,14 @@ namespace SystemyWP.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double precision");
+                    b.Property<float>("PricePerStack")
+                        .HasColumnType("real");
 
                     b.Property<int>("RestaurantAccessKeyId")
                         .HasColumnType("integer");
 
-                    b.Property<long>("RestaurantAppIngredientStackId")
-                        .HasColumnType("bigint");
+                    b.Property<float>("StackSize")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp without time zone");
@@ -1250,7 +1235,7 @@ namespace SystemyWP.Data.Migrations
                     b.ToTable("RestaurantAppIngredients");
                 });
 
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredientStack", b =>
+            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppUsedIngredient", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1268,14 +1253,11 @@ namespace SystemyWP.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<double>("PricePerStack")
-                        .HasColumnType("double precision");
+                    b.Property<long>("RestaurantAppDishId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("RestaurantAppIngredientId")
                         .HasColumnType("bigint");
-
-                    b.Property<double>("StackSize")
-                        .HasColumnType("double precision");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp without time zone");
@@ -1285,12 +1267,16 @@ namespace SystemyWP.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<float>("UsedAmount")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantAppIngredientId")
-                        .IsUnique();
+                    b.HasIndex("RestaurantAppDishId");
 
-                    b.ToTable("RestaurantAppIngredientStack");
+                    b.HasIndex("RestaurantAppIngredientId");
+
+                    b.ToTable("RestaurantAppUsedIngredients");
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Menus.RestaurantAppMenu", b =>
@@ -1332,21 +1318,6 @@ namespace SystemyWP.Data.Migrations
                     b.HasIndex("RestaurantAccessKeyId");
 
                     b.ToTable("RestaurantAppMenus");
-                });
-
-            modelBuilder.Entity("RestaurantAppDishRestaurantAppIngredient", b =>
-                {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantAppDishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantAppIngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("RestaurantAppDishRestaurantAppMenu", b =>
@@ -1596,13 +1567,21 @@ namespace SystemyWP.Data.Migrations
                     b.Navigation("RestaurantAccessKey");
                 });
 
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredientStack", b =>
+            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppUsedIngredient", b =>
                 {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", "RestaurantAppIngredient")
-                        .WithOne("RestaurantAppIngredientStack")
-                        .HasForeignKey("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredientStack", "RestaurantAppIngredientId")
+                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", "RestaurantAppDish")
+                        .WithMany("RestaurantAppUsedIngredients")
+                        .HasForeignKey("RestaurantAppDishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", "RestaurantAppIngredient")
+                        .WithMany("RestaurantAppUsedIngredients")
+                        .HasForeignKey("RestaurantAppIngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RestaurantAppDish");
 
                     b.Navigation("RestaurantAppIngredient");
                 });
@@ -1689,9 +1668,14 @@ namespace SystemyWP.Data.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", b =>
+                {
+                    b.Navigation("RestaurantAppUsedIngredients");
+                });
+
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", b =>
                 {
-                    b.Navigation("RestaurantAppIngredientStack");
+                    b.Navigation("RestaurantAppUsedIngredients");
                 });
 #pragma warning restore 612, 618
         }

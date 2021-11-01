@@ -81,6 +81,7 @@ namespace SystemyWP.Data
         public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
         public DbSet<RestaurantAppDish> RestaurantAppDishes { get; set; }      
         public DbSet<RestaurantAppIngredient> RestaurantAppIngredients { get; set; }  
+        public DbSet<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; }  
         
         #endregion
 
