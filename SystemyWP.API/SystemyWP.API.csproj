@@ -1,42 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <UserSecretsId>c8a60151-6f20-43ec-8567-b9b141121e73</UserSecretsId>
+        <TargetFramework>net6.0</TargetFramework>
+        <UserSecretsId>651f1825-1930-428d-859e-b500f7733135</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SystemyWP.Data\SystemyWP.Data.csproj" />
+        <ProjectReference Include="..\SystemyWP.Data\SystemyWP.Data.csproj"/>
     </ItemGroup>
-
     <ItemGroup>
-        <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.3.21" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+        <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1"/>
+        <PackageReference Include="AWSSDK.S3" Version="3.7.7.2"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="SendGrid" Version="9.24.4" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+        <PackageReference Include="SendGrid" Version="9.25.1"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CustomExtensions\RestaurantAppExtensions\Dish" />
-        <Folder Include="CustomExtensions\RestaurantAppExtensions\Ingredient" />
-        <Folder Include="Forms\RestaurantApp\Ingredient\Validation" />
-        <Folder Include="Projections\RestaurantApp\Dish" />
-        <Folder Include="Projections\RestaurantApp\Ingredient" />
-        <Folder Include="Scripts" />
-        <Folder Include="ViewModels\LegalApp" />
+        <Folder Include="CustomExtensions\RestaurantAppExtensions\Dish"/>
+        <Folder Include="CustomExtensions\RestaurantAppExtensions\Ingredient"/>
+        <Folder Include="Forms\RestaurantApp\Ingredient\Validation"/>
+        <Folder Include="Projections\RestaurantApp\Dish"/>
+        <Folder Include="Projections\RestaurantApp\Ingredient"/>
+        <Folder Include="Scripts"/>
+        <Folder Include="ViewModels\LegalApp"/>
     </ItemGroup>
 
 </Project>
