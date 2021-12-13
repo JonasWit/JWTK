@@ -31,6 +31,8 @@ namespace SystemyWP.API.Controllers.RestaurantApp.Menu
                     .Select(RestaurantAppMenuProjections.FlatProjection)
                     .FirstOrDefault();
 
+                if (result is null) return NotFound();
+
                 return Ok(result);
             }
             catch (Exception e)

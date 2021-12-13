@@ -34,7 +34,8 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                     .Include(x => x.Users)
                     .Select(AccessKeyProjection.FullProjection)
                     .ToList();
-                
+
+                if (results.Count == 0) return NotFound();
                 return Ok(results);
             }
             catch (Exception e)
@@ -117,7 +118,7 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                 return ServerError;
             }
         }
-        
+
         [HttpDelete("access-key/delete/{id}")]
         [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
         public async Task<IActionResult> DeleteAccessKey(int id)
@@ -142,13 +143,15 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
 
         [HttpPost("user/grant/access-key")]
         [Authorize(SystemyWpConstants.Policies.PortalAdmin)]
-        public async Task<IActionResult> GrantAccessKey([FromBody] GrantDataAccessKeyForm form, [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> GrantAccessKey([FromBody] GrantDataAccessKeyForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id == user.Id);
-                if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || userProfile is null)
+                    return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var accessKey = _context.RestaurantAccessKeys
                     .FirstOrDefault(x => x.Id == form.KeyId);
@@ -157,8 +160,7 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                 accessKey.Users.Add(userProfile);
                 var result = await _context.SaveChangesAsync();
 
-                if (result > 0)
-                    return Ok();
+                if (result > 0) return Ok();
                 return BadRequest(SystemyWpConstants.ResponseMessages.IncorrectBehaviour);
             }
             catch (Exception e)
@@ -167,17 +169,19 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                 return ServerError;
             }
         }
-        
+
         [HttpPost("access-key/revoke")]
         [Authorize(SystemyWpConstants.Policies.UserAdmin)]
-        public async Task<IActionResult> RevokeAccessKey([FromBody] UserIdForm form, [FromServices] UserManager<IdentityUser> userManager)
+        public async Task<IActionResult> RevokeAccessKey([FromBody] UserIdForm form,
+            [FromServices] UserManager<IdentityUser> userManager)
         {
             try
             {
                 var user = await userManager.FindByIdAsync(form.UserId);
                 var userProfile = _context.Users.FirstOrDefault(x => x.Id.Equals(user.Id));
 
-                if (user is null || userProfile is null) return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
+                if (user is null || userProfile is null)
+                    return BadRequest(SystemyWpConstants.ResponseMessages.DataNotFound);
 
                 var assignedKey = _context.RestaurantAccessKeys
                     .FirstOrDefault(x => x.Users.Any(y => y.Id.Equals(user.Id)));
@@ -192,7 +196,7 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                     if (result > 0) return Ok();
                     return BadRequest();
                 }
-                
+
                 return BadRequest();
             }
             catch (Exception e)

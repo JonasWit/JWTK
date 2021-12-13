@@ -18,10 +18,11 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
     [Authorize(SystemyWpConstants.Policies.UserAdmin)]
     public class RestaurantAppAdminController : ApiController
     {
-        public RestaurantAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        public RestaurantAppAdminController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger,
+            context)
         {
         }
-        
+
         [HttpGet("all-related-users")]
         public async Task<IActionResult> GetRelatedUsers([FromServices] UserManager<IdentityUser> userManager)
         {
@@ -58,6 +59,7 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                         .Invoke(relatedUser));
                 }
 
+                if (result.Count == 0) return NotFound();
                 return Ok(result);
             }
             catch (Exception e)
@@ -66,6 +68,5 @@ namespace SystemyWP.API.Controllers.RestaurantApp.RestaurantAppManagement
                 return ServerError;
             }
         }
-        
     }
 }

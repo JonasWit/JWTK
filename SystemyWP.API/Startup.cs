@@ -48,6 +48,8 @@ namespace SystemyWP.API
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             AddIdentity(services);
 
