@@ -1,5 +1,5 @@
 using AutoMapper;
-using SystemyWP.API.Dtos.Restaurant;
+using SystemyWP.API.Dtos.RestaurantApp;
 using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
 using SystemyWP.Data.Models.RestaurantAppModels.Menus;
 

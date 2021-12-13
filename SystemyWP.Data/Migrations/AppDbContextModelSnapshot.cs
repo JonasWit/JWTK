@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SystemyWP.Data;
 
+#nullable disable
+
 namespace SystemyWP.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
@@ -15,31 +17,18 @@ namespace SystemyWP.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.11")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("RestaurantAppDishRestaurantAppMenu", b =>
-                {
-                    b.Property<long>("RestaurantAppDishesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RestaurantAppMenusId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RestaurantAppDishesId", "RestaurantAppMenusId");
-
-                    b.HasIndex("RestaurantAppMenusId");
-
-                    b.ToTable("RestaurantAppDishRestaurantAppMenu");
-                });
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SystemyWP.Data.Models.General.ApiLogRecord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -64,15 +53,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApiLogs");
+                    b.ToTable("ApiLogs", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.General.PortalLogRecord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -116,15 +106,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PortalLogs");
+                    b.ToTable("PortalLogs", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.General.PortalPublication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -163,7 +154,7 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PortalPublications");
+                    b.ToTable("PortalPublications", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.General.User", b =>
@@ -254,15 +245,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("RestaurantAccessKeyId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers.LegalAppDataAccess", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -295,15 +287,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LegalAppDataAccesses");
+                    b.ToTable("LegalAppDataAccesses", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Access.LegalAccessKey", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -334,15 +327,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LegalAccessKeys");
+                    b.ToTable("LegalAccessKeys", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Billings.LegalAppBillingRecord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -407,15 +401,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAccessKeyId");
 
-                    b.ToTable("LegalAppBillingRecords");
+                    b.ToTable("LegalAppBillingRecords", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.Cases.LegalAppCase", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -461,15 +456,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppClientId");
 
-                    b.ToTable("LegalAppCases");
+                    b.ToTable("LegalAppCases", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.Cases.LegalAppCaseDeadline", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -497,15 +493,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppCaseId");
 
-                    b.ToTable("LegalAppCaseDeadlines");
+                    b.ToTable("LegalAppCaseDeadlines", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.Cases.LegalAppCaseNote", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -542,15 +539,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppCaseId");
 
-                    b.ToTable("LegalAppCaseNotes");
+                    b.ToTable("LegalAppCaseNotes", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.LegalAppClient", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -583,15 +581,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAccessKeyId");
 
-                    b.ToTable("LegalAppClients");
+                    b.ToTable("LegalAppClients", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.LegalAppClientNote", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -636,15 +635,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppClientId");
 
-                    b.ToTable("LegalAppClientNotes");
+                    b.ToTable("LegalAppClientNotes", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Clients.LegalAppClientWorkRecord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -699,15 +699,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppClientId");
 
-                    b.ToTable("LegalAppClientWorkRecords");
+                    b.ToTable("LegalAppClientWorkRecords", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Contacts.LegalAppContactDetail", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -744,15 +745,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppClientId");
 
-                    b.ToTable("LegalAppContacts");
+                    b.ToTable("LegalAppContacts", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Contacts.LegalAppEmailAddress", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -781,15 +783,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppContactDetailId");
 
-                    b.ToTable("LegalAppEmailAddresses");
+                    b.ToTable("LegalAppEmailAddresses", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Contacts.LegalAppPhoneNumber", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -818,15 +821,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppContactDetailId");
 
-                    b.ToTable("LegalAppPhoneNumbers");
+                    b.ToTable("LegalAppPhoneNumbers", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Contacts.LegalAppPhysicalAddress", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -871,15 +875,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAppContactDetailId");
 
-                    b.ToTable("LegalAppPhysicalAddresses");
+                    b.ToTable("LegalAppPhysicalAddresses", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.LegalAppModels.Reminders.LegalAppReminder", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -937,15 +942,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("LegalAccessKeyId");
 
-                    b.ToTable("LegalAppReminders");
+                    b.ToTable("LegalAppReminders", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.MedicalAppModels.Access.DataAccessModifiers.MedicalAppDataAccess", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -978,15 +984,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MedicalAppDataAccesses");
+                    b.ToTable("MedicalAppDataAccesses", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.MedicalAppModels.Access.MedicalAccessKey", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -1017,15 +1024,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicalAccessKeys");
+                    b.ToTable("MedicalAccessKeys", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.MedicalAppModels.Patients.MedicalAppPatient", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -1059,15 +1067,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("MedicalAccessKeyId");
 
-                    b.ToTable("MedicalAppPatients");
+                    b.ToTable("MedicalAppPatients", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Access.DataAccessModifiers.RestaurantAppDataAccess", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -1100,15 +1109,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RestaurantAppDataAccesses");
+                    b.ToTable("RestaurantAppDataAccesses", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Access.RestaurantAccessKey", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -1139,150 +1149,16 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RestaurantAccessKeys");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int>("RestaurantAccessKeyId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RestaurantAccessKeyId");
-
-                    b.ToTable("RestaurantAppDishes");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<int>("MeasurementUnits")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<float>("PricePerStack")
-                        .HasColumnType("real");
-
-                    b.Property<int>("RestaurantAccessKeyId")
-                        .HasColumnType("integer");
-
-                    b.Property<float>("StackSize")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RestaurantAccessKeyId");
-
-                    b.ToTable("RestaurantAppIngredients");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppUsedIngredient", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<long>("RestaurantAppDishId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RestaurantAppIngredientId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<float>("UsedAmount")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RestaurantAppDishId");
-
-                    b.HasIndex("RestaurantAppIngredientId");
-
-                    b.ToTable("RestaurantAppUsedIngredients");
+                    b.ToTable("RestaurantAccessKeys", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Menus.RestaurantAppMenu", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -1294,11 +1170,6 @@ namespace SystemyWP.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("RestaurantAccessKeyId")
                         .HasColumnType("integer");
@@ -1315,22 +1186,7 @@ namespace SystemyWP.Data.Migrations
 
                     b.HasIndex("RestaurantAccessKeyId");
 
-                    b.ToTable("RestaurantAppMenus");
-                });
-
-            modelBuilder.Entity("RestaurantAppDishRestaurantAppMenu", b =>
-                {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantAppDishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Menus.RestaurantAppMenu", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantAppMenusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("RestaurantAppMenus", (string)null);
                 });
 
             modelBuilder.Entity("SystemyWP.Data.Models.General.User", b =>
@@ -1543,47 +1399,6 @@ namespace SystemyWP.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", b =>
-                {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Access.RestaurantAccessKey", "RestaurantAccessKey")
-                        .WithMany("RestaurantAppDishes")
-                        .HasForeignKey("RestaurantAccessKeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RestaurantAccessKey");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", b =>
-                {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Access.RestaurantAccessKey", "RestaurantAccessKey")
-                        .WithMany("RestaurantAppIngredients")
-                        .HasForeignKey("RestaurantAccessKeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RestaurantAccessKey");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppUsedIngredient", b =>
-                {
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", "RestaurantAppDish")
-                        .WithMany("RestaurantAppUsedIngredients")
-                        .HasForeignKey("RestaurantAppDishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", "RestaurantAppIngredient")
-                        .WithMany("RestaurantAppUsedIngredients")
-                        .HasForeignKey("RestaurantAppIngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RestaurantAppDish");
-
-                    b.Navigation("RestaurantAppIngredient");
-                });
-
             modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Menus.RestaurantAppMenu", b =>
                 {
                     b.HasOne("SystemyWP.Data.Models.RestaurantAppModels.Access.RestaurantAccessKey", "RestaurantAccessKey")
@@ -1657,23 +1472,9 @@ namespace SystemyWP.Data.Migrations
                 {
                     b.Navigation("RestaurantAppDataAccesses");
 
-                    b.Navigation("RestaurantAppDishes");
-
-                    b.Navigation("RestaurantAppIngredients");
-
                     b.Navigation("RestaurantAppMenus");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Dishes.RestaurantAppDish", b =>
-                {
-                    b.Navigation("RestaurantAppUsedIngredients");
-                });
-
-            modelBuilder.Entity("SystemyWP.Data.Models.RestaurantAppModels.Ingredients.RestaurantAppIngredient", b =>
-                {
-                    b.Navigation("RestaurantAppUsedIngredients");
                 });
 #pragma warning restore 612, 618
         }

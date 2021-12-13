@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using SystemyWP.Data;
-using SystemyWP.Data.Models.LegalAppModels.Access.DataAccessModifiers;
 using SystemyWP.Data.Models.RestaurantAppModels.Menus;
 
 namespace SystemyWP.API.CustomExtensions.RestaurantAppExtensions.Menu

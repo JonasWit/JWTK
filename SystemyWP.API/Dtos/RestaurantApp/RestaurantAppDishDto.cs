@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Dtos.Restaurant;
+namespace SystemyWP.API.Dtos.RestaurantApp;
 
 public class RestaurantAppDishDto
 {

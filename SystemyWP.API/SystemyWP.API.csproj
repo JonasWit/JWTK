@@ -34,8 +34,6 @@
         <Folder Include="CustomExtensions\RestaurantAppExtensions\Dish" />
         <Folder Include="CustomExtensions\RestaurantAppExtensions\Ingredient" />
         <Folder Include="Forms\RestaurantApp\Ingredient\Validation" />
-        <Folder Include="Projections\RestaurantApp\Dish" />
-        <Folder Include="Projections\RestaurantApp\Ingredient" />
         <Folder Include="Scripts" />
         <Folder Include="ViewModels\LegalApp" />
     </ItemGroup>

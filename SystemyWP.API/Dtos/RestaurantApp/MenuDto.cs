@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
 
-namespace SystemyWP.API.Dtos.Restaurant;
+namespace SystemyWP.API.Dtos.RestaurantApp;
 
 public class MenuDto
 {

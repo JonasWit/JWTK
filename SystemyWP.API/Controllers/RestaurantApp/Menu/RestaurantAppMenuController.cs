@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SystemyWP.API.CustomExtensions.LegalAppExtensions.Clients;
 using SystemyWP.API.CustomExtensions.RestaurantAppExtensions.Menu;
-using SystemyWP.API.Projections.LegalApp.Clients;
-using SystemyWP.API.Projections.RestaurantApp.Menu;
 
 namespace SystemyWP.API.Controllers.RestaurantApp.Menu
 {
@@ -17,8 +15,11 @@ namespace SystemyWP.API.Controllers.RestaurantApp.Menu
     [Authorize(SystemyWpConstants.Policies.User)]
     public class RestaurantAppMenuController : RestaurantAppApiControllerBase
     {
-        public RestaurantAppMenuController(PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
+        private readonly IMapper _mapper;
+
+        public RestaurantAppMenuController(IMapper mapper, PortalLogger portalLogger, AppDbContext context) : base(portalLogger, context)
         {
+            _mapper = mapper;
         }
         
         [HttpGet("client/{menuId}")]
@@ -28,8 +29,13 @@ namespace SystemyWP.API.Controllers.RestaurantApp.Menu
             {
                 var result = _context.RestaurantAppMenus
                     .GetAllowedMenu(UserId, Role, menuId, _context, true)
-                    .Select(RestaurantAppMenuProjections.FlatProjection)
                     .FirstOrDefault();
+                
+                
+                
+                
+                
+                
 
                 if (result is null) return NotFound();
 

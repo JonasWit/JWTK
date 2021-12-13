@@ -48,7 +48,7 @@ namespace SystemyWP.API
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
-            
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             AddIdentity(services);
@@ -58,7 +58,7 @@ namespace SystemyWP.API
                     x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
 
             services.AddRazorPages();
-            
+
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
             services.Configure<CorsSettings>(_configuration.GetSection(nameof(CorsSettings)));
 
@@ -220,20 +220,20 @@ namespace SystemyWP.API
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
                         SystemyWpConstants.Roles.PortalAdmin));
-                
+
                 options.AddPolicy(SystemyWpConstants.Policies.LegalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
                         SystemyWpConstants.Apps.LegalApp));
-                
+
                 options.AddPolicy(SystemyWpConstants.Policies.MedicalAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
                         SystemyWpConstants.Apps.MedicalApp));
-                
+
                 options.AddPolicy(SystemyWpConstants.Policies.RestaurantAppAccess, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess, 
+                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
                         SystemyWpConstants.Apps.RestaurantApp));
             });
         }

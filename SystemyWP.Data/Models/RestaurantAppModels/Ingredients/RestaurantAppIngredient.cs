@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using SystemyWP.Data.Enums;
 using SystemyWP.Data.Models.Abstractions;
 using SystemyWP.Data.Models.RestaurantAppModels.Access;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
 
 namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
 {
