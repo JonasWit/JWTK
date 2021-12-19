@@ -11,7 +11,10 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Menus
         [Required]
         [MaxLength(500)]
         public string Name { get; set; }
-
+        
+        [MaxLength(1000)]
+        public string Description { get; set; }
+        
         public List<RestaurantAppDish> RestaurantAppDishes { get; set; } = new();
         
         [Required]
