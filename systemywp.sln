@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API", "SystemyWP.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.Data", "SystemyWP.Data\SystemyWP.Data.csproj", "{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.WASM", "SystemyWP.WASM\SystemyWP.WASM.csproj", "{D01D2321-D12F-44A0-8FDF-A3BEEF52AFBA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5978E2D7-6EE5-48F3-A3CB-EAD25E94E169}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D01D2321-D12F-44A0-8FDF-A3BEEF52AFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D01D2321-D12F-44A0-8FDF-A3BEEF52AFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D01D2321-D12F-44A0-8FDF-A3BEEF52AFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D01D2321-D12F-44A0-8FDF-A3BEEF52AFBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

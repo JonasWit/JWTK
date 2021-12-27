@@ -18,7 +18,7 @@ using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Users
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [Authorize]
     public class AuthController : ApiController
     {
