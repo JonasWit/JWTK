@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SystemyWP.Data.Models.General;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Enums;
+using SystemyWP.API.Data.Models.General.Logging;
 
 namespace SystemyWP.API.Controllers.BaseClases
 {

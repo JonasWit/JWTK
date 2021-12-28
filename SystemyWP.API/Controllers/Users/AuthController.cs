@@ -2,30 +2,31 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Dtos.General;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Forms.Admin;
 using SystemyWP.API.Repositories.General;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Users
 {
     [Route("api/[controller]")]
     public class AuthController : ApiControllerBase
     {
+        private readonly Encryptor _encryptor;
         private readonly IUserRepository _userRepository;
 
         public AuthController(
+            Encryptor encryptor,
             IUserRepository userRepository,
             PortalLogger portalLogger, 
             AppDbContext context, 
             IMapper mapper) : base(portalLogger, context, mapper)
         {
+            _encryptor = encryptor;
             _userRepository = userRepository;
         }
 
@@ -38,7 +39,7 @@ namespace SystemyWP.API.Controllers.Users
             var newUser = new User()
             {
                 Id = new Guid().ToString(),
-                Password = Encryptor.Encrypt(userCredentialsForm.Password),
+                Password = _encryptor.Encrypt(userCredentialsForm.Password),
                 Email = userCredentialsForm.Email
             };
 

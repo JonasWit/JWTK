@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.Abstractions;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
+namespace SystemyWP.API.Data.Models.RestaurantAppModels.Ingredients
 {
     public class RestaurantAppUsedIngredient : TrackedModel
     {
@@ -21,5 +22,10 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
         public RestaurantAppIngredient RestaurantAppIngredient { get; set; }
         [Required]
         public long RestaurantAppIngredientId { get; set; }
+        
+        [Required]
+        public AccessKey AccessKey { get; set; }
+        [Required]
+        public int RestaurantAccessKeyId { get; set; }
     }
 }

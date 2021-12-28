@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using SystemyWP.Data;
+using SystemyWP.API.Data;
 
 namespace SystemyWP.API.Repositories;
 

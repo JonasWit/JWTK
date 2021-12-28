@@ -1,7 +1,7 @@
 using AutoMapper;
-using SystemyWP.API.Dtos.RestaurantApp;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
-using SystemyWP.Data.Models.RestaurantAppModels.Menus;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Menus;
+using SystemyWP.API.DTOs.RestaurantApp;
 
 namespace SystemyWP.API.Profiles;
 

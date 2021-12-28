@@ -1,7 +1,7 @@
 ﻿using System;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Models.General.Logging;
 
 namespace SystemyWP.API.Services.Logging
 {

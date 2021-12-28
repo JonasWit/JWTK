@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.RestaurantAppModels.Access;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.Abstractions;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.Data.Models.RestaurantAppModels.Menus
+namespace SystemyWP.API.Data.Models.RestaurantAppModels.Menus
 {
     public class RestaurantAppMenu : TrackedModel
     {
@@ -22,7 +22,7 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Menus
         public List<RestaurantAppDish> RestaurantAppDishes { get; set; } = new();
         
         [Required]
-        public RestaurantAccessKey RestaurantAccessKey { get; set; }
+        public AccessKey AccessKey { get; set; }
         [Required]
         public int RestaurantAccessKeyId { get; set; }
     }

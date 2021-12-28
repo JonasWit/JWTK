@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SystemyWP.API.Forms.GeneralApp.Access
+namespace SystemyWP.API.Forms.Admin.Access
 {
     public class CreateAccessKeyForm
     {

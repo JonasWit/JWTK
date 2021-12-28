@@ -1,6 +1,6 @@
 using System;
-using SystemyWP.Data;
-using SystemyWP.Data.Models.General;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Models.UsersManagement;
 
 namespace SystemyWP.API.Repositories.General;
 

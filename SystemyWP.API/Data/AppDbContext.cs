@@ -1,12 +1,13 @@
-﻿using SystemyWP.Data.ContextBuilders;
-using SystemyWP.Data.Models.General;
-using Microsoft.EntityFrameworkCore;
-using SystemyWP.Data.Models.RestaurantAppModels.Access;
-using SystemyWP.Data.Models.RestaurantAppModels.Dishes;
-using SystemyWP.Data.Models.RestaurantAppModels.Ingredients;
-using SystemyWP.Data.Models.RestaurantAppModels.Menus;
+﻿using Microsoft.EntityFrameworkCore;
+using SystemyWP.API.Data.ContextBuilders;
+using SystemyWP.API.Data.Models.General.Logging;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Dishes;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Ingredients;
+using SystemyWP.API.Data.Models.RestaurantAppModels.Menus;
+using SystemyWP.API.Data.Models.UsersManagement;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.Data
+namespace SystemyWP.API.Data
 {
     public class AppDbContext : DbContext
     {
@@ -19,8 +20,7 @@ namespace SystemyWP.Data
         public DbSet<PortalLogRecord> PortalLogs { get; set; }
         public DbSet<ApiLogRecord> ApiLogs { get; set; }
         
-        //Restaurnat
-        public DbSet<RestaurantAccessKey> RestaurantAccessKeys { get; set; }
+        public DbSet<AccessKey> AccessKeys { get; set; }
         
         //Data
         public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
@@ -30,6 +30,12 @@ namespace SystemyWP.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+            
+            
+            
+            
+            
             modelBuilder.ConfigureRestaurantApp();
         }
     }

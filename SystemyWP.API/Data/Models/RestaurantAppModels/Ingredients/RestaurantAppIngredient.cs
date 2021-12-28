@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.Abstractions;
-using SystemyWP.Data.Models.RestaurantAppModels.Access;
+﻿using System.ComponentModel.DataAnnotations;
+using SystemyWP.API.Data.Enums;
+using SystemyWP.API.Data.Models.Abstractions;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
+namespace SystemyWP.API.Data.Models.RestaurantAppModels.Ingredients
 {
     public class RestaurantAppIngredient : TrackedModel
     {
@@ -20,10 +19,8 @@ namespace SystemyWP.Data.Models.RestaurantAppModels.Ingredients
         public float PricePerStack { get; set; }
         public float StackSize { get; set; }
 
-        public List<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; }
-        
         [Required]
-        public RestaurantAccessKey RestaurantAccessKey { get; set; }
+        public AccessKey AccessKey { get; set; }
         [Required]
         public int RestaurantAccessKeyId { get; set; }
     }

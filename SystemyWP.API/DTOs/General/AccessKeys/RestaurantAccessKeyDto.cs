@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Dtos.General.AccessKeys;
+namespace SystemyWP.API.DTOs.General.AccessKeys;
 
 public class RestaurantAccessKeyDto
 {

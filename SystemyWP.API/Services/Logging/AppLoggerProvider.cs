@@ -1,5 +1,5 @@
-﻿using SystemyWP.Data;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using SystemyWP.API.Data;
 
 namespace SystemyWP.API.Services.Logging
 {

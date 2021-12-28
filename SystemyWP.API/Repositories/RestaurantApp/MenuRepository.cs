@@ -1,5 +1,5 @@
 using SystemyWP.API.CustomAttributes;
-using SystemyWP.Data;
+using SystemyWP.API.Data;
 
 namespace SystemyWP.API.Repositories.RestaurantApp;
 

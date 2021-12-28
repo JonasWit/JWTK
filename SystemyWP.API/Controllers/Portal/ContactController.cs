@@ -5,9 +5,9 @@ using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Forms.Portal;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
-using SystemyWP.Data;
 using Microsoft.AspNetCore.Mvc;
-using SystemyWP.Data.Enums;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Enums;
 
 namespace SystemyWP.API.Controllers.Portal
 {

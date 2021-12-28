@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Data.Models.RestaurantAppModels.Access;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.Data.Models.General
+namespace SystemyWP.API.Data.Models.UsersManagement
 {
     public class User
     {
@@ -32,7 +33,8 @@ namespace SystemyWP.Data.Models.General
         
         public DateTime? LastLogin  { get; set; }
 
-        public RestaurantAccessKey RestaurantAccessKey { get; set; }
+        public List<Claim> Claims { get; set; } = new();
         
+        public List<AccessKey> AccessKeys { get; set; } = new();
     }
 }

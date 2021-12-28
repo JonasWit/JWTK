@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using SystemyWP.Data;
 using Microsoft.Extensions.Configuration;
+using SystemyWP.API.Data;
 
 namespace SystemyWP.API
 {

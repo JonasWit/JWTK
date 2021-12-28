@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SystemyWP.API.CustomAttributes;
-using SystemyWP.Data;
-using SystemyWP.Data.Enums;
-using SystemyWP.Data.Models.General;
+using SystemyWP.API.Data;
+using SystemyWP.API.Data.Enums;
+using SystemyWP.API.Data.Models.General.Logging;
 
 namespace SystemyWP.API.Services.Logging
 {

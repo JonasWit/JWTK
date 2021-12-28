@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using SystemyWP.Data.Models.RestaurantAppModels.Access;
+using SystemyWP.API.Data.Models.UsersManagement.Access;
 
-namespace SystemyWP.API.Dtos.General;
+namespace SystemyWP.API.DTOs.General;
 
 public class UserDto
 {
@@ -22,5 +21,5 @@ public class UserDto
         
     public DateTime? LastLogin  { get; set; }
 
-    public RestaurantAccessKey RestaurantAccessKey { get; set; }
+    public AccessKey AccessKey { get; set; }
 }

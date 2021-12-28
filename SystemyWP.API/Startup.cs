@@ -5,7 +5,6 @@ using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
-using SystemyWP.Data;
 using AspNetCoreRateLimit;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +19,7 @@ using SystemyWP.API.Repositories.General;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SystemyWP.API.Data;
 
 namespace SystemyWP.API
 {
