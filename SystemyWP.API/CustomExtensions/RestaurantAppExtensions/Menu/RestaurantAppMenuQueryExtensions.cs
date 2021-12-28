@@ -14,7 +14,6 @@ namespace SystemyWP.API.CustomExtensions.RestaurantAppExtensions.Menu
                 .Where(menu =>
                     context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).RestaurantAccessKey
                         .ExpireDate >= DateTime.UtcNow &&
-                    menu.Active == active &&
                     menu.RestaurantAccessKeyId == context.Users
                         .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).RestaurantAccessKey.Id);
             
@@ -39,9 +38,8 @@ namespace SystemyWP.API.CustomExtensions.RestaurantAppExtensions.Menu
         {
             var filteredSource = source
                 .Where(menu =>
-                    context.Users.FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).RestaurantAccessKey.ExpireDate >= DateTime.UtcNow &&
+                    context.Users.FirstOrDefault(u => u.Id.Equals(userId)).RestaurantAccessKey.ExpireDate >= DateTime.UtcNow &&
                     menu.Id == menuId &&
-                    menu.Active == active &&
                     menu.RestaurantAccessKeyId == context.Users
                         .FirstOrDefault(userEntity => userEntity.Id.Equals(userId)).RestaurantAccessKey.Id);
             

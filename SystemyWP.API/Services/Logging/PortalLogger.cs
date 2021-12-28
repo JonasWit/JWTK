@@ -30,9 +30,7 @@ namespace SystemyWP.API.Services.Logging
                 Endpoint = endpoint,
                 LogType = LogType.Access,
                 Description = description,
-                CreatedBy = createdBy,
                 UserEmail = user.Email,
-                UserName = user.UserName,
                 UserId = user.Id,
             });
             await _context.SaveChangesAsync();

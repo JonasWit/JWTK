@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using SystemyWP.API.CustomAttributes;
-using SystemyWP.API.Localization;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
@@ -10,18 +9,17 @@ using SystemyWP.Data;
 using AspNetCoreRateLimit;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Middleware;
+using SystemyWP.API.Repositories.General;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SystemyWP.API
 {
@@ -48,7 +46,8 @@ namespace SystemyWP.API
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("Default")));
-
+            services.AddScoped<IUserRepository, UserRepository>();
+            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             AddIdentity(services);
@@ -56,9 +55,7 @@ namespace SystemyWP.API
             services.AddControllers()
                 .AddFluentValidation(x =>
                     x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
-
-            services.AddRazorPages();
-
+            
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
             services.Configure<CorsSettings>(_configuration.GetSection(nameof(CorsSettings)));
 
@@ -92,12 +89,6 @@ namespace SystemyWP.API
 
             app.UseCustomResponseHeaders();
             app.UseCors(NuxtJsApp);
-            app.UseCookiePolicy(
-                new CookiePolicyOptions
-                {
-                    Secure = CookieSecurePolicy.Always,
-                    MinimumSameSitePolicy = SameSiteMode.Strict
-                });
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIpRateLimiting();
@@ -107,7 +98,6 @@ namespace SystemyWP.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapRazorPages();
             });
         }
 
@@ -138,69 +128,25 @@ namespace SystemyWP.API
 
         private void AddIdentity(IServiceCollection services)
         {
-            services.AddDbContext<ApiIdentityDbContext>(config =>
-                config.UseNpgsql(_configuration.GetConnectionString("Default")));
 
-            services.AddDataProtection()
-                .SetApplicationName("Systemywp")
-                .UseCryptographicAlgorithms(
-                    new AuthenticatedEncryptorConfiguration()
-                    {
-                        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-                        ValidationAlgorithm = ValidationAlgorithm.HMACSHA512
-                    })
-                .PersistKeysToDbContext<ApiIdentityDbContext>();
-
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtBearerOptions =>
+            {
+                jwtBearerOptions.RequireHttpsMetadata = true;
+                jwtBearerOptions.SaveToken = true;
+                jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.User.AllowedUserNameCharacters = SystemyWpConstants.CharacterSets.StandardSet;
-                    options.User.RequireUniqueEmail = true;
-
-                    if (_env.IsDevelopment())
-                    {
-                        options.Password.RequireDigit = false;
-                        options.Password.RequiredLength = 4;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-                        options.Lockout.MaxFailedAccessAttempts = 2;
-                        options.Lockout.AllowedForNewUsers = true;
-                    }
-                    else
-                    {
-                        options.Password.RequireDigit = true;
-                        options.Password.RequiredLength = 16;
-                        options.Password.RequireLowercase = true;
-                        options.Password.RequireUppercase = true;
-                        options.Password.RequireNonAlphanumeric = true;
-                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                        options.Lockout.MaxFailedAccessAttempts = 3;
-                        options.Lockout.AllowedForNewUsers = true;
-                    }
-                })
-                .AddErrorDescriber<PolishIdentityErrorDescriber>()
-                .AddEntityFrameworkStores<ApiIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<DataProtectionTokenProviderOptions>(options =>
-                options.TokenLifespan = TimeSpan.FromHours(24));
-
-            services.Configure<SecurityStampValidatorOptions>(options =>
-            {
-                options.ValidationInterval = TimeSpan.FromSeconds(10);
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue("JWTSettings:SecretKey", ""))),
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                };
             });
-
-            services.ConfigureApplicationCookie(config =>
-            {
-                config.LoginPath = SystemyWpConstants.Paths.LoginPath;
-                config.LogoutPath = SystemyWpConstants.Paths.LogoutPath;
-                config.Cookie.Domain = _configuration["CookieDomain"];
-                config.Cookie.Name = SystemyWpConstants.CookiesNames.IdCookie;
-                config.Cookie.HttpOnly = true;
-                config.Cookie.SameSite = SameSiteMode.Strict;
-            });
-
+            
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy

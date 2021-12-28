@@ -4,16 +4,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <UserSecretsId>651f1825-1930-428d-859e-b500f7733135</UserSecretsId>
     </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\SystemyWP.Data\SystemyWP.Data.csproj" />
-    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="AspNetCoreRateLimit" Version="4.0.1" />
         <PackageReference Include="AutoMapper" Version="10.1.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
         <PackageReference Include="AWSSDK.S3" Version="3.7.7.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
@@ -31,11 +28,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="CustomExtensions\RestaurantAppExtensions\Dish" />
-        <Folder Include="CustomExtensions\RestaurantAppExtensions\Ingredient" />
-        <Folder Include="Forms\RestaurantApp\Ingredient\Validation" />
+        <Folder Include="Controllers\RestaurantApp" />
         <Folder Include="Scripts" />
-        <Folder Include="ViewModels\LegalApp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Account\ChangePassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\Client.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\ForgotPassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\ForgotPasswordConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\Lockout.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\ResetPassword.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Account\ResetPasswordConfirmation.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Error.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Shared\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\_ViewImports.cshtml" />
     </ItemGroup>
 
 </Project>

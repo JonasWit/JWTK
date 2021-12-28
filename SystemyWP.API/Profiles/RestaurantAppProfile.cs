@@ -14,10 +14,5 @@ public class RestaurantAppProfile : Profile
                 s => s.RestaurantAppDishes, 
                 c => c.MapFrom(m => m.RestaurantAppDishes));
         CreateMap<RestaurantAppDish, RestaurantAppDishDto>();
-
-
-
-
-
     }
 }

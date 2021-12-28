@@ -1,6 +1,5 @@
 using SystemyWP.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,18 +14,17 @@ namespace SystemyWP.API
 
             using var scope = host.Services.CreateScope();
             var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var identityContext = scope.ServiceProvider.GetRequiredService<ApiIdentityDbContext>();
-
+            
             if (env.IsDevelopment())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                DataSeed.DevSeed(context, identityContext, userManager);
+                DataSeed.DevSeed(context);
             }
             else if (env.IsProduction())
             {
+                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                DataSeed.ProdAdminSeed(identityContext, userManager, config);
+                DataSeed.ProdAdminSeed(context, config);
             }
 
             host.Run();
