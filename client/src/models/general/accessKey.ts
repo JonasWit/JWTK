@@ -8,7 +8,4 @@ class AccessKey {
         this.name = name;
         this.applicationType = applicationType;
     }
-    
-    
-    
 } 
