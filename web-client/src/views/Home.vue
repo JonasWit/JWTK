@@ -17,7 +17,7 @@
 
       <div>
         <div>
-          <img src="/img/restaurant-card.jpg" alt="gastronomia">
+          <img src="/img/restaurant-card-sm.jpg" alt="gastronomia">
           <div>
             <span>Gastronomia</span>
           </div>
