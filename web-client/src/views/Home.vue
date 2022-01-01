@@ -1,9 +1,9 @@
 <template>
   <div>
     <p>Home page</p>
-    
+
     <h4>Zobacz co mamy</h4>
-    
+
     <div>
       <div>
         <img src="" alt="">
@@ -13,26 +13,21 @@
         </div>
       </div>
 
-      <h4>Rzowiązania dla firm</h4>    
-      
+      <h4>Rzowiązania dla firm</h4>
+
       <div>
-        
-        
-        
-        
-        
-        
+        <div>
+          <img src="/img/restaurant-card.jpg" alt="gastronomia">
+          <div>
+            <span>Gastronomia</span>
+          </div>
+        </div>
+
+
       </div>
-      
-      
-      
-      
-      
     </div>
     
-    
-    
-    
+
   </div>
 </template>
 
@@ -40,7 +35,6 @@
 
 export default {
   name: 'Home',
-  components: {
-  }
+  components: {}
 }
 </script>
