@@ -2,7 +2,7 @@
   <div>
     <p>Home page</p>
 
-    <h4>Zobacz co mamy</h4>
+    <h4 class="font-bold">Rzowiązania indywidualne</h4>
 
     <div>
       <div>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <h4>Rzowiązania dla firm</h4>
+      <h4 class="font-bold">Rozwiązania dla firm</h4>
 
       <div>
         <div>
