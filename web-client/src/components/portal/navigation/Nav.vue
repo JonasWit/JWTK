@@ -1,7 +1,7 @@
 <template>
 <nav>
   <div>
-    <h1>
+    <h1 class="font-bold uppercase p-4">
       <router-link to="/">systemywp</router-link>    
     </h1>
   </div>

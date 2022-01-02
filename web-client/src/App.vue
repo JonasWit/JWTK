@@ -1,6 +1,6 @@
 <template>
   <Nav/>
-  <main>
+  <main class="px-12 py-6">
     <Authorization/>
     <router-view/>
   </main>

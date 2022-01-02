@@ -1,15 +1,16 @@
 <template>
   <div>
-    <p>Home page</p>
-
-    <h4 class="font-bold">Rzowiązania indywidualne</h4>
-
+    
+    
+    
+    
+    
     <div>
       <div>
         <img src="" alt="">
         <div>
-          <span>Rozwiązania Indywidualne</span>
-          <span>Zaprojektujem i budujemy aplikacje</span>
+          <span>Rozwiązania Indywidualne dla Firm</span>
+          <span>Projektujemy i budujemy aplikacje</span>
         </div>
       </div>
 
