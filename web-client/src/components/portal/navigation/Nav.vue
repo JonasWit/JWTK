@@ -1,7 +1,7 @@
 <template>
 <nav>
   <div>
-    <h1 class="font-bold uppercase p-4">
+    <h1 class="font-bold uppercase p-4 border-b border-gray-100">
       <router-link to="/">systemywp</router-link>    
     </h1>
   </div>
@@ -17,7 +17,7 @@
       </router-link>
     </li>
     <li>
-      <router-link :to="{ 'name': 'About' }">
+      <router-link :to="{ 'name': 'Contact' }">
         <span>Kontakt</span>
       </router-link>
     </li>

@@ -1,12 +1,10 @@
 <template>
-<div>
-  
-</div>
+  <div>Contact page</div>
 </template>
 
 <script>
 export default {
-  name: "HomeCard"
+  name: "Contact"
 }
 </script>
 

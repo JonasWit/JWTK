@@ -4,6 +4,7 @@ import Login from "@/views/Login";
 import Register from "@/views/Register";
 import About from "@/views/About";
 import Privacy from "@/views/Privacy";
+import Contact from "@/views/Contact";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/privacy',
     name: 'Privacy',
     component: Privacy
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: Contact
   },
   {
     path: '/register',
