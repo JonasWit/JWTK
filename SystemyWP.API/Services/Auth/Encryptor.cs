@@ -7,7 +7,12 @@ namespace SystemyWP.API.Services.Auth;
 
 [TransientService]
 public class Encryptor
-{        
+{
+    public Encryptor()
+    {
+        
+    }
+    
     public string Encrypt(string password)
     {
         var provider = MD5.Create();

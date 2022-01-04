@@ -58,6 +58,7 @@ namespace SystemyWP.API
             
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
             services.Configure<CorsSettings>(_configuration.GetSection(nameof(CorsSettings)));
+            services.Configure<AuthSettings>(_configuration.GetSection(nameof(AuthSettings)));
 
             AddMarkedServices(services);
 
@@ -128,7 +129,6 @@ namespace SystemyWP.API
 
         private void AddIdentity(IServiceCollection services)
         {
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -140,7 +140,7 @@ namespace SystemyWP.API
                 jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue("JWTSettings:SecretKey", ""))),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue("AuthSettings:SecretKey", ""))),
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuer = true,
                     ValidateAudience = true,
