@@ -2,7 +2,7 @@
 <nav>
   <div>
     <h1 class="font-bold uppercase p-4 border-b border-gray-100">
-      <router-link to="/">systemywp</router-link>    
+      <router-link class="text-blue-700" to="/">systemywp</router-link>    
     </h1>
   </div>
   <ul>
