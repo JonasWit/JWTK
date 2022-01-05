@@ -3,6 +3,10 @@
     <header>
       <h2 class="text-gray-700 text-4xl font-semibold">Rozwiązania dla Firm</h2>
     </header>
+
+
+    <SwitchButton/>
+    
     <div>
 
       <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Rozwiązania Indywidualne</h4>
@@ -34,11 +38,13 @@
 
 <script>
 
+import SwitchButton from "@/components/generic/SwitchButton";
 export default {
   name: 'Home',
-  components: {},
+  components: {SwitchButton},
   setup(){
     
   }
 }
 </script>
+
