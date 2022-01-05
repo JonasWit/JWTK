@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Data.ContextBuilders;
 using SystemyWP.API.Data.Models.General.Logging;
-using SystemyWP.API.Data.Models.RestaurantAppModels.Dishes;
-using SystemyWP.API.Data.Models.RestaurantAppModels.Ingredients;
-using SystemyWP.API.Data.Models.RestaurantAppModels.Menus;
 using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Data.Models.UsersManagement.Access;
 
@@ -15,28 +11,31 @@ namespace SystemyWP.API.Data
         {
         }
 
-        //Portal
         public DbSet<User> Users { get; set; }
         public DbSet<PortalLogRecord> PortalLogs { get; set; }
         public DbSet<ApiLogRecord> ApiLogs { get; set; }
-        
         public DbSet<AccessKey> AccessKeys { get; set; }
-        
-        //Data
-        public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
-        public DbSet<RestaurantAppDish> RestaurantAppDishes { get; set; }      
-        public DbSet<RestaurantAppIngredient> RestaurantAppIngredients { get; set; }  
-        public DbSet<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; }  
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            
-            
-            
-            
-            
-            modelBuilder.ConfigureRestaurantApp();
+            modelBuilder.Entity<User>()
+                .HasOne(x => x.AccessKey)
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Claims)
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Claims)
+                .WithOne(x => x.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AccessKey>()
+                .HasMany(x => x.AllowedUsers)
+                .WithMany(x => x.AllowedKeys);
         }
     }
 }

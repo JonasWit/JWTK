@@ -1,23 +1,27 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
 using SystemyWP.API.CustomAttributes;
+using SystemyWP.API.Settings;
 
 namespace SystemyWP.API.Services.Auth;
 
 [TransientService]
 public class Encryptor
 {
-    public Encryptor()
+    private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
+
+    public Encryptor(IOptionsMonitor<AuthSettings> optionsMonitor)
     {
-        
+        _optionsMonitor = optionsMonitor;
     }
-    
+
     public string Encrypt(string password)
     {
-        var provider = MD5.Create();
-        var salt = "S0m3R@nd0mSalt";
-        var bytes = provider.ComputeHash(Encoding.UTF32.GetBytes(salt + password));
+        var bytes = SHA512
+            .Create()
+            .ComputeHash(Encoding.UTF32.GetBytes(_optionsMonitor.CurrentValue.Salt + password));
         return BitConverter.ToString(bytes).Replace("-", "").ToLower();
     }
 }

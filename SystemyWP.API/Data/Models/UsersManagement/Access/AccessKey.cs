@@ -9,15 +9,12 @@ namespace SystemyWP.API.Data.Models.UsersManagement.Access
     {
         [Key]
         [Required]
-        public long Id { get; set; }  
-        
-        [Required] 
-        [MaxLength(100)] 
-        public string Name { get; set; }
+        [MaxLength(512)]
+        public string Id { get; set; }
 
-        [Required] 
-        public ApplicationType ApplicationType { get; set; }
-        
-        public List<User> Users { get; set; } = new();
+        public User User { get; set; }
+        public string UserId { get; set; }
+
+        public List<User> AllowedUsers { get; set; }
     }
 }

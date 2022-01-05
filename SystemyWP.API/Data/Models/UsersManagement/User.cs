@@ -27,6 +27,8 @@ namespace SystemyWP.API.Data.Models.UsersManagement
         [MaxLength(48)]
         public string Role { get; set; }
         
+        public string PasswordResetToken { get; set; }
+        
         public bool EmailConfirmed { get; set; }
 
         public bool IsLocked { get; set; }
@@ -34,7 +36,10 @@ namespace SystemyWP.API.Data.Models.UsersManagement
         public DateTime? LastLogin  { get; set; }
 
         public List<Claim> Claims { get; set; } = new();
-        
-        public List<AccessKey> AccessKeys { get; set; } = new();
+
+        public List<AccessKey> AllowedKeys { get; set; }
+
+        public AccessKey AccessKey { get; set; }
+        public string AccessKeyId { get; set; }
     }
 }

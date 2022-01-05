@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Controllers\RestaurantApp" />
+        <Folder Include="CustomExtensions\RestaurantAppExtensions" />
         <Folder Include="Scripts" />
     </ItemGroup>
 

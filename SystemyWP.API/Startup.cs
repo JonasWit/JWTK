@@ -20,6 +20,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SystemyWP.API.Data;
+using SystemyWP.API.Services.Auth;
 
 namespace SystemyWP.API
 {
@@ -44,25 +45,24 @@ namespace SystemyWP.API
             services.Configure<IpRateLimitPolicies>(_configuration.GetSection("IpRateLimitPolicies"));
             services.AddInMemoryRateLimiting();
 
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(_configuration.GetConnectionString("Default")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_configuration.GetConnectionString("Default")));
             services.AddScoped<IUserRepository, UserRepository>();
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             AddIdentity(services);
 
-            services.AddControllers()
-                .AddFluentValidation(x =>
-                    x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
+            services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
             
             services.Configure<SendGridOptions>(_configuration.GetSection(nameof(SendGridOptions)));
             services.Configure<CorsSettings>(_configuration.GetSection(nameof(CorsSettings)));
             services.Configure<AuthSettings>(_configuration.GetSection(nameof(AuthSettings)));
-
-            AddMarkedServices(services);
-
+            
             services.AddScoped<EmailClient>();
+            services.AddScoped<PortalLogger>();
+            services.AddTransient<Encryptor>();
+            services.AddTransient<JwtManager>();
+            
             services.AddFileServices(_configuration);
 
             services.AddCors(options => options.AddPolicy(NuxtJsApp, build => build
@@ -101,32 +101,7 @@ namespace SystemyWP.API
                 endpoints.MapDefaultControllerRoute();
             });
         }
-
-        private void AddMarkedServices(IServiceCollection services)
-        {
-            var transientServiceType = typeof(TransientService);
-            var scopedServiceType = typeof(ScopedService);
-            var singletonServiceType = typeof(SingletonService);
-
-            var appDefinedTransientTypes = transientServiceType.Assembly.DefinedTypes.ToList();
-            var appDefinedScopedTypes = scopedServiceType.Assembly.DefinedTypes.ToList();
-            var appDefinedSingletonTypes = singletonServiceType.Assembly.DefinedTypes.ToList();
-
-            var transientServices = appDefinedTransientTypes
-                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<TransientService>() != null);
-            var scopedServices = appDefinedScopedTypes
-                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<ScopedService>() != null);
-            var singletonServices = appDefinedSingletonTypes
-                .Where(typeInfo => typeInfo.GetTypeInfo().GetCustomAttribute<SingletonService>() != null);
-
-            foreach (var service in transientServices)
-                services.AddTransient(service);
-            foreach (var service in scopedServices)
-                services.AddScoped(service);
-            foreach (var service in singletonServices)
-                services.AddSingleton(service);
-        }
-
+        
         private void AddIdentity(IServiceCollection services)
         {
             services.AddAuthentication(options =>
@@ -153,34 +128,12 @@ namespace SystemyWP.API
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
                         SystemyWpConstants.Roles.User,
-                        SystemyWpConstants.Roles.PortalAdmin,
-                        SystemyWpConstants.Roles.UserAdmin));
+                        SystemyWpConstants.Roles.Admin));
 
-                options.AddPolicy(SystemyWpConstants.Policies.UserAdmin, policy => policy
+                options.AddPolicy(SystemyWpConstants.Policies.Admin, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim(SystemyWpConstants.Claims.Role,
-                        SystemyWpConstants.Roles.PortalAdmin,
-                        SystemyWpConstants.Roles.UserAdmin));
-
-                options.AddPolicy(SystemyWpConstants.Policies.PortalAdmin, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.Role,
-                        SystemyWpConstants.Roles.PortalAdmin));
-
-                options.AddPolicy(SystemyWpConstants.Policies.LegalAppAccess, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
-                        SystemyWpConstants.Apps.LegalApp));
-
-                options.AddPolicy(SystemyWpConstants.Policies.MedicalAppAccess, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
-                        SystemyWpConstants.Apps.MedicalApp));
-
-                options.AddPolicy(SystemyWpConstants.Policies.RestaurantAppAccess, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(SystemyWpConstants.Claims.AppAccess,
-                        SystemyWpConstants.Apps.RestaurantApp));
+                        SystemyWpConstants.Roles.Admin));
             });
         }
     }
