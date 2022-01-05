@@ -1,7 +1,4 @@
 using System;
-using System.Linq;
-using System.Reflection;
-using SystemyWP.API.CustomAttributes;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
@@ -100,6 +97,8 @@ namespace SystemyWP.API
             {
                 endpoints.MapDefaultControllerRoute();
             });
+            
+            DBManager.PrepareDatabase(app);
         }
         
         private void AddIdentity(IServiceCollection services)
