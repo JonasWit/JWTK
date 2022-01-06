@@ -15,6 +15,16 @@ namespace SystemyWP.API
             public const string LoginPath = @"/Account/Login";
             public const string LogoutPath = @"/api/auth/logout";
         }
+        
+        public struct AuthenticationType
+        {
+            public const string ServerAuth = nameof(ServerAuth);
+        }
+        
+        public struct CorsName
+        {
+            public const string ClientApp = nameof(ClientApp);
+        }
 
         public struct Patterns
         {

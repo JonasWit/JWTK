@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.Portal.Validation
+namespace SystemyWP.API.Forms.Conact.Validation
 {
     public class ContactFormValidation : AbstractValidator<ContactForm>
     {

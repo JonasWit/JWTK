@@ -8,23 +8,23 @@ namespace SystemyWP.API.Data.Models.UsersManagement
     public class User
     {
         [Key]
-        [Required]    
-        [MaxLength(265)]
-        public string Id { get; set; }
-        
-        public string Image { get; set; }
-
         [Required]
-        [MaxLength(265)]
+        [MaxLength(128)]
+        public string Id { get; set; }     
+        
+        [Required]
+        [MaxLength(128)]
         [EmailAddress]
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
         
         [Required]
         [MaxLength(512)]
         public string Password { get; set; }
         
+        public string Image { get; set; }
+        
         [Required]
-        [MaxLength(48)]
+        [MaxLength(64)]
         public string Role { get; set; }
         
         public string PasswordResetToken { get; set; }
@@ -35,7 +35,7 @@ namespace SystemyWP.API.Data.Models.UsersManagement
         
         public DateTime? LastLogin  { get; set; }
 
-        public List<Claim> Claims { get; set; } = new();
+        public List<UserClaim> Claims { get; set; } = new();
 
         public List<AccessKey> AllowedKeys { get; set; }
 

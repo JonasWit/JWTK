@@ -1,24 +1,112 @@
+using System;
+using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.Logging;
+using SystemyWP.API.Settings;
+using AspNetCoreRateLimit;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SystemyWP.API.Middleware;
+using SystemyWP.API.Repositories.General;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using SystemyWP.API;
 using SystemyWP.API.Data;
+using SystemyWP.API.Services.Auth;
 
-namespace SystemyWP.API
+var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+
+builder.Services.AddOptions();
+builder.Services.AddMemoryCache();
+
+builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
+builder.Services.AddInMemoryRateLimiting();
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+            
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddAuthentication(options =>
 {
-    public class Program
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(jwtBearerOptions =>
+{
+    jwtBearerOptions.RequireHttpsMetadata = true;
+    jwtBearerOptions.SaveToken = true;
+    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
     {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue("AuthSettings:SecretKey", ""))),
+        ClockSkew = TimeSpan.Zero,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+    };
+});
+            
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy
+        .RequireAuthenticatedUser()
+        .RequireClaim(SystemyWpConstants.Claims.Role,
+            SystemyWpConstants.Roles.User,
+            SystemyWpConstants.Roles.Admin));
 
-            host.Run();
-        }
+    options.AddPolicy(SystemyWpConstants.Policies.Admin, policy => policy
+        .RequireAuthenticatedUser()
+        .RequireClaim(SystemyWpConstants.Claims.Role,
+            SystemyWpConstants.Roles.Admin));
+});
 
-        private static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-        }
-    }
+builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
+            
+builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
+builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
+builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
+            
+builder.Services.AddScoped<EmailClient>();
+builder.Services.AddScoped<PortalLogger>();
+builder.Services.AddTransient<Encryptor>();
+
+builder.Services.AddFileServices(configuration);
+
+builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsName.ClientApp, build => build
+    .AllowAnyHeader()
+    .WithOrigins(configuration.GetValue("CorsSettings:PortalUrl", ""))
+    .AllowAnyMethod()
+    .AllowCredentials()));
+
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseCustomResponseHeaders();
+app.UseCors(SystemyWpConstants.CorsName.ClientApp);
+app.UseStaticFiles();
+app.UseRouting();
+app.UseIpRateLimiting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+});
+            
+DBManager.PrepareDatabase(app);
+Console.WriteLine("--> App has started...");
+
+app.Run();

@@ -1,21 +1,32 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.Extensions;
 using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Forms.Portal;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Enums;
+using SystemyWP.API.Forms.Conact;
 
 namespace SystemyWP.API.Controllers.Portal
 {
     [Route("/api/[controller]")]
     public class ContactController : ApiControllerBase
     {
-        public ContactController(PortalLogger portalLogger, AppDbContext context, IMapper mapper) : base(portalLogger, context, mapper)
+        private readonly PortalLogger _portalLogger;
+        private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+
+        public ContactController(
+            PortalLogger portalLogger, 
+            AppDbContext context, 
+            IMapper mapper)
         {
+            _portalLogger = portalLogger;
+            _context = context;
+            _mapper = mapper;
         }
 
         [HttpPost("request")]
@@ -34,32 +45,9 @@ namespace SystemyWP.API.Controllers.Portal
             }
             catch (Exception e)
             {
-                await NewLog(LogType.Exception, e);
+                await _portalLogger.Log(HttpContext.Request.Path.Value, UserId, LogType.Exception, e);
                 return ServerError;
             }
         }
-        
-        // [HttpPost("lapp/support-request")]
-        // [Authorize(SystemyWpConstants.Policies.User)]
-        // public async Task<IActionResult> LegaAppSupportRequest(
-        //     [FromServices] EmailClient emailClient)
-        // {
-        //     try
-        //     {
-        //         // await emailClient.SendEmailAsync(
-        //         //     SystemyWpConstants.Emails.SupportAddress,
-        //         //     $"Support Request - Legal App |{UserEmail}| {form.Subject}",
-        //         //     form.Body);
-        //         
-        //         return Ok();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         await NewLog(LogType.Exception, e);
-        //         return ServerError;
-        //     }
-        // }
-
-
     }
 }

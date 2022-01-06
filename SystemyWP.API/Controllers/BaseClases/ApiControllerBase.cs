@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using SystemyWP.API.Services.Logging;
@@ -13,29 +15,13 @@ namespace SystemyWP.API.Controllers.BaseClases
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase
     {
-        protected readonly PortalLogger _portalLogger;
-        protected readonly AppDbContext _context;
-        protected readonly IMapper _mapper;
-
         protected IActionResult ServerError => StatusCode(StatusCodes.Status500InternalServerError, "Error occured contact admin");
 
-        protected ApiControllerBase(PortalLogger portalLogger, AppDbContext context, IMapper mapper)
-        {
-            _portalLogger = portalLogger;
-            _context = context;
-            _mapper = mapper;
-        }
-
-        protected Task NewLog(LogType logType, Exception ex = null, string description = "")
-        {
-            return _portalLogger.Log(new PortalLogRecord
-            {
-                LogType = logType,
-                ExceptionMessage = ex?.Message,
-                ExceptionStackTrace = ex?.StackTrace,
-                Endpoint = HttpContext.Request.Path.Value,
-                Description = description
-            });
-        }
+        protected string UserId => GetClaim(ClaimTypes.NameIdentifier);
+        protected string UserEmail => GetClaim(ClaimTypes.Email);
+        protected string Role => GetClaim(SystemyWpConstants.Claims.Role);
+        
+        private string GetClaim(string claimType) => User.Claims
+            .FirstOrDefault(x => x.Type.Equals(claimType))?.Value;
     }
 }

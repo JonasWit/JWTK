@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.API.Forms.Admin
+﻿namespace SystemyWP.API.Forms.User
 {
     public class UserCredentialsForm
     {

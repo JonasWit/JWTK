@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.Admin.Validation
+namespace SystemyWP.API.Forms.User.Validation
 {
     public class UserCredentialsFormValidation : AbstractValidator<UserCredentialsForm>
     {

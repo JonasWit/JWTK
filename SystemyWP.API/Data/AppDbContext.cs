@@ -28,11 +28,6 @@ namespace SystemyWP.API.Data
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<User>()
-                .HasMany(x => x.Claims)
-                .WithOne(x => x.User)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<AccessKey>()
                 .HasMany(x => x.AllowedUsers)
                 .WithMany(x => x.AllowedKeys);

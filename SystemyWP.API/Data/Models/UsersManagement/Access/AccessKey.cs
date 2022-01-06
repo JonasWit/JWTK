@@ -13,7 +13,6 @@ namespace SystemyWP.API.Data.Models.UsersManagement.Access
         public string Id { get; set; }
 
         public User User { get; set; }
-        public string UserId { get; set; }
 
         public List<User> AllowedUsers { get; set; }
     }

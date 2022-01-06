@@ -4,6 +4,6 @@
     {
         Access = 0,
         Exception = 1,
-        Issue = 2,
+        Warning = 2,
     }
 }

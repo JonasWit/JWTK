@@ -1,13 +1,14 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using SystemyWP.API.CustomAttributes;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Enums;
 using SystemyWP.API.Data.Models.General.Logging;
+using SystemyWP.API.Data.Models.UsersManagement;
 
 namespace SystemyWP.API.Services.Logging
 {
-    [TransientService]
     public class PortalLogger
     {
         private readonly AppDbContext _context;
@@ -23,15 +24,27 @@ namespace SystemyWP.API.Services.Logging
             await _context.SaveChangesAsync();
         }
         
-        public async Task Log(string endpoint, IdentityUser user, LogType logType, string description, string createdBy)
+        public async Task Log(string endpoint, string userId, LogType logType, string description)
         {
             _context.PortalLogs.Add(new PortalLogRecord
             {
                 Endpoint = endpoint,
                 LogType = LogType.Access,
                 Description = description,
-                UserEmail = user.Email,
-                UserId = user.Id,
+                UserEmail = userId,
+            });
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task Log(string endpoint, string userId, LogType logType, Exception ex)
+        {
+            _context.PortalLogs.Add(new PortalLogRecord
+            {
+                ExceptionStackTrace = ex.StackTrace,
+                Endpoint = endpoint,
+                LogType = LogType.Access,
+                Description = ex.Message,
+                UserEmail = userId,
             });
             await _context.SaveChangesAsync();
         }

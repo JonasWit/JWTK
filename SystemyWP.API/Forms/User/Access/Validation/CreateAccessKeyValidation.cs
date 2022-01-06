@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.Admin.Access.Validation
+namespace SystemyWP.API.Forms.User.Access.Validation
 {
     public class CreateAccessKeyValidation: AbstractValidator<CreateAccessKeyForm>
     {
