@@ -67,7 +67,7 @@ namespace SystemyWP.API.Controllers.Users
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 return ServerError;
             }
         }
@@ -90,7 +90,7 @@ namespace SystemyWP.API.Controllers.Users
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 return ServerError;
             }
         }

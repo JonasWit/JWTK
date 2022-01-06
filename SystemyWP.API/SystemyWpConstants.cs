@@ -15,7 +15,9 @@ namespace SystemyWP.API
             public const string LoginPath = @"/Account/Login";
             public const string LogoutPath = @"/api/auth/logout";
         }
-        
+
+        public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
+
         public struct AuthenticationType
         {
             public const string ServerAuth = nameof(ServerAuth);
