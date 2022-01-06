@@ -1,4 +1,4 @@
-class UserModel {
+export class UserModel {
     constructor(id, email, role, claims, accessKeys) {
         this.id = id;
         this.email = email;
@@ -8,14 +8,14 @@ class UserModel {
     }
 }
 
-class ClaimModel {
+export class ClaimModel {
     constructor(claimType, claimValue) {
         this.claimType = claimType;
         this.claimValue = claimValue;
     }
 }
 
-class AccessKeyModel {
+export class AccessKeyModel {
     constructor(claimType, email) {
         this.claimType = claimType;
         this.email = email;

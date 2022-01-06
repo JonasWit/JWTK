@@ -6,6 +6,7 @@ import About from "@/views/About";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
+import Gastronomy from "@/views/gastronomy/Gastronomy";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/gastronomy/gastronomy',
+    name: 'Gastronomy',
+    component: Gastronomy
   },
   // {
   //   path: '/about',
