@@ -1,23 +1,59 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from "@/views/Login";
-import Register from "@/views/Register";
 import About from "@/views/About";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
-import Gastronomy from "@/views/gastronomy/Gastronomy";
+import Gastronomy from "@/views/apps/Gastronomy";
+import Login from "@/views/auth/Login";
+import Register from "@/views/auth/Register";
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      title: 'systemywp.pl',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'The home page of our example app.'
+        },
+        {
+          property: 'og:description',
+          content: 'The home page of our example app.'
+        }
+      ]
+    }
   },
   {
-    path: '/login',
+    path: '/auth/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      title: 'Logowanie',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'The home page of our example app.'
+        },
+      ]
+    }
+  },
+  {
+    path: '/auth/register',
+    name: 'Register',
+    component: Register,
+    meta: {
+      title: 'Rejestracja',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'The home page of our example app.'
+        },
+      ]
+    }
   },
   {
     path: '/about',
@@ -35,17 +71,12 @@ const routes = [
     component: Contact
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: Register
-  },
-  {
     path: '/profile',
     name: 'Profile',
     component: Profile
   },
   {
-    path: '/gastronomy/gastronomy',
+    path: '/apps/gastronomy',
     name: 'Gastronomy',
     component: Gastronomy
   },
@@ -64,5 +95,35 @@ const router = createRouter({
   routes,
   mode: "history"
 })
+
+//Tab Title
+router.beforeEach((to, from, next) => {
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+  const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+
+  if(nearestWithTitle) {
+    document.title = nearestWithTitle.meta.title;
+  } else if(previousNearestWithMeta) {
+    document.title = previousNearestWithMeta.meta.title;
+  }
+
+  Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
+
+  if(!nearestWithMeta) return next();
+  nearestWithMeta.meta.metaTags.map(tagDef => {
+    const tag = document.createElement('meta');
+
+    Object.keys(tagDef).forEach(key => {
+      tag.setAttribute(key, tagDef[key]);
+    });
+
+    tag.setAttribute('data-vue-router-controlled', '');
+
+    return tag;
+  }).forEach(tag => document.head.appendChild(tag));
+
+  next();
+});
 
 export default router

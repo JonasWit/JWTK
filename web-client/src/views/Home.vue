@@ -1,14 +1,8 @@
 <template>
   <div>
-    <header>
-      <h2 class="text-gray-700 text-4xl font-semibold">Rozwiązania dla Firm</h2>
-    </header>
-    
     <div>
-      <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Rozwiązania Indywidualne</h4>
-
+      <h4 class="font-bold mt-12 pb-2 border-b border-gray-200 text-xl text-center">Rozwiązania dla Firm</h4>
       <div class="mt-8 grid lg:grid-cols-3 gap-7">
-        
         <div class="portal-card">
           <img src="/img/individual.jpg" alt="inidividual-solutions" class="w-full h-32 sm:h-48 object-cover">
           <div class="m-4">
@@ -16,10 +10,9 @@
             <span class="block text-gray-500 text-sm">Projektujemy i budujemy aplikacje dla każdego rodzaju działalności</span>
           </div>
           <div class="portal-badge">
-            <span class="text-gray-500">Darmowa Wycena</span>
+            <span class="text-customClassicBlue">Darmowa Wycena</span>
           </div>
         </div>
-
         <div class="portal-card">
           <img src="/img/restaurant-card-sm.jpg" alt="gastronomy" class="w-full h-32 sm:h-48 object-cover">
           <div class="m-4">
@@ -27,10 +20,9 @@
             <span class="block text-gray-500 text-sm">Twórz własne dania i komponuj z nich Menu. Zarządzaj pracą kuchni.</span>
           </div>
           <div class="portal-badge">
-            <span class="text-gray-500">Darmowy Dostęp</span>
+            <span class="text-customClassicBlue">Darmowy Dostęp</span>
           </div>
         </div>
-
         <div class="portal-card">
           <img src="/img/warehouse-card-sm.jpg" alt="logistics" class="w-full h-32 sm:h-48 object-cover">
           <div class="m-4">
@@ -38,25 +30,10 @@
             <span class="block text-gray-500 text-sm">Zarządzaj Logistyką</span>
           </div>
           <div class="portal-badge">
-            <span class="text-gray-500">Darmowy Dostęp</span>
+            <span class="text-customClassicBlue">Darmowy Dostęp</span>
           </div>
         </div>
-        
       </div>
-
-<!--      <h4 class="font-bold mt-12 pb-2 border-b border-gray-200">Branże</h4>-->
-
-<!--      <div class="mt-8">-->
-<!--        -->
-<!--        <div>-->
-<!--          <img src="/img/restaurant-card-sm.jpg" alt="gastronomy">-->
-<!--          <div>-->
-<!--            <span>Gastronomia</span>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        -->
-<!--      </div>-->
-
     </div>
   </div>
 </template>

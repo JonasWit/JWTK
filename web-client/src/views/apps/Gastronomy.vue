@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "GastronomyApp"
+  name: "Gastronomy"
 }
 </script>
 
