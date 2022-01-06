@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
@@ -21,6 +22,12 @@ using SystemyWP.API.Data;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
+});
+
 var configuration = builder.Configuration;
 
 builder.Services.AddOptions();
@@ -88,6 +95,7 @@ builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsNam
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
