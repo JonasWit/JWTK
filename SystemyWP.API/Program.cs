@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
@@ -11,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SystemyWP.API.Middleware;
 using SystemyWP.API.Repositories.General;
 using System.Text;
@@ -22,6 +20,7 @@ using SystemyWP.API.Data;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 
 builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
 {

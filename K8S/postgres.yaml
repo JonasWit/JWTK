@@ -1,3 +1,4 @@
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -39,7 +40,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: pvc-master
+            claimName: pvc
 ---
 apiVersion: v1
 kind: Service
