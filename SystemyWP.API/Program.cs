@@ -32,11 +32,12 @@ var configuration = builder.Configuration;
 builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
 
+//IP Rate limiting
 builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
 builder.Services.AddInMemoryRateLimiting();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
             
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -74,7 +75,9 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
-            
+
+// Options from Settings
+builder.Services.Configure<ClusterServices>(configuration.GetSection(nameof(ClusterServices)));
 builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
 builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));

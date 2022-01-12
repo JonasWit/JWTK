@@ -12,17 +12,13 @@ namespace SystemyWP.API.Gastronomy.Data.Models.Ingredients
         
         public float UsedAmount { get; set; }
         
-        [Required]
         public RestaurantAppDish RestaurantAppDish { get; set; }
-        [Required]
-        public long RestaurantAppDishId { get; set; }        
-        
-        [Required]
+        public long RestaurantAppDishId { get; set; }
+
         public RestaurantAppIngredient RestaurantAppIngredient { get; set; }
-        [Required]
         public long RestaurantAppIngredientId { get; set; }
         
         [Required]
-        public string AccessKey { get; set; }
+        public string AccessKey { get; set; }= "";
     }
 }

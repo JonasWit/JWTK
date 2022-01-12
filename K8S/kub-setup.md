@@ -3,6 +3,10 @@
 export KUBECONFIG=test-kubeconfig.yaml
 export KUBE_EDITOR=vim
 
+### Add Secret for .NET
+
+kubectl create secret generic secret-appsettings --from-file=./appsettings.secrets.json
+
 ### Create PVC
 
 kubectl create -f pvc.yaml

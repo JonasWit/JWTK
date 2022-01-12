@@ -7,10 +7,10 @@ public class DBManager
     public static void PrepareDatabase(IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
-        SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>());
+        SeedData(serviceScope.ServiceProvider.GetRequiredService<AppDbContext>());
     }
 
-    private static void SeedData(AppDbContext context)
+    private static void SeedData(DbContext context)
     {
         Console.WriteLine("--> Attempting to apply migrations...");
         try

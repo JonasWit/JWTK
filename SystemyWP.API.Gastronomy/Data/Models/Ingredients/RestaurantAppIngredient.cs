@@ -12,13 +12,13 @@ namespace SystemyWP.API.Gastronomy.Data.Models.Ingredients
         
         [Required]
         [MaxLength(500)]
-        public string Name { get; set; }
+        public string Name { get; set; }= "";
         public MeasurementUnits MeasurementUnits { get; set; }
 
         public float PricePerStack { get; set; }
         public float StackSize { get; set; }
 
         [Required]
-        public string AccessKey { get; set; }
+        public string AccessKey { get; set; }= "";
     }
 }
