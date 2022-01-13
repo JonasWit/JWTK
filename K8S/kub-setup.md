@@ -1,3 +1,15 @@
+### Docker Commands
+
+docker build -t systemywp/master:gate_v1 .
+docker push systemywp/master:gate_v1
+
+### Private Docker
+
+docker login - locally
+kubectl create secret generic docker-key \
+--from-file=.dockerconfigjson=.docker/config.json \
+--type=kubernetes.io/dockerconfigjson
+
 ### Setup kubectl
 
 export KUBECONFIG=test-kubeconfig.yaml
