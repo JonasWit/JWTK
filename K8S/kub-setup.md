@@ -1,12 +1,12 @@
 ### Docker Commands
 
-docker build -t systemywp/master:gate_v1 .
-docker push systemywp/master:gate_v1
+docker build -t systemywp/master:[tag name] .
+docker push systemywp/master:[tag name]
 
 ### Private Docker
 
 docker login - locally
-kubectl create secret generic docker-key \
+kubectl create secret generic [docker-key or some name] \
 --from-file=.dockerconfigjson=.docker/config.json \
 --type=kubernetes.io/dockerconfigjson
 

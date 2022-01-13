@@ -1,1 +1,43 @@
- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: systemywp-master-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: systemywp-master
+  template:
+    metadata:
+      labels:
+        app: systemywp-master
+    spec:
+      imagePullSecrets:
+      - name: docker-key 
+      containers:
+      - name: master
+        image: systemywp/master:gate_v1
+        volumeMounts:
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: systemywp-master-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: systemywp-master
+  ports:
+  - name: platformservice
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    
+
