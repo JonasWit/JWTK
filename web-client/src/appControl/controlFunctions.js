@@ -1,4 +1,4 @@
-import {COOKIES_NAMES} from "../enums/portalEnums";
+import {COOKIES_NAMES} from "@/enums/portalEnums";
 
 export const readGateAPIAddress = () => {
     return process.env.VUE_APP_API_GATE
