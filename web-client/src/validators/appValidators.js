@@ -4,6 +4,12 @@ const minLength = min => {
         : null;
 };
 
+const isTheSame = (check, whatShouldBeTheSame) => {
+    return input => input !== check
+        ? `${whatShouldBeTheSame} muszą być takie same`
+        : null;
+};
+
 const isEmail = () => {
     const re = /\S+@\S+\.\S+/;
     return input => re.test(input)
@@ -11,4 +17,4 @@ const isEmail = () => {
         : "Nieprawidłowy adres email";
 }
 
-export { minLength, isEmail };
+export { minLength, isEmail, isTheSame };
