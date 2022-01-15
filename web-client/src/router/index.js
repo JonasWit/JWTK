@@ -7,6 +7,7 @@ import Profile from "@/views/Profile";
 import Gastronomy from "@/views/apps/Gastronomy";
 import Login from "@/views/auth/Login";
 import Register from "@/views/auth/Register";
+import ForgotPassword from "@/views/auth/ForgotPassword";
 
 const routes = [
   {
@@ -33,6 +34,20 @@ const routes = [
     component: Login,
     meta: {
       title: 'Logowanie',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'The home page of our example app.'
+        },
+      ]
+    }
+  },
+  {
+    path: '/auth/forgotpassword',
+    name: 'ForgotPassword',
+    component: ForgotPassword,
+    meta: {
+      title: 'Zapomniane Hasło',
       metaTags: [
         {
           name: 'description',
