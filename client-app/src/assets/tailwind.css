@@ -19,3 +19,7 @@
 .form-validation-error{
     @apply text-red-900 text-xs m-0.5
 }
+
+.form-input-text-general{
+    @apply w-full px-1 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:ring-customClassicBlue focus:border-customUltraViolet focus:z-10 sm:text-sm
+}
