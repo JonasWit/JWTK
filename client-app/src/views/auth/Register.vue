@@ -8,8 +8,8 @@
       <div>
         <input v-model="state.email" type="text" placeholder="Email"/>
         <span v-if="v$.email.$error">
-          {{ v$.email.$errors[0].$message }}
-        </span>
+        {{ v$.email.$errors[0].$message }}
+      </span>
       </div>
       <div>
         <input v-model="state.password.password"
@@ -24,9 +24,12 @@
         <input v-model="state.password.confirm"
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                placeholder="Powtórz Hasło"/>
+        <span v-if="v$.password.confirm.$error">
+        {{ v$.password.confirm.$errors[0].$message }}
+      </span>
       </div>
 
-      <button @click="register"
+      <button @click="submitForm"
               class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
         Zarejestruj się
       </button>
@@ -66,12 +69,17 @@ export default {
 
     const v$ = useVuelidate(rules, state)
 
-    const register = () => {
-      console.log("login clicked", state)
+    function submitForm() {
+      this.v$.$validate() // checks all inputs
+      if (!this.v$.$error) { // if ANY fail validation
+        alert('Form successfully submitted.')
+      } else {
+        alert('Form failed validation')
+      }
     }
 
     return {
-      register,
+      submitForm,
       state,
       v$
     }
