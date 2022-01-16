@@ -10,7 +10,7 @@
                class="form-input-text-general"
                placeholder="Email"/>
         <div v-if="v$.email.$error">
-          <span class="text-xs text-red-900" v-for="error in v$.email.$errors" :key="error.$uid"> {{
+          <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
         </div>
@@ -21,7 +21,7 @@
                class="form-input-text-general"
                placeholder="Hasło"/>
         <div v-if="v$.password.password.$error">
-          <span class="text-xs text-red-900" v-for="error in v$.password.password.$errors" :key="error.$uid"> {{
+          <span class="validation-error-span" v-for="error in v$.password.password.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
         </div>
@@ -32,7 +32,7 @@
                class="form-input-text-general"
                placeholder="Powtórz Hasło"/>
         <div v-if="v$.password.confirm.$error">
-          <span class="text-xs text-red-900" v-for="error in v$.password.confirm.$errors" :key="error.$uid"> {{
+          <span class="validation-error-span" v-for="error in v$.password.confirm.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
         </div>
@@ -46,7 +46,7 @@
           </label>
         </div>
         <div v-if="v$.rulesAccepted.$error">
-          <span class="text-xs text-red-900" v-for="error in v$.rulesAccepted.$errors" :key="error.$uid"> {{
+          <span class="text-xs text-red-900 block" v-for="error in v$.rulesAccepted.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
         </div>
