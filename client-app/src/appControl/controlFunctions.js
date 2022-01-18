@@ -52,3 +52,15 @@ export const getGDPRConsent = () => {
 export const setGDPRConsent = () => {
     localStorage.setItem("GDPR:accepted", "true");
 };
+
+export const getLocalStoreItem = (key) => {
+    return localStorage.getItem(key);
+};
+
+export const setLocalStoreItem = (key, value) => {
+    localStorage.setItem(key, value);
+};
+
+export const removeLocalStoreItem = (key) => {
+    localStorage.removeItem(key);
+};

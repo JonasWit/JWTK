@@ -64,6 +64,8 @@
 import {computed, reactive} from "vue";
 import {required, email, minLength, sameAs, helpers} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import {register} from "@/services/authAPI";
+
 
 export default {
   name: "Register",
@@ -101,14 +103,23 @@ export default {
     })
 
     const v$ = useVuelidate(rules, state)
-
-    function submitForm() {
-      this.v$.$validate() // checks all inputs
-      if (!this.v$.$error) { // if ANY fail validation
-        alert('Form successfully submitted.')
-      } else {
-        alert('Form failed validation')
+    
+    async function submitForm() {
+      this.v$.$validate()
+      if (this.v$.$error) return;
+      
+      console.log("submitting")
+      
+      try {
+        const res = await register() 
+        console.log(res.data)
+        
+      }catch (e){
+        console.log(e)    
       }
+      
+
+      
     }
 
     return {
