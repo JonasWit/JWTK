@@ -14,16 +14,25 @@ using SystemyWP.API.Repositories.General;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
 using SystemyWP.API;
 using SystemyWP.API.Data;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 
-builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
+});
+
+builder.WebHost.UseSerilog((context, config) =>
+{
+    var connectionString = context.Configuration.GetConnectionString("Master");
+    config.WriteTo.PostgreSQL(connectionString, "Logs", null, LogEventLevel.Verbose, needAutoCreateTable: false, needAutoCreateSchema: false)
+        .MinimumLevel.Information();
 });
 
 var configuration = builder.Configuration;
