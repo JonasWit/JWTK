@@ -29,6 +29,7 @@
 
     <ItemGroup>
         <Folder Include="CustomExtensions" />
+        <Folder Include="Data\Models\General" />
         <Folder Include="HttpClients\GastronomyClient" />
         <Folder Include="Secrets" />
     </ItemGroup>

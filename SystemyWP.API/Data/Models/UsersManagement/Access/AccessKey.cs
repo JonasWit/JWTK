@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.API.Data.Enums;
 using SystemyWP.API.Data.Models.Abstractions;
 
 namespace SystemyWP.API.Data.Models.UsersManagement.Access

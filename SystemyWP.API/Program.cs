@@ -1,6 +1,5 @@
 using System;
 using SystemyWP.API.Services.Email;
-using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
 using AspNetCoreRateLimit;
 using FluentValidation.AspNetCore;
@@ -83,7 +82,6 @@ builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSet
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
             
 builder.Services.AddScoped<EmailClient>();
-builder.Services.AddScoped<PortalLogger>();
 builder.Services.AddTransient<Encryptor>();
 
 builder.Services.AddFileServices(configuration);

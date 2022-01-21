@@ -1,6 +1,4 @@
 using AutoMapper;
-using SystemyWP.API.Gastronomy.Data.Models.Dishes;
-using SystemyWP.API.Gastronomy.Data.Models.Menus;
 
 namespace SystemyWP.API.Gastronomy.Profiles;
 

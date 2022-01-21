@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SystemyWP.API.Controllers.BaseClases;
@@ -17,7 +17,6 @@ using SystemyWP.API.DTOs;
 using SystemyWP.API.Forms.User;
 using SystemyWP.API.Repositories.General;
 using SystemyWP.API.Services.Auth;
-using SystemyWP.API.Services.Logging;
 using SystemyWP.API.Settings;
 
 namespace SystemyWP.API.Controllers.Users
@@ -25,19 +24,21 @@ namespace SystemyWP.API.Controllers.Users
     [Route("api/[controller]")]
     public class AuthController : ApiControllerBase
     {
+        private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
         private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
         private readonly Encryptor _encryptor;
         private readonly IUserRepository _userRepository;
 
         public AuthController(
+            ILogger<AuthController> logger,
             AppDbContext context,
             IOptionsMonitor<AuthSettings> optionsMonitor,
             Encryptor encryptor,
             IUserRepository userRepository,
-            PortalLogger portalLogger,
             IMapper mapper)
         {
+            _logger = logger;
             _context = context;
             _optionsMonitor = optionsMonitor;
             _encryptor = encryptor;

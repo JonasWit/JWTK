@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Data.Models.General.Logging;
 using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Data.Models.UsersManagement.Access;
 
@@ -12,8 +11,6 @@ namespace SystemyWP.API.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<PortalLogRecord> PortalLogs { get; set; }
-        public DbSet<ApiLogRecord> ApiLogs { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
