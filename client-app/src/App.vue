@@ -1,6 +1,6 @@
 <template>
   <div>
-    <snack-popup/>
+    <SnackPopup/>
     <div class="grid md:grid-cols-8">
       <Nav class="md:col-span-2">
         <MainNav v-if="nav.navType === 'main'"/>

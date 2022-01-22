@@ -7,7 +7,7 @@
       <div>
         <input v-model="state.email"
                type="text"
-               class="form-input-text-general"
+               class="form-input-text-general" 
                placeholder="Email"/>
         <div v-if="v$.email.$error">
           <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
@@ -66,6 +66,7 @@ import {required, email, minLength, sameAs, helpers} from "@vuelidate/validators
 import useVuelidate from "@vuelidate/core";
 import {register} from "@/services/authAPI";
 import {useStore} from "vuex";
+import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
 
 export default {
   name: "Register",
@@ -109,7 +110,7 @@ export default {
       this.v$.$validate()
       if (this.v$.$error) {
 
-        await store.dispatch('snack/snack', "TEST")
+        await store.dispatch('snack/snack', {text: "Rejestracja nie powiodła się", textColor: SNACK_TEXT.WHITE, backColor: SNACK_BACKGROUNDS.ERROR })
         return;
       }
 

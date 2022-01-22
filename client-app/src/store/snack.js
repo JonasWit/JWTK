@@ -1,8 +1,16 @@
+import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
+
+let defaults = {
+    text: null, 
+    textColor: SNACK_TEXT.WHITE, 
+    backColor: SNACK_BACKGROUNDS.DEFAULT
+}
+
 export default {
     namespaced: true,
 
     state: {
-        snack: null
+        snack: defaults
     },
 
     getters: {
@@ -12,14 +20,21 @@ export default {
     },
 
     mutations: {
-        setSnack(state, text) {
-            state.snack = text
+        setSnack(state, options) {
+            state.snack.text = options.text
+            state.snack.textColor = options.textColor
+            state.snack.backColor = options.backColor
         }
     },
 
     actions: {
-        snack({commit}, text) {
-            commit('setSnack', text)
+        snack({commit}, options) {
+            options = { ...defaults, ...options }
+            commit('setSnack', options)
+
+            setTimeout(() => {
+                commit('setSnack', { ...defaults, text: null })
+            }, 2000)
         }
     }
 }
