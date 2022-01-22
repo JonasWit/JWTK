@@ -2,7 +2,7 @@
   <div>
     <div>
       <h4 class="font-bold mt-12 pb-2 border-b border-gray-200 text-xl text-center">Rozwiązania dla Firm</h4>
-      <div class="mt-8 grid lg:grid-cols-3 gap-7">
+      <div class="mt-8 grid lg:grid-cols-3 gap-7" >
         <div class="portal-card">
           <img src="/img/individual.jpg" alt="inidividual-solutions" class="w-full h-32 sm:h-48 object-cover">
           <div class="m-4">

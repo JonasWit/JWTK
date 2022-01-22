@@ -65,7 +65,7 @@ import {computed, reactive} from "vue";
 import {required, email, minLength, sameAs, helpers} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {register} from "@/services/authAPI";
-
+import {useStore} from "vuex";
 
 export default {
   name: "Register",
@@ -79,7 +79,8 @@ export default {
         confirm: '',
       },
     })
-    
+
+    const store = useStore()
     const rules = computed(() => {
       return {
         rulesAccepted: {
@@ -103,23 +104,28 @@ export default {
     })
 
     const v$ = useVuelidate(rules, state)
-    
+
     async function submitForm() {
       this.v$.$validate()
-      if (this.v$.$error) return;
-      
+      if (this.v$.$error) {
+
+        await store.dispatch('snack/snack', "TEST")
+        return;
+      }
+
       console.log("submitting")
       
       try {
-        const res = await register() 
+        const res = await register()
         console.log(res.data)
-        
-      }catch (e){
-        console.log(e)    
-      }
-      
 
-      
+
+      } catch (e) {
+        console.log(e)
+
+      }
+
+
     }
 
     return {

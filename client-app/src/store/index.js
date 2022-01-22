@@ -1,8 +1,9 @@
 import {createStore} from 'vuex'
 import {NavModel} from "@/models/general/portalDisplayModel";
 import {NAV_TYPES} from "@/models/enums";
-import {getCookie, readGateAPIAddress} from "../appControl/controlFunctions";
-import {COOKIES_NAMES} from "../enums/portalEnums";
+import {getCookie, readGateAPIAddress} from "@/appControl/controlFunctions";
+import {COOKIES_NAMES} from "@/enums/portalEnums";
+import snack from "@/store/snack";
 
 export default createStore({
     state: {
@@ -18,9 +19,10 @@ export default createStore({
     },
     actions: {
         readStatusOfLegalAppTooltips({commit}) {
-
             commit('setLegalAppTooltipsOption', {option: true});
         },
     },
-    modules: {}
+    modules: {
+        snack
+    }
 })

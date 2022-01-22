@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 .portal-card{
-    @apply bg-white rounded overflow-hidden shadow-md relative hover:shadow-xl transition ease-in-out delay-100
+    @apply bg-white rounded overflow-hidden shadow-md relative hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
 }
 
 .portal-badge{
