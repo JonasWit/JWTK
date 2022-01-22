@@ -19,7 +19,7 @@ namespace SystemyWP.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Log>().Metadata.SetIsTableExcludedFromMigrations(true);
+            modelBuilder.Entity<Log>().HasNoKey();
             
             modelBuilder.Entity<User>()
                 .HasOne(x => x.AccessKey)
@@ -34,6 +34,10 @@ namespace SystemyWP.API.Data
             modelBuilder.Entity<AccessKey>()
                 .HasMany(x => x.AllowedUsers)
                 .WithMany(x => x.AllowedKeys);
+            
+            modelBuilder.Entity<Log>()
+                .Property(b => b.Properties)
+                .HasColumnType("jsonb");
         }
     }
 }

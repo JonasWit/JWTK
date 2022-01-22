@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
 using AspNetCoreRateLimit;
@@ -17,8 +18,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
+using NpgsqlTypes;
 using Serilog;
-using Serilog.Events;
+using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using SystemyWP.API;
 using SystemyWP.API.Data;
 using SystemyWP.API.Services.Auth;
@@ -34,7 +36,18 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 builder.WebHost.UseSerilog((context, config) =>
 {
     var connectionString = context.Configuration.GetConnectionString("Master");
-    config.WriteTo.PostgreSQL(connectionString, "Logs", null, LogEventLevel.Verbose, needAutoCreateTable: true, needAutoCreateSchema: true)
+    
+    IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+    {
+        {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
+        {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
+        {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
+        {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
+        {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
+        {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
+    };
+    
+    config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
         .MinimumLevel.Information();
 });
 
