@@ -44,21 +44,6 @@ namespace SystemyWP.API.Controllers.Users
             _encryptor = encryptor;
             _userRepository = userRepository;
         }
-        
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            try
-            {
-                _logger.LogWarning("TEST");
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
-                return ServerError;
-            }
-        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserCredentialsForm userCredentialsForm)

@@ -1,22 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Data.Models.General;
 using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Data.Models.UsersManagement.Access;
 
 namespace SystemyWP.API.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDataProtectionKeyContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
         
-        public DbSet<Log> Logs { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public DbSet<Log> Logs { get; set; }    
         public DbSet<User> Users { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Log>().Metadata.SetIsTableExcludedFromMigrations(true);
+            
             modelBuilder.Entity<User>()
                 .HasOne(x => x.AccessKey)
                 .WithOne(x => x.User)

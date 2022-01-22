@@ -13,6 +13,9 @@ using SystemyWP.API.Middleware;
 using SystemyWP.API.Repositories.General;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
@@ -31,7 +34,7 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 builder.WebHost.UseSerilog((context, config) =>
 {
     var connectionString = context.Configuration.GetConnectionString("Master");
-    config.WriteTo.PostgreSQL(connectionString, "Logs", null, LogEventLevel.Verbose, needAutoCreateTable: false, needAutoCreateSchema: false)
+    config.WriteTo.PostgreSQL(connectionString, "Logs", null, LogEventLevel.Verbose, needAutoCreateTable: true, needAutoCreateSchema: true)
         .MinimumLevel.Information();
 });
 
@@ -49,6 +52,16 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configu
 builder.Services.AddScoped<IUserRepository, UserRepository>();
             
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDataProtection()
+    .SetApplicationName("systemywp")
+    .UseCryptographicAlgorithms(
+        new AuthenticatedEncryptorConfiguration()
+        {
+            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+            ValidationAlgorithm = ValidationAlgorithm.HMACSHA512
+        })
+    .PersistKeysToDbContext<AppDbContext>();
 
 builder.Services.AddAuthentication(options =>
 {
