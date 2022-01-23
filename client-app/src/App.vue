@@ -2,11 +2,11 @@
   <div>
     <SnackPopup/>
     <div class="grid md:grid-cols-8">
-      <Nav class="md:col-span-2">
+      <NavContainer class="md:col-span-2">
         <MainNav v-if="nav.navType === 'main'"/>
-      </Nav>
+      </NavContainer>
       <main class="px-12 py-6 bg-gray-100 md:col-span-6 md:flex md:flex-col md:h-screen">
-        <Authorization/>
+        <AuthorizationBar/>
         <!--      <router-view/>-->
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Nav from "@/components/portal/navigation/Nav";
-import Authorization from "@/components/portal/user/Authorization";
+import NavContainer from "@/components/portal/navigation/NavContainer";
+import AuthorizationBar from "@/components/portal/user/AuthorizationBar";
 import MainNav from "@/components/portal/navigation/MainNav";
 import {useStore} from "vuex";
 import {computed} from "vue";
@@ -28,7 +28,7 @@ import {NavModel} from "@/models/general/portalDisplayModel";
 import SnackPopup from "@/components/generic/SnackPopup";
 
 export default {
-  components: {SnackPopup, MainNav, Authorization, Nav},
+  components: {SnackPopup, MainNav, AuthorizationBar, NavContainer},
   setup() {
     const store = useStore()
 

@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "Nav",
+  name: "NavContainer",
   setup() {
     const handleSubmit =  () => {
       const menu = document.querySelector('#menu');
