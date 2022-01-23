@@ -151,30 +151,29 @@ namespace SystemyWP.API.Controllers.Users
         {
             try
             {
-                var key = Encoding.ASCII.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
-
-                var claimEmail = new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue);
-                var claimName = new Claim(ClaimTypes.Name, user.Claims.First(c => c.ClaimType == ClaimTypes.Name).ClaimValue);
-                var claimNameIdentifier = new Claim(ClaimTypes.NameIdentifier, user.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).ClaimValue);
-                var claimRole = new Claim(ClaimTypes.Role, user.Claims.First(c => c.ClaimType == ClaimTypes.Role).ClaimValue);
-            
-                var claimsIdentity = new ClaimsIdentity(new[] {claimEmail, claimNameIdentifier, claimRole, claimName},
-                    SystemyWpConstants.AuthenticationType.ServerAuth);
-
-                var tokenDescriptor = new SecurityTokenDescriptor
+                var claims = new[]
                 {
-                    Subject = claimsIdentity,
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                        SecurityAlgorithms.HmacSha512Signature)
+                    new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
+                    new Claim(ClaimTypes.Name, user.Claims.First(c => c.ClaimType == ClaimTypes.Name).ClaimValue),
+                    new Claim(ClaimTypes.NameIdentifier, user.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).ClaimValue),
+                    new Claim(ClaimTypes.Role, user.Claims.First(c => c.ClaimType == ClaimTypes.Role).ClaimValue)
                 };
 
-                //creating a token handler
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
+                var key = new SymmetricSecurityKey(secretBytes);
 
-                //returning the token back
-                return tokenHandler.WriteToken(token);
+                var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+                var token = new JwtSecurityToken(
+                    _optionsMonitor.CurrentValue.Issuer, 
+                    _optionsMonitor.CurrentValue.Audience, 
+                    claims,
+                    notBefore: DateTime.UtcNow,
+                    expires: DateTime.UtcNow.AddDays(7),
+                    signingCredentials);
+
+                var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
+                return tokenJson;
             }
             catch (Exception e)
             {

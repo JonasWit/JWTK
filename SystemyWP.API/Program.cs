@@ -37,17 +37,17 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 builder.WebHost.UseSerilog((context, config) =>
 {
     var connectionString = context.Configuration.GetConnectionString("Master");
-    
+
     IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
     {
-        {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-        {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-        {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
-        {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
-        {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
-        {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
+        {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text)},
+        {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text)},
+        {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar)},
+        {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp)},
+        {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text)},
+        {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)},
     };
-    
+
     config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
         .MinimumLevel.Information();
 });
@@ -64,7 +64,7 @@ builder.Services.AddInMemoryRateLimiting();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-            
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDataProtection()
@@ -77,24 +77,26 @@ builder.Services.AddDataProtection()
         })
     .PersistKeysToDbContext<AppDbContext>();
 
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jwtBearerOptions =>
-{
-    jwtBearerOptions.RequireHttpsMetadata = true;
-    jwtBearerOptions.SaveToken = true;
-    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+    var secretBytes = Encoding.UTF8.GetBytes(configuration.GetValue("AuthSettings:SecretKey", ""));
+    var key = new SymmetricSecurityKey(secretBytes);
+    
+    if (builder.Environment.IsDevelopment()) config.RequireHttpsMetadata = false;
+    config.SaveToken = true;
+    config.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidIssuer = configuration.GetValue("AuthSettings:Issuer", ""),
+        ValidAudience = configuration.GetValue("AuthSettings:Audience", ""),
+        IssuerSigningKey = key,
+        
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue("AuthSettings:SecretKey", ""))),
         ClockSkew = TimeSpan.Zero,
         ValidateIssuer = true,
         ValidateAudience = true,
     };
 });
-            
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy
@@ -116,7 +118,7 @@ builder.Services.Configure<ClusterServices>(configuration.GetSection(nameof(Clus
 builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
 builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
-            
+
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 
@@ -145,11 +147,8 @@ app.UseIpRateLimiting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
-            
+app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+
 DBManager.PrepareDatabase(app);
 Console.WriteLine("--> App has started...");
 
