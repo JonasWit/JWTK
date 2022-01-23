@@ -36,8 +36,8 @@ const routes = [
       title: 'Logowanie',
       metaTags: [
         {
-          name: 'description',
-          content: 'The home page of our example app.'
+          name: 'Strona Logowania',
+          content: 'Strona Logowania do Aplikacji'
         },
       ]
     }
@@ -65,7 +65,7 @@ const routes = [
       metaTags: [
         {
           name: 'description',
-          content: 'The home page of our example app.'
+          content: 'Strona Rejestracji do Aplikacji'
         },
       ]
     }

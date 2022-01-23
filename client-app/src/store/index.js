@@ -1,16 +1,23 @@
 import {createStore} from 'vuex'
 import {NavModel} from "@/models/general/portalDisplayModel";
 import {NAV_TYPES} from "@/models/enums";
-import {getCookie, readGateAPIAddress} from "@/appControl/controlFunctions";
-import {COOKIES_NAMES} from "@/enums/portalEnums";
+import {readGateAPIAddress, setLocalStoreItem} from "@/appControl/controlFunctions";
 import snack from "@/store/snack";
+import {LOCAL_STORE_NAMES} from "@/enums/portalEnums";
 
 export default createStore({
     state: {
         user: null,
         navType: new NavModel(NAV_TYPES.MAIN),
-        idToken: getCookie(COOKIES_NAMES.token_id),
-        apiGateBaseAddress: readGateAPIAddress()
+        apiGateBaseAddress: readGateAPIAddress(),
+        idToken: null
+    },
+    getters: {
+        getUser(){
+     
+     
+            
+        }
     },
     mutations: {
         setApiGateBaseAddress(state, {address}) {
@@ -20,6 +27,15 @@ export default createStore({
     actions: {
         readStatusOfLegalAppTooltips({commit}) {
             commit('setLegalAppTooltipsOption', {option: true});
+        },
+        setIdToken({state}, token) {
+            console.warn("Saving token: ", token)
+            setLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN, token)
+            state.idToken = token
+            
+            
+            
+            
         },
     },
     modules: {

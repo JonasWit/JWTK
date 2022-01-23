@@ -113,9 +113,9 @@ export default {
       this.v$.$validate()
       if (this.v$.$error) {
         await store.dispatch('snack/snack', {
-          text: "Rejestracja nie powiodła się",
-          textColor: SNACK_TEXT.WHITE,
-          backColor: SNACK_BACKGROUNDS.ERROR
+          text: "Niepoprawne dane",
+          textColor: SNACK_TEXT.BLACK,
+          backColor: SNACK_BACKGROUNDS.WARNING
         })
         return;
       }
@@ -139,6 +139,11 @@ export default {
         await router.push('/')
       } catch (error) {
         if (error.response) {
+          await store.dispatch('snack/snack', {
+            text: "Rejestracja nie powiodła się",
+            textColor: SNACK_TEXT.WHITE,
+            backColor: SNACK_BACKGROUNDS.ERROR
+          })
           console.log("data: ", error.response.data);
           console.log("status: ", error.response.status);
           console.log("headers: ", error.response.headers);

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -28,7 +29,7 @@ namespace SystemyWP.API.Controllers.Users
     [Route("api/[controller]")]
     public class AuthController : ApiControllerBase
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
         private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
@@ -36,7 +37,7 @@ namespace SystemyWP.API.Controllers.Users
         private readonly IUserRepository _userRepository;
 
         public AuthController(
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment webHostEnvironment,
             ILogger<AuthController> logger,
             AppDbContext context,
             IOptionsMonitor<AuthSettings> optionsMonitor,
@@ -44,7 +45,7 @@ namespace SystemyWP.API.Controllers.Users
             IUserRepository userRepository,
             IMapper mapper)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
             _logger = logger;
             _context = context;
             _optionsMonitor = optionsMonitor;
@@ -53,7 +54,7 @@ namespace SystemyWP.API.Controllers.Users
         }
 
         [Authorize]
-        [HttpGet("register")]
+        [HttpGet("authorized-check")]
         public IActionResult AuthorizedCheck()
         {
             return Ok("Authorized response");
@@ -111,7 +112,7 @@ namespace SystemyWP.API.Controllers.Users
             }
             catch (Exception e)
             {
-                if (_hostingEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
+                if (_webHostEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 _logger.LogError(e, "Issue during Registration");
                 return ServerError;
             }
@@ -130,13 +131,17 @@ namespace SystemyWP.API.Controllers.Users
                     .FirstOrDefaultAsync();
 
                 if (loggedInUser is null) return NotFound();
-
+                
+                loggedInUser.LastLogin = DateTime.UtcNow;
+                _context.Update(loggedInUser);
+                await _context.SaveChangesAsync();
+                
                 var token = GenerateJwtToken(loggedInUser);
                 return Ok(new TokenDto() {Token = token});
             }
             catch (Exception e)
             {
-                if (_hostingEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
+                if (_webHostEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 _logger.LogError(e, "Issue during Authentication");
                 return ServerError;
             }
