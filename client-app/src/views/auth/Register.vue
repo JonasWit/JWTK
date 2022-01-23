@@ -7,7 +7,7 @@
       <div>
         <input v-model="state.email"
                type="text"
-               class="form-input-text-general" 
+               class="form-input-text-general"
                placeholder="Email"/>
         <div v-if="v$.email.$error">
           <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
@@ -67,11 +67,14 @@ import useVuelidate from "@vuelidate/core";
 import {register} from "@/services/authAPI";
 import {useStore} from "vuex";
 import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Register",
   components: {},
   setup() {
+    const router = useRouter()
+    
     const state = reactive({
       email: '',
       rulesAccepted: false,
@@ -109,21 +112,37 @@ export default {
     async function submitForm() {
       this.v$.$validate()
       if (this.v$.$error) {
-
-        await store.dispatch('snack/snack', {text: "Rejestracja nie powiodła się", textColor: SNACK_TEXT.WHITE, backColor: SNACK_BACKGROUNDS.ERROR })
+        await store.dispatch('snack/snack', {
+          text: "Rejestracja nie powiodła się",
+          textColor: SNACK_TEXT.WHITE,
+          backColor: SNACK_BACKGROUNDS.ERROR
+        })
         return;
       }
 
-      console.log("submitting")
-      
       try {
-        const res = await register()
-        console.log(res.data)
-
-
-      } catch (e) {
-        console.log(e)
-
+        const payload = {
+          email: state.email, 
+          password: state.password.password
+        }
+        console.log("credentials: ", payload)
+        const res = await register(payload)
+        console.log("data: ", res.data);
+        console.log("status: ", res.status);
+        console.log("headers: ", res.headers);
+        
+        await store.dispatch('snack/snack', {
+          text: "Rejestracja powiodła się",
+          textColor: SNACK_TEXT.BLACK,
+          backColor: SNACK_BACKGROUNDS.SUCCESS
+        })
+        await router.push('/')
+      } catch (error) {
+        if (error.response) {
+          console.log("data: ", error.response.data);
+          console.log("status: ", error.response.status);
+          console.log("headers: ", error.response.headers);
+        }
       }
 
 

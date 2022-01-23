@@ -12,7 +12,7 @@ namespace SystemyWP.API.Controllers.BaseClases
 
         protected string UserId => GetClaim(ClaimTypes.NameIdentifier);
         protected string UserEmail => GetClaim(ClaimTypes.Email);
-        protected string Role => GetClaim(SystemyWpConstants.Claims.Role);
+        protected string Role => GetClaim(ClaimTypes.Role);
         
         private string GetClaim(string claimType) => User.Claims
             .FirstOrDefault(x => x.Type.Equals(claimType))?.Value;

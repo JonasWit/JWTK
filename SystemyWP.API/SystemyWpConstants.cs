@@ -38,13 +38,11 @@ namespace SystemyWP.API
             public const string User = nameof(User);
             public const string Admin = nameof(Admin);
         }
-        
+
         public struct Claims
         {
-            public const string Role = "Role";
-            public const string AppAccess = "AppAccess";
-            public static readonly Claim UserClaim = new (Role, Roles.User);
-            public static readonly Claim AdminClaim = new (Role, Roles.Admin);
+            public static readonly Claim UserClaim = new (ClaimTypes.Role, Roles.User);
+            public static readonly Claim AdminClaim = new (ClaimTypes.Role, Roles.Admin);
         }
 
         public struct Roles

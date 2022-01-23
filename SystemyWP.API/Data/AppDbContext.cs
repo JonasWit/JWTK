@@ -14,7 +14,8 @@ namespace SystemyWP.API.Data
         
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<Log> Logs { get; set; }    
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }        
+        public DbSet<UserClaim> UserClaims { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

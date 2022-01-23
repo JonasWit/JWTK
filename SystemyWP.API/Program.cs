@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
 using AspNetCoreRateLimit;
@@ -98,13 +99,13 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy
         .RequireAuthenticatedUser()
-        .RequireClaim(SystemyWpConstants.Claims.Role,
+        .RequireClaim(ClaimTypes.Role,
             SystemyWpConstants.Roles.User,
             SystemyWpConstants.Roles.Admin));
 
     options.AddPolicy(SystemyWpConstants.Policies.Admin, policy => policy
         .RequireAuthenticatedUser()
-        .RequireClaim(SystemyWpConstants.Claims.Role,
+        .RequireClaim(ClaimTypes.Role,
             SystemyWpConstants.Roles.Admin));
 });
 

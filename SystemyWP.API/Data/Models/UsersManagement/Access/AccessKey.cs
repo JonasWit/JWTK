@@ -4,15 +4,15 @@ using SystemyWP.API.Data.Models.Abstractions;
 
 namespace SystemyWP.API.Data.Models.UsersManagement.Access
 {
-    public class AccessKey : TrackedModel
+    public class AccessKey
     {
         [Key]
         [Required]
-        [MaxLength(512)]
+        [MaxLength(256)]
         public string Id { get; set; }
 
         public User User { get; set; }
 
-        public List<User> AllowedUsers { get; set; }
+        public List<User> AllowedUsers { get; set; } = new();
     }
 }
