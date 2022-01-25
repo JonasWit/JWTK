@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
@@ -130,11 +131,20 @@ builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsNam
     .AllowAnyMethod()
     .AllowCredentials()));
 
-builder.Services.AddHsts(options =>
+if (builder.Environment.IsProduction())
 {
-    options.Preload = true;
-    options.MaxAge = TimeSpan.FromDays(60);
-});
+    builder.Services.AddHsts(options =>
+    {
+        options.Preload = true;
+        options.MaxAge = TimeSpan.FromDays(60);
+    });
+
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
+        options.HttpsPort = 443;
+    });  
+}
 
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
@@ -150,6 +160,7 @@ if (app.Environment.IsDevelopment())
 // Prod only
 if (!app.Environment.IsDevelopment())
 {
+    app.UseHttpsRedirection();
     app.UseHsts();
 }
 
