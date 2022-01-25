@@ -130,13 +130,27 @@ builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsNam
     .AllowAnyMethod()
     .AllowCredentials()));
 
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.MaxAge = TimeSpan.FromDays(60);
+});
+
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
+// Build the app
 var app = builder.Build();
 
+// Dev only
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+}
+
+// Prod only
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
 }
 
 app.UseCustomResponseHeaders();

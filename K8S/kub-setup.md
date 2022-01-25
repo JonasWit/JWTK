@@ -70,5 +70,5 @@ kns default - be sure that you are in default namespace
 kubectl apply -f cm-certificate.yaml
 
 // now create domain, ingress and certificate
-kubectl create ing [ingress name] --rule=[our domain]/*=[service name]:[service port],tls=[secret with certificate name]
+kubectl create ing [ingress name] --rule=[our domain]/*=[service name]:[service port ex.80],tls=[secret with certificate name]
 kubectl get ing
