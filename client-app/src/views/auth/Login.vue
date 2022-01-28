@@ -90,7 +90,7 @@ export default {
 
         const token = res.data.token
         console.log("Passing token to store: ", token)
-        await store.dispatch('setIdToken', token)
+        await store.dispatch('auth/setIdToken', token)
         await store.dispatch('snack/snack', {
           text: "Logowanie powiodło się",
           textColor: SNACK_TEXT.BLACK,

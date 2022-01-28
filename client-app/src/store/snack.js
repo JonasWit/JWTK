@@ -12,13 +12,11 @@ export default {
     state: {
         snack: defaults
     },
-
     getters: {
         getSanck(state) {
             return state.snack
         }
     },
-
     mutations: {
         setSnack(state, options) {
             state.snack.text = options.text
@@ -26,7 +24,6 @@ export default {
             state.snack.backColor = options.backColor
         }
     },
-
     actions: {
         snack({commit}, options) {
             options = { ...defaults, ...options }

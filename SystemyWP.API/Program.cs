@@ -35,23 +35,34 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
     config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
 });
 
-builder.WebHost.UseSerilog((context, config) =>
+if (builder.Environment.IsProduction())
 {
-    var connectionString = context.Configuration.GetConnectionString("Master");
-
-    IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+    builder.WebHost.UseSerilog((context, config) =>
     {
-        {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text)},
-        {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text)},
-        {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar)},
-        {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp)},
-        {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text)},
-        {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)},
-    };
+        var connectionString = context.Configuration.GetConnectionString("Master");
 
-    config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
-        .MinimumLevel.Information();
-});
+        IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+        {
+            {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text)},
+            {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text)},
+            {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar)},
+            {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp)},
+            {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text)},
+            {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)},
+        };
+
+        config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
+            .MinimumLevel.Information();
+    });  
+}
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseSerilog((context, config) =>
+    {
+        config.WriteTo.Console();
+    }); 
+}
 
 var configuration = builder.Configuration;
 
