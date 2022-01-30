@@ -26,7 +26,7 @@ using SystemyWP.API.Settings;
 
 namespace SystemyWP.API.Controllers.Users
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthController : ApiControllerBase
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -141,7 +141,6 @@ namespace SystemyWP.API.Controllers.Users
             }
             catch (Exception e)
             {
-                if (_webHostEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 _logger.LogError(e, "Issue during Authentication");
                 return ServerError;
             }
@@ -180,7 +179,6 @@ namespace SystemyWP.API.Controllers.Users
                 _logger.LogError(e, "Issue when generating JWT token");
                 throw new Exception();
             }
-
         }
     }
 }

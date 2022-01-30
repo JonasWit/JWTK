@@ -53,6 +53,11 @@ if (builder.Environment.IsProduction())
 
         config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
             .MinimumLevel.Information();
+
+        if (builder.Environment.IsDevelopment())
+        {
+            config.WriteTo.Console();
+        }
     });  
 }
 

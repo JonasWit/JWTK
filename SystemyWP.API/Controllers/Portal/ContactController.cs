@@ -9,7 +9,7 @@ using SystemyWP.API.Forms.Conact;
 
 namespace SystemyWP.API.Controllers.Portal
 {
-    [Route("/api/[controller]")]
+    [Route("[controller]")]
     public class ContactController : ApiControllerBase
     {
         private readonly AppDbContext _context;

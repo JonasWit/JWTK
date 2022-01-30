@@ -8,7 +8,7 @@ using SystemyWP.API.Data.Models.General;
 
 namespace SystemyWP.API.Controllers.Logs;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class LogsController : ApiControllerBase
 {
     private readonly ILogger<LogsController> _logger;

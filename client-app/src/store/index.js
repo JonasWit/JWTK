@@ -19,9 +19,6 @@ export default createStore({
         },
     },
     actions: {
-        readStatusOfLegalAppTooltips({commit}) {
-            commit('setLegalAppTooltipsOption', {option: true});
-        },
     },
     modules: {
         snack,
