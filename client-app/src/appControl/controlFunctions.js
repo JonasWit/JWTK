@@ -57,6 +57,10 @@ export const getLocalStoreItem = (key) => {
     return localStorage.getItem(key);
 };
 
+export const deserializeUserObject = () => {
+    return null;
+};
+
 export const setLocalStoreItem = (key, value) => {
     localStorage.setItem(key, value);
 };

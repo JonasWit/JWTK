@@ -24,7 +24,7 @@
                   class="block text-gray-500 text-sm">Twórz własne dania i komponuj z nich Menu. Zarządzaj pracą kuchni.</span>
             </div>
             <div class="portal-badge">
-              <span class="text-customClassicBlue">Darmowy Dostęp</span>
+              <span class="text-customClassicBlue">Wkrótce Darmowy Dostęp</span>
             </div>
           </div>
         </router-link>
@@ -36,7 +36,7 @@
               <span class="block text-gray-500 text-sm">Zarządzaj Logistyką</span>
             </div>
             <div class="portal-badge">
-              <span class="text-customClassicBlue">Darmowy Dostęp</span>
+              <span class="text-customClassicBlue">Wkrótce Darmowy Dostęp</span>
             </div>
           </div>
         </router-link>

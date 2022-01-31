@@ -7,9 +7,11 @@ import Profile from "@/views/Profile";
 import Gastronomy from "@/views/apps/Gastronomy";
 import Login from "@/views/auth/Login";
 import Register from "@/views/auth/Register";
-import ForgotPassword from "@/views/auth/ForgotPassword";
 import store from "@/store";
 import Solutions from "@/views/Solutions";
+import ChangePassword from "@/views/auth/ChangePassword";
+import Logout from "@/views/auth/Logout";
+import ToS from "@/views/ToS";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -55,11 +57,21 @@ const routes = [
         }
     },
     {
-        path: '/auth/forgotpassword',
-        name: 'ForgotPassword',
-        component: ForgotPassword,
+        path: '/auth/logout',
+        name: 'Logout',
+        component: Logout,
+        beforeEnter: requireAuth,
         meta: {
-            title: 'Zapomniane Hasło',
+            title: 'Wyloguj',
+        }
+    },
+    {
+        path: '/auth/changepassword',
+        name: 'ChangePassword',
+        component: ChangePassword,
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Zamiana Hasła',
             metaTags: [
                 {
                     name: 'description',
@@ -85,34 +97,60 @@ const routes = [
     {
         path: '/about',
         name: 'About',
-        component: About
+        component: About,
+        meta: {
+            title: 'O Nas',
+        }
     },
     {
         path: '/privacy',
         name: 'Privacy',
-        component: Privacy
+        component: Privacy,
+        meta: {
+            title: 'Polityka Prywatności',
+        }
     },
     {
         path: '/contact',
         name: 'Contact',
-        component: Contact
+        component: Contact,
+        meta: {
+            title: 'Kontakt',
+        }
     },
     {
         path: '/profile',
         name: 'Profile',
-        component: Profile
+        component: Profile,
+        meta: {
+            title: 'Profil',
+        }
+    },
+    {
+        path: '/tos',
+        name: 'ToS',
+        component: ToS,
+        meta: {
+            title: 'Regulamin',
+        }
     },
     {
         path: '/apps/gastronomy',
         name: 'Gastronomy',
         component: Gastronomy,
-        beforeEnter: requireAuth
- 
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Gastronomia',
+        }
     },
     {
         path: '/solutions',
         name: 'Solutions',
-        component: Solutions
+        component: Solutions,
+        meta: {
+            title: 'Rozwiązania dla Firm',
+        }
+        
     },
     // {
     //   path: '/about',

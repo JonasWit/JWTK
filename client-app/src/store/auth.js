@@ -1,14 +1,15 @@
-import {setLocalStoreItem} from "@/appControl/controlFunctions";
+import {deserializeUserObject, getLocalStoreItem, setLocalStoreItem} from "@/appControl/controlFunctions";
 import {LOCAL_STORE_NAMES} from "@/enums/portalEnums";
 
 export default {
     namespaced: true,
     state: {
-        userToken: null,
-        userObject: null,
+        userToken: getLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN),
+        userObject: deserializeUserObject(),
     },
     getters: {
         isAuthorized(state){
+            console.log("token check", state.userToken)
             return !!state.userToken;
         },
         getUserObject(){
@@ -19,12 +20,13 @@ export default {
         resetCredentials(state) {
             state.userToken = null
             state.userObject = null
+        },
+        deserializeUserObject(state) {
+            state.userToken = null
+            state.userObject = null
         }
     },
     actions: {
-        readStatusOfLegalAppTooltips({commit}) {
-            commit('setLegalAppTooltipsOption', {option: true});
-        },
         setIdToken({state}, token) {
             console.warn("Saving token: ", token)
             setLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN, token)
