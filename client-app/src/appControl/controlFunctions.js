@@ -6,6 +6,11 @@ export const readGateAPIAddress = () => {
     return process.env.VUE_APP_API_GATE
 };
 
+export const readDarkMode = () => {
+    const darkTheme = getLocalStoreItem(LOCAL_STORE_NAMES.DARK_THEME);
+    return !!darkTheme;
+};
+
 export const setTokenCookie = (tokenValue) => {
     console.log('setting cookie')
     let d = new Date();
@@ -77,7 +82,6 @@ export const deserializeUserObject = () => {
                 user.expire = new Date(value * 1000)
             }
         })
-        
         return user
     }
     return null

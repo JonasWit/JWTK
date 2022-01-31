@@ -6,8 +6,8 @@
     <button @click="test">
       Test
     </button>
-    
-    
+
+
   </div>
 </template>
 
@@ -33,9 +33,8 @@ export default {
 
 
     }
-
     return {
-      test
+      test,
     }
   }
 }
