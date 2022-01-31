@@ -15,7 +15,6 @@ using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Middleware;
 using SystemyWP.API.Repositories.General;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;

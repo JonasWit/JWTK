@@ -9,28 +9,21 @@ export default {
     },
     getters: {
         isAuthorized(state){
-            console.log("token check", state.userToken)
             return !!state.userToken;
         },
-        getUserObject(){
-            
-        }
     },
     mutations: {
         resetCredentials(state) {
             state.userToken = null
             state.userObject = null
         },
-        deserializeUserObject(state) {
-            state.userToken = null
-            state.userObject = null
-        }
     },
     actions: {
         setIdToken({state}, token) {
             console.warn("Saving token: ", token)
             setLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN, token)
             state.userToken = token
+            state.userObject = deserializeUserObject()
         },
     },
 }

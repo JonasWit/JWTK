@@ -1,4 +1,6 @@
-import {COOKIES_NAMES} from "@/enums/portalEnums";
+import {COOKIES_NAMES, LOCAL_STORE_NAMES} from "@/enums/portalEnums";
+import jwt_decode from "jwt-decode";
+import {UserModel} from "@/models/general/userModel";
 
 export const readGateAPIAddress = () => {
     return process.env.VUE_APP_API_GATE
@@ -58,7 +60,27 @@ export const getLocalStoreItem = (key) => {
 };
 
 export const deserializeUserObject = () => {
-    return null;
+    const token = getLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN);
+    if (token) {
+        const user = new UserModel();
+        Object.entries(jwt_decode(token)).forEach(([key, value]) => {
+            if (key.includes("emailaddress")) {
+                user.email = value
+            }
+            if (key.includes("role")) {
+                user.role = value
+            }
+            if (key.includes("nameidentifier")) {
+                user.id = value
+            }
+            if (key === "exp") {
+                user.expire = new Date(value * 1000)
+            }
+        })
+        
+        return user
+    }
+    return null
 };
 
 export const setLocalStoreItem = (key, value) => {

@@ -1,8 +1,9 @@
 export class UserModel {
-    constructor(email, role, claims) {
+    constructor(id, email, role, expire) {
         this.email = email;
         this.role = role;
-        this.claims = claims;
+        this.id = id;
+        this.expire = expire;
     }
 }
 

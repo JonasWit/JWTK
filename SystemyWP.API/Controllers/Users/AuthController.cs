@@ -82,23 +82,23 @@ namespace SystemyWP.API.Controllers.Users
                     },
                     Claims = new List<UserClaim>
                     {
-                        new UserClaim
+                        new()
                         {
                             ClaimType = ClaimTypes.Role,
                             ClaimValue = SystemyWpConstants.Roles.User
                         },
-                        new UserClaim
+                        new()
                         {
                             ClaimType = ClaimTypes.Email,
                             ClaimValue = userCredentialsForm.Email
                             
                         },
-                        new UserClaim
+                        new()
                         {
                             ClaimType = ClaimTypes.Name,
                             ClaimValue = userCredentialsForm.Email
                         },
-                        new UserClaim
+                        new()
                         {
                             ClaimType = ClaimTypes.NameIdentifier,
                             ClaimValue = newGuid
@@ -154,8 +154,8 @@ namespace SystemyWP.API.Controllers.Users
                 {
                     new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
                     new Claim(ClaimTypes.Name, user.Claims.First(c => c.ClaimType == ClaimTypes.Name).ClaimValue),
+                    new Claim(ClaimTypes.Role, user.Claims.First(c => c.ClaimType == ClaimTypes.Role).ClaimValue),
                     new Claim(ClaimTypes.NameIdentifier, user.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).ClaimValue),
-                    new Claim(ClaimTypes.Role, user.Claims.First(c => c.ClaimType == ClaimTypes.Role).ClaimValue)
                 };
 
                 var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
@@ -167,8 +167,8 @@ namespace SystemyWP.API.Controllers.Users
                     _optionsMonitor.CurrentValue.Issuer, 
                     _optionsMonitor.CurrentValue.Audience, 
                     claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: DateTime.UtcNow.AddDays(7),
+                    DateTime.UtcNow,
+                    DateTime.UtcNow.AddDays(7),
                     signingCredentials);
 
                 var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
