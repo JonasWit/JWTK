@@ -1,10 +1,8 @@
 export class UserModel {
-    constructor(id, email, role, claims, accessKeys) {
-        this.id = id;
+    constructor(email, role, claims) {
         this.email = email;
         this.role = role;
         this.claims = claims;
-        this.accessKeys = accessKeys;
     }
 }
 

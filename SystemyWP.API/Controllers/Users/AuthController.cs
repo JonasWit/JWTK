@@ -57,7 +57,7 @@ namespace SystemyWP.API.Controllers.Users
         [HttpGet("authorized-check")]
         public IActionResult AuthorizedCheck()
         {
-            return Ok("Authorized response");
+            return Ok(new {Message= "Authorized Response", UserEmail, UserId });
         }
 
         [HttpPost("register", Name = "Register")]

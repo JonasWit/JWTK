@@ -25,9 +25,6 @@
               class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
         Zaloguj
       </button>
-      <button @click="test">
-        Test
-      </button>
     </div>
   </div>
 </template>
@@ -41,7 +38,6 @@ import {email, helpers, required} from "@vuelidate/validators";
 import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
 import {authenticate} from "@/services/authAPI";
 import useVuelidate from "@vuelidate/core";
-import {testAuth} from "@/services/devTools";
 
 export default {
   name: "Login",
@@ -111,24 +107,8 @@ export default {
       }
     }
     
-    async function test(){
-      try {
-        const res = await testAuth()
-        console.log("data: ", res.data);
-        console.log("status: ", res.status);
-        console.log("headers: ", res.headers);
-      }  catch(error){
-        console.log("data: ", error.response.data);
-        console.log("status: ", error.response.status);
-        console.log("headers: ", error.response.headers);    
-      }
-      
-
-    }
-
     return {
       submitForm,
-      test,
       state,
       v$
     }
