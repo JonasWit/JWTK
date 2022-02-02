@@ -173,15 +173,15 @@ if (app.Environment.IsDevelopment())
 }
 
 // Prod only
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsProduction())
 {
-    app.UseHttpsRedirection();
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 
 app.UseIpRateLimiting();
 app.UseCustomResponseHeaders();
-app.UseStaticFiles();
 app.UseRouting();
 app.UseCors(SystemyWpConstants.CorsName.ClientApp);
 app.UseAuthentication();

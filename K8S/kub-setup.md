@@ -24,7 +24,11 @@ kubectl create secret generic secret-appsettings --from-file=./appsettings.secre
 kubectl create -f pvc.yaml
 kubectl get pvc
 
-###  Deploy postgres
+### Deploy postgres
+
+kubectl apply -f pvc.yaml
+kubectl apply -f postgres-secrets.yaml
+kubectl apply -f postgres.yaml
 
 ### Deploy microservices
 
@@ -70,5 +74,5 @@ kns default - be sure that you are in default namespace
 kubectl apply -f cm-certificate.yaml
 
 // now create domain, ingress and certificate
-kubectl create ing [ingress name] --rule=[our domain]/*=[service name]:[service port ex.80],tls=[secret with certificate name]
+kubectl create ing [master_gate] --rule=[api.systemywp.pl]/*=[systemywp-master]:[80],tls=[api.systemywp.pl]
 kubectl get ing
