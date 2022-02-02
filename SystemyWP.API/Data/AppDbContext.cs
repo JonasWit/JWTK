@@ -32,10 +32,6 @@ namespace SystemyWP.API.Data
                 .WithOne(x => x.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<AccessKey>()
-                .HasMany(x => x.AllowedUsers)
-                .WithMany(x => x.AllowedKeys);
-            
             modelBuilder.Entity<Log>()
                 .Property(b => b.Properties)
                 .HasColumnType("jsonb");

@@ -29,8 +29,6 @@ namespace SystemyWP.API.Data.Models.UsersManagement
 
         public List<UserClaim> Claims { get; set; } = new();
 
-        public List<AccessKey> AllowedKeys { get; set; } = new();
-
         public AccessKey AccessKey { get; set; }
         public string AccessKeyId { get; set; }
     }

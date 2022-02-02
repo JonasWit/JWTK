@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SystemyWP.API.Controllers.BaseClases;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Data.Models.UsersManagement.Access;
@@ -24,7 +23,7 @@ using SystemyWP.API.Repositories.General;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Settings;
 
-namespace SystemyWP.API.Controllers.Access
+namespace SystemyWP.API.Controllers
 {
     [Route("[controller]")]
     public class AuthController : ApiControllerBase
@@ -70,49 +69,13 @@ namespace SystemyWP.API.Controllers.Access
                         .Include(x => x.Claims)
                         .FirstOrDefault(u => u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
                 if (emailAddressExists is not null) return BadRequest();
-
-                var newGuid = Guid.NewGuid().ToString();
-                var newUser = new User()
-                {
-                    Id = newGuid,
-                    Password = _encryptor.Encrypt(userCredentialsForm.Password),
-                    AccessKey = new AccessKey
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                    },
-                    Claims = new List<UserClaim>
-                    {
-                        new()
-                        {
-                            ClaimType = ClaimTypes.Role,
-                            ClaimValue = SystemyWpConstants.Roles.User
-                        },
-                        new()
-                        {
-                            ClaimType = ClaimTypes.Email,
-                            ClaimValue = userCredentialsForm.Email
-                            
-                        },
-                        new()
-                        {
-                            ClaimType = ClaimTypes.Name,
-                            ClaimValue = userCredentialsForm.Email
-                        },
-                        new()
-                        {
-                            ClaimType = ClaimTypes.NameIdentifier,
-                            ClaimValue = newGuid
-                        },
-                    }
-                };
-
-                _userRepository.CreateUser(newUser);
+                
+                _userRepository.CreateUser(userCredentialsForm);
                 await _userRepository.SaveChanges();
                 return Ok();
             }
             catch (Exception e)
             {
-                if (_webHostEnvironment.IsDevelopment()) Console.WriteLine(SystemyWpConstants.ExceptionConsoleMessage(e));
                 _logger.LogError(e, "Issue during Registration");
                 return ServerError;
             }

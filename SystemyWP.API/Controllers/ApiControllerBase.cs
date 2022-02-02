@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers.BaseClases
+namespace SystemyWP.API.Controllers
 {
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase

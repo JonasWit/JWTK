@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using SystemyWP.API.Controllers.BaseClases;
-using SystemyWP.API.Services.Email;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Data;
 using SystemyWP.API.Forms.Conact;
+using SystemyWP.API.Services.Email;
 
-namespace SystemyWP.API.Controllers.Portal
+namespace SystemyWP.API.Controllers
 {
     [Route("[controller]")]
     public class ContactController : ApiControllerBase
