@@ -24,7 +24,7 @@ using SystemyWP.API.Repositories.General;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Settings;
 
-namespace SystemyWP.API.Controllers.Users
+namespace SystemyWP.API.Controllers.Access
 {
     [Route("[controller]")]
     public class AuthController : ApiControllerBase

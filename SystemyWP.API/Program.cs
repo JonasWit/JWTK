@@ -140,11 +140,11 @@ builder.Services.AddTransient<Encryptor>();
 
 builder.Services.AddFileServices(configuration);
 
-builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsName.ClientApp, build => build
-    .AllowAnyHeader()
-    .WithOrigins(configuration.GetValue("CorsSettings:PortalUrl", ""))
-    .AllowAnyMethod()
-    .AllowCredentials()));
+// builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsName.ClientApp, build => build
+//     .AllowAnyHeader()
+//     .WithOrigins(configuration.GetValue("CorsSettings:PortalUrl", ""))
+//     .AllowAnyMethod()
+//     .AllowCredentials()));
 
 if (builder.Environment.IsProduction())
 {
@@ -180,7 +180,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCustomResponseHeaders();
-app.UseCors(SystemyWpConstants.CorsName.ClientApp);
+//app.UseCors(SystemyWpConstants.CorsName.ClientApp);
 app.UseStaticFiles();
 app.UseRouting();
 app.UseIpRateLimiting();
