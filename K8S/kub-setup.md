@@ -6,7 +6,7 @@ docker push systemywp/master:[tag name]
 ### Private Docker
 
 docker login - locally
-kubectl create secret generic [docker-key or some name] \
+kubectl create secret generic [docker-key] \
 --from-file=.dockerconfigjson=.docker/config.json \
 --type=kubernetes.io/dockerconfigjson
 
