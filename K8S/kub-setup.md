@@ -14,7 +14,7 @@ kubectl describe pod [pod-name]
 ### Private Docker
 
 docker login - locally
-kubectl create secret generic [docker-key] \
+kubectl create secret generic docker-key \
 --from-file=.dockerconfigjson=.docker/config.json \
 --type=kubernetes.io/dockerconfigjson
 
@@ -34,7 +34,13 @@ kubectl exec -it postgres-0 bash
 # login to postgres
 psql --username=swp_api init-db
 
-### Deploy microservices
+### Deploy microservices & Tips
+
+kubectl apply -f systemywp-master.yaml
+
+base 64 password - echo -n 'my-super-secret-password' | base64
+kubectl exec --stdin --tty [pod] -- /bin/bash
+kubectl logs [pod-name]
 
 ##  Main API
 

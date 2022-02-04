@@ -17,6 +17,7 @@ spec:
       containers:
       - name: master
         image: systemywp/master:gate_v1
+        imagePullPolicy: "Always"
         volumeMounts:
         - name: secrets
           mountPath: /app/secrets
