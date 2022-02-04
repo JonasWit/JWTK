@@ -25,16 +25,14 @@ kubectl create secret generic secret-appsettings --from-file=./appsettings.secre
 ### Deploy postgres
 
 kubectl apply -f postgres-secrets.yaml
-
-kubectl create ns postgres
-kubectl -n postgres apply -f postgres-pv-claim.yaml
-kubectl -n postgres apply -f postgres.yaml
+kubectl apply -f postgres-pv-claim.yaml
+kubectl apply -f postgres.yaml
 
 # enter the container
 kubectl exec -it postgres-0 bash
 
 # login to postgres
-psql --username=swp_api swp_api
+psql --username=swp_api init-db
 
 ### Deploy microservices
 
