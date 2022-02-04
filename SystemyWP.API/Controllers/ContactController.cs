@@ -36,7 +36,7 @@ namespace SystemyWP.API.Controllers
                 
                 return Ok();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return ServerError;
             }

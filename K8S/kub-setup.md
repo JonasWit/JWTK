@@ -3,6 +3,14 @@
 docker build -t systemywp/master:[tag name] .
 docker push systemywp/master:[tag name]
 
+### Setup kubectl
+
+export KUBECONFIG=core-kubeconfig.yaml
+export KUBE_EDITOR=vim
+
+kubectl logs [pod-name] -p
+kubectl describe pod [pod-name]
+
 ### Private Docker
 
 docker login - locally
@@ -10,25 +18,23 @@ kubectl create secret generic [docker-key] \
 --from-file=.dockerconfigjson=.docker/config.json \
 --type=kubernetes.io/dockerconfigjson
 
-### Setup kubectl
-
-export KUBECONFIG=test-kubeconfig.yaml
-export KUBE_EDITOR=vim
-
 ### Add Secret for .NET
 
 kubectl create secret generic secret-appsettings --from-file=./appsettings.secrets.json
 
-### Create PVC
-
-kubectl create -f pvc.yaml
-kubectl get pvc
-
 ### Deploy postgres
 
-kubectl apply -f pvc.yaml
 kubectl apply -f postgres-secrets.yaml
-kubectl apply -f postgres.yaml
+
+kubectl create ns postgres
+kubectl -n postgres apply -f postgres-pv-claim.yaml
+kubectl -n postgres apply -f postgres.yaml
+
+# enter the container
+kubectl exec -it postgres-0 bash
+
+# login to postgres
+psql --username=swp_api swp_api
 
 ### Deploy microservices
 

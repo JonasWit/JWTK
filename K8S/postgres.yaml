@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 data:
-  POSTGRES_DB: masterdb
+  POSTGRES_DB: init-db
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -23,23 +23,22 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres
-          image: postgres:13.4
-          imagePullPolicy: "IfNotPresent"
-          ports:
-            - containerPort: 5432
-          envFrom:
-            - configMapRef:
-                name: postgres-config
-            - secretRef:
-                name: postgres-secrets                    
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/postgresql/data
+      - name: postgres
+        image: postgres:13.4
+        ports:
+          - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+          - secretRef:
+              name: postgres-secrets                    
+        volumeMounts:
+          - name: postgres-database-storage
+            mountPath: /var/lib/pgsql/data
       volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: pvc
+      - name: postgres-database-storage
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
 ---
 apiVersion: v1
 kind: Service
@@ -51,7 +50,7 @@ spec:
   selector:
     app: postgres
   ports:
-    - protocol: TCP
-      name: http
-      port: 5432
-      targetPort: 5432
+  - protocol: TCP
+    name: http
+    port: 5432
+    targetPort: 5432
