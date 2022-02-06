@@ -20,8 +20,8 @@ public class HealthController : ApiControllerBase
     }
     
     [DisableCors]
-    [HttpGet("get-check")]
-    public IActionResult AuthorizedCheck()
+    [HttpGet]
+    public IActionResult Get()
     {
         _logger.LogWarning($"Health Check endpoint called!");
         return Ok(new {Message= "Service is alive!" });

@@ -28,7 +28,7 @@ using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+//builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
