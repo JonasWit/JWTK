@@ -163,8 +163,6 @@ if (builder.Environment.IsProduction())
 
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
-Console.WriteLine($"--> Settings used: {configuration.GetValue("ConfigSet", "")}");
-
 // Build the app
 var app = builder.Build();
 
@@ -192,6 +190,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
 
 DBManager.PrepareDatabase(app);
+Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");
 Console.WriteLine("--> App has started...");
 
 app.Run();
