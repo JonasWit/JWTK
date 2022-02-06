@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: systemywp-master-depl
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: systemywp-master
@@ -16,8 +16,10 @@ spec:
       - name: docker-key 
       containers:
       - name: master
-        image: systemywp/master:test
+        image: systemywp/master:gate_v2
         imagePullPolicy: "Always"
+        ports:
+          - containerPort: 8080
         volumeMounts:
         - name: secrets
           mountPath: /app/secrets
@@ -38,7 +40,7 @@ spec:
   ports:
   - name: systemywp-master
     protocol: TCP
-    port: 80
-    targetPort: 80
+    port: 8080
+    targetPort: 8080
     
 

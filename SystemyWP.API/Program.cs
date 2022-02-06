@@ -176,8 +176,8 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsProduction())
 {
     app.UseExceptionHandler("/Error");
-    app.UseHsts();
-    app.UseHttpsRedirection();
+    // app.UseHsts();
+    // app.UseHttpsRedirection();
 }
 
 app.UseIpRateLimiting();
