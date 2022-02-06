@@ -1,7 +1,7 @@
 ### Docker Commands
 
-docker build -t systemywp/master:[tag name] .
-docker push systemywp/master:[tag name]
+docker build -t systemywp/master:gate_v2 .
+docker push systemywp/master:gate_v2
 
 ### Setup kubectl
 

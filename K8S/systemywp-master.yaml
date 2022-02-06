@@ -19,7 +19,7 @@ spec:
         image: systemywp/master:gate_v2
         imagePullPolicy: "Always"
         ports:
-          - containerPort: 8080
+          - containerPort: 80
         volumeMounts:
         - name: secrets
           mountPath: /app/secrets
@@ -40,7 +40,7 @@ spec:
   ports:
   - name: systemywp-master
     protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 80
+    targetPort: 80
     
 
