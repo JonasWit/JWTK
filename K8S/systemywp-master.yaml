@@ -16,7 +16,7 @@ spec:
       - name: docker-key 
       containers:
       - name: master
-        image: systemywp/master:gate_v2
+        image: systemywp/master:test
         imagePullPolicy: "Always"
         volumeMounts:
         - name: secrets
@@ -34,9 +34,9 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: systemywp-master-srv
+    app: systemywp-master
   ports:
-  - name: systemywp-master-srv
+  - name: systemywp-master
     protocol: TCP
     port: 80
     targetPort: 80
