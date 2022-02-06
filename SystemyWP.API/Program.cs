@@ -163,6 +163,8 @@ if (builder.Environment.IsProduction())
 
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
+Console.WriteLine($"--> Settings used: {configuration.GetValue("ConfigSet", "")}");
+
 // Build the app
 var app = builder.Build();
 
