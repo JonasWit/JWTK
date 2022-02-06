@@ -51,11 +51,16 @@ kubectl logs [pod-name]
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
+helm repo update
+
 LINODE_API_TOKEN=1234abcd...6789
+
 helm upgrade --install external-dns bitnami/external-dns \
 --namespace external-dns --create-namespace \
 --set provider=linode \
 --set linode.apiToken=$LINODE_API_TOKEN
+
+kubectl logs -n external-dns -l app.kubernetes.io/name=external-dns
 
 // do this later on the cert step
 kubectl annotate service [our service name] \
@@ -69,7 +74,7 @@ helm upgrade --install traefik traefik/traefik \
 --set "providers.kubernetesIngress.publishedService.enabled=true"
 
 // do this later on the cert step
-kubectl create ingress [ingress name] --rule=[our domain]/*=[service name]:[service port]
+kubectl create ingress master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80
 kubectl get ing
 
 ### Enable TLS
@@ -83,6 +88,10 @@ kubectl apply -f cm-clusterissuer.yaml
 kns default - be sure that you are in default namespace
 kubectl apply -f cm-certificate.yaml
 
+//yaml annotation for TLS
+
+
 // now create domain, ingress and certificate
-kubectl create ing [master_gate] --rule=[api.systemywp.pl]/*=[systemywp-master]:[80],tls=[api.systemywp.pl]
+kubectl create ing master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80,tls=api.systemywp.pl
+kubectl annotate ingress master-gate cert-manager.io/cluster-issuer=letsencrypt-production
 kubectl get ing

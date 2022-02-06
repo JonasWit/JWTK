@@ -36,7 +36,7 @@ spec:
   selector:
     app: systemywp-master
   ports:
-  - name: platformservice
+  - name: systemywp-master
     protocol: TCP
     port: 80
     targetPort: 80
