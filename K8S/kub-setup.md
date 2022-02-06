@@ -77,6 +77,8 @@ helm upgrade --install traefik traefik/traefik \
 kubectl create ingress master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80
 kubectl get ing
 
+kubectl create ingress test-app --rule=api.systemywp.pl/*=test-app:80
+
 ### Enable TLS
 
 helm upgrade --install cert-manager cert-manager \
@@ -87,9 +89,6 @@ helm upgrade --install cert-manager cert-manager \
 kubectl apply -f cm-clusterissuer.yaml
 kns default - be sure that you are in default namespace
 kubectl apply -f cm-certificate.yaml
-
-//yaml annotation for TLS
-
 
 // now create domain, ingress and certificate
 kubectl create ing master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80,tls=api.systemywp.pl

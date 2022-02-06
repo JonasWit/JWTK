@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: systemywp-master-depl
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: systemywp-master
@@ -16,7 +16,7 @@ spec:
       - name: docker-key 
       containers:
       - name: master
-        image: systemywp/master:gate_v1
+        image: systemywp/master:gate_v2
         imagePullPolicy: "Always"
         volumeMounts:
         - name: secrets
@@ -34,9 +34,9 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: systemywp-master
+    app: systemywp-master-srv
   ports:
-  - name: systemywp-master
+  - name: systemywp-master-srv
     protocol: TCP
     port: 80
     targetPort: 80
