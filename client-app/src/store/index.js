@@ -3,7 +3,7 @@ import {NavModel} from "@/models/general/portalDisplayModel";
 import {NAV_TYPES} from "@/models/enums";
 import {
     readDarkMode,
-    readGateAPIAddress,
+    readGateAPIAddress, readGDPRConsent,
     setLocalStoreItem
 } from "@/appControl/controlFunctions";
 import snack from "@/store/snack";
@@ -15,16 +15,23 @@ export default createStore({
         navType: new NavModel(NAV_TYPES.MAIN),
         apiGateBaseAddress: readGateAPIAddress(),
         darkMode: readDarkMode(),
+        gdpr: readGDPRConsent()
     },
     getters: {
         isDark(state) {
             return state.darkMode
+        },
+        gdprAccepted(state) {
+            return state.gdpr
         }
     },
     mutations: {
         toggleDarkTheme(state, option) {
             state.darkMode = option
-        }
+        },
+        toggleGDPR(state, option) {
+            state.gdpr = option
+        },
     },
     actions: {
         setDark({commit, state}) {
@@ -35,6 +42,10 @@ export default createStore({
                 setLocalStoreItem(LOCAL_STORE_NAMES.DARK_THEME, true)
                 commit('toggleDarkTheme', true)
             }
+        },
+        acceptGDPR({commit}) {
+            setLocalStoreItem(LOCAL_STORE_NAMES.GDPR_CONSENT, true)
+            commit('toggleGDPR', true)
         }
     },
     modules: {

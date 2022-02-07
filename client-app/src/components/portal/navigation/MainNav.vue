@@ -33,16 +33,15 @@
 <script>
 import {useStore} from "vuex";
 import {computed} from "vue";
-import LoginRouterLink from "@/components/auth/LoginRouterLink";
-import RegisterRouterLink from "@/components/auth/RegisterRouterLink";
-import HomeRouterLink from "@/components/auth/HomeRouterLink";
-import AboutRouterLink from "@/components/auth/AboutRouterLink";
-import PrivacyRouterLink from "@/components/auth/PrivacyRouterLink";
-import ContactRouterLink from "@/components/auth/ContactRouterLink";
-import ChangePasswordRouterLink from "@/components/auth/ChangePasswordRouterLink";
-import LogoutRouterLink from "@/components/auth/LogoutRouterLink";
-import ToSRouterLink from "@/components/auth/ToSRouterLink";
-
+import LogoutRouterLink from "@/components/portal/LogoutRouterLink";
+import ToSRouterLink from "@/components/portal/ToSRouterLink";
+import ChangePasswordRouterLink from "@/components/portal/ChangePasswordRouterLink";
+import ContactRouterLink from "@/components/portal/ContactRouterLink";
+import PrivacyRouterLink from "@/components/portal/PrivacyRouterLink";
+import AboutRouterLink from "@/components/portal/AboutRouterLink";
+import HomeRouterLink from "@/components/portal/HomeRouterLink";
+import RegisterRouterLink from "@/components/portal/RegisterRouterLink";
+import LoginRouterLink from "@/components/portal/LoginRouterLink";
 export default {
   name: "MainNav",
   components: {

@@ -1,11 +1,7 @@
 <template>
-  <div :class="isDark ? 'dark' : ''">
+  <div :class="isDark ? 'dark' : ''" class="relative">
     <div class="min-h-screen md:flex">
-
-      <button @click="toggleDark">
-        toggle Dark
-      </button>
-
+      <GdprModal v-if="!gdprAccepted"></GdprModal>
       <NavContainer class="flex-none w-full md:max-w-xs">
         <MainNav v-if="nav.navType === 'main'"/>
       </NavContainer>
@@ -27,20 +23,17 @@ import {useStore} from "vuex";
 import {computed} from "vue";
 import {NavModel} from "@/models/general/portalDisplayModel";
 import SnackPopup from "@/components/generic/SnackPopup";
+import GdprModal from "@/components/portal/GdprModal";
 
 export default {
-  components: {SnackPopup, MainNav, NavContainer},
+  components: {GdprModal, SnackPopup, MainNav, NavContainer},
   setup() {
     const store = useStore()
-
-    function toggleDark() {
-      store.dispatch('setDark')
-    }
 
     return {
       nav: computed(() => Object.assign(NavModel, store.state.navType)),
       isDark: computed(() => store.getters["isDark"]),
-      toggleDark
+      gdprAccepted: computed(() => store.getters["gdprAccepted"]),
     }
   }
 }

@@ -11,6 +11,12 @@ export const readDarkMode = () => {
     return !!darkTheme;
 };
 
+export const readGDPRConsent = () => {
+    const consent = getLocalStoreItem(LOCAL_STORE_NAMES.GDPR_CONSENT);
+    console.warn("GDPR Consent: ", !!consent)
+    return !!consent;
+};
+
 export const setTokenCookie = (tokenValue) => {
     console.log('setting cookie')
     let d = new Date();
@@ -50,14 +56,6 @@ export const getCookie = (cname) => {
 export const checkCookie = (cookieName) => {
     const cookie = getCookie(cookieName);
     return cookie !== "";
-};
-
-export const getGDPRConsent = () => {
-    return localStorage.getItem("GDPR:accepted") === "true";
-};
-
-export const setGDPRConsent = () => {
-    localStorage.setItem("GDPR:accepted", "true");
 };
 
 export const getLocalStoreItem = (key) => {

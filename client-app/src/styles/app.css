@@ -8,3 +8,7 @@
     opacity: 0;
 }
 
+.nav-width {
+    max-width: 15rem;
+}
+

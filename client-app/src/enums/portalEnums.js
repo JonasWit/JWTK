@@ -5,5 +5,6 @@ export const COOKIES_NAMES = {
 
 export const LOCAL_STORE_NAMES = {
     ID_TOKEN: "token_id",
-    DARK_THEME: "dark_theme"
+    DARK_THEME: "dark_theme",
+    GDPR_CONSENT: "gdpr_consent"
 };

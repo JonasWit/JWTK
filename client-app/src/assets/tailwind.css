@@ -12,6 +12,10 @@
     @apply transform -translate-y-24
 }
 
+.modal-gdpr {
+    @apply absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-transparent
+}
+
 .snack-leave-to {
     @apply transform -translate-y-24   
 }

@@ -17,13 +17,16 @@ export default {
             state.userToken = null
             state.userObject = null
         },
+        setUserData(state, { token, userObject}){
+            state.userToken = token
+            state.userObject = userObject
+        }
     },
     actions: {
-        setIdToken({state}, token) {
+        setIdToken({commit}, token) {
             console.warn("Saving token: ", token)
             setLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN, token)
-            state.userToken = token
-            state.userObject = deserializeUserObject()
+            commit('setSnack', { token: token, userObject: deserializeUserObject() })
         },
     },
 }

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-
 import {useRouter} from "vue-router";
 import {computed, reactive} from "vue";
 import {useStore} from "vuex";
