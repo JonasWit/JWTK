@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using SystemyWP.API.Data.Models.UsersManagement;
 using SystemyWP.API.Forms.User;
 

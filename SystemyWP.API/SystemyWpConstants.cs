@@ -15,6 +15,12 @@ namespace SystemyWP.API
             public const string LoginPath = @"/Account/Login";
             public const string LogoutPath = @"/api/auth/logout";
         }
+        
+        public struct ServiceResponses
+        {
+            public const string AliveResponse = "Service is alive!";
+            public const string DeadResponse = "Service is dead!";
+        }
 
         public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
 
@@ -22,7 +28,7 @@ namespace SystemyWP.API
         {
             public const string ServerAuth = nameof(ServerAuth);
         }
-        
+
         public struct CorsName
         {
             public const string ClientApp = nameof(ClientApp);

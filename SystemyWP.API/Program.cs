@@ -24,11 +24,17 @@ using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using SystemyWP.API;
 using SystemyWP.API.Data;
+using SystemyWP.API.HttpClients;
+using SystemyWP.API.Policies;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+if (builder.Environment.IsDevelopment())
+{
+    builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+}
+
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
     config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
@@ -78,10 +84,12 @@ builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateL
 builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
 builder.Services.AddInMemoryRateLimiting();
 
+//Data Access Layer
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddSingleton(new HttpClientPolicy());
 
 builder.Services.AddDataProtection()
     .SetApplicationName("systemywp")
@@ -135,6 +143,7 @@ builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(Send
 builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
 
+builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 
@@ -176,8 +185,8 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsProduction())
 {
     app.UseExceptionHandler("/Error");
-    // app.UseHsts();
-    // app.UseHttpsRedirection();
+    app.UseHsts();
+    //app.UseHttpsRedirection();
 }
 
 app.UseIpRateLimiting();

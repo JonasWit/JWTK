@@ -4,12 +4,16 @@ using SystemyWP.API.Gastronomy.Data;
 using SystemyWP.API.Gastronomy.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5001));
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5001));
+}
 
 var configuration = builder.Configuration;
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("Default")));
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(configuration.GetConnectionString("Gastronomy")));
 
 builder.Services.AddControllers()
     .AddFluentValidation(x =>
@@ -22,5 +26,5 @@ var app = builder.Build();
 
 app.UseServiceStatus();
 app.MapControllers();
-DBManager.PrepareDatabase(app);
+//DBManager.PrepareDatabase(app);
 app.Run();
