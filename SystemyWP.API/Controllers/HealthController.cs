@@ -20,7 +20,6 @@ public class HealthController : ApiControllerBase
     public IActionResult Get()
     {
         _logger.LogWarning($"Health Check endpoint called!");
-        
         return Ok(new {MasterStatus = "Service is alive!" });
     }
 }
