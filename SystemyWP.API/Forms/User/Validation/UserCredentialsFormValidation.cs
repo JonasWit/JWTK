@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace SystemyWP.API.Forms.User.Validation
+namespace SystemyWP.API.Forms.User.Validation;
+
+public class UserCredentialsFormValidation : AbstractValidator<UserCredentialsForm>
 {
-    public class UserCredentialsFormValidation : AbstractValidator<UserCredentialsForm>
+    public UserCredentialsFormValidation()
     {
-        public UserCredentialsFormValidation()
-        {
-            RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            RuleFor(x => x.Password).NotEmpty();
-        }
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(12);
     }
 }

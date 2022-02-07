@@ -28,7 +28,6 @@ namespace SystemyWP.API.Controllers
     [Route("[controller]")]
     public class AuthController : ApiControllerBase
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
         private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
@@ -36,15 +35,12 @@ namespace SystemyWP.API.Controllers
         private readonly IUserRepository _userRepository;
 
         public AuthController(
-            IWebHostEnvironment webHostEnvironment,
             ILogger<AuthController> logger,
             AppDbContext context,
             IOptionsMonitor<AuthSettings> optionsMonitor,
             Encryptor encryptor,
-            IUserRepository userRepository,
-            IMapper mapper)
+            IUserRepository userRepository)
         {
-            _webHostEnvironment = webHostEnvironment;
             _logger = logger;
             _context = context;
             _optionsMonitor = optionsMonitor;
@@ -61,15 +57,13 @@ namespace SystemyWP.API.Controllers
         {
             try
             {
-                var emailAddressExists =
-                    _context.Users
-                        .Include(x => x.Claims)
-                        .FirstOrDefault(u => u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
+                var emailAddressExists = _userRepository.GetUser(u =>
+                    u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
                 if (emailAddressExists is not null) return BadRequest();
                 
                 _userRepository.CreateUser(userCredentialsForm);
-                await _userRepository.SaveChanges();
-                return Ok();
+                if (await _userRepository.SaveChanges() > 0) return Ok();
+                return BadRequest();
             }
             catch (Exception e)
             {
@@ -84,12 +78,10 @@ namespace SystemyWP.API.Controllers
             try
             {
                 userCredentialsForm.Password = _encryptor.Encrypt(userCredentialsForm.Password);
-                var loggedInUser = await _context.Users
-                    .Include(u => u.Claims)
-                    .Where(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
-                                u.Password == userCredentialsForm.Password)
-                    .FirstOrDefaultAsync();
-
+                
+                var loggedInUser = _userRepository
+                    .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
+                                u.Password == userCredentialsForm.Password);
                 if (loggedInUser is null) return NotFound();
                 
                 loggedInUser.LastLogin = DateTime.UtcNow;
@@ -98,6 +90,50 @@ namespace SystemyWP.API.Controllers
                 
                 var token = GenerateJwtToken(loggedInUser);
                 return Ok(new TokenDto() {Token = token});
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Issue during Authentication");
+                return ServerError;
+            }
+        }
+        
+        [Authorize]
+        [HttpPost("delete-account", Name = "DeleteAccount")]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            try
+            {
+                _userRepository.DeleteAccount(UserId);
+                if (await _userRepository.SaveChanges() > 0) return NoContent();
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Issue during Authentication");
+                return ServerError;
+            }
+        }
+        
+        [Authorize]
+        [HttpPost("change-password", Name = "ResetPassword")]
+        public async Task<IActionResult> ChangePassword(UserChangePasswordForm changePasswordForm)
+        {
+            try
+            {
+                var newPassword = _encryptor.Encrypt(changePasswordForm.NewPassword);
+                var oldPassword = _encryptor.Encrypt(changePasswordForm.OldPassword);
+                
+                var loggedInUser = _userRepository
+                    .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == UserEmail) &&
+                                  u.Password == oldPassword);
+                if (loggedInUser is null) return NotFound();
+                
+                _userRepository.ChangePassword(UserId, newPassword);
+                await _userRepository.SaveChanges();
+                
+                if (await _userRepository.SaveChanges() > 0) return Ok();
+                return BadRequest();
             }
             catch (Exception e)
             {
