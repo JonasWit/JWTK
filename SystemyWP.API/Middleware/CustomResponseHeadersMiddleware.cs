@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace SystemyWP.API.Middleware
 {
-    public static class RequestCultureMiddlewareExtensions
+    public static class CustomResponseHeadersMiddlewareExtensions
     {
         public static IApplicationBuilder UseCustomResponseHeaders(this IApplicationBuilder builder)
         {
