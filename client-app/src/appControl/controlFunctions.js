@@ -3,6 +3,7 @@ import jwt_decode from "jwt-decode";
 import {UserModel} from "@/models/general/userModel";
 
 export const readGateAPIAddress = () => {
+    console.warn("API Endpoint: ", process.env.VUE_APP_API_GATE)
     return process.env.VUE_APP_API_GATE
 };
 
