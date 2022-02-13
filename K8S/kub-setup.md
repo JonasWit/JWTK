@@ -95,4 +95,8 @@ kubectl apply -f cm-certificate.yaml
 // now create domain, ingress and certificate
 kubectl create ing master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80,tls=api.systemywp.pl
 kubectl annotate ingress master-gate cert-manager.io/cluster-issuer=letsencrypt-production
+
+kubectl create ing client-app --rule=www.systemywp.pl/*=client-app-srv:80,tls=www.systemywp.pl
+kubectl annotate ingress client-app cert-manager.io/cluster-issuer=letsencrypt-production
+
 kubectl get ing

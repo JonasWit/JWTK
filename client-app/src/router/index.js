@@ -33,12 +33,8 @@ const routes = [
             metaTags: [
                 {
                     name: 'description',
-                    content: 'The home page of our example app.'
+                    content: 'Strona Główna'
                 },
-                {
-                    property: 'og:description',
-                    content: 'The home page of our example app.'
-                }
             ]
         }
     },
@@ -51,7 +47,7 @@ const routes = [
             metaTags: [
                 {
                     name: 'Strona Logowania',
-                    content: 'Strona Logowania do Aplikacji'
+                    content: 'Strona Logowania'
                 },
             ]
         }
@@ -75,7 +71,7 @@ const routes = [
             metaTags: [
                 {
                     name: 'description',
-                    content: 'The home page of our example app.'
+                    content: 'Zmiana Hasła'
                 },
             ]
         }
@@ -89,7 +85,7 @@ const routes = [
             metaTags: [
                 {
                     name: 'description',
-                    content: 'Strona Rejestracji do Aplikacji'
+                    content: 'Strona Rejestracji'
                 },
             ]
         }
