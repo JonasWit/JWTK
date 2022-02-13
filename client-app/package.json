@@ -1,14 +1,13 @@
 {
   "vue": {
     "pwa": {
-      "name": "SystemyWP",
       "themeColor": "#205c94",
       "msTileColor": "#205c94",
       "appleMobileWebAppCapable": "yes",
       "appleMobileWebAppStatusBarStyle": "#205c94"
     }
   },
-  "name": "systemywp",
+  "name": "systemywp.pl",
   "version": "0.1.0",
   "private": true,
   "scripts": {
