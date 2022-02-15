@@ -12,6 +12,7 @@ import Solutions from "@/views/Solutions";
 import ChangePassword from "@/views/auth/ChangePassword";
 import Logout from "@/views/auth/Logout";
 import ToS from "@/views/ToS";
+import DeleteAccount from "@/views/auth/DeleteAccount";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -62,7 +63,7 @@ const routes = [
         }
     },
     {
-        path: '/auth/changepassword',
+        path: '/auth/change-password',
         name: 'ChangePassword',
         component: ChangePassword,
         beforeEnter: requireAuth,
@@ -86,6 +87,21 @@ const routes = [
                 {
                     name: 'description',
                     content: 'Strona Rejestracji'
+                },
+            ]
+        }
+    },
+    {
+        path: '/auth/delete-account',
+        name: 'DeleteAccount',
+        component: DeleteAccount,
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Usunięcie Konta',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Usunięcie Konta'
                 },
             ]
         }
@@ -146,7 +162,6 @@ const routes = [
         meta: {
             title: 'Rozwiązania dla Firm',
         }
-        
     },
     // {
     //   path: '/about',
