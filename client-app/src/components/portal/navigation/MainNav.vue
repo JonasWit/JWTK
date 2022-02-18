@@ -22,6 +22,9 @@
       <RegisterRouterLink/>
     </li>
     <li v-if="isAuth" class="py-1">
+      <DeleteAccountRouterLink/>
+    </li>
+    <li v-if="isAuth" class="py-1">
       <ChangePasswordRouterLink/>
     </li>
     <li v-if="isAuth" class="py-1">
@@ -42,9 +45,11 @@ import AboutRouterLink from "@/components/portal/AboutRouterLink";
 import HomeRouterLink from "@/components/portal/HomeRouterLink";
 import RegisterRouterLink from "@/components/portal/RegisterRouterLink";
 import LoginRouterLink from "@/components/portal/LoginRouterLink";
+import DeleteAccountRouterLink from "@/components/portal/DeleteAccountRouterLink";
 export default {
   name: "MainNav",
   components: {
+    DeleteAccountRouterLink,
     ToSRouterLink,
     LogoutRouterLink,
     ChangePasswordRouterLink,
