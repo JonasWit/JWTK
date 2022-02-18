@@ -110,7 +110,7 @@ namespace SystemyWP.API.Controllers
         }
         
         [Authorize]
-        [HttpPost("change-password", Name = "ResetPassword")]
+        [HttpPost("change-password", Name = "ChangePassword")]
         public async Task<IActionResult> ChangePassword(UserChangePasswordForm changePasswordForm)
         {
             try
@@ -124,8 +124,6 @@ namespace SystemyWP.API.Controllers
                 if (loggedInUser is null) return NotFound();
                 
                 _userRepository.ChangePassword(UserId, newPassword);
-                await _userRepository.SaveChanges();
-                
                 if (await _userRepository.SaveChanges() > 0) return Ok();
                 return BadRequest();
             }
