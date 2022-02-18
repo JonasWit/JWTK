@@ -1,6 +1,7 @@
 <template>
   <div :class="isDark ? 'dark' : ''" class="relative">
     <div class="min-h-screen md:flex">
+      <SnackPopup/>
       <GdprModal v-if="!gdprAccepted"></GdprModal>
       <NavContainer class="flex-none w-full md:max-w-xs">
         <MainNav v-if="nav.navType === 'main'"/>
