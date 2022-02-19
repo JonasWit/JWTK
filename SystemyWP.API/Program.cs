@@ -42,7 +42,7 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 
 if (builder.Environment.IsProduction())
 {
-    builder.WebHost.UseSerilog((context, config) =>
+    builder.Host.UseSerilog((context, config) =>
     {
         var connectionString = context.Configuration.GetConnectionString("Master");
 
@@ -68,7 +68,7 @@ if (builder.Environment.IsProduction())
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.WebHost.UseSerilog((context, config) =>
+    builder.Host.UseSerilog((context, config) =>
     {
         config.WriteTo.Console();
     }); 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,5 +25,7 @@ public class DBManager
         {
             Console.WriteLine($"--> Could not run migrations: {ex.Message}");
         }
+        
+        
     }
 }
