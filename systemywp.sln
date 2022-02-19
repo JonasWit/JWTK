@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Test", "Syste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.Tests", "SystemyWP.Tests\SystemyWP.Tests.csproj", "{5658002E-BAD1-49F6-9520-776D2E3BF7E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.Lib.Auth", "SystemyWP.Lib.Auth\SystemyWP.Lib.Auth.csproj", "{91159929-2D46-42BA-8AFA-778CD3D70899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{5658002E-BAD1-49F6-9520-776D2E3BF7E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5658002E-BAD1-49F6-9520-776D2E3BF7E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5658002E-BAD1-49F6-9520-776D2E3BF7E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91159929-2D46-42BA-8AFA-778CD3D70899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91159929-2D46-42BA-8AFA-778CD3D70899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91159929-2D46-42BA-8AFA-778CD3D70899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91159929-2D46-42BA-8AFA-778CD3D70899}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

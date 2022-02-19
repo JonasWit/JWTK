@@ -1,4 +1,8 @@
-﻿namespace SystemyWP.API.Gastronomy.Middleware
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
+namespace SystemyWP.API.Gastronomy.Middleware
 {
     public static class ServiceStatusMiddlewareExtensions
     {

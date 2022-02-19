@@ -27,12 +27,20 @@ public class GastronomyHttpClient
     
     public async Task<string> GetHealthCheckResponse()
     {
-        _httpClient.BaseAddress = new Uri(_optionsMonitor.CurrentValue.GastronomyService);
+        try
+        {
+            _httpClient.BaseAddress = new Uri(_optionsMonitor.CurrentValue.GastronomyService);
 
-        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync("health"));
+            var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+                => _httpClient.GetAsync("health"));
 
-        return response.IsSuccessStatusCode ? 
-            SystemyWpConstants.ServiceResponses.AliveResponse : SystemyWpConstants.ServiceResponses.DeadResponse;
+            return response.IsSuccessStatusCode
+                ? SystemyWpConstants.ServiceResponses.AliveResponse
+                : SystemyWpConstants.ServiceResponses.DeadResponse;
+        }
+        catch (Exception)
+        {
+            return SystemyWpConstants.ServiceResponses.ErrorResponse;
+        }
     }
 }

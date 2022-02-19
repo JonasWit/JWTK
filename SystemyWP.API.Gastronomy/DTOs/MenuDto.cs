@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SystemyWP.API.Gastronomy.DTOs;
 
 public class MenuDto

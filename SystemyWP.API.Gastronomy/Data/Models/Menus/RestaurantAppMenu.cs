@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using SystemyWP.API.Gastronomy.Data.Models.Abstractions;
 using SystemyWP.API.Gastronomy.Data.Models.Dishes;
 

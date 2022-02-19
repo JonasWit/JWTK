@@ -1,6 +1,9 @@
+using System;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Gastronomy.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
