@@ -1,10 +1,10 @@
 <template>
-<div>Gastro app</div>
+<div>dishes</div>
 </template>
 
 <script>
 export default {
-  name: "Gastronomy"
+  name: "Dishes"
 }
 </script>
 

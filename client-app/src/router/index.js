@@ -4,7 +4,6 @@ import About from "@/views/About";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
-import Gastronomy from "@/views/apps/Gastronomy";
 import Login from "@/views/auth/Login";
 import Register from "@/views/auth/Register";
 import store from "@/store";
@@ -13,6 +12,10 @@ import ChangePassword from "@/views/auth/ChangePassword";
 import Logout from "@/views/auth/Logout";
 import ToS from "@/views/ToS";
 import DeleteAccount from "@/views/auth/DeleteAccount";
+import Menus from "@/views/apps/gastronomy/Menus";
+import Dishes from "@/views/apps/gastronomy/Dishes";
+import Ingredients from "@/views/apps/gastronomy/Ingredients";
+import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -147,12 +150,39 @@ const routes = [
         }
     },
     {
-        path: '/apps/gastronomy',
-        name: 'Gastronomy',
-        component: Gastronomy,
+        path: '/apps/gastronomy/control-panel',
+        name: 'GastronomyControlPanel',
+        component: ControlPanel,
         beforeEnter: requireAuth,
         meta: {
-            title: 'Gastronomia',
+            title: 'Panel',
+        }
+    },
+    {
+        path: '/apps/gastronomy/menus',
+        name: 'GastronomyMenus',
+        component: Menus,
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Menu',
+        }
+    },
+    {
+        path: '/apps/gastronomy/dishes',
+        name: 'GastronomyDishes',
+        component: Dishes,
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Dania',
+        }
+    },
+    {
+        path: '/apps/gastronomy/ingredients',
+        name: 'GastronomyIngredients',
+        component: Ingredients,
+        beforeEnter: requireAuth,
+        meta: {
+            title: 'Składniki',
         }
     },
     {

@@ -93,3 +93,20 @@ export const setLocalStoreItem = (key, value) => {
 export const removeLocalStoreItem = (key) => {
     localStorage.removeItem(key);
 };
+
+export const toggleNavBar = () => {
+    const menu = document.querySelector('#mainNavBar');
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+    } else {
+        menu.classList.add('hidden');
+    }
+};
+
+export const hideNavBar = () => {
+    const menu = document.querySelector('#mainNavBar');
+    if (!menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+    }
+};
+

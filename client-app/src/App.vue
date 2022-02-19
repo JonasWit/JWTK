@@ -30,7 +30,6 @@ export default {
   components: {GdprModal, SnackPopup, MainNav, NavContainer},
   setup() {
     const store = useStore()
-
     return {
       nav: computed(() => Object.assign(NavModel, store.state.navType)),
       isDark: computed(() => store.getters["isDark"]),

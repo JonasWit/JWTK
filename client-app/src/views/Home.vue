@@ -3,7 +3,7 @@
     <div>
       <h4 class="font-bold mt-12 pb-2 border-b border-gray-200 text-xl text-center">Rozwiązania dla Firm</h4>
       <div class="mt-8 grid lg:grid-cols-3 gap-7">
-        <router-link :to="{ 'name': 'Gastronomy' }">
+        <router-link :to="{ 'name': 'GastronomyControlPanel' }">
           <div class="portal-card">
             <img src="/img/restaurant-card-sm.jpg" alt="gastronomy" class="w-full h-32 sm:h-48 object-cover">
             <div class="m-4">
@@ -16,7 +16,7 @@
             </div>
           </div>
         </router-link>
-        <router-link :to="{ 'name': 'Gastronomy' }">
+        <router-link :to="{ 'name': 'GastronomyControlPanel' }">
           <div class="portal-card">
             <img src="/img/warehouse-card-sm.jpg" alt="logistics" class="w-full h-32 sm:h-48 object-cover">
             <div class="m-4">

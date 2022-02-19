@@ -7,13 +7,13 @@
             systemywp.pl
           </router-link>
         </h1>
-        <div class="px-4 cursor-pointer md:hidden" @click="handleSubmit">
+        <div class="px-4 cursor-pointer md:hidden" @click="toggleNav">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </div>
       </div>
-      <div class="hidden md:block" id="menu">
+      <div class="hidden md:block" id="mainNavBar">
         <slot></slot>
       </div>
     </nav>
@@ -21,19 +21,13 @@
 </template>
 
 <script>
+import {toggleNavBar} from "@/appControl/controlFunctions";
+
 export default {
   name: "NavContainer",
   setup() {
-    const handleSubmit =  () => {
-      const menu = document.querySelector('#menu');
-
-        if (menu.classList.contains('hidden')) {
-          menu.classList.remove('hidden');
-        } else {
-          menu.classList.add('hidden');
-        }
-    }
-    return { handleSubmit }
+    const toggleNav =  toggleNavBar;
+    return { toggleNav }
   }
 }
 </script>
