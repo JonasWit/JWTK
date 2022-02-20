@@ -28,7 +28,7 @@ namespace SystemyWP.API.Data.Models
         public DateTime? LastLogin { get; set; }
 
         public List<UserClaim> Claims { get; set; } = new();
-
+        
         public AccessKey AccessKey { get; set; }
         public string AccessKeyId { get; set; }
     }

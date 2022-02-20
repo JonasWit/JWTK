@@ -68,8 +68,8 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
     public void DeleteAccount(string userId)
     {
         if(userId is null) throw new ArgumentNullException(nameof(userId));
-        var user = _context.Users.Include(user => user.AccessKey).FirstOrDefault(u => u.Id.Equals(userId));
-        if (user is not null) _context.Users.Remove(user);
+        var user = _context.Users.Include(us => us.AccessKey).FirstOrDefault(user => user.Id == userId);
+        if (user is not null) _context.Remove(user);
     }
 
     public void ChangePassword(string userId, string password)

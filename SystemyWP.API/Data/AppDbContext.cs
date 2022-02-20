@@ -19,10 +19,11 @@ namespace SystemyWP.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Log>().HasNoKey();
-            
+
             modelBuilder.Entity<User>()
                 .HasOne(x => x.AccessKey)
                 .WithOne(x => x.User)
+                .HasForeignKey<AccessKey>(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
