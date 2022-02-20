@@ -11,4 +11,5 @@ public interface IUserRepository : IRepositoryBase
     void DeleteAccount(string userId);
     void ChangePassword(string userId, string password);
     User GetUser(Func<User, bool> condition);
+    string GetUserAccessKey(string userId);
 }

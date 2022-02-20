@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SystemyWP.Lib.Shared.DTOs.SharedConstants;
 
 namespace SystemyWP.API.Data.Models
 {
@@ -6,7 +7,7 @@ namespace SystemyWP.API.Data.Models
     {
         [Key]
         [Required]
-        [MaxLength(256)]
+        [MaxLength(SharedConstants.DataLimits.KeyLimit)]
         public string Id { get; set; }
 
         public User User { get; set; }

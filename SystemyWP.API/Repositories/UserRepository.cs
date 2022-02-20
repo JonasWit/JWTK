@@ -68,7 +68,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
     public void DeleteAccount(string userId)
     {
         if(userId is null) throw new ArgumentNullException(nameof(userId));
-        var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
+        var user = _context.Users.Include(user => user.AccessKey).FirstOrDefault(u => u.Id.Equals(userId));
         if (user is not null) _context.Users.Remove(user);
     }
 
@@ -85,6 +85,9 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
     }
     
     public User GetUser(Func<User, bool> condition) => _context.Users
-            .Include(x => x.Claims)
-            .FirstOrDefault(condition);
+        .Include(x => x.Claims)
+        .FirstOrDefault(condition);
+
+    public string GetUserAccessKey(string userId)=> _context.AccessKeys
+        .FirstOrDefault(ac => ac.User.Id == userId)?.Id;
 }

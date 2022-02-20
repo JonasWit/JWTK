@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SystemyWP.Lib.Shared.Abstractions.DataRelated;
 
-public class RepositoryBase<TContext> where TContext : DbContext
+public abstract class RepositoryBase<TContext> where TContext : DbContext
 {
     protected readonly TContext _context;
 

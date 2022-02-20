@@ -8,21 +8,20 @@ namespace SystemyWP.API.Gastronomy.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        
-        //Data
-        public DbSet<Menu> RestaurantAppMenus { get; set; }
-        public DbSet<Dish> RestaurantAppDishes { get; set; }      
-        public DbSet<Ingredient> RestaurantAppIngredients { get; set; }
+
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Dish>()
-                .HasMany(x => x.RestaurantAppIngredients)
-                .WithMany(x => x.RestaurantAppDishes);
+                .HasMany(x => x.Ingredients)
+                .WithMany(x => x.Dishes);
 
             modelBuilder.Entity<Menu>()
-                .HasMany(x => x.RestaurantAppDishes)
-                .WithMany(x => x.RestaurantAppMenus);
+                .HasMany(x => x.Dishes)
+                .WithMany(x => x.Menus);
         }
     }
 }

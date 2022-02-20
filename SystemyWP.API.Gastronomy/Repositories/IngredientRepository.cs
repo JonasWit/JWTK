@@ -1,19 +1,20 @@
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Gastronomy.Data;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.Lib.Shared.Abstractions.DataRelated;
-using SystemyWP.Lib.Shared.DTOs.Gastronomy;
+using SystemyWP.Lib.Shared.DTOs;
 
 namespace SystemyWP.API.Gastronomy.Repositories;
 
-public class IngredientRepository : RepositoryBase<AppDbContext>,  IIngredientRepository
+public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRepository
 {
-    protected IngredientRepository(AppDbContext context) : base(context)
+    public IngredientRepository(AppDbContext context) : base(context)
     {
     }
+    
+    public void CreateIngredient(Ingredient ingredient) => _context.Ingredients.Add(ingredient);
 
-
-    public void CreateIngredient(CreateIngredientDto createIngredientDto)
-    {
-        throw new System.NotImplementedException();
-    }
+    public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass) => 
+        _context.Ingredients.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
 }

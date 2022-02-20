@@ -9,7 +9,7 @@ namespace SystemyWP.API
         {
             public const string StandardSet = @"ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
         }
-        
+
         public struct Paths
         {
             public const string LoginPath = @"/Account/Login";
