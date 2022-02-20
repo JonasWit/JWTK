@@ -21,13 +21,20 @@
 </template>
 
 <script>
-import {toggleNavBar} from "@/appControl/controlFunctions";
+
+import {useStore} from "vuex";
 
 export default {
   name: "NavContainer",
   setup() {
-    const toggleNav =  toggleNavBar;
-    return { toggleNav }
+    const store = useStore()
+    function toggleNav() {
+      store.commit('toggleNavBar')
+    }
+
+    return {
+      toggleNav
+    }
   }
 }
 </script>

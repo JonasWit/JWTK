@@ -133,10 +133,7 @@ export default {
           console.log("headers: ", error.response.headers);
         }
       }
-
-
     }
-
     return {
       submitForm,
       state,

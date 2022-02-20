@@ -1,29 +1,18 @@
 <template>
-  <div>
-    <div class="mt-8 grid lg:grid-cols-3 gap-7">
-
-      <router-link :to="{ 'name': 'GastronomyMenus' }">
-
-        
-        
-        
-      </router-link>
-  
-  
-  
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+    <NavButton text="Menu" navigate-to="GastronomyMenus" icon-path="/img/bubble-icons/icons8-menu-100.png"></NavButton>
+    <NavButton text="Dania" navigate-to="GastronomyDishes" icon-path="/img/bubble-icons/icons8-dish-100.png"></NavButton>
+    <NavButton text="Składniki" navigate-to="GastronomyIngredients" icon-path="/img/bubble-icons/icons8-ingredients-100.png"></NavButton>
+    <NavButton text="Kalkulator" navigate-to="GastronomyCalculator" icon-path="/img/bubble-icons/icons8-calculator-100.png"></NavButton>
+  </div>
 </template>
 
 <script>
-import {onMounted} from "vue";
-import {hideNavBar} from "@/appControl/controlFunctions";
+import NavButton from "@/components/applicationNavigationButtons/NavButton";
 
 export default {
   name: "ControlPanel",
-  setup() {
-    onMounted(() => {
-      hideNavBar()
-    })
-  }
+  components: {NavButton},
 }
 </script>
 

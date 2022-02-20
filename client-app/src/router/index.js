@@ -17,6 +17,7 @@ import Dishes from "@/views/apps/gastronomy/Dishes";
 import Ingredients from "@/views/apps/gastronomy/Ingredients";
 import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
 import Sources from "@/views/Sources";
+import GastronomyCalculator from "@/views/apps/gastronomy/GastronomyCalculator";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -32,6 +33,7 @@ const requireAuth = (to, from, next) => {
 const scrollUp = (to, from, next) => {
     next()
     window.scrollTo(0, 0)
+    store.commit('hideNavBar')
 }
 
 const routes = [
@@ -204,6 +206,15 @@ const routes = [
         beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Dania',
+        }
+    },
+    {
+        path: '/apps/gastronomy/calculator',
+        name: 'GastronomyCalculator',
+        component: GastronomyCalculator,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Kalkulator',
         }
     },
     {
