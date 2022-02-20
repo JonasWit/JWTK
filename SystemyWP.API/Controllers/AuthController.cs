@@ -10,10 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SystemyWP.API.Data;
-using SystemyWP.API.Data.Models.UsersManagement;
+using SystemyWP.API.Data.Models;
 using SystemyWP.API.DTOs;
-using SystemyWP.API.Forms.User;
-using SystemyWP.API.Repositories.General;
+using SystemyWP.API.Forms;
+using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Settings;
 

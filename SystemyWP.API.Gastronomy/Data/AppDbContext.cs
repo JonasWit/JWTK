@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data.Models.Dishes;
-using SystemyWP.API.Gastronomy.Data.Models.Ingredients;
-using SystemyWP.API.Gastronomy.Data.Models.Menus;
+using SystemyWP.API.Gastronomy.Data.Models;
 
 namespace SystemyWP.API.Gastronomy.Data
 {

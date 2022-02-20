@@ -23,8 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories" />
       <Folder Include="Secrets" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SystemyWP.Lib.Shared.DTOs\SystemyWP.Lib.Shared.DTOs.csproj" />
     </ItemGroup>
 
 </Project>

@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Middleware;
-using SystemyWP.API.Repositories.General;
 using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
@@ -26,6 +25,7 @@ using SystemyWP.API;
 using SystemyWP.API.Data;
 using SystemyWP.API.HttpClients;
 using SystemyWP.API.Policies;
+using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -197,7 +197,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
 
-DBManager.PrepareDatabase(app);
+DbManager.PrepareDatabase(app);
 Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");
 Console.WriteLine("--> App has started...");
 

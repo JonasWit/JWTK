@@ -1,6 +1,15 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace SystemyWP.API.Gastronomy.Controllers;
 
-public class DishController
+[Route("[controller]")]
+public class DishController : ControllerBase
 {
+    
+    
+    
+    
+    
+    
     
 }
