@@ -7,10 +7,11 @@ using SystemyWP.API.Data;
 using SystemyWP.API.Data.Models;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.Lib.Shared.Abstractions.DataRelated;
 
 namespace SystemyWP.API.Repositories;
 
-internal class UserRepository : RepositoryBase, IUserRepository
+internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 {
     private readonly Encryptor _encryptor;
 
@@ -61,14 +62,14 @@ internal class UserRepository : RepositoryBase, IUserRepository
             }
         };
 
-        Context.Add(newUser);
+        _context.Add(newUser);
     }
 
     public void DeleteAccount(string userId)
     {
         if(userId is null) throw new ArgumentNullException(nameof(userId));
-        var user = Context.Users.FirstOrDefault(u => u.Id.Equals(userId));
-        if (user is not null) Context.Users.Remove(user);
+        var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
+        if (user is not null) _context.Users.Remove(user);
     }
 
     public void ChangePassword(string userId, string password)
@@ -76,14 +77,14 @@ internal class UserRepository : RepositoryBase, IUserRepository
         if(userId is null) throw new ArgumentNullException(nameof(userId));
         if(password is null) throw new ArgumentNullException(nameof(password));
 
-        var user = Context.Users.FirstOrDefault(u => u.Id.Equals(userId));
+        var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
         if (user is null) return;
 
         user.Password = password;
-        Context.Update(user);
+        _context.Update(user);
     }
     
-    public User GetUser(Func<User, bool> condition) => Context.Users
+    public User GetUser(Func<User, bool> condition) => _context.Users
             .Include(x => x.Claims)
             .FirstOrDefault(condition);
 }

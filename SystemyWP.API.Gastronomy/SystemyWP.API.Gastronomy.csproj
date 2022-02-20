@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SystemyWP.Lib.Shared.Abstractions\SystemyWP.Lib.Shared.Abstractions.csproj" />
       <ProjectReference Include="..\SystemyWP.Lib.Shared.DTOs\SystemyWP.Lib.Shared.DTOs.csproj" />
     </ItemGroup>
 

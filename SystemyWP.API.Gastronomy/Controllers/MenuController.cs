@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
-[Route("/api/gastro/[controller]")]
 [ApiController]
+[Route("/api/gastro/[controller]")]
 public class MenuController : ControllerBase
 {
     

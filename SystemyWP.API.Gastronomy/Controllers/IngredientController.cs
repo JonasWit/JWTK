@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace SystemyWP.API.Gastronomy.Controllers;
 
-public class IngredientController
+[ApiController]
+[Route("[controller]")]
+public class IngredientController : ControllerBase
 {
     
 }

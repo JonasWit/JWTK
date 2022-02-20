@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[Route("[controller]")]
 public class HealthController : ControllerBase
 {
     [HttpGet]
