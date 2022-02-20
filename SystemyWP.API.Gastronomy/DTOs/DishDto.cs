@@ -1,6 +1,6 @@
 namespace SystemyWP.API.Gastronomy.DTOs;
 
-public class RestaurantAppDishDto
+public class DishDto
 {
     public string Name { get; set; } = "";
 }
