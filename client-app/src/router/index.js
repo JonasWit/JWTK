@@ -16,15 +16,22 @@ import Menus from "@/views/apps/gastronomy/Menus";
 import Dishes from "@/views/apps/gastronomy/Dishes";
 import Ingredients from "@/views/apps/gastronomy/Ingredients";
 import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
+import Sources from "@/views/Sources";
 
 //route guards
 const requireAuth = (to, from, next) => {
     let auth = store.getters['auth/isAuthorized'];
-    if (!auth){
-        next( { name: 'Login'} )
+    if (!auth) {
+        next({name: 'Login'})
     } else {
         next()
     }
+}
+
+//custom actions
+const scrollUp = (to, from, next) => {
+    next()
+    window.scrollTo(0, 0)
 }
 
 const routes = [
@@ -32,6 +39,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
+        beforeEnter: scrollUp,
         meta: {
             title: 'systemywp.pl',
             metaTags: [
@@ -43,9 +51,25 @@ const routes = [
         }
     },
     {
+        path: '/sources',
+        name: 'Sources',
+        component: Sources,
+        beforeEnter: scrollUp,
+        meta: {
+            title: 'systemywp.pl',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Źródła'
+                },
+            ]
+        }
+    },
+    {
         path: '/auth/login',
         name: 'Login',
         component: Login,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Logowanie',
             metaTags: [
@@ -60,7 +84,7 @@ const routes = [
         path: '/auth/logout',
         name: 'Logout',
         component: Logout,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Wyloguj',
         }
@@ -69,7 +93,7 @@ const routes = [
         path: '/auth/change-password',
         name: 'ChangePassword',
         component: ChangePassword,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Zamiana Hasła',
             metaTags: [
@@ -84,6 +108,7 @@ const routes = [
         path: '/auth/register',
         name: 'Register',
         component: Register,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Rejestracja',
             metaTags: [
@@ -98,7 +123,7 @@ const routes = [
         path: '/auth/delete-account',
         name: 'DeleteAccount',
         component: DeleteAccount,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Usunięcie Konta',
             metaTags: [
@@ -113,6 +138,7 @@ const routes = [
         path: '/about',
         name: 'About',
         component: About,
+        beforeEnter: scrollUp,
         meta: {
             title: 'O Nas',
         }
@@ -121,6 +147,7 @@ const routes = [
         path: '/privacy',
         name: 'Privacy',
         component: Privacy,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Polityka Prywatności',
         }
@@ -129,6 +156,7 @@ const routes = [
         path: '/contact',
         name: 'Contact',
         component: Contact,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Kontakt',
         }
@@ -137,6 +165,7 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: Profile,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Profil',
         }
@@ -145,6 +174,7 @@ const routes = [
         path: '/tos',
         name: 'ToS',
         component: ToS,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Regulamin',
         }
@@ -153,7 +183,7 @@ const routes = [
         path: '/apps/gastronomy/control-panel',
         name: 'GastronomyControlPanel',
         component: ControlPanel,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Panel',
         }
@@ -162,7 +192,7 @@ const routes = [
         path: '/apps/gastronomy/menus',
         name: 'GastronomyMenus',
         component: Menus,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Menu',
         }
@@ -171,7 +201,7 @@ const routes = [
         path: '/apps/gastronomy/dishes',
         name: 'GastronomyDishes',
         component: Dishes,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Dania',
         }
@@ -180,7 +210,7 @@ const routes = [
         path: '/apps/gastronomy/ingredients',
         name: 'GastronomyIngredients',
         component: Ingredients,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Składniki',
         }
@@ -189,6 +219,7 @@ const routes = [
         path: '/solutions',
         name: 'Solutions',
         component: Solutions,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Rozwiązania dla Firm',
         }

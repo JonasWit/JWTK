@@ -14,6 +14,7 @@
         </router-view>
       </main>
     </div>
+    <PortalFooter/>
   </div>
 </template>
 
@@ -25,9 +26,10 @@ import {computed} from "vue";
 import {NavModel} from "@/models/general/portalDisplayModel";
 import SnackPopup from "@/components/generic/SnackPopup";
 import GdprModal from "@/components/portal/GdprModal";
+import PortalFooter from "@/components/portal/PortalFooter";
 
 export default {
-  components: {GdprModal, SnackPopup, MainNav, NavContainer},
+  components: {PortalFooter, GdprModal, SnackPopup, MainNav, NavContainer},
   setup() {
     const store = useStore()
     return {

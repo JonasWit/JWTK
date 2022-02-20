@@ -1,5 +1,16 @@
 <template>
-  <div>control panel</div>
+  <div>
+    <div class="mt-8 grid lg:grid-cols-3 gap-7">
+
+      <router-link :to="{ 'name': 'GastronomyMenus' }">
+
+        
+        
+        
+      </router-link>
+  
+  
+  
 </template>
 
 <script>
