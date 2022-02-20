@@ -22,6 +22,12 @@ namespace SystemyWP.API
             public const string DeadResponse = "Service is dead!";
             public const string ErrorResponse = "Service check gives error!";
         }
+        
+        public struct Services
+        {
+            public const string MasterService = nameof(MasterService);
+            public const string GastronomyService = nameof(GastronomyService);
+        }
 
         public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
 

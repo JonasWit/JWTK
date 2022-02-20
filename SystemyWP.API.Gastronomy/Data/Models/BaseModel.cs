@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SystemyWP.API.Gastronomy.Data.Models.BaseClasses;
+namespace SystemyWP.API.Gastronomy.Data.Models;
 
 public class BaseModel
 {

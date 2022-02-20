@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SystemyWP.API.Gastronomy.Data.Enums;
-using SystemyWP.API.Gastronomy.Data.Models.BaseClasses;
 
 namespace SystemyWP.API.Gastronomy.Data.Models
 {
-    public class RestaurantAppIngredient : BaseModel
+    public class Ingredient : BaseModel
     {
         [Required]
         [MaxLength(500)]
@@ -19,6 +18,6 @@ namespace SystemyWP.API.Gastronomy.Data.Models
         public float PricePerStack { get; set; }
         public float StackSize { get; set; }
         
-        public List<RestaurantAppDish> RestaurantAppDishes { get; set; } = new();
+        public List<Dish> RestaurantAppDishes { get; set; } = new();
     }
 }
