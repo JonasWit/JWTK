@@ -1,1 +1,46 @@
- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: systemywp-gastronomy-depl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: systemywp-gastronomy
+  template:
+    metadata:
+      labels:
+        app: systemywp-gastronomy
+    spec:
+      imagePullSecrets:
+        - name: docker-key
+      containers:
+        - name: gastronomy
+          image: systemywp/master:gastronomy
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: secret-appsettings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: systemywp-gastronomy-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: systemywp-gastronomy
+  ports:
+    - name: systemywp-gastronomy
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    
+

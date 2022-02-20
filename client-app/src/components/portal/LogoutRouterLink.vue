@@ -12,10 +12,6 @@
 <script>
 export default {
   name: "LogoutRouterLink",
-  setup() {
-
-
-  }
 }
 </script>
 

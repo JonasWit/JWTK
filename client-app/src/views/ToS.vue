@@ -17,8 +17,8 @@
         Wyrażeniom pisanym w niniejszym regulaminie z wielkiej litery nadaje się następujące znaczenie:
       </p>
     </div>
-    <ol>
-      <li>
+    <ol class="list-disc">
+      <li> 
         Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
         nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
         e-mail: biuro@systemywp.pl , +48 534 127 160;
@@ -42,16 +42,16 @@
       </li>
     </ol>
     <div class="my-3">
-      <p>1.2. Uzytkownik jest zobowiązany do przestrzegania Regulaminu.</p>
+      <p>1.1. Uzytkownik jest zobowiązany do przestrzegania Regulaminu.</p>
     </div>
     <div class="my-3">
       <p>
-        1.3. Usługa jest dostępna jest nideodpłatnie.
+        1.2. Usługa jest dostępna jest nideodpłatnie.
       </p>
     </div>
     <div class="my-3">
       <p>
-        1.4. Informacje zawarte na stronie internetowej Serwisu lub Operatora nie stanowią oferty, lecz zaproszenie do
+        1.3. Informacje zawarte na stronie internetowej Serwisu lub Operatora nie stanowią oferty, lecz zaproszenie do
         zawarcia umowy, w rozumieniu art. 71 kc; art. 661 oraz 682 kc nie stosuje się.
       </p>
     </div>
@@ -451,5 +451,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

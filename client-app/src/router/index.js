@@ -4,7 +4,6 @@ import About from "@/views/About";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
-import Gastronomy from "@/views/apps/Gastronomy";
 import Login from "@/views/auth/Login";
 import Register from "@/views/auth/Register";
 import store from "@/store";
@@ -12,15 +11,29 @@ import Solutions from "@/views/Solutions";
 import ChangePassword from "@/views/auth/ChangePassword";
 import Logout from "@/views/auth/Logout";
 import ToS from "@/views/ToS";
+import DeleteAccount from "@/views/auth/DeleteAccount";
+import Menus from "@/views/apps/gastronomy/Menus";
+import Dishes from "@/views/apps/gastronomy/Dishes";
+import Ingredients from "@/views/apps/gastronomy/Ingredients";
+import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
+import Sources from "@/views/Sources";
+import GastronomyCalculator from "@/views/apps/gastronomy/GastronomyCalculator";
 
 //route guards
 const requireAuth = (to, from, next) => {
     let auth = store.getters['auth/isAuthorized'];
-    if (!auth){
-        next( { name: 'Login'} )
+    if (!auth) {
+        next({name: 'Login'})
     } else {
         next()
     }
+}
+
+//custom actions
+const scrollUp = (to, from, next) => {
+    next()
+    window.scrollTo(0, 0)
+    store.commit('hideNavBar')
 }
 
 const routes = [
@@ -28,6 +41,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
+        beforeEnter: scrollUp,
         meta: {
             title: 'systemywp.pl',
             metaTags: [
@@ -39,9 +53,25 @@ const routes = [
         }
     },
     {
+        path: '/sources',
+        name: 'Sources',
+        component: Sources,
+        beforeEnter: scrollUp,
+        meta: {
+            title: 'systemywp.pl',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Źródła'
+                },
+            ]
+        }
+    },
+    {
         path: '/auth/login',
         name: 'Login',
         component: Login,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Logowanie',
             metaTags: [
@@ -56,16 +86,16 @@ const routes = [
         path: '/auth/logout',
         name: 'Logout',
         component: Logout,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Wyloguj',
         }
     },
     {
-        path: '/auth/changepassword',
+        path: '/auth/change-password',
         name: 'ChangePassword',
         component: ChangePassword,
-        beforeEnter: requireAuth,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
             title: 'Zamiana Hasła',
             metaTags: [
@@ -80,6 +110,7 @@ const routes = [
         path: '/auth/register',
         name: 'Register',
         component: Register,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Rejestracja',
             metaTags: [
@@ -91,9 +122,25 @@ const routes = [
         }
     },
     {
+        path: '/auth/delete-account',
+        name: 'DeleteAccount',
+        component: DeleteAccount,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Usunięcie Konta',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Usunięcie Konta'
+                },
+            ]
+        }
+    },
+    {
         path: '/about',
         name: 'About',
         component: About,
+        beforeEnter: scrollUp,
         meta: {
             title: 'O Nas',
         }
@@ -102,6 +149,7 @@ const routes = [
         path: '/privacy',
         name: 'Privacy',
         component: Privacy,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Polityka Prywatności',
         }
@@ -110,6 +158,7 @@ const routes = [
         path: '/contact',
         name: 'Contact',
         component: Contact,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Kontakt',
         }
@@ -118,6 +167,7 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: Profile,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Profil',
         }
@@ -126,27 +176,64 @@ const routes = [
         path: '/tos',
         name: 'ToS',
         component: ToS,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Regulamin',
         }
     },
     {
-        path: '/apps/gastronomy',
-        name: 'Gastronomy',
-        component: Gastronomy,
-        beforeEnter: requireAuth,
+        path: '/apps/gastronomy/control-panel',
+        name: 'GastronomyControlPanel',
+        component: ControlPanel,
+        beforeEnter: [requireAuth, scrollUp],
         meta: {
-            title: 'Gastronomia',
+            title: 'Panel',
+        }
+    },
+    {
+        path: '/apps/gastronomy/menus',
+        name: 'GastronomyMenus',
+        component: Menus,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Menu',
+        }
+    },
+    {
+        path: '/apps/gastronomy/dishes',
+        name: 'GastronomyDishes',
+        component: Dishes,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Dania',
+        }
+    },
+    {
+        path: '/apps/gastronomy/calculator',
+        name: 'GastronomyCalculator',
+        component: GastronomyCalculator,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Kalkulator',
+        }
+    },
+    {
+        path: '/apps/gastronomy/ingredients',
+        name: 'GastronomyIngredients',
+        component: Ingredients,
+        beforeEnter: [requireAuth, scrollUp],
+        meta: {
+            title: 'Składniki',
         }
     },
     {
         path: '/solutions',
         name: 'Solutions',
         component: Solutions,
+        beforeEnter: scrollUp,
         meta: {
             title: 'Rozwiązania dla Firm',
         }
-        
     },
     // {
     //   path: '/about',

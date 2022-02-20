@@ -1,10 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Data;
-using SystemyWP.API.Forms.Conact;
-using SystemyWP.API.Services.Email;
 
 namespace SystemyWP.API.Controllers
 {
@@ -20,26 +16,6 @@ namespace SystemyWP.API.Controllers
         {
             _context = context;
             _mapper = mapper;
-        }
-
-        [HttpPost("request")]
-        public async Task<IActionResult> RequestContact(
-            [FromBody] ContactForm contactForm,
-            [FromServices] EmailClient emailClient)
-        {
-            try
-            {
-                await emailClient.SendEmailAsync(
-                    SystemyWpConstants.Emails.ContactAddress,
-                    "Contact Request",
-                    $"Name: {contactForm.Name}, Email: {contactForm.Email}, Phone: {contactForm.Phone}");
-                
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return ServerError;
-            }
         }
     }
 }

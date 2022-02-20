@@ -26,9 +26,9 @@ export default {
     },
     actions: {
         snack({commit}, options) {
+            console.warn('Showing Snack')
             options = { ...defaults, ...options }
             commit('setSnack', options)
-
             setTimeout(() => {
                 commit('setSnack', { ...defaults, text: null })
             }, 2000)

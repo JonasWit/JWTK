@@ -95,7 +95,7 @@ export default {
       } catch (error) {
         if (error.response) {
           await store.dispatch('snack/snack', {
-            text: "Logowanie nie powiodło się",
+            text: "Logowanie nie powiodło się lub przekroczono limit prób. Spróbuj ponownie poźniej",
             textColor: SNACK_TEXT.WHITE,
             backColor: SNACK_BACKGROUNDS.ERROR
           })

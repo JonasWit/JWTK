@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Middleware;
-using SystemyWP.API.Repositories.General;
 using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
@@ -26,6 +25,7 @@ using SystemyWP.API;
 using SystemyWP.API.Data;
 using SystemyWP.API.HttpClients;
 using SystemyWP.API.Policies;
+using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +42,7 @@ builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 
 if (builder.Environment.IsProduction())
 {
-    builder.WebHost.UseSerilog((context, config) =>
+    builder.Host.UseSerilog((context, config) =>
     {
         var connectionString = context.Configuration.GetConnectionString("Master");
 
@@ -68,7 +68,7 @@ if (builder.Environment.IsProduction())
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.WebHost.UseSerilog((context, config) =>
+    builder.Host.UseSerilog((context, config) =>
     {
         config.WriteTo.Console();
     }); 
@@ -186,7 +186,6 @@ if (app.Environment.IsProduction())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
-    //app.UseHttpsRedirection();
 }
 
 app.UseIpRateLimiting();
@@ -198,7 +197,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
 
-DBManager.PrepareDatabase(app);
+DbManager.PrepareDatabase(app);
 Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");
 Console.WriteLine("--> App has started...");
 

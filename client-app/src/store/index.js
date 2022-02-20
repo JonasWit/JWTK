@@ -2,17 +2,20 @@ import {createStore} from 'vuex'
 import {NavModel} from "@/models/general/portalDisplayModel";
 import {NAV_TYPES} from "@/models/enums";
 import {
+    hideNavBar,
     readDarkMode,
     readGateAPIAddress, readGDPRConsent,
-    setLocalStoreItem
+    setLocalStoreItem, toggleNavBar
 } from "@/appControl/controlFunctions";
 import snack from "@/store/snack";
 import auth from "@/store/auth";
 import {LOCAL_STORE_NAMES} from "@/enums/portalEnums";
+import gastronomy from "@/store/gastronomy";
 
 export default createStore({
     state: {
         navType: new NavModel(NAV_TYPES.MAIN),
+        navBarVisible: false,
         apiGateBaseAddress: readGateAPIAddress(),
         darkMode: readDarkMode(),
         gdpr: readGDPRConsent()
@@ -23,6 +26,9 @@ export default createStore({
         },
         gdprAccepted(state) {
             return state.gdpr
+        },
+        navBarVisibility(state) {
+            return state.navBarVisible
         }
     },
     mutations: {
@@ -31,6 +37,13 @@ export default createStore({
         },
         toggleGDPR(state, option) {
             state.gdpr = option
+        },
+        toggleNavBar(state) {
+            state.navBarVisible = toggleNavBar();
+        },
+        hideNavBar(state) {
+            hideNavBar()
+            state.navBarVisible = false
         },
     },
     actions: {
@@ -50,6 +63,7 @@ export default createStore({
     },
     modules: {
         snack,
-        auth
+        auth,
+        gastronomy
     }
 })

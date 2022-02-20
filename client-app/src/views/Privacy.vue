@@ -1,7 +1,13 @@
 <template>
   <div class="text-xs">
-    <h1>Polityka prywatności</h1>
-    <h2>I. Wstęp</h2>
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">Polityka prywatności</h1>
+    </div>
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        I. Wstęp
+      </h1>
+    </div>
     <p>Prywatność Użytkowników korzystających z naszych usług jest dla nas bardzo ważna, dlatego dokładamy wszelkich
       starań, aby należycie ją chronić i respektować prawa w tym zakresie. W tym celu za pomocą niniejszej polityki
       prywatności opisujemy zasady przetwarzania przez nas Twoich danych
@@ -9,20 +15,23 @@
       zbieramy,
       jak je przetwarzamy i po co, kto jest ich administratorem, w
       jaki sposób są zabezpieczone, czy je komuś udostępniamy oraz jakie masz prawa.</p>
-    <h2>Informacje ogólne</h2>
-    <ol type="1">
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        Informacje ogólne
+      </h1>
+    </div>
+    <ol class="list-decimal">
       <li>
-        Administratorem Twoich danych osobowych i jednocześnie operatorem serwisu https://portal.systemywp.pl, za
-        którego
-        pośrednictwem zbierane są informacje i dane osobowe jest Marzena Witek prowadząca jednoosobową działalność
+        Administratorem Twoich danych osobowych i jednocześnie operatorem serwisu https://www.systemywp.pl, za
+        którego pośrednictwem zbierane są informacje i dane osobowe jest Marzena Witek prowadząca jednoosobową
+        działalność
         gospodarczą pod nazwą Systemy Wspomagania Pracy, Kraków, NIP: 7343144682, REGON: 388896441 zwana dalej
         Administratorem.
       </li>
       <li>
         Administratorem w odniesieniu do danych osobowych klientów czy pracowników jest osoba korzystająca z serwisu
-        https://portal.systemywp.pl . My zaś przetwarzamy te dane w Twoim imieniu wyłącznie na Twoje udokumentowane
-        polecenie,
-        a bez takiego polecenia tylko w przypadku, gdyby zobowiązywało nas do tego prawo.
+        https://www.systemywp.pl . My zaś przetwarzamy te dane w Twoim imieniu wyłącznie na Twoje udokumentowane
+        polecenie, a bez takiego polecenia tylko w przypadku, gdyby zobowiązywało nas do tego prawo.
       </li>
       <li>
         Inspektor danych osobowych - W przypadku wyznaczenia przez nas tego podmiotu, zostaniesz o tym poinformowany w
@@ -30,8 +39,8 @@
       </li>
       <li>
         Kontakt z Administratorem Twoich danych osobowych i operatorem serwisu możliwy jest poprzez e-mail:
-        kontakt@systemywp.pl lub
-        korespondencyjnie na adres korespondencyjny: Systemy Wspomagania Pracy, FUP Kraków 28, Os. Urocze 5, 31-955
+        kontakt@systemywp.pl lub korespondencyjnie na adres korespondencyjny: Systemy Wspomagania Pracy, FUP Kraków 28,
+        Os. Urocze 5, 31-955
         Kraków, Skrytka pocztowa 44.
       </li>
       <li>
@@ -43,7 +52,7 @@
       </li>
       <li>
         Jeśli zamierzasz założyć konto Użytkownika oraz korzystać z naszych usług, zostaniesz poproszony o podanie nam
-        Twoich danych osobowych.
+        Twojego adresu e-mail.
       </li>
       <li>
         Twoje dane przetwarzane są przez nas we wskazanych poniżej celach, związanych z funkcjonowaniem Serwisu i
@@ -52,17 +61,24 @@
       </li>
     </ol>
 
-    <h2>II. Cele przetwarzania danych osobowych</h2>
-    <ol type="1">
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        II. Cele przetwarzania danych osobowych
+      </h1>
+    </div>
+
+    <ol class="list-disc">
       <li>
         Nadrzędnym celem przetwarzania Twoich danych osobowych jest realizacja usług świadczonych drogą elektroniczną, w
         zgodzie z postanowieniami regulaminu serwisu, a w szczególności świadczenie usług oferowanych w Serwisie.
       </li>
       <li>
-        <p>Szczegółowe cele przetwarzania to:</p>
-        <ol type="a">
+        <div class="font-bold my-3">
+          <p>Szczegółowe cele przetwarzania to:</p>
+        </div>
+        <ol class="list-decimal">
           <li>
-            Świadczenie usług oferowanych w serwisie– podstawa art. 6 ust. 1 lit. b i lit. f RODO,
+            Świadczenie usług oferowanych w serwisie – podstawa art. 6 ust. 1 lit. b i lit. f RODO,
           </li>
           <li>
             Rejestrowanie konta i korzystanie z niego, aby zarządzać posiadanym kontem – podstawa art. 6 ust. 1 lit. b
@@ -93,108 +109,101 @@
         </ol>
       </li>
     </ol>
-    <h3>Podstawa przetwarzania danych:</h3>
-    <p>
-      W zależności od podejmowanych przez Ciebie czynności, mogą to być:
-    </p>
-    <ol type="a">
-      <li>umowa o świadczenie usług lub działania podejmowane na Twoje żądanie, zmierzające do jej zawarcia (art. 6 ust.
+    <div class="font-bold my-3">
+      <p>Podstawa przetwarzania danych</p>
+    </div>
+    <div class="font-bold my-3">
+      <p>W zależności od podejmowanych przez Ciebie czynności, mogą to być:</p>
+    </div>
+    <ol class="list-decimal">
+      <li>Umowa o świadczenie usług lub działania podejmowane na Twoje żądanie, zmierzające do jej zawarcia (art. 6 ust.
         1 lit. b RODO),
       </li>
       <li>
-        ciążący na nas obowiązek prawny, np. związany z rachunkowością (art. 6 ust. 1 lit. c RODO),
+        Ciążący na nas obowiązek prawny, np. związany z rachunkowością (art. 6 ust. 1 lit. c RODO),
       </li>
-      <li>nasz prawnie uzasadniony interes, polegający na przetwarzaniu w celu ustalenia, dochodzenia lub obrony
+      <li>Nasz prawnie uzasadniony interes, polegający na przetwarzaniu w celu ustalenia, dochodzenia lub obrony
         ewentualnych roszczeń (art. 6 ust. 1 lit. f RODO),
       </li>
     </ol>
-    <h3>Podanie danych:</h3>
-    <ol type="a">
+    <div class="font-bold my-3">
+      <p>Podanie danych:</p>
+    </div>
+    <ol class="list-decimal">
       <li>
-        dobrowolne, ale w niektórych przypadkach może być konieczne do zawarcia umowy
+        Dobrowolne, ale w niektórych przypadkach może być konieczne do zawarcia umowy
       </li>
     </ol>
-    <h3>
-      Skutek niepodania danych:
-    </h3>
-    <p>W zależności od celu, w jakim dane są podawane:</p>
-    <ol type="a">
+    <div class="font-bold my-3">
+      <p>Skutek niepodania danych, w zależności od celu, w jakim dane są podawane:</p>
+    </div>
+    <ol class="list-decimal">
       <li>
-        brak możliwości zarejestrowania się w Serwisie,
+        Brak możliwości zarejestrowania się w Serwisie,
       </li>
       <li>
-        brak możliwości korzystania z usług Serwisu,
-      </li>
-    </ol>
-    <h3>Możliwość cofnięcia zgody:</h3>
-    <ol type="a">
-      <li>
-        w każdej chwili
+        Brak możliwości korzystania z usług Serwisu,
       </li>
     </ol>
-    <p>Przetwarzanie danych do momentu cofnięcia przez Ciebie zgody pozostaje zgodne z prawem.</p>
-    <h2>III. Jakie dane przetwarzamy oraz w jaki sposób je pozyskujemy</h2>
-    <p>Dane osobowe i informacje możemy pozyskać poprzez:</p>
-    <ol type="1">
-      <li>Dobrowolne ich podanie i zarazem niezbędne do prawidłowego korzystania z serwisu:</li>
-      <ol type="a">
-        <li>
-          Imię - kiedy wypełniasz formularz ofertowy w naszym serwisie,
-        </li>
-        <li>
-          Adres e-mail – kiedy wypełniasz formularz ofertowy w naszym serwisie lub/i
-        </li>
-        <li>
-          Numer telefonu – kiedy wypełniasz formularz ofertowy w naszym serwisie,
-        </li>
-      </ol>
+    <div class="font-bold my-3">
+      <p>Możliwość cofnięcia zgody:</p>
+    </div>
+    <ol class="list-disc">
+      <li> W każdej chwili</li>
+      <li> Przetwarzanie danych do momentu cofnięcia przez Ciebie zgody pozostaje zgodne z prawem.</li>
+    </ol>
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        III. Jakie dane przetwarzamy oraz w jaki sposób je pozyskujemy
+      </h1>
+    </div>
+
+    <div class="font-bold my-1">
+      <p>Dane osobowe i informacje możemy pozyskać poprzez:</p>
+    </div>
+
+    <div class="font-bold my-3">
+      <p>Dobrowolne ich podanie i zarazem niezbędne do prawidłowego korzystania z serwisu:</p>
+    </div>
+    <div class="font-bold my-3">
+      <p>Adres e-mail – kiedy wypełniasz formularz rejestracji w naszym serwisie</p>
+    </div>
+    <ol class="list-disc">
       <li>Poniższe dane mogą zostać wprowadzone, zmienione lub usunięte przez Ciebie w dowolnym momencie po rejestracji
-        konta. Dane te wymagane są, jeśli zamierzasz zakupić licencję na którąś z usług oferowanych w ramach portalu.
-        <ol type="a">
-          <li>
-            Twoje imię i nazwisko - w celu wystawienia faktury za usługę
-          </li>
-          <li>
-            Numer telefonu (opcjonalnie) - w celu kontaktu bezpośredniego, jeśli zajdzie potrzeba
-          </li>
-          <li>
-            Nazwa Firmy - w celu wystawienia faktury za usługę
-          </li>
-          <li>
-            Adres Twój lub Firmy - w celu wystawienia faktury za usługę
-          </li>
-          <li>
-            Adres Korespondencyjny - jeśli inny niż adres z punktu e)
-          </li>
-          <li>
-            Dane rejestrowe firmy tj. nazwę, nr NIP, nr REGON i adres – wyłącznie w przypadku zakupienia usługi i
-            konieczności wystawienia faktury na osobę prawną lub działalność gospodarczą - podanie tej informacji jest
-            konieczne do prawidłowej realizacji usług świadczonych przez Administratora,
-          </li>
+        konta.
+        <ol class="list-disc">
           <li>
             Wszelkie inne dane – w momencie, kiedy zdecydujesz się dobrowolnie je podać w serwisie. Zalecamy zachowanie
             ostrożności w nadmiernym ujawnianiu własnych danych osobowych i zachowaniu szczególnego bezpieczeństwa w tym
             zakresie.
-            <p>W trakcie korzystania z usług portalu Użytkownik, w ramach korzystania z
-              zakupionej usługi może podać,
-              dla własnych potrzeb oraz w celu pełnego korzystania z usługi: Imiona, Nazwiska, Sygnatury Spraw, Adresy,
-              Adresy E-Mail, Numery Telefonów - Administratorem w odniesieniu do danych osobowych klientów czy
-              pracowników jest osoba korzystająca z serwisu.</p>
+            <div class="font-bold my-1">
+              <p>W trakcie korzystania z usług portalu Użytkownik, w ramach korzystania z
+                zakupionej usługi może podać, dla własnych potrzeb oraz w celu pełnego korzystania z usługi: Imiona,
+                Nazwiska, Adresy,
+                Adresy E-Mail, Numery Telefonów - Administratorem w odniesieniu do tych danych osobowych jest osoba
+                korzystająca z serwisu.</p>
+            </div>
           </li>
         </ol>
       </li>
       <li>
         Poprzez pliki cookies – więcej na ten temat w pkt. IX poniżej.
       </li>
-
     </ol>
-    <h2>IV. Jak długo przechowujemy Twoje dane?</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        IV. Jak długo przechowujemy Twoje dane?
+      </h1>
+    </div>
+
+    <ol class="list-disc">
       <li>
         Wszystkie dane osobowe wynikające z rejestracji w serwisie są przechowywane przez cały czas posiadania konta. Po
         usunięciu konta długość okresu przechowywania przez nas Twoich danych osobowych zależy od celu przetwarzania
         oraz przepisów, które stanowią podstawę prawną przetwarzania. Twoje dane będziemy przechowywać:
-        <ol type="a">
+        <ol class="list-decimal">
           <li>
             Gdy podstawą przetwarzania jest umowa (postanowienia regulaminu) – tak długo jak jest to niezbędne do
             realizacji postanowień, a po tym czasie do momentu przedawnienia roszczeń z tytułu umowy.
@@ -223,11 +232,17 @@
         </ol>
       </li>
     </ol>
-    <h2>V. Komu udostępniamy Twoje dane?</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        V. Komu udostępniamy Twoje dane?
+      </h1>
+    </div>
+
+    <ol class="list-disc">
       <li>
         Dane udostępniamy wyłącznie Dostawcom naszych usług wskazanym poniżej:
-        <ol type="a">
+        <ol class="list-decimal">
           <li>
             Dostawcy usługi programu rachunkowo-księgowego celem prawidłowego i rzetelnego prowadzenia ksiąg
             Administratora w świetle obowiązujących przepisów prawnych,
@@ -238,7 +253,7 @@
             cywilnoprawnych, w tym również kancelariom prawniczym.
           </li>
         </ol>
-        <ol type="1">
+        <ol class="list-disc">
           <li>
             Z w/w procesorami łączą nas umowy, w których wymagamy zapewnienia bezpieczeństwa i tajemnicy Twoich danych
             osobowych oraz przetwarzania ich zgodnie z prawem. Nie mogą oni powierzyć przetwarzania danych innym
@@ -254,8 +269,14 @@
         </ol>
       </li>
     </ol>
-    <h2>VI. W jaki sposób wykorzystujemy Twoje dane</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        VI. W jaki sposób wykorzystujemy Twoje dane
+      </h1>
+    </div>
+
+    <ol class="list-disc">
       <li>
         Zgodnie z RODO poprzez przetwarzanie danych rozumie się jakiekolwiek czynności wykonywane z danymi osobowymi w
         sposób zautomatyzowany lub niezautomatyzowany. Mogą to być w szczególności: zbieranie, zapisywanie,
@@ -263,38 +284,44 @@
         rozpowszechnianie, dopasowywanie, łączenie, ograniczanie, usuwanie, niszczenie.
       </li>
     </ol>
-    <h2>VII. Jakie są Twoje prawa</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        VII. Jakie są Twoje prawa
+      </h1>
+    </div>
+
+    <ol class="list-disc">
       <li>
         Osoba, której dane dotyczą, ma prawo:
       </li>
-      <ol type="a">
+      <ol class="list-decimal">
         <li>
-          dostępu do treści swoich danych osobowych oraz otrzymania ich kopii zgodnie z art. 15 RODO,
+          Dostępu do treści swoich danych osobowych oraz otrzymania ich kopii zgodnie z art. 15 RODO,
         </li>
         <li>
-          sprostowania danych, czyli ich korekty lub uzupełnienia zgodnie z art. 16 RODO,
+          Sprostowania danych, czyli ich korekty lub uzupełnienia zgodnie z art. 16 RODO,
         </li>
         <li>
-          usunięcia danych tzw. prawo do bycia zapomnianym zgodnie z art. 17 RODO,
+          Usunięcia danych tzw. prawo do bycia zapomnianym zgodnie z art. 17 RODO,
         </li>
         <li>
-          ograniczenia przetwarzania zgodnie z art. 18 RODO,
+          Ograniczenia przetwarzania zgodnie z art. 18 RODO,
         </li>
         <li>
-          prawo do przenoszenia danych na podstawie art. 20 RODO,
+          Prawo do przenoszenia danych na podstawie art. 20 RODO,
         </li>
         <li>
-          prawo wniesienia sprzeciwu wobec przetwarzania danych zgodnie z art. 21 RODO,
+          Prawo wniesienia sprzeciwu wobec przetwarzania danych zgodnie z art. 21 RODO,
         </li>
         <li>
-          prawo do cofnięcia zgody w dowolnym momencie bez wpływu na zgodność z prawem przetwarzania, którego dokonano
+          Prawo do cofnięcia zgody w dowolnym momencie bez wpływu na zgodność z prawem przetwarzania, którego dokonano
           na podstawie zgody przed jej cofnięciem – na podstawie art. 7 ust. 3 RODO.
         </li>
       </ol>
       <li>
         W każdej z wyżej wymienionych spraw możesz się z nami skontaktować na adres kontakt@systemywp.pl lub
-        korespondencyjnie na adres korespondencyjny Administratora podany w pkt. I ppkt. 1. Dołożymy wszelkich starań,
+        korespondencyjnie na adres korespondencyjny Administratora. Dołożymy wszelkich starań,
         aby zrealizować Twoje
         prawa w ciągu 30 dni, w przeciwnym razie skontaktujemy się informując o przyczynach i terminie realizacji
         Twoich praw.
@@ -304,36 +331,41 @@
         prawo wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych, z którym możesz skontaktować się pod
         adresem: ul. Stawki 2, 00-193 Warszawa.
       </li>
-
     </ol>
-    <h2>VIII. W jaki sposób staramy się chronić Twoje dane</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        VIII. W jaki sposób staramy się chronić Twoje dane
+      </h1>
+    </div>
+
+    <p>
+      Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji certyfikatem SSL. Dzięki
+      temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą
+      być odczytane jedynie na docelowym serwerze,
+    </p>
+    <ol class="list-decimal">
       <li>
-        Miejsca logowania i wprowadzania danych osobowych są chronione w warstwie transmisji certyfikatem SSL. Dzięki
-        temu dane osobowe i dane logowania, wprowadzone na stronie, zostają zaszyfrowane w komputerze użytkownika i mogą
-        być odczytane jedynie na docelowym serwerze,
+        Miejsce, w którym przechowywane są dane osobowe zabezpieczone jest certyfikatem oraz silnym hasłem dostępu,
       </li>
-      <ol type="a">
-        <li>
-          Miejsce, w którym przechowywane są dane osobowe zabezpieczone jest certyfikatem oraz silnym hasłem dostępu,
-        </li>
-        <li>
-          Hasła użytkowników są przechowywane w postaci hashowanej. Funkcja hashująca działa jednokierunkowo - nie jest
-          możliwe odwrócenie jej działania, co stanowi obecnie współczesny standard w zakresie przechowywania haseł
-          użytkowników,
-        </li>
-        <li>
-          Dostęp do danych osobowych jest limitowany odpowiednim poziomem uprawnień,
-        </li>
-        <li>
-          Administrator okresowo zmienia swoje hasła administracyjne,
-        </li>
-        <li>
-          Istotnym elementem ochrony danych jest również regularna aktualizacja wszelkiego oprogramowania,
-          wykorzystywanego przez Administratora, co w szczególności oznacza regularne aktualizacje komponentów
-          programistycznych.
-        </li>
-      </ol>
+      <li>
+        Hasła użytkowników są przechowywane w postaci hashowanej. Funkcja hashująca działa jednokierunkowo - nie jest
+        możliwe odwrócenie jej działania, co stanowi obecnie współczesny standard w zakresie przechowywania haseł
+        użytkowników,
+      </li>
+      <li>
+        Dostęp do danych osobowych jest limitowany odpowiednim poziomem uprawnień,
+      </li>
+      <li>
+        Administrator okresowo zmienia swoje hasła administracyjne,
+      </li>
+      <li>
+        Istotnym elementem ochrony danych jest również regularna aktualizacja wszelkiego oprogramowania,
+        wykorzystywanego przez Administratora, co w szczególności oznacza regularne aktualizacje komponentów
+        programistycznych.
+      </li>
+    </ol>
+    <ol class="list-disc">
       <li>
         Administrator na bieżąco prowadzi analizę ryzyka w celu zapewnienia, że dane osobowe przetwarzane są przez niego
         w sposób bezpieczny, zapewniający przede wszystkim, że dostęp do danych mają jedynie osoby upoważnione i jedynie
@@ -347,13 +379,18 @@
         osobowe na zlecenie Administratora.
       </li>
     </ol>
-    <h2>IX. Technologia cookies</h2>
-    <ol type="1">
+
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        IX. Technologia cookies
+      </h1>
+    </div>
+
+    <ol class="list-decimal">
       <li>
         Serwis prowadzony przez Administratora używa plików cookies zwanych również „ciasteczkami”. Chcemy w ten sposób
         zapewnić Ci wygodniejsze korzystanie z naszego serwisu.
       </li>
-
       <li>
         Pliki cookies stanowią dane informatyczne zapisane w małych plikach tekstowych, które umieszczane są na
         urządzeniu końcowym odwiedzającego serwis - komputerze, telefonie, tablecie. Nie są one szkodliwe dla tych
@@ -381,95 +418,113 @@
         Zapisywanie i odczyt naszych cookies nie umożliwia nam pobierania żadnych danych osobowych ani informacji
         poufnych z Twoich urządzeń jak również nie umożliwia nam instalowania żadnego szkodliwego oprogramowania.
       </li>
+    </ol>
+
+    <div class="font-bold my-1">
+      <p> W ramach serwisu stosowane są:</p>
+    </div>
+
+    <ol class="list-decimal">
       <li>
-        W ramach serwisu stosowane są:
-      </li>
-      <ol type="a">
-        <li>
-          Cookies sesyjne – są plikami tymczasowymi, które przechowywane są w urządzeniu końcowym do czasu wylogowania
-          lub opuszczenia strony,
-        </li>
-        <li>
-          Cookies stałe – przechowywane są w urządzeniu końcowym przez czas określony w parametrach przeglądarki lub do
-          czasu ich usunięcia przez Ciebie.
-        </li>
-      </ol>
-      <li>
-        Pliki cookies służą/mogą posłużyć nam do:
-      </li>
-      <ol type="a">
-        <li>
-          utrzymywania sesji logowania przez pewien czas celem zapewnienia wygody użytkowania serwisu,
-        </li>
-        <li>
-          wyświetlania bardziej dopasowanych treści oraz mierzenia ich efektywności,
-        </li>
-        <li>
-          stosowania narzędzi marketingowych polegających m.in. na dopasowaniu przekazów reklamowych oraz wyświetlania
-          reklam lub linków sponsorowanych naszych bądź partnerów z którymi współpracujemy,
-        </li>
-        <li>
-          do tworzenia anonimowych statystyk, aby wiedzieć w jaki sposób korzystasz z serwisu co umożliwi nam ulepszanie
-          jego zawartości i struktury,
-        </li>
-        <li>
-          zapewnienia bezpieczeństwa Administratora oraz innych użytkowników serwisu i przeciwdziałania czynom
-          niezgodnych z prawem.
-        </li>
-      </ol>
-      <li>
-        Zapisywanie plików cookies jest konieczne do prawidłowego świadczenia wszystkich usług w serwisie. Przeglądarki
-        internetowe domyślnie dopuszczają przechowywanie plików cookies.
+        Cookies sesyjne – są plikami tymczasowymi, które przechowywane są w urządzeniu końcowym do czasu wylogowania
+        lub opuszczenia strony,
       </li>
       <li>
-        Masz prawo dokonać zmiany tych ustawień w zakresie dostępu plików cookies do swojego urządzenia bezpośrednio w
+        Cookies stałe – przechowywane są w urządzeniu końcowym przez czas określony w parametrach przeglądarki lub do
+        czasu ich usunięcia przez Ciebie.
+      </li>
+    </ol>
+
+    <div class="font-bold my-1">
+      <p>Pliki cookies służą/mogą posłużyć nam do:</p>
+    </div>
+    
+    <ol class="list-decimal">
+      <li>
+        Utrzymywania sesji logowania przez pewien czas celem zapewnienia wygody użytkowania serwisu,
+      </li>
+      <li>
+        Wyświetlania bardziej dopasowanych treści oraz mierzenia ich efektywności,
+      </li>
+      <li>
+        Stosowania narzędzi marketingowych polegających m.in. na dopasowaniu przekazów reklamowych oraz wyświetlania
+        reklam lub linków sponsorowanych naszych bądź partnerów z którymi współpracujemy,
+      </li>
+      <li>
+        Do tworzenia anonimowych statystyk, aby wiedzieć w jaki sposób korzystasz z serwisu co umożliwi nam ulepszanie
+        jego zawartości i struktury,
+      </li>
+      <li>
+        Zapewnienia bezpieczeństwa Administratora oraz innych użytkowników serwisu i przeciwdziałania czynom
+        niezgodnych z prawem.
+      </li>
+    </ol>
+    
+    <div class="font-bold my-1">
+      <p>Zapisywanie plików cookies jest konieczne do prawidłowego świadczenia wszystkich usług w serwisie. Przeglądarki
+        internetowe domyślnie dopuszczają przechowywanie plików cookies.</p>
+    </div>
+
+    <div class="font-bold my-1">
+      <p>Masz prawo dokonać zmiany tych ustawień w zakresie dostępu plików cookies do swojego urządzenia bezpośrednio w
         oknie swojej przeglądarki w każdym momencie. Przeglądarka internetowa umożliwia również usunięcie plików
         cookies, a także możliwość automatycznego blokowania tych plików. Szczegółowe informacje o możliwościach i
         sposobach obsługi i zarządzania plikami cookies dostępne są w ustawieniach poszczególnych przeglądarek
-        internetowych. Aby się z nimi zapoznać prezentujemy je poniżej:
-      </li>
-      <ol type="a">
-        <li>
-          Edge - https://support.microsoft.com/pl-pl/help/4468242/microsoft-edge-browsing-data-and-privacy
-        </li>
-        <li>
-          Internet Explorer
-          - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
-        </li>
-        <li>
-          Chrome - https://support.google.com/chrome/answer/95647?hl=pl
-        </li>
-        <li>
-          Safari - https://support.apple.com/pl-pl/guide/safari/sfri11471/mac
-        </li>
-        <li>
-          Firefox - https://support.mozilla.org/pl/kb/ciasteczka
-        </li>
-        <li>
-          Opera - https://help.opera.com/pl/latest/web-preferences/#cookies
-        </li>
-
-      </ol>
-      <span> Urządzenia mobilne:</span>
-      <ol type="a">
-        <li>
-          Android - https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DAndroid&hl=pl
-        </li>
-        <li>
-          Safari (iOS) - https://support.apple.com/pl-pl/HT201265
-        </li>
-        <li>
-          Windows Phone - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
-        </li>
-      </ol>
+        internetowych. Aby się z nimi zapoznać prezentujemy je poniżej:</p>
+    </div>
+    
+    <ol class="list-decimal">
       <li>
-        Wyłączenie lub ograniczenie obsługi plików cookies w przeglądarce internetowej może spowodować utrudnienia w
-        korzystaniu lub brak działania niektórych funkcji, a w skrajnych przypadkach może uniemożliwić korzystanie z
-        serwisu.
+        Edge - https://support.microsoft.com/pl-pl/help/4468242/microsoft-edge-browsing-data-and-privacy
+      </li>
+      <li>
+        Internet Explorer
+        - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
+      </li>
+      <li>
+        Chrome - https://support.google.com/chrome/answer/95647?hl=pl
+      </li>
+      <li>
+        Safari - https://support.apple.com/pl-pl/guide/safari/sfri11471/mac
+      </li>
+      <li>
+        Firefox - https://support.mozilla.org/pl/kb/ciasteczka
+      </li>
+      <li>
+        Opera - https://help.opera.com/pl/latest/web-preferences/#cookies
       </li>
     </ol>
-    <h2>X. Postanowienia końcowe</h2>
-    <ol type="1">
+
+    <div class="font-bold my-1">
+      <p>Urządzenia mobilne:</p>
+    </div>
+    
+    <ol class="list-decimal">
+      <li>
+        Android - https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DAndroid&hl=pl
+      </li>
+      <li>
+        Safari (iOS) - https://support.apple.com/pl-pl/HT201265
+      </li>
+      <li>
+        Windows Phone - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
+      </li>
+    </ol>
+    
+    <div class="font-bold my-1">
+      <p>
+        Wyłączenie lub ograniczenie obsługi plików cookies w przeglądarce internetowej może spowodować utrudnienia w
+        korzystaniu lub brak działania niektórych funkcji, a w skrajnych przypadkach może uniemożliwić korzystanie z
+        serwisu.</p>
+    </div>
+    
+    <div class="flex content-center justify-center">
+      <h1 class="font-bold my-4 text-sm">
+        X. Postanowienia końcowe
+      </h1>
+    </div>
+    
+    <ol class="list-decimal">
       <li>
         Dane osobowe nie są przekazywane od krajów trzecich w rozumieniu przepisów o ochronie danych osobowych. Oznacza
         to, że nie przesyłamy ich poza teren Unii Europejskiej.
@@ -482,7 +537,6 @@
         W przypadku zmian w przepisach prawa, rozwoju serwisu i usług Administratora niniejsza polityka prywatności może
         ulec zmianie, o czym Administrator poinformuje z wyprzedzeniem, a jej aktualizacja pojawi się w
         serwisie:
-        <nuxt-link to="/portal-web/terms-of-service">polityka prywatności</nuxt-link>
       </li>
       <li>
         Administrator nigdy nie prosi w jakiejkolwiek formie o podanie swoich haseł dostępowych ani innych danych
@@ -499,19 +553,8 @@
         Ochrony
         Danych Osobowych pod adresem: ul. Stawki 2, 00-193 Warszawa.
       </li>
-    </ol>  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    </ol>
   </div>
-
 </template>
 
 <script>
@@ -521,5 +564,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

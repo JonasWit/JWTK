@@ -20,6 +20,7 @@ namespace SystemyWP.API
         {
             public const string AliveResponse = "Service is alive!";
             public const string DeadResponse = "Service is dead!";
+            public const string ErrorResponse = "Service check gives error!";
         }
 
         public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";

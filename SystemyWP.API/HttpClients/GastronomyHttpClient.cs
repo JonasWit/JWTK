@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using SystemyWP.API.DTOs;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Settings;
 
@@ -27,12 +26,20 @@ public class GastronomyHttpClient
     
     public async Task<string> GetHealthCheckResponse()
     {
-        _httpClient.BaseAddress = new Uri(_optionsMonitor.CurrentValue.GastronomyService);
+        try
+        {
+            _httpClient.BaseAddress = new Uri(_optionsMonitor.CurrentValue.GastronomyService);
 
-        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync("health"));
+            var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+                => _httpClient.GetAsync("health"));
 
-        return response.IsSuccessStatusCode ? 
-            SystemyWpConstants.ServiceResponses.AliveResponse : SystemyWpConstants.ServiceResponses.DeadResponse;
+            return response.IsSuccessStatusCode
+                ? SystemyWpConstants.ServiceResponses.AliveResponse
+                : SystemyWpConstants.ServiceResponses.DeadResponse;
+        }
+        catch (Exception)
+        {
+            return SystemyWpConstants.ServiceResponses.ErrorResponse;
+        }
     }
 }
