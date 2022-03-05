@@ -109,6 +109,26 @@ namespace SystemyWP.API.Controllers
             }
         }
         
+        [HttpPost("reset-password", Name = "ResetPassword")]
+        public async Task<IActionResult> ResetPassword(
+            [FromBody] UserEmailForm userEmailForm)
+        {
+            try
+            {
+
+                
+                
+                
+                
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Issue during Password Reset");
+                return ServerError;
+            }
+        }
+        
         [Authorize]
         [HttpPost("change-password", Name = "ChangePassword")]
         public async Task<IActionResult> ChangePassword(UserChangePasswordForm changePasswordForm)
