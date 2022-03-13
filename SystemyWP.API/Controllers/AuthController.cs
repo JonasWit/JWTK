@@ -109,9 +109,8 @@ namespace SystemyWP.API.Controllers
             }
         }
         
-        [HttpPost("reset-password", Name = "ResetPassword")]
-        public async Task<IActionResult> ResetPassword(
-            [FromBody] UserEmailForm userEmailForm)
+        [HttpPost("reset-password-request", Name = "ResetPasswordRequest")]
+        public async Task<IActionResult> ResetPasswordRequest([FromBody] UserEmailForm userEmailForm)
         {
             try
             {
@@ -124,7 +123,26 @@ namespace SystemyWP.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Issue during Password Reset");
+                _logger.LogError(e, "Issue during Password Reset Request");
+                return ServerError;
+            }
+        }
+        
+        [HttpPost("reset-password-action/{key}", Name = "ResetPasswordAction")]
+        public async Task<IActionResult> ResetPasswordAction(string key)
+        {
+            try
+            {
+
+                
+                
+                
+                
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Issue during Password Reset Action");
                 return ServerError;
             }
         }

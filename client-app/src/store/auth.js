@@ -9,7 +9,7 @@ export default {
     },
     getters: {
         isAuthorized(state){
-            return !!state.userToken;
+            return !!(state.userToken && state.userObject.expire > Date.now());
         },
     },
     mutations: {
