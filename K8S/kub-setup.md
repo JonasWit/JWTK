@@ -3,7 +3,7 @@ docker system prune -a
 dotnet publish -c Release -o publish
 
 docker build -f SystemyWP.API/Dockerfile -t systemywp/master:gate_v2 .
-#docker build -t systemywp/master:gate_v2 .
+docker build -t systemywp/master:gate_v2 .
 docker build -t systemywp/master:client_v1 .
 
 docker push systemywp/master:gate_v2
