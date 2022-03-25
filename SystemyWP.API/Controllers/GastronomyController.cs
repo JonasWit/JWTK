@@ -53,6 +53,39 @@ public class GastronomyController : ApiControllerBase
         }
     }
     
+    [HttpPost("remove-ingredient", Name = "RemoveIngredient")]
+    public async Task<IActionResult> RemoveIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    {
+        try
+        {
+
+
+
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            return ServerError;
+        }
+    }
+    
+    [HttpPost("update-ingredient", Name = "UpdateIngredient")]
+    public async Task<IActionResult> UpdateIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    {
+        try
+        {
+
+            
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            return ServerError;
+        }
+    }
+    
     [HttpGet("get-ingredient/{id:long}", Name = "GetIngredient")]
     public async Task<IActionResult> GetIngredient(long id)
     {
