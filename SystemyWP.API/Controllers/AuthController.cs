@@ -159,8 +159,8 @@ namespace SystemyWP.API.Controllers
             try
             {
                 if (!_tokenService.ValidateToken(userPasswordResetForm.Token)) return BadRequest();
-                var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
                 
+                var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
                 var user = _userRepository
                     .GetUser(user => user.PasswordResetToken == userPasswordResetForm.Token && user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
