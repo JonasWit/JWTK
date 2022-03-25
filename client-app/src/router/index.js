@@ -18,6 +18,7 @@ import Ingredients from "@/views/apps/gastronomy/Ingredients";
 import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
 import Sources from "@/views/Sources";
 import GastronomyCalculator from "@/views/apps/gastronomy/GastronomyCalculator";
+import ResetPassword from "@/views/auth/ResetPassword";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -137,6 +138,21 @@ const routes = [
         }
     },
     {
+        path: '/auth/reset-password',
+        name: 'ResetPassword',
+        component: ResetPassword,
+        beforeEnter: [scrollUp],
+        meta: {
+            title: 'Reset Hasła',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Rest Hasła'
+                },
+            ]
+        }
+    },
+    {
         path: '/about',
         name: 'About',
         component: About,
@@ -248,7 +264,7 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
-    mode: "history"
+    mode: 'hash'
 })
 
 //Tab Title

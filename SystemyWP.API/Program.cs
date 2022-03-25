@@ -27,6 +27,7 @@ using SystemyWP.API.HttpClients;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.API.Services.JWTServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,7 +114,6 @@ builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
         ValidIssuer = configuration.GetValue("AuthSettings:Issuer", ""),
         ValidAudience = configuration.GetValue("AuthSettings:Audience", ""),
         IssuerSigningKey = key,
-        
         ValidateIssuerSigningKey = true,
         ClockSkew = TimeSpan.Zero,
         ValidateIssuer = true,
@@ -146,6 +146,7 @@ builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSet
 builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
+builder.Services.AddTransient<TokenService>();
 
 builder.Services.AddFileServices(configuration);
 

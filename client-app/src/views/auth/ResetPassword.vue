@@ -5,17 +5,6 @@
         Zmiana Hasła
       </h2>
       <div>
-        <input v-model="state.currentPassword"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Obecne Hasło"/>
-        <div v-if="v$.currentPassword.$error">
-          <span class="validation-error-span" v-for="error in v$.currentPassword.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
-        </div>
-      </div>
-      <div>
         <input v-model="state.newPassword.newPassword"
                type="password"
                class="form-input-text-general"
@@ -52,28 +41,28 @@ import {useStore} from "vuex";
 import {helpers, minLength, required, sameAs} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
-import {changePassword} from "@/services/authAPI";
-import {computed, reactive} from "vue";
+import {computed, onMounted, reactive} from "vue";
+import {resetPasswordAction} from "@/services/authAPI";
 
 export default {
   name: "ChangePassword",
   setup() {
     const router = useRouter()
     const state = reactive({
-      currentPassword: '',
       newPassword: {
         newPassword: '',
         confirm: '',
       },
     })
 
+    onMounted(() => {
+      console.warn("target: ", router.currentRoute.value.query.target);
+      console.warn("token: ", router.currentRoute.value.query.token);
+    })
+
     const store = useStore()
     const rules = computed(() => {
       return {
-        currentPassword: {
-          required: helpers.withMessage("Pole nie może być puste", required),
-          minLength: helpers.withMessage("Minimum 12 znaków", minLength(12))
-        },
         newPassword: {
           newPassword: {
             required: helpers.withMessage("Pole nie może być puste", required),
@@ -100,11 +89,12 @@ export default {
 
       try {
         const payload = {
-          oldPassword: state.currentPassword,
-          newPassword: state.newPassword.newPassword
+          password: state.newPassword.newPassword,
+          token: router.currentRoute.value.query.token
         }
+        
         console.log("credentials: ", payload)
-        const res = await changePassword(payload)
+        const res = await resetPasswordAction(payload)
         console.log("data: ", res.data);
         console.log("status: ", res.status);
         console.log("headers: ", res.headers);
@@ -114,10 +104,10 @@ export default {
           textColor: SNACK_TEXT.BLACK,
           backColor: SNACK_BACKGROUNDS.SUCCESS
         })
-        
-        await store.commit('auth/resetCredentials')    
+
+        await store.commit('auth/resetCredentials')
         await router.push('/')
-        
+
       } catch (error) {
         if (error.response) {
           await store.dispatch('snack/snack', {

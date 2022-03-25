@@ -5,7 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -15,7 +17,10 @@ using SystemyWP.API.DTOs;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
+using SystemyWP.API.Utilities;
 
 namespace SystemyWP.API.Controllers
 {
@@ -24,22 +29,28 @@ namespace SystemyWP.API.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
-        private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
+        private readonly IOptionsMonitor<AuthSettings> _authSettings;
+        private readonly IOptionsMonitor<CorsSettings> _corsSettings;
         private readonly Encryptor _encryptor;
         private readonly IUserRepository _userRepository;
+        private readonly TokenService _tokenService;
 
         public AuthController(
             ILogger<AuthController> logger,
             AppDbContext context,
-            IOptionsMonitor<AuthSettings> optionsMonitor,
+            IOptionsMonitor<AuthSettings> authSettings,
+            IOptionsMonitor<CorsSettings> corsSettings,
             Encryptor encryptor,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            TokenService tokenService)
         {
             _logger = logger;
             _context = context;
-            _optionsMonitor = optionsMonitor;
+            _authSettings = authSettings;
+            _corsSettings = corsSettings;
             _encryptor = encryptor;
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         [Authorize]
@@ -82,7 +93,7 @@ namespace SystemyWP.API.Controllers
                 _context.Update(loggedInUser);
                 await _context.SaveChangesAsync();
                 
-                var token = GenerateJwtToken(loggedInUser);
+                var token = _tokenService.GenerateJwtToken(loggedInUser);
                 return Ok(new TokenDto() {Token = token});
             }
             catch (Exception e)
@@ -110,15 +121,29 @@ namespace SystemyWP.API.Controllers
         }
         
         [HttpPost("reset-password-request", Name = "ResetPasswordRequest")]
-        public async Task<IActionResult> ResetPasswordRequest([FromBody] UserEmailForm userEmailForm)
+        public async Task<IActionResult> ResetPasswordRequest(
+            [FromBody] UserEmailForm userEmailForm,
+            [FromServices] EmailClient emailClient)
         {
             try
             {
+                var user = _userRepository.GetUser(user => user.Claims.Any(claim =>
+                    claim.ClaimType == ClaimTypes.Email && claim.ClaimValue == userEmailForm.Email));
 
+                if (user is null)  return Ok();
+                var resetToken = _tokenService.GeneratePasswordResetJwtToken(user);
+
+                _userRepository.UpdateResetPasswordTokenToken(user.Id, resetToken);
+
+                var qb = new QueryBuilder {{"target", "password-reset"}, {"token", resetToken}};
+                var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/reset-password/{qb}";
                 
+                await emailClient.SendEmailAsync(
+                    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
+                    "Reset Hasła",
+                    EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
                 
-                
-                
+                if (await _userRepository.SaveChanges() > 0) return Ok();
                 return BadRequest();
             }
             catch (Exception e)
@@ -128,15 +153,22 @@ namespace SystemyWP.API.Controllers
             }
         }
         
-        [HttpPost("reset-password-action/{key}", Name = "ResetPasswordAction")]
-        public async Task<IActionResult> ResetPasswordAction(string key)
+        [HttpPost("reset-password-action", Name = "ResetPasswordAction")]
+        public async Task<IActionResult> ResetPasswordAction([FromBody] UserPasswordResetForm userPasswordResetForm)
         {
             try
             {
+                if (!_tokenService.ValidateToken(userPasswordResetForm.Token)) return BadRequest();
+                var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
+                
+                var user = _userRepository
+                    .GetUser(user => user.PasswordResetToken == userPasswordResetForm.Token && user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
+                if (user is null) return BadRequest();
                 
-                
-                
+                var password = _encryptor.Encrypt(userPasswordResetForm.Password);
+                _userRepository.ChangePassword(user.Id, password);
+                if (await _userRepository.SaveChanges() > 0) return Ok();
                 
                 return BadRequest();
             }
@@ -169,41 +201,6 @@ namespace SystemyWP.API.Controllers
             {
                 _logger.LogError(e, "Issue during Authentication");
                 return ServerError;
-            }
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            try
-            {
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
-                    new Claim(ClaimTypes.Name, user.Claims.First(c => c.ClaimType == ClaimTypes.Name).ClaimValue),
-                    new Claim(ClaimTypes.Role, user.Claims.First(c => c.ClaimType == ClaimTypes.Role).ClaimValue),
-                    new Claim(ClaimTypes.NameIdentifier, user.Claims.First(c => c.ClaimType == ClaimTypes.NameIdentifier).ClaimValue),
-                };
-
-                var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
-                var key = new SymmetricSecurityKey(secretBytes);
-
-                var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
-                var token = new JwtSecurityToken(
-                    _optionsMonitor.CurrentValue.Issuer, 
-                    _optionsMonitor.CurrentValue.Audience, 
-                    claims,
-                    DateTime.UtcNow,
-                    DateTime.UtcNow.AddDays(7),
-                    signingCredentials);
-
-                var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
-                return tokenJson;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Issue when generating JWT token");
-                throw new Exception();
             }
         }
     }

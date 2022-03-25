@@ -80,7 +80,16 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
         if (user is null) return;
 
+        user.PasswordResetToken = null;
         user.Password = password;
+        _context.Update(user);
+    }
+    
+    public void UpdateResetPasswordTokenToken(string userId, string token)
+    {
+        var user = _context.Users.FirstOrDefault(user => user.Id == userId);
+        if(user is null) throw new ArgumentNullException(nameof(userId));    
+        user.PasswordResetToken = token;
         _context.Update(user);
     }
     
