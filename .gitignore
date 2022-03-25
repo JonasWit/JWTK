@@ -3,6 +3,7 @@
 *.key
 bin/
 obj/
+publish/
 
 wwwroot/
 tempkey.jwk
@@ -11,6 +12,7 @@ systemywp.sln.DotSettings.user
 .DS_Store
 node_modules
 /dist
+/publish
 
 
 # local env files

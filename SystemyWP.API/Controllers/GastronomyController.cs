@@ -1,31 +1,75 @@
+using System;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using SystemyWP.API.Settings;
+using SystemyWP.API.HttpClients;
+using SystemyWP.API.Repositories;
+using SystemyWP.Lib.Shared.DTOs;
+using SystemyWP.Lib.Shared.DTOs.Gastronomy;
 
 namespace SystemyWP.API.Controllers;
 
 [Route("[controller]")]
 public class GastronomyController : ApiControllerBase
 {
-
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+    private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyController> _logger;
-    private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
 
     public GastronomyController(
-        ILogger<GastronomyController> logger,
-        IOptionsMonitor<AuthSettings> optionsMonitor)
+        IUserRepository userRepository,
+        IMapper mapper,
+        GastronomyHttpClient gastronomyHttpClient,
+        ILogger<GastronomyController> logger)
     {
+        _userRepository = userRepository;
+        _mapper = mapper;
+        _gastronomyHttpClient = gastronomyHttpClient;
         _logger = logger;
-        _optionsMonitor = optionsMonitor;
     }
-    
-    [Authorize]
-    [HttpGet("authorized-check")]
-    public IActionResult AuthorizedCheck() => Ok(new {Message= "Authorized Response", UserEmail, UserId });
-    
-    
-    
-    
+
+    [HttpPost("create-ingredient", Name = "CreateIngredient")]
+    public async Task<IActionResult> CreateIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+
+            createIngredientDto.AccessKey = key;
+            var ingredientDto = await _gastronomyHttpClient.CreateIngredient(createIngredientDto);
+            if (ingredientDto is null) throw new Exception();
+
+            return CreatedAtRoute(nameof(GetIngredient), new {ingredientDto.Id}, ingredientDto);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            return ServerError;
+        }
+    }
+
+    [HttpGet("get-ingredient/{id:long}", Name = "GetIngredient")]
+    public async Task<IActionResult> GetIngredient(long id)
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+
+            var ingredientDto =
+                await _gastronomyHttpClient.GetIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
+            if (ingredientDto is null) return NotFound();
+
+            return Ok(ingredientDto);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Get Ingredient Failed");
+            return ServerError;
+        }
+    }
 }

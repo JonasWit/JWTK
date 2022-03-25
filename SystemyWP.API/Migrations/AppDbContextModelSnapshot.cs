@@ -17,7 +17,7 @@ namespace SystemyWP.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -41,7 +41,24 @@ namespace SystemyWP.API.Migrations
                     b.ToTable("DataProtectionKeys");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.General.Log", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.AccessKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("AccessKeys");
+                });
+
+            modelBuilder.Entity("SystemyWP.API.Data.Models.Log", b =>
                 {
                     b.Property<string>("Exception")
                         .HasColumnType("text");
@@ -64,25 +81,14 @@ namespace SystemyWP.API.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.Access.AccessKey", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AccessKeys");
-                });
-
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.User", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("AccessKeyId")
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
@@ -107,13 +113,10 @@ namespace SystemyWP.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccessKeyId")
-                        .IsUnique();
-
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.UserClaim", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.UserClaim", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,19 +145,19 @@ namespace SystemyWP.API.Migrations
                     b.ToTable("UserClaims");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.User", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.AccessKey", b =>
                 {
-                    b.HasOne("SystemyWP.API.Data.Models.UsersManagement.Access.AccessKey", "AccessKey")
-                        .WithOne("User")
-                        .HasForeignKey("SystemyWP.API.Data.Models.UsersManagement.User", "AccessKeyId")
+                    b.HasOne("SystemyWP.API.Data.Models.User", "User")
+                        .WithOne("AccessKey")
+                        .HasForeignKey("SystemyWP.API.Data.Models.AccessKey", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("AccessKey");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.UserClaim", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.UserClaim", b =>
                 {
-                    b.HasOne("SystemyWP.API.Data.Models.UsersManagement.User", "User")
+                    b.HasOne("SystemyWP.API.Data.Models.User", "User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -162,13 +165,10 @@ namespace SystemyWP.API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.Access.AccessKey", b =>
+            modelBuilder.Entity("SystemyWP.API.Data.Models.User", b =>
                 {
-                    b.Navigation("User");
-                });
+                    b.Navigation("AccessKey");
 
-            modelBuilder.Entity("SystemyWP.API.Data.Models.UsersManagement.User", b =>
-                {
                     b.Navigation("Claims");
                 });
 #pragma warning restore 612, 618

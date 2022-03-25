@@ -1,5 +1,5 @@
 using System;
-using SystemyWP.API.Data.Models.UsersManagement.Access;
+using SystemyWP.API.Data.Models;
 
 namespace SystemyWP.API.DTOs;
 

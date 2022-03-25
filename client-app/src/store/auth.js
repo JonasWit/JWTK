@@ -9,7 +9,7 @@ export default {
     },
     getters: {
         isAuthorized(state){
-            return !!state.userToken;
+            return !!(state.userToken && state.userObject.expire > Date.now());
         },
     },
     mutations: {
@@ -26,7 +26,7 @@ export default {
         setIdToken({commit}, token) {
             console.warn("Saving token: ", token)
             setLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN, token)
-            commit('setSnack', { token: token, userObject: deserializeUserObject() })
+            commit('setUserData', { token: token, userObject: deserializeUserObject() })
         },
     },
 }

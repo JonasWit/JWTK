@@ -9,7 +9,7 @@ namespace SystemyWP.API
         {
             public const string StandardSet = @"ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
         }
-        
+
         public struct Paths
         {
             public const string LoginPath = @"/Account/Login";
@@ -20,6 +20,13 @@ namespace SystemyWP.API
         {
             public const string AliveResponse = "Service is alive!";
             public const string DeadResponse = "Service is dead!";
+            public const string ErrorResponse = "Service check gives error!";
+        }
+        
+        public struct Services
+        {
+            public const string MasterService = nameof(MasterService);
+            public const string GastronomyService = nameof(GastronomyService);
         }
 
         public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";

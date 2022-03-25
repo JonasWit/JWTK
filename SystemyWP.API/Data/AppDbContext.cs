@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Data.Models.General;
-using SystemyWP.API.Data.Models.UsersManagement;
-using SystemyWP.API.Data.Models.UsersManagement.Access;
+using SystemyWP.API.Data.Models;
 
 namespace SystemyWP.API.Data
 {
@@ -14,17 +12,18 @@ namespace SystemyWP.API.Data
         
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<Log> Logs { get; set; }    
-        public DbSet<User> Users { get; set; }        
+        public DbSet<User> Users { get; set; }    
         public DbSet<UserClaim> UserClaims { get; set; }
         public DbSet<AccessKey> AccessKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Log>().HasNoKey();
-            
+
             modelBuilder.Entity<User>()
                 .HasOne(x => x.AccessKey)
                 .WithOne(x => x.User)
+                .HasForeignKey<AccessKey>(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()

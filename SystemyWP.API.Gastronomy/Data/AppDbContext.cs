@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data.Models.Dishes;
-using SystemyWP.API.Gastronomy.Data.Models.Ingredients;
-using SystemyWP.API.Gastronomy.Data.Models.Menus;
+using SystemyWP.API.Gastronomy.Data.Models;
 
 namespace SystemyWP.API.Gastronomy.Data
 {
@@ -10,23 +8,20 @@ namespace SystemyWP.API.Gastronomy.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        
-        //Data
-        public DbSet<RestaurantAppMenu> RestaurantAppMenus { get; set; }
-        public DbSet<RestaurantAppDish> RestaurantAppDishes { get; set; }      
-        public DbSet<RestaurantAppIngredient> RestaurantAppIngredients { get; set; }  
-        public DbSet<RestaurantAppUsedIngredient> RestaurantAppUsedIngredients { get; set; }  
-        
+
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RestaurantAppDish>()
-                .HasMany(x => x.RestaurantAppUsedIngredients)
-                .WithOne(x => x.RestaurantAppDish)
-                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Dish>()
+                .HasMany(x => x.Ingredients)
+                .WithMany(x => x.Dishes);
 
-            modelBuilder.Entity<RestaurantAppMenu>()
-                .HasMany(x => x.RestaurantAppDishes)
-                .WithMany(x => x.RestaurantAppMenus);
+            modelBuilder.Entity<Menu>()
+                .HasMany(x => x.Dishes)
+                .WithMany(x => x.Menus);
         }
     }
 }

@@ -1,5 +1,5 @@
-using SystemyWP.API.Forms.User;
-using SystemyWP.API.Forms.User.Validation;
+using SystemyWP.API.FluentValidations;
+using SystemyWP.API.Forms;
 using Xunit;
 
 namespace SystemyWP.Tests.ValidatorsTests;

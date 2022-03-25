@@ -24,6 +24,10 @@
     @apply bg-white rounded overflow-hidden shadow-md relative hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
 }
 
+.app-navigation-link{
+    @apply bg-white rounded shadow-md hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
+}
+
 .portal-badge{
     @apply bg-gray-200 text-white text-xs uppercase font-bold rounded-full p-2 absolute top-0 m-0.5
 }

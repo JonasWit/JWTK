@@ -1,30 +1,28 @@
-#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+#FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 #WORKDIR /app
+#EXPOSE 80
 #
-#COPY *.csproj ./
-#RUN dotnet restore
+#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+#WORKDIR /src
+#COPY ["SystemyWP.API.csproj", "./"]
+#RUN dotnet restore "SystemyWP.API.csproj"
+#COPY . .
+#RUN dotnet publish "SystemyWP.API.csproj" -c Release -o /app/publish
 #
-#COPY . ./
-#RUN dotnet publish -c Release -o out
-#
-#FROM mcr.microsoft.com/dotnet/aspnet:6.0
+#FROM base AS final
 #WORKDIR /app
-#COPY --from=build-env /app/out .
-#
-#ENTRYPOINT [ "dotnet", "SystemyWP.API.dll" ]
+#COPY --from=build /app/publish .
+#ENTRYPOINT ["dotnet", "SystemyWP.API.dll"]
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["SystemyWP.API.csproj", "./"]
-RUN dotnet restore "SystemyWP.API.csproj"
-COPY . .
-RUN dotnet publish "SystemyWP.API.csproj" -c Release -o /app/publish
+COPY . ./
+RUN dotnet publish SystemyWP.API -c Release -o SystemyWP.API/out
 
-FROM base AS final
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build-env /app/SystemyWP.API/out .
 ENTRYPOINT ["dotnet", "SystemyWP.API.dll"]
