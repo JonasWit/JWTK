@@ -187,7 +187,6 @@ namespace SystemyWP.API.Controllers
             {
                 var newPassword = _encryptor.Encrypt(changePasswordForm.NewPassword);
                 var oldPassword = _encryptor.Encrypt(changePasswordForm.OldPassword);
-                
                 var loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == UserEmail) &&
                                   u.Password == oldPassword);
