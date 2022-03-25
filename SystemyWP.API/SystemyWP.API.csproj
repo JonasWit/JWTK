@@ -35,25 +35,4 @@
     <ItemGroup>
         <Folder Include="Secrets" />
     </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Pages\Account\ChangePassword.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\Client.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\ForgotPassword.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\ForgotPasswordConfirmation.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\Lockout.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\Login.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\ResetPassword.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Account\ResetPasswordConfirmation.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Error.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Shared\_Layout.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\_ViewImports.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SystemyWP.Lib.Auth\SystemyWP.Lib.Auth.csproj" />
-      <ProjectReference Include="..\SystemyWP.Lib.Shared.Abstractions\SystemyWP.Lib.Shared.Abstractions.csproj" />
-      <ProjectReference Include="..\SystemyWP.Lib.Shared.DTOs\SystemyWP.Lib.Shared.DTOs.csproj" />
-    </ItemGroup>
-
 </Project>

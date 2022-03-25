@@ -1,4 +1,4 @@
-namespace SystemyWP.Lib.Shared.DTOs;
+namespace SystemyWP.API.DTOs;
 
 public class ResourceAccessPass
 {

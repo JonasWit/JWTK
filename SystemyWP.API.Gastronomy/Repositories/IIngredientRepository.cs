@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.Lib.Shared.Abstractions.DataRelated;
-using SystemyWP.Lib.Shared.DTOs;
+using SystemyWP.API.Gastronomy.DTOs;
 
 namespace SystemyWP.API.Gastronomy.Repositories;
 

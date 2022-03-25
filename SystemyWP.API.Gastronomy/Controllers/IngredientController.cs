@@ -4,9 +4,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SystemyWP.API.Gastronomy.Data.Models;
+using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.Repositories;
-using SystemyWP.Lib.Shared.DTOs;
-using SystemyWP.Lib.Shared.DTOs.Gastronomy;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 

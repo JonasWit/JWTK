@@ -1,6 +1,6 @@
-using SystemyWP.Lib.Shared.DTOs.BaseDtos;
+using SystemyWP.API.Constants;
 
-namespace SystemyWP.Lib.Shared.DTOs.Gastronomy;
+namespace SystemyWP.API.DTOs.Gastronomy;
 
 public class CreateIngredientDto : BasicDto
 {

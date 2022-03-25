@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace SystemyWP.API
+namespace SystemyWP.API.Constants
 {
     public class SystemyWpConstants
     {
@@ -21,6 +21,15 @@ namespace SystemyWP.API
             public const string AliveResponse = "Service is alive!";
             public const string DeadResponse = "Service is dead!";
             public const string ErrorResponse = "Service check gives error!";
+        }
+        
+        public struct DataLimits
+        {
+            public const int DescriptionLimit = 1000;
+            public const int NameLimit = 500;
+            public const int ShortKeyLimit = 128;
+            public const int KeyLimit = 256;
+            public const int LongKeyLimit = 512;
         }
         
         public struct Services

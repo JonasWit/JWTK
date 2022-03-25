@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.Lib.Shared.DTOs.SharedConstants;
+using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Data.Models
 {
@@ -9,16 +9,16 @@ namespace SystemyWP.API.Data.Models
     {
         [Key]
         [Required]
-        [MaxLength(SharedConstants.DataLimits.KeyLimit)]
+        [MaxLength(SystemyWpConstants.DataLimits.KeyLimit)]
         public string Id { get; set; }
 
         [Required]
-        [MaxLength(SharedConstants.DataLimits.LongKeyLimit)]
+        [MaxLength(SystemyWpConstants.DataLimits.LongKeyLimit)]
         public string Password { get; set; }
 
         public string Image { get; set; }
 
-        [MaxLength(SharedConstants.DataLimits.LongKeyLimit)]
+        [MaxLength(SystemyWpConstants.DataLimits.LongKeyLimit)]
         public string PasswordResetToken { get; set; }
 
         public bool EmailConfirmed { get; set; }

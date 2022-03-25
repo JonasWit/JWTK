@@ -1,6 +1,6 @@
 using AutoMapper;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.Lib.Shared.DTOs.Gastronomy;
+using SystemyWP.API.Gastronomy.DTOs;
 
 namespace SystemyWP.API.Gastronomy.Profiles;
 

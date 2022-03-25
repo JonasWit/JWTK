@@ -1,4 +1,4 @@
-namespace SystemyWP.Lib.Shared.DTOs.BaseDtos;
+namespace SystemyWP.API.DTOs;
 
 public class BasicDto
 {

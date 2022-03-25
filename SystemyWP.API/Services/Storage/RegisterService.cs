@@ -5,6 +5,7 @@ using SystemyWP.API;
 using SystemyWP.API.Services.Storage;
 using SystemyWP.API.Settings;
 using Microsoft.Extensions.Configuration;
+using SystemyWP.API.Constants;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

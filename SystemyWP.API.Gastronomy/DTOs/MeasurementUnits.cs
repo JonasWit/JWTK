@@ -1,4 +1,4 @@
-﻿namespace SystemyWP.Lib.Shared.DTOs.Gastronomy
+﻿namespace SystemyWP.API.Gastronomy.DTOs
 {
     public enum MeasurementUnits
     {

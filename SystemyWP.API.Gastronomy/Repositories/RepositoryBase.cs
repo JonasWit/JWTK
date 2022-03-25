@@ -1,8 +1,9 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.Lib.Shared.Abstractions.DataRelated;
+namespace SystemyWP.API.Gastronomy.Repositories;
 
-public abstract class RepositoryBase<TContext> where TContext : DbContext
+public abstract class RepositoryBase<TContext> : IRepositoryBase where TContext : DbContext 
 {
     protected readonly TContext _context;
 
