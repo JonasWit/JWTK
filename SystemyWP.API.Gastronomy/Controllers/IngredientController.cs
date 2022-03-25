@@ -24,7 +24,7 @@ public class IngredientController : ControllerBase
         _ingredientRepository = ingredientRepository;
     }
 
-    [HttpPost("create-ingredient", Name = "CreateIngredient")]
+    [HttpPost(Name = "CreateIngredient")]
     public async Task<ActionResult<Ingredient>> CreateIngredient([FromBody] CreateIngredientDto createIngredientDto)
     {
         try
@@ -54,6 +54,37 @@ public class IngredientController : ControllerBase
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
-    } 
+    }
     
+    [HttpDelete("/{key}/{id:long}", Name = "RemoveIngredient")]
+    public async Task<ActionResult<Ingredient>> RemoveIngredient(string key, long id)
+    {
+        try
+        {
+
+
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+    
+    [HttpPut(Name = "UpdateIngredient")]
+    public async Task<ActionResult<Ingredient>> UpdateIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    {
+        try
+        {
+
+
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+    
+
 }
