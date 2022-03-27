@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Nunito']
+        body: ['Helvetica'],
+        sans: ['Helvetica', 'sans-serif'],
       },
       colors: {
         customClassicBlue: '#34568B',

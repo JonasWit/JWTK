@@ -6,7 +6,7 @@
       <NavContainer class="flex-none w-full md:max-w-xs">
         <MainNav v-if="nav.navType === 'main'"/>
       </NavContainer>
-      <main class="flex-1 px-12 py-6 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
+      <main class="flex-1 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component"/>
