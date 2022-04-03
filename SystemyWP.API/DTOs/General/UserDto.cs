@@ -1,7 +1,7 @@
 using System;
 using SystemyWP.API.Data.Models;
 
-namespace SystemyWP.API.DTOs;
+namespace SystemyWP.API.DTOs.General;
 
 public class UserDto
 {

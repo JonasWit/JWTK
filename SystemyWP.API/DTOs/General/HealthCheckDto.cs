@@ -1,4 +1,4 @@
-namespace SystemyWP.API.DTOs;
+namespace SystemyWP.API.DTOs.General;
 
 public class HealthCheckDto
 {

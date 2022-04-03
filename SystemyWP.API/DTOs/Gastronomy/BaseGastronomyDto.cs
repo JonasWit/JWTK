@@ -1,3 +1,5 @@
+using SystemyWP.API.DTOs.General;
+
 namespace SystemyWP.API.DTOs.Gastronomy;
 
 public class BaseGastronomyDto : BasicDto

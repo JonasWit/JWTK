@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Data;
 using SystemyWP.API.DTOs;
+using SystemyWP.API.DTOs.General;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
