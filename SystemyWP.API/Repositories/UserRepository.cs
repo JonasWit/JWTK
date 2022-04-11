@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Models;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Services.Auth;
-using SystemyWP.Lib.Shared.Abstractions.DataRelated;
 
 namespace SystemyWP.API.Repositories;
 
@@ -41,7 +41,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
                 new()
                 {
                     ClaimType = ClaimTypes.Role,
-                    ClaimValue = SystemyWpConstants.Roles.User
+                    ClaimValue = AppConstants.Roles.User
                 },
                 new()
                 {

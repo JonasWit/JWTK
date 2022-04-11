@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Constants;
 using SystemyWP.API.DTOs;
+using SystemyWP.API.DTOs.General;
 using SystemyWP.API.HttpClients;
 using SystemyWP.API.Repositories;
 
@@ -35,7 +37,7 @@ public class HealthController : ApiControllerBase
             _logger.LogWarning($"Health Check endpoint called!");
             var res = new HealthCheckDto
             {
-                MasterServiceStatus = SystemyWpConstants.ServiceResponses.AliveResponse,
+                MasterServiceStatus = AppConstants.ServiceResponses.AliveResponse,
                 GastronomyServiceStatus = await _gastronomyHttpClient.GetHealthCheckResponse()
             };
 

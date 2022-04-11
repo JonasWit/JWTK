@@ -8,13 +8,13 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="11.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -27,10 +27,4 @@
     <ItemGroup>
       <Folder Include="Secrets" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SystemyWP.Lib.Shared.Abstractions\SystemyWP.Lib.Shared.Abstractions.csproj" />
-      <ProjectReference Include="..\SystemyWP.Lib.Shared.DTOs\SystemyWP.Lib.Shared.DTOs.csproj" />
-    </ItemGroup>
-
 </Project>

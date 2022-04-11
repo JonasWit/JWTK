@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SystemyWP.API.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Services.Storage
 {
@@ -21,14 +22,14 @@ namespace SystemyWP.API.Services.Storage
 
         public async Task<string> SavePortalPublicationImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWpConstants.Files.GeneratePortalPublicationFileName();
+            var fileName = AppConstants.Files.GeneratePortalPublicationFileName();
             await SaveFile(fileStream, fileName);
             return $"{_settings.ImageUrl}/{fileName}";
         }
 
         public async Task<string> SaveProfileImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
+            var fileName = AppConstants.Files.GenerateProfileFileName();
             await SaveFile(fileStream, fileName);
             return $"{_settings.ImageUrl}/{fileName}";
         }

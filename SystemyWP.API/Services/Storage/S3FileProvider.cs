@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Services.Storage
 {
@@ -14,13 +15,13 @@ namespace SystemyWP.API.Services.Storage
 
         public Task<string> SavePortalPublicationImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWpConstants.Files.GeneratePortalPublicationFileName();
+            var fileName = AppConstants.Files.GeneratePortalPublicationFileName();
             return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
         }
 
         public Task<string> SaveProfileImageAsync(Stream fileStream)
         {
-            var fileName = SystemyWpConstants.Files.GenerateProfileFileName();
+            var fileName = AppConstants.Files.GenerateProfileFileName();
             return _s3Client.SaveFile(fileName, "image/jpg", fileStream);
         }
 
