@@ -1,7 +1,7 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Gastronomy.Data.Models;
@@ -29,7 +29,7 @@ public class IngredientController : ControllerBase
     }
 
     [HttpPost(Name = "CreateIngredient")]
-    public async Task<ActionResult<Ingredient>> CreateIngredient([FromBody] IngredientCreateDto ingredientCreateDto)
+    public async Task<ActionResult<IngredientDto>> CreateIngredient([FromBody] IngredientCreateDto ingredientCreateDto)
     {
         try
         {
@@ -41,13 +41,13 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CREATE Ingredient Failed");
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            _logger.LogError(e, AppConstants.ResponseMessages.CreateIngredientException);
+            return Problem(AppConstants.ResponseMessages.CreateIngredientException);
         }
     }
     
     [HttpGet("/{key}/{id:long}",Name = "GetIngredient")]
-    public async Task<ActionResult<Ingredient>> GetIngredient(string key, long id)
+    public async Task<ActionResult<IngredientDto>> GetIngredient(string key, long id)
     {
         try
         {
@@ -57,8 +57,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GET Ingredient Failed");
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
+            return Problem(AppConstants.ResponseMessages.GetIngredientException);
         }
     }
     
@@ -73,13 +73,13 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "REMOVE Ingredient Failed");
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            _logger.LogError(e, AppConstants.ResponseMessages.RemoveIngredientException);
+            return Problem(AppConstants.ResponseMessages.RemoveIngredientException);
         }
     }
     
     [HttpPut(Name = "UpdateIngredient")]
-    public async Task<ActionResult<Ingredient>> UpdateIngredient([FromBody] IngredientDto ingredientDto)
+    public async Task<IActionResult> UpdateIngredient([FromBody] IngredientDto ingredientDto)
     {
         try
         {
@@ -89,8 +89,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "UPDATE Ingredient Failed");
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            _logger.LogError(e, AppConstants.ResponseMessages.UpdateIngredientException);
+            return Problem(AppConstants.ResponseMessages.UpdateIngredientException);
         }
     }
 }

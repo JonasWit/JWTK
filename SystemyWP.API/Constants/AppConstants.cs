@@ -5,6 +5,11 @@ namespace SystemyWP.API.Constants
 {
     public class AppConstants
     {
+        public struct ResponseMessages
+        {
+            public const string DefaultExceptionMessage = "Error occured contact admin";
+        }
+        
         public struct CharacterSets
         {
             public const string StandardSet = @"ąęźżćłśĄĘĆŚŹŻŁabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";

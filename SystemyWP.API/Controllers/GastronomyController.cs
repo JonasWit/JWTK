@@ -1,11 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
-using SystemyWP.API.DTOs;
 using SystemyWP.API.DTOs.Gastronomy;
 using SystemyWP.API.DTOs.General;
 using SystemyWP.API.HttpClients;
@@ -50,7 +48,7 @@ public class GastronomyController : ApiControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return ServerError;
+            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
         }
     }
     
@@ -67,7 +65,7 @@ public class GastronomyController : ApiControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return ServerError;
+            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
         }
     }
     
@@ -83,7 +81,7 @@ public class GastronomyController : ApiControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return ServerError;
+            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
         }
     }
     
@@ -104,7 +102,7 @@ public class GastronomyController : ApiControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Get Ingredient Failed");
-            return ServerError;
+            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
         }
     }
 }
