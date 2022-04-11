@@ -1,6 +1,6 @@
 ﻿namespace SystemyWP.API.Gastronomy
 {
-    public class SystemyWpConstants
+    public class AppConstants
     {
         public struct DataLimits
         {

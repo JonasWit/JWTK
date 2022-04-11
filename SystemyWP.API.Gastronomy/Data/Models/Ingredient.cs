@@ -6,9 +6,9 @@ namespace SystemyWP.API.Gastronomy.Data.Models
 {
     public class Ingredient : BaseModel
     {
-        [Required] [MaxLength(SystemyWpConstants.DataLimits.NameLimit)] public string Name { get; set; } = "";
+        [Required] [MaxLength(AppConstants.DataLimits.NameLimit)] public string Name { get; set; } = "";
 
-        [MaxLength(SystemyWpConstants.DataLimits.DescriptionLimit)] public string Description { get; set; } = "";
+        [MaxLength(AppConstants.DataLimits.DescriptionLimit)] public string Description { get; set; } = "";
 
         public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
 

@@ -8,4 +8,6 @@ public interface IIngredientRepository : IRepositoryBase
 {
     void CreateIngredient(Ingredient createIngredientDto);
     Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass);
+    void RemoveIngredient(ResourceAccessPass resourceAccessPass);
+    void UpdateIngredient(Ingredient ingredient);
 }

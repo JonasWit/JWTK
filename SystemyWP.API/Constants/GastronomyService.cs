@@ -7,4 +7,9 @@ public class GastronomyServiceUrls
         public const string Dev = @"";
         public const string Prod = @"";
     }
+    
+    public struct Routes
+    {
+        public const string Dev = @"";
+    }
 }

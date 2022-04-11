@@ -8,7 +8,8 @@ public class RestaurantAppProfile : Profile
 {
     public RestaurantAppProfile()
     {
-        CreateMap<CreateIngredientDto, Ingredient>();
+        CreateMap<IngredientCreateDto, Ingredient>();
         CreateMap<Ingredient, IngredientDto>();
+        CreateMap<IngredientDto, Ingredient>();
     }
 }
