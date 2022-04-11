@@ -49,7 +49,7 @@ public class GastronomyController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
             return ServerError;
         }
     }
@@ -66,7 +66,7 @@ public class GastronomyController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
             return ServerError;
         }
     }
@@ -82,7 +82,7 @@ public class GastronomyController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Create Ingredient Failed");
+            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
             return ServerError;
         }
     }
@@ -103,7 +103,7 @@ public class GastronomyController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{SystemyWpConstants.Services.GastronomyService} - Get Ingredient Failed");
+            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Get Ingredient Failed");
             return ServerError;
         }
     }

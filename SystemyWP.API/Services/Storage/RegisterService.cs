@@ -19,11 +19,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<FileSettings>(settingsSection);
             
             services.AddSingleton<TemporaryFileStorage>();
-            if (settings.Provider.Equals(SystemyWpConstants.Files.Providers.Local))
+            if (settings.Provider.Equals(AppConstants.Files.Providers.Local))
             {
                 services.AddSingleton<IFileProvider, LocalFileProvider>();
             }
-            else if (settings.Provider.Equals(SystemyWpConstants.Files.Providers.S3))
+            else if (settings.Provider.Equals(AppConstants.Files.Providers.S3))
             {
                 services.Configure<S3Settings>(configuration.GetSection(nameof(S3Settings)));
                 services.AddSingleton<IFileProvider, S3FileProvider>();

@@ -7,7 +7,7 @@ namespace SystemyWP.API.Data.Models
     {
         [Key]
         [Required]
-        [MaxLength(SystemyWpConstants.DataLimits.KeyLimit)]
+        [MaxLength(AppConstants.DataLimits.KeyLimit)]
         public string Id { get; set; }
         
         public User User { get; set; }

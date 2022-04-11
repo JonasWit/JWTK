@@ -1,6 +1,6 @@
 namespace SystemyWP.API.Gastronomy.DTOs;
 
-public class CreateIngredientDto : BasicDto
+public class IngredientCreateDto : BasicDto
 {
     public string Name { get; set; } 
 

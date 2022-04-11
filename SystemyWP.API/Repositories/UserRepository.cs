@@ -41,7 +41,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
                 new()
                 {
                     ClaimType = ClaimTypes.Role,
-                    ClaimValue = SystemyWpConstants.Roles.User
+                    ClaimValue = AppConstants.Roles.User
                 },
                 new()
                 {

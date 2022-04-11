@@ -38,12 +38,12 @@ public class GastronomyHttpClient
                 => _httpClient.GetAsync("health"));
 
             return response.IsSuccessStatusCode
-                ? SystemyWpConstants.ServiceResponses.AliveResponse
-                : SystemyWpConstants.ServiceResponses.DeadResponse;
+                ? AppConstants.ServiceResponses.AliveResponse
+                : AppConstants.ServiceResponses.DeadResponse;
         }
         catch (Exception)
         {
-            return SystemyWpConstants.ServiceResponses.ErrorResponse;
+            return AppConstants.ServiceResponses.ErrorResponse;
         }
     }
 

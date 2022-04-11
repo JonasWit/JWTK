@@ -9,16 +9,16 @@ namespace SystemyWP.API.Data.Models
     {
         [Key]
         [Required]
-        [MaxLength(SystemyWpConstants.DataLimits.KeyLimit)]
+        [MaxLength(AppConstants.DataLimits.KeyLimit)]
         public string Id { get; set; }
 
         [Required]
-        [MaxLength(SystemyWpConstants.DataLimits.LongKeyLimit)]
+        [MaxLength(AppConstants.DataLimits.LongKeyLimit)]
         public string Password { get; set; }
 
         public string Image { get; set; }
 
-        [MaxLength(SystemyWpConstants.DataLimits.LongKeyLimit)]
+        [MaxLength(AppConstants.DataLimits.LongKeyLimit)]
         public string PasswordResetToken { get; set; }
 
         public bool EmailConfirmed { get; set; }

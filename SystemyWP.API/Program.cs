@@ -124,16 +124,16 @@ builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(SystemyWpConstants.Policies.User, policy => policy
+    options.AddPolicy(AppConstants.Policies.User, policy => policy
         .RequireAuthenticatedUser()
         .RequireClaim(ClaimTypes.Role,
-            SystemyWpConstants.Roles.User,
-            SystemyWpConstants.Roles.Admin));
+            AppConstants.Roles.User,
+            AppConstants.Roles.Admin));
 
-    options.AddPolicy(SystemyWpConstants.Policies.Admin, policy => policy
+    options.AddPolicy(AppConstants.Policies.Admin, policy => policy
         .RequireAuthenticatedUser()
         .RequireClaim(ClaimTypes.Role,
-            SystemyWpConstants.Roles.Admin));
+            AppConstants.Roles.Admin));
 });
 
 builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
@@ -151,7 +151,7 @@ builder.Services.AddTransient<TokenService>();
 
 builder.Services.AddFileServices(configuration);
 
-builder.Services.AddCors(options => options.AddPolicy(SystemyWpConstants.CorsName.ClientApp, build => build
+builder.Services.AddCors(options => options.AddPolicy(AppConstants.CorsName.ClientApp, build => build
     .AllowAnyHeader()
     .WithOrigins(configuration.GetValue("CorsSettings:PortalUrl", ""))
     .AllowAnyMethod()
@@ -193,7 +193,7 @@ if (app.Environment.IsProduction())
 app.UseIpRateLimiting();
 app.UseCustomResponseHeaders();
 app.UseRouting();
-app.UseCors(SystemyWpConstants.CorsName.ClientApp);
+app.UseCors(AppConstants.CorsName.ClientApp);
 app.UseAuthentication();
 app.UseAuthorization();
 

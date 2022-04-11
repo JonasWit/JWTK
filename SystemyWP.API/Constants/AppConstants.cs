@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace SystemyWP.API.Constants
 {
-    public class SystemyWpConstants
+    public class AppConstants
     {
         public struct CharacterSets
         {

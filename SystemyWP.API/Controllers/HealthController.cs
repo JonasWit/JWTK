@@ -37,7 +37,7 @@ public class HealthController : ApiControllerBase
             _logger.LogWarning($"Health Check endpoint called!");
             var res = new HealthCheckDto
             {
-                MasterServiceStatus = SystemyWpConstants.ServiceResponses.AliveResponse,
+                MasterServiceStatus = AppConstants.ServiceResponses.AliveResponse,
                 GastronomyServiceStatus = await _gastronomyHttpClient.GetHealthCheckResponse()
             };
 
