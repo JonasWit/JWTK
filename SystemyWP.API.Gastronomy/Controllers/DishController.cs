@@ -12,7 +12,6 @@ public class DishController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IIngredientRepository _ingredientRepository;
     private readonly ILogger<DishController> _logger;
-
     public DishController(
         IMapper mapper,
         IIngredientRepository ingredientRepository,
