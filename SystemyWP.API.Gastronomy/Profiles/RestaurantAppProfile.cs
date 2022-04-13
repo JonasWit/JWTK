@@ -11,5 +11,6 @@ public class RestaurantAppProfile : Profile
         CreateMap<IngredientCreateDto, Ingredient>();
         CreateMap<Ingredient, IngredientDto>();
         CreateMap<IngredientDto, Ingredient>();
+        CreateMap<DishCreateDto, Dish>();
     }
 }

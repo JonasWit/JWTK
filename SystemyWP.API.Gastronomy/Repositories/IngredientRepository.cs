@@ -13,7 +13,7 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     {
     }
     
-    public void CreateIngredient(Ingredient ingredient) => _context.Ingredients.Add(ingredient);
+    public void CreateIngredient(Ingredient ingredient) => _context.Add(ingredient);
 
     public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass) => 
         _context.Ingredients.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
