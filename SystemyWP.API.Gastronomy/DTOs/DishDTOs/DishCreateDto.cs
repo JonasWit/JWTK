@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Gastronomy.DTOs;
+namespace SystemyWP.API.Gastronomy.DTOs.DishDTOs;
 
 public class DishCreateDto : BasicDto
 {

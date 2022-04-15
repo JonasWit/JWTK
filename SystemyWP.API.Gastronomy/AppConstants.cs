@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-
-namespace SystemyWP.API.Gastronomy
+﻿namespace SystemyWP.API.Gastronomy
 {
     public class AppConstants
     {
@@ -19,6 +17,11 @@ namespace SystemyWP.API.Gastronomy
             public const string UpdateIngredientException = "UPDATE Ingredient Failed";
             public const string RemoveIngredientException = "REMOVE Ingredient Failed";
             public const string GetIngredientException = "GET Ingredient Failed";
+            
+            public const string CreateDishException = "CREATE Dish Failed";
+            public const string UpdateDishException = "UPDATE Dish Failed";
+            public const string RemoveDishException = "REMOVE Dish Failed";
+            public const string GetDishException = "GET Dish Failed";
         }
     }
 }

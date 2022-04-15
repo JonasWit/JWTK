@@ -1,11 +1,11 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
+using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
 using SystemyWP.API.Gastronomy.Repositories;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
@@ -46,7 +46,7 @@ public class IngredientController : ControllerBase
         }
     }
     
-    [HttpGet("/{key}/{id:long}",Name = "GetIngredient")]
+    [HttpGet("{key}/{id:long}",Name = "GetIngredient")]
     public async Task<ActionResult<IngredientDto>> GetIngredient(string key, long id)
     {
         try
@@ -62,7 +62,7 @@ public class IngredientController : ControllerBase
         }
     }
     
-    [HttpDelete("/{key}/{id:long}", Name = "RemoveIngredient")]
+    [HttpDelete("{key}/{id:long}", Name = "RemoveIngredient")]
     public async Task<IActionResult> RemoveIngredient(string key, long id)
     {
         try
