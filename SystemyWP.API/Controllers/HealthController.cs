@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
-using SystemyWP.API.DTOs;
 using SystemyWP.API.DTOs.General;
-using SystemyWP.API.HttpClients;
 using SystemyWP.API.Repositories;
+using SystemyWP.API.Services.HttpClients;
 
 namespace SystemyWP.API.Controllers;
 
@@ -46,7 +45,7 @@ public class HealthController : ApiControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Issue during Health check");
-            return ServerError;
+            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
         }
     }
 }

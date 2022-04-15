@@ -1,7 +1,9 @@
-namespace SystemyWP.API.Gastronomy.DTOs;
+namespace SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
 
-public class IngredientDto : BaseGastronomyDto
+public class IngredientDto : BasicDto
 {
+    public long Id { get; set; }
+    
     public string Name { get; set; } 
 
     public string Description { get; set; }

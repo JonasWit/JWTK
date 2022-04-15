@@ -5,17 +5,15 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
-using SystemyWP.API.DTOs;
 using SystemyWP.API.DTOs.Gastronomy;
 using SystemyWP.API.DTOs.General;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Settings;
 
-namespace SystemyWP.API.HttpClients;
+namespace SystemyWP.API.Services.HttpClients;
 
 public class GastronomyHttpClient
 {
-    private readonly IOptionsMonitor<ClusterServices> _clusterServicesSettings;
     private readonly HttpClient _httpClient;
     private readonly HttpClientPolicy _httpClientPolicy;
 
@@ -24,10 +22,9 @@ public class GastronomyHttpClient
         HttpClient httpClient,
         HttpClientPolicy httpClientPolicy)
     {
-        _clusterServicesSettings = clusterServicesSettings;
         _httpClient = httpClient;
         _httpClientPolicy = httpClientPolicy;
-        _httpClient.BaseAddress = new Uri(_clusterServicesSettings.CurrentValue.GastronomyService);
+        _httpClient.BaseAddress = new Uri(clusterServicesSettings.CurrentValue.GastronomyService);
     }
 
     public async Task<string> GetHealthCheckResponse()

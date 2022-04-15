@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
-using SystemyWP.API.DTOs;
 using SystemyWP.API.DTOs.General;
 using SystemyWP.API.Forms;
 using SystemyWP.API.Repositories;
@@ -69,7 +69,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Registration");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
 
@@ -95,7 +95,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Authentication");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
         
@@ -112,7 +112,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Authentication");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
         
@@ -145,7 +145,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Password Reset Request");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
         
@@ -171,7 +171,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Password Reset Action");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
         
@@ -195,7 +195,7 @@ namespace SystemyWP.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Authentication");
-                return ServerError;
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
     }

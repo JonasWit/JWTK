@@ -21,13 +21,12 @@ using Microsoft.IdentityModel.Tokens;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
-using SystemyWP.API;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
-using SystemyWP.API.HttpClients;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.API.Services.HttpClients;
 using SystemyWP.API.Services.JWTServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -148,6 +147,7 @@ builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
+builder.Services.AddTransient<UrlService>();
 
 builder.Services.AddFileServices(configuration);
 
