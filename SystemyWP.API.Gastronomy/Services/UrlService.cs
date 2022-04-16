@@ -12,5 +12,5 @@ public class UrlService
         _clusterServicesSettings = clusterServicesSettings;
     }
 
-    public Uri GetIngredientUrl(long id) => new Uri($"{_clusterServicesSettings.CurrentValue.GastronomyService}/Ingredients/{id}");
+    public Uri GetIngredientUrl(long id) => new Uri($"{_clusterServicesSettings.CurrentValue.GastronomyService}/ingredients/{id}");
 }

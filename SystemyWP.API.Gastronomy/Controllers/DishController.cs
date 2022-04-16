@@ -95,4 +95,32 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.UpdateDishException);
         }
     }
+    
+    [HttpPost("add-ingredient", Name = "AddIngredient")]
+    public async Task<ActionResult<Ingredient>> AddIngredient()
+    {
+        try
+        {
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
+            return Problem(AppConstants.ResponseMessages.CreateDishException);
+        }
+    }
+    
+    [HttpPost("remove-ingredient", Name = "RemoveIngredient")]
+    public async Task<ActionResult<Ingredient>> RemoveIngredient()
+    {
+        try
+        {
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
+            return Problem(AppConstants.ResponseMessages.CreateDishException);
+        }
+    }
 }
