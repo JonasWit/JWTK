@@ -11,14 +11,14 @@ using SystemyWP.API.Gastronomy.Data;
 namespace SystemyWP.API.Gastronomy.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220327083703_init")]
+    [Migration("20220417121612_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -105,11 +105,11 @@ namespace SystemyWP.API.Gastronomy.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<float>("PricePerStack")
-                        .HasColumnType("real");
+                    b.Property<int>("PricePerStack")
+                        .HasColumnType("integer");
 
-                    b.Property<float>("StackSize")
-                        .HasColumnType("real");
+                    b.Property<double>("StackSize")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 

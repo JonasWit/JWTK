@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SystemyWP.API.Gastronomy.Data.Models
 {
-    public class Dish : BaseModel
+    public record Dish : BaseModel
     {
         [Required] [MaxLength(AppConstants.DataLimits.NameLimit)] public string Name { get; set; } = "";
 

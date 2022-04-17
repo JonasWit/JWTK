@@ -1,6 +1,9 @@
 ﻿### migrations - default
 dotnet ef migrations add <name>
 
+### migrations - update ef tool
+dotnet tool update --global dotnet-ef
+
 ### migrations - use from Data path
 
 dotnet ef migrations add <name> -c AppDbContext -s ..\SystemyWP.API -o .\Migrations

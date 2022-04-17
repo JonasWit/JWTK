@@ -1,6 +1,10 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Gastronomy.Data;
+using SystemyWP.API.Gastronomy.Data.Models;
+using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.Tests.Utilities;
 using Xunit;
 
 namespace SystemyWP.Tests.GastronomyTests.RepositoriesTests;
@@ -8,46 +12,74 @@ namespace SystemyWP.Tests.GastronomyTests.RepositoriesTests;
 public class IngredientRepositoryTests
 {
     [Fact]
-    public void RegisterValidatorIncorrectTest()
+    public async Task CreateIngredientTest()
     {
-        // var options = new DbContextOptionsBuilder<MovieDbContext>()
-        //     .UseInMemoryDatabase(databaseName: "MovieListDatabase")
-        //     .Options;
-        //
-        // // Insert seed data into the database using one instance of the context
-        // using (var context = new MovieDbContext(options))
-        // {
-        //     context.Movies.Add(new Movie {Id = 1, Title = "Movie 1", YearOfRelease = 2018, Genre = "Action"});
-        //     context.Movies.Add(new Movie {Id = 2, Title = "Movie 2", YearOfRelease = 2018, Genre = "Action"});
-        //     context.Movies.Add(nnew Movie {Id = 3, Title = "Movie 3", YearOfRelease = 2019, Genre = "Action"});
-        //     context.SaveChanges();
-        // }
-        //
-        // // Use a clean instance of the context to run the test
-        // using (var context = new MovieDbContext(options))
-        // {
-        //     MovieRepository movieRepository = new MovieRepository(context);
-        //     List<Movies> movies == movieRepository.GetAll()
-        //
-        //         
-        //     Assert.Equal(3, movies.Count);
-        
-        
         //Arrange
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
-            .Options;
-        using var context = new AppDbContext(options);
-        
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("CreateIngredientTest"));
+
         IIngredientRepository repo = new IngredientRepository(context);
+        var newIngredient = new Ingredient
+        {
+            AccessKey = "abc",
+            Name = "test ingredient",
+            MeasurementUnits = MeasurementUnits.Gram,
+            StackSize = 10,
+            PricePerStack = 150
+        };
 
         //Act
-
-        
-        
-        
+        repo.CreateIngredient(newIngredient);
+        await repo.SaveChanges();
+        var results = await context.Ingredients.ToListAsync();
 
         //Assert
+        Assert.Single(results);
+        Assert.Contains(results, item => item.Equals(newIngredient with {Id = 1}));
+    }
 
+    [Fact]
+    public async Task UpdateIngredientTest()
+    {
+        //Arrange
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("UpdateIngredientTest"));
+        const string accessKey = "abc";
+        const string ingredientName = "test ingredient";
+        const string ingredientDescription = "test description";
+
+        IIngredientRepository repo = new IngredientRepository(context);
+        var newIngredient = new Ingredient
+        {
+            AccessKey = accessKey,
+            Name = ingredientName,
+            Description = ingredientDescription,
+            MeasurementUnits = MeasurementUnits.Gram,
+            StackSize = 10,
+            PricePerStack = 150
+        };
+
+        //Act
+        repo.CreateIngredient(newIngredient);
+        await repo.SaveChanges();
+
+        await using var contextForUpdate =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("UpdateIngredientTest"));
+        repo = new IngredientRepository(contextForUpdate);
+
+        var entity = await repo.GetIngredient(new ResourceAccessPass {AccessKey = accessKey, Id = 1});
+
+        entity.Description = $"updated-{ingredientDescription}";
+        entity.Name = $"updated-{ingredientName}";
+        entity.StackSize = 11;
+        entity.PricePerStack = 110;
+
+        repo.UpdateIngredient(entity);
+        await repo.SaveChanges();
+
+        var result = await repo.GetIngredient(new ResourceAccessPass {AccessKey = accessKey, Id = 1});
+
+        //Assert
+        Assert.Equal(entity with {MeasurementUnits = MeasurementUnits.Gram}, result);
     }
 }
