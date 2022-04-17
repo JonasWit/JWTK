@@ -2,7 +2,7 @@ using SystemyWP.API.FluentValidations;
 using SystemyWP.API.Forms;
 using Xunit;
 
-namespace SystemyWP.Tests.ValidatorsTests;
+namespace SystemyWP.Tests.MasterTests.ValidatorsTests;
 
 public class AuthValidatorsTests
 {
