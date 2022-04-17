@@ -96,8 +96,8 @@ public class DishController : ControllerBase
         }
     }
     
-    [HttpPost("add-ingredient", Name = "AddIngredient")]
-    public async Task<ActionResult<Ingredient>> AddIngredient()
+    [HttpPost("add-ingredient", Name = "AddIngredientToDish")]
+    public async Task<ActionResult<Ingredient>> AddIngredientToDish()
     {
         try
         {
@@ -110,8 +110,8 @@ public class DishController : ControllerBase
         }
     }
     
-    [HttpPost("remove-ingredient", Name = "RemoveIngredient")]
-    public async Task<ActionResult<Ingredient>> RemoveIngredient()
+    [HttpPost("remove-ingredient", Name = "RemoveIngredientFromDish")]
+    public async Task<ActionResult<Ingredient>> RemoveIngredientFromDish()
     {
         try
         {
