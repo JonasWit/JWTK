@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -60,5 +61,14 @@ public class GastronomyHttpClient
     
         if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
+    }
+    
+    public async Task<List<IngredientDto>> GetIngredients(string accessKey)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredients(accessKey)));
+    
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
     }
 }

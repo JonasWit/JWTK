@@ -135,7 +135,8 @@ builder.Services.AddAuthorization(options =>
             AppConstants.Roles.Admin));
 });
 
-builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
+builder.Services.AddControllers()
+    .AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
 
 // Options from Settings
 builder.Services.Configure<ClusterServices>(configuration.GetSection(nameof(ClusterServices)));

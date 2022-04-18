@@ -8,6 +8,7 @@ public class UrlService
     {
         public const string CreateIngredient = "ingredient";
         public static string GetIngredient(ResourceAccessPass pass) => $"ingredient/{pass.AccessKey}/{pass.Id}";
+        public static string GetIngredients(string accessKey) => $"ingredient/list/{accessKey}";
     }
     
     public struct Errors
