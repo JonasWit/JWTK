@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Gastronomy.Data;
@@ -46,7 +48,7 @@ public class IngredientRepositoryTests
         await using var context =
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetIngredientListTest"));
 
-        IIngredientRepository repo = new IngredientRepository(context);
+        var repo = new IngredientRepository(context);
         var ingredients = GastronomySeed.GetTestIngredientsList(10);
         ingredients.ForEach(item => repo.CreateIngredient(item));
         
@@ -104,14 +106,29 @@ public class IngredientRepositoryTests
     }
     
     [Fact]
-    public void PaginatedResultsTests()
+    public async Task PaginatedResultsTests()
     {
         //Arrange
-
-
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("PaginatedResultsTests"));
+        var repo = new IngredientRepository(context);
+        var ingredients = GastronomySeed.GetTestIngredientsList(500); 
+        ingredients.ForEach(item => repo.CreateIngredient(item));
+        
         //Act
+        await repo.SaveChanges();
 
+        var paginatedResults = new List<List<Ingredient>>();
+
+        var cursor = 0;
+        for (var i = 0; i < 15; i++)
+        {
+            paginatedResults.Add(await repo.GetIngredients(GastronomySeed.AccessKey, cursor, 75));
+            cursor += 75;
+        }
+        
         //Assert
- 
+        Assert.Equal(500, paginatedResults.Sum(l => l.Count));      
+        Assert.Equal(ingredients, paginatedResults.SelectMany(l => l).ToList());
     }  
 }

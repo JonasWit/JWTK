@@ -36,7 +36,7 @@ public class IngredientController : ControllerBase
         {
             var ingredient = _mapper.Map<Ingredient>(ingredientCreateDto);
             _ingredientRepository.CreateIngredient(ingredient);
-            
+
             if (await _ingredientRepository.SaveChanges() > 0) return Ok(_mapper.Map<IngredientDto>(ingredient));
             return BadRequest();
         }
@@ -46,13 +46,14 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.CreateIngredientException);
         }
     }
-    
-    [HttpGet("{key}/{id:long}",Name = "GetIngredient")]
+
+    [HttpGet("{key}/{id:long}", Name = "GetIngredient")]
     public async Task<ActionResult<IngredientDto>> GetIngredient(string key, long id)
     {
         try
         {
-            var ingredient = await _ingredientRepository.GetIngredient(new ResourceAccessPass {AccessKey = key, Id = id});
+            var ingredient =
+                await _ingredientRepository.GetIngredient(new ResourceAccessPass {AccessKey = key, Id = id});
             if (ingredient is null) return NotFound();
             return Ok(_mapper.Map<IngredientDto>(ingredient));
         }
@@ -62,8 +63,8 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetIngredientException);
         }
     }
-    
-    [HttpGet("list/{key}",Name = "GetIngredients")]
+
+    [HttpGet("list/{key}", Name = "GetIngredients")]
     public async Task<ActionResult<IngredientDto>> GetIngredients(string key)
     {
         try
@@ -78,8 +79,8 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetIngredientException);
         }
     }
-    
-    [HttpGet("list/{key}/{cursor:int}/{take:int}",Name = "GetIngredients")]
+
+    [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedIngredients")]
     public async Task<ActionResult<IngredientDto>> GetPaginatedIngredients(string key, int cursor, int take)
     {
         try
@@ -101,7 +102,7 @@ public class IngredientController : ControllerBase
         try
         {
             _ingredientRepository.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
-            if (await _ingredientRepository.SaveChanges() > 0) return Ok();
+            if (await _ingredientRepository.SaveChanges() > 0) return NoContent();
             return BadRequest();
         }
         catch (Exception e)
@@ -110,7 +111,7 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.RemoveIngredientException);
         }
     }
-    
+
     [HttpPut(Name = "UpdateIngredient")]
     public async Task<IActionResult> UpdateIngredient([FromBody] IngredientDto ingredientDto)
     {

@@ -78,6 +78,22 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetDishesException);
         }
     }
+    
+    [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedDishes")]
+    public async Task<ActionResult<DishDto>> GetPaginatedDishes(string key, int cursor, int take)
+    {
+        try
+        {
+            var dishes = await _dishRepository.GetDishes(key, cursor, take);
+            if (dishes is null) return NotFound();
+            return Ok(_mapper.Map<List<DishDto>>(dishes));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.GetDishesException);
+            return Problem(AppConstants.ResponseMessages.GetDishesException);
+        }
+    }
 
     [HttpDelete("{key}/{id:long}", Name = "RemoveDish")]
     public async Task<IActionResult> RemoveDish(string key, long id)
@@ -85,7 +101,7 @@ public class DishController : ControllerBase
         try
         {
             _dishRepository.RemoveDish(new ResourceAccessPass {Id = id, AccessKey = key});
-            if (await _dishRepository.SaveChanges() > 0) return Ok();
+            if (await _dishRepository.SaveChanges() > 0) return NoContent();
             return BadRequest();
         }
         catch (Exception e)
@@ -135,7 +151,7 @@ public class DishController : ControllerBase
         {
             _dishRepository.RemoveIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
                 dishIngredientUpdateDto.IngredientId);
-            if (await _dishRepository.SaveChanges() > 0) return Ok();   
+            if (await _dishRepository.SaveChanges() > 0) return NoContent();   
             return BadRequest();  
         }
         catch (Exception e)
