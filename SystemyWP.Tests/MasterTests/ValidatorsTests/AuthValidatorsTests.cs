@@ -2,7 +2,7 @@ using SystemyWP.API.FluentValidations;
 using SystemyWP.API.Forms;
 using Xunit;
 
-namespace SystemyWP.Tests.ValidatorsTests;
+namespace SystemyWP.Tests.MasterTests.ValidatorsTests;
 
 public class AuthValidatorsTests
 {
@@ -36,7 +36,7 @@ public class AuthValidatorsTests
         var testModel = new UserCredentialsForm
         {
             Email = "jw@jw.pl",
-            Password = "password"
+            Password = "12345678909876"
         };
         var res = validator.Validate(testModel);
         var errors = res.Errors;

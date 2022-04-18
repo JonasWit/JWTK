@@ -1,7 +1,9 @@
 namespace SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
 
-public class IngredientDto : BasicDto
+public class IngredientDto
 {
+    public string AccessKey { get; set; }
+    
     public long Id { get; set; }
     
     public string Name { get; set; } 

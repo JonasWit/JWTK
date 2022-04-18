@@ -4,16 +4,19 @@ using SystemyWP.API.Gastronomy.DTOs;
 
 namespace SystemyWP.API.Gastronomy.Data.Models
 {
-    public class Ingredient : BaseModel
+    public record Ingredient : BaseModel
     {
-        [Required] [MaxLength(AppConstants.DataLimits.NameLimit)] public string Name { get; set; } = "";
+        [Required]
+        [MaxLength(AppConstants.DataLimits.NameLimit)]
+        public string Name { get; set; } = "";
 
-        [MaxLength(AppConstants.DataLimits.DescriptionLimit)] public string Description { get; set; } = "";
+        [MaxLength(AppConstants.DataLimits.DescriptionLimit)]
+        public string Description { get; set; } = "";
 
         public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
 
-        public float PricePerStack { get; set; }
-        public float StackSize { get; set; }
+        public int PricePerStack { get; set; }
+        public double StackSize { get; set; }
 
         public List<Dish> Dishes { get; set; } = new();
     }

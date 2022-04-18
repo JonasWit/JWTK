@@ -33,8 +33,8 @@ namespace SystemyWP.API.Gastronomy.Migrations
                     Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     MeasurementUnits = table.Column<int>(type: "integer", nullable: false),
-                    PricePerStack = table.Column<float>(type: "real", nullable: false),
-                    StackSize = table.Column<float>(type: "real", nullable: false),
+                    PricePerStack = table.Column<int>(type: "integer", nullable: false),
+                    StackSize = table.Column<double>(type: "double precision", nullable: false),
                     AccessKey = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>

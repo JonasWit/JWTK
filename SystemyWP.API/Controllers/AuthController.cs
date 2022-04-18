@@ -107,6 +107,10 @@ namespace SystemyWP.API.Controllers
             {
                 _userRepository.DeleteAccount(UserId);
                 if (await _userRepository.SaveChanges() > 0) return NoContent();
+                
+                // todo: remove all gastro data for access-key
+                
+                
                 return BadRequest();
             }
             catch (Exception e)

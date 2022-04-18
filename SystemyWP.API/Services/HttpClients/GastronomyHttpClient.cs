@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
@@ -47,17 +48,34 @@ public class GastronomyHttpClient
     public async Task<IngredientDto> CreateIngredient(CreateIngredientDto createIngredientDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.PostAsJsonAsync("ingredient/create-ingredient", createIngredientDto));
+            => _httpClient.PostAsJsonAsync(UrlService.Gastronomy.CreateIngredient, createIngredientDto));
     
-        if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy - Ingredient POST Failed");
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.CreateIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
     public async Task<IngredientDto> GetIngredient(ResourceAccessPass resourceAccessPass)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync($"ingredient/{resourceAccessPass.AccessKey}/{resourceAccessPass.Id}"));
+            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredient(resourceAccessPass)));
     
-        return !response.IsSuccessStatusCode ? null : JsonSerializer.Deserialize<IngredientDto>(await response.Content.ReadAsStringAsync());
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<IngredientDto>();
+    }
+    
+    public async Task<List<IngredientDto>> GetIngredients(string accessKey)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredients(accessKey)));
+    
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
+    }
+    
+    public async Task<HttpStatusCode> RemoveIngredient(ResourceAccessPass resourceAccessPass)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.DeleteAsync(UrlService.Gastronomy.DeleteIngredient(resourceAccessPass)));
+        return response.StatusCode;
     }
 }

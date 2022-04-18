@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
@@ -29,7 +30,7 @@ public class DishController : ControllerBase
     }
 
     [HttpPost(Name = "CreateDish")]
-    public async Task<ActionResult<Ingredient>> CreateDish([FromBody] DishCreateDto dishCreateDto)
+    public async Task<ActionResult<DishDto>> CreateDish([FromBody] DishCreateDto dishCreateDto)
     {
         try
         {
@@ -47,7 +48,7 @@ public class DishController : ControllerBase
     }
 
     [HttpGet("{key}/{id:long}", Name = "GetDish")]
-    public async Task<ActionResult<Ingredient>> GetDish(string key, long id)
+    public async Task<ActionResult<DishDto>> GetDish(string key, long id)
     {
         try
         {
@@ -59,6 +60,22 @@ public class DishController : ControllerBase
         {
             _logger.LogError(e, AppConstants.ResponseMessages.GetDishException);
             return Problem(AppConstants.ResponseMessages.GetDishException);
+        }
+    }
+    
+    [HttpGet("list/{key}", Name = "GetDishes")]
+    public async Task<ActionResult<DishDto>> GetDishes(string key)
+    {
+        try
+        {
+            var dishes = await _dishRepository.GetDishes(key);
+            if (dishes is null) return NotFound();
+            return Ok(_mapper.Map<List<DishDto>>(dishes));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.GetDishesException);
+            return Problem(AppConstants.ResponseMessages.GetDishesException);
         }
     }
 
@@ -79,20 +96,52 @@ public class DishController : ControllerBase
     }
 
     [HttpPut(Name = "UpdateDish")]
-    public async Task<ActionResult<Ingredient>> UpdateDish([FromBody] DishBasicDto dishBasicDto)
+    public async Task<IActionResult> UpdateDish([FromBody] DishBasicDto dishBasicDto)
     {
         try
         {
-            var dish = await _dishRepository.UpdateDish(_mapper.Map<Dish>(dishBasicDto));
-            if (dish is null) return BadRequest();
-
-            await _dishRepository.SaveChanges();
-            return Ok(_mapper.Map<DishDto>(dish));
+            _dishRepository.UpdateDish(_mapper.Map<Dish>(dishBasicDto));
+            if (await _dishRepository.SaveChanges() > 0) return Ok();
+            return BadRequest();
         }
         catch (Exception e)
         {
             _logger.LogError(e, AppConstants.ResponseMessages.UpdateDishException);
             return Problem(AppConstants.ResponseMessages.UpdateDishException);
+        }
+    }
+    
+    [HttpPost("add-ingredient", Name = "AddIngredientToDish")]
+    public async Task<ActionResult> AddIngredientToDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        try
+        {
+            _dishRepository.AddIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
+                dishIngredientUpdateDto.IngredientId);
+            if (await _dishRepository.SaveChanges() > 0) return Ok();    
+            return BadRequest();        
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
+            return Problem(AppConstants.ResponseMessages.CreateDishException);
+        }
+    }
+    
+    [HttpPost("remove-ingredient", Name = "RemoveIngredientFromDish")]
+    public async Task<ActionResult> RemoveIngredientFromDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        try
+        {
+            _dishRepository.RemoveIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
+                dishIngredientUpdateDto.IngredientId);
+            if (await _dishRepository.SaveChanges() > 0) return Ok();   
+            return BadRequest();  
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
+            return Problem(AppConstants.ResponseMessages.CreateDishException);
         }
     }
 }
