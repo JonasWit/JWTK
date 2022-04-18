@@ -1,11 +1,11 @@
 using FluentValidation;
-using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
+using SystemyWP.API.Gastronomy.DTOs.MenuDTOs;
 
 namespace SystemyWP.API.Gastronomy.FluentValidations;
 
-public class IngredientCreateDtoValidation : AbstractValidator<IngredientCreateDto>
+public class MenuCreateDtoValidation : AbstractValidator<MenuCreateDto>
 {
-    public IngredientCreateDtoValidation()
+    public MenuCreateDtoValidation()
     {
         RuleFor(x => x.AccessKey).NotEmpty();
         RuleFor(x => x.Name).NotEmpty();

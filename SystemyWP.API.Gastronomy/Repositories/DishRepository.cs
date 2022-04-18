@@ -35,6 +35,16 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
         .Include(d => d.Ingredients)
         .ToListAsync();
 
+    public Task<List<Dish>> GetDishes(string accessKey, int cursor, int take) => 
+        _context.Dishes
+            .Where(menu => menu.AccessKey == accessKey)
+            .Include(d => d.Menus)
+            .Include(d => d.Ingredients)
+            .OrderBy(x => x.Id)
+            .Skip(cursor)
+            .Take(take)
+            .ToListAsync();
+
     public void UpdateDish(Dish dish) => _context.Update(dish);
     
     public void AddIngredient(ResourceAccessPass resourceAccessPass, long ingredientId)

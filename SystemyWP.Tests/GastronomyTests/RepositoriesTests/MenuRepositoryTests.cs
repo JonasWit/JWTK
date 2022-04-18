@@ -104,8 +104,15 @@ public class MenuRepositoryTests
         Assert.Empty(result.Dishes);
     }
     
-    
-    
-    
-    
+    [Fact]
+    public void PaginatedResultsTests()
+    {
+        //Arrange
+
+
+        //Act
+
+        //Assert
+ 
+    }
 }

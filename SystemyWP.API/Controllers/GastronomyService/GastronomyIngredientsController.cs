@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -49,8 +50,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            _logger.LogError(e, UrlService.GastronomyErrors.CreateIngredient);
+            return Problem(UrlService.GastronomyErrors.CreateIngredient);
         }
     }
     
@@ -70,8 +71,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Get Ingredient Failed");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredient);
+            return Problem(UrlService.GastronomyErrors.GetIngredient);
         }
     }
     
@@ -89,25 +90,37 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Get Ingredient Failed");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredients);
+            return Problem(UrlService.GastronomyErrors.GetIngredients);
         }
     }
     
     [HttpDelete(Name = "RemoveIngredient")]
-    public async Task<IActionResult> RemoveIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    public async Task<IActionResult> RemoveIngredient(long id)
     {
         try
         {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+    
+            var responseCode = await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
 
-
-
-            throw new NotImplementedException();
+            switch (responseCode)
+            {
+                case HttpStatusCode.OK:
+                    return Ok();
+                case HttpStatusCode.BadRequest:
+                    return BadRequest();
+                case HttpStatusCode.InternalServerError:
+                    throw new Exception(UrlService.GastronomyErrors.InternalErrorFromService);
+                default:
+                    throw new Exception(UrlService.GastronomyErrors.InternalUnsupportedStatusCode);
+            }
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            _logger.LogError(e, UrlService.GastronomyErrors.RemoveIngredient);
+            return Problem(UrlService.GastronomyErrors.RemoveIngredient);
         }
     }
     

@@ -102,4 +102,16 @@ public class IngredientRepositoryTests
         //Assert
         Assert.Equal(entity with {MeasurementUnits = MeasurementUnits.Gram}, result);
     }
+    
+    [Fact]
+    public void PaginatedResultsTests()
+    {
+        //Arrange
+
+
+        //Act
+
+        //Assert
+ 
+    }  
 }

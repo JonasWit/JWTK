@@ -78,7 +78,7 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetIngredientException);
         }
     }
-    
+
     [HttpDelete("{key}/{id:long}", Name = "RemoveIngredient")]
     public async Task<IActionResult> RemoveIngredient(string key, long id)
     {

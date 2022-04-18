@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
@@ -50,7 +50,7 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.PostAsJsonAsync(UrlService.Gastronomy.CreateIngredient, createIngredientDto));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.CreateIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.CreateIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
@@ -59,7 +59,7 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredient(resourceAccessPass)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
@@ -68,7 +68,14 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredients(accessKey)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
+    }
+    
+    public async Task<HttpStatusCode> RemoveIngredient(ResourceAccessPass resourceAccessPass)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.DeleteAsync(UrlService.Gastronomy.DeleteIngredient(resourceAccessPass)));
+        return response.StatusCode;
     }
 }

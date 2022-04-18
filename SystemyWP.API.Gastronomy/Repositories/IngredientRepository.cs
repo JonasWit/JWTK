@@ -24,6 +24,14 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
         .Where(d => d.AccessKey == accessKey)
         .ToListAsync();
 
+    public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take) => 
+        _context.Ingredients
+            .Where(menu => menu.AccessKey == accessKey)
+            .OrderBy(x => x.Id)
+            .Skip(cursor)
+            .Take(take)
+            .ToListAsync();
+
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {
         var ingredient = _context.Ingredients.FirstOrDefault(ing =>

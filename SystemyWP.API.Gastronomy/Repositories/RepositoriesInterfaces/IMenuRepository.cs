@@ -11,6 +11,7 @@ public interface IMenuRepository : IRepositoryBase
     void RemoveMenu(ResourceAccessPass resourceAccessPass);
     Task<Menu> GetMenu(ResourceAccessPass resourceAccessPass);
     Task<List<Menu>> GetMenus(string accessKey);
+    Task<List<Menu>> GetMenus(string accessKey, int cursor, int take);
     void UpdateMenu(Menu menu);
     void AddDish(ResourceAccessPass resourceAccessPass, long dishId); 
     void RemoveDish(ResourceAccessPass resourceAccessPass, long dishId); 

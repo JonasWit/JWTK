@@ -134,4 +134,19 @@ public class DishRepositoryTests
         //Assert
         Assert.Empty(result.Ingredients);
     }
+    
+    [Fact]
+    public void PaginatedResultsTests()
+    {
+        //Arrange
+
+
+        //Act
+
+        //Assert
+ 
+    }  
+    
+    
+    
 }

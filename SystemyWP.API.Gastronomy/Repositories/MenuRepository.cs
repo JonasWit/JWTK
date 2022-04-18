@@ -33,6 +33,15 @@ public class MenuRepository : RepositoryBase<AppDbContext>, IMenuRepository
         .Include(d => d.Dishes)
         .ToListAsync();
 
+    public Task<List<Menu>> GetMenus(string accessKey, int cursor, int take) => 
+        _context.Menus
+            .Where(menu => menu.AccessKey == accessKey)
+            .Include(d => d.Dishes)
+            .OrderBy(x => x.Id)
+            .Skip(cursor)
+            .Take(take)
+            .ToListAsync();
+
     public void UpdateMenu(Menu menu)
     {
         var entity = _context.Menus.FirstOrDefault(e => e.Id == menu.Id && e.AccessKey == menu.AccessKey);

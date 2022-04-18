@@ -1,5 +1,4 @@
 using SystemyWP.API.Constants;
-using SystemyWP.API.DTOs.General;
 
 namespace SystemyWP.API.DTOs.Gastronomy;
 
