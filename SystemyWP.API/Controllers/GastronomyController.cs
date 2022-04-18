@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
@@ -11,6 +12,7 @@ using SystemyWP.API.Services.HttpClients;
 
 namespace SystemyWP.API.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class GastronomyController : ApiControllerBase
 {

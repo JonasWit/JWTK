@@ -3,8 +3,10 @@ using SystemyWP.API.DTOs.General;
 
 namespace SystemyWP.API.DTOs.Gastronomy;
 
-public class CreateIngredientDto : BasicDto
+public class CreateIngredientDto
 {
+    public string AccessKey { get; set; }
+    
     public string Name { get; set; } 
 
     public string Description { get; set; } 
@@ -12,5 +14,6 @@ public class CreateIngredientDto : BasicDto
     public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
 
     public float PricePerStack { get; set; }
+    
     public float StackSize { get; set; }
 }

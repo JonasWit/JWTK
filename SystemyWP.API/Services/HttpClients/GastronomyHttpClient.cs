@@ -47,17 +47,18 @@ public class GastronomyHttpClient
     public async Task<IngredientDto> CreateIngredient(CreateIngredientDto createIngredientDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.PostAsJsonAsync("ingredient/create-ingredient", createIngredientDto));
+            => _httpClient.PostAsJsonAsync(UrlService.Gastronomy.CreateIngredient, createIngredientDto));
     
-        if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy - Ingredient POST Failed");
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.CreateIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
     public async Task<IngredientDto> GetIngredient(ResourceAccessPass resourceAccessPass)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync($"ingredient/{resourceAccessPass.AccessKey}/{resourceAccessPass.Id}"));
+            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredient(resourceAccessPass)));
     
-        return !response.IsSuccessStatusCode ? null : JsonSerializer.Deserialize<IngredientDto>(await response.Content.ReadAsStringAsync());
+        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.Errors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
 }
