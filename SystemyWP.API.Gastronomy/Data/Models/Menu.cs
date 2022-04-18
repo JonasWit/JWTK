@@ -5,9 +5,12 @@ namespace SystemyWP.API.Gastronomy.Data.Models
 {
     public record Menu : BaseModel
     {
-        [Required] [MaxLength(AppConstants.DataLimits.NameLimit)] public string Name { get; set; } = "";
+        [Required]
+        [MaxLength(AppConstants.DataLimits.NameLimit)]
+        public string Name { get; set; } = "";
 
-        [MaxLength(AppConstants.DataLimits.DescriptionLimit)] public string Description { get; set; } = "";
+        [MaxLength(AppConstants.DataLimits.DescriptionLimit)]
+        public string Description { get; set; } = "";
 
         public List<Dish> Dishes { get; set; } = new();
     }

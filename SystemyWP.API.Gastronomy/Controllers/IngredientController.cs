@@ -7,6 +7,7 @@ using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
 using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 

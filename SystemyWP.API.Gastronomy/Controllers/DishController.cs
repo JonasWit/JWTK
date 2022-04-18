@@ -7,6 +7,7 @@ using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
 using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
@@ -97,11 +98,14 @@ public class DishController : ControllerBase
     }
     
     [HttpPost("add-ingredient", Name = "AddIngredientToDish")]
-    public async Task<ActionResult<Ingredient>> AddIngredientToDish()
+    public async Task<ActionResult<Dish>> AddIngredientToDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
     {
         try
         {
-            throw new NotImplementedException();
+            _dishRepository.AddIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
+                dishIngredientUpdateDto.IngredientId);
+            if (await _dishRepository.SaveChanges() > 0) return Ok();    
+            return BadRequest();        
         }
         catch (Exception e)
         {
@@ -111,11 +115,14 @@ public class DishController : ControllerBase
     }
     
     [HttpPost("remove-ingredient", Name = "RemoveIngredientFromDish")]
-    public async Task<ActionResult<Ingredient>> RemoveIngredientFromDish()
+    public async Task<ActionResult<Dish>> RemoveIngredientFromDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
     {
         try
         {
-            throw new NotImplementedException();
+            _dishRepository.RemoveIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
+                dishIngredientUpdateDto.IngredientId);
+            if (await _dishRepository.SaveChanges() > 0) return Ok();   
+            return BadRequest();  
         }
         catch (Exception e)
         {

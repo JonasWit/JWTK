@@ -11,7 +11,7 @@ using SystemyWP.API.Gastronomy.Data;
 namespace SystemyWP.API.Gastronomy.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220417121612_init")]
+    [Migration("20220418084253_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

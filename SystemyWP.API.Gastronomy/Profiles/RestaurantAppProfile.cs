@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using SystemyWP.API.Gastronomy.Data.Models;
+using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
 using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
 
@@ -22,5 +23,8 @@ public class RestaurantAppProfile : Profile
         
         CreateMap<DishDto, Dish>();
         CreateMap<DishBasicDto, Dish>();
+
+        CreateMap<DishIngredientUpdateDto, ResourceAccessPass>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DishId));
     }
 }

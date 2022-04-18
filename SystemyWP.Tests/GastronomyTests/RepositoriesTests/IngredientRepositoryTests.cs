@@ -4,6 +4,7 @@ using SystemyWP.API.Gastronomy.Data;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 using SystemyWP.Tests.Utilities;
 using Xunit;
 
