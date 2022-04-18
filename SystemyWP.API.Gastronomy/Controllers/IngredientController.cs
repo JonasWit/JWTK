@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
 using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
-using SystemyWP.API.Gastronomy.Repositories;
 using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
@@ -55,6 +55,22 @@ public class IngredientController : ControllerBase
             var ingredient = await _ingredientRepository.GetIngredient(new ResourceAccessPass {AccessKey = key, Id = id});
             if (ingredient is null) return NotFound();
             return Ok(_mapper.Map<IngredientDto>(ingredient));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
+            return Problem(AppConstants.ResponseMessages.GetIngredientException);
+        }
+    }
+    
+    [HttpGet("list/{key}",Name = "GetIngredients")]
+    public async Task<ActionResult<IngredientDto>> GetIngredients(string key)
+    {
+        try
+        {
+            var ingredients = await _ingredientRepository.GetIngredients(key);
+            if (ingredients is null) return NotFound();
+            return Ok(_mapper.Map<List<IngredientDto>>(ingredients));
         }
         catch (Exception e)
         {

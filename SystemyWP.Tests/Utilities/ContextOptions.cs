@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data;
 
 namespace SystemyWP.Tests.Utilities;
 

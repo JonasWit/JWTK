@@ -10,7 +10,7 @@ using Xunit;
 
 namespace SystemyWP.Tests.GastronomyTests.RepositoriesTests;
 
-public class DishRepositoryTest
+public class DishRepositoryTests
 {
     [Fact]
     public async Task CreateDishTest()
