@@ -9,12 +9,12 @@ public class GastronomySeed
 {
     public const string AccessKey = "seed-test-key";
         
-    public static List<Ingredient> GetTestIngredientsList()
+    public static List<Ingredient> GetTestIngredientsList(int size)
     {
         var result = new List<Ingredient>();
         var rnd = new Random();
 
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < size; i++)
         {
             result.Add(new Ingredient
             {
@@ -30,12 +30,12 @@ public class GastronomySeed
         return result;
     }
     
-    public static List<Dish> GetTestDishesList()
+    public static List<Dish> GetTestDishesList(int size)
     {
         var result = new List<Dish>();
         var rnd = new Random();
 
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < size; i++)
         {
             result.Add(new Dish
             {
@@ -48,12 +48,12 @@ public class GastronomySeed
         return result;
     }
     
-    public static List<Menu> GetTestMenusList()
+    public static List<Menu> GetTestMenusList(int size)
     {
         var result = new List<Menu>();
         var rnd = new Random();
 
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < size; i++)
         {
             result.Add(new Menu
             {

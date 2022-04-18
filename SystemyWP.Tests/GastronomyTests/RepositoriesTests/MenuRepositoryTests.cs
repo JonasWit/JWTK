@@ -19,7 +19,7 @@ public class MenuRepositoryTests
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetMenuListTest"));
 
         IMenuRepository repo = new MenuRepository(context);
-        var ingredients = GastronomySeed.GetTestMenusList();
+        var ingredients = GastronomySeed.GetTestMenusList(10);
         ingredients.ForEach(item => repo.CreateMenu(item));
         
         //Act

@@ -47,7 +47,7 @@ public class IngredientRepositoryTests
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetIngredientListTest"));
 
         IIngredientRepository repo = new IngredientRepository(context);
-        var ingredients = GastronomySeed.GetTestIngredientsList();
+        var ingredients = GastronomySeed.GetTestIngredientsList(10);
         ingredients.ForEach(item => repo.CreateIngredient(item));
         
         //Act

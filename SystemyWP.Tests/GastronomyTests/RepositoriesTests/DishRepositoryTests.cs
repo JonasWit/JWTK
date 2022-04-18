@@ -44,7 +44,7 @@ public class DishRepositoryTests
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetDishListTest"));
 
         IDishRepository repo = new DishRepository(context);
-        var dishes = GastronomySeed.GetTestDishesList();
+        var dishes = GastronomySeed.GetTestDishesList(10);
         dishes.ForEach(item => repo.CreateDish(item));
         
         //Act

@@ -95,6 +95,25 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
     }
     
+    [HttpGet("list", Name = "GetPaginatedIngredients")]
+    public async Task<IActionResult> GetPaginatedIngredients()
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+    
+            var ingredients = await _gastronomyHttpClient.GetIngredients(key);
+            if (ingredients is null) return NotFound();
+            return Ok(ingredients);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredients);
+            return Problem(UrlService.GastronomyErrors.GetIngredients);
+        }
+    }
+    
     [HttpDelete(Name = "RemoveIngredient")]
     public async Task<IActionResult> RemoveIngredient(long id)
     {

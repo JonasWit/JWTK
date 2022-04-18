@@ -78,6 +78,22 @@ public class IngredientController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetIngredientException);
         }
     }
+    
+    [HttpGet("list/{key}/{cursor:int}/{take:int}",Name = "GetIngredients")]
+    public async Task<ActionResult<IngredientDto>> GetPaginatedIngredients(string key, int cursor, int take)
+    {
+        try
+        {
+            var ingredients = await _ingredientRepository.GetIngredients(key, cursor, take);
+            if (ingredients is null) return NotFound();
+            return Ok(_mapper.Map<List<IngredientDto>>(ingredients));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
+            return Problem(AppConstants.ResponseMessages.GetIngredientException);
+        }
+    }
 
     [HttpDelete("{key}/{id:long}", Name = "RemoveIngredient")]
     public async Task<IActionResult> RemoveIngredient(string key, long id)
