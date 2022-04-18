@@ -35,7 +35,7 @@ public class MenuRepositoryTests
     {
         //Arrange
         await using var context =
-            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("AddIngredientToDishTest"));
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("AddDishToMenuTest"));
         
         IDishRepository dishRepo = new DishRepository(context);
         var newDish = new Dish()
@@ -71,7 +71,7 @@ public class MenuRepositoryTests
     {
         //Arrange
         await using var context =
-            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("AddIngredientToDishTest"));
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("RemoveDishFromMenuTest"));
         
         IDishRepository dishRepo = new DishRepository(context);
         var newDish = new Dish()

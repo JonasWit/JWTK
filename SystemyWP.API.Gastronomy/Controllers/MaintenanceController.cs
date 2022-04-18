@@ -7,6 +7,8 @@ using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
+[ApiController]
+[Route("[controller]")]
 public class MaintenanceController : ControllerBase
 {
     private readonly IMapper _mapper;
