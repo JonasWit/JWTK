@@ -25,27 +25,18 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
         _context.Remove(dish);
     }
 
-    public async Task<Dish> GetDish(ResourceAccessPass resourceAccessPass) => await _context.Dishes
+    public Task<Dish> GetDish(ResourceAccessPass resourceAccessPass) => _context.Dishes
         .Include(d => d.Menus)
         .Include(d => d.Ingredients)
         .FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
 
-    public Task<List<Dish>> GetDishes(string accessKey)
-    {
-        throw new System.NotImplementedException();
-    }
+    public Task<List<Dish>> GetDishes(string accessKey) => _context.Dishes
+        .Where(d => d.AccessKey == accessKey)
+        .Include(d => d.Menus)
+        .Include(d => d.Ingredients)
+        .ToListAsync();
 
-    public async Task<Dish> UpdateDish(Dish dish)
-    {
-        var entity = _context.Dishes.FirstOrDefault(e => e.Id == dish.Id && e.AccessKey == dish.AccessKey);
-        if (entity is null) return await Task.FromResult<Dish>(null);
-
-        entity.Description = dish.Description;
-        entity.Name = dish.Name;
-
-        await _context.SaveChangesAsync();
-        return await GetDish(new ResourceAccessPass {Id = entity.Id, AccessKey = entity.AccessKey});
-    }
+    public void UpdateDish(Dish dish) => _context.Update(dish);
     
     public void AddIngredient(ResourceAccessPass resourceAccessPass, long ingredientId)
     {

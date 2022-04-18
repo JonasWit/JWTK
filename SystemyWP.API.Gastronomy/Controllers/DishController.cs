@@ -80,15 +80,13 @@ public class DishController : ControllerBase
     }
 
     [HttpPut(Name = "UpdateDish")]
-    public async Task<ActionResult<Ingredient>> UpdateDish([FromBody] DishBasicDto dishBasicDto)
+    public async Task<IActionResult> UpdateDish([FromBody] DishBasicDto dishBasicDto)
     {
         try
         {
-            var dish = await _dishRepository.UpdateDish(_mapper.Map<Dish>(dishBasicDto));
-            if (dish is null) return BadRequest();
-
-            await _dishRepository.SaveChanges();
-            return Ok(_mapper.Map<DishDto>(dish));
+            _dishRepository.UpdateDish(_mapper.Map<Dish>(dishBasicDto));
+            if (await _dishRepository.SaveChanges() > 0) return Ok();
+            return BadRequest();
         }
         catch (Exception e)
         {

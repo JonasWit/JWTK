@@ -38,6 +38,25 @@ public class IngredientRepositoryTests
         Assert.Single(results);
         Assert.Contains(results, item => item.Equals(newIngredient with {Id = 1}));
     }
+    
+    [Fact]
+    public async Task GetIngredientListTest()
+    {
+        //Arrange
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetIngredientListTest"));
+
+        IIngredientRepository repo = new IngredientRepository(context);
+        var ingredients = GastronomySeed.GetTestIngredientsList();
+        ingredients.ForEach(item => repo.CreateIngredient(item));
+        
+        //Act
+        await repo.SaveChanges();
+        var results = await repo.GetIngredients(GastronomySeed.AccessKey);
+
+        //Assert
+        Assert.Equal(ingredients.Count, results.Count);
+    }
 
     [Fact]
     public async Task UpdateIngredientTest()

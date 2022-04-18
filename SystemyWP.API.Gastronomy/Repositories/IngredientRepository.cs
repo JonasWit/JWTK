@@ -20,10 +20,9 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass) => 
         _context.Ingredients.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
 
-    public Task<List<Ingredient>> GetIngredients(string accessKey)
-    {
-        throw new System.NotImplementedException();
-    }
+    public Task<List<Ingredient>> GetIngredients(string accessKey) => _context.Ingredients
+        .Where(d => d.AccessKey == accessKey)
+        .ToListAsync();
 
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {

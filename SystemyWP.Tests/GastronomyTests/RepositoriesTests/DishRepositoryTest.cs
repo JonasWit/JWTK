@@ -37,6 +37,25 @@ public class DishRepositoryTest
     }
     
     [Fact]
+    public async Task GetDishListTest()
+    {
+        //Arrange
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("GetDishListTest"));
+
+        IDishRepository repo = new DishRepository(context);
+        var dishes = GastronomySeed.GetTestDishesList();
+        dishes.ForEach(item => repo.CreateDish(item));
+        
+        //Act
+        await repo.SaveChanges();
+        var results = await repo.GetDishes(GastronomySeed.AccessKey);
+
+        //Assert
+        Assert.Equal(dishes.Count, results.Count);
+    }
+    
+    [Fact]
     public async Task AddIngredientToDishTest()
     {
         //Arrange
@@ -106,6 +125,9 @@ public class DishRepositoryTest
         await dishRepo.SaveChanges();
 
         //Act
+        dishRepo.AddIngredient(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id}, newIngredient.Id);
+        await dishRepo.SaveChanges();
+        
         dishRepo.RemoveIngredient(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id}, newIngredient.Id);
         var result = await dishRepo.GetDish(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id});
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Gastronomy.Data;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.DTOs;
@@ -24,28 +25,38 @@ public class MenuRepository : RepositoryBase<AppDbContext>, IMenuRepository
         _context.Remove(menu);
     }
 
-    public Task<Menu> GetMenu(ResourceAccessPass resourceAccessPass)
+    public Task<Menu> GetMenu(ResourceAccessPass resourceAccessPass) => 
+        _context.Menus.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+
+    public Task<List<Menu>> GetMenus(string accessKey)=> _context.Menus
+        .Where(d => d.AccessKey == accessKey)
+        .Include(d => d.Dishes)
+        .ToListAsync();
+
+    public void UpdateMenu(Menu menu)
     {
-        throw new System.NotImplementedException();
+        var entity = _context.Menus.FirstOrDefault(e => e.Id == menu.Id && e.AccessKey == menu.AccessKey);
+        if (entity is null) return;
+
+        entity.Description = menu.Description;
+        entity.Name = menu.Name;
     }
 
-    public Task<List<Menu>> GetMenus(string accessKey)
+    public void AddDish(ResourceAccessPass resourceAccessPass, long dishId)
     {
-        throw new System.NotImplementedException();
+        var menu = _context.Menus
+            .Include(d => d.Dishes)
+            .First(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        var dish = _context.Dishes.FirstOrDefault(ing => ing.Id == dishId && ing.AccessKey == resourceAccessPass.AccessKey);
+        menu.Dishes.Add(dish);
     }
 
-    public Task<Menu> UpdateDish(Menu menu)
+    public void RemoveDish(ResourceAccessPass resourceAccessPass, long dishId)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<Menu> AddDish(ResourceAccessPass resourceAccessPass, long dishId)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<Menu> RemoveDish(ResourceAccessPass resourceAccessPass, long dishId)
-    {
-        throw new System.NotImplementedException();
+        var menu = _context.Menus
+            .Include(d => d.Dishes)
+            .First(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        var dish = _context.Dishes.FirstOrDefault(ing => ing.Id == dishId && ing.AccessKey == resourceAccessPass.AccessKey);
+        menu.Dishes.Remove(dish);
     }
 }

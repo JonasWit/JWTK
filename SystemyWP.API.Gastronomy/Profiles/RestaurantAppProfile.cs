@@ -16,7 +16,6 @@ public class RestaurantAppProfile : Profile
         CreateMap<IngredientDto, Ingredient>();
         
         CreateMap<DishCreateDto, Dish>();
-        CreateMap<Dish, DishDto>();
         CreateMap<Dish, DishDto>()
             .ForMember(dest => dest.Ingredients,opt => opt.MapFrom(src => src.Ingredients.Select(i => i.Id)))
             .ForMember(dest => dest.Menus, opt => opt.MapFrom(src => src.Menus.Select(i => i.Id)));       
