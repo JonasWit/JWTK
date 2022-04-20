@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.MasterService
 {
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase

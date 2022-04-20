@@ -18,14 +18,13 @@ using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
 using SystemyWP.API.Utilities;
 
-namespace SystemyWP.API.Controllers
+namespace SystemyWP.API.Controllers.MasterService
 {
     [Route("[controller]")]
     public class AuthController : ApiControllerBase
     {
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
-        private readonly IOptionsMonitor<AuthSettings> _authSettings;
         private readonly IOptionsMonitor<CorsSettings> _corsSettings;
         private readonly Encryptor _encryptor;
         private readonly IUserRepository _userRepository;
@@ -34,7 +33,6 @@ namespace SystemyWP.API.Controllers
         public AuthController(
             ILogger<AuthController> logger,
             AppDbContext context,
-            IOptionsMonitor<AuthSettings> authSettings,
             IOptionsMonitor<CorsSettings> corsSettings,
             Encryptor encryptor,
             IUserRepository userRepository,
@@ -42,7 +40,6 @@ namespace SystemyWP.API.Controllers
         {
             _logger = logger;
             _context = context;
-            _authSettings = authSettings;
             _corsSettings = corsSettings;
             _encryptor = encryptor;
             _userRepository = userRepository;
