@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: client-app-depl
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: client-app
@@ -16,7 +16,7 @@ spec:
         - name: docker-key
       containers:
         - name: master
-          image: systemywp/master:client_v1
+          image: systemywp/master:client
           imagePullPolicy: "Always"
           ports:
             - containerPort: 80
