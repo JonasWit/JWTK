@@ -33,7 +33,7 @@ public class GastronomyHttpClient
         try
         {
             var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-                => _httpClient.GetAsync("health"));
+                => _httpClient.GetAsync(UrlService.Gastronomy.HealthCheck));
 
             return response.IsSuccessStatusCode
                 ? AppConstants.ServiceResponses.AliveResponse

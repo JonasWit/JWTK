@@ -7,6 +7,7 @@ public class UrlService
     public struct Gastronomy
     {
         public const string CreateIngredient = "ingredient";
+        public const string HealthCheck = "health";
         public static string DeleteIngredient(ResourceAccessPass pass) => $"ingredient/{pass.AccessKey}/{pass.Id}";
         public static string GetIngredient(ResourceAccessPass pass) => $"ingredient/{pass.AccessKey}/{pass.Id}";
         public static string GetIngredients(string accessKey) => $"ingredient/list/{accessKey}";
