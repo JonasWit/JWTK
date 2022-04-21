@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
+using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.DTOs.Gastronomy;
 using SystemyWP.API.DTOs.General;
 using SystemyWP.API.Repositories;

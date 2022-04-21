@@ -79,6 +79,22 @@ public class MenuController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetMenusException);
         }
     }
+    
+    [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedMenus")]
+    public async Task<ActionResult<DishDto>> GetPaginatedMenus(string key, int cursor, int take)
+    {
+        try
+        {
+            var menus = await _menuRepository.GetMenus(key, cursor, take);
+            if (menus is null) return NotFound();
+            return Ok(_mapper.Map<List<MenuDto>>(menus));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.GetMenusException);
+            return Problem(AppConstants.ResponseMessages.GetMenusException);
+        }
+    }
 
     [HttpDelete("{key}/{id:long}", Name = "RemoveMenu")]
     public async Task<IActionResult> RemoveMenu(string key, long id)
@@ -86,7 +102,7 @@ public class MenuController : ControllerBase
         try
         {
             _menuRepository.RemoveMenu(new ResourceAccessPass {Id = id, AccessKey = key});
-            if (await _menuRepository.SaveChanges() > 0) return Ok();
+            if (await _menuRepository.SaveChanges() > 0) return NoContent();
             return BadRequest();
         }
         catch (Exception e)
@@ -138,7 +154,7 @@ public class MenuController : ControllerBase
         {
             _menuRepository.RemoveDish(_mapper.Map<ResourceAccessPass>(menuDishUpdateDto),
                 menuDishUpdateDto.DishId);
-            if (await _menuRepository.SaveChanges() > 0) return Ok();   
+            if (await _menuRepository.SaveChanges() > 0) return NoContent();   
             return BadRequest(); 
         }
         catch (Exception e)

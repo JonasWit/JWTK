@@ -8,7 +8,7 @@ using SystemyWP.API.DTOs.General;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.HttpClients;
 
-namespace SystemyWP.API.Controllers;
+namespace SystemyWP.API.Controllers.MasterService;
 
 [Route("[controller]")]
 public class HealthController : ApiControllerBase

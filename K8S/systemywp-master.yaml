@@ -16,7 +16,7 @@ spec:
       - name: docker-key 
       containers:
       - name: master
-        image: systemywp/master:gate_v2
+        image: systemywp/master:gate
         imagePullPolicy: "Always"
         ports:
           - containerPort: 80

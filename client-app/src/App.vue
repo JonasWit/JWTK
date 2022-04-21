@@ -7,9 +7,11 @@
         <MainNav v-if="nav.navType === 'main'"/>
       </NavContainer>
       <main class="flex-1 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <component :is="Component"/>
+        <router-view v-slot="{ Component, route }">
+          <transition name="fade">
+            <div :key="route.name">
+              <component :is="Component"></component>
+            </div>
           </transition>
         </router-view>
       </main>

@@ -4,13 +4,13 @@ dotnet publish -c Release -o publish
 
 docker build -f SystemyWP.API/Dockerfile -t systemywp/master:gate_v2 .
 
-docker build -t systemywp/master:gate_v2 .
+docker build -t systemywp/master:gate .
 docker build -t systemywp/master:gastronomy .
-docker build -t systemywp/master:client_v1 .
+docker build -t systemywp/master:client .
 
-docker push systemywp/master:gate_v2
+docker push systemywp/master:gate
 docker push systemywp/master:gastronomy
-docker push systemywp/master:client_v1
+docker push systemywp/master:client
 
 docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 systemywp/master:client_v1
 docker run -d -p 8080:80 --name myapp systemywp/master:gate_v2

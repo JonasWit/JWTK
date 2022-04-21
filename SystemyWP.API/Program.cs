@@ -30,11 +30,7 @@ using SystemyWP.API.Services.HttpClients;
 using SystemyWP.API.Services.JWTServices;
 
 var builder = WebApplication.CreateBuilder(args);
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
-}
+if (builder.Environment.IsDevelopment()) builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
