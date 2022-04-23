@@ -16,6 +16,7 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
     }
     
     public void CreateDish(Dish dish) => _context.Add(dish);
+    
     public void RemoveDish(ResourceAccessPass resourceAccessPass)
     {
         var dish = _context.Dishes.FirstOrDefault(ing =>
