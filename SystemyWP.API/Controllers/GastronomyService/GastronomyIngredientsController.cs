@@ -36,23 +36,23 @@ public class GastronomyIngredientsController : ApiControllerBase
     }
 
     [HttpPost(Name = "CreateIngredient")]
-    public async Task<IActionResult> CreateIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    public async Task<IActionResult> CreateIngredient([FromBody] IngredientCreateDto ingredientCreateDto)
     {
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (key is null) return BadRequest();
     
-            createIngredientDto.AccessKey = key;
-            var ingredientDto = await _gastronomyHttpClient.CreateIngredient(createIngredientDto);
+            ingredientCreateDto.AccessKey = key;
+            var ingredientDto = await _gastronomyHttpClient.CreateIngredient(ingredientCreateDto);
             if (ingredientDto is null) throw new Exception();
     
             return CreatedAtRoute(nameof(GetIngredient), new {ingredientDto.Id}, ingredientDto);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, UrlService.GastronomyErrors.CreateIngredient);
-            return Problem(UrlService.GastronomyErrors.CreateIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.CreateIngredient);
+            return Problem(ServicesConstants.GastronomyErrors.CreateIngredient);
         }
     }
     
@@ -72,8 +72,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredient);
-            return Problem(UrlService.GastronomyErrors.GetIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredient);
+            return Problem(ServicesConstants.GastronomyErrors.GetIngredient);
         }
     }
     
@@ -91,27 +91,27 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredients);
-            return Problem(UrlService.GastronomyErrors.GetIngredients);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredients);
+            return Problem(ServicesConstants.GastronomyErrors.GetIngredients);
         }
     }
     
-    [HttpGet("list", Name = "GetPaginatedIngredients")]
-    public async Task<IActionResult> GetPaginatedIngredients()
+    [HttpGet("list/{cursor:int}/{take:int}", Name = "GetPaginatedIngredients")]
+    public async Task<IActionResult> GetPaginatedIngredients(int cursor, int take)
     {
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (key is null) return BadRequest();
     
-            var ingredients = await _gastronomyHttpClient.GetIngredients(key);
+            var ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
             if (ingredients is null) return NotFound();
             return Ok(ingredients);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, UrlService.GastronomyErrors.GetIngredients);
-            return Problem(UrlService.GastronomyErrors.GetIngredients);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredients);
+            return Problem(ServicesConstants.GastronomyErrors.GetIngredients);
         }
     }
     
@@ -124,39 +124,45 @@ public class GastronomyIngredientsController : ApiControllerBase
             if (key is null) return BadRequest();
     
             var responseCode = await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
-
-            switch (responseCode)
+            return responseCode switch
             {
-                case HttpStatusCode.OK:
-                    return Ok();
-                case HttpStatusCode.BadRequest:
-                    return BadRequest();
-                case HttpStatusCode.InternalServerError:
-                    throw new Exception(UrlService.GastronomyErrors.InternalErrorFromService);
-                default:
-                    throw new Exception(UrlService.GastronomyErrors.InternalUnsupportedStatusCode);
-            }
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyErrors
+                    .InternalErrorFromService),
+                _ => throw new Exception(ServicesConstants.GastronomyErrors.InternalUnsupportedStatusCode)
+            };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, UrlService.GastronomyErrors.RemoveIngredient);
-            return Problem(UrlService.GastronomyErrors.RemoveIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.RemoveIngredient);
+            return Problem(ServicesConstants.GastronomyErrors.RemoveIngredient);
         }
     }
     
     [HttpPut(Name = "UpdateIngredient")]
-    public async Task<IActionResult> UpdateIngredient([FromBody] CreateIngredientDto createIngredientDto)
+    public async Task<IActionResult> UpdateIngredient([FromBody] IngredientDto ingredientDto)
     {
         try
         {
-
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+            ingredientDto.AccessKey = key;
             
-            throw new NotImplementedException();
+            var responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyErrors
+                    .InternalErrorFromService),
+                _ => throw new Exception(ServicesConstants.GastronomyErrors.InternalUnsupportedStatusCode)
+            };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"{AppConstants.Services.GastronomyService} - Create Ingredient Failed");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            _logger.LogError(e, ServicesConstants.GastronomyErrors.UpdateIngredient);
+            return Problem(ServicesConstants.GastronomyErrors.UpdateIngredient);
         }
     }
     

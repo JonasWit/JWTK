@@ -1,6 +1,6 @@
 using System;
 using SystemyWP.API.Data.Models;
-using SystemyWP.API.Forms;
+using SystemyWP.API.DTOs.General.UserForms;
 
 namespace SystemyWP.API.Repositories;
 

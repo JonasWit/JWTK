@@ -1,5 +1,7 @@
+using SystemyWP.API.DTOs.General.UserForms;
 using SystemyWP.API.FluentValidations;
-using SystemyWP.API.Forms;
+using SystemyWP.API.FluentValidations.MasterService;
+using SystemyWP.API.FluentValidations.MasterService.UserForms;
 using Xunit;
 
 namespace SystemyWP.Tests.MasterTests.ValidatorsTests;

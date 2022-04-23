@@ -33,7 +33,7 @@ public class GastronomyHttpClient
         try
         {
             var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-                => _httpClient.GetAsync(UrlService.Gastronomy.HealthCheck));
+                => _httpClient.GetAsync(ServicesConstants.Gastronomy.HealthCheck));
 
             return response.IsSuccessStatusCode
                 ? AppConstants.ServiceResponses.AliveResponse
@@ -45,37 +45,53 @@ public class GastronomyHttpClient
         }
     }
 
-    public async Task<IngredientDto> CreateIngredient(CreateIngredientDto createIngredientDto)
+    public async Task<IngredientDto> CreateIngredient(IngredientCreateDto ingredientCreateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.PostAsJsonAsync(UrlService.Gastronomy.CreateIngredient, createIngredientDto));
+            => _httpClient.PostAsJsonAsync(ServicesConstants.Gastronomy.CreateIngredient, ingredientCreateDto));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.CreateIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.CreateIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
+    }
+    
+    public async Task<HttpStatusCode> UpdateIngredient(IngredientDto ingredientDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PutAsJsonAsync(ServicesConstants.Gastronomy.UpdateIngredient, ingredientDto));
+        return response.StatusCode;
     }
     
     public async Task<IngredientDto> GetIngredient(ResourceAccessPass resourceAccessPass)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredient(resourceAccessPass)));
+            => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetIngredient(resourceAccessPass)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
     public async Task<List<IngredientDto>> GetIngredients(string accessKey)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.GetAsync(UrlService.Gastronomy.GetIngredients(accessKey)));
+            => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetIngredients(accessKey)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(UrlService.GastronomyErrors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
+    }
+    
+    public async Task<List<IngredientDto>> GetPaginatedIngredients(string accessKey, int cursor, int take)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetPaginatedIngredients(accessKey, cursor, take)));
+    
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
     }
     
     public async Task<HttpStatusCode> RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.DeleteAsync(UrlService.Gastronomy.DeleteIngredient(resourceAccessPass)));
+            => _httpClient.DeleteAsync(ServicesConstants.Gastronomy.DeleteIngredient(resourceAccessPass)));
         return response.StatusCode;
     }
 }

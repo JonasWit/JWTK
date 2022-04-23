@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Models;
-using SystemyWP.API.Forms;
+using SystemyWP.API.DTOs.General.UserForms;
 using SystemyWP.API.Services.Auth;
 
 namespace SystemyWP.API.Repositories;

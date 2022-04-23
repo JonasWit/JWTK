@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Forms;
+namespace SystemyWP.API.DTOs.General.UserForms;
 
 public class UserPasswordResetForm : UserPasswordForm
 {

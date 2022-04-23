@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.DTOs.General;
-using SystemyWP.API.Forms;
+using SystemyWP.API.DTOs.General.UserForms;
 using SystemyWP.API.Repositories;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.Email;
