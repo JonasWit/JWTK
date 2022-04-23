@@ -1,62 +1,70 @@
 <template>
-  <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Rejestracja
-      </h2>
-      <div>
-        <input v-model="state.email"
-               type="text"
-               class="form-input-text-general"
-               placeholder="Email"/>
-        <div v-if="v$.email.$error">
+  <div class="mt-8">
+    <div class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+          <h1 class="text-3xl font-semibold text-center text-blue-700">
+            Rejestracja
+          </h1>
+          <form class="mt-6">
+            <div>
+              <label class="block text-sm text-gray-800">Email</label>
+              <input v-model="state.email" type="email" placeholder="Email"
+                     class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+              <div v-if="v$.email.$error">
           <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
-        </div>
-      </div>
-      <div>
-        <input v-model="state.password.password"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Hasło"/>
-        <div v-if="v$.password.password.$error">
+              </div>
+            </div>
+            <div class="mt-4">
+              <div>
+                <label  class="block text-sm text-gray-800">Hasło</label>
+                <input v-model="state.password.password" type="password" placeholder="Hasło"
+                       class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                <div v-if="v$.password.password.$error">
           <span class="validation-error-span" v-for="error in v$.password.password.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
-        </div>
-      </div>
-      <div>
-        <input v-model="state.password.confirm"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Powtórz Hasło"/>
-        <div v-if="v$.password.confirm.$error">
-          <span class="validation-error-span" v-for="error in v$.password.confirm.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
-        </div>
-      </div>
-      <div>
-        <div class="flex items-center">
-          <input v-model="state.rulesAccepted" id="remember-me" name="remember-me" type="checkbox"
-                 class="h-4 w-4 text-indigo-600 focus:ring-customClassicBlue border-gray-300 rounded"/>
-          <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-            Akceptuję polityke i regulamin
-          </label>
-        </div>
-        <div v-if="v$.rulesAccepted.$error">
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="block text-sm text-gray-800">Powtórz hasło</label>
+                <input v-model="state.password.confirm" type="password" placeholder="Powtórz hasło"
+                       class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                <div v-if="v$.password.confirm.$error">
+                <span class="validation-error-span" v-for="error in v$.password.confirm.$errors" :key="error.$uid"> 
+                  {{error.$message}}
+                </span>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="flex items-center py-2 mt-2">
+                  <input v-model="state.rulesAccepted" id="remember-me" name="remember-me" type="checkbox"
+                         class="h-4 w-4 text-indigo-600 focus:ring-customClassicBlue border-gray-300 rounded"/>
+                  <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                    Akceptuję politykę i regulamin
+                  </label>
+                </div>
+                <div v-if="v$.rulesAccepted.$error">
           <span class="text-xs text-red-900 block" v-for="error in v$.rulesAccepted.$errors" :key="error.$uid"> {{
               error.$message
             }}</span>
+                </div>
+              </div>               
+              <div class="mt-6">
+                <button @click="submitForm"
+                        class="button">
+                  Zarejestruj
+                </button>
+              </div>
+            </div>
+          </form>         
         </div>
       </div>
-      <button @click="submitForm"
-              class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
-        Zarejestruj się
-      </button>
     </div>
   </div>
+
 </template>
 
 <script>
