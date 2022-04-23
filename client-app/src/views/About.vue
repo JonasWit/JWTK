@@ -28,33 +28,28 @@
       </div>
     </div>
   </section>
-  <section class="section-3 my-10">
-    <div>
-      <div class="content text-center ">
+  <section class="my-10">
+      <div class="text-center ">
         <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Cennik</h1>
         <h5 class="mx-7">
           Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
       </div>
-      <div class="flex flex-col md:flex-row flex-wrap mt-20">
-           <div class="justify-between" v-for=" item in others" :key="item.id">
+      <div class="flex flex-col md:flex-row flex-wrap justify-center">
+           <div class="justify-between m-6 border-4 rounded-lg p-4 md:w-1/4" v-for=" item in others" :key="item.id">
             <div class="text-center">
-              <h2 class="text-center header mb-4">{{ item.title }}</h2>
-              <h2 class="price">{{ item.price }} </h2>
+              <h2 class="text-3xl text-center mb-4 text-customClassicBlue tracking-wide font-bold">{{ item.title }}</h2>
+              <h2 class="text-2xl my-3 font-bold">{{ item.price }} </h2>
               <h5 class="text-center"> {{ item.subtitle }}</h5>
-            </div> 
-             
-             
-              <ul>                
-                  <li v-for="(bullet, i) in item.bullet" :key="i">                                    
-                      {{ bullet[0] }}                 
+            </div>                          
+              <ul class="list-disc px-3 text">                
+                  <li class="list-outside py-1" v-for="(bullet, i) in item.bullet" :key="i">                                    
+                   {{ bullet[0] }}         
                   </li>           
               </ul>
-                     </div>
+           </div>
          </div>         
-     </div>
-  </section>
-  
-</template>
+     </section>
+  </template>
 <script>
 export default {
   name: "About",
@@ -129,6 +124,8 @@ export default {
             ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
             ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
           ],
+          img: 'img/bubble-icons/icons8-tick-24.png'
+         
         },
         {
           id: 2,
