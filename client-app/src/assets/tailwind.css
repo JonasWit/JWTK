@@ -35,7 +35,9 @@
 .portal-button{
     @apply rounded-md py-2 px-3 text-xs font-bold cursor-pointer tracking-wider transition ease-in-out delay-100
 }
-
+.button{
+    @apply w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-700 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600
+}
 .form-validation-error{
     @apply text-red-900 text-xs m-0.5
 }
