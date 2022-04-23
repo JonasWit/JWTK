@@ -115,7 +115,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
     }
     
-    [HttpDelete(Name = "RemoveIngredient")]
+    [HttpDelete("{id:long}", Name = "RemoveIngredient")]
     public async Task<IActionResult> RemoveIngredient(long id)
     {
         try
@@ -126,7 +126,7 @@ public class GastronomyIngredientsController : ApiControllerBase
             var responseCode = await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
             return responseCode switch
             {
-                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.NoContent => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
                 HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyErrors
                     .InternalErrorFromService),

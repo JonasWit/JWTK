@@ -18,6 +18,3 @@ export const changePassword = (payload) => {
 export const deleteUserAccount = () => {
     return axiosInstanceAuthorized().post("/auth/delete-account")
 }
-
-export class resetPassword {
-}
