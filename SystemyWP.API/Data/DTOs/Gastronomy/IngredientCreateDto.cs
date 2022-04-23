@@ -1,6 +1,6 @@
 using SystemyWP.API.Constants;
 
-namespace SystemyWP.API.DTOs.Gastronomy;
+namespace SystemyWP.API.Data.DTOs.Gastronomy;
 
 public class IngredientCreateDto
 {

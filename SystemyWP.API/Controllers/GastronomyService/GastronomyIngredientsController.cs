@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Controllers.MasterService;
-using SystemyWP.API.DTOs.Gastronomy;
-using SystemyWP.API.DTOs.General;
-using SystemyWP.API.Repositories;
+using SystemyWP.API.Data.DTOs.Gastronomy;
+using SystemyWP.API.Data.DTOs.General;
+using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.HttpClients;
 
 namespace SystemyWP.API.Controllers.GastronomyService;
@@ -51,8 +51,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.CreateIngredient);
-            return Problem(ServicesConstants.GastronomyErrors.CreateIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.CreateIngredient);
+            return Problem(ServicesConstants.GastronomyResponseErrors.CreateIngredient);
         }
     }
     
@@ -72,8 +72,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredient);
-            return Problem(ServicesConstants.GastronomyErrors.GetIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredient);
+            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredient);
         }
     }
     
@@ -91,8 +91,27 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredients);
-            return Problem(ServicesConstants.GastronomyErrors.GetIngredients);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredients);
+            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
+        }
+    }
+    
+    [HttpGet("count", Name = "CountIngredients")]
+    public async Task<IActionResult> CountIngredients()
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (key is null) return BadRequest();
+    
+            var ingredients = await _gastronomyHttpClient.CountIngredients(key);
+            if (ingredients is null) return NotFound();
+            return Ok(ingredients);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.CountIngredients);
+            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
         }
     }
     
@@ -110,8 +129,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.GetIngredients);
-            return Problem(ServicesConstants.GastronomyErrors.GetIngredients);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredients);
+            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
         }
     }
     
@@ -128,15 +147,15 @@ public class GastronomyIngredientsController : ApiControllerBase
             {
                 HttpStatusCode.NoContent => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyErrors
+                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyResponseErrors
                     .InternalErrorFromService),
-                _ => throw new Exception(ServicesConstants.GastronomyErrors.InternalUnsupportedStatusCode)
+                _ => throw new Exception(ServicesConstants.GastronomyResponseErrors.InternalUnsupportedStatusCode)
             };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.RemoveIngredient);
-            return Problem(ServicesConstants.GastronomyErrors.RemoveIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.RemoveIngredient);
+            return Problem(ServicesConstants.GastronomyResponseErrors.RemoveIngredient);
         }
     }
     
@@ -154,15 +173,15 @@ public class GastronomyIngredientsController : ApiControllerBase
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyErrors
+                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyResponseErrors
                     .InternalErrorFromService),
-                _ => throw new Exception(ServicesConstants.GastronomyErrors.InternalUnsupportedStatusCode)
+                _ => throw new Exception(ServicesConstants.GastronomyResponseErrors.InternalUnsupportedStatusCode)
             };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyErrors.UpdateIngredient);
-            return Problem(ServicesConstants.GastronomyErrors.UpdateIngredient);
+            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.UpdateIngredient);
+            return Problem(ServicesConstants.GastronomyResponseErrors.UpdateIngredient);
         }
     }
     

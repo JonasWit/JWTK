@@ -15,4 +15,5 @@ public interface IDishRepository : IRepositoryBase
     void UpdateDish(Dish dish);
     void AddIngredient(ResourceAccessPass resourceAccessPass, long ingredientId); 
     void RemoveIngredient(ResourceAccessPass resourceAccessPass, long ingredientId); 
+    Task<int> CountDishes(string accessKey);
 }

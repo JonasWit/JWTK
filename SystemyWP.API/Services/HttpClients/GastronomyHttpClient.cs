@@ -6,8 +6,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
-using SystemyWP.API.DTOs.Gastronomy;
-using SystemyWP.API.DTOs.General;
+using SystemyWP.API.Data.DTOs.Gastronomy;
+using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Settings;
 
@@ -50,7 +50,7 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.PostAsJsonAsync(ServicesConstants.Gastronomy.CreateIngredient, ingredientCreateDto));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.CreateIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyResponseErrors.CreateIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
@@ -66,7 +66,7 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetIngredient(resourceAccessPass)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyResponseErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
@@ -75,8 +75,17 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetIngredients(accessKey)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyResponseErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
+    }
+    
+    public async Task<ElementCountDto> CountIngredients(string accessKey)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(ServicesConstants.Gastronomy.CountIngredients(accessKey)));
+    
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyResponseErrors.GetIngredient);
+        return await response.Content.ReadFromJsonAsync<ElementCountDto>();
     }
     
     public async Task<List<IngredientDto>> GetPaginatedIngredients(string accessKey, int cursor, int take)
@@ -84,7 +93,7 @@ public class GastronomyHttpClient
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(ServicesConstants.Gastronomy.GetPaginatedIngredients(accessKey, cursor, take)));
     
-        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyErrors.GetIngredient);
+        if (!response.IsSuccessStatusCode) throw new Exception(ServicesConstants.GastronomyResponseErrors.GetIngredient);
         return await response.Content.ReadFromJsonAsync<List<IngredientDto>>();
     }
     

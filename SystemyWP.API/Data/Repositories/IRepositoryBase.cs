@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SystemyWP.API.Repositories;
+namespace SystemyWP.API.Data.Repositories;
 
 public interface IRepositoryBase
 {

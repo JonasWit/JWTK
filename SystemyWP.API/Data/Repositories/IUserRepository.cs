@@ -1,8 +1,8 @@
 using System;
+using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Models;
-using SystemyWP.API.DTOs.General.UserForms;
 
-namespace SystemyWP.API.Repositories;
+namespace SystemyWP.API.Data.Repositories;
 
 public interface IUserRepository : IRepositoryBase
 {

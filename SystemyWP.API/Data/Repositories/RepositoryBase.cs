@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Repositories;
+namespace SystemyWP.API.Data.Repositories;
 
 public abstract class RepositoryBase<TContext> : IRepositoryBase where TContext : DbContext
 {

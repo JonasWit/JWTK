@@ -41,4 +41,5 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     }
 
     public void UpdateIngredient(Ingredient ingredient) => _context.Update(ingredient);
+    public Task<int> CountIngredients(string accessKey) => _context.Ingredients.CountAsync(d => d.AccessKey == accessKey);
 }

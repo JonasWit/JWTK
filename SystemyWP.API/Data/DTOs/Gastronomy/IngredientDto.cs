@@ -1,10 +1,11 @@
 using SystemyWP.API.Constants;
 
-namespace SystemyWP.API.DTOs.Gastronomy;
+namespace SystemyWP.API.Data.DTOs.Gastronomy;
 
-public class IngredientUpdateDto
+public class IngredientDto
 {
     public long Id { get; set; }
+    public string AccessKey { get; set; }
 
     public string Name { get; set; } 
 

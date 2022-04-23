@@ -36,7 +36,7 @@ public class DishController : ControllerBase
         {
             var dish = _mapper.Map<Dish>(dishCreateDto);
             _dishRepository.CreateDish(dish);
-            
+
             if (await _dishRepository.SaveChanges() > 0) return Ok(_mapper.Map<DishDto>(dish));
             return BadRequest();
         }
@@ -62,7 +62,7 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetDishException);
         }
     }
-    
+
     [HttpGet("list/{key}", Name = "GetDishes")]
     public async Task<ActionResult<DishDto>> GetDishes(string key)
     {
@@ -78,7 +78,21 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetDishesException);
         }
     }
-    
+
+    [HttpGet("count/{key}", Name = "CountDishes")]
+    public async Task<ActionResult<int>> CountDishes(string key)
+    {
+        try
+        {
+            return Ok(new {Count = await _dishRepository.CountDishes(key)});
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CountDishesException);
+            return Problem(AppConstants.ResponseMessages.CountDishesException);
+        }
+    }
+
     [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedDishes")]
     public async Task<ActionResult<DishDto>> GetPaginatedDishes(string key, int cursor, int take)
     {
@@ -126,7 +140,7 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.UpdateDishException);
         }
     }
-    
+
     [HttpPost("add-ingredient", Name = "AddIngredientToDish")]
     public async Task<ActionResult> AddIngredientToDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
     {
@@ -134,8 +148,8 @@ public class DishController : ControllerBase
         {
             _dishRepository.AddIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
                 dishIngredientUpdateDto.IngredientId);
-            if (await _dishRepository.SaveChanges() > 0) return Ok();    
-            return BadRequest();        
+            if (await _dishRepository.SaveChanges() > 0) return Ok();
+            return BadRequest();
         }
         catch (Exception e)
         {
@@ -143,7 +157,7 @@ public class DishController : ControllerBase
             return Problem(AppConstants.ResponseMessages.CreateDishException);
         }
     }
-    
+
     [HttpPost("remove-ingredient", Name = "RemoveIngredientFromDish")]
     public async Task<ActionResult> RemoveIngredientFromDish([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
     {
@@ -151,8 +165,8 @@ public class DishController : ControllerBase
         {
             _dishRepository.RemoveIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
                 dishIngredientUpdateDto.IngredientId);
-            if (await _dishRepository.SaveChanges() > 0) return NoContent();   
-            return BadRequest();  
+            if (await _dishRepository.SaveChanges() > 0) return NoContent();
+            return BadRequest();
         }
         catch (Exception e)
         {

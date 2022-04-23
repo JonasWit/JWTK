@@ -1,4 +1,4 @@
-using SystemyWP.API.DTOs.General.UserForms;
+using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.FluentValidations;
 using SystemyWP.API.FluentValidations.MasterService;
 using SystemyWP.API.FluentValidations.MasterService.UserForms;

@@ -69,6 +69,20 @@ public class MenuController : ControllerBase
     {
         try
         {
+            return Ok(new {Count = await _menuRepository.CountMenus(key)});
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CountMenusException);
+            return Problem(AppConstants.ResponseMessages.CountMenusException);
+        }
+    }
+
+    [HttpGet("count/{key}", Name = "CountMenus")]
+    public async Task<ActionResult<int>> CountMenus(string key)
+    {
+        try
+        {
             var menus = await _menuRepository.GetMenus(key);
             if (menus is null) return NotFound();
             return Ok(_mapper.Map<List<MenuDto>>(menus));
@@ -79,7 +93,7 @@ public class MenuController : ControllerBase
             return Problem(AppConstants.ResponseMessages.GetMenusException);
         }
     }
-    
+
     [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedMenus")]
     public async Task<ActionResult<DishDto>> GetPaginatedMenus(string key, int cursor, int take)
     {
@@ -136,8 +150,8 @@ public class MenuController : ControllerBase
         {
             _menuRepository.AddDish(_mapper.Map<ResourceAccessPass>(menuDishUpdateDto),
                 menuDishUpdateDto.DishId);
-            if (await _menuRepository.SaveChanges() > 0) return Ok();    
-            return BadRequest(); 
+            if (await _menuRepository.SaveChanges() > 0) return Ok();
+            return BadRequest();
         }
         catch (Exception e)
         {
@@ -154,8 +168,8 @@ public class MenuController : ControllerBase
         {
             _menuRepository.RemoveDish(_mapper.Map<ResourceAccessPass>(menuDishUpdateDto),
                 menuDishUpdateDto.DishId);
-            if (await _menuRepository.SaveChanges() > 0) return NoContent();   
-            return BadRequest(); 
+            if (await _menuRepository.SaveChanges() > 0) return NoContent();
+            return BadRequest();
         }
         catch (Exception e)
         {

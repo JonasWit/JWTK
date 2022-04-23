@@ -4,12 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Constants;
-using SystemyWP.API.Data;
+using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Models;
-using SystemyWP.API.DTOs.General.UserForms;
 using SystemyWP.API.Services.Auth;
 
-namespace SystemyWP.API.Repositories;
+namespace SystemyWP.API.Data.Repositories;
 
 internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 {

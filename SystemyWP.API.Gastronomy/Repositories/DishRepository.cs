@@ -64,4 +64,6 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
         var ingredient = _context.Ingredients.FirstOrDefault(ing => ing.Id == ingredientId && ing.AccessKey == resourceAccessPass.AccessKey);
         dish.Ingredients.Remove(ingredient);
     }
+
+    public Task<int> CountDishes(string accessKey) => _context.Dishes.CountAsync(d => d.AccessKey == accessKey);
 }

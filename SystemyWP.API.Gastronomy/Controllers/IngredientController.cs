@@ -80,6 +80,20 @@ public class IngredientController : ControllerBase
         }
     }
 
+    [HttpGet("count/{key}", Name = "CountIngredients")]
+    public async Task<ActionResult<int>> CountIngredients(string key)
+    {
+        try
+        {
+            return Ok(new {Count = await _ingredientRepository.CountIngredients(key)});
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, AppConstants.ResponseMessages.CountIngredientsException);
+            return Problem(AppConstants.ResponseMessages.CountIngredientsException);
+        }
+    }
+
     [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedIngredients")]
     public async Task<ActionResult<IngredientDto>> GetPaginatedIngredients(string key, int cursor, int take)
     {

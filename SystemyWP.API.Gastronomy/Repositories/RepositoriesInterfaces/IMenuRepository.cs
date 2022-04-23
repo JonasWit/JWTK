@@ -15,4 +15,5 @@ public interface IMenuRepository : IRepositoryBase
     void UpdateMenu(Menu menu);
     void AddDish(ResourceAccessPass resourceAccessPass, long dishId); 
     void RemoveDish(ResourceAccessPass resourceAccessPass, long dishId); 
+    Task<int> CountMenus(string accessKey);
 }

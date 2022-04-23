@@ -13,4 +13,5 @@ public interface IIngredientRepository : IRepositoryBase
     Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take);
     void RemoveIngredient(ResourceAccessPass resourceAccessPass);
     void UpdateIngredient(Ingredient ingredient);
+    Task<int> CountIngredients(string accessKey);
 }

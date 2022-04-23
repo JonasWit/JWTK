@@ -1,6 +1,6 @@
 using AutoMapper;
+using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Models;
-using SystemyWP.API.DTOs.General;
 
 namespace SystemyWP.API.Profiles;
 

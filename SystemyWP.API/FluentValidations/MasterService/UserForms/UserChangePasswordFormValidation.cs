@@ -1,5 +1,5 @@
 using FluentValidation;
-using SystemyWP.API.DTOs.General.UserForms;
+using SystemyWP.API.Data.DTOs.General.UserForms;
 
 namespace SystemyWP.API.FluentValidations.MasterService.UserForms;
 

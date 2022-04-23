@@ -1,4 +1,4 @@
-namespace SystemyWP.API.DTOs.General.UserForms;
+namespace SystemyWP.API.Data.DTOs.General.UserForms;
 
 public class UserEmailForm
 {

@@ -68,4 +68,6 @@ public class MenuRepository : RepositoryBase<AppDbContext>, IMenuRepository
         var dish = _context.Dishes.FirstOrDefault(ing => ing.Id == dishId && ing.AccessKey == resourceAccessPass.AccessKey);
         menu.Dishes.Remove(dish);
     }
+
+    public Task<int> CountMenus(string accessKey) => _context.Menus.CountAsync(d => d.AccessKey == accessKey);
 }
