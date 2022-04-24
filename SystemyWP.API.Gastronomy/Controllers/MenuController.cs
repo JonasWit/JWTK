@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Gastronomy.Data.DTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
-using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.DTOs.MenuDTOs;
-using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
+using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
@@ -54,7 +54,7 @@ public class MenuController : ControllerBase
         try
         {
             var menu = await _menuRepository.GetMenu(new ResourceAccessPass {AccessKey = key, Id = id});
-            if (menu is null) return NotFound();
+            if (menu is null) return BadRequest();
             return Ok(_mapper.Map<MenuDto>(menu));
         }
         catch (Exception e)
@@ -65,11 +65,13 @@ public class MenuController : ControllerBase
     }
 
     [HttpGet("list/{key}", Name = "GetMenus")]
-    public async Task<ActionResult<DishDto>> GetMenus(string key)
+    public async Task<ActionResult<MenuDto>> GetMenus(string key)
     {
         try
         {
-            return Ok(new {Count = await _menuRepository.CountMenus(key)});
+            var menus = await _menuRepository.GetMenus(key);
+            if (menus is null) return BadRequest();
+            return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
         catch (Exception e)
         {
@@ -83,9 +85,7 @@ public class MenuController : ControllerBase
     {
         try
         {
-            var menus = await _menuRepository.GetMenus(key);
-            if (menus is null) return NotFound();
-            return Ok(_mapper.Map<List<MenuDto>>(menus));
+            return Ok(new {Count = await _menuRepository.CountMenus(key)});
         }
         catch (Exception e)
         {
@@ -100,7 +100,7 @@ public class MenuController : ControllerBase
         try
         {
             var menus = await _menuRepository.GetMenus(key, cursor, take);
-            if (menus is null) return NotFound();
+            if (menus is null) return BadRequest();
             return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
         catch (Exception e)
@@ -155,8 +155,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
-            return Problem(AppConstants.ResponseMessages.CreateDishException);
+            _logger.LogError(e, AppConstants.ResponseMessages.AddMenuDishException);
+            return Problem(AppConstants.ResponseMessages.AddMenuDishException);
         }
     }
 
@@ -173,8 +173,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
-            return Problem(AppConstants.ResponseMessages.CreateDishException);
+            _logger.LogError(e, AppConstants.ResponseMessages.RemoveMenuDishException);
+            return Problem(AppConstants.ResponseMessages.RemoveMenuDishException);
         }
     }
 }

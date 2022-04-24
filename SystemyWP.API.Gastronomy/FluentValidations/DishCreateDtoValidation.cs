@@ -1,5 +1,5 @@
 using FluentValidation;
-using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
 
 namespace SystemyWP.API.Gastronomy.FluentValidations;
 

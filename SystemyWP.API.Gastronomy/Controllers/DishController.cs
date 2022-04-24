@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Gastronomy.Data.DTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
-using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
+using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
@@ -53,7 +53,7 @@ public class DishController : ControllerBase
         try
         {
             var dish = await _dishRepository.GetDish(new ResourceAccessPass {AccessKey = key, Id = id});
-            if (dish is null) return NotFound();
+            if (dish is null) return BadRequest();
             return Ok(_mapper.Map<DishDto>(dish));
         }
         catch (Exception e)
@@ -69,7 +69,7 @@ public class DishController : ControllerBase
         try
         {
             var dishes = await _dishRepository.GetDishes(key);
-            if (dishes is null) return NotFound();
+            if (dishes is null) return BadRequest();
             return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
@@ -99,7 +99,7 @@ public class DishController : ControllerBase
         try
         {
             var dishes = await _dishRepository.GetDishes(key, cursor, take);
-            if (dishes is null) return NotFound();
+            if (dishes is null) return BadRequest();
             return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
@@ -153,8 +153,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
-            return Problem(AppConstants.ResponseMessages.CreateDishException);
+            _logger.LogError(e, AppConstants.ResponseMessages.AddDishIngredientException);
+            return Problem(AppConstants.ResponseMessages.AddDishIngredientException);
         }
     }
 
@@ -170,8 +170,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
-            return Problem(AppConstants.ResponseMessages.CreateDishException);
+            _logger.LogError(e, AppConstants.ResponseMessages.RemoveDishIngredientException);
+            return Problem(AppConstants.ResponseMessages.RemoveDishIngredientException);
         }
     }
 }

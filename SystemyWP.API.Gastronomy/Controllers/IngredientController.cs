@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemyWP.API.Gastronomy.Data.DTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
-using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
-using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
+using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 
@@ -54,7 +54,7 @@ public class IngredientController : ControllerBase
         {
             var ingredient =
                 await _ingredientRepository.GetIngredient(new ResourceAccessPass {AccessKey = key, Id = id});
-            if (ingredient is null) return NotFound();
+            if (ingredient is null) return BadRequest();
             return Ok(_mapper.Map<IngredientDto>(ingredient));
         }
         catch (Exception e)
@@ -70,7 +70,7 @@ public class IngredientController : ControllerBase
         try
         {
             var ingredients = await _ingredientRepository.GetIngredients(key);
-            if (ingredients is null) return NotFound();
+            if (ingredients is null) return BadRequest();
             return Ok(_mapper.Map<List<IngredientDto>>(ingredients));
         }
         catch (Exception e)
@@ -100,7 +100,7 @@ public class IngredientController : ControllerBase
         try
         {
             var ingredients = await _ingredientRepository.GetIngredients(key, cursor, take);
-            if (ingredients is null) return NotFound();
+            if (ingredients is null) return BadRequest();
             return Ok(_mapper.Map<List<IngredientDto>>(ingredients));
         }
         catch (Exception e)

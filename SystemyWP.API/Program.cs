@@ -26,7 +26,7 @@ using SystemyWP.API.Data;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Services.Auth;
-using SystemyWP.API.Services.HttpClients;
+using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -144,6 +144,7 @@ builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
+builder.Services.AddTransient<UrlService>();
 
 builder.Services.AddFileServices(configuration);
 

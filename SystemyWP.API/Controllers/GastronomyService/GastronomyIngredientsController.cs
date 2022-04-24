@@ -10,7 +10,7 @@ using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
-using SystemyWP.API.Services.HttpClients;
+using SystemyWP.API.Services.HttpServices;
 
 namespace SystemyWP.API.Controllers.GastronomyService;
 
@@ -41,7 +41,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
             ingredientCreateDto.AccessKey = key;
             var ingredientDto = await _gastronomyHttpClient.CreateIngredient(ingredientCreateDto);
@@ -51,8 +51,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.CreateIngredient);
-            return Problem(ServicesConstants.GastronomyResponseErrors.CreateIngredient);
+            _logger.LogError(e, "CreateIngredient Error");
+            return Problem("CreateIngredient Error");
         }
     }
     
@@ -62,18 +62,17 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
-            var ingredientDto =
-                await _gastronomyHttpClient.GetIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
+            var ingredientDto = await _gastronomyHttpClient.GetIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
             if (ingredientDto is null) return NotFound();
     
             return Ok(ingredientDto);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredient);
-            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredient);
+            _logger.LogError(e, "GetIngredient Error");
+            return Problem("GetIngredient Error");
         }
     }
     
@@ -83,7 +82,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
             var ingredients = await _gastronomyHttpClient.GetIngredients(key);
             if (ingredients is null) return NotFound();
@@ -91,8 +90,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredients);
-            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
+            _logger.LogError(e, "GetIngredients Error");
+            return Problem("GetIngredients Error");
         }
     }
     
@@ -102,7 +101,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
             var ingredients = await _gastronomyHttpClient.CountIngredients(key);
             if (ingredients is null) return NotFound();
@@ -110,8 +109,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.CountIngredients);
-            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
+            _logger.LogError(e, "CountIngredients Error");
+            return Problem("CountIngredients Error");
         }
     }
     
@@ -121,7 +120,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
             var ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
             if (ingredients is null) return NotFound();
@@ -129,8 +128,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.GetIngredients);
-            return Problem(ServicesConstants.GastronomyResponseErrors.GetIngredients);
+            _logger.LogError(e, "GetPaginatedIngredients Error");
+            return Problem("GetPaginatedIngredients Error");
         }
     }
     
@@ -140,22 +139,21 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
     
             var responseCode = await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyResponseErrors
-                    .InternalErrorFromService),
-                _ => throw new Exception(ServicesConstants.GastronomyResponseErrors.InternalUnsupportedStatusCode)
+                HttpStatusCode.InternalServerError => throw new Exception("RemoveIngredient Error - Service Error"),
+                _ => throw new Exception("RemoveIngredient Error - Unsupported Status Code")
             };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.RemoveIngredient);
-            return Problem(ServicesConstants.GastronomyResponseErrors.RemoveIngredient);
+            _logger.LogError(e, "RemoveIngredient Error");
+            return Problem("RemoveIngredient Error");
         }
     }
     
@@ -165,7 +163,7 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (key is null) return BadRequest();
+            if (string.IsNullOrEmpty(key)) return BadRequest();
             ingredientDto.AccessKey = key;
             
             var responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientDto);
@@ -173,15 +171,14 @@ public class GastronomyIngredientsController : ApiControllerBase
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception(ServicesConstants.GastronomyResponseErrors
-                    .InternalErrorFromService),
-                _ => throw new Exception(ServicesConstants.GastronomyResponseErrors.InternalUnsupportedStatusCode)
+                HttpStatusCode.InternalServerError => throw new Exception("RemoveIngredient Error - Service Error"),
+                _ => throw new Exception("RemoveIngredient Error - Unsupported Status Code")
             };
         }
         catch (Exception e)
         {
-            _logger.LogError(e, ServicesConstants.GastronomyResponseErrors.UpdateIngredient);
-            return Problem(ServicesConstants.GastronomyResponseErrors.UpdateIngredient);
+            _logger.LogError(e, "UpdateIngredient Error");
+            return Problem("UpdateIngredient Error");
         }
     }
     

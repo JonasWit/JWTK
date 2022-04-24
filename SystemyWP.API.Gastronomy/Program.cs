@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using SystemyWP.API.Gastronomy.Data;
+using SystemyWP.API.Gastronomy.Data.Repositories;
+using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 using SystemyWP.API.Gastronomy.Middleware;
-using SystemyWP.API.Gastronomy.Repositories;
-using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
 using SystemyWP.API.Gastronomy.Services;
 
 var builder = WebApplication.CreateBuilder(args);

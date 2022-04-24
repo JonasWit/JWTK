@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
-using SystemyWP.API.Services.HttpClients;
+using SystemyWP.API.Services.HttpServices;
 
 namespace SystemyWP.API.Controllers.MasterService;
 

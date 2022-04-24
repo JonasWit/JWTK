@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Gastronomy.Repositories.RepositoriesInterfaces;
+using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
 

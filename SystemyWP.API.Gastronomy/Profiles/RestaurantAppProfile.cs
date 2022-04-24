@@ -1,10 +1,10 @@
 using System.Linq;
 using AutoMapper;
+using SystemyWP.API.Gastronomy.Data.DTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
+using SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
-using SystemyWP.API.Gastronomy.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.DTOs.IngredientDTOs;
-using SystemyWP.API.Gastronomy.DTOs.MenuDTOs;
 
 namespace SystemyWP.API.Gastronomy.Profiles;
 

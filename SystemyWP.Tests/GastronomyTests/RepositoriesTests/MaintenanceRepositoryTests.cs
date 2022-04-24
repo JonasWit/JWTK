@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using SystemyWP.API.Gastronomy.Data;
+using SystemyWP.API.Gastronomy.Data.DTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
-using SystemyWP.API.Gastronomy.Repositories;
+using SystemyWP.API.Gastronomy.Data.Repositories;
 using SystemyWP.Tests.Utilities;
 using Xunit;
 

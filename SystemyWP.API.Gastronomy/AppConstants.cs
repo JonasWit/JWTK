@@ -28,6 +28,8 @@
             public const string GetDishException = "GET Dish Failed";
             public const string CountDishesException = "COUNT Dishes Failed";
             public const string GetDishesException = "GET Dishes Failed";
+            public const string AddDishIngredientException = "ADD Dish Ingredient Failed";  
+            public const string RemoveDishIngredientException = "REMOVE Dish Ingredient Failed";  
             
             public const string CreateMenuException = "CREATE Menu Failed";
             public const string UpdateMenuException = "UPDATE Menu Failed";
@@ -35,6 +37,8 @@
             public const string GetMenuException = "GET Menu Failed";
             public const string CountMenusException = "COUNT Menus Failed";
             public const string GetMenusException = "GET Menus Failed";
+            public const string AddMenuDishException = "ADD Menu Dish Failed";         
+            public const string RemoveMenuDishException = "REMOVE Menu Dish Failed";                  
         }
     }
 }

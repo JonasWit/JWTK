@@ -1,6 +1,4 @@
-using SystemyWP.API.Constants;
-
-namespace SystemyWP.API.Data.DTOs.Gastronomy;
+namespace SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
 
 public class IngredientCreateDto
 {
@@ -12,7 +10,6 @@ public class IngredientCreateDto
 
     public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
 
-    public int PricePerStack { get; set; }
-    
-    public double StackSize { get; set; }
+    public float PricePerStack { get; set; }
+    public float StackSize { get; set; }
 }

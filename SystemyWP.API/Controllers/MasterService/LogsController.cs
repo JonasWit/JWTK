@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
-using SystemyWP.API.Services.HttpClients;
 
 namespace SystemyWP.API.Controllers.MasterService;
 

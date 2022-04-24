@@ -4,14 +4,11 @@ using SystemyWP.API.Data.DTOs.Gastronomy;
 
 namespace SystemyWP.API.FluentValidations.GastronomyService;
 
-public class IngredientCreateValidation : AbstractValidator<IngredientCreateDto>
+public class DishCreateValidation : AbstractValidator<DishCreateDto>
 {
-    public IngredientCreateValidation()
+    public DishCreateValidation()
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(AppConstants.DataLimits.NameLimit);
         RuleFor(x => x.Description).NotEmpty().MaximumLength(AppConstants.DataLimits.DescriptionLimit);
-        RuleFor(x => x.MeasurementUnits).IsInEnum();
-        RuleFor(x => x.PricePerStack).NotNull().InclusiveBetween(0, 1000000);     
-        RuleFor(x => x.StackSize).NotNull().InclusiveBetween(0.001, 1000000);   
     }
 }

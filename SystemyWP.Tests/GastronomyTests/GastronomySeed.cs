@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using SystemyWP.API.Gastronomy.Data.DTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.DTOs;
 
 namespace SystemyWP.Tests.GastronomyTests;
 
