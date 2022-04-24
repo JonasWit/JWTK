@@ -166,4 +166,18 @@ public class GastronomyHttpClient
         if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy Service GET Paginated Dishes Error");
         return await response.Content.ReadFromJsonAsync<List<DishServiceDto>>();
     }
+    
+    public async Task<HttpStatusCode> AddIngredientToDish(DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.AddIngredientToDish, dishIngredientUpdateDto));
+        return response.StatusCode;
+    }
+    
+    public async Task<HttpStatusCode> RemoveIngredientFromDish(DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.RemoveIngredientFromDish, dishIngredientUpdateDto));
+        return response.StatusCode;
+    }
 }

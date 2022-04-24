@@ -22,7 +22,6 @@ public class UrlService
     public struct GastronomyService
     {
         public const string BaseIngredientController = "ingredient";
-        public const string BaseDishController = "dish";
         
         public static string GetIngredient(ResourceAccessPass pass) => $"{BaseIngredientController}/{pass.AccessKey}/{pass.Id}";
         public static string DeleteIngredient(ResourceAccessPass pass) => $"{BaseIngredientController}/{pass.AccessKey}/{pass.Id}";
@@ -30,11 +29,16 @@ public class UrlService
         public static string CountIngredients(string accessKey) => $"{BaseIngredientController}/count/{accessKey}";
         public static string GetPaginatedIngredients(string accessKey, int cursor, int take) => $"{BaseIngredientController}/list/{accessKey}/{cursor}/{take}";
 
+        public const string BaseDishController = "dish";
+        public static string AddIngredientToDish = $"{BaseDishController}/add-ingredient";
+        public static string RemoveIngredientFromDish = $"{BaseDishController}/remove-ingredient";    
+        
         public static string GetDish(ResourceAccessPass pass) => $"{BaseDishController}/{pass.AccessKey}/{pass.Id}";
         public static string DeleteDish(ResourceAccessPass pass) => $"{BaseDishController}/{pass.AccessKey}/{pass.Id}";       
         public static string GetDishes(string accessKey) => $"{BaseDishController}/list/{accessKey}";
         public static string CountDishes(string accessKey) => $"{BaseDishController}/count/{accessKey}";
         public static string GetPaginatedDishes(string accessKey, int cursor, int take) => $"{BaseDishController}/list/{accessKey}/{cursor}/{take}";
+        
     }
     
     

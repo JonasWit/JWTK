@@ -209,9 +209,55 @@ public class GastronomyDishesController : ApiControllerBase
         }
     }
     
+    [HttpPost("add-ingredient", Name = "AddDishIngredient")]
+    public async Task<IActionResult> AddDishIngredient([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            dishIngredientUpdateDto.AccessKey = key;
+            
+            var responseCode = await _gastronomyHttpClient.AddIngredientToDish(dishIngredientUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception("AddDishIngredient Error - Service Error"),
+                _ => throw new Exception("AddDishIngredient Error - Unsupported Status Code")
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "AddDishIngredient Error");
+            return Problem("AddDishIngredient Error");
+        }
+    }
     
-    
-    
+    [HttpPost("remove-ingredient", Name = "RemoveDishIngredient")]
+    public async Task<IActionResult> RemoveDishIngredient([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    {
+        try
+        {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            dishIngredientUpdateDto.AccessKey = key;
+            
+            var responseCode = await _gastronomyHttpClient.RemoveIngredientFromDish(dishIngredientUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception("RemoveDishIngredient Error - Service Error"),
+                _ => throw new Exception("RemoveDishIngredient Error - Unsupported Status Code")
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "RemoveDishIngredient Error");
+            return Problem("RemoveDishIngredient Error");
+        }
+    }  
     
     
     
