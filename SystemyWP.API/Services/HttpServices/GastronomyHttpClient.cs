@@ -45,6 +45,8 @@ public class GastronomyHttpClient
         }
     }
 
+    #region Ingredients
+
     public async Task<IngredientDto> CreateIngredient(IngredientCreateDto ingredientCreateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
@@ -106,6 +108,10 @@ public class GastronomyHttpClient
         return response.StatusCode;
     }
     
+    #endregion
+    
+    #region Dishes
+
     public async Task<DishDto> CreateDish(DishCreateDto dishCreateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
@@ -180,4 +186,13 @@ public class GastronomyHttpClient
             => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.RemoveIngredientFromDish, dishIngredientUpdateDto));
         return response.StatusCode;
     }
+    
+    #endregion
+
+    #region Menus
+
+    
+
+    #endregion
+    
 }
