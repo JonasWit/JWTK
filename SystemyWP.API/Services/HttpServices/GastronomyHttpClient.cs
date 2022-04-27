@@ -28,6 +28,8 @@ public class GastronomyHttpClient
         _httpClient.BaseAddress = new Uri(clusterServicesSettings.CurrentValue.GastronomyService);
     }
 
+    #region Maintenance
+    
     public async Task<string> GetHealthCheckResponse()
     {
         try
@@ -45,6 +47,12 @@ public class GastronomyHttpClient
         }
     }
 
+    
+    
+    
+
+    #endregion
+    
     #region Ingredients
 
     public async Task<IngredientDto> CreateIngredient(IngredientCreateDto ingredientCreateDto)
@@ -193,6 +201,11 @@ public class GastronomyHttpClient
 
     
 
+    
+    
+    
+    
+    
     #endregion
     
 }
