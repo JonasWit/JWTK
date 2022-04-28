@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.Gastronomy;
+using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
+using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
+using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Settings;
@@ -46,11 +49,7 @@ public class GastronomyHttpClient
             return AppConstants.ServiceResponses.ErrorResponse;
         }
     }
-
     
-    
-    
-
     #endregion
     
     #region Ingredients
@@ -199,9 +198,41 @@ public class GastronomyHttpClient
 
     #region Menus
 
+    public async Task<MenuDto> CreateMenu(MenuCreateDto menuCreateDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.BaseMenuController, menuCreateDto));
     
-
+        if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy Service CREATE Menu Error");
+        return await response.Content.ReadFromJsonAsync<MenuDto>();
+    }  
     
+    public async Task<DishServiceDto> GetMenu(ResourceAccessPass resourceAccessPass)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(UrlService.GastronomyService.GetMenu(resourceAccessPass)));
+    
+        if (response.StatusCode == HttpStatusCode.BadRequest) return null;
+        if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy Service GET Dish Error");
+        return await response.Content.ReadFromJsonAsync<DishServiceDto>();
+    }
+    
+    public async Task<HttpStatusCode> RemoveMenu(ResourceAccessPass resourceAccessPass)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.DeleteAsync(UrlService.GastronomyService.DeleteMenu(resourceAccessPass)));
+        return response.StatusCode;
+    }
+    
+    public async Task<List<MenuServiceDto>> GetMenus(string accessKey)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.GetAsync(UrlService.GastronomyService.GetMenus(accessKey)));
+    
+        if (response.StatusCode == HttpStatusCode.BadRequest) return null;
+        if (!response.IsSuccessStatusCode) throw new Exception("Gastronomy Service GET Menus Error");
+        return await response.Content.ReadFromJsonAsync<List<MenuServiceDto>>();
+    }
     
     
     
