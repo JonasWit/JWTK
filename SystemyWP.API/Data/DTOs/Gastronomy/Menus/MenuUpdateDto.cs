@@ -1,6 +1,6 @@
-namespace SystemyWP.API.Data.DTOs.Gastronomy;
+namespace SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 
-public class DishUpdateDto
+public class MenuUpdateDto
 {
     public string AccessKey { get; set; }
     public long Id { get; set; }

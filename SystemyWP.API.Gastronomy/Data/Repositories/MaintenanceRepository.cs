@@ -11,8 +11,8 @@ public class MaintenanceRepository: RepositoryBase<AppDbContext>, IMaintenanceRe
 
     public void RemoveAllData(string accessKey)
     {
-        _context.RemoveRange(_context.Ingredients.Where(ing => ing.AccessKey == accessKey));
-        _context.RemoveRange(_context.Dishes.Where(ing => ing.AccessKey == accessKey));
-        _context.RemoveRange(_context.Menus.Where(ing => ing.AccessKey == accessKey));
+        _context.RemoveRange(_context.Ingredients.Where(ingredient => ingredient.AccessKey == accessKey));
+        _context.RemoveRange(_context.Dishes.Where(dish => dish.AccessKey == accessKey));
+        _context.RemoveRange(_context.Menus.Where(menu => menu.AccessKey == accessKey));
     }
 }

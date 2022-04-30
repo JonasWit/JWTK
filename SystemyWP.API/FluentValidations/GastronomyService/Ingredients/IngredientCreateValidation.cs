@@ -1,14 +1,14 @@
 using FluentValidation;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.Gastronomy;
+using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 
 namespace SystemyWP.API.FluentValidations.GastronomyService;
 
-public class IngredientValidation: AbstractValidator<IngredientDto>
+public class IngredientCreateValidation : AbstractValidator<IngredientCreateDto>
 {
-    public IngredientValidation()
+    public IngredientCreateValidation()
     {
-        RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.Name).NotEmpty().MaximumLength(AppConstants.DataLimits.NameLimit);
         RuleFor(x => x.Description).NotEmpty().MaximumLength(AppConstants.DataLimits.DescriptionLimit);
         RuleFor(x => x.MeasurementUnits).IsInEnum();

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.Data.DTOs.Gastronomy;
+using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.HttpServices;

@@ -39,6 +39,13 @@ public class UrlService
         public static string CountDishes(string accessKey) => $"{BaseDishController}/count/{accessKey}";
         public static string GetPaginatedDishes(string accessKey, int cursor, int take) => $"{BaseDishController}/list/{accessKey}/{cursor}/{take}";
         
+        public const string BaseMenuController = "menu";
+        public static string AddDishToMenu = $"{BaseMenuController}/add-dish";
+        public static string RemoveDishFromMenu = $"{BaseMenuController}/remove-dish";   
+        
+        public static string GetMenu(ResourceAccessPass pass) => $"{BaseMenuController}/{pass.AccessKey}/{pass.Id}";   
+        public static string DeleteMenu(ResourceAccessPass pass) => $"{BaseMenuController}/{pass.AccessKey}/{pass.Id}";      
+        public static string GetMenus(string accessKey) => $"{BaseMenuController}/list/{accessKey}";
     }
     
     
