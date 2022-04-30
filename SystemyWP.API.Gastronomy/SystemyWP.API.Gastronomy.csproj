@@ -27,8 +27,6 @@
 
     <ItemGroup>
         <Folder Include="Secrets" />
-    </ItemGroup>
-    <ItemGroup>
         <InternalsVisibleTo Include="SystemyWP.Tests" />
     </ItemGroup>
 </Project>

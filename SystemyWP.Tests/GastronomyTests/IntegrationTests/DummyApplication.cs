@@ -6,7 +6,7 @@ using SystemyWP.API.Gastronomy.Data;
 
 namespace SystemyWP.Tests.GastronomyTests.IntegrationTests;
 
-public class MockedGastronomyApplication: WebApplicationFactory<Program>
+internal class MockedGastronomyApplication: WebApplicationFactory<Program>
 {
     private readonly string _environment;
     
