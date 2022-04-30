@@ -142,6 +142,87 @@ public class GastronomyMenusController : ApiControllerBase
         }
     }
     
+    [HttpGet("count", Name = "CountMenus")]
+    public async Task<IActionResult> CountMenus()
+    {
+        try
+        {
+            throw new NotImplementedException();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "CountMenus Error");
+            return Problem("CountMenus Error");
+        }
+    }
+    
+    [HttpPut(Name = "UpdateMenu")]
+    public async Task<IActionResult> UpdateMenu([FromBody] MenuUpdateDto menuUpdateDto)
+    {
+        try
+        {
+
+            throw new NotImplementedException();     
+            
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "UpdateMenu Error");
+            return Problem("UpdateMenu Error");
+        }
+    }
+    
+    [HttpGet("list/{cursor:int}/{take:int}", Name = "GetPaginatedMenus")]
+    public async Task<IActionResult> GetPaginatedMenus(int cursor, int take)
+    {
+        try
+        {
+            throw new NotImplementedException();     
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "GetPaginatedMenus Error");
+            return Problem("GetPaginatedMenus Error");
+        }
+    }
+    
+    [HttpPost("add-dish", Name = "AddMenuDish")]
+    public async Task<IActionResult> AddMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    {
+        try
+        {
+            
+            
+            
+            throw new NotImplementedException();     
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "AddMenuDish Error");
+            return Problem("AddMenuDish Error");
+        }
+    }
+    
+    
+    [HttpPost("remove-dish", Name = "RemoveMenuDish")]
+    public async Task<IActionResult> RemoveMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    {
+        try
+        {
+            
+            
+            
+            
+            throw new NotImplementedException();    
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "RemoveMenuDish Error");
+            return Problem("RemoveMenuDish Error");
+        }
+    }  
+    
+    
     
     
     
