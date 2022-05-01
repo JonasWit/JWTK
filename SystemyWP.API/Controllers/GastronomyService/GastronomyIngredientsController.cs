@@ -52,8 +52,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CreateIngredient Error");
-            return Problem("CreateIngredient Error");
+            _logger.LogError(e, $"{nameof(CreateIngredient)} Error");
+            return Problem($"{nameof(CreateIngredient)} Error");
         }
     }
     
@@ -72,8 +72,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetIngredient Error");
-            return Problem("GetIngredient Error");
+            _logger.LogError(e, $"{nameof(GetIngredient)} Error");
+            return Problem($"{nameof(GetIngredient)} Error");
         }
     }
     
@@ -91,8 +91,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetIngredients Error");
-            return Problem("GetIngredients Error");
+            _logger.LogError(e, $"{nameof(GetIngredients)} Error");
+            return Problem($"{nameof(GetIngredients)} Error");
         }
     }
     
@@ -110,8 +110,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CountIngredients Error");
-            return Problem("CountIngredients Error");
+            _logger.LogError(e, $"{nameof(CountIngredients)} Error");
+            return Problem($"{nameof(CountIngredients)} Error");
         }
     }
     
@@ -129,8 +129,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetPaginatedIngredients Error");
-            return Problem("GetPaginatedIngredients Error");
+            _logger.LogError(e, $"{nameof(GetPaginatedIngredients)} Error");
+            return Problem($"{nameof(GetPaginatedIngredients)} Error");
         }
     }
     
@@ -153,21 +153,21 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "RemoveIngredient Error");
-            return Problem("RemoveIngredient Error");
+            _logger.LogError(e, $"{nameof(RemoveIngredient)} Error");
+            return Problem($"{nameof(RemoveIngredient)} Error");
         }
     }
     
     [HttpPut(Name = "UpdateIngredient")]
-    public async Task<IActionResult> UpdateIngredient([FromBody] IngredientDto ingredientDto)
+    public async Task<IActionResult> UpdateIngredient([FromBody] IngredientUpdateDto ingredientUpdateDto)
     {
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-            ingredientDto.AccessKey = key;
+            ingredientUpdateDto.AccessKey = key;
             
-            var responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientDto);
+            var responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),
@@ -178,8 +178,8 @@ public class GastronomyIngredientsController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "UpdateIngredient Error");
-            return Problem("UpdateIngredient Error");
+            _logger.LogError(e, $"{nameof(UpdateIngredient)} Error");
+            return Problem($"{nameof(UpdateIngredient)} Error");
         }
     }
     

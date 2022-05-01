@@ -60,8 +60,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CreateMenu Error");
-            return Problem("CreateMenu Error");
+            _logger.LogError(e, $"{nameof(CreateMenu)} Error");
+            return Problem($"{nameof(CreateMenu)} Error");
         }
     }
     
@@ -86,8 +86,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetMenu Error");
-            return Problem("GetMenu Error");
+            _logger.LogError(e, $"{nameof(GetMenu)} Error");
+            return Problem($"{nameof(GetMenu)} Error");
         }
     }
     
@@ -110,8 +110,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "RemoveMenu Error");
-            return Problem("RemoveMenu Error");
+            _logger.LogError(e, $"{nameof(RemoveMenu)} Error");
+            return Problem($"{nameof(RemoveMenu)} Error");
         }
     }
     
@@ -137,8 +137,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetMenus Error");
-            return Problem("GetMenus Error");
+            _logger.LogError(e, $"{nameof(GetMenus)} Error");
+            return Problem($"{nameof(GetMenus)} Error");
         }
     }
     
@@ -151,8 +151,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CountMenus Error");
-            return Problem("CountMenus Error");
+            _logger.LogError(e, $"{nameof(CountMenus)} Error");
+            return Problem($"{nameof(CountMenus)} Error");
         }
     }
     
@@ -167,8 +167,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "UpdateMenu Error");
-            return Problem("UpdateMenu Error");
+            _logger.LogError(e, $"{nameof(UpdateMenu)} Error");
+            return Problem($"{nameof(UpdateMenu)} Error");
         }
     }
     
@@ -181,8 +181,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetPaginatedMenus Error");
-            return Problem("GetPaginatedMenus Error");
+            _logger.LogError(e, $"{nameof(GetPaginatedMenus)} Error");
+            return Problem($"{nameof(GetPaginatedMenus)} Error");
         }
     }
     
@@ -198,8 +198,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "AddMenuDish Error");
-            return Problem("AddMenuDish Error");
+            _logger.LogError(e, $"{nameof(AddMenuDish)} Error");
+            return Problem($"{nameof(AddMenuDish)} Error");
         }
     }
     
@@ -217,8 +217,8 @@ public class GastronomyMenusController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "RemoveMenuDish Error");
-            return Problem("RemoveMenuDish Error");
+            _logger.LogError(e, $"{nameof(RemoveMenuDish)} Error");
+            return Problem($"{nameof(RemoveMenuDish)} Error");
         }
     }  
     

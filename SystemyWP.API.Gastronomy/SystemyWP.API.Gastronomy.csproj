@@ -27,6 +27,6 @@
 
     <ItemGroup>
         <Folder Include="Secrets" />
-        <InternalsVisibleTo Include="SystemyWP.Tests" />
+        <InternalsVisibleTo Include="SystemyWP.API.Gastronomy.Tests" />
     </ItemGroup>
 </Project>
