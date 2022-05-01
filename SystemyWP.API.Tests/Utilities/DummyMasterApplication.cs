@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SystemyWP.API.Gastronomy.Data;
+using SystemyWP.API.Data;
 using SystemyWP.API.Services.HttpServices;
 
 namespace SystemyWP.API.Tests.Utilities;
@@ -11,7 +11,7 @@ internal class DummyMasterApplication : WebApplicationFactory<Program>
 {
     private readonly string _environment;
 
-    public DummyMasterApplication(string environment = "Test")
+    public DummyMasterApplication(string environment = "Development")
     {
         _environment = environment;
     }
@@ -29,16 +29,6 @@ internal class DummyMasterApplication : WebApplicationFactory<Program>
                     .UseApplicationServiceProvider(sp)
                     .Options;
             });
-
-            services.AddHttpClient("TEST", config =>
-            {
-                
-            });
-            
-            services.AddHttpClient<GastronomyHttpClient>();
-
-
-
         });
 
         return base.CreateHost(builder);

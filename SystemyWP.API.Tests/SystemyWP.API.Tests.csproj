@@ -25,7 +25,6 @@
 
     <ItemGroup>
       <Folder Include="AuthTests" />
-      <Folder Include="IntegrationServicesTests" />
     </ItemGroup>
 
     <ItemGroup>

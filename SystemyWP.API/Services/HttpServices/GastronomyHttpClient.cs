@@ -28,10 +28,7 @@ public class GastronomyHttpClient
     {
         _httpClient = httpClient;
         _httpClientPolicy = httpClientPolicy;
-        if (!string.IsNullOrEmpty(clusterServicesSettings.CurrentValue.GastronomyService))
-        {
-            _httpClient.BaseAddress = new Uri(clusterServicesSettings.CurrentValue.GastronomyService);
-        }
+        _httpClient.BaseAddress = new Uri(clusterServicesSettings.CurrentValue.GastronomyService);
     }
 
     #region Maintenance
