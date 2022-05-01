@@ -4,9 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API", "SystemyWP.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Gastronomy", "SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj", "{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Tests", "SystemyWP.API.Tests\SystemyWP.API.Tests.csproj", "{49D615AF-4E14-4408-AF22-96C7B0BF7AA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Gastronomy.Tests", "SystemyWP.API.Gastronomy.Tests\SystemyWP.API.Gastronomy.Tests.csproj", "{B780BAF5-30B2-4D39-8CB9-00009280342D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Gastronomy.Tests", "SystemyWP.API.Gastronomy.Tests\SystemyWP.API.Gastronomy.Tests.csproj", "{505EB859-11FE-4C25-BB72-E29CA3B63119}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Tests", "SystemyWP.API.Tests\SystemyWP.API.Tests.csproj", "{21865C31-08A8-45F7-9A35-4566D26E58EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,13 +22,13 @@ Global
 		{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49D615AF-4E14-4408-AF22-96C7B0BF7AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49D615AF-4E14-4408-AF22-96C7B0BF7AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49D615AF-4E14-4408-AF22-96C7B0BF7AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49D615AF-4E14-4408-AF22-96C7B0BF7AA6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{505EB859-11FE-4C25-BB72-E29CA3B63119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{505EB859-11FE-4C25-BB72-E29CA3B63119}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{505EB859-11FE-4C25-BB72-E29CA3B63119}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{505EB859-11FE-4C25-BB72-E29CA3B63119}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21865C31-08A8-45F7-9A35-4566D26E58EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21865C31-08A8-45F7-9A35-4566D26E58EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21865C31-08A8-45F7-9A35-4566D26E58EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21865C31-08A8-45F7-9A35-4566D26E58EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

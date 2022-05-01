@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Gastronomy.Data;
 
-namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests.IntegrationTests;
+namespace SystemyWP.API.Gastronomy.Tests.Utilities;
 
 internal class DummyGastronomyApplication : WebApplicationFactory<Program>
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
@@ -55,15 +56,10 @@ if (builder.Environment.IsProduction())
 
         config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
             .MinimumLevel.Information();
-
-        if (builder.Environment.IsDevelopment())
-        {
-            config.WriteTo.Console();
-        }
     });  
 }
 
-if (builder.Environment.IsDevelopment())
+if (!builder.Environment.IsProduction())
 {
     builder.Host.UseSerilog((context, config) =>
     {
