@@ -197,3 +197,4 @@ Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", 
 Console.WriteLine("--> App has started...");
 
 app.Run();
+

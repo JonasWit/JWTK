@@ -25,10 +25,12 @@
 
     <ItemGroup>
       <Folder Include="AuthTests" />
+      <Folder Include="IntegrationServicesTests" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj" />
+      <ProjectReference Include="..\SystemyWP.API\SystemyWP.API.csproj" />
     </ItemGroup>
 
 </Project>

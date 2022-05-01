@@ -1,13 +1,13 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using SystemyWP.API.Gastronomy.Data;
 
 namespace SystemyWP.API.Tests.Utilities;
 
-internal class DummyGastronomyApplication : WebApplicationFactory<Program>
+internal class DummyGastronomyApplication : WebApplicationFactory<SystemyWP.API.Gastronomy.Program>
 {
     private readonly string _environment;
 
