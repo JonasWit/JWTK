@@ -1,9 +1,8 @@
 using FluentValidation;
 using SystemyWP.API.Constants;
-using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 
-namespace SystemyWP.API.FluentValidations.GastronomyService;
+namespace SystemyWP.API.FluentValidations.GastronomyService.Dishes;
 
 public class DishCreateValidation : AbstractValidator<DishCreateDto>
 {

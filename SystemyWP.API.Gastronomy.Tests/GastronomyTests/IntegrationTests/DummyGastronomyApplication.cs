@@ -4,13 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Gastronomy.Data;
 
-namespace SystemyWP.Tests.GastronomyTests.IntegrationTests;
+namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests.IntegrationTests;
 
-internal class MockedGastronomyApplication: WebApplicationFactory<Program>
+internal class DummyGastronomyApplication : WebApplicationFactory<Program>
 {
     private readonly string _environment;
-    
-    public MockedGastronomyApplication(string environment = "Development")
+
+    public DummyGastronomyApplication(string environment = "Development")
     {
         _environment = environment;
     }
@@ -18,12 +18,11 @@ internal class MockedGastronomyApplication: WebApplicationFactory<Program>
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.UseEnvironment(_environment);
-        
+
         builder.ConfigureServices(services =>
         {
             services.AddScoped(sp =>
             {
-                // Replace SQLite with in-memory database for tests
                 return new DbContextOptionsBuilder<AppDbContext>()
                     .UseInMemoryDatabase("gastronomy-in-memory-test-db")
                     .UseApplicationServiceProvider(sp)

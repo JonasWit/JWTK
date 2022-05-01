@@ -24,11 +24,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj" />
-      <ProjectReference Include="..\SystemyWP.API\SystemyWP.API.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="MasterTests" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SystemyWP.API.Gastronomy.Data.DTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.Tests.GastronomyTests;
+namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests;
 
 public class GastronomySeed
 {

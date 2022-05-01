@@ -63,10 +63,10 @@ public class GastronomyHttpClient
         return await response.Content.ReadFromJsonAsync<IngredientDto>();
     }
     
-    public async Task<HttpStatusCode> UpdateIngredient(IngredientDto ingredientDto)
+    public async Task<HttpStatusCode> UpdateIngredient(IngredientUpdateDto ingredientUpdateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
-            => _httpClient.PutAsJsonAsync(UrlService.GastronomyService.BaseIngredientController, ingredientDto));
+            => _httpClient.PutAsJsonAsync(UrlService.GastronomyService.BaseIngredientController, ingredientUpdateDto));
         return response.StatusCode;
     }
     

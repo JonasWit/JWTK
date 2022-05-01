@@ -56,8 +56,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CreateDish Error");
-            return Problem("CreateDish Error");
+            _logger.LogError(e, $"{nameof(CreateDish)} Error");
+            return Problem($"{nameof(CreateDish)} Error");
         }
     }
 
@@ -83,8 +83,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetDish Error");
-            return Problem("GetDish Error");
+            _logger.LogError(e, $"{nameof(GetDish)} Error");
+            return Problem($"{nameof(GetDish)} Error");
         }
     }
     
@@ -110,8 +110,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetDishes Error");
-            return Problem("GetDishes Error");
+            _logger.LogError(e, $"{nameof(GetDishes)} Error");
+            return Problem($"{nameof(GetDishes)} Error");
         }
     }
 
@@ -134,8 +134,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "RemoveDish Error");
-            return Problem("RemoveDish Error");
+            _logger.LogError(e, $"{nameof(RemoveDish)} Error");
+            return Problem($"{nameof(RemoveDish)} Error");
         }
     }
     
@@ -153,8 +153,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "CountIngredients Error");
-            return Problem("CountIngredients Error");
+            _logger.LogError(e, $"{nameof(CountDishes)} Error");
+            return Problem($"{nameof(CountDishes)} Error");
         }
     }
     
@@ -178,8 +178,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "UpdateDish Error");
-            return Problem("UpdateDish Error");
+            _logger.LogError(e, $"{nameof(UpdateDish)} Error");
+            return Problem($"{nameof(UpdateDish)} Error");
         }
     }
     
@@ -205,8 +205,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "GetPaginatedDishes Error");
-            return Problem("GetPaginatedDishes Error");
+            _logger.LogError(e, $"{nameof(GetPaginatedDishes)} Error");
+            return Problem($"{nameof(GetPaginatedDishes)} Error");
         }
     }
     
@@ -230,8 +230,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "AddDishIngredient Error");
-            return Problem("AddDishIngredient Error");
+            _logger.LogError(e, $"{nameof(AddDishIngredient)} Error");
+            return Problem($"{nameof(AddDishIngredient)} Error");
         }
     }
     
@@ -255,8 +255,8 @@ public class GastronomyDishesController : ApiControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "RemoveDishIngredient Error");
-            return Problem("RemoveDishIngredient Error");
+            _logger.LogError(e, $"{nameof(RemoveDishIngredient)} Error");
+            return Problem($"{nameof(RemoveDishIngredient)} Error");
         }
     }  
     
