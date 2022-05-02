@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -73,13 +74,7 @@ public class GastronomyMenusController : ApiControllerBase
             var menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass {Id = id, AccessKey = key});
             if (menuServiceDto is null) return NotFound();
             
-            return Ok(new MenuDto
-            {
-                Name = menuServiceDto.Name,
-                Id = menuServiceDto.Id,
-                Description = menuServiceDto.Description,
-                Dishes = menuServiceDto.Ingredients.Select(item => _urlService.DishPath("GastronomyDishes", item).ToString()).ToList(),
-            });
+            return Ok(_mapper.Map<MenuDto>(menuServiceDto));
         }
         catch (Exception e)
         {
@@ -120,16 +115,10 @@ public class GastronomyMenusController : ApiControllerBase
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
     
-            var response = await _gastronomyHttpClient.GetMenus(key);
-            if (response is null) return NotFound();
+            var menus = await _gastronomyHttpClient.GetMenus(key);
+            if (menus is null) return NotFound();
             
-            return Ok(response.Select(serviceDto => new MenuDto
-            {
-                Name = serviceDto.Name,
-                Id = serviceDto.Id,
-                Description = serviceDto.Description,
-                Dishes = serviceDto.Dishes.Select(item => _urlService.DishPath("GastronomyDishes", item).ToString()).ToList(),
-            }).ToList());
+            return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
         catch (Exception e)
         {
@@ -193,13 +182,7 @@ public class GastronomyMenusController : ApiControllerBase
             var menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
             if (menus is null) return NotFound();
             
-            return Ok(menus.Select(menuServiceDto => new MenuDto
-            {
-                Name = menuServiceDto.Name,
-                Id = menuServiceDto.Id,
-                Description = menuServiceDto.Description,
-                Dishes = menuServiceDto.Dishes.Select(item => _urlService.IngredientPath("GastronomyDishes", item).ToString()).ToList(),
-            }).ToList());  
+            return Ok(_mapper.Map<List<MenuDto>>(menus)); 
         }
         catch (Exception e)
         {
