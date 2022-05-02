@@ -6,6 +6,6 @@ public class IngredientCreateDto
     public string Name { get; set; }
     public string Description { get; set; }
     public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
-    public float PricePerStack { get; set; }
-    public float StackSize { get; set; }
+    public int PricePerStack { get; set; }
+    public double StackSize { get; set; }
 }

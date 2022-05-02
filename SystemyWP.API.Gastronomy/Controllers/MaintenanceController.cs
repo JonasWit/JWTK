@@ -36,8 +36,8 @@ public class MaintenanceController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.MaintenanceRemoveData);
-            return Problem(AppConstants.ResponseMessages.MaintenanceRemoveData);
+            _logger.LogError(e, $"{nameof(RemoveData)} Error");
+            return Problem($"{nameof(RemoveData)} Error");
         }
     }
     

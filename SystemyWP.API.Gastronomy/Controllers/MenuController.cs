@@ -31,10 +31,12 @@ public class MenuController : ControllerBase
     }
 
     [HttpPost(Name = "CreateMenu")]
-    public async Task<ActionResult<Ingredient>> CreateMenu([FromBody] MenuCreateDto menuCreateDto)
+    public async Task<ActionResult<MenuDto>> CreateMenu([FromBody] MenuCreateDto menuCreateDto)
     {
         try
         {
+            if (await _menuRepository.CountMenus(menuCreateDto.AccessKey) > AppConstants.RecordsLimits.Menu) return BadRequest();
+            
             var menu = _mapper.Map<Menu>(menuCreateDto);
             _menuRepository.CreateMenu(menu);
 
@@ -43,13 +45,13 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateMenuException);
-            return Problem(AppConstants.ResponseMessages.CreateMenuException);
+            _logger.LogError(e, $"{nameof(CreateMenu)} Error");
+            return Problem($"{nameof(CreateMenu)} Error");
         }
     }
 
     [HttpGet("{key}/{id:long}", Name = "GetMenu")]
-    public async Task<ActionResult<Ingredient>> GetMenu(string key, long id)
+    public async Task<ActionResult<MenuDto>> GetMenu(string key, long id)
     {
         try
         {
@@ -59,8 +61,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetMenuException);
-            return Problem(AppConstants.ResponseMessages.GetMenuException);
+            _logger.LogError(e, $"{nameof(GetMenu)} Error");
+            return Problem($"{nameof(GetMenu)} Error");
         }
     }
 
@@ -75,8 +77,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CountMenusException);
-            return Problem(AppConstants.ResponseMessages.CountMenusException);
+            _logger.LogError(e, $"{nameof(GetMenus)} Error");
+            return Problem($"{nameof(GetMenus)} Error");
         }
     }
 
@@ -89,13 +91,13 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetMenusException);
-            return Problem(AppConstants.ResponseMessages.GetMenusException);
+            _logger.LogError(e, $"{nameof(CountMenus)} Error");
+            return Problem($"{nameof(CountMenus)} Error");
         }
     }
 
     [HttpGet("list/{key}/{cursor:int}/{take:int}", Name = "GetPaginatedMenus")]
-    public async Task<ActionResult<DishDto>> GetPaginatedMenus(string key, int cursor, int take)
+    public async Task<ActionResult<MenuDto>> GetPaginatedMenus(string key, int cursor, int take)
     {
         try
         {
@@ -105,8 +107,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetMenusException);
-            return Problem(AppConstants.ResponseMessages.GetMenusException);
+            _logger.LogError(e, $"{nameof(GetPaginatedMenus)} Error");
+            return Problem($"{nameof(GetPaginatedMenus)} Error");
         }
     }
 
@@ -121,8 +123,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.RemoveDishException);
-            return Problem(AppConstants.ResponseMessages.RemoveDishException);
+            _logger.LogError(e, $"{nameof(RemoveMenu)} Error");
+            return Problem($"{nameof(RemoveMenu)} Error");
         }
     }
 
@@ -137,14 +139,13 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.UpdateMenuException);
-            return Problem(AppConstants.ResponseMessages.UpdateMenuException);
+            _logger.LogError(e, $"{nameof(UpdateMenu)} Error");
+            return Problem($"{nameof(UpdateMenu)} Error");
         }
     }
 
     [HttpPost("add-dish", Name = "AddDishToMenu")]
-    public async Task<ActionResult<Dish>> AddDishToMenu(
-        [FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    public async Task<IActionResult> AddDishToMenu([FromBody] MenuDishUpdateDto menuDishUpdateDto)
     {
         try
         {
@@ -155,14 +156,13 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.AddMenuDishException);
-            return Problem(AppConstants.ResponseMessages.AddMenuDishException);
+            _logger.LogError(e, $"{nameof(AddDishToMenu)} Error");
+            return Problem($"{nameof(AddDishToMenu)} Error");
         }
     }
 
     [HttpPost("remove-dish", Name = "RemoveDishFromMenu")]
-    public async Task<ActionResult<Dish>> RemoveDishFromMenu(
-        [FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    public async Task<IActionResult> RemoveDishFromMenu([FromBody] MenuDishUpdateDto menuDishUpdateDto)
     {
         try
         {
@@ -173,8 +173,8 @@ public class MenuController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.RemoveMenuDishException);
-            return Problem(AppConstants.ResponseMessages.RemoveMenuDishException);
+            _logger.LogError(e, $"{nameof(RemoveDishFromMenu)} Error");
+            return Problem($"{nameof(RemoveDishFromMenu)} Error");
         }
     }
 }
