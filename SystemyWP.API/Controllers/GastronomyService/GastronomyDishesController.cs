@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -99,17 +100,10 @@ public class GastronomyDishesController : ApiControllerBase
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
     
-            var dishServiceDtos = await _gastronomyHttpClient.GetDishes(key);
-            if (dishServiceDtos is null) return NotFound();
+            var dishes = await _gastronomyHttpClient.GetDishes(key);
+            if (dishes is null) return NotFound();
             
-            return Ok(dishServiceDtos.Select(dishServiceDto => new DishDto
-            {
-                Name = dishServiceDto.Name,
-                Id = dishServiceDto.Id,
-                Description = dishServiceDto.Description,
-                Ingredients = dishServiceDto.Ingredients.Select(item => _urlService.IngredientPath("GastronomyIngredients", item).ToString()).ToList(),
-                Menus = dishServiceDto.Menus.Select(item => _urlService.IngredientPath("GastronomyMenus", item).ToString()).ToList(),
-            }).ToList());
+            return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
         {
@@ -197,14 +191,7 @@ public class GastronomyDishesController : ApiControllerBase
             var dishes = await _gastronomyHttpClient.GetPaginatedDishes(key, cursor, take);
             if (dishes is null) return NotFound();
             
-            return Ok(dishes.Select(dishServiceDto => new DishDto
-            {
-                Name = dishServiceDto.Name,
-                Id = dishServiceDto.Id,
-                Description = dishServiceDto.Description,
-                Ingredients = dishServiceDto.Ingredients.Select(item => _urlService.IngredientPath("GastronomyIngredients", item).ToString()).ToList(),
-                Menus = dishServiceDto.Menus.Select(item => _urlService.IngredientPath("GastronomyMenus", item).ToString()).ToList(),
-            }).ToList());
+            return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
         {

@@ -210,14 +210,14 @@ public class GastronomyHttpClient
         return await response.Content.ReadFromJsonAsync<MenuDto>();
     }
 
-    public async Task<DishServiceDto> GetMenu(ResourceAccessPass resourceAccessPass)
+    public async Task<MenuServiceDto> GetMenu(ResourceAccessPass resourceAccessPass)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.GetAsync(UrlService.GastronomyService.GetMenu(resourceAccessPass)));
 
         if (response.StatusCode == HttpStatusCode.BadRequest) return null;
         if (!response.IsSuccessStatusCode) throw new Exception(ErrorMessage(nameof(GetMenu)));
-        return await response.Content.ReadFromJsonAsync<DishServiceDto>();
+        return await response.Content.ReadFromJsonAsync<MenuServiceDto>();
     }
 
     public async Task<HttpStatusCode> RemoveMenu(ResourceAccessPass resourceAccessPass)

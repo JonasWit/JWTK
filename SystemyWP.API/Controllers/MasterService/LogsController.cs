@@ -18,19 +18,19 @@ public class LogsController : ApiControllerBase
         _logger = logger;
     }
     
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        try
-        {
-            return Ok("test");
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "");
-            return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
-        }
-    }
+    // [HttpGet]
+    // public async Task<IActionResult> Get()
+    // {
+    //     try
+    //     {
+    //         return Ok("test");
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         _logger.LogError(e, "");
+    //         return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+    //     }
+    // }
     
     
 }

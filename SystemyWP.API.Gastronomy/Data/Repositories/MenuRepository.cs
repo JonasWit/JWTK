@@ -25,7 +25,9 @@ public class MenuRepository : RepositoryBase<AppDbContext>, IMenuRepository
     }
 
     public Task<Menu> GetMenu(ResourceAccessPass resourceAccessPass) => 
-        _context.Menus.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        _context.Menus
+            .Include(d => d.Dishes)
+            .FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
 
     public Task<List<Menu>> GetMenus(string accessKey)=> _context.Menus
         .Where(d => d.AccessKey == accessKey)
