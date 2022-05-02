@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Middleware;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -26,6 +27,7 @@ using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Policies;
+using SystemyWP.API.Profiles;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
@@ -82,6 +84,13 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configu
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new GastronomyServiceProfile(provider.GetService<UrlService>()));
+}).CreateMapper());
+
+
 builder.Services.AddSingleton(new HttpClientPolicy());
 
 builder.Services.AddDataProtection()

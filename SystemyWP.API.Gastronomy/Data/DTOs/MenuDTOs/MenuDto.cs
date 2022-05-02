@@ -5,5 +5,5 @@ namespace SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
 
 public class MenuDto : MenuBasicDto
 {
-    public List<Dish> Dishes { get; set; } = new();
+    public List<long> Dishes { get; set; } = new();
 }

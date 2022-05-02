@@ -261,6 +261,21 @@ public class GastronomyHttpClient
         if (!response.IsSuccessStatusCode) throw new Exception(ErrorMessage(nameof(GetPaginatedMenus)));
         return await response.Content.ReadFromJsonAsync<List<MenuServiceDto>>();
     }
+    
+    public async Task<HttpStatusCode> AddDishToMenu(MenuDishUpdateDto menuDishUpdateDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.AddDishToMenu, menuDishUpdateDto));
+        return response.StatusCode;
+    }
+
+    public async Task<HttpStatusCode> RemoveDishFromMenu(MenuDishUpdateDto menuDishUpdateDto)
+    {
+        var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
+            => _httpClient.PostAsJsonAsync(UrlService.GastronomyService.RemoveDishFromMenu,
+                menuDishUpdateDto));
+        return response.StatusCode;
+    }
 
     #endregion
 }

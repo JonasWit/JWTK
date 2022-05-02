@@ -227,8 +227,8 @@ public class GastronomyDishesController : ApiControllerBase
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception("AddDishIngredient Error - Service Error"),
-                _ => throw new Exception("AddDishIngredient Error - Unsupported Status Code")
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddDishIngredient)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(AddDishIngredient)} Error - Unsupported Status Code")
             };
         }
         catch (Exception e)
@@ -250,10 +250,10 @@ public class GastronomyDishesController : ApiControllerBase
             var responseCode = await _gastronomyHttpClient.RemoveIngredientFromDish(dishIngredientUpdateDto);
             return responseCode switch
             {
-                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.NoContent => NoContent(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception("RemoveDishIngredient Error - Service Error"),
-                _ => throw new Exception("RemoveDishIngredient Error - Unsupported Status Code")
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Unsupported Status Code")
             };
         }
         catch (Exception e)

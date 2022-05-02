@@ -130,7 +130,6 @@ public class GastronomyMenusController : ApiControllerBase
                 Description = serviceDto.Description,
                 Dishes = serviceDto.Dishes.Select(item => _urlService.DishPath("GastronomyDishes", item).ToString()).ToList(),
             }).ToList());
-            
         }
         catch (Exception e)
         {
@@ -214,10 +213,18 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuDishUpdateDto.AccessKey = key;
             
-            
-            
-            throw new NotImplementedException();     
+            var responseCode = await _gastronomyHttpClient.AddDishToMenu(menuDishUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddMenuDish)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(AddMenuDish)} Error - Unsupported Status Code")
+            };   
         }
         catch (Exception e)
         {
@@ -226,17 +233,23 @@ public class GastronomyMenusController : ApiControllerBase
         }
     }
     
-    
     [HttpPost("remove-dish", Name = "RemoveMenuDish")]
     public async Task<IActionResult> RemoveMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
     {
         try
         {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuDishUpdateDto.AccessKey = key;
             
-            
-            
-            
-            throw new NotImplementedException();    
+            var responseCode = await _gastronomyHttpClient.RemoveDishFromMenu(menuDishUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.NoContent => NoContent(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveMenuDish)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(RemoveMenuDish)} Error - Unsupported Status Code")
+            };
         }
         catch (Exception e)
         {
