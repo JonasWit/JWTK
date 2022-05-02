@@ -46,6 +46,9 @@ public class UrlService
         public static string GetMenu(ResourceAccessPass pass) => $"{BaseMenuController}/{pass.AccessKey}/{pass.Id}";   
         public static string DeleteMenu(ResourceAccessPass pass) => $"{BaseMenuController}/{pass.AccessKey}/{pass.Id}";      
         public static string GetMenus(string accessKey) => $"{BaseMenuController}/list/{accessKey}";
+        public static string CountMenus(string accessKey) => $"{BaseMenuController}/count/{accessKey}";
+        public static string GetPaginatedMenus(string accessKey, int cursor, int take) => $"{BaseMenuController}/list/{accessKey}/{cursor}/{take}";      
+        
     }
     
     

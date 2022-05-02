@@ -144,7 +144,12 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            throw new NotImplementedException();
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+    
+            var elementCountDto = await _gastronomyHttpClient.CountMenus(key);
+            if (elementCountDto is null) return NotFound();
+            return Ok(elementCountDto);
         }
         catch (Exception e)
         {
@@ -158,9 +163,18 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-
-            throw new NotImplementedException();     
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuUpdateDto.AccessKey = key;
             
+            var responseCode = await _gastronomyHttpClient.UpdateMenu(menuUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception("UpdateDish Error - Service Error"),
+                _ => throw new Exception("UpdateDish Error - Unsupported Status Code")
+            };
         }
         catch (Exception e)
         {
@@ -174,7 +188,19 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            throw new NotImplementedException();     
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+    
+            var menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
+            if (menus is null) return NotFound();
+            
+            return Ok(menus.Select(menuServiceDto => new MenuDto
+            {
+                Name = menuServiceDto.Name,
+                Id = menuServiceDto.Id,
+                Description = menuServiceDto.Description,
+                Dishes = menuServiceDto.Dishes.Select(item => _urlService.IngredientPath("GastronomyDishes", item).ToString()).ToList(),
+            }).ToList());  
         }
         catch (Exception e)
         {

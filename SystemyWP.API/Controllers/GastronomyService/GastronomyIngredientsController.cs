@@ -21,6 +21,8 @@ public class GastronomyIngredientsController : ApiControllerBase
     private readonly IMapper _mapper;
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyIngredientsController> _logger;
+    
+    private string ErrorMessage(string methodName) => $"Gastronomy Service Controller {methodName} Error";
 
     public GastronomyIngredientsController(
         IUserRepository userRepository,

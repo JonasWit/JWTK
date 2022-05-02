@@ -140,7 +140,7 @@ builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<UrlService>();
+builder.Services.AddSingleton<UrlService>();
 
 builder.Services.AddFileServices(configuration);
 
