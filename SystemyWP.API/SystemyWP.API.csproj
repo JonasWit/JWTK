@@ -34,5 +34,7 @@
 
     <ItemGroup>
         <Folder Include="Secrets" />
+        <InternalsVisibleTo Include="SystemyWP.API.Tests" />
     </ItemGroup>
+    
 </Project>

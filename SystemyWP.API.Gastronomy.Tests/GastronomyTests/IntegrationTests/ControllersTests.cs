@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using SystemyWP.API.Gastronomy.Data.DTOs;
 using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
+using SystemyWP.API.Gastronomy.Tests.Utilities;
 using Xunit;
 
 namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests.IntegrationTests;
@@ -108,6 +109,7 @@ public class ControllersTests
         // Assert
         Assert.NotEmpty(postResponses);
         Assert.NotEmpty(getResponses);
+        Assert.Equal(createdObjects.Count, getObjects.Count);
         Assert.All(postResponses, result => Assert.Equal(HttpStatusCode.OK, result.StatusCode));
         Assert.All(getResponses, result => Assert.Equal(HttpStatusCode.OK, result.StatusCode));
     }

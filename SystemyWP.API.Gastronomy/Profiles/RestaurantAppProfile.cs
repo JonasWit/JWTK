@@ -19,23 +19,23 @@ public class RestaurantAppProfile : Profile
         
         // Dish
         CreateMap<DishCreateDto, Dish>();
+        CreateMap<DishDto, Dish>();
+        CreateMap<DishBasicDto, Dish>();    
+        
         CreateMap<Dish, DishDto>()
             .ForMember(dest => dest.Ingredients,opt => opt.MapFrom(src => src.Ingredients.Select(i => i.Id)))
             .ForMember(dest => dest.Menus, opt => opt.MapFrom(src => src.Menus.Select(i => i.Id)));       
         
-        CreateMap<DishDto, Dish>();
-        CreateMap<DishBasicDto, Dish>();
-
         CreateMap<DishIngredientUpdateDto, ResourceAccessPass>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DishId));
         
         // Menu
         CreateMap<MenuCreateDto, Menu>();
+        CreateMap<MenuDto, Menu>();
+        CreateMap<MenuBasicDto, Menu>();           
+        
         CreateMap<Menu, MenuDto>()
             .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.Dishes.Select(i => i.Id)));
-
-        CreateMap<MenuDto, Menu>();
-        CreateMap<MenuBasicDto, Menu>();     
         
         CreateMap<MenuDishUpdateDto, ResourceAccessPass>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MenuId));

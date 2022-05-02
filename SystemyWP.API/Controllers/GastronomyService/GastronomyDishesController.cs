@@ -6,13 +6,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Constants;
+using Microsoft.Extensions.Options;
 using SystemyWP.API.Controllers.MasterService;
-using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.HttpServices;
+using SystemyWP.API.Settings;
 
 namespace SystemyWP.API.Controllers.GastronomyService;
 
@@ -20,6 +20,7 @@ namespace SystemyWP.API.Controllers.GastronomyService;
 [Route("[controller]")]
 public class GastronomyDishesController : ApiControllerBase
 {
+    private readonly IOptionsMonitor<ClusterServices> _clusterServicesSettings;
     private readonly UrlService _urlService;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -27,12 +28,14 @@ public class GastronomyDishesController : ApiControllerBase
     private readonly ILogger<GastronomyDishesController> _logger;
 
     public GastronomyDishesController(
+        IOptionsMonitor<ClusterServices> clusterServicesSettings,
         UrlService urlService,
         IUserRepository userRepository,
         IMapper mapper,
         GastronomyHttpClient gastronomyHttpClient,
         ILogger<GastronomyDishesController> logger)
     {
+        _clusterServicesSettings = clusterServicesSettings;
         _urlService = urlService;
         _userRepository = userRepository;
         _mapper = mapper;
@@ -191,10 +194,10 @@ public class GastronomyDishesController : ApiControllerBase
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
     
-            var dishServiceDtos = await _gastronomyHttpClient.GetPaginatedDishes(key, cursor, take);
-            if (dishServiceDtos is null) return NotFound();
+            var dishes = await _gastronomyHttpClient.GetPaginatedDishes(key, cursor, take);
+            if (dishes is null) return NotFound();
             
-            return Ok(dishServiceDtos.Select(dishServiceDto => new DishDto
+            return Ok(dishes.Select(dishServiceDto => new DishDto
             {
                 Name = dishServiceDto.Name,
                 Id = dishServiceDto.Id,
@@ -224,8 +227,8 @@ public class GastronomyDishesController : ApiControllerBase
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception("AddDishIngredient Error - Service Error"),
-                _ => throw new Exception("AddDishIngredient Error - Unsupported Status Code")
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddDishIngredient)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(AddDishIngredient)} Error - Unsupported Status Code")
             };
         }
         catch (Exception e)
@@ -247,10 +250,10 @@ public class GastronomyDishesController : ApiControllerBase
             var responseCode = await _gastronomyHttpClient.RemoveIngredientFromDish(dishIngredientUpdateDto);
             return responseCode switch
             {
-                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.NoContent => NoContent(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception("RemoveDishIngredient Error - Service Error"),
-                _ => throw new Exception("RemoveDishIngredient Error - Unsupported Status Code")
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Unsupported Status Code")
             };
         }
         catch (Exception e)

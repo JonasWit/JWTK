@@ -5,9 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Constants;
 using SystemyWP.API.Controllers.MasterService;
-using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
@@ -23,6 +21,8 @@ public class GastronomyIngredientsController : ApiControllerBase
     private readonly IMapper _mapper;
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyIngredientsController> _logger;
+    
+    private string ErrorMessage(string methodName) => $"Gastronomy Service Controller {methodName} Error";
 
     public GastronomyIngredientsController(
         IUserRepository userRepository,

@@ -6,10 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Constants;
 using SystemyWP.API.Controllers.MasterService;
-using SystemyWP.API.Data.DTOs.Gastronomy;
-using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
@@ -133,7 +130,6 @@ public class GastronomyMenusController : ApiControllerBase
                 Description = serviceDto.Description,
                 Dishes = serviceDto.Dishes.Select(item => _urlService.DishPath("GastronomyDishes", item).ToString()).ToList(),
             }).ToList());
-            
         }
         catch (Exception e)
         {
@@ -147,7 +143,12 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            throw new NotImplementedException();
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+    
+            var elementCountDto = await _gastronomyHttpClient.CountMenus(key);
+            if (elementCountDto is null) return NotFound();
+            return Ok(elementCountDto);
         }
         catch (Exception e)
         {
@@ -161,9 +162,18 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-
-            throw new NotImplementedException();     
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuUpdateDto.AccessKey = key;
             
+            var responseCode = await _gastronomyHttpClient.UpdateMenu(menuUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception("UpdateDish Error - Service Error"),
+                _ => throw new Exception("UpdateDish Error - Unsupported Status Code")
+            };
         }
         catch (Exception e)
         {
@@ -177,7 +187,19 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            throw new NotImplementedException();     
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+    
+            var menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
+            if (menus is null) return NotFound();
+            
+            return Ok(menus.Select(menuServiceDto => new MenuDto
+            {
+                Name = menuServiceDto.Name,
+                Id = menuServiceDto.Id,
+                Description = menuServiceDto.Description,
+                Dishes = menuServiceDto.Dishes.Select(item => _urlService.IngredientPath("GastronomyDishes", item).ToString()).ToList(),
+            }).ToList());  
         }
         catch (Exception e)
         {
@@ -191,10 +213,18 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuDishUpdateDto.AccessKey = key;
             
-            
-            
-            throw new NotImplementedException();     
+            var responseCode = await _gastronomyHttpClient.AddDishToMenu(menuDishUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.OK => Ok(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddMenuDish)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(AddMenuDish)} Error - Unsupported Status Code")
+            };   
         }
         catch (Exception e)
         {
@@ -203,17 +233,23 @@ public class GastronomyMenusController : ApiControllerBase
         }
     }
     
-    
     [HttpPost("remove-dish", Name = "RemoveMenuDish")]
     public async Task<IActionResult> RemoveMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
     {
         try
         {
+            var key = _userRepository.GetUserAccessKey(UserId);
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+            menuDishUpdateDto.AccessKey = key;
             
-            
-            
-            
-            throw new NotImplementedException();    
+            var responseCode = await _gastronomyHttpClient.RemoveDishFromMenu(menuDishUpdateDto);
+            return responseCode switch
+            {
+                HttpStatusCode.NoContent => NoContent(),
+                HttpStatusCode.BadRequest => BadRequest(),
+                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveMenuDish)} Error - Service Error"),
+                _ => throw new Exception($"{nameof(RemoveMenuDish)} Error - Unsupported Status Code")
+            };
         }
         catch (Exception e)
         {

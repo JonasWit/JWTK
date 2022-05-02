@@ -165,7 +165,7 @@ public class DishController : ControllerBase
         {
             _dishRepository.RemoveIngredient(_mapper.Map<ResourceAccessPass>(dishIngredientUpdateDto),
                 dishIngredientUpdateDto.IngredientId);
-            if (await _dishRepository.SaveChanges() > 0) return Ok();
+            if (await _dishRepository.SaveChanges() > 0) return NoContent();
             return BadRequest();
         }
         catch (Exception e)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SystemyWP.API.Middleware;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -25,6 +27,7 @@ using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Policies;
+using SystemyWP.API.Profiles;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
@@ -55,15 +58,10 @@ if (builder.Environment.IsProduction())
 
         config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
             .MinimumLevel.Information();
-
-        if (builder.Environment.IsDevelopment())
-        {
-            config.WriteTo.Console();
-        }
     });  
 }
 
-if (builder.Environment.IsDevelopment())
+if (!builder.Environment.IsProduction())
 {
     builder.Host.UseSerilog((context, config) =>
     {
@@ -86,6 +84,13 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configu
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new GastronomyServiceProfile(provider.GetService<UrlService>()));
+}).CreateMapper());
+
+
 builder.Services.AddSingleton(new HttpClientPolicy());
 
 builder.Services.AddDataProtection()
@@ -144,7 +149,7 @@ builder.Services.AddHttpClient<GastronomyHttpClient>();
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<UrlService>();
+builder.Services.AddSingleton<UrlService>();
 
 builder.Services.AddFileServices(configuration);
 
@@ -201,3 +206,4 @@ Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", 
 Console.WriteLine("--> App has started...");
 
 app.Run();
+
