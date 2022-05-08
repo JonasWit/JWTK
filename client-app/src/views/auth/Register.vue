@@ -6,7 +6,7 @@
           <h1 class="text-3xl font-semibold text-center text-blue-700">
             Rejestracja
           </h1>
-          <form class="mt-6">
+          <form class="mt-6" @submit.prevent="submitForm">
             <div>
               <label class="block text-sm text-gray-800">Email</label>
               <input v-model="state.email" type="email" placeholder="Email"
@@ -53,8 +53,7 @@
                 </div>
               </div>               
               <div class="mt-6">
-                <button @click="submitForm"
-                        class="button">
+                <button class="button">
                   Zarejestruj
                 </button>
               </div>
@@ -118,6 +117,7 @@ export default {
     const v$ = useVuelidate(rules, state)
 
     async function submitForm() {
+      console.log("form submitted")
       this.v$.$validate()
       if (this.v$.$error) {
         await store.dispatch('snack/snack', {
