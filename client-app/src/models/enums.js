@@ -14,3 +14,5 @@ export const SNACK_TEXT = {
     WHITE: "text-white",
     BLACK: "text-black",
 };
+
+// todo: JW clean up, use enums/...
