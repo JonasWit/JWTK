@@ -34,6 +34,8 @@ public class IngredientController : ControllerBase
     {
         try
         {
+            if (await _ingredientRepository.CountIngredients(ingredientCreateDto.AccessKey) > AppConstants.RecordsLimits.Ingredient) return BadRequest();
+            
             var ingredient = _mapper.Map<Ingredient>(ingredientCreateDto);
             _ingredientRepository.CreateIngredient(ingredient);
 
@@ -42,8 +44,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateIngredientException);
-            return Problem(AppConstants.ResponseMessages.CreateIngredientException);
+            _logger.LogError(e, $"{nameof(CreateIngredient)} Error");
+            return Problem($"{nameof(CreateIngredient)} Error");
         }
     }
 
@@ -59,8 +61,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
-            return Problem(AppConstants.ResponseMessages.GetIngredientException);
+            _logger.LogError(e, $"{nameof(GetIngredient)} Error");
+            return Problem($"{nameof(GetIngredient)} Error");
         }
     }
 
@@ -75,8 +77,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
-            return Problem(AppConstants.ResponseMessages.GetIngredientException);
+            _logger.LogError(e, $"{nameof(GetIngredients)} Error");
+            return Problem($"{nameof(GetIngredients)} Error");
         }
     }
 
@@ -89,8 +91,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CountIngredientsException);
-            return Problem(AppConstants.ResponseMessages.CountIngredientsException);
+            _logger.LogError(e, $"{nameof(CountIngredients)} Error");
+            return Problem($"{nameof(CountIngredients)} Error");
         }
     }
 
@@ -105,8 +107,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetIngredientException);
-            return Problem(AppConstants.ResponseMessages.GetIngredientException);
+            _logger.LogError(e, $"{nameof(GetPaginatedIngredients)} Error");
+            return Problem($"{nameof(GetPaginatedIngredients)} Error");
         }
     }
 
@@ -121,8 +123,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.RemoveIngredientException);
-            return Problem(AppConstants.ResponseMessages.RemoveIngredientException);
+            _logger.LogError(e,$"{nameof(RemoveIngredient)} Error");
+            return Problem($"{nameof(RemoveIngredient)} Error");
         }
     }
 
@@ -137,8 +139,8 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.UpdateIngredientException);
-            return Problem(AppConstants.ResponseMessages.UpdateIngredientException);
+            _logger.LogError(e, $"{nameof(UpdateIngredient)} Error");
+            return Problem($"{nameof(UpdateIngredient)} Error");
         }
     }
 }

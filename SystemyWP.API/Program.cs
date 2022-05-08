@@ -61,7 +61,7 @@ if (builder.Environment.IsProduction())
     });  
 }
 
-if (!builder.Environment.IsProduction())
+if (builder.Environment.IsDevelopment())
 {
     builder.Host.UseSerilog((context, config) =>
     {
@@ -202,8 +202,8 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
 
 DbManager.PrepareDatabase(app);
-Console.WriteLine($"--> Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");
-Console.WriteLine("--> App has started...");
+Console.WriteLine($"--> Master App Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");
+Console.WriteLine("--> Master App has started...");
 
 app.Run();
 

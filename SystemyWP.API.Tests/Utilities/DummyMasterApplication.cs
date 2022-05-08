@@ -29,6 +29,8 @@ internal class DummyMasterApplication : WebApplicationFactory<Program>
                     .UseApplicationServiceProvider(sp)
                     .Options;
             });
+            
+            services.AddHttpClient<GastronomyHttpClient>(_ => new DummyGastronomyApplication().CreateClient());
         });
 
         return base.CreateHost(builder);

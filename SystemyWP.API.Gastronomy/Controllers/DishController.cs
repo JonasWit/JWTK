@@ -34,6 +34,8 @@ public class DishController : ControllerBase
     {
         try
         {
+            if (await _dishRepository.CountDishes(dishCreateDto.AccessKey) > AppConstants.RecordsLimits.Dish) return BadRequest();
+            
             var dish = _mapper.Map<Dish>(dishCreateDto);
             _dishRepository.CreateDish(dish);
 
@@ -42,8 +44,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CreateDishException);
-            return Problem(AppConstants.ResponseMessages.CreateDishException);
+            _logger.LogError(e, $"{nameof(CreateDish)} Error");
+            return Problem($"{nameof(CreateDish)} Error");
         }
     }
 
@@ -58,8 +60,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetDishException);
-            return Problem(AppConstants.ResponseMessages.GetDishException);
+            _logger.LogError(e, $"{nameof(GetDish)} Error");
+            return Problem($"{nameof(GetDish)} Error");
         }
     }
 
@@ -74,8 +76,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetDishesException);
-            return Problem(AppConstants.ResponseMessages.GetDishesException);
+            _logger.LogError(e, $"{nameof(GetDish)} Error");
+            return Problem($"{nameof(GetDish)} Error");
         }
     }
 
@@ -88,8 +90,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.CountDishesException);
-            return Problem(AppConstants.ResponseMessages.CountDishesException);
+            _logger.LogError(e, $"{nameof(CountDishes)} Error");
+            return Problem($"{nameof(CountDishes)} Error");
         }
     }
 
@@ -104,8 +106,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.GetDishesException);
-            return Problem(AppConstants.ResponseMessages.GetDishesException);
+            _logger.LogError(e, $"{nameof(GetPaginatedDishes)} Error");
+            return Problem($"{nameof(GetPaginatedDishes)} Error");
         }
     }
 
@@ -120,8 +122,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.RemoveDishException);
-            return Problem(AppConstants.ResponseMessages.RemoveDishException);
+            _logger.LogError(e, $"{nameof(RemoveDish)} Error");
+            return Problem($"{nameof(RemoveDish)} Error");
         }
     }
 
@@ -136,8 +138,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.UpdateDishException);
-            return Problem(AppConstants.ResponseMessages.UpdateDishException);
+            _logger.LogError(e, $"{nameof(UpdateDish)} Error");
+            return Problem($"{nameof(UpdateDish)} Error");
         }
     }
 
@@ -153,8 +155,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.AddDishIngredientException);
-            return Problem(AppConstants.ResponseMessages.AddDishIngredientException);
+            _logger.LogError(e, $"{nameof(AddIngredientToDish)} Error");
+            return Problem($"{nameof(AddIngredientToDish)} Error");
         }
     }
 
@@ -170,8 +172,8 @@ public class DishController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, AppConstants.ResponseMessages.RemoveDishIngredientException);
-            return Problem(AppConstants.ResponseMessages.RemoveDishIngredientException);
+            _logger.LogError(e, $"{nameof(RemoveIngredientFromDish)} Error");
+            return Problem($"{nameof(RemoveIngredientFromDish)} Error");
         }
     }
 }
