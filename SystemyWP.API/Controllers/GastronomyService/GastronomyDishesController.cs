@@ -248,9 +248,5 @@ public class GastronomyDishesController : ApiControllerBase
             _logger.LogError(e, $"{nameof(RemoveDishIngredient)} Error");
             return Problem($"{nameof(RemoveDishIngredient)} Error");
         }
-    }  
-    
-    
-    
-    
+    }
 }
