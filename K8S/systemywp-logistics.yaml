@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: systemywp-logistics-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: systemywp-logistics
+  template:
+    metadata:
+      labels:
+        app: systemywp-logistics
+    spec:
+      imagePullSecrets:
+        - name: docker-key
+      containers:
+        - name: gastronomy
+          image: systemywp/master:logistics
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+      volumes:
+        - name: secrets
+          secret:
+            secretName: secret-appsettings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: systemywp-logistics-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: systemywp-logistics
+  ports:
+    - name: systemywp-logistics
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    
+

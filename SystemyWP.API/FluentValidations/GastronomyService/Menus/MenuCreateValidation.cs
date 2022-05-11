@@ -1,6 +1,5 @@
 using FluentValidation;
 using SystemyWP.API.Constants;
-using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 
 namespace SystemyWP.API.FluentValidations.GastronomyService.Menus;

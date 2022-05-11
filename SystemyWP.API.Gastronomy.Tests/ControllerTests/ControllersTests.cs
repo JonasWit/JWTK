@@ -8,7 +8,7 @@ using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
 using SystemyWP.API.Gastronomy.Tests.Utilities;
 using Xunit;
 
-namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests.IntegrationTests;
+namespace SystemyWP.API.Gastronomy.Tests.ControllerTests;
 
 public class ControllersTests
 {

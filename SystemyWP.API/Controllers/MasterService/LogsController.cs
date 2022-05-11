@@ -1,9 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Controllers.MasterService;
 
