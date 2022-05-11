@@ -7,7 +7,7 @@ using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 using SystemyWP.API.Gastronomy.Tests.Utilities;
 using Xunit;
 
-namespace SystemyWP.API.Gastronomy.Tests.GastronomyTests.RepositoriesTests;
+namespace SystemyWP.API.Gastronomy.Tests.RepositoryTests;
 
 public class MenuRepositoryTests
 {
