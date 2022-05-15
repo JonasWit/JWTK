@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ 'name': 'ChangePassword' }" class="px-4 flex justify-end border-r-4"
-               :class="{ 'border-customClassicBlue': $route.path === '/auth/changepassword',  'border-white': $route.path !== '/auth/changepassword'}">
+               :class="{ 'border-customClassicBlue': $route.path === '/auth/change-password',  'border-white': $route.path !== '/auth/change-password'}">
     <span class="inline-flex items-center">Zmień Hasło</span>
     <svg class="h-6 w-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

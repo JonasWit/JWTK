@@ -19,6 +19,7 @@ import ControlPanel from "@/views/apps/gastronomy/ControlPanel";
 import Sources from "@/views/Sources";
 import GastronomyCalculator from "@/views/apps/gastronomy/GastronomyCalculator";
 import ResetPassword from "@/views/auth/ResetPassword";
+import ForgotPassword from "@/views/auth/ForgotPassword";
 
 //route guards
 const requireAuth = (to, from, next) => {
@@ -133,6 +134,21 @@ const routes = [
                 {
                     name: 'description',
                     content: 'Usunięcie Konta'
+                },
+            ]
+        }
+    },
+    {
+        path: '/auth/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword,
+        beforeEnter: [scrollUp],
+        meta: {
+            title: 'Przypomnienie Hasła',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Przypomnienie Hasła'
                 },
             ]
         }

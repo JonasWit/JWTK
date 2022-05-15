@@ -1,46 +1,54 @@
 <template>
-  <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Zmiana Hasła
-      </h2>
-      <div>
-        <input v-model="state.currentPassword"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Obecne Hasło"/>
-        <div v-if="v$.currentPassword.$error">
-          <span class="validation-error-span" v-for="error in v$.currentPassword.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
-        </div>
+  <div class="mt-8 mx-4">
+    <div
+        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      <div class="max-w-md w-full space-y-8">
+        <h1 class="text-3xl font-semibold text-center text-blue-700">
+          Zmiana Hasła
+        </h1>
+        <form class="mt-6" @submit.prevent="submitForm">
+          <div>
+            <label class="block text-sm text-gray-800">Email</label>
+            <input v-model="state.currentPassword"
+                   class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                   placeholder="Obecne Hasło"
+                   type="password">
+            <div v-if="v$.currentPassword.$error">
+              <span v-for="error in v$.currentPassword.$errors" :key="error.$uid" class="validation-error-span"> {{
+                  error.$message
+                }}</span>
+            </div>
+            <div class="mt-4">
+              <label class="block text-sm text-gray-800">Nowe Hasło</label>
+              <input v-model="state.newPassword.newPassword"
+                     class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                     placeholder="Nowe Hasło"
+                     type="password">
+              <div v-if="v$.newPassword.newPassword.$error">
+          <span v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid" class="validation-error-span"> 
+            {{ error.$message }}</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="block text-sm text-gray-800">Powtórz Nowe Hasło</label>
+              <input v-model="state.newPassword.confirmn"
+                     class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                     placeholder="Powtórz Nowe Hasło"
+                     type="password">
+              <div v-if="v$.newPassword.confirm.$error">
+                      <span v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid"
+                            class="validation-error-span"> {{ error.$message }}</span>
+              </div>
+            </div>
+            <div class="mt-6">
+              <button class="button"
+                      @click="submitForm">
+                Zmień Hasło
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-      <div>
-        <input v-model="state.newPassword.newPassword"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Nowe Hasło"/>
-        <div v-if="v$.newPassword.newPassword.$error">
-          <span class="validation-error-span" v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
-        </div>
-      </div>
-      <div>
-        <input v-model="state.newPassword.confirm"
-               type="password"
-               class="form-input-text-general"
-               placeholder="Powtórz Nowe Hasło"/>
-        <div v-if="v$.newPassword.confirm.$error">
-          <span class="validation-error-span" v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
-        </div>
-      </div>
-      <button @click="submitForm"
-              class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
-        Zmień Hasło
-      </button>
     </div>
   </div>
 </template>
@@ -88,6 +96,7 @@ export default {
     })
 
     const v$ = useVuelidate(rules, state)
+
     async function submitForm() {
       this.v$.$validate()
       if (this.v$.$error) {
@@ -114,10 +123,10 @@ export default {
           textColor: SNACK_TEXT.BLACK,
           backColor: SNACK_BACKGROUNDS.SUCCESS
         })
-        
-        await store.commit('auth/resetCredentials')    
+
+        await store.commit('auth/resetCredentials')
         await router.push('/')
-        
+
       } catch (error) {
         if (error.response) {
           await store.dispatch('snack/snack', {
@@ -131,6 +140,7 @@ export default {
         }
       }
     }
+
     return {
       submitForm,
       state,

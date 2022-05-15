@@ -6,28 +6,29 @@
       </h2>
       <div>
         <input v-model="state.newPassword.newPassword"
-               type="password"
                class="form-input-text-general"
-               placeholder="Nowe Hasło"/>
+               placeholder="Nowe Hasło"
+               type="password"/>
         <div v-if="v$.newPassword.newPassword.$error">
-          <span class="validation-error-span" v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid"> {{
+          <span v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid" class="validation-error-span"> {{
               error.$message
             }}</span>
         </div>
       </div>
       <div>
         <input v-model="state.newPassword.confirm"
-               type="password"
                class="form-input-text-general"
-               placeholder="Powtórz Nowe Hasło"/>
+               placeholder="Powtórz Nowe Hasło"
+               type="password"/>
         <div v-if="v$.newPassword.confirm.$error">
-          <span class="validation-error-span" v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid"> {{
+          <span v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid" class="validation-error-span"> {{
               error.$message
             }}</span>
         </div>
       </div>
-      <button @click="submitForm"
-              class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
+      <button
+          class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white"
+          @click="submitForm">
         Zmień Hasło
       </button>
     </div>
@@ -77,6 +78,7 @@ export default {
     })
 
     const v$ = useVuelidate(rules, state)
+
     async function submitForm() {
       this.v$.$validate()
       if (this.v$.$error) {
@@ -92,7 +94,7 @@ export default {
           password: state.newPassword.newPassword,
           token: router.currentRoute.value.query.token
         }
-        
+
         console.log("credentials: ", payload)
         const res = await resetPasswordAction(payload)
         console.log("data: ", res.data);
@@ -121,6 +123,7 @@ export default {
         }
       }
     }
+
     return {
       submitForm,
       state,
