@@ -1,59 +1,62 @@
 <template>
-<section class="section-1">
-  <div class="content text-center p-16 mt-2 text-blue-50">
-    <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">Zapraszamy do współpracy</h1>
-    <h5 class="text-base sm:text-2xl font-medium">
-      <span class="font-bold">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb <span class="font-bold">Twojej firmy.</span></h5>
-    <h5 class="sm:text-2xl font-medium"> Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie biznesu. </h5>
-  </div>
-  </section>       
-<section class="mx-1.5">
-  <div class="flex flex-col md:flex-row mt-20">
-    <div v-for="item in items" :key="item.id" class="my-2.5 w-full">
-      <h1 class="font-bold tracking-wide text-center text-2xl text-customClassicBlue">{{ item.title }}</h1>
-      <img class="m-auto" :src="item.icon">
-      <div class="text-center">{{ item.text }}</div>
+  <section class="section-1">
+    <div class="content text-center p-16 mt-2 text-blue-50">
+      <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">Zapraszamy do współpracy</h1>
+      <h5 class="text-base sm:text-2xl font-medium">
+        <span class="font-bold">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb <span
+          class="font-bold">Twojej firmy.</span></h5>
+      <h5 class="sm:text-2xl font-medium"> Tworzymy strony internetowe i aplikacje, które wspierają funkcjonowanie
+        biznesu. </h5>
     </div>
-  </div>
-</section>
+  </section>
+  <section class="mx-1.5">
+    <div class="flex flex-col md:flex-row mt-20">
+      <div v-for="item in items" :key="item.id" class="my-2.5 w-full">
+        <h1 class="font-bold tracking-wide text-center text-2xl text-customClassicBlue">{{ item.title }}</h1>
+        <img :src="item.icon" class="m-auto">
+        <div class="text-center">{{ item.text }}</div>
+      </div>
+    </div>
+  </section>
   <section class="section-2 my-10 w-full border-t-4 border-b-4">
     <div class="text-center p-16">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Technologie</h1>
       <h5 class="my-10">
-        Więcej informacji na temat technologii, które wykorzystujemy, możesz uzyskać na oficjlanych stronach podlinkowanych poniżej. </h5>
+        Więcej informacji na temat technologii, które wykorzystujemy, możesz uzyskać na oficjlanych stronach
+        podlinkowanych poniżej. </h5>
       <div class="flex flex-row justify-around">
-        <div class="mx-auto" v-for="item in icons" :key="item.id">
-          <a :href="item.url" target="_blank"><img class="icon" :src="item.img"/></a>
+        <div v-for="item in icons" :key="item.id" class="mx-auto">
+          <a :href="item.url" target="_blank"><img :src="item.img" class="icon"/></a>
         </div>
       </div>
     </div>
   </section>
   <section class="my-10">
-      <div class="text-center ">
-        <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Cennik</h1>
-        <h5 class="mx-7">
-          Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
+    <div class="text-center ">
+      <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Cennik</h1>
+      <h5 class="mx-7">
+        Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
+    </div>
+    <div class="flex flex-col md:flex-row flex-wrap justify-center">
+      <div v-for=" item in others" :key="item.id" class="justify-between m-6 border-4 rounded-lg p-4 md:w-1/4">
+        <div class="text-center">
+          <h2 class="text-3xl text-center mb-4 text-customClassicBlue tracking-wide font-bold">{{ item.title }}</h2>
+          <h2 class="text-2xl my-3 font-bold">{{ item.price }} </h2>
+          <h5 class="text-center"> {{ item.subtitle }}</h5>
+        </div>
+        <ul class="list-disc px-3 text">
+          <li v-for="(bullet, i) in item.bullet" :key="i" class="list-outside py-1">
+            {{ bullet[0] }}
+          </li>
+        </ul>
       </div>
-      <div class="flex flex-col md:flex-row flex-wrap justify-center">
-           <div class="justify-between m-6 border-4 rounded-lg p-4 md:w-1/4" v-for=" item in others" :key="item.id">
-            <div class="text-center">
-              <h2 class="text-3xl text-center mb-4 text-customClassicBlue tracking-wide font-bold">{{ item.title }}</h2>
-              <h2 class="text-2xl my-3 font-bold">{{ item.price }} </h2>
-              <h5 class="text-center"> {{ item.subtitle }}</h5>
-            </div>                          
-              <ul class="list-disc px-3 text">                
-                  <li class="list-outside py-1" v-for="(bullet, i) in item.bullet" :key="i">                                    
-                   {{ bullet[0] }}         
-                  </li>           
-              </ul>
-           </div>
-         </div>         
-     </section>
-  </template>
+    </div>
+  </section>
+</template>
 <script>
 export default {
   name: "About",
-  data () {
+  data() {
     return {
       items: [
         {
@@ -71,7 +74,7 @@ export default {
         {
           id: 3,
           title: 'Elastyczność',
-          icon: 'img/bubble-icons/icons8-couple-target-100.png',          
+          icon: 'img/bubble-icons/icons8-couple-target-100.png',
           text: 'Jesteśmy otwarci na wszelkie zmiany i dodatki do aplikacji. ' +
               'Zarówno oferowanych już na portalu jak i stworonych na zamówienie. Oferujemy zawsze bezpłatną konsultację i wycenę każdej zmiany lub rozszeżenia.'
         },
@@ -125,7 +128,7 @@ export default {
             ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
           ],
           img: 'img/bubble-icons/icons8-tick-24.png'
-         
+
         },
         {
           id: 2,
@@ -175,22 +178,24 @@ export default {
             ['Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie']
           ],
         },
-      ],    
-     
+      ],
+
     };
   },
 }
 </script>
 
-<style scoped>
+<style>
 .icon {
   height: 48px;
   margin: 22px 0 0 22px;
 }
+
 .icon:hover {
   animation: shake 0.5s;
   animation-iteration-count: infinite;
 }
+
 @keyframes shake {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
@@ -228,8 +233,6 @@ export default {
 }
 
 
-
-
 .section-1 {
   position: relative;
   width: 100%;
@@ -238,9 +241,11 @@ export default {
   justify-content: center;
   overflow: hidden;
 }
+
 .section-1 .content {
-   z-index: 1; 
+  z-index: 1;
 }
+
 .section-1:before {
   content: '';
   position: absolute;

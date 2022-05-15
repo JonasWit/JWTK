@@ -17,32 +17,34 @@
 }
 
 .snack-leave-to {
-    @apply transform -translate-y-24   
+    @apply transform -translate-y-24
 }
 
-.portal-card{
-    @apply bg-white rounded overflow-hidden shadow-md relative hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
+.portal-card {
+    @apply w-full bg-white rounded overflow-hidden shadow-md relative hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
 }
 
-.app-navigation-link{
+.app-navigation-link {
     @apply bg-white rounded shadow-md hover:shadow-xl transition ease-in-out delay-100 cursor-pointer
 }
 
-.portal-badge{
+.portal-badge {
     @apply bg-gray-200 text-white text-xs uppercase font-bold rounded-full p-2 absolute top-0 m-0.5
 }
 
-.portal-button{
+.portal-button {
     @apply rounded-md py-2 px-3 text-xs font-bold cursor-pointer tracking-wider transition ease-in-out delay-100
 }
-.button{
+
+.button {
     @apply w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-700 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600
 }
-.form-validation-error{
+
+.form-validation-error {
     @apply text-red-900 text-xs m-0.5
 }
 
-.form-input-text-general{
+.form-input-text-general {
     @apply w-full px-1 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:ring-customClassicBlue focus:border-customUltraViolet focus:z-10 sm:text-sm
 }
 

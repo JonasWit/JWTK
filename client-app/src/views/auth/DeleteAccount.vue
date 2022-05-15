@@ -1,12 +1,26 @@
 <template>
-  
-  
-  
-  
-  <button @click="deleteAccount"
-          class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
-    Usuń Konto
-  </button>
+  <div class="mt-8 mx-4">
+    <div
+        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      <div class="max-w-md w-full space-y-8">
+        <h1 class="text-3xl font-semibold text-center text-blue-700 mt-2">
+          Czy napewno chcesz usunąć swoje konto?
+        </h1>
+        <div class="flex flex justify-evenly">
+          <div>
+            <button class="button" @click="deleteAccount">
+              Usuń Konto
+            </button>
+          </div>
+          <div>
+            <button class="button">
+              Anuluj
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -19,12 +33,12 @@ import {deleteUserAccount} from "@/services/authAPI";
 
 export default {
   name: "DeleteAccount",
-  setup(){
+  setup() {
     const store = useStore()
     const router = useRouter()
 
     async function deleteAccount() {
-      try{
+      try {
         await deleteUserAccount()
         removeLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN)
         store.commit('auth/resetCredentials')
@@ -34,7 +48,7 @@ export default {
           backColor: SNACK_BACKGROUNDS.SUCCESS
         })
         await router.push('/')
-      }catch (e){
+      } catch (e) {
         await store.dispatch('snack/snack', {
           text: "Błąd usuwania konta",
           textColor: SNACK_TEXT.BLACK,
@@ -42,6 +56,7 @@ export default {
         })
       }
     }
+
     return {
       deleteAccount,
     }

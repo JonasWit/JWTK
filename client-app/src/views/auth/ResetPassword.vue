@@ -1,36 +1,42 @@
 <template>
-  <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Zmiana Hasła
-      </h2>
-      <div>
-        <input v-model="state.newPassword.newPassword"
-               class="form-input-text-general"
-               placeholder="Nowe Hasło"
-               type="password"/>
-        <div v-if="v$.newPassword.newPassword.$error">
-          <span v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid" class="validation-error-span"> {{
-              error.$message
-            }}</span>
-        </div>
+  <div class="mt-8 mx-4">
+    <div
+        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      <div class="max-w-md w-full space-y-8">
+        <h1 class="text-3xl font-semibold text-center text-blue-700">
+          Zmiana Hasła
+        </h1>
+        <form class="mt-6" @submit.prevent="submitForm">
+          <div class="mt-4">
+            <label class="block text-sm text-gray-800">Nowe Hasło</label>
+            <input v-model="state.newPassword.newPassword"
+                   class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                   placeholder="Nowe Hasło"
+                   type="password">
+            <div v-if="v$.newPassword.newPassword.$error">
+          <span v-for="error in v$.newPassword.newPassword.$errors" :key="error.$uid" class="validation-error-span"> 
+            {{ error.$message }}</span>
+            </div>
+          </div>
+          <div class="mt-4">
+            <label class="block text-sm text-gray-800">Powtórz Hasło</label>
+            <input v-model="state.newPassword.confirmn"
+                   class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                   placeholder="Powtórz Hasło"
+                   type="password">
+            <div v-if="v$.newPassword.confirm.$error">
+                      <span v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid"
+                            class="validation-error-span"> {{ error.$message }}</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button class="button"
+                    @click="submitForm">
+              Zmień Hasło
+            </button>
+          </div>
+        </form>
       </div>
-      <div>
-        <input v-model="state.newPassword.confirm"
-               class="form-input-text-general"
-               placeholder="Powtórz Nowe Hasło"
-               type="password"/>
-        <div v-if="v$.newPassword.confirm.$error">
-          <span v-for="error in v$.newPassword.confirm.$errors" :key="error.$uid" class="validation-error-span"> {{
-              error.$message
-            }}</span>
-        </div>
-      </div>
-      <button
-          class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white"
-          @click="submitForm">
-        Zmień Hasło
-      </button>
     </div>
   </div>
 </template>

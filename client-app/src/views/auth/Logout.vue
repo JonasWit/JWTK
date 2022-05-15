@@ -1,8 +1,27 @@
 <template>
-  <button @click="logout"
-          class="w-full portal-button mt-2 text-customClassicBlue border-customClassicBlue md:border-2 hover:bg-customClassicBlue hover:text-white">
-    Wyloguj z Aplikacji
-  </button>
+  <div class="mt-8 mx-4">
+    <div
+        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      <div class="max-w-md w-full space-y-8">
+        <h1 class="text-3xl font-semibold text-center text-blue-700 mt-2">
+          Czy napewno chcesz się wylogować z aplikacji?
+        </h1>
+        <div class="flex flex justify-evenly">
+          <div>
+            <button class="button"
+                    @click="logout">
+              Wyloguj
+            </button>
+          </div>
+          <div>
+            <button class="button">
+              Anuluj
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -14,12 +33,12 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "Logout",
-  setup(){
+  setup() {
     const store = useStore()
     const router = useRouter()
 
     function logout() {
-      try{
+      try {
         removeLocalStoreItem(LOCAL_STORE_NAMES.ID_TOKEN)
         store.commit('auth/resetCredentials')
         store.dispatch('snack/snack', {
@@ -28,14 +47,15 @@ export default {
           backColor: SNACK_BACKGROUNDS.SUCCESS
         })
         router.push('/')
-      }catch (e){
+      } catch (e) {
         store.dispatch('snack/snack', {
           text: "Błąd podczas wylogowywania",
           textColor: SNACK_TEXT.BLACK,
           backColor: SNACK_BACKGROUNDS.ERROR
-        })      
+        })
       }
     }
+
     return {
       logout,
     }

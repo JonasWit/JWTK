@@ -1,10 +1,23 @@
 <template>
+
+  <div class="section-1">
+    <div class="content text-center p-16 mt-2 text-blue-50">
+      <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">
+        Witaj na stronie Systemy Wspomagania Pracy!
+      </h1>
+      <h5 class="text-base sm:text-2xl font-medium">
+        <span class="font-bold">Wybierz</span>rozwiązania dostosowane do potrzeb <span
+          class="font-bold">Twojej firmy.</span></h5>
+      <h5 class="sm:text-2xl font-medium"> Kliknij na odbowiedni kafelek poniżej, aby sprawdzić szczegóły. </h5>
+    </div>
+    <div>
+    </div>
+  </div>
   <div>
-    <h4 class="font-bold mt-12 pb-2 border-b border-gray-200 text-xl text-center">Rozwiązania dla Firm</h4>
-    <div class="mt-8 grid lg:grid-cols-3 gap-7">
+    <div class="mt-8 flex flex-row justify-evenly gap-7">
       <router-link :to="{ 'name': 'GastronomyControlPanel' }">
         <div class="portal-card">
-          <img src="/img/restaurant-card-sm.jpg" alt="gastronomy" class="w-full h-32 sm:h-48 object-cover">
+          <img alt="gastronomy" class="w-full h-32 sm:h-48 object-cover" src="/img/restaurant-card-sm.jpg">
           <div class="m-4">
             <span class="font-bold">Gastronomia</span>
             <span
@@ -17,7 +30,7 @@
       </router-link>
       <router-link :to="{ 'name': 'GastronomyControlPanel' }">
         <div class="portal-card">
-          <img src="/img/warehouse-card-sm.jpg" alt="logistics" class="w-full h-32 sm:h-48 object-cover">
+          <img alt="logistics" class="w-full h-32 sm:h-48 object-cover" src="/img/warehouse-card-sm.jpg">
           <div class="m-4">
             <span class="font-bold">Logistyka</span>
             <span class="block text-gray-500 text-sm">Zarządzaj Logistyką</span>
@@ -29,7 +42,7 @@
       </router-link>
       <router-link :to="{ 'name': 'Solutions' }">
         <div class="portal-card">
-          <img src="/img/individual.jpg" alt="individual-solutions" class="w-full h-32 sm:h-48 object-cover">
+          <img alt="individual-solutions" class="w-full h-32 sm:h-48 object-cover" src="/img/individual.jpg">
           <div class="m-4">
             <span class="font-bold">Rozwiązania Indywidualne</span>
             <span
@@ -43,7 +56,6 @@
     </div>
   </div>
 </template>
-
 <script>
 
 export default {
