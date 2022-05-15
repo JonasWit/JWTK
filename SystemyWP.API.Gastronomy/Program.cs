@@ -45,4 +45,5 @@ app.MapControllers();
 
 DbManager.PrepareDatabase(app);
 
+Console.WriteLine("--> App has started...");
 app.Run();

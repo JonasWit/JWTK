@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using SystemyWP.API.Services.Email;
 using SystemyWP.API.Settings;
