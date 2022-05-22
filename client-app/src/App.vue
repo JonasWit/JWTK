@@ -3,7 +3,7 @@
     <div class="min-h-screen md:flex">
       <SnackPopup/>
       <GdprModal v-if="!gdprAccepted"></GdprModal>
-      <NavContainer class="flex-none w-full md:max-w-xs">
+      <NavContainer class="flex-none w-full md:max-w-xs sticky top-0 z-10">
         <MainNav v-if="nav.navType === 'main'"/>
       </NavContainer>
       <main class="flex-1 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
@@ -16,7 +16,7 @@
         </router-view>
       </main>
     </div>
-    <PortalFooter/>
+    <PortalFooter class="bottom-0 sticky z-10"/>
   </div>
 </template>
 

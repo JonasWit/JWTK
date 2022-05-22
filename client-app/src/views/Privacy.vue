@@ -1,5 +1,5 @@
 <template>
-  <div class="text-xs">
+  <div class="text-sm px-8">
     <div class="flex content-center justify-center">
       <h1 class="font-bold my-4 text-sm">Polityka prywatności</h1>
     </div>
@@ -438,7 +438,7 @@
     <div class="font-bold my-1">
       <p>Pliki cookies służą/mogą posłużyć nam do:</p>
     </div>
-    
+
     <ol class="list-decimal">
       <li>
         Utrzymywania sesji logowania przez pewien czas celem zapewnienia wygody użytkowania serwisu,
@@ -459,7 +459,7 @@
         niezgodnych z prawem.
       </li>
     </ol>
-    
+
     <div class="font-bold my-1">
       <p>Zapisywanie plików cookies jest konieczne do prawidłowego świadczenia wszystkich usług w serwisie. Przeglądarki
         internetowe domyślnie dopuszczają przechowywanie plików cookies.</p>
@@ -472,7 +472,7 @@
         sposobach obsługi i zarządzania plikami cookies dostępne są w ustawieniach poszczególnych przeglądarek
         internetowych. Aby się z nimi zapoznać prezentujemy je poniżej:</p>
     </div>
-    
+
     <ol class="list-decimal">
       <li>
         Edge - https://support.microsoft.com/pl-pl/help/4468242/microsoft-edge-browsing-data-and-privacy
@@ -498,7 +498,7 @@
     <div class="font-bold my-1">
       <p>Urządzenia mobilne:</p>
     </div>
-    
+
     <ol class="list-decimal">
       <li>
         Android - https://support.google.com/chrome/answer/95647?co=GENIE.Platform%3DAndroid&hl=pl
@@ -510,20 +510,20 @@
         Windows Phone - https://support.microsoft.com/pl-pl/help/17442/windows-internet-explorer-delete-manage-cookies
       </li>
     </ol>
-    
+
     <div class="font-bold my-1">
       <p>
         Wyłączenie lub ograniczenie obsługi plików cookies w przeglądarce internetowej może spowodować utrudnienia w
         korzystaniu lub brak działania niektórych funkcji, a w skrajnych przypadkach może uniemożliwić korzystanie z
         serwisu.</p>
     </div>
-    
+
     <div class="flex content-center justify-center">
       <h1 class="font-bold my-4 text-sm">
         X. Postanowienia końcowe
       </h1>
     </div>
-    
+
     <ol class="list-decimal">
       <li>
         Dane osobowe nie są przekazywane od krajów trzecich w rozumieniu przepisów o ochronie danych osobowych. Oznacza

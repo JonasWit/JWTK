@@ -3,9 +3,9 @@
     <li class="py-1">
       <HomeRouterLink/>
     </li>
-<!--    <li class="py-1">-->
-<!--      <ContactRouterLink/>-->
-<!--    </li>-->
+    <!--    <li class="py-1">-->
+    <!--      <ContactRouterLink/>-->
+    <!--    </li>-->
     <li class="py-1">
       <AboutRouterLink/>
     </li>
@@ -54,7 +54,8 @@ export default {
     LogoutRouterLink,
     ChangePasswordRouterLink,
     PrivacyRouterLink,
-    AboutRouterLink, HomeRouterLink, RegisterRouterLink, LoginRouterLink},
+    AboutRouterLink, HomeRouterLink, RegisterRouterLink, LoginRouterLink
+  },
   setup() {
     const store = useStore()
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="text-xs">
+  <div class="text-xs px-8">
     <div class="flex content-center justify-center">
-      <h1 class="font-bold my-4 text-sm">REGULAMIN USŁUGI</h1>    
+      <h1 class="font-bold my-4 text-sm">REGULAMIN USŁUGI</h1>
     </div>
     <p>Świadczonej przez Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
       nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
@@ -18,7 +18,7 @@
       </p>
     </div>
     <ol class="list-disc">
-      <li> 
+      <li>
         Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
         nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
         e-mail: biuro@systemywp.pl , +48 534 127 160;
@@ -35,7 +35,8 @@
       </li>
       <li>
         Usługa — usługa świadczona przez Operatora na rzecz Uzytkownika drogą elektroniczną na zasadach określonych w
-        Regulaminie, polegająca na udostępnieniu Uzytkownikowi Serwisu za pośrednictwem sieci Internet, w zakresie o którym decyduje Operator;
+        Regulaminie, polegająca na udostępnieniu Uzytkownikowi Serwisu za pośrednictwem sieci Internet, w zakresie o
+        którym decyduje Operator;
       </li>
       <li>
         Użytkownik — osoba fizyczna korzystająca z serwisu.
@@ -63,7 +64,8 @@
     <div class="my-3">
       <p>
         2.1. Serwis wraz ze strukturą bazy danych Serwisu stanowią przedmiot prawa autorskiego. Prawa autorskie do
-        Serwisu należą do Operatora. Udostępniając Serwis Uzytkowinikowi Operator nie przenosi na Uzytkownika praw do
+        Serwisu należą do Operatora. Udostępniając Serwis Uzytkowinikowi Operator nie przenosi na Uzytkownika praw
+        do
         Serwisu.
       </p>
     </div>
@@ -147,22 +149,26 @@
     </div>
     <div class="my-3">
       <p>
-        4.2. Utworzenie konta dla Uzytkownika wymaga podania co najmniej następujących danych: adresu e-mail oraz hasła dostępu.
+        4.2. Utworzenie konta dla Uzytkownika wymaga podania co najmniej następujących danych: adresu e-mail oraz hasła
+        dostępu.
       </p>
     </div>
     <div class="my-3">
       <p>
-        4.3. Operator udostępnia nieodpłatne funkcjonalności Serwisu. Operator dołoży starań by dane w serwisie nie zostały usunięte bez wiedzy Abonenta oraz by seris był dostępny jak najczęściej.
+        4.3. Operator udostępnia nieodpłatne funkcjonalności Serwisu. Operator dołoży starań by dane w serwisie nie
+        zostały usunięte bez wiedzy Abonenta oraz by seris był dostępny jak najczęściej.
       </p>
     </div>
     <div class="my-3">
       <p>
-        4.4. Uzytkownik może w dowolnym momencie usunąć konto Abonenta – następuje to poprzez wybranie opcji 'usuń konto'.
+        4.4. Uzytkownik może w dowolnym momencie usunąć konto Abonenta – następuje to poprzez wybranie opcji 'usuń
+        konto'.
       </p>
     </div>
     <div class="my-3">
       <p>
-        W następstwie usunięcia konta przez Użytkowika zostaną nieodwracalnie usunięte wszystkie dane wprowadzone przez Użytkowika i utrwalone w Serwisie w ramach jego konta. 
+        W następstwie usunięcia konta przez Użytkowika zostaną nieodwracalnie usunięte wszystkie dane wprowadzone
+        przez Użytkowika i utrwalone w Serwisie w ramach jego konta.
       </p>
     </div>
     <div class="flex content-center justify-center">
@@ -174,7 +180,7 @@
       <p>
         5.1. Użytkownik jest wyłącznie odpowiedzialny za ochronę identyfikatora i hasła używanego do uzyskiwania
         dostępu do Serwisu. Użytkownik zobowiązuje się nie ujawniać hasła osobom trzecim. Operator nie ponosi
-        odpowiedzialności za szkodę wynikającą z niezastosowania się do powyższych wymagań. 
+        odpowiedzialności za szkodę wynikającą z niezastosowania się do powyższych wymagań.
       </p>
     </div>
     <div class="my-3">
@@ -227,7 +233,8 @@
         niepowołane osoby;
       </li>
       <li>
-        System bezpieczeństwa centrum obliczeniowego — Operator przechowuje dane Użytkownika wyłącznie we Frankfurcie nad
+        System bezpieczeństwa centrum obliczeniowego — Operator przechowuje dane Użytkownika wyłącznie we Frankfurcie
+        nad
         Menem, w strzeżonym data center prowadzonym przez spółkę Linode LLC (Spółka z ograniczoną odpowiedzialnością)
         z siedzibą w Stanach Zjednoczonych Ameryki Północnej, 249 Arch St., Philadelphia, PA 19106, wiodącego
         dostawcę usług IaaS na świecie. Centrum posiada certyfikaty bezpieczeństwa ISO/IEC 27001:2013 i PCI DSS;
@@ -238,7 +245,8 @@
         6.7. Operator zapewnia ochronę danych zapisanych na koncie Użytkownika przed dostępem osób trzecich, z
         zastrzeżeniem osób upoważnionych przez Użytkownika lub innych osób upoważnionych do przetwarzania danych
         osobowych zgodnie z ustawą o ochronie danych osobowych. Operator, zabezpieczając dane, dokłada w tym zakresie
-        należytej staranności. Użytkownik decyduje o udostępnieniu danych osobowych innym Użytkownikom i ponosi z tego
+        należytej staranności. Użytkownik decyduje o udostępnieniu danych osobowych innym Użytkownikom i ponosi z
+        tego
         tytułu pełną odpowiedzialność.
       </p>
     </div>
@@ -266,9 +274,11 @@
     </div>
     <div class="my-3">
       <p>
-        6.11. Operator zobowiązuje się niezwłocznie poinformować Uzytkowika o każdym żądaniu dostępu do jego danych
+        6.11. Operator zobowiązuje się niezwłocznie poinformować Uzytkowika o każdym żądaniu dostępu do jego
+        danych
         wystosowanym przez prokuraturę, sąd lub inne uprawnione organy państwowe. Postanowienia zdania poprzedniego
-        nie stosuje się wyłącznie wówczas, gdy poinformowanie Użytkowika nie jest dopuszczalne na gruncie bezwzględnie
+        nie stosuje się wyłącznie wówczas, gdy poinformowanie Użytkowika nie jest dopuszczalne na gruncie
+        bezwzględnie
         wiążących przepisów prawa.
       </p>
     </div>
@@ -363,7 +373,8 @@
     </ol>
     <div class="font-bold my-3">
       <p>
-        8.3. W przypadku naruszenia postanowień Regulaminu przez Użytkownika, Operator jest uprawniony do usinięcia konta Użytkownika.
+        8.3. W przypadku naruszenia postanowień Regulaminu przez Użytkownika, Operator jest uprawniony do usinięcia
+        konta Użytkownika.
       </p>
     </div>
     <div class="flex content-center justify-center">
@@ -379,7 +390,8 @@
     <div class="my-3">
       <p>
         9.2. Reklamacja wymaga uzasadnienia i powinna być zgłoszona przez Użytkownika nie później niż w
-        terminie 14 dni od daty zaistnienia zdarzenia uzasadniającego złożenie reklamacji lub od chwili, kiedy Użytkownik
+        terminie 14 dni od daty zaistnienia zdarzenia uzasadniającego złożenie reklamacji lub od chwili, kiedy
+        Użytkownik
         powziął informację o wystąpieniu takiego zdarzenia.
       </p>
     </div>
@@ -391,7 +403,8 @@
     </div>
     <div class="my-3">
       <p>
-        9.4. O sposobie załatwienia reklamacji Operator informuje Użytkownika drogą elektroniczną w terminie około 14 dni od
+        9.4. O sposobie załatwienia reklamacji Operator informuje Użytkownika drogą elektroniczną w terminie około 14
+        dni od
         dnia rozpatrzenia reklamacji. Operator zastrzega sobie prawo do odrzucenia reklamacji bez podania przyczyny.
       </p>
     </div>
@@ -403,22 +416,28 @@
     <div class="my-3">
       <p>
         10.1. O wprowadzeniu nowego Regulaminu, Cennika lub innego aktu określającego zasady korzystania z Serwisu
-        przez nowych (przyszłych) Użytkowników lub aktualnych Użytkowników, Operator zawiadamia udostępniając treść nowego Regulaminu, Cennika lub innego aktu na stronie internetowej Serwisu.
+        przez nowych (przyszłych) Użytkowników lub aktualnych Użytkowników, Operator zawiadamia udostępniając treść
+        nowego Regulaminu, Cennika lub innego aktu na stronie internetowej Serwisu.
       </p>
     </div>
     <div class="my-3">
       <p>
         10.2. Operator zastrzega sobie prawo do wprowadzania zmian do Regulaminu, wiążących Użytkowników w toku
-        obowiązywania Umowy (korzystania z Serwisu). Zmiana Regulaminu może nastąpić w szczególności w wypadku zmian technologicznych lub
+        obowiązywania Umowy (korzystania z Serwisu). Zmiana Regulaminu może nastąpić w szczególności w wypadku
+        zmian technologicznych lub
         organizacyjnych w działaniu Serwisu albo zmian warunków technicznych, organizacyjnych lub prawnych świadczenia
-        Usługi. O zmianach Regulaminu Operator zawiadamia Użytkownika udostępniając treść nowego Regulaminu na stronie
-        internetowej Serwisu i przesyłając zmieniony Regulamin na adres e-mail Użytkownika wskazany przez Użytkownika w trakcie rejestracji konta.
+        Usługi. O zmianach Regulaminu Operator zawiadamia Użytkownika udostępniając treść nowego Regulaminu na
+        stronie
+        internetowej Serwisu i przesyłając zmieniony Regulamin na adres e-mail Użytkownika wskazany przez Użytkownika w
+        trakcie rejestracji konta.
       </p>
     </div>
     <div class="my-3">
       <p>
-        10.3. W przypadku niewyrażenia zgody na zmianę Regulaminu, o której mowa w pkt 11.2 Regulaminu, Użytkownik może
-        bez negatywnych następstw usunąć konto Użytkownika i rozwiązać w ten sposób Umowę, a to w terminie 7 dni od
+        10.3. W przypadku niewyrażenia zgody na zmianę Regulaminu, o której mowa w pkt 11.2 Regulaminu, Użytkownik
+        może
+        bez negatywnych następstw usunąć konto Użytkownika i rozwiązać w ten sposób Umowę, a to w terminie 7 dni
+        od
         otrzymania zmienionego Regulaminu; zmiana Regulaminu wchodzi w życie po upływie 7 dni od opublikowania treści
         nowego Regulaminu na stronie internetowej Serwisu i przesłania Abonentowi zmienionej treści Regulaminu, o ile
         Użytkownik nie rozwiąże Umowy w sposób wskazany w zdaniu poprzednim.
