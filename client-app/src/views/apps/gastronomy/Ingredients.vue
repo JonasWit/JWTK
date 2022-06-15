@@ -50,6 +50,8 @@
 
 <script>
 import AccordionTemplate from "@/components/generic/AccordionTemplate";
+import {getIngredients} from "@/services/gastronomyServiceAPI";
+import {reactive} from "vue";
 
 export default {
   name: "Ingredients",
@@ -62,6 +64,7 @@ export default {
 
     async function getList() {
       const res = await getIngredients()
+      console.log("result:", res.data)
       console.log("result:", res)
 
     }
