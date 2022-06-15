@@ -1,4 +1,4 @@
-import {axiosInstance, axiosInstanceAuthorized} from "@/services/API";
+import {axiosInstanceAuthorized} from "@/services/API";
 
 export const createIngredient = (payload) => {
     return axiosInstanceAuthorized().post("/GastronomyIngredients", payload)
@@ -22,6 +22,11 @@ export const removeIngredient = (id) => {
 
 export const updateIngredient = (payload) => {
     return axiosInstanceAuthorized().put("/GastronomyIngredients", payload)
+}
+
+
+export const createDish = (payload) => {
+    return axiosInstanceAuthorized().post("/CreateDish", payload)
 }
 
 // todo: JW add rest of them
