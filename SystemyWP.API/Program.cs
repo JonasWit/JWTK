@@ -34,11 +34,13 @@ using SystemyWP.API.Settings;
 var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsDevelopment()) builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 
+// Secrets injection
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
-    config.AddJsonFile("secrets/appsettings.secrets.json", true, true);
+    config.AddJsonFile(AppConstants.Paths.SecretSettings, true, true);
 });
 
+// Logging
 if (builder.Environment.IsProduction())
     builder.Host.UseSerilog((context, config) =>
     {
@@ -66,23 +68,22 @@ var configuration = builder.Configuration;
 builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
 
-//IP Rate limiting
+// IP Rate limiting
 builder.Services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
 builder.Services.AddInMemoryRateLimiting();
 
-//Data Access Layer
+// Data Access Layer
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master")));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+// Mapper with additional data from URL Service
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new GastronomyServiceProfile(provider.GetService<UrlService>()));
 }).CreateMapper());
 
-
+// Polly policies
 builder.Services.AddSingleton(new HttpClientPolicy());
 
 builder.Services.AddDataProtection()
