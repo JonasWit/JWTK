@@ -24,13 +24,11 @@ public class GastronomyHttpClient
     private string ErrorMessage(string methodName) => $"Gastronomy Service Client {methodName} Error";
 
     public GastronomyHttpClient(
-        IOptionsMonitor<ClusterServices> clusterServicesSettings,
         HttpClient httpClient,
         HttpClientPolicy httpClientPolicy)
     {
         _httpClient = httpClient;
         _httpClientPolicy = httpClientPolicy;
-        _httpClient.BaseAddress = new Uri(clusterServicesSettings.CurrentValue.GastronomyService);
     }
 
     #region Maintenance

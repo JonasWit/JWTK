@@ -2,22 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
-using SystemyWP.API.Services.Email;
-using SystemyWP.API.Settings;
+using System.Text;
 using AspNetCoreRateLimit;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SystemyWP.API.Middleware;
-using System.Text;
-using AutoMapper;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
 using NpgsqlTypes;
 using Serilog;
@@ -25,22 +22,24 @@ using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Repositories;
+using SystemyWP.API.Middleware;
 using SystemyWP.API.Policies;
 using SystemyWP.API.Profiles;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
+using SystemyWP.API.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsDevelopment()) builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
 
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
-    config.AddJsonFile("secrets/appsettings.secrets.json", optional: true, reloadOnChange: true);
+    config.AddJsonFile("secrets/appsettings.secrets.json", true, true);
 });
 
 if (builder.Environment.IsProduction())
-{
     builder.Host.UseSerilog((context, config) =>
     {
         var connectionString = context.Configuration.GetConnectionString("Master");
@@ -52,21 +51,15 @@ if (builder.Environment.IsProduction())
             {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar)},
             {"RaiseDate", new TimestampColumnWriter(NpgsqlDbType.Timestamp)},
             {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text)},
-            {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)},
+            {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)}
         };
 
         config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
             .MinimumLevel.Information();
-    });  
-}
+    });
 
 if (builder.Environment.IsDevelopment())
-{
-    builder.Host.UseSerilog((context, config) =>
-    {
-        config.WriteTo.Console();
-    }); 
-}
+    builder.Host.UseSerilog((context, config) => { config.WriteTo.Console(); });
 
 var configuration = builder.Configuration;
 
@@ -95,7 +88,7 @@ builder.Services.AddSingleton(new HttpClientPolicy());
 builder.Services.AddDataProtection()
     .SetApplicationName("systemywp")
     .UseCryptographicAlgorithms(
-        new AuthenticatedEncryptorConfiguration()
+        new AuthenticatedEncryptorConfiguration
         {
             EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
             ValidationAlgorithm = ValidationAlgorithm.HMACSHA512
@@ -106,7 +99,7 @@ builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
 {
     var secretBytes = Encoding.UTF8.GetBytes(configuration.GetValue("AuthSettings:SecretKey", ""));
     var key = new SymmetricSecurityKey(secretBytes);
-    
+
     if (builder.Environment.IsDevelopment()) config.RequireHttpsMetadata = false;
     config.SaveToken = true;
     config.TokenValidationParameters = new TokenValidationParameters
@@ -117,7 +110,7 @@ builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
         ValidateIssuerSigningKey = true,
         ClockSkew = TimeSpan.Zero,
         ValidateIssuer = true,
-        ValidateAudience = true,
+        ValidateAudience = true
     };
 });
 
@@ -144,8 +137,8 @@ builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(Send
 builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
 
-// todo: add base address here
-builder.Services.AddHttpClient<GastronomyHttpClient>();
+builder.Services.AddHttpClient<GastronomyHttpClient>(httpClient =>
+    httpClient.BaseAddress = new Uri(configuration.GetValue<string>("ClusterServices:GastronomyService")));
 builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
@@ -169,9 +162,9 @@ if (builder.Environment.IsProduction())
 
     builder.Services.AddHttpsRedirection(options =>
     {
-        options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
+        options.RedirectStatusCode = (int) HttpStatusCode.TemporaryRedirect;
         options.HttpsPort = 443;
-    });  
+    });
 }
 
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
@@ -180,10 +173,7 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 var app = builder.Build();
 
 // Dev only
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
+if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
 
 // Prod only
 if (app.Environment.IsProduction())
@@ -206,4 +196,3 @@ Console.WriteLine($"--> Master App Settings used: {app.Configuration.GetValue("C
 Console.WriteLine("--> Master App has started...");
 
 app.Run();
-
