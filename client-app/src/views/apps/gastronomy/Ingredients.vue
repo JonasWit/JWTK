@@ -1,61 +1,41 @@
 <template>
-  <AccordionTemplate>
+<div>
+<AccordionTemplate @click="getList">
     <template v-slot:title>
       <h1>Warzywa</h1>
     </template>
     <template v-slot:content>
-      <button class="button" @click="getList">get list</button>
-      <div>
-
+           
+           <div v-for="item in state.listOfIngredients" :key="item.id" class="flex flex-row p-2">
+      <div class="p-5 rounded shadow bg-indigo-500 text-white">
+        {{item.name}}
       </div>
-    </template>
-  </AccordionTemplate>
-  <AccordionTemplate>
-    <template v-slot:title>
-      <h1>Owoce</h1>
-    </template>
-    <template v-slot:content>
-      <p>A paragraph for the component.</p>
-      <p>And <b>another</b> one.</p>
-    </template>
-  </AccordionTemplate>
-  <AccordionTemplate>
-    <template v-slot:title>
-      <h1>Napoje</h1>
-    </template>
-    <template v-slot:content>
-      <p>A paragraph for the component.</p>
-      <p>And <b>another</b> one.</p>
-    </template>
-  </AccordionTemplate>
-  <AccordionTemplate>
-    <template v-slot:title>
-      <h1>Produkty zbożowe</h1>
-    </template>
-    <template v-slot:content>
-      <p>A paragraph for the component.</p>
-      <p>And <b>another</b> one.</p>
-    </template>
-  </AccordionTemplate>
-  <AccordionTemplate>
-    <template v-slot:title>
-      <h1>Mięso i Ryby</h1>
-    </template>
-    <template v-slot:content>
-      <p>A paragraph for the component.</p>
-      <p>And <b>another</b> one.</p>
-    </template>
-  </AccordionTemplate>
+    </div>
+     
+        </template>
+  </AccordionTemplate>  
+ <ModalTemplate>
+  <template v-slot:name>
+Nazwa
+  </template>
+  <template v-slot:description>
+Opis
+  </template>
+ </ModalTemplate>
+  
+</div>
+   
 </template>
 
 <script>
 import AccordionTemplate from "@/components/generic/AccordionTemplate";
 import {getIngredients} from "@/services/gastronomyServiceAPI";
 import {reactive} from "vue";
+import ModalTemplate from "@/components/generic/ModalTemplate";
 
 export default {
   name: "Ingredients",
-  components: {AccordionTemplate},
+  components: { AccordionTemplate, ModalTemplate },
   setup() {
 
     const state = reactive({
@@ -63,10 +43,12 @@ export default {
     })
 
     async function getList() {
-      const res = await getIngredients()
-      console.log("result:", res.data)
-      console.log("result:", res)
-
+      try {
+            const res = await getIngredients()
+            state.listOfIngredients = res.data
+            console.log("listOfIngredients:",  state.listOfIngredients)
+         } catch (error) {
+            console.log(error)}
     }
 
     return {
