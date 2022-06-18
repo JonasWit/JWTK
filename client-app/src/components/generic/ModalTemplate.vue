@@ -1,30 +1,33 @@
 <template>
-<div>
-   
-<form class="mt-6 mx-4">
-            <div>
-                <slot name="name">
-                    <label class="block text-sm text-gray-800"></label>
-                                   </slot> 
-                <input class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
-            </div>
-           <div class="mt-4">
-              <slot name="description">
-                    <label class="block text-sm text-gray-800"></label>  </slot>
-                    <input class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
-              
-              </div>
-              
-</form>
-
-</div>
-
-</template>
+  <div>
+    <button @click="isModalOpen=true">Click me to open modal</button>
+    <div class="bg-zinc-100 opacity-10 fixed top-0 left-0 w-screen h-screen flex justify-center content-center" v-if="isModalOpen">
+      <div class="relative bg-white pt-12 pb-24 px-12 rounded shadow-2xl w-96 h-40" ref="modal">
+        <button class="button" @click="isModalOpen=false">close me</button>
+        Click outside this modal to close it.
+      </div>
+    </div>
+  </div>
+ </template>
 
 <script>
+import {ref} from "vue";
+import {onClickOutside} from 'vueuse/core'
 export default {
   name: "ModalTemplate",
- 
+
+  setup () {
+   const isModalOpen = ref(false)
+   const modal = ref(null)
+
+   onClickOutside(modal, () => (isModalOpen.value = false))
+    return {
+        isModalOpen,
+        modal,
+        onClickOutside
+      } 
+    }
+  
   
 }
 </script>
