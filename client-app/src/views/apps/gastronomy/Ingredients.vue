@@ -15,12 +15,7 @@
         </template>
   </AccordionTemplate>  
  <ModalTemplate>
-  <template v-slot:name>
-Nazwa
-  </template>
-  <template v-slot:description>
-Opis
-  </template>
+
  </ModalTemplate>
   
 </div>
