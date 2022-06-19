@@ -15,7 +15,24 @@
         </template>
   </AccordionTemplate>  
  <ModalTemplate>
-
+  <template v-slot:title>
+    Add ingredient
+  </template>
+  <template v-slot:name>
+    Name
+  </template>
+  <template v-slot:description>
+    Description
+  </template>
+  <template v-slot:unit>
+    Unit
+  </template>
+  <template v-slot:price>
+    Price
+  </template>
+  <template v-slot:size>
+    Size
+  </template>
  </ModalTemplate>
   
 </div>
@@ -35,6 +52,7 @@ export default {
 
     const state = reactive({
       listOfIngredients: [],
+      name: 'test'
     })
 
     async function getList() {
