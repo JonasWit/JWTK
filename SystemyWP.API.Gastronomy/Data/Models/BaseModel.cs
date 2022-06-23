@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SystemyWP.API.Gastronomy.Data.Models;
 
-public record BaseModel
+public abstract record BaseModel
 {
     [Key] public long Id { get; set; }
 

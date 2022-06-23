@@ -21,21 +21,21 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
 
     public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass)
     {
-        return _context.Ingredients.FirstOrDefaultAsync(ing =>
-            ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        return _context.Ingredients
+            .FilterAllowedEntity(resourceAccessPass).FirstOrDefaultAsync();
     }
 
     public Task<List<Ingredient>> GetIngredients(string accessKey)
     {
         return _context.Ingredients
-            .Where(d => d.AccessKey == accessKey)
+            .FilterAllowedEntities(accessKey)
             .ToListAsync();
     }
 
     public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take)
     {
         return _context.Ingredients
-            .Where(menu => menu.AccessKey == accessKey)
+            .FilterAllowedEntities(accessKey)
             .OrderBy(x => x.Id)
             .Skip(cursor)
             .Take(take)
@@ -44,8 +44,9 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
 
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {
-        var ingredient = _context.Ingredients.FirstOrDefault(ing =>
-            ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        var ingredient = _context.Ingredients
+            .FilterAllowedEntity(resourceAccessPass)
+            .FirstOrDefault();
         if (ingredient is null) return;
         _context.Remove(ingredient);
     }
@@ -53,8 +54,9 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     public void UpdateIngredient(Ingredient ingredient)
     {
         var entity =
-            _context.Ingredients.FirstOrDefault(ing =>
-                ing.Id == ingredient.Id && ing.AccessKey == ingredient.AccessKey);
+            _context.Ingredients
+                .FilterAllowedEntity(ingredient.Id, ingredient.AccessKey)
+                .FirstOrDefault();
         if (entity is null) return;
 
         entity.Description = ingredient.Description;

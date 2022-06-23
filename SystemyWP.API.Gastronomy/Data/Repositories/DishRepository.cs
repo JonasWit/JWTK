@@ -21,8 +21,9 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
 
     public void RemoveDish(ResourceAccessPass resourceAccessPass)
     {
-        var dish = _context.Dishes.FirstOrDefault(ing =>
-            ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+        var dish = _context.Dishes
+            .FilterAllowedEntity(resourceAccessPass)
+            .FirstOrDefault();
         if (dish is null) return;
         _context.Remove(dish);
     }
@@ -30,16 +31,16 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
     public Task<Dish> GetDish(ResourceAccessPass resourceAccessPass)
     {
         return _context.Dishes
+            .FilterAllowedEntity(resourceAccessPass)
             .Include(d => d.Menus)
             .Include(d => d.Ingredients)
-            .FirstOrDefaultAsync(dish =>
-                dish.Id == resourceAccessPass.Id && dish.AccessKey == resourceAccessPass.AccessKey);
+            .FirstOrDefaultAsync();
     }
 
     public Task<List<Dish>> GetDishes(string accessKey)
     {
         return _context.Dishes
-            .Where(d => d.AccessKey == accessKey)
+            .FilterAllowedEntities(accessKey)
             .Include(d => d.Menus)
             .Include(d => d.Ingredients)
             .ToListAsync();
@@ -48,7 +49,7 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
     public Task<List<Dish>> GetDishes(string accessKey, int cursor, int take)
     {
         return _context.Dishes
-            .Where(menu => menu.AccessKey == accessKey)
+            .FilterAllowedEntities(accessKey)
             .Include(d => d.Menus)
             .Include(d => d.Ingredients)
             .OrderBy(x => x.Id)
@@ -59,7 +60,9 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
 
     public void UpdateDish(Dish dish)
     {
-        var entity = _context.Menus.FirstOrDefault(e => e.Id == dish.Id && e.AccessKey == dish.AccessKey);
+        var entity = _context.Menus
+            .FilterAllowedEntity(dish.Id, dish.AccessKey)
+            .FirstOrDefault();
         if (entity is null) return;
 
         entity.Description = dish.Description;
@@ -69,24 +72,28 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
     public void AddIngredient(ResourceAccessPass resourceAccessPass, long ingredientId)
     {
         var dish = _context.Dishes
+            .FilterAllowedEntity(resourceAccessPass)
             .Include(d => d.Ingredients)
-            .FirstOrDefault(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+            .FirstOrDefault();
         if (dish is null) return;
 
-        var ingredient = _context.Ingredients.FirstOrDefault(ing =>
-            ing.Id == ingredientId && ing.AccessKey == resourceAccessPass.AccessKey);
+        var ingredient = _context.Ingredients
+            .FilterAllowedEntity(ingredientId, resourceAccessPass.AccessKey)
+            .FirstOrDefault();
         dish.Ingredients.Add(ingredient);
     }
 
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass, long ingredientId)
     {
         var dish = _context.Dishes
+            .FilterAllowedEntity(resourceAccessPass)
             .Include(d => d.Ingredients)
-            .FirstOrDefault(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+            .FirstOrDefault();
         if (dish is null) return;
 
-        var ingredient = _context.Ingredients.FirstOrDefault(ing =>
-            ing.Id == ingredientId && ing.AccessKey == resourceAccessPass.AccessKey);
+        var ingredient = _context.Ingredients
+            .FilterAllowedEntity(ingredientId, resourceAccessPass.AccessKey)
+            .FirstOrDefault();
         dish.Ingredients.Remove(ingredient);
     }
 
