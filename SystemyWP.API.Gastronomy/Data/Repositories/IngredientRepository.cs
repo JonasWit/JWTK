@@ -13,23 +13,34 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     public IngredientRepository(AppDbContext context) : base(context)
     {
     }
-    
-    public void CreateIngredient(Ingredient ingredient) => _context.Add(ingredient);
 
-    public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass) => 
-        _context.Ingredients.FirstOrDefaultAsync(ing => ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+    public void CreateIngredient(Ingredient ingredient)
+    {
+        _context.Add(ingredient);
+    }
 
-    public Task<List<Ingredient>> GetIngredients(string accessKey) => _context.Ingredients
-        .Where(d => d.AccessKey == accessKey)
-        .ToListAsync();
+    public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass)
+    {
+        return _context.Ingredients.FirstOrDefaultAsync(ing =>
+            ing.Id == resourceAccessPass.Id && ing.AccessKey == resourceAccessPass.AccessKey);
+    }
 
-    public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take) => 
-        _context.Ingredients
+    public Task<List<Ingredient>> GetIngredients(string accessKey)
+    {
+        return _context.Ingredients
+            .Where(d => d.AccessKey == accessKey)
+            .ToListAsync();
+    }
+
+    public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take)
+    {
+        return _context.Ingredients
             .Where(menu => menu.AccessKey == accessKey)
             .OrderBy(x => x.Id)
             .Skip(cursor)
             .Take(take)
             .ToListAsync();
+    }
 
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {
@@ -39,6 +50,22 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
         _context.Remove(ingredient);
     }
 
-    public void UpdateIngredient(Ingredient ingredient) => _context.Update(ingredient);
-    public Task<int> CountIngredients(string accessKey) => _context.Ingredients.CountAsync(d => d.AccessKey == accessKey);
+    public void UpdateIngredient(Ingredient ingredient)
+    {
+        var entity =
+            _context.Ingredients.FirstOrDefault(ing =>
+                ing.Id == ingredient.Id && ing.AccessKey == ingredient.AccessKey);
+        if (entity is null) return;
+
+        entity.Description = ingredient.Description;
+        entity.Name = ingredient.Name;
+        entity.MeasurementUnits = ingredient.MeasurementUnits;
+        entity.StackSize = ingredient.StackSize;
+        entity.PricePerStack = ingredient.PricePerStack;
+    }
+
+    public Task<int> CountIngredients(string accessKey)
+    {
+        return _context.Ingredients.CountAsync(d => d.AccessKey == accessKey);
+    }
 }
