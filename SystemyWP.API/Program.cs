@@ -6,6 +6,7 @@ using System.Text;
 using AspNetCoreRateLimit;
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
@@ -62,6 +63,13 @@ if (builder.Environment.IsProduction())
 
 if (builder.Environment.IsDevelopment())
     builder.Host.UseSerilog((context, config) => { config.WriteTo.Console(); });
+
+// Swagger
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddFluentValidationRulesToSwagger();
+}
 
 var configuration = builder.Configuration;
 
@@ -174,7 +182,12 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 var app = builder.Build();
 
 // Dev only
-if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 // Prod only
 if (app.Environment.IsProduction())
