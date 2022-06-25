@@ -20,11 +20,11 @@ namespace SystemyWP.API.Controllers.GastronomyService;
 [Route("[controller]")]
 public class GastronomyMenusController : ApiControllerBase
 {
-    private readonly UrlService _urlService;
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyMenusController> _logger;
+    private readonly IMapper _mapper;
+    private readonly UrlService _urlService;
+    private readonly IUserRepository _userRepository;
 
     public GastronomyMenusController(
         UrlService urlService,
@@ -39,13 +39,14 @@ public class GastronomyMenusController : ApiControllerBase
         _gastronomyHttpClient = gastronomyHttpClient;
         _logger = logger;
     }
-    
-    
+
+
     [HttpPost(Name = "CreateMenu")]
-    public async Task<IActionResult> CreateMenu([FromBody] MenuCreateDto menuCreateDto)
+    public async Task<IActionResult> CreateMenu([FromBody] MenuCreatePayload menuCreatePayload)
     {
         try
         {
+            var menuCreateDto = _mapper.Map<MenuCreateDto>(menuCreatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
@@ -61,7 +62,7 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(CreateMenu)} Error");
         }
     }
-    
+
     [HttpGet("{id:long}", Name = "GetMenu")]
     public async Task<IActionResult> GetMenu(long id)
     {
@@ -72,7 +73,7 @@ public class GastronomyMenusController : ApiControllerBase
 
             var menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass {Id = id, AccessKey = key});
             if (menuServiceDto is null) return NotFound();
-            
+
             return Ok(_mapper.Map<MenuDto>(menuServiceDto));
         }
         catch (Exception e)
@@ -81,7 +82,7 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(GetMenu)} Error");
         }
     }
-    
+
     [HttpDelete("{id:long}", Name = "RemoveMenu")]
     public async Task<IActionResult> RemoveMenu(long id)
     {
@@ -89,8 +90,9 @@ public class GastronomyMenusController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
-            var responseCode = await _gastronomyHttpClient.RemoveMenu(new ResourceAccessPass {Id = id, AccessKey = key});
+
+            var responseCode =
+                await _gastronomyHttpClient.RemoveMenu(new ResourceAccessPass {Id = id, AccessKey = key});
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),
@@ -105,7 +107,7 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(RemoveMenu)} Error");
         }
     }
-    
+
     [HttpGet("list", Name = "GetMenus")]
     public async Task<IActionResult> GetMenus()
     {
@@ -113,10 +115,10 @@ public class GastronomyMenusController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var menus = await _gastronomyHttpClient.GetMenus(key);
             if (menus is null) return NotFound();
-            
+
             return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
         catch (Exception e)
@@ -125,7 +127,7 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(GetMenus)} Error");
         }
     }
-    
+
     [HttpGet("count", Name = "CountMenus")]
     public async Task<IActionResult> CountMenus()
     {
@@ -133,7 +135,7 @@ public class GastronomyMenusController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var elementCountDto = await _gastronomyHttpClient.CountMenus(key);
             if (elementCountDto is null) return NotFound();
             return Ok(elementCountDto);
@@ -144,16 +146,17 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(CountMenus)} Error");
         }
     }
-    
+
     [HttpPut(Name = "UpdateMenu")]
-    public async Task<IActionResult> UpdateMenu([FromBody] MenuUpdateDto menuUpdateDto)
+    public async Task<IActionResult> UpdateMenu([FromBody] MenuUpdatePayload menuUpdatePayload)
     {
         try
         {
+            var menuUpdateDto = _mapper.Map<MenuUpdateDto>(menuUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             menuUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.UpdateMenu(menuUpdateDto);
             return responseCode switch
             {
@@ -169,7 +172,7 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(UpdateMenu)} Error");
         }
     }
-    
+
     [HttpGet("list/{cursor:int}/{take:int}", Name = "GetPaginatedMenus")]
     public async Task<IActionResult> GetPaginatedMenus(int cursor, int take)
     {
@@ -177,11 +180,11 @@ public class GastronomyMenusController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
             if (menus is null) return NotFound();
-            
-            return Ok(_mapper.Map<List<MenuDto>>(menus)); 
+
+            return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
         catch (Exception e)
         {
@@ -189,24 +192,26 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(GetPaginatedMenus)} Error");
         }
     }
-    
+
     [HttpPost("add-dish", Name = "AddMenuDish")]
-    public async Task<IActionResult> AddMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    public async Task<IActionResult> AddMenuDish([FromBody] MenuDishUpdatePayload menuDishUpdatePayload)
     {
         try
         {
+            var menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             menuDishUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.AddDishToMenu(menuDishUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddMenuDish)} Error - Service Error"),
+                HttpStatusCode.InternalServerError => throw new Exception(
+                    $"{nameof(AddMenuDish)} Error - Service Error"),
                 _ => throw new Exception($"{nameof(AddMenuDish)} Error - Unsupported Status Code")
-            };   
+            };
         }
         catch (Exception e)
         {
@@ -214,22 +219,24 @@ public class GastronomyMenusController : ApiControllerBase
             return Problem($"{nameof(AddMenuDish)} Error");
         }
     }
-    
+
     [HttpPost("remove-dish", Name = "RemoveMenuDish")]
-    public async Task<IActionResult> RemoveMenuDish([FromBody] MenuDishUpdateDto menuDishUpdateDto)
+    public async Task<IActionResult> RemoveMenuDish([FromBody] MenuDishUpdatePayload menuDishUpdatePayload)
     {
         try
         {
+            var menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             menuDishUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.RemoveDishFromMenu(menuDishUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.NoContent => NoContent(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveMenuDish)} Error - Service Error"),
+                HttpStatusCode.InternalServerError => throw new Exception(
+                    $"{nameof(RemoveMenuDish)} Error - Service Error"),
                 _ => throw new Exception($"{nameof(RemoveMenuDish)} Error - Unsupported Status Code")
             };
         }
@@ -238,11 +245,5 @@ public class GastronomyMenusController : ApiControllerBase
             _logger.LogError(e, $"{nameof(RemoveMenuDish)} Error");
             return Problem($"{nameof(RemoveMenuDish)} Error");
         }
-    }  
-    
-    
-    
-    
-    
-    
+    }
 }

@@ -3,7 +3,7 @@ using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 
 namespace SystemyWP.API.FluentValidations.GastronomyService.Dishes;
 
-public class DishIngredientUpdateDtoValidation : AbstractValidator<DishIngredientUpdateDto>
+public class DishIngredientUpdateDtoValidation : AbstractValidator<DishIngredientUpdatePayload>
 {
     public DishIngredientUpdateDtoValidation()
     {

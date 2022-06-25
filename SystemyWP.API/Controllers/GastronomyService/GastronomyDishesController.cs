@@ -22,11 +22,11 @@ namespace SystemyWP.API.Controllers.GastronomyService;
 public class GastronomyDishesController : ApiControllerBase
 {
     private readonly IOptionsMonitor<ClusterServices> _clusterServicesSettings;
-    private readonly UrlService _urlService;
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyDishesController> _logger;
+    private readonly IMapper _mapper;
+    private readonly UrlService _urlService;
+    private readonly IUserRepository _userRepository;
 
     public GastronomyDishesController(
         IOptionsMonitor<ClusterServices> clusterServicesSettings,
@@ -45,10 +45,11 @@ public class GastronomyDishesController : ApiControllerBase
     }
 
     [HttpPost(Name = "CreateDish")]
-    public async Task<IActionResult> CreateDish([FromBody] DishCreateDto dishCreateDto)
+    public async Task<IActionResult> CreateDish([FromBody] DishCreatePayload dishCreatePayload)
     {
         try
         {
+            var dishCreateDto = _mapper.Map<DishCreateDto>(dishCreatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
@@ -75,14 +76,16 @@ public class GastronomyDishesController : ApiControllerBase
 
             var dishServiceDto = await _gastronomyHttpClient.GetDish(new ResourceAccessPass {Id = id, AccessKey = key});
             if (dishServiceDto is null) return NotFound();
-            
+
             return Ok(new DishDto
             {
                 Name = dishServiceDto.Name,
                 Id = dishServiceDto.Id,
                 Description = dishServiceDto.Description,
-                Ingredients = dishServiceDto.Ingredients.Select(item => _urlService.IngredientPath("GastronomyIngredients", item).ToString()).ToList(),
-                Menus = dishServiceDto.Menus.Select(item => _urlService.IngredientPath("GastronomyMenus", item).ToString()).ToList(),
+                Ingredients = dishServiceDto.Ingredients
+                    .Select(item => _urlService.IngredientPath("GastronomyIngredients", item).ToString()).ToList(),
+                Menus = dishServiceDto.Menus
+                    .Select(item => _urlService.IngredientPath("GastronomyMenus", item).ToString()).ToList()
             });
         }
         catch (Exception e)
@@ -91,7 +94,7 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(GetDish)} Error");
         }
     }
-    
+
     [HttpGet("list", Name = "GetDishes")]
     public async Task<IActionResult> GetDishes()
     {
@@ -99,10 +102,10 @@ public class GastronomyDishesController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var dishes = await _gastronomyHttpClient.GetDishes(key);
             if (dishes is null) return NotFound();
-            
+
             return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
@@ -119,8 +122,9 @@ public class GastronomyDishesController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
-            var responseCode = await _gastronomyHttpClient.RemoveDish(new ResourceAccessPass {Id = id, AccessKey = key});
+
+            var responseCode =
+                await _gastronomyHttpClient.RemoveDish(new ResourceAccessPass {Id = id, AccessKey = key});
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),
@@ -135,7 +139,7 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(RemoveDish)} Error");
         }
     }
-    
+
     [HttpGet("count", Name = "CountDishes")]
     public async Task<IActionResult> CountDishes()
     {
@@ -143,7 +147,7 @@ public class GastronomyDishesController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var elementCountDto = await _gastronomyHttpClient.CountDishes(key);
             if (elementCountDto is null) return NotFound();
             return Ok(elementCountDto);
@@ -154,16 +158,17 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(CountDishes)} Error");
         }
     }
-    
+
     [HttpPut(Name = "UpdateDish")]
-    public async Task<IActionResult> UpdateDish([FromBody] DishUpdateDto dishUpdateDto)
+    public async Task<IActionResult> UpdateDish([FromBody] DishUpdatePayload dishUpdatePayload)
     {
         try
         {
+            var dishUpdateDto = _mapper.Map<DishUpdateDto>(dishUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             dishUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.UpdateDish(dishUpdateDto);
             return responseCode switch
             {
@@ -179,7 +184,7 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(UpdateDish)} Error");
         }
     }
-    
+
     [HttpGet("list/{cursor:int}/{take:int}", Name = "GetPaginatedDishes")]
     public async Task<IActionResult> GetPaginatedDishes(int cursor, int take)
     {
@@ -187,10 +192,10 @@ public class GastronomyDishesController : ApiControllerBase
         {
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
-    
+
             var dishes = await _gastronomyHttpClient.GetPaginatedDishes(key, cursor, take);
             if (dishes is null) return NotFound();
-            
+
             return Ok(_mapper.Map<List<DishDto>>(dishes));
         }
         catch (Exception e)
@@ -199,22 +204,25 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(GetPaginatedDishes)} Error");
         }
     }
-    
+
     [HttpPost("add-ingredient", Name = "AddDishIngredient")]
-    public async Task<IActionResult> AddDishIngredient([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    public async Task<IActionResult> AddDishIngredient(
+        [FromBody] DishIngredientUpdatePayload dishIngredientUpdatePayload)
     {
         try
         {
+            var dishIngredientUpdateDto = _mapper.Map<DishIngredientUpdateDto>(dishIngredientUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             dishIngredientUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.AddIngredientToDish(dishIngredientUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(AddDishIngredient)} Error - Service Error"),
+                HttpStatusCode.InternalServerError => throw new Exception(
+                    $"{nameof(AddDishIngredient)} Error - Service Error"),
                 _ => throw new Exception($"{nameof(AddDishIngredient)} Error - Unsupported Status Code")
             };
         }
@@ -224,22 +232,25 @@ public class GastronomyDishesController : ApiControllerBase
             return Problem($"{nameof(AddDishIngredient)} Error");
         }
     }
-    
+
     [HttpPost("remove-ingredient", Name = "RemoveDishIngredient")]
-    public async Task<IActionResult> RemoveDishIngredient([FromBody] DishIngredientUpdateDto dishIngredientUpdateDto)
+    public async Task<IActionResult> RemoveDishIngredient(
+        [FromBody] DishIngredientUpdatePayload dishIngredientUpdatePayload)
     {
         try
         {
+            var dishIngredientUpdateDto = _mapper.Map<DishIngredientUpdateDto>(dishIngredientUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
             dishIngredientUpdateDto.AccessKey = key;
-            
+
             var responseCode = await _gastronomyHttpClient.RemoveIngredientFromDish(dishIngredientUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.NoContent => NoContent(),
                 HttpStatusCode.BadRequest => BadRequest(),
-                HttpStatusCode.InternalServerError => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Service Error"),
+                HttpStatusCode.InternalServerError => throw new Exception(
+                    $"{nameof(RemoveDishIngredient)} Error - Service Error"),
                 _ => throw new Exception($"{nameof(RemoveDishIngredient)} Error - Unsupported Status Code")
             };
         }

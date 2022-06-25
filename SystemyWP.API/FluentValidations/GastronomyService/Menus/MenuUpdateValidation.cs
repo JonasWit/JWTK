@@ -4,7 +4,7 @@ using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 
 namespace SystemyWP.API.FluentValidations.GastronomyService.Menus;
 
-public class MenuUpdateValidation : AbstractValidator<MenuUpdateDto>
+public class MenuUpdateValidation : AbstractValidator<MenuUpdatePayload>
 {
     public MenuUpdateValidation()
     {

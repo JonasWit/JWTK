@@ -2,12 +2,12 @@ using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 
-public class IngredientCreateDto
+public class IngredientUpdatePayload
 {
-    public string AccessKey { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
+    public MeasurementUnits MeasurementUnits { get; set; }
     public int PricePerStack { get; set; }
     public double StackSize { get; set; }
 }
