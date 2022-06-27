@@ -13,7 +13,7 @@
           <p>Stack Size: {{item.stackSize}}</p>
           <button @click="() => remove(item.id)" class="button m-2">REMOVE
             INGREDIENT</button>
-          <UpdateForm :item="item"></UpdateForm>
+          <UpdateIngredientForm :selectedIngredient="item"></UpdateIngredientForm>
         </ul>
       </li>
     </div>
@@ -23,8 +23,8 @@
 <script>
 import {useStore} from "vuex";
 import {computed} from "vue";
-import UpdateForm from "../../../components/generic/UpdateForm.vue";
 import AddIngredientForm from "../../../components/gastronomy/ingredients/AddIngredientForm.vue";
+import UpdateIngredientForm from "../../../components/gastronomy/ingredients/UpdateIngredientForm.vue";
 
 
 export default {
@@ -61,7 +61,7 @@ export default {
             
         };
     },
-    components: { UpdateForm, AddIngredientForm }
+    components: { AddIngredientForm, UpdateIngredientForm }
 }
 </script>
 
