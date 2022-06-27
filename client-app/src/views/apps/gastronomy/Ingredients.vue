@@ -5,6 +5,7 @@
     <div v-if="listA">
       <li v-for="item in listA" :key="item.id" class="w-45">
         <ul class="border p-9">
+          <p>ID: {{item.id}}</p>
           <p>Name:{{item.name}}</p>
           <p>Description:{{item.description}}</p>
           <p>Measurement Unit: {{item.measurementUnits}}</p>
