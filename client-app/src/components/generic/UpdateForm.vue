@@ -31,8 +31,8 @@
                         class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
 
                     <div class="absolute bottom-5 right-4 flex gap-4">
-                        <button class="bg-indigo-500 text-white px-4 py-2 hover:bg-indigo-600"
-                            @click="() => update(item)">Save</button>
+                        <!-- <button class="bg-indigo-500 text-white px-4 py-2 hover:bg-indigo-600"
+                            @click="() => update(item)">Save</button> -->
                         <button class=" bg-indigo-500 text-white px-4 py-2 hover:bg-indigo-600"
                             @click="isModalUpdateOpen = false">Anuluj</button>
                     </div>
@@ -44,33 +44,33 @@
 
 <script>
 import { ref } from "vue";
-import { useStore } from "vuex";
+// import { useStore } from "vuex";
 
 export default {
-    props: {
-        item: Object,
-    },
+    // props: {
+    //     item: Object,
+    // },
     setup() {
         const isModalUpdateOpen = ref(false);
         const modalUpdate = ref(null);
 
-        const store = useStore();
+        // const store = useStore();
 
-        async function update(item) {
-            try {
-                console.log("item", item)
-                await store.dispatch("gastronomy/updateOneIngredient", item);
-                console.log("updated", item);
-                isModalUpdateOpen.value = false
-            }
-            catch (error) {
-                console.log("error", error);
-            }
-        }
+        // async function update(item) {
+        //     try {
+        //         console.log("item", item)
+        //         await store.dispatch("gastronomy/updateOneIngredient", item);
+        //         console.log("updated", item);
+        //         isModalUpdateOpen.value = false
+        //     }
+        //     catch (error) {
+        //         console.log("error", error);
+        //     }
+        // }
         return {
             isModalUpdateOpen,
             modalUpdate,
-            update
+            // update
         }
     }
 }

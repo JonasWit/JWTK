@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemyWP.API.Controllers.MasterService;
@@ -83,6 +84,10 @@ public class GastronomyIngredientsController : ApiControllerBase
     }
 
     [HttpGet("list", Name = "GetIngredients")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetIngredients()
     {
         try
