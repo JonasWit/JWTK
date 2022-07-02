@@ -1,11 +1,9 @@
 <template>
-  <div :class="isDark ? 'dark' : ''" class="relative">
-    <div class="min-h-screen md:flex">
-      <SnackPopup/>
+  <div :class="isDark ? 'dark' : ''">
+    <div>
+      <SnackPopup />
       <GdprModal v-if="!gdprAccepted"></GdprModal>
-      <NavContainer class="flex-none w-full md:max-w-xs sticky top-0 z-10">
-        <MainNav v-if="nav.navType === 'main'"/>
-      </NavContainer>
+     
       <main class="flex-1 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
         <router-view v-slot="{ Component, route }">
           <transition name="fade">
@@ -15,8 +13,10 @@
           </transition>
         </router-view>
       </main>
-    </div>
-    <PortalFooter class="bottom-0 sticky z-10"/>
+    </div> 
+    <MainNav  v-if="nav.navType === 'main'" />
+
+    <!-- <PortalFooter class="bottom-0 sticky z-10" /> -->
   </div>
 </template>
 

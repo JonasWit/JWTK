@@ -12,3 +12,10 @@
     max-width: 15rem;
 }
 
+.nav-link:hover {
+    opacity: 0.5;
+}
+
+.nav-active-link {
+    opacity: 0.5;
+}

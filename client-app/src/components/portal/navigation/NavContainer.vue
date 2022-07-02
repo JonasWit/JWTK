@@ -1,6 +1,6 @@
 <template>
-  <div class="md:flex md:justify-end bg-white">
-    <nav class="text-right">
+  <div>
+    <nav class="text-right flex flex-row">
       <div class="flex justify-between items-center">
         <h1 class="font-bold uppercase p-4 border-b border-gray-100">
           <router-link class="text-customClassicBlue hover:text-blue-400 transition ease-in-out delay-100" to="/">
