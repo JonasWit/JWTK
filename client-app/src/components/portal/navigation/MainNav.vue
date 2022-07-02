@@ -10,6 +10,9 @@
       <li v-if="!isAuth">
         <LoginRouterLink />
       </li>
+      <li v-if="isAuth">
+        <LogoutRouterLink />
+      </li>
       </ul>
   </div>
 
@@ -21,18 +24,23 @@ import {computed} from "vue";
 import AboutRouterLink from "@/components/portal/AboutRouterLink";
 import HomeRouterLink from "@/components/portal/HomeRouterLink";
 import LoginRouterLink from "@/components/portal/LoginRouterLink";
+import LogoutRouterLink from "../LogoutRouterLink.vue";
 
 
 export default {
   name: "MainNav",
   components: {
-      AboutRouterLink, HomeRouterLink, LoginRouterLink
-  },
+    AboutRouterLink,
+    HomeRouterLink,
+    LoginRouterLink,
+    LogoutRouterLink
+},
   setup() {
     const store = useStore()
    
     return {
       isAuth: computed(() => store.getters["auth/isAuthorized"]),
+      
    
          }
   }
