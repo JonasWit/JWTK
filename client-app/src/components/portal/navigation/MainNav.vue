@@ -5,15 +5,24 @@
         <HomeRouterLink />
       </li>
       <li>
+        <HomeRouterLink />
+      </li>
+      <li class="absolute bottom-6">
         <AboutRouterLink />
       </li>
       <li v-if="!isAuth">
         <LoginRouterLink />
       </li>
       <li v-if="isAuth">
+        <ProfileRouterLink />
+      </li>
+      <li v-if="isAuth">
         <LogoutRouterLink />
       </li>
-      </ul>
+      <li>
+
+      </li>
+    </ul>
   </div>
 
 </template>
@@ -25,6 +34,7 @@ import AboutRouterLink from "@/components/portal/AboutRouterLink";
 import HomeRouterLink from "@/components/portal/HomeRouterLink";
 import LoginRouterLink from "@/components/portal/LoginRouterLink";
 import LogoutRouterLink from "../LogoutRouterLink.vue";
+import ProfileRouterLink from "../ProfileRouterLink.vue";
 
 
 export default {
@@ -33,7 +43,8 @@ export default {
     AboutRouterLink,
     HomeRouterLink,
     LoginRouterLink,
-    LogoutRouterLink
+    LogoutRouterLink,
+    ProfileRouterLink
 },
   setup() {
     const store = useStore()

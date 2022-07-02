@@ -46,18 +46,13 @@
       </div>
     </div>
   </div>
-  <div>
-  <PrivacyRouterLink></PrivacyRouterLink>
-  <ToSRouterLink></ToSRouterLink>
-  </div>
 </div>  
 </template>
 <script>
-import PrivacyRouterLink from '../components/portal/PrivacyRouterLink.vue'
-import ToSRouterLink from '../components/portal/ToSRouterLink.vue'
+
 
 export default {
-  components: { PrivacyRouterLink, ToSRouterLink },
+ 
   name: 'Home',
 }
 </script>

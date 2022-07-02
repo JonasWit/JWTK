@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import NavContainer from "@/components/portal/navigation/NavContainer";
 import MainNav from "@/components/portal/navigation/MainNav";
 import {useStore} from "vuex";
 import {computed} from "vue";
@@ -31,7 +30,7 @@ import GdprModal from "@/components/portal/GdprModal";
 import PortalFooter from "@/components/portal/PortalFooter";
 
 export default {
-  components: {PortalFooter, GdprModal, SnackPopup, MainNav, NavContainer},
+  components: {PortalFooter, GdprModal, SnackPopup, MainNav},
   setup() {
     const store = useStore()
     return {
