@@ -14,5 +14,6 @@ public class IngredientUpdateValidation : AbstractValidator<IngredientUpdatePayl
         RuleFor(x => x.MeasurementUnits).IsInEnum();
         RuleFor(x => x.PricePerStack).NotNull().InclusiveBetween(0, 1000000);
         RuleFor(x => x.StackSize).NotNull().InclusiveBetween(0.001, 1000000);
+        RuleFor(x => x.Category).MaximumLength(AppConstants.DataLimits.NameLimit);
     }
 }

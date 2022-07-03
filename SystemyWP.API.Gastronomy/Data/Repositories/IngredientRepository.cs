@@ -64,6 +64,7 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
         entity.MeasurementUnits = ingredient.MeasurementUnits;
         entity.StackSize = ingredient.StackSize;
         entity.PricePerStack = ingredient.PricePerStack;
+        entity.Category = ingredient.Category;
     }
 
     public Task<int> CountIngredients(string accessKey)

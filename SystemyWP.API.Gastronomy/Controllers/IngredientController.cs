@@ -15,9 +15,9 @@ namespace SystemyWP.API.Gastronomy.Controllers;
 [Route("[controller]")]
 public class IngredientController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IIngredientRepository _ingredientRepository;
     private readonly ILogger<IngredientController> _logger;
+    private readonly IMapper _mapper;
 
     public IngredientController(
         IMapper mapper,
@@ -34,8 +34,9 @@ public class IngredientController : ControllerBase
     {
         try
         {
-            if (await _ingredientRepository.CountIngredients(ingredientCreateDto.AccessKey) > AppConstants.RecordsLimits.Ingredient) return BadRequest();
-            
+            if (await _ingredientRepository.CountIngredients(ingredientCreateDto.AccessKey) >
+                AppConstants.RecordsLimits.Ingredient) return BadRequest();
+
             var ingredient = _mapper.Map<Ingredient>(ingredientCreateDto);
             _ingredientRepository.CreateIngredient(ingredient);
 
@@ -45,7 +46,7 @@ public class IngredientController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"{nameof(CreateIngredient)} Error");
-            return Problem($"{nameof(CreateIngredient)} Error");
+            return Problem($"{nameof(CreateIngredient)} Error, {e.Message}");
         }
     }
 
@@ -123,7 +124,7 @@ public class IngredientController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e,$"{nameof(RemoveIngredient)} Error");
+            _logger.LogError(e, $"{nameof(RemoveIngredient)} Error");
             return Problem($"{nameof(RemoveIngredient)} Error");
         }
     }

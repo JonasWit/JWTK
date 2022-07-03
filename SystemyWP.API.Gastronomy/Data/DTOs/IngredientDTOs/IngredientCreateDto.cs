@@ -8,4 +8,5 @@ public class IngredientCreateDto
     public MeasurementUnits MeasurementUnits { get; set; } = MeasurementUnits.None;
     public int PricePerStack { get; set; }
     public double StackSize { get; set; }
+    public string Category { get; set; }
 }

@@ -67,6 +67,7 @@ public class DishRepository : RepositoryBase<AppDbContext>, IDishRepository
 
         entity.Description = dish.Description;
         entity.Name = dish.Name;
+        entity.Category = dish.Category;
     }
 
     public void AddIngredient(ResourceAccessPass resourceAccessPass, long ingredientId)

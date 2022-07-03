@@ -11,5 +11,6 @@ public class DishUpdateValidation : AbstractValidator<DishUpdatePayload>
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.Name).NotEmpty().MaximumLength(AppConstants.DataLimits.NameLimit);
         RuleFor(x => x.Description).NotEmpty().MaximumLength(AppConstants.DataLimits.DescriptionLimit);
+        RuleFor(x => x.Category).MaximumLength(AppConstants.DataLimits.NameLimit);
     }
 }

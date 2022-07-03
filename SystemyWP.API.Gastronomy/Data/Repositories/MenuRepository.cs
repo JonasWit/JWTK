@@ -64,6 +64,7 @@ public class MenuRepository : RepositoryBase<AppDbContext>, IMenuRepository
 
         entity.Description = menu.Description;
         entity.Name = menu.Name;
+        entity.Category = menu.Category;
     }
 
     public void AddDish(ResourceAccessPass resourceAccessPass, long dishId)

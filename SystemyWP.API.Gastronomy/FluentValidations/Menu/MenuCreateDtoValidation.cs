@@ -9,5 +9,6 @@ public class MenuCreateDtoValidation : AbstractValidator<MenuCreateDto>
     {
         RuleFor(x => x.AccessKey).NotEmpty();
         RuleFor(x => x.Name).NotEmpty().MaximumLength(AppConstants.DataLimits.NameLimit);
+        RuleFor(x => x.Category).MaximumLength(AppConstants.DataLimits.NameLimit);
     }
 }

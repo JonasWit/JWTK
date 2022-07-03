@@ -23,7 +23,7 @@ public class DishRepositoryTests
         var newDish = new Dish
         {
             AccessKey = "abc",
-            Name = "test description",
+            Name = "test description"
         };
 
         //Act
@@ -35,7 +35,47 @@ public class DishRepositoryTests
         Assert.Single(results);
         Assert.Contains(results, item => item.Equals(newDish with {Id = 1}));
     }
-    
+
+    [Fact]
+    public async Task UpdateDishTest()
+    {
+        //Arrange
+        await using var context =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("UpdateDishTest"));
+        const string accessKey = "abc";
+        const string dishName = "test dish";
+        const string description = "test description";
+
+        IDishRepository repo = new DishRepository(context);
+        var newDish = new Dish
+        {
+            AccessKey = accessKey,
+            Name = dishName,
+            Description = description
+        };
+
+        //Act
+        repo.CreateDish(newDish);
+        await repo.SaveChanges();
+
+        await using var contextForUpdate =
+            new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("UpdateDishTest"));
+        repo = new DishRepository(contextForUpdate);
+
+        var entity = await repo.GetDish(new ResourceAccessPass {AccessKey = accessKey, Id = 1});
+
+        entity.Description = $"updated-{description}";
+        entity.Name = $"updated-{dishName}";
+
+        repo.UpdateDish(entity);
+        await repo.SaveChanges();
+
+        var result = await repo.GetDish(new ResourceAccessPass {AccessKey = accessKey, Id = 1});
+
+        //Assert
+        Assert.Equal(entity, result);
+    }
+
     [Fact]
     public async Task GetDishListTest()
     {
@@ -46,7 +86,7 @@ public class DishRepositoryTests
         IDishRepository repo = new DishRepository(context);
         var dishes = GastronomySeed.GetTestDishesList(10);
         dishes.ForEach(item => repo.CreateDish(item));
-        
+
         //Act
         await repo.SaveChanges();
         var results = await repo.GetDishes(GastronomySeed.AccessKey);
@@ -54,14 +94,14 @@ public class DishRepositoryTests
         //Assert
         Assert.Equal(dishes.Count, results.Count);
     }
-    
+
     [Fact]
     public async Task AddIngredientToDishTest()
     {
         //Arrange
         await using var context =
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("AddIngredientToDishTest"));
-        
+
         IIngredientRepository ingredientRepo = new IngredientRepository(context);
         var newIngredient = new Ingredient
         {
@@ -71,7 +111,7 @@ public class DishRepositoryTests
             StackSize = 10,
             PricePerStack = 150
         };
-        
+
         ingredientRepo.CreateIngredient(newIngredient);
         await ingredientRepo.SaveChanges();
 
@@ -79,9 +119,9 @@ public class DishRepositoryTests
         var newDish = new Dish
         {
             AccessKey = "abc",
-            Name = "test description",
+            Name = "test description"
         };
-        
+
         dishRepo.CreateDish(newDish);
         await dishRepo.SaveChanges();
 
@@ -93,14 +133,14 @@ public class DishRepositoryTests
         Assert.Single(result.Ingredients);
         Assert.Contains(result.Ingredients, item => item.Equals(newIngredient));
     }
-    
+
     [Fact]
     public async Task RemoveIngredientFromDishTest()
     {
         //Arrange
         await using var context =
             new AppDbContext(ContextOptions.GetDefaultOptions<AppDbContext>("RemoveIngredientFromDishTest"));
-        
+
         IIngredientRepository ingredientRepo = new IngredientRepository(context);
         var newIngredient = new Ingredient
         {
@@ -110,7 +150,7 @@ public class DishRepositoryTests
             StackSize = 10,
             PricePerStack = 150
         };
-        
+
         ingredientRepo.CreateIngredient(newIngredient);
         await ingredientRepo.SaveChanges();
 
@@ -118,23 +158,23 @@ public class DishRepositoryTests
         var newDish = new Dish
         {
             AccessKey = "abc",
-            Name = "test description",
+            Name = "test description"
         };
-        
+
         dishRepo.CreateDish(newDish);
         await dishRepo.SaveChanges();
 
         //Act
         dishRepo.AddIngredient(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id}, newIngredient.Id);
         await dishRepo.SaveChanges();
-        
+
         dishRepo.RemoveIngredient(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id}, newIngredient.Id);
         var result = await dishRepo.GetDish(new ResourceAccessPass {AccessKey = "abc", Id = newDish.Id});
 
         //Assert
         Assert.Empty(result.Ingredients);
     }
-    
+
     [Fact]
     public void PaginatedResultsTests()
     {
@@ -144,9 +184,5 @@ public class DishRepositoryTests
         //Act
 
         //Assert
- 
-    }  
-    
-    
-    
+    }
 }
