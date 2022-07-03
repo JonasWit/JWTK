@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
@@ -12,7 +11,6 @@ using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Policies;
-using SystemyWP.API.Settings;
 
 namespace SystemyWP.API.Services.HttpServices;
 
@@ -21,14 +19,17 @@ public class GastronomyHttpClient
     private readonly HttpClient _httpClient;
     private readonly HttpClientPolicy _httpClientPolicy;
 
-    private string ErrorMessage(string methodName) => $"Gastronomy Service Client {methodName} Error";
-
     public GastronomyHttpClient(
         HttpClient httpClient,
         HttpClientPolicy httpClientPolicy)
     {
         _httpClient = httpClient;
         _httpClientPolicy = httpClientPolicy;
+    }
+
+    private string ErrorMessage(string methodName)
+    {
+        return $"Gastronomy Service Client {methodName} Error";
     }
 
     #region Maintenance
@@ -234,7 +235,7 @@ public class GastronomyHttpClient
         if (!response.IsSuccessStatusCode) throw new Exception(ErrorMessage(nameof(GetMenus)));
         return await response.Content.ReadFromJsonAsync<List<MenuServiceDto>>();
     }
-    
+
     public async Task<ElementCountDto> CountMenus(string accessKey)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
@@ -243,14 +244,14 @@ public class GastronomyHttpClient
         if (!response.IsSuccessStatusCode) throw new Exception(ErrorMessage(nameof(CountMenus)));
         return await response.Content.ReadFromJsonAsync<ElementCountDto>();
     }
-    
+
     public async Task<HttpStatusCode> UpdateMenu(MenuUpdateDto menuDishUpdateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
             => _httpClient.PutAsJsonAsync(UrlService.GastronomyService.BaseMenuController, menuDishUpdateDto));
         return response.StatusCode;
     }
-    
+
     public async Task<List<MenuServiceDto>> GetPaginatedMenus(string accessKey, int cursor, int take)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()
@@ -259,7 +260,7 @@ public class GastronomyHttpClient
         if (!response.IsSuccessStatusCode) throw new Exception(ErrorMessage(nameof(GetPaginatedMenus)));
         return await response.Content.ReadFromJsonAsync<List<MenuServiceDto>>();
     }
-    
+
     public async Task<HttpStatusCode> AddDishToMenu(MenuDishUpdateDto menuDishUpdateDto)
     {
         var response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(()

@@ -9,6 +9,10 @@ namespace SystemyWP.API.Profiles;
 
 public class GastronomyServiceProfile : Profile
 {
+    public GastronomyServiceProfile()
+    {
+    }
+
     public GastronomyServiceProfile(UrlService urlService)
     {
         CreateMap<IngredientCreatePayload, IngredientCreateDto>();

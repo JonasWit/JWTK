@@ -22,11 +22,8 @@ public class User
     public string PasswordResetToken { get; set; }
 
     public bool EmailConfirmed { get; set; }
-
     public DateTime? Locked { get; set; }
-
     public DateTime? LastLogin { get; set; }
-
     public List<UserClaim> Claims { get; set; } = new();
 
     [Required]
