@@ -20,21 +20,18 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
     {
         _encryptor = encryptor;
     }
-    
+
     public void CreateUser(UserCredentialsForm userCredentialsForm)
     {
-        if(userCredentialsForm.Email is null) throw new ArgumentNullException(nameof(userCredentialsForm.Email));
-        if(userCredentialsForm.Password is null) throw new ArgumentNullException(nameof(userCredentialsForm.Password));
-        
-        var newGuid = Guid.NewGuid().ToString();
-        var newUser = new User()
+        if (userCredentialsForm.Email is null) throw new ArgumentNullException(nameof(userCredentialsForm.Email));
+        if (userCredentialsForm.Password is null) throw new ArgumentNullException(nameof(userCredentialsForm.Password));
+
+        var userId = Guid.NewGuid().ToString();
+        var newUser = new User
         {
-            Id = newGuid,
+            Id = userId,
             Password = _encryptor.Encrypt(userCredentialsForm.Password),
-            AccessKey = new AccessKey
-            {
-                Id = Guid.NewGuid().ToString(),
-            },
+            AccessKey = Guid.NewGuid().ToString(),
             Claims = new List<UserClaim>
             {
                 new()
@@ -46,7 +43,6 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
                 {
                     ClaimType = ClaimTypes.Email,
                     ClaimValue = userCredentialsForm.Email
-                            
                 },
                 new()
                 {
@@ -56,8 +52,8 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
                 new()
                 {
                     ClaimType = ClaimTypes.NameIdentifier,
-                    ClaimValue = newGuid
-                },
+                    ClaimValue = userId
+                }
             }
         };
 
@@ -66,15 +62,15 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 
     public void DeleteAccount(string userId)
     {
-        if(userId is null) throw new ArgumentNullException(nameof(userId));
+        if (userId is null) throw new ArgumentNullException(nameof(userId));
         var user = _context.Users.Include(us => us.AccessKey).FirstOrDefault(user => user.Id == userId);
         if (user is not null) _context.Remove(user);
     }
 
     public void ChangePassword(string userId, string password)
     {
-        if(userId is null) throw new ArgumentNullException(nameof(userId));
-        if(password is null) throw new ArgumentNullException(nameof(password));
+        if (userId is null) throw new ArgumentNullException(nameof(userId));
+        if (password is null) throw new ArgumentNullException(nameof(password));
 
         var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
         if (user is null) return;
@@ -83,19 +79,25 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         user.Password = password;
         _context.Update(user);
     }
-    
+
     public void UpdateResetPasswordTokenToken(string userId, string token)
     {
         var user = _context.Users.FirstOrDefault(user => user.Id == userId);
-        if(user is null) throw new ArgumentNullException(nameof(userId));    
+        if (user is null) throw new ArgumentNullException(nameof(userId));
         user.PasswordResetToken = token;
         _context.Update(user);
     }
-    
-    public User GetUser(Func<User, bool> condition) => _context.Users
-        .Include(x => x.Claims)
-        .FirstOrDefault(condition);
 
-    public string GetUserAccessKey(string userId)=> _context.AccessKeys
-        .FirstOrDefault(ac => ac.User.Id == userId)?.Id;
+    public User GetUser(Func<User, bool> condition)
+    {
+        return _context.Users
+            .Include(x => x.Claims)
+            .FirstOrDefault(condition);
+    }
+
+    public string GetUserAccessKey(string userId)
+    {
+        return _context.Users
+            .FirstOrDefault(user => user.Id == userId)?.Id;
+    }
 }

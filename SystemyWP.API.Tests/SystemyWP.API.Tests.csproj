@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="AuthTests" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj" />
       <ProjectReference Include="..\SystemyWP.API\SystemyWP.API.csproj" />
     </ItemGroup>

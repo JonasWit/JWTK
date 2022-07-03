@@ -11,17 +11,6 @@ namespace SystemyWP.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AccessKeys",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessKeys", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DataProtectionKeys",
                 columns: table => new
                 {
@@ -61,17 +50,11 @@ namespace SystemyWP.API.Migrations
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     Locked = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    AccessKeyId = table.Column<string>(type: "character varying(256)", nullable: true)
+                    AccessKey = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_AccessKeys_AccessKeyId",
-                        column: x => x.AccessKeyId,
-                        principalTable: "AccessKeys",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,12 +82,6 @@ namespace SystemyWP.API.Migrations
                 name: "IX_UserClaims_UserId",
                 table: "UserClaims",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_AccessKeyId",
-                table: "Users",
-                column: "AccessKeyId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -120,9 +97,6 @@ namespace SystemyWP.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "AccessKeys");
         }
     }
 }

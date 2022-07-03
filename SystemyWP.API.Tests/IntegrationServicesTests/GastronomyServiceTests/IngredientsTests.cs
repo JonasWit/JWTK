@@ -15,7 +15,7 @@ public class IngredientsTests
     {
         // Arrange
         // Arrange
-        await using var gastronomyApp = new DummyGastronomyApplication();
+        using var gastronomyApp = new DummyGastronomyApplication();
         using var gastronomyClient = gastronomyApp.CreateClient();
         var policy = new HttpClientPolicy();
         var gastronomyHttpClient = new GastronomyHttpClient(gastronomyClient, policy);
@@ -28,14 +28,15 @@ public class IngredientsTests
             MeasurementUnits = MeasurementUnits.Gram,
             Category = "test category",
             StackSize = 1,
-            PricePerStack = 120
+            PricePerStack = 1
         };
 
         // Act
-        var response = await gastronomyHttpClient.CreateIngredient(newIngredient);
-
+        //var response = await gastronomyHttpClient.CreateIngredient(newIngredient);
+        //var response2 = await gastronomyHttpClient.GetDishes("abc");
+        var response3 = await gastronomyHttpClient.GetHealthCheckResponse();
         // Assert
-        Assert.NotNull(response);
+        //Assert.NotNull(response);
 
 
         // Act
