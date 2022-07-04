@@ -12,3 +12,27 @@
     max-width: 15rem;
 }
 
+.nav-link:hover {
+    opacity: 0.5;
+    transform: scale(1.25);
+    transition: 0.3s;
+    transition-timing-function: ease-in-out;
+
+   
+}
+
+.nav-active-link {
+    opacity: 0.5;
+}
+
+.profile-card {
+    height: 150px;
+    width: 154px;
+    background-color: #3c2560;
+    color: #ffd606;
+    
+}
+
+.profile-link:hover {
+    opacity: 0.5
+}

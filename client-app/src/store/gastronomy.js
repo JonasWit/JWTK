@@ -27,6 +27,11 @@ export default {
             try {
                 const res = await getIngredients()
                 const results = res.data
+                results.sort((a, b) => {
+                    const idA = a.id;
+                    const idB = b.id;
+                    return idB - idA;
+                })
                 commit('updateIngredientsList', { ingredientsList: results })
              } catch (error) {
                 console.log(error)}

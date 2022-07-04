@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from "@/views/About";
+import Offer from "@/views/Offer";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
@@ -177,6 +178,15 @@ const routes = [
             title: 'O Nas',
         }
     },
+     {
+        path: '/offer',
+        name: 'Offer',
+        component: Offer,
+        beforeEnter: scrollUp,
+        meta: {
+            title: 'Oferta',
+        }
+    },
     {
         path: '/privacy',
         name: 'Privacy',
@@ -280,7 +290,8 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
-    mode: 'history'
+    mode: 'history',
+    linkActiveClass: 'nav-active-link'
 })
 
 //Tab Title

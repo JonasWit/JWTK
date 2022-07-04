@@ -1,5 +1,8 @@
 <template>
-  <div class="section-1">
+<div>
+  <PrivacyRouterLink></PrivacyRouterLink>
+  <ToSRouterLink></ToSRouterLink>
+<div class="section-1">
     <div class="content text-center p-16 mt-2 text-blue-50">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">
         Witaj na stronie Systemy Wspomagania Pracy!
@@ -8,8 +11,6 @@
         <span class="font-bold">Wybierz </span>rozwiązania dostosowane do potrzeb <span
           class="font-bold">Twojej firmy.</span></h5>
       <h5 class="sm:text-2xl font-medium"> Kliknij na odbowiedni kafelek poniżej, aby sprawdzić szczegóły. </h5>
-    </div>
-    <div>
     </div>
   </div>
   <div>
@@ -45,29 +46,17 @@
           </div>
         </router-link>
       </div>
-      <!--      <div class="portal-card">-->
-      <!--        <img alt="individual-solutions" class="w-full h-32 sm:h-48 object-cover" src="/img/individual.jpg">-->
-      <!--        <div class="m-4">-->
-      <!--          <span class="font-bold">Rozwiązania Indywidualne</span>-->
-      <!--          <span-->
-      <!--              class="block text-gray-500 text-sm">Projektujemy i budujemy aplikacje dla każdego rodzaju działalności</span>-->
-      <!--        </div>-->
-      <!--        <div class="portal-badge">-->
-      <!--          <span>Darmowa Wycena</span>-->
-      <!--        </div>-->
-      <!--        <router-link :to="{ 'name': 'Solutions' }">-->
-      <!--          <div class="card-button">-->
-      <!--            Sprawdź-->
-      <!--          </div>-->
-      <!--        </router-link>-->
-      <!--      </div>-->
     </div>
   </div>
+</div>  
 </template>
 <script>
+import ToSRouterLink from '../components/portal/ToSRouterLink.vue';
+
 
 export default {
-  name: 'Home',
+    name: "Home",
+    components: { ToSRouterLink }
 }
 </script>
 
