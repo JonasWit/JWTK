@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ 'name': 'About' }">
+  <router-link :to="{ 'name': 'About' }" class="nav-link">
     <img class="logo" src="img/logos/systemywp-logo-transparent.png" />
    </router-link>
 </template>
@@ -14,6 +14,7 @@ export default {
 
 .logo {
   height: 125px;
- 
+  margin-bottom: 0px;
+  margin-top: -75px;
 }
 </style>

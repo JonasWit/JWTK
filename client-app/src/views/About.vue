@@ -1,5 +1,6 @@
 <template>
-  <section class="section-1">
+<div class="div">
+<section class="section-1">
     <div class="content text-center p-16 mt-2 text-blue-50">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">Zapraszamy do współpracy</h1>
       <h5 class="text-base sm:text-2xl font-medium">
@@ -24,34 +25,15 @@
       <h5 class="my-10">
         Więcej informacji na temat technologii, które wykorzystujemy, możesz uzyskać na oficjlanych stronach
         podlinkowanych poniżej. </h5>
-      <div class="flex flex-row justify-around">
+      <div class="flex flex-row justify-around flex-wrap">
         <div v-for="item in icons" :key="item.id" class="mx-auto">
           <a :href="item.url" target="_blank"><img :src="item.img" class="icon"/></a>
         </div>
       </div>
     </div>
   </section>
-  <section class="my-10">
-    <div class="text-center ">
-      <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Cennik</h1>
-      <h5 class="mx-7">
-        Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
-    </div>
-    <div class="flex flex-col md:flex-row flex-wrap justify-center">
-      <div v-for=" item in others" :key="item.id" class="justify-between m-6 border-4 rounded-lg p-4 md:w-1/4">
-        <div class="text-center">
-          <h2 class="text-3xl text-center mb-4 text-customClassicBlue tracking-wide font-bold">{{ item.title }}</h2>
-          <h2 class="text-2xl my-3 font-bold">{{ item.price }} </h2>
-          <h5 class="text-center"> {{ item.subtitle }}</h5>
-        </div>
-        <ul class="list-disc px-3 text">
-          <li v-for="(bullet, i) in item.bullet" :key="i" class="list-outside py-1">
-            {{ bullet[0] }}
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
+
+</div> 
 </template>
 <script>
 export default {
@@ -116,70 +98,7 @@ export default {
           img: 'img/icons/icons8-postgresql-48.png',
         },
       ],
-      others: [
-        {
-          id: 1,
-          title: 'Aplikacje Webowe',
-          price: 'od 3500 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Aplikacje do obługi firmy, sklepy internetowe'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
-            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
-          ],
-          img: 'img/bubble-icons/icons8-tick-24.png'
-
-        },
-        {
-          id: 2,
-          title: 'Strony Internetowe',
-          price: 'od 1500 PLN netto',
-          bullet: [
-            ['Statyczne strony internetowe'],
-            ['Możliwość dodania dodatkowych funkcjonalności'],
-            ['Możliwość zastosowania CMS (Wordpress)'],
-          ],
-        },
-        {
-          id: 3,
-          title: 'Aplikacje Desktopowe',
-          price: 'od 4000 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET'],
-            ['Aplikacje WPF'],
-            ['Aplikacje WinForms'],
-            ['Aplikacje MAUI'],
-            ['Integracja z bazą danych'],
-          ],
-        },
-        {
-          id: 4,
-          title: 'Utrzymanie Hostingu',
-          price: 'od 300 PLN netto',
-          subtitle: 'Kwota miesięczna za aplikację',
-          bullet: [
-            ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
-            ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
-            ['Monitorowanie stanu aplikacji'],
-            ['Regularne instalowanie łatek systemu'],
-          ],
-        },
-        {
-          id: 5,
-          title: 'Utrzymanie Aplikacji',
-          price: 'od 200 PLN netto',
-          subtitle: 'Kwota miesięczna za aplikację',
-          bullet: [
-            ['Pomoc techniczna w przypadku błędów'],
-            ['Wprowadzanie nowych funkcjonalności'],
-            ['Zmiany istniejących funkcjonalności'],
-            ['Monitorowanie stanu aplikacji'],
-            ['Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie']
-          ],
-        },
-      ],
-
+     
     };
   },
 }
@@ -189,14 +108,16 @@ export default {
 .icon {
   height: 48px;
   margin: 22px 0 0 22px;
+  padding: 5px;
 }
 
 .icon:hover {
-  animation: shake 0.5s;
-  animation-iteration-count: infinite;
+  opacity: 0.7;
+  /* animation: shake 0.5s;
+  animation-iteration-count: infinite; */
 }
 
-@keyframes shake {
+/* @keyframes shake {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
   }
@@ -230,7 +151,7 @@ export default {
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
-}
+} */
 
 
 .section-1 {

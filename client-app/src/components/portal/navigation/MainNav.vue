@@ -1,30 +1,26 @@
 <template>
   <div class="bottom-0 sticky z-10 main-div">
-    <ul class="text-sm flex flex-row justify-center p-5 mb=2">
+       <ul class="text-sm flex flex-row justify-center p-5">
       <li>
         <HomeRouterLink />
       </li>
-      <li>
-        <HomeRouterLink />
+      <li class="">
+        <OfferRouterLink />
       </li>
-      <li class="absolute bottom-6">
+      <li class="">
         <AboutRouterLink />
       </li>
-      <li v-if="!isAuth">
+      <li v-if="!isAuth" class="">
         <LoginRouterLink />
       </li>
-      <li v-if="isAuth">
+      <li v-if="isAuth" class="">
         <ProfileRouterLink />
       </li>
-      <li v-if="isAuth">
+      <li v-if=" isAuth">
         <LogoutRouterLink />
-      </li>
-      <li>
-
       </li>
     </ul>
   </div>
-
 </template>
 
 <script>
@@ -35,6 +31,7 @@ import HomeRouterLink from "@/components/portal/HomeRouterLink";
 import LoginRouterLink from "@/components/portal/LoginRouterLink";
 import LogoutRouterLink from "../LogoutRouterLink.vue";
 import ProfileRouterLink from "../ProfileRouterLink.vue";
+import OfferRouterLink from "../OfferRouterLink.vue";
 
 
 export default {
@@ -44,7 +41,8 @@ export default {
     HomeRouterLink,
     LoginRouterLink,
     LogoutRouterLink,
-    ProfileRouterLink
+    ProfileRouterLink,
+    OfferRouterLink
 },
   setup() {
     const store = useStore()
@@ -58,13 +56,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .main-div {
   background-color: #3c2560;
   color: #ffd606;
 }
-
 
 
 </style>

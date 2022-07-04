@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from "@/views/About";
+import Offer from "@/views/Offer";
 import Privacy from "@/views/Privacy";
 import Contact from "@/views/Contact";
 import Profile from "@/views/Profile";
@@ -175,6 +176,15 @@ const routes = [
         beforeEnter: scrollUp,
         meta: {
             title: 'O Nas',
+        }
+    },
+     {
+        path: '/offer',
+        name: 'Offer',
+        component: Offer,
+        beforeEnter: scrollUp,
+        meta: {
+            title: 'Oferta',
         }
     },
     {

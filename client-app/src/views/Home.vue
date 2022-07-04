@@ -1,5 +1,7 @@
 <template>
 <div>
+  <PrivacyRouterLink></PrivacyRouterLink>
+  <ToSRouterLink></ToSRouterLink>
 <div class="section-1">
     <div class="content text-center p-16 mt-2 text-blue-50">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">
@@ -49,11 +51,12 @@
 </div>  
 </template>
 <script>
+import ToSRouterLink from '../components/portal/ToSRouterLink.vue';
 
 
 export default {
- 
-  name: 'Home',
+    name: "Home",
+    components: { ToSRouterLink }
 }
 </script>
 

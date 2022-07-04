@@ -5,6 +5,7 @@
       <GdprModal v-if="!gdprAccepted"></GdprModal>
      
       <main class="flex-1 bg-gray-100 dark:bg-gray-700 h-full min-h-screen">
+     
         <router-view v-slot="{ Component, route }">
           <transition name="fade">
             <div :key="route.name">
@@ -29,8 +30,9 @@ import SnackPopup from "@/components/generic/SnackPopup";
 import GdprModal from "@/components/portal/GdprModal";
 import PortalFooter from "@/components/portal/PortalFooter";
 
+
 export default {
-  components: {PortalFooter, GdprModal, SnackPopup, MainNav},
+  components: { PortalFooter, GdprModal, SnackPopup, MainNav },
   setup() {
     const store = useStore()
     return {
