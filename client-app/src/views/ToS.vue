@@ -3,9 +3,7 @@
     <div class="flex content-center justify-center">
       <h1 class="font-bold my-4 text-sm">REGULAMIN USŁUGI</h1>
     </div>
-    <p>Świadczonej przez Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
-      nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
-      e-mail: biuro@systemywp.pl , +48 534 127 160
+    <p>Świadczonej przez portal systemywp.pl, e-mail: biuro@systemywp.pl
     </p>
     <div class="flex content-center justify-center">
       <h1 class="font-bold my-4 text-sm">
@@ -19,9 +17,7 @@
     </div>
     <ol class="list-disc">
       <li>
-        Operator — Marzenę Witek prowadząca jednoosobową działalność gospodarczą pod
-        nazwą Systemy Wspomagania Pracy, NIP: 7343144682, REGON: 388896441,
-        e-mail: biuro@systemywp.pl , +48 534 127 160;
+        Operator — Marzena W. i Jonasz W. e-mail: biuro@systemywp.pl;
       </li>
       <li>
         Regulamin — niniejszy regulamin;
@@ -90,7 +86,7 @@
     </div>
     <div class="my-3">
       <p>
-        3.2. Serwis korzysta z technologii: .NET 5 i wyższe, Vue, postgreSQL i zapewnia Uzytkownikowi dostęp do
+        3.2. Serwis korzysta z technologii: .NET 6 i wyższe, Vue, postgreSQL i zapewnia Uzytkownikowi dostęp do
         danych zgromadzonych w ramach Serwisu za pośrednictwem urządzeń, które posiadają dostęp do sieci Internet,
         przeglądarkę internetową i spełniają wymagania techniczne korzystania z Serwisu.
       </p>

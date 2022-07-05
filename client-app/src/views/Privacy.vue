@@ -23,9 +23,7 @@
     <ol class="list-decimal">
       <li>
         Administratorem Twoich danych osobowych i jednocześnie operatorem serwisu https://www.systemywp.pl, za
-        którego pośrednictwem zbierane są informacje i dane osobowe jest Marzena Witek prowadząca jednoosobową
-        działalność
-        gospodarczą pod nazwą Systemy Wspomagania Pracy, Kraków, NIP: 7343144682, REGON: 388896441 zwana dalej
+        którego pośrednictwem zbierane są informacje i dane osobowe jest Marzena W. zwana dalej
         Administratorem.
       </li>
       <li>
@@ -39,9 +37,7 @@
       </li>
       <li>
         Kontakt z Administratorem Twoich danych osobowych i operatorem serwisu możliwy jest poprzez e-mail:
-        kontakt@systemywp.pl lub korespondencyjnie na adres korespondencyjny: Systemy Wspomagania Pracy, FUP Kraków 28,
-        Os. Urocze 5, 31-955
-        Kraków, Skrytka pocztowa 44.
+        kontakt@systemywp.pl
       </li>
       <li>
         Dane osobowe zbierane przez Administratora za pośrednictwem serwisu są przetwarzane zgodnie z Rozporządzeniem
