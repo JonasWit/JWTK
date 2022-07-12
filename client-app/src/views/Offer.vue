@@ -1,5 +1,9 @@
 <template>
   <div class="div">
+    <div class="flex flex-row justify-between header-top">
+      <ToSRouterLink/>
+      <PrivacyRouterLink/>
+    </div>
     <section class="section-1">
       <div class="content text-center p-16 mt-2 text-blue-50">
         <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">Zapraszamy do współpracy</h1>
@@ -36,77 +40,77 @@
   </div>
 </template>
 <script>
+import ToSRouterLink from '../components/portal/ToSRouterLink.vue';
+import PrivacyRouterLink from '../components/portal/PrivacyRouterLink.vue';
 export default {
-  name: "Offer",
-  data() {
-    return {
-     
-      others: [
-        {
-          id: 1,
-          title: 'Aplikacje Webowe',
-          price: 'od 3500 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Aplikacje do obługi firmy, sklepy internetowe'],
-            ['Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru.'],
-            ['Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL'],
-          ],
-          img: 'img/bubble-icons/icons8-tick-24.png'
-
-        },
-        {
-          id: 2,
-          title: 'Strony Internetowe',
-          price: 'od 1500 PLN netto',
-          bullet: [
-            ['Statyczne strony internetowe'],
-            ['Możliwość dodania dodatkowych funkcjonalności'],
-            ['Możliwość zastosowania CMS (Wordpress)'],
-          ],
-        },
-        {
-          id: 3,
-          title: 'Aplikacje Desktopowe',
-          price: 'od 4000 PLN netto',
-          bullet: [
-            ['Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu'],
-            ['Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET'],
-            ['Aplikacje WPF'],
-            ['Aplikacje WinForms'],
-            ['Aplikacje MAUI'],
-            ['Integracja z bazą danych'],
-          ],
-        },
-        {
-          id: 4,
-          title: 'Utrzymanie Hostingu',
-          price: 'od 300 PLN netto',
-          subtitle: 'Kwota miesięczna za aplikację',
-          bullet: [
-            ['Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze'],
-            ['Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode'],
-            ['Monitorowanie stanu aplikacji'],
-            ['Regularne instalowanie łatek systemu'],
-          ],
-        },
-        {
-          id: 5,
-          title: 'Utrzymanie Aplikacji',
-          price: 'od 200 PLN netto',
-          subtitle: 'Kwota miesięczna za aplikację',
-          bullet: [
-            ['Pomoc techniczna w przypadku błędów'],
-            ['Wprowadzanie nowych funkcjonalności'],
-            ['Zmiany istniejących funkcjonalności'],
-            ['Monitorowanie stanu aplikacji'],
-            ['Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie']
-          ],
-        },
-      ],
-
-    };
-  },
+    name: "Offer",
+    data() {
+        return {
+            others: [
+                {
+                    id: 1,
+                    title: "Aplikacje Webowe",
+                    price: "od 3500 PLN netto",
+                    bullet: [
+                        ["Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu"],
+                        ["Aplikacje do obługi firmy, sklepy internetowe"],
+                        ["Możliwość wyboru technologii, w której stworzymy projekt. Zapewniamy darmową pomoc w dokonaniu właściwego wyboru."],
+                        ["Technologie dla rozwiązań indywidualnych: Wordpress, Vue.js (Nuxt), Blazor WASM, .NET5 i wyższe, PostgreSQL"],
+                    ],
+                    img: "img/bubble-icons/icons8-tick-24.png"
+                },
+                {
+                    id: 2,
+                    title: "Strony Internetowe",
+                    price: "od 1500 PLN netto",
+                    bullet: [
+                        ["Statyczne strony internetowe"],
+                        ["Możliwość dodania dodatkowych funkcjonalności"],
+                        ["Możliwość zastosowania CMS (Wordpress)"],
+                    ],
+                },
+                {
+                    id: 3,
+                    title: "Aplikacje Desktopowe",
+                    price: "od 4000 PLN netto",
+                    bullet: [
+                        ["Bezpłatna wycena i konsultacja co do technologii odpowiedniej dla projektu"],
+                        ["Zawsze rozpoczynamy projekt w najnowszej dostępnej produkcyjnej wersji .NET"],
+                        ["Aplikacje WPF"],
+                        ["Aplikacje WinForms"],
+                        ["Aplikacje MAUI"],
+                        ["Integracja z bazą danych"],
+                    ],
+                },
+                {
+                    id: 4,
+                    title: "Utrzymanie Hostingu",
+                    price: "od 300 PLN netto",
+                    subtitle: "Kwota miesięczna za aplikację",
+                    bullet: [
+                        ["Obsługa i utrzymanie stworzonej przez nas aplikacji lub statycznej strony internetowej w chmurze"],
+                        ["Możliwość wyboru lokalizacji serwera, Używamy VPS dostarczanych przez firmę Linode"],
+                        ["Monitorowanie stanu aplikacji"],
+                        ["Regularne instalowanie łatek systemu"],
+                    ],
+                },
+                {
+                    id: 5,
+                    title: "Utrzymanie Aplikacji",
+                    price: "od 200 PLN netto",
+                    subtitle: "Kwota miesięczna za aplikację",
+                    bullet: [
+                        ["Pomoc techniczna w przypadku błędów"],
+                        ["Wprowadzanie nowych funkcjonalności"],
+                        ["Zmiany istniejących funkcjonalności"],
+                        ["Monitorowanie stanu aplikacji"],
+                        ["Zmiany lub rozszeżenia do aplikacji wyceniane są indywidualnie"]
+                    ],
+                },
+            ],
+        };
+    },
+    components: { ToSRouterLink, PrivacyRouterLink }
 }
 </script>
 

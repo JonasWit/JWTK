@@ -36,3 +36,33 @@
 .profile-link:hover {
     opacity: 0.5
 }
+
+.header-top {
+    background: linear-gradient(45deg, #3c2560, #000000);
+    color: #ffd606;
+}
+
+.section-1 {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.section-1 .content {
+    z-index: 1;
+}
+
+.section-1:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #3c2560, #000000);
+    border-radius: 0 0 50% 50%/0 0 100% 100%;
+    transform: scaleX(1.5);
+}

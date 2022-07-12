@@ -1,9 +1,11 @@
 <template>
 <div>
-  <PrivacyRouterLink></PrivacyRouterLink>
-  <ToSRouterLink></ToSRouterLink>
-<div class="section-1">
-    <div class="content text-center p-16 mt-2 text-blue-50">
+ <div class="flex flex-row justify-between header-top">
+       <ToSRouterLink/>
+       <PrivacyRouterLink/>  
+ </div> 
+ <div class="section-1">
+     <div class="content text-center p-16 mt-2 text-blue-50">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">
         Witaj na stronie Systemy Wspomagania Pracy!
       </h1>
@@ -52,11 +54,15 @@
 </template>
 <script>
 import ToSRouterLink from '../components/portal/ToSRouterLink.vue';
+import PrivacyRouterLink from '../components/portal/PrivacyRouterLink.vue';
 
 
 export default {
     name: "Home",
-    components: { ToSRouterLink }
+    components: { ToSRouterLink, PrivacyRouterLink }
 }
 </script>
 
+<style scoped>
+
+</style>

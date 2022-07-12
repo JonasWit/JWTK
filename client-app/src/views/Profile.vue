@@ -1,4 +1,9 @@
 <template>
+<div>
+  <div class="flex flex-row justify-between header-top">
+    <ToSRouterLink />
+    <PrivacyRouterLink />
+  </div>
   <div class="flex md:flex-row flex-col justify-center pt-5">
     <div class="p-2 m-auto">
       <DeleteAccountRouterLink />
@@ -13,6 +18,7 @@
       <ToSRouterLink />
     </div>
   </div>
+</div>
 </template>
 
 <script>
