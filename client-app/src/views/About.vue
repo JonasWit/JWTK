@@ -5,7 +5,7 @@
       <PrivacyRouterLink />
     </div>
     <section class="section-1">
-      <div class="content text-center p-16 mt-2 text-blue-50">
+      <div class="content text-center p-16 mt-2 text-white">
         <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">Zapraszamy do współpracy</h1>
         <h5 class="text-base sm:text-2xl font-medium">
           <span class="font-bold">Systemy Wspomagania Pracy</span> to rozwiązania dostosowane do potrzeb <span
@@ -24,7 +24,7 @@
         </div>
       </div>
     </section>
-    <section class="section-2 my-10 w-full border-t-4 border-b-4">
+    <section class="section-2 my-10 w-full border-t-4 border-customSecondaryGold">
       <div class="text-center p-16">
         <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customUltraViolet">Technologie</h1>
         <h5 class=" my-10">

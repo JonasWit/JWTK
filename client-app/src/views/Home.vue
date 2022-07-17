@@ -5,7 +5,7 @@
        <PrivacyRouterLink/>  
  </div> 
  <div class="section-1">
-     <div class="content text-center p-16 mt-2 text-blue-50">
+     <div class="content text-center p-16 mt-2 text-white">
       <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold">
         Witaj na stronie Systemy Wspomagania Pracy!
       </h1>

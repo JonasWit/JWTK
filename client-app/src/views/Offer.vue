@@ -1,8 +1,8 @@
 <template>
   <div class="div">
     <div class="flex flex-row justify-between header-top">
-      <ToSRouterLink/>
-      <PrivacyRouterLink/>
+      <ToSRouterLink />
+      <PrivacyRouterLink />
     </div>
     <section class="section-1">
       <div class="content text-center p-16 mt-2 text-blue-50">
@@ -17,15 +17,15 @@
     </section>
     <section class="my-10">
       <div class="text-center ">
-        <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customClassicBlue">Cennik</h1>
+        <h1 class="text-2xl md:text-5xl mb-4 tracking-wide font-bold text-customUltraViolet">Cennik</h1>
         <h5 class="mx-7">
           Zapraszamy do kontaktu, aby poznać szczegółową wycenę usługi. </h5>
         <h1 class="text-xl"><a href="mailto:systemywp@pm.me">systemywp@pm.me</a></h1>
       </div>
       <div class="flex flex-col md:flex-row flex-wrap justify-center">
-        <div v-for=" item in others" :key="item.id" class="justify-between m-6 border-4 rounded-lg p-4 md:w-1/4">
-          <div class="text-center">
-            <h2 class="text-3xl text-center mb-4 text-customClassicBlue tracking-wide font-bold">{{ item.title }}</h2>
+        <div v-for=" item in others" :key="item.id" class="justify-between m-6  p-4 md:w-1/4 ">
+          <div class="text-center border-t-4 border-b-4 border-customSecondaryGold py-5">
+            <h2 class="text-3xl text-center mb-4 tracking-wide font-bold">{{ item.title }}</h2>
             <h2 class="text-2xl my-3 font-bold">{{ item.price }} </h2>
             <h5 class="text-center"> {{ item.subtitle }}</h5>
           </div>
@@ -116,30 +116,9 @@ export default {
 
 <style>
 
-.section-1 {
-  position: relative;
-  width: 100%;
-  height: 40vh;
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
+
+.offer-card-hd {
+  border-bottom: 5px solid #ffd606;
+  padding: 5px;
 }
-
-.section-1 .content {
-  z-index: 1;
-}
-
-.section-1:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, cornflowerblue, #000000);
-  border-radius: 0 0 50% 50%/0 0 100% 100%;
-  transform: scaleX(1.5);
-}
-
-
 </style>

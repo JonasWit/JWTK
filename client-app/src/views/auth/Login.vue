@@ -1,33 +1,32 @@
 <template>
   <div class="mt-8 mx-4">
     <div
-        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      class="w-full p-3 m-auto bg-white border-t-4 border-customPrimaryVioletDark rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
       <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
-          <h1 class="text-3xl font-semibold text-center text-blue-700">
+          <h1 class="text-3xl font-semibold text-center text-customPrimaryViolet">
             Logowanie
           </h1>
           <form class="mt-6" @submit.prevent="submitForm">
             <div>
               <label class="block text-sm text-gray-800">Email</label>
               <input v-model="state.email" type="email" placeholder="Email"
-                     class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
               <div v-if="v$.email.$error">
-              <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
+                <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
                   error.$message
-                }}</span>
+                  }}</span>
               </div>
             </div>
             <div class="mt-4">
               <div>
                 <label class="block text-sm text-gray-800">Hasło</label>
                 <input v-model="state.password" type="password" placeholder="Hasło"
-                       class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                  class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
               </div>
-              <ForgotPasswordRouterLink/>
-                            <div class="mt-6">
-                <button @click="submitForm"
-                        class="button">
+              <ForgotPasswordRouterLink />
+              <div class="mt-6">
+                <button @click="submitForm" class="button">
                   Zaloguj
                 </button>
               </div>
