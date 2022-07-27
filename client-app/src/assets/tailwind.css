@@ -54,3 +54,16 @@
 .validation-error-span {
     @apply text-xs text-red-900 block
 }
+
+.auth-card {
+    @apply w-full p-3 m-auto bg-white border-t-4 border-customPrimaryVioletDark text-customPrimaryVioletLight rounded shadow-lg lg:max-w-md
+}
+
+    .auth-card-header {
+        @apply min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8
+    }
+
+    .auth-card-content {
+        @apply max-w-md w-full space-y-8
+    }
+    
