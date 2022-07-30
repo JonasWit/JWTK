@@ -10,7 +10,7 @@ namespace SystemyWP.API.Tests.IntegrationServicesTests.GastronomyServiceTests;
 
 public class HttpClientTests
 {
-    private const string _dummyAccessKey = "275a1184-8c4d-4063-9208-63e9747b217e";
+    private const string DummyAccessKey = "275a1184-8c4d-4063-9208-63e9747b217e";
 
     [Fact]
     public async Task CreateAndGetIngredientTest()
@@ -23,7 +23,7 @@ public class HttpClientTests
 
         var dto = new IngredientCreateDto
         {
-            AccessKey = _dummyAccessKey,
+            AccessKey = DummyAccessKey,
             Name = "test12",
             Description = "test12",
             Category = "test category",
