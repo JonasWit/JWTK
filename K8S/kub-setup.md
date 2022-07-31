@@ -1,4 +1,5 @@
 ### Docker Commands
+
 docker system prune -a
 dotnet publish -c Release -o publish
 
@@ -21,6 +22,7 @@ export KUBECONFIG=core-kubeconfig.yaml
 export KUBE_EDITOR=vim
 
 # login to postgres
+
 psql --username=user-name db-name
 
 kubectl logs [pod-name] -p
@@ -44,9 +46,11 @@ kubectl apply -f postgres-pv-claim.yaml
 kubectl apply -f postgres.yaml
 
 # enter the container
+
 kubectl exec -it postgres-0 bash
 
 # login to postgres
+
 psql --username=swp_api init-db
 
 ### Deploy microservices & Tips
@@ -57,9 +61,9 @@ base 64 password - echo -n 'my-super-secret-password' | base64
 kubectl exec --stdin --tty [pod] -- /bin/bash
 kubectl logs [pod-name]
 
-##  Main API
+## Main API
 
-###  External DNS
+### External DNS
 
 -> TTL as low as possible
 -> Get token from Linode
@@ -110,6 +114,9 @@ kubectl create ing master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80
 kubectl annotate ingress master-gate cert-manager.io/cluster-issuer=letsencrypt-production
 
 kubectl create ing client-app --rule=www.systemywp.pl/*=client-app-srv:80,tls=www.systemywp.pl
+kubectl annotate ingress client-app cert-manager.io/cluster-issuer=letsencrypt-production
+
+kubectl create ing client-app --rule=www.vapps.pl/*=client-app-srv:80,tls=www.vapps.pl
 kubectl annotate ingress client-app cert-manager.io/cluster-issuer=letsencrypt-production
 
 kubectl get ing
