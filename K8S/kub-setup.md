@@ -90,7 +90,8 @@ external-dns.alpha.kubernetes.io/hostname=api.systemywp.pl
 helm upgrade --install traefik traefik/traefik \
 --create-namespace --namespace traefik \
 --set "ports.websecure.tls.enabled=true" \
---set "providers.kubernetesIngress.publishedService.enabled=true"
+--set "providers.kubernetesIngress.publishedService.enabled=true" \
+--set "ports.web.redirectTo=websecure"
 
 // do this later on the cert step
 kubectl create ingress master-gate --rule=api.systemywp.pl/*=systemywp-master-srv:80
