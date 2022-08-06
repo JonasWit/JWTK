@@ -9,22 +9,18 @@
           </h1>
           <form class="mt-6" @submit.prevent="submitForm">
             <div>
-              <label class="block text-sm text-gray-800">Email</label>
-              <input v-model="state.email" type="email" placeholder="Email"
-                class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none focus:ring focus:ring-opacity-40">
+              <BaseInput v-model="state.email" label="Email" type="email" />
               <div v-if="v$.email.$error">
                 <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
-                  error.$message
-                  }}</span>
+                error.$message
+                }}</span>
               </div>
             </div>
             <div class="mt-4">
               <div>
-                <label class="block text-sm text-gray-800">Hasło</label>
-                <input v-model="state.password" type="password" placeholder="Hasło"
-                  class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none focus:ring focus:ring-opacity-40">
-              
-              
+                <BaseInput v-model="state.password" label="Hasło" type="password" />
+                
+
               </div>
               <ForgotPasswordRouterLink />
               <div class="mt-6">
@@ -54,10 +50,11 @@ import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
 import {authenticate} from "@/services/authAPI";
 import useVuelidate from "@vuelidate/core";
 import ForgotPasswordRouterLink from "@/components/portal/ForgotPasswordRouterLink";
+import BaseInput from "../../components/generic/BaseInput.vue";
 
 export default {
   name: "Login",
-  components: {ForgotPasswordRouterLink},
+  components: { ForgotPasswordRouterLink, BaseInput },
   setup() {
     const router = useRouter()
 
