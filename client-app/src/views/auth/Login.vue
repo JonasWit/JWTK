@@ -1,4 +1,33 @@
 <template>
+  <!-- <FormCardTemplate title="Logowanie">
+    <template id="formSlot">
+      <form class="mt-6" @submit.prevent="submitForm">
+        <div>
+          <BaseInput v-model="state.email" label="Email" type="email" />
+          <div v-if="v$.email.$error">
+            <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
+              error.$message
+              }}</span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div>
+            <BaseInput v-model="state.password" label="Hasło" type="password" />
+          </div>
+          <ForgotPasswordRouterLink />
+          <div class="mt-6">
+            <button @click="submitForm" class="button">
+              Zaloguj
+            </button>
+          </div>
+        </div>
+      </form>
+    </template>
+    <template id="bottomContent">
+     
+    </template>
+
+  </FormCardTemplate> -->
   <div class="mt-8 mx-4">
     <div
       class="w-full p-3 m-auto bg-white border-t-4 border-customPrimaryVioletDark rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
@@ -12,15 +41,13 @@
               <BaseInput v-model="state.email" label="Email" type="email" />
               <div v-if="v$.email.$error">
                 <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
-                error.$message
-                }}</span>
+                  error.$message
+                  }}</span>
               </div>
             </div>
             <div class="mt-4">
               <div>
                 <BaseInput v-model="state.password" label="Hasło" type="password" />
-                
-
               </div>
               <ForgotPasswordRouterLink />
               <div class="mt-6">
@@ -51,6 +78,7 @@ import {authenticate} from "@/services/authAPI";
 import useVuelidate from "@vuelidate/core";
 import ForgotPasswordRouterLink from "@/components/portal/ForgotPasswordRouterLink";
 import BaseInput from "../../components/generic/BaseInput.vue";
+// import FormCardTemplate from "../../components/generic/FormCardTemplate.vue";
 
 export default {
   name: "Login",
