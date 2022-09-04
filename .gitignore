@@ -1,6 +1,7 @@
 .idea
 *.cert
 *.key
+.vs/
 bin/
 obj/
 publish/
