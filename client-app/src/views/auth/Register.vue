@@ -1,64 +1,69 @@
 <template>
   <div class="mt-8 mx-4">
-    <div class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
-      <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-          <h1 class="text-3xl font-semibold text-center text-blue-700">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="auth-card-content">
+          <h1 class="text-3xl font-semibold text-center text-customPrimaryVioletLight">
             Rejestracja
           </h1>
           <form class="mt-6" @submit.prevent="submitForm">
             <div>
               <label class="block text-sm text-gray-800">Email</label>
               <input v-model="state.email" type="email" placeholder="Email"
-                     class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none focus:ring focus:ring-opacity-40">
               <div v-if="v$.email.$error">
-          <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
+                <span class="validation-error-span" v-for="error in v$.email.$errors" :key="error.$uid"> {{
+                  error.$message
+                  }}</span>
               </div>
             </div>
             <div class="mt-4">
-              <div>
-                <label  class="block text-sm text-gray-800">Hasło</label>
-                <input v-model="state.password.password" type="password" placeholder="Hasło"
-                       class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+              <div class="relative">
+                <label class="block text-sm text-gray-800">Hasło</label>
+                <input v-model="state.password.password" :type="state.type" placeholder="Hasło"
+                  class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none focus:ring focus:ring-opacity-40">
+                <button class="absolute bottom-2 right-2 text-sm" @click="showPassword">{{ state.btnText }}</button>
+
                 <div v-if="v$.password.password.$error">
-          <span class="validation-error-span" v-for="error in v$.password.password.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
+                  <span class="validation-error-span" v-for="error in v$.password.password.$errors" :key="error.$uid">
+                    {{
+                    error.$message
+                    }}</span>
                 </div>
               </div>
-              <div class="mt-4">
+              <div class="mt-4 relative">
                 <label class="block text-sm text-gray-800">Powtórz hasło</label>
-                <input v-model="state.password.confirm" type="password" placeholder="Powtórz hasło"
-                       class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                <input v-model="state.password.confirm" :type="state.type" placeholder="Powtórz hasło"
+                  class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none focus:ring focus:ring-opacity-40">
+                <button class="absolute bottom-2 right-2 text-sm" @click="showPassword">{{ state.btnText }}</button>
                 <div v-if="v$.password.confirm.$error">
-                <span class="validation-error-span" v-for="error in v$.password.confirm.$errors" :key="error.$uid"> 
-                  {{error.$message}}
-                </span>
+                  <span class="validation-error-span" v-for="error in v$.password.confirm.$errors" :key="error.$uid">
+                    {{error.$message}}
+                  </span>
                 </div>
               </div>
               <div class="mt-4">
                 <div class="flex items-center py-2 mt-2">
                   <input v-model="state.rulesAccepted" id="remember-me" name="remember-me" type="checkbox"
-                         class="h-4 w-4 text-indigo-600 focus:ring-customClassicBlue border-gray-300 rounded"/>
+                    class="h-4 w-4 accent-pink-500" />
                   <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                     Akceptuję politykę i regulamin
                   </label>
                 </div>
                 <div v-if="v$.rulesAccepted.$error">
-          <span class="text-xs text-red-900 block" v-for="error in v$.rulesAccepted.$errors" :key="error.$uid"> {{
-              error.$message
-            }}</span>
+                  <span class="text-xs text-red-900 block" v-for="error in v$.rulesAccepted.$errors" :key="error.$uid">
+                    {{
+                    error.$message
+                    }}</span>
                 </div>
-              </div>               
+              </div>
               <div class="mt-6">
                 <button class="button">
                   Zarejestruj
                 </button>
               </div>
             </div>
-          </form>         
+          </form>
         </div>
       </div>
     </div>
@@ -76,6 +81,7 @@ import {useStore} from "vuex";
 import {SNACK_BACKGROUNDS, SNACK_TEXT} from "@/models/enums";
 import {useRouter} from "vue-router";
 
+
 export default {
   name: "Register",
   components: {},
@@ -83,6 +89,8 @@ export default {
     const router = useRouter()
     
     const state = reactive({
+      type: 'password',
+      btnText: 'Pokaż',
       email: '',
       rulesAccepted: false,
       password: {
@@ -91,6 +99,7 @@ export default {
       },
     })
 
+    
     const store = useStore()
     const rules = computed(() => {
       return {
@@ -110,11 +119,22 @@ export default {
             required: helpers.withMessage("Pole nie może być puste", required),
             sameAs: helpers.withMessage("Hasła nie są identyczne", sameAs(state.password.password))
           },
-        }
+        },
+       
       }
     })
 
     const v$ = useVuelidate(rules, state)
+
+   function showPassword() {
+      if (state.type === 'password') {
+        state.type = 'text'
+        state.btnText = 'Ukryj'
+      } else {
+        state.type = 'password'
+       state.btnText = 'Pokaż'
+      }
+}
 
     async function submitForm() {
       console.log("form submitted")
@@ -158,8 +178,11 @@ export default {
         }
       }
     }
+
+ 
     return {
       submitForm,
+      showPassword,
       state,
       v$
     }

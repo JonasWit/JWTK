@@ -1,15 +1,14 @@
 <template>
   <div class="mt-8 mx-4">
     <div
-        class="w-full p-3 m-auto bg-white border-t-4 border-blue-600 rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
+      class="w-full p-3 m-auto bg-white border-t-4 border-customPrimaryVioletDark rounded shadow-lg shadow-purple-800/50 lg:max-w-md">
       <div class="max-w-md w-full space-y-8">
-        <h1 class="text-3xl font-semibold text-center text-blue-700 mt-2">
+        <h1 class="text-3xl font-semibold text-center text-customPrimaryViolet mt-2">
           Czy napewno chcesz się wylogować z aplikacji?
         </h1>
         <div class="flex flex justify-evenly">
           <div>
-            <button class="button"
-                    @click="logout">
+            <button class="button" @click="logout">
               Wyloguj
             </button>
           </div>
