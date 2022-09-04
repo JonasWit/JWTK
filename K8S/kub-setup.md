@@ -37,6 +37,7 @@ kubectl create secret generic docker-key \
 
 ### Add Secret for .NET
 
+kubectl delete secret ----
 kubectl create secret generic secret-appsettings --from-file=./appsettings.secrets.json
 
 ### Deploy postgres
