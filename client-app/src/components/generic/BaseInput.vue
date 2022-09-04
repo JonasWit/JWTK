@@ -1,14 +1,15 @@
 <template>
-<div>
-    <label>{{label}}</label>
-    <input :placeholder="label"
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value )"
-    class="block w-full px-4 py-2 mt-2 text-blue-700 bg-white 
-    border rounded-md focus:border-blue-400 focus:ring-blue-300 
-    focus:outline-none focus:ring focus:ring-opacity-40"
-    />  
-</div> 
+    <div>
+        <label class="block text-sm text-gray-800">{{label}}</label>
+        <input 
+        v-bind="$attrs"
+        :placeholder="label" 
+        :value="modelValue" 
+        @input="$emit('update:modelValue', $event.target.value )"
+        class="block w-full px-4 py-2 mt-2 text-customPrimaryVioletLight bg-white border rounded-md 
+        focus:border-customSecondaryGold focus:ring-customSecondaryGoldLight focus:outline-none 
+        focus:ring focus:ring-opacity-40" />
+    </div>
 </template>
 
 <script>
@@ -21,7 +22,6 @@ props: {
     modelValue: {
         type: [String, Number],
         default: ''
-
     }
 }
 }

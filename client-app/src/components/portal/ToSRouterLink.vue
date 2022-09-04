@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ 'name': 'ToS' }" class="absolute z-10 top-2  text-white">
+  <router-link :to="{ 'name': 'ToS' }" class="px-2 ">
     <div class="flex flex-col">
       <svg class="h-4 w-4 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg">

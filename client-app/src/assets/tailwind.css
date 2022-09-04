@@ -42,13 +42,6 @@
     @apply rounded-md py-2 px-3 text-xs font-bold cursor-pointer tracking-wider transition ease-in-out delay-100
 }
 
-.button {
-    @apply w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-700 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600
-}
-
-.card-button {
-    @apply w-full py-2 px-4 tracking-wide text-white transition-colors duration-200 transform bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-600 md:absolute bottom-0 text-center
-}
 
 .form-validation-error {
     @apply text-red-900 text-xs m-0.5
@@ -61,3 +54,16 @@
 .validation-error-span {
     @apply text-xs text-red-900 block
 }
+
+.auth-card {
+    @apply w-full p-3 m-auto bg-white border-t-4 border-customPrimaryVioletDark text-customPrimaryVioletLight rounded shadow-lg lg:max-w-md
+}
+
+    .auth-card-header {
+        @apply min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8
+    }
+
+    .auth-card-content {
+        @apply max-w-md w-full space-y-8
+    }
+    
