@@ -16,7 +16,11 @@ namespace VappsMobile.ViewModels
 
         protected async Task RunCommand(Expression<Func<bool>> updatingFlag, Func<Task> action)
         {
-            if (updatingFlag.GetPropertyValue()) return;
+            if (updatingFlag.GetPropertyValue())
+            {
+                return;
+            }
+
             updatingFlag.SetPropertyValue(true);
 
             try

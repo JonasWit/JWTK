@@ -10,22 +10,21 @@ namespace VappsMobile
 
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
 
-            builder.Services.AddSingleton(new HttpClientPolicy());
+            _ = builder.Services.AddSingleton(new HttpClientPolicy());
 
-            builder.Services.AddHttpClient<VappsHttpClient>(httpClient =>
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(httpClient =>
                 httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
 
+            _ = builder.Services.AddSingleton<MainPageVM>();
 
-            builder.Services.AddSingleton<MainPageVM>();
-
-            builder
+            _ = builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    _ = fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    _ = fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
             App = builder.Build();
