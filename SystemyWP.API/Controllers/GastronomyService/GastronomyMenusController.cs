@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.Data.DTOs.Gastronomy.Menus;
 using SystemyWP.API.Data.DTOs.General;
@@ -54,7 +54,7 @@ public class GastronomyMenusController : ApiControllerBase
             var menuDto = await _gastronomyHttpClient.CreateMenu(menuCreateDto);
             if (menuDto is null) throw new Exception();
 
-            return CreatedAtRoute(nameof(GetMenu), new {menuDto.Id}, menuDto);
+            return CreatedAtRoute(nameof(GetMenu), new { menuDto.Id }, menuDto);
         }
         catch (Exception e)
         {
@@ -71,7 +71,7 @@ public class GastronomyMenusController : ApiControllerBase
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
-            var menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass {Id = id, AccessKey = key});
+            var menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass { Id = id, AccessKey = key });
             if (menuServiceDto is null) return NotFound();
 
             return Ok(_mapper.Map<MenuDto>(menuServiceDto));
@@ -92,7 +92,7 @@ public class GastronomyMenusController : ApiControllerBase
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
             var responseCode =
-                await _gastronomyHttpClient.RemoveMenu(new ResourceAccessPass {Id = id, AccessKey = key});
+                await _gastronomyHttpClient.RemoveMenu(new ResourceAccessPass { Id = id, AccessKey = key });
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),
