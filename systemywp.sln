@@ -1,16 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API", "SystemyWP.API\SystemyWP.API.csproj", "{C7E81B22-B7A8-45A7-8577-E998FFFEAB37}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API", "SystemyWP.API\SystemyWP.API.csproj", "{C7E81B22-B7A8-45A7-8577-E998FFFEAB37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Gastronomy", "SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj", "{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Gastronomy", "SystemyWP.API.Gastronomy\SystemyWP.API.Gastronomy.csproj", "{8C4C01C7-1BFE-4C78-BDDA-22AC47CB223D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Gastronomy.Tests", "SystemyWP.API.Gastronomy.Tests\SystemyWP.API.Gastronomy.Tests.csproj", "{B780BAF5-30B2-4D39-8CB9-00009280342D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Gastronomy.Tests", "SystemyWP.API.Gastronomy.Tests\SystemyWP.API.Gastronomy.Tests.csproj", "{B780BAF5-30B2-4D39-8CB9-00009280342D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Tests", "SystemyWP.API.Tests\SystemyWP.API.Tests.csproj", "{21865C31-08A8-45F7-9A35-4566D26E58EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Tests", "SystemyWP.API.Tests\SystemyWP.API.Tests.csproj", "{21865C31-08A8-45F7-9A35-4566D26E58EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Logistics", "SystemyWP.API.Logistics\SystemyWP.API.Logistics.csproj", "{132DD1D4-6119-4A86-877A-A511AAA50C26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Logistics", "SystemyWP.API.Logistics\SystemyWP.API.Logistics.csproj", "{132DD1D4-6119-4A86-877A-A511AAA50C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemyWP.API.Logistics.Tests", "SystemyWP.API.Logistics.Tests\SystemyWP.API.Logistics.Tests.csproj", "{338C456E-FE17-49D0-AACA-97AEB3969024}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Logistics.Tests", "SystemyWP.API.Logistics.Tests\SystemyWP.API.Logistics.Tests.csproj", "{338C456E-FE17-49D0-AACA-97AEB3969024}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VappsMobile", "VappsMobile\VappsMobile.csproj", "{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +47,17 @@ Global
 		{338C456E-FE17-49D0-AACA-97AEB3969024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{338C456E-FE17-49D0-AACA-97AEB3969024}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{338C456E-FE17-49D0-AACA-97AEB3969024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38E680E2-07B3-4AD7-9A18-CA35D6E64D5D}
 	EndGlobalSection
 EndGlobal
