@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <UserSecretsId>651f1825-1930-428d-859e-b500f7733135</UserSecretsId>
-    </PropertyGroup>
+      <UserSecretsId>82e30b56-de3f-4499-a731-d40678f2dad2</UserSecretsId>
+  </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="AspNetCoreRateLimit" Version="4.0.2" />
         <PackageReference Include="AutoMapper" Version="11.0.1" />
@@ -38,5 +38,7 @@
         <Folder Include="Secrets" />
         <InternalsVisibleTo Include="SystemyWP.API.Tests" />
     </ItemGroup>
+
+    <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://github.com/fbecart/zinoma/releases/latest/download/zinoma-schema.json" /></VisualStudio></ProjectExtensions>
     
 </Project>
