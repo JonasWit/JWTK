@@ -17,7 +17,11 @@ namespace VappsMobile
             _ = builder.Services.AddHttpClient<VappsHttpClient>(httpClient =>
                 httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
 
-            _ = builder.Services.AddSingleton<MainPageVM>();
+            _ = builder.Services.AddSingleton<MainPageViewModel>();
+
+            _ = builder.Services.AddSingleton<AppShell>();
+            _ = builder.Services.AddSingleton<MainPage>();
+            _ = builder.Services.AddSingleton<MainPageViewModel>();
 
             _ = builder
                 .UseMauiApp<App>()

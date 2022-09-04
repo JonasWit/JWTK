@@ -1,13 +1,13 @@
 ﻿namespace VappsMobile.ViewModels
 {
-    internal class MainPageVM : ViewModelBase
+    public class MainPageViewModel : ViewModelBase
     {
         private string _mainTitle;
         public string MainTitle { get => _mainTitle; set { _mainTitle = value; OnPropertyChanged(); } }
 
-        public MainPageVM()
+        public MainPageViewModel()
         {
-            MainTitle = "test main title";
+            MainTitle = "test main title from VM";
         }
     }
 }

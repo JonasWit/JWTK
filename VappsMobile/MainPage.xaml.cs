@@ -6,10 +6,10 @@ namespace VappsMobile
     {
         private int count = 0;
 
-        public MainPage()
+        public MainPage(MainPageViewModel mainPageViewModel)
         {
             InitializeComponent();
-            BindingContext = MauiProgram.App.Services.GetRequiredService<MainPageVM>();
+            BindingContext = mainPageViewModel;
         }
 
         private void OnCounterClicked(object sender, EventArgs e)

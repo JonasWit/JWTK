@@ -5,7 +5,7 @@ using VappsMobile.Expressions;
 
 namespace VappsMobile.ViewModels
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
