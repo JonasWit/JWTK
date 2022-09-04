@@ -1,4 +1,6 @@
-﻿namespace VappsMobile
+﻿using VappsMobile.ViewModels;
+
+namespace VappsMobile
 {
     public partial class MainPage : ContentPage
     {
@@ -7,6 +9,7 @@
         public MainPage()
         {
             InitializeComponent();
+            BindingContext = MauiProgram.App.Services.GetRequiredService<MainPageVM>();
         }
 
         private void OnCounterClicked(object sender, EventArgs e)
