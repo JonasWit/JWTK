@@ -1,23 +1,23 @@
-﻿using VappsMobile.ViewModels;
+﻿using VappsMobile.Services;
+using VappsMobile.ViewModels;
 
 namespace VappsMobile
 {
     public partial class MainPage : ContentPage
     {
-        private int count = 0;
+        private readonly AuthService _authService;
 
-        public MainPage(MainPageViewModel mainPageViewModel)
+        public MainPage(MainPageViewModel mainPageViewModel, AuthService authService)
         {
             InitializeComponent();
             BindingContext = mainPageViewModel;
+            _authService = authService;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            count++;
-            CounterBtn.Text = count == 1 ? $"Clicked {count} time" : $"Clicked {count} times";
+            base.OnAppearing();
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
         }
     }
 }

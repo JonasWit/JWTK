@@ -1,11 +1,14 @@
-﻿namespace VappsMobile
+﻿using VappsMobile.Pages;
+using VappsMobile.Services;
+
+namespace VappsMobile
 {
     public partial class App : Application
     {
-        public App(MainPage mainPage)
+        public App(AuthService authService, AppShell appShell, LoginPage loginPage)
         {
             InitializeComponent();
-            MainPage = mainPage;
+            MainPage = authService.IsSignedIn() ? appShell : loginPage;
         }
     }
 }

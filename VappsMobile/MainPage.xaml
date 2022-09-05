@@ -14,13 +14,11 @@
             VerticalOptions="Center">
 
 
-            <Entry IsPassword="True" Text="{Binding Password, Mode=TwoWay}">
-                <!-- Omitted for brevity... -->
+            <!--<Entry IsPassword="True" Text="{Binding Password, Mode=TwoWay}">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateCommand}" />
                 </Entry.Behaviors>
-                <!-- Omitted for brevity... -->
-            </Entry>
+            </Entry>-->
 
             <Image
                 Source="dotnet_bot.png"
@@ -41,12 +39,12 @@
                 FontSize="18"
                 HorizontalOptions="Center" />
 
-            <Button
+            <!--<Button
                 x:Name="CounterBtn"
                 Text="Click me"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" />-->
 
         </VerticalStackLayout>
     </ScrollView>

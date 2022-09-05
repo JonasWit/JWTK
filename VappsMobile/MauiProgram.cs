@@ -24,10 +24,16 @@ namespace VappsMobile
                 .Select(t => t.AsType())
                 .ToList();
 
-            viewModels.ForEach(dt => builder.Services.AddSingleton(dt));
+            var pages = appDefinedTypes
+                .Where(t => t.Name.Contains("Page") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ContentPage)))
+                .Select(t => t.AsType())
+                .ToList();
+
+            viewModels.ForEach(vm => builder.Services.AddSingleton(vm));
+            pages.ForEach(page => builder.Services.AddSingleton(page));
 
             _ = builder.Services.AddSingleton<AppShell>();
-            _ = builder.Services.AddSingleton<MainPage>();
+            _ = builder.Services.AddSingleton<AuthService>();
 
             _ = builder
                 .UseMauiApp<App>()
