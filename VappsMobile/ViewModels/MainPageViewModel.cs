@@ -1,13 +1,25 @@
-﻿namespace VappsMobile.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+namespace VappsMobile.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase
+    public partial class MainPageViewModel : ObservableObject
     {
-        private string _mainTitle;
-        public string MainTitle { get => _mainTitle; set { _mainTitle = value; OnPropertyChanged(); } }
+        [ObservableProperty]
+        public string mainTitle;
+
+        [ObservableProperty]
+        public string password;
 
         public MainPageViewModel()
         {
             MainTitle = "test main title from VM";
+        }
+
+        [RelayCommand]
+        public Task Validate()
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using VappsMobile.Policies;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using VappsMobile.Policies;
 using VappsMobile.Services;
-using VappsMobile.ViewModels;
 
 namespace VappsMobile
 {
@@ -17,11 +17,17 @@ namespace VappsMobile
             _ = builder.Services.AddHttpClient<VappsHttpClient>(httpClient =>
                 httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
 
-            _ = builder.Services.AddSingleton<MainPageViewModel>();
+            IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
+
+            var viewModels = appDefinedTypes
+                .Where(t => t.Name.Contains("ViewModel") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ObservableObject)))
+                .Select(t => t.AsType())
+                .ToList();
+
+            viewModels.ForEach(dt => builder.Services.AddSingleton(dt));
 
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<MainPage>();
-            _ = builder.Services.AddSingleton<MainPageViewModel>();
 
             _ = builder
                 .UseMauiApp<App>()
