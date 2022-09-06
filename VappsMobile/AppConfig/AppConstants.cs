@@ -1,6 +1,6 @@
-﻿namespace VappsMobile
+﻿namespace VappsMobile.AppConfig
 {
-    internal static class AppConstants
+    public static class AppConstants
     {
         public struct AppColors
         {
@@ -8,6 +8,8 @@
             public const string Gold = "#ffd606";
             public const string Red = "#820828";
         }
+
+
 
         public struct BaseUrls
         {

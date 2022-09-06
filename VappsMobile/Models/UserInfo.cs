@@ -10,6 +10,7 @@
         public UserInfo(string token)
         {
             Token = token;
+            Email = "test email";
         }
 
         private void ExtractToken()

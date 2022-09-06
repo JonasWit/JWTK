@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using VappsMobile.AppConfig;
 using VappsMobile.Policies;
 using VappsMobile.Services;
 using VappsMobile.Views;

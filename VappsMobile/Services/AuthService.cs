@@ -22,7 +22,7 @@ namespace VappsMobile.Services
             {
 
             }
-            return Task.FromResult(new UserInfo { Email = "TEST EMAIL" });
+            return Task.FromResult(new UserInfo("token"));
         }
 
         public bool IsSignedIn()

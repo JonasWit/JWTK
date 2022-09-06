@@ -65,10 +65,13 @@
 
 	<ItemGroup>
 	  <Folder Include="Behaviours\" />
-	  <Folder Include="CustomControls\" />
+	  <Folder Include="Resources\Images\Generic\" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="CustomControls\FlyoutHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AboutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

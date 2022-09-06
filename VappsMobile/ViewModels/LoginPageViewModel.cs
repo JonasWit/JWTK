@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Text.Json;
+using VappsMobile.CustomControls;
 using VappsMobile.Models;
 using VappsMobile.Services;
 using VappsMobile.Views;
@@ -37,6 +38,8 @@ namespace VappsMobile.ViewModels
                 var userInfo = JsonSerializer.Serialize(user);
                 Preferences.Set(nameof(UserInfo), userInfo);
                 App.UserInfo = user;
+
+                Shell.Current.FlyoutHeader = new FlyoutHeader();
 
                 await Shell.Current.GoToAsync($"//{nameof(VappsMasterPage)}");
             }
