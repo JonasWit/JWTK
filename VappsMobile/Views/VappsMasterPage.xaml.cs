@@ -1,4 +1,4 @@
-namespace VappsMobile.Pages;
+namespace VappsMobile.Views;
 
 public partial class VappsMasterPage : ContentPage
 {

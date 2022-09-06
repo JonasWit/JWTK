@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vms="clr-namespace:VappsMobile.ViewModels"
              x:DataType="vms:LoginPageViewModel"
-             x:Class="VappsMobile.Pages.LoginPage"
+             x:Class="VappsMobile.Views.LoginPage"
+             Shell.NavBarIsVisible="False"
              Title="Logowanie">
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
@@ -53,10 +54,10 @@
                     <Label Text="Zapamiętaj mnie" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
                     <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
                 </StackLayout>
-                <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding Login}"></Button>
-                <StackLayout>
+                <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding LoginCommand}"></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
                     <Label Text="Nowy Użytkownik?" TextColor="DarkGray" FontSize="Small"/>
-                    <Label Text="Stwórz Konto"/>
+                    <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
                 </StackLayout>
             </StackLayout>
         </Grid>

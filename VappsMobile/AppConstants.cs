@@ -13,5 +13,10 @@
         {
             public const string MasterUrl = "test";
         }
+
+        public struct HttpClientsNames
+        {
+            public const string AuthHttpClient = "AuthClient";
+        }
     }
 }

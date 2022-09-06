@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using VappsMobile.Policies;
 using VappsMobile.Services;
+using VappsMobile.Views;
 
 namespace VappsMobile
 {
@@ -14,8 +15,9 @@ namespace VappsMobile
 
             _ = builder.Services.AddSingleton(new HttpClientPolicy());
 
-            _ = builder.Services.AddHttpClient<VappsHttpClient>(httpClient =>
-                httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(
+                AppConstants.HttpClientsNames.AuthHttpClient,
+                httpClient => httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
 
             IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
 
@@ -24,16 +26,14 @@ namespace VappsMobile
                 .Select(t => t.AsType())
                 .ToList();
 
-            var pages = appDefinedTypes
-                .Where(t => t.Name.Contains("Page") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ContentPage)))
-                .Select(t => t.AsType())
-                .ToList();
-
             viewModels.ForEach(vm => builder.Services.AddSingleton(vm));
-            pages.ForEach(page => builder.Services.AddSingleton(page));
 
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
+
+            _ = builder.Services.AddSingleton<LoginPage>();
+            _ = builder.Services.AddSingleton<RegisterPage>();
+            _ = builder.Services.AddSingleton<VappsMasterPage>();
 
             _ = builder
                 .UseMauiApp<App>()

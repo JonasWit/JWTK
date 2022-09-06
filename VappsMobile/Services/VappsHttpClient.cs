@@ -4,17 +4,16 @@ namespace VappsMobile.Services
 {
     internal class VappsHttpClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClientPolicy _httpClientPolicy;
 
-        public VappsHttpClient(
-            HttpClient httpClient,
+        public VappsHttpClient(IHttpClientFactory httpClientFactory,
             HttpClientPolicy httpClientPolicy)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
             _httpClientPolicy = httpClientPolicy;
+
+
         }
-
-
     }
 }

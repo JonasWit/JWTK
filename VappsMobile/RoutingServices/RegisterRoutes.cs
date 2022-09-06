@@ -1,4 +1,4 @@
-﻿using VappsMobile.Pages;
+﻿using VappsMobile.Views;
 
 namespace VappsMobile.RoutingServices
 {
@@ -9,6 +9,8 @@ namespace VappsMobile.RoutingServices
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(VappsMasterPage), typeof(VappsMasterPage));
+            Routing.RegisterRoute(nameof(ContactPage), typeof(ContactPage));
+            Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
         }
     }
 }

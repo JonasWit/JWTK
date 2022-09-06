@@ -4,14 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:VappsMobile"
-    xmlns:pages="clr-namespace:VappsMobile.Pages"
+    xmlns:views="clr-namespace:VappsMobile.Views"
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Logowanie"
-        ContentTemplate="{DataTemplate pages:LoginPage}"
+        ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
-    
+
+    <FlyoutItem Route="VappsMasterPage" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Vapps" ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
+        <ShellContent Title="Contact" ContentTemplate="{DataTemplate views:ContactPage}"/>
+        <ShellContent Title="About" ContentTemplate="{DataTemplate views:AboutPage}"/>
+    </FlyoutItem>
  
 
 </Shell>
