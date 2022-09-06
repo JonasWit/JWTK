@@ -6,10 +6,7 @@ namespace VappsMobile.ViewModels
     public partial class MainPageViewModel : ObservableObject
     {
         [ObservableProperty]
-        public string mainTitle;
-
-        [ObservableProperty]
-        public string password;
+        public string _mainTitle;
 
         public MainPageViewModel()
         {

@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vms="clr-namespace:VappsMobile.ViewModels"
+             x:DataType="vms:LoginPageViewModel"
              x:Class="VappsMobile.Pages.LoginPage"
-             Title="LoginPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="login page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Logowanie">
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <StackLayout>
+            <Frame BackgroundColor="Transparent" HeightRequest="200" WidthRequest="200" Margin="0,100,0,0" HorizontalOptions="Center">
+                <Image Source="vapps.png" Aspect="Fill"/>
+            </Frame>
+        </StackLayout>
+
+        <Grid RowSpacing="5" Grid.Row="1" Margin="20,20,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="1" Text="Witaj" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="0"/>
+            <Label Grid.Row="2" Text="Zaloguj się" HorizontalOptions="Center" FontSize="Subtitle" FontAttributes="Bold"/>
+
+            <StackLayout Grid.Row="3" Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                <Frame Padding="0" BackgroundColor="Transparent" BorderColor="LightBlue" HorizontalOptions="FillAndExpand" CornerRadius="20">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="icons8_male_user_100.png" Aspect="Fill"/>
+                        </Frame>
+                        <Entry Text="{Binding Email}" Placeholder="Adres Email" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="0,15,0,0" Padding="0" BackgroundColor="Transparent" BorderColor="LightBlue" HorizontalOptions="FillAndExpand" CornerRadius="20">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="icons8_lock_100.png" Aspect="Fill"/>
+                        </Frame>
+                        <Entry Text="{Binding Password}" Placeholder="Hasło" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                    </StackLayout>
+                </Frame>
+                <StackLayout Orientation="Horizontal" Margin="0,10,0,0" Padding="0">
+                    <CheckBox IsChecked="False"/>
+                    <Label Text="Zapamiętaj mnie" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                </StackLayout>
+                <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding Login}"></Button>
+                <StackLayout>
+                    <Label Text="Nowy Użytkownik?" TextColor="DarkGray" FontSize="Small"/>
+                    <Label Text="Stwórz Konto"/>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

@@ -8,9 +8,9 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate pages:VappsMasterPage}"
-        Route="VappsMasterPage" />
+        Title="Logowanie"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="LoginPage" />
     
  
 

@@ -1,36 +1,13 @@
-﻿using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using VappsMobile.Expressions;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VappsMobile.ViewModels
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public partial class ViewModelBase : ObservableObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        [ObservableProperty]
+        public bool _isBusy;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected async Task RunCommand(Expression<Func<bool>> updatingFlag, Func<Task> action)
-        {
-            if (updatingFlag.GetPropertyValue())
-            {
-                return;
-            }
-
-            updatingFlag.SetPropertyValue(true);
-
-            try
-            {
-                await action();
-            }
-            finally
-            {
-                updatingFlag.SetPropertyValue(false);
-            }
-        }
+        [ObservableProperty]
+        public string _title;
     }
 }
