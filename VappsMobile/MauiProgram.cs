@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using VappsMobile.AppConfig;
+﻿using VappsMobile.AppConfig;
 using VappsMobile.Policies;
 using VappsMobile.Services;
+using VappsMobile.ViewModels;
 using VappsMobile.Views;
 
 namespace VappsMobile
@@ -16,23 +16,23 @@ namespace VappsMobile
 
             _ = builder.Services.AddSingleton(new HttpClientPolicy());
 
-            _ = builder.Services.AddHttpClient<VappsHttpClient>(
-                AppConstants.HttpClientsNames.AuthHttpClient,
-                httpClient => httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
+            //_ = builder.Services.AddHttpClient<VappsHttpClient>(
+            //    AppConstants.HttpClientsNames.AuthHttpClient,
+            //    httpClient => httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
+
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(AppConstants.HttpClientsNames.AuthHttpClient);
 
             IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
-
-            var viewModels = appDefinedTypes
-                .Where(t => t.Name.Contains("ViewModel") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ObservableObject)))
-                .Select(t => t.AsType())
-                .ToList();
-
-            viewModels.ForEach(vm => builder.Services.AddSingleton(vm));
 
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
 
-            _ = builder.Services.AddSingleton<LoginPage>();
+            _ = builder.Services.AddTransient<LoginPageViewModel>();
+            _ = builder.Services.AddSingleton<MainPageViewModel>();
+            _ = builder.Services.AddSingleton<ShellViewModel>();
+            _ = builder.Services.AddSingleton<VappsMasterPageViewModel>();
+
+            _ = builder.Services.AddTransient<LoginPage>();
             _ = builder.Services.AddSingleton<RegisterPage>();
             _ = builder.Services.AddSingleton<VappsMasterPage>();
 

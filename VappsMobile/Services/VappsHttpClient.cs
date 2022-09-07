@@ -3,14 +3,13 @@ using VappsMobile.Policies;
 
 namespace VappsMobile.Services
 {
-    internal class VappsHttpClient
+    public class VappsHttpClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClientPolicy _httpClientPolicy;
         private readonly string _url;
 
-        public VappsHttpClient(IHttpClientFactory httpClientFactory,
-            HttpClientPolicy httpClientPolicy)
+        public VappsHttpClient(IHttpClientFactory httpClientFactory, HttpClientPolicy httpClientPolicy)
         {
             _httpClientFactory = httpClientFactory;
             _httpClientPolicy = httpClientPolicy;
@@ -24,13 +23,12 @@ namespace VappsMobile.Services
             return client;
         }
 
-        public string HealthCheck()
+        public async Task HealthCheck()
         {
-            var client = GetClient(AppConstants.HttpClientsNames.AuthHttpClient);
+            HttpClient client = GetClient(AppConstants.HttpClientsNames.AuthHttpClient);
 
+            HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => client.GetAsync("health"));
 
-
-            return string.Empty;
         }
     }
 }

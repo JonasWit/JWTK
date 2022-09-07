@@ -26,7 +26,7 @@ namespace VappsMobile.ViewModels
         [RelayCommand]
         public async void SignIn()
         {
-
+            await _authService.SignIn("", "");
         }
 
         [RelayCommand]
