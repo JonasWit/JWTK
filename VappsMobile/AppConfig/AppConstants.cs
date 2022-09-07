@@ -9,8 +9,6 @@
             public const string Red = "#820828";
         }
 
-
-
         public struct BaseUrls
         {
             public const string MasterUrl = "test";

@@ -58,6 +58,9 @@
                 <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
                     <Label Text="Nowy Użytkownik?" TextColor="DarkGray" FontSize="Small"/>
                     <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignInCommand}"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
             </StackLayout>
         </Grid>

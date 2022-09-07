@@ -24,6 +24,12 @@ namespace VappsMobile.ViewModels
         }
 
         [RelayCommand]
+        public async void SignIn()
+        {
+
+        }
+
+        [RelayCommand]
         public async void Login()
         {
             if (!string.IsNullOrEmpty(_email) && !string.IsNullOrEmpty(_password))
