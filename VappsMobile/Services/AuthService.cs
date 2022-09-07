@@ -31,7 +31,7 @@ namespace VappsMobile.Services
             if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
             {
 
-                HttpClient client = GetClient(AppConstants.HttpClientsNames.AuthHttpClient);
+                HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthHttpClient);
 
                 HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => client.GetAsync("health"));
 
