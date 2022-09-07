@@ -8,15 +8,5 @@
             public const string Gold = "#ffd606";
             public const string Red = "#820828";
         }
-
-        public struct BaseUrls
-        {
-            public const string MasterUrl = "test";
-        }
-
-        public struct HttpClientsNames
-        {
-            public const string AuthHttpClient = "AuthClient";
-        }
     }
 }

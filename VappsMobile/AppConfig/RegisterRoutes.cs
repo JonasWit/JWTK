@@ -1,6 +1,6 @@
 ﻿using VappsMobile.Views;
 
-namespace VappsMobile.RoutingServices
+namespace VappsMobile.AppConfig
 {
     public static class RouterService
     {

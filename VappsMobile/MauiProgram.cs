@@ -20,7 +20,7 @@ namespace VappsMobile
             //    AppConstants.HttpClientsNames.AuthHttpClient,
             //    httpClient => httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
 
-            _ = builder.Services.AddHttpClient<VappsHttpClient>(AppConstants.HttpClientsNames.AuthHttpClient);
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(ApiConfig.HttpClientsNames.AuthHttpClient);
 
             IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
 

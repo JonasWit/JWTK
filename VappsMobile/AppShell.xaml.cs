@@ -1,4 +1,4 @@
-﻿using VappsMobile.RoutingServices;
+﻿using VappsMobile.AppConfig;
 using VappsMobile.ViewModels;
 
 namespace VappsMobile
