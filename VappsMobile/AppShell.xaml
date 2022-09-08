@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:VappsMobile"
     xmlns:views="clr-namespace:VappsMobile.Views"
     xmlns:config="clr-namespace:VappsMobile.AppConfig"
+    BackgroundColor="{DynamicResource DefaultBackground}"
     Shell.TabBarIsVisible="False">
 
     <ShellContent

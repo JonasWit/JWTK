@@ -8,7 +8,6 @@ namespace VappsMobile.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClientPolicy _httpClientPolicy;
-        private readonly string _url;
 
         public AuthService(
             IHttpClientFactory httpClientFactory,
@@ -16,13 +15,16 @@ namespace VappsMobile.Services
         {
             _httpClientFactory = httpClientFactory;
             _httpClientPolicy = httpClientPolicy;
-            _url = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5000";
         }
 
-        public HttpClient GetClient(string name)
+        public void GetStoredUser()
+        {
+
+        }
+
+        private HttpClient GetClient(string name)
         {
             HttpClient client = _httpClientFactory.CreateClient(name);
-            client.BaseAddress = new Uri(_url);
             return client;
         }
 
@@ -31,7 +33,7 @@ namespace VappsMobile.Services
             if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
             {
 
-                HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthHttpClient);
+                HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthClient);
 
                 HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => client.GetAsync("health"));
 

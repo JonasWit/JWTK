@@ -16,16 +16,28 @@ namespace VappsMobile
 
             _ = builder.Services.AddSingleton(new HttpClientPolicy());
 
-            //_ = builder.Services.AddHttpClient<VappsHttpClient>(
-            //    AppConstants.HttpClientsNames.AuthHttpClient,
-            //    httpClient => httpClient.BaseAddress = new Uri(AppConstants.BaseUrls.MasterUrl));
-
-            _ = builder.Services.AddHttpClient<VappsHttpClient>(ApiConfig.HttpClientsNames.AuthHttpClient);
+#if DEBUG
+            var url = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5000";
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(
+            ApiConfig.HttpClientsNames.AuthClient,
+            httpClient => httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiControllers.Auth}"));
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(
+            ApiConfig.HttpClientsNames.HealthClient,
+            httpClient => httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiControllers.Health}"));
+#else
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(
+            ApiConfig.HttpClientsNames.AuthClient,
+            httpClient => httpClient.BaseAddress = new Uri($"{ApiConfig.ApiUrls.MasterService}/{ApiConfig.ApiControllers.Auth}"));
+            _ = builder.Services.AddHttpClient<VappsHttpClient>(
+            ApiConfig.HttpClientsNames.HealthClient,
+            httpClient => httpClient.BaseAddress = new Uri($"{ApiConfig.ApiUrls.MasterService}/{ApiConfig.ApiControllers.Health}"));
+#endif
 
             IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
 
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
+            _ = builder.Services.AddSingleton<HealthService>();
 
             _ = builder.Services.AddTransient<LoginPageViewModel>();
             _ = builder.Services.AddSingleton<MainPageViewModel>();

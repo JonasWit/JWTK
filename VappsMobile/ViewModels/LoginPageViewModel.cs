@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Text.Json;
+using VappsMobile.AppConfig;
 using VappsMobile.CustomControls;
 using VappsMobile.Models;
 using VappsMobile.Services;
@@ -11,6 +12,7 @@ namespace VappsMobile.ViewModels
     public partial class LoginPageViewModel : ViewModelBase
     {
         private readonly AuthService _authService;
+        private readonly HealthService _healthService;
 
         [ObservableProperty]
         private string _email;
@@ -18,15 +20,27 @@ namespace VappsMobile.ViewModels
         [ObservableProperty]
         private string _password;
 
-        public LoginPageViewModel(AuthService authService)
+        public LoginPageViewModel(AuthService authService, HealthService healthService)
         {
             _authService = authService;
+            _healthService = healthService;
         }
 
         [RelayCommand]
         public async void SignIn()
         {
-            await _authService.SignIn("", "");
+            try
+            {
+                await Shell.Current.GoToAsync(nameof(LoadingPage));
+                _ = await _healthService.CheckHealth();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                await Shell.Current.GoToAsync(AppConstants.Navigation.PopCurrent);
+            }
         }
 
         [RelayCommand]

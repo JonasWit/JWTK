@@ -2,14 +2,21 @@
 {
     public static class ApiConfig
     {
-        public struct BaseUrls
+        public struct ApiUrls
         {
-            public const string MasterUrl = "test";
+            public const string MasterService = @"https://api.systemywp.pl";
+        }
+
+        public struct ApiControllers
+        {
+            public const string Auth = nameof(Auth);
+            public const string Health = nameof(Health);
         }
 
         public struct HttpClientsNames
         {
-            public const string AuthHttpClient = "AuthClient";
+            public const string AuthClient = nameof(AuthClient);
+            public const string HealthClient = nameof(HealthClient);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace VappsMobile.Services
 
         public async Task HealthCheck()
         {
-            HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthHttpClient);
+            HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthClient);
 
             HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => client.GetAsync("health"));
 

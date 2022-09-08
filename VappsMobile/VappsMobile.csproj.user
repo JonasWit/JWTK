@@ -17,13 +17,13 @@
     <MauiXaml Update="CustomControls\FlyoutHeader.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="MainPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Views\AboutPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\ContactPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoadingPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\LoginPage.xaml">

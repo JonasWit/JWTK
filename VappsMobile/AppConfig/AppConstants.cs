@@ -8,5 +8,10 @@
             public const string Gold = "#ffd606";
             public const string Red = "#820828";
         }
+
+        public struct Navigation
+        {
+            public const string PopCurrent = "..";
+        }
     }
 }
