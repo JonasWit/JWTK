@@ -18,6 +18,9 @@ docker run -d -p 8080:80 --name myapp systemywp/master:gate_v2
 
 ### Setup kubectl
 
+k9s --kubeconfig=c:\kube\config          
+kubectl get services --kubeconfig=c:\kube\config  
+
 export KUBECONFIG=core-kubeconfig.yaml
 export KUBE_EDITOR=vim
 
