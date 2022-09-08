@@ -32,17 +32,17 @@
                 <CheckBox IsChecked="False"/>
                 <Label Text="Zapamiętaj mnie" TextColor="{DynamicResource Gray600}" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
             </HorizontalStackLayout>
-            <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding LoginCommand}" TextColor="{DynamicResource Secondary}"></Button>
+            <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding SignInCommand}" TextColor="{DynamicResource Secondary}"></Button>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
                 <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
                 <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignInCommand}"></TapGestureRecognizer>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignUpCommand}"></TapGestureRecognizer>
                 </StackLayout.GestureRecognizers>
             </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,20,0,0" Padding="0">
                 <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="End" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
                 <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignInCommand}"></TapGestureRecognizer>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ForgotPasswordCommand}"></TapGestureRecognizer>
                 </StackLayout.GestureRecognizers>
             </StackLayout>
         </StackLayout>

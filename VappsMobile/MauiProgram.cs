@@ -33,8 +33,6 @@ namespace VappsMobile
             httpClient => httpClient.BaseAddress = new Uri($"{ApiConfig.ApiUrls.MasterService}/{ApiConfig.ApiControllers.Health}"));
 #endif
 
-            IEnumerable<System.Reflection.TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
-
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
             _ = builder.Services.AddSingleton<HealthService>();
