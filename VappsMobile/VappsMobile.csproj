@@ -41,6 +41,7 @@
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Include="Resources\Images\GastroApka\*" />
 		<MauiImage Include="Resources\Images\Auth\*" />
+		<MauiImage Include="Resources\Images\Generic\*" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -51,6 +52,9 @@
 
 	<ItemGroup>
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
+	  <None Remove="Resources\Images\GastroApka\icons8_ingredients_100.png" />
+	  <None Remove="Resources\Images\GastroApka\icons8_meal_100.png" />
+	  <None Remove="Resources\Images\GastroApka\icons8_menu_vertical_100.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -66,8 +70,6 @@
 	<ItemGroup>
 	  <Folder Include="Behaviours\" />
 	  <Folder Include="Models\GastroAppModels\" />
-	  <Folder Include="Resources\Images\Generic\" />
-	  <Folder Include="Views\Popups\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,6 +89,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Popups\ErrorModalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPage.xaml">

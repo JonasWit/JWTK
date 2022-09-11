@@ -5,7 +5,8 @@
              xmlns:vms="clr-namespace:VappsMobile.ViewModels"
              x:DataType="vms:VappsMasterPageViewModel"
              xmlns:models="clr-namespace:VappsMobile.Models.GeneralModels"
-             Shell.BackgroundColor="{DynamicResource Primary}"
+             Shell.BackgroundColor="{StaticResource Primary}"
+             Style="{StaticResource DefaultPage}"
              Title="Apki">
     <VerticalStackLayout>
         <CollectionView

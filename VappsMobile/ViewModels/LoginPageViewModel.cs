@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using VappsMobile.AppConfig;
 using VappsMobile.CustomControls;
+using VappsMobile.Models.GeneralModels;
 using VappsMobile.Services;
 using VappsMobile.Views;
+using VappsMobile.Views.Popups;
 
 namespace VappsMobile.ViewModels
 {
@@ -11,12 +12,6 @@ namespace VappsMobile.ViewModels
     {
         private readonly AuthService _authService;
         private readonly HealthService _healthService;
-
-        //[ObservableProperty]
-        //private string _validationMessage;
-
-        //[ObservableProperty]
-        //private bool _validationVisible;
 
         [ObservableProperty]
         private bool _rememberMe;
@@ -35,26 +30,18 @@ namespace VappsMobile.ViewModels
             RememberMe = true;
         }
 
-        //partial void OnEmailChanging(string value)
-        //{
-        //    if (string.IsNullOrEmpty(value))
-        //    {
-        //        _validationVisible = false;
-        //        _validationMessage = string.Empty;
-        //        return;
-        //    }
-
-        //    _validationVisible = true;
-        //    _validationMessage = value;
-        //}
-
         [RelayCommand]
         public async void SignIn()
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
+            IsBusy = true;
+
             try
             {
-                await Shell.Current.GoToAsync(nameof(LoadingPage));
-
                 if (await _authService.SignIn(_email, _password, _rememberMe))
                 {
                     Shell.Current.FlyoutHeader = new FlyoutHeader(_authService.UserInfo.Email);
@@ -62,39 +49,39 @@ namespace VappsMobile.ViewModels
                     return;
                 }
 
-                await Shell.Current.GoToAsync(AppConstants.Navigation.PopCurrent);
+                throw new Exception();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await Shell.Current.GoToAsync(AppConstants.Navigation.PopCurrent);
+                await Shell.Current.GoToAsync(nameof(ErrorModalPage), true, new Dictionary<string, object>
+                {
+                    {"ErrorModalContent", new ErrorModalContent{ Message = "Logowanie nie powiodło się", Exception = ex} }
+                });
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
         [RelayCommand]
-        public void ForgotPassword()
+        public async void ForgotPassword()
         {
-
+            if (IsBusy)
+            {
+                return;
+            }
+            await Shell.Current.GoToAsync($"{nameof(ForgotPasswordPage)}");
         }
 
         [RelayCommand]
-        public void SignUp()
+        public async void SignUp()
         {
-            //if (!string.IsNullOrEmpty(_email) && !string.IsNullOrEmpty(_password))
-            //{
-            //    if (await _authService.SignIn(_email, _password))
-            //    {
-
-            //    }
-
-            //    if (Preferences.ContainsKey(nameof(UserInfo)))
-            //    {
-            //        Preferences.Remove(nameof(UserInfo));
-            //    }
-
-            //    var userInfo = JsonSerializer.Serialize(user);
-            //    Preferences.Set(nameof(UserInfo), userInfo);
-
-            //}
+            if (IsBusy)
+            {
+                return;
+            }
+            await Shell.Current.GoToAsync($"{nameof(RegisterPage)}");
         }
     }
 }

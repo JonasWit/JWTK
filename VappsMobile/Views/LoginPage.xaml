@@ -4,50 +4,68 @@
              xmlns:vms="clr-namespace:VappsMobile.ViewModels"
              x:DataType="vms:LoginPageViewModel"
              x:Class="VappsMobile.Views.LoginPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False" 
              Shell.BackgroundColor="{DynamicResource Primary}"
-             BackgroundColor="{DynamicResource DefaultBackground}"
+             xmlns:config="clr-namespace:VappsMobile.AppConfig"
+             Style="{StaticResource DefaultPage}"
              Title="Logowanie">
+    
+    <Grid ColumnDefinitions="*" RowDefinitions="*">
+        <VerticalStackLayout VerticalOptions="Center">
+            <Label Text="Logowanie" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="0, 0, 0, 40"/>
 
-    <VerticalStackLayout VerticalOptions="Center">
-        <Label Text="Logowanie" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="0, 0, 0, 40"/>
-        <!--<Label IsVisible="{Binding ValidationVisible, Mode=TwoWay}" TextColor="{DynamicResource Tertiary}" Text="{Binding ValidationMessage, Mode=TwoWay}" FontSize="Micro" Padding="0" Margin="0, 0, 0, 10" HorizontalOptions="Center"></Label>-->
+            <StackLayout  Orientation="Vertical" HorizontalOptions="CenterAndExpand" Margin="10">
+                <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="20">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="{x:Static config:Icons.AuthUser}" Aspect="Fill"/>
+                        </Frame>
+                        <Entry Text="{Binding Email}" Placeholder="Adres Email" PlaceholderColor="{StaticResource Gray600}"
+                           FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0">
+                            <Entry.Behaviors>
+                                <toolkit:TextValidationBehavior 
+                            InvalidStyle="{StaticResource InvalidEntryStyle}"
+                            ValidStyle="{StaticResource ValidEntryStyle}"
+                            Flags="ValidateOnValueChanged"
+                            RegexPattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </StackLayout>
 
-        <StackLayout  Orientation="Vertical" HorizontalOptions="CenterAndExpand" Margin="10">
-            <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{DynamicResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="20">
-                <StackLayout Orientation="Horizontal">
-                    <Frame BackgroundColor="{DynamicResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
-                        <Image Source="icons8_male_user_100.png" Aspect="Fill"/>
-                    </Frame>
-                    <Entry Text="{Binding Email}" Placeholder="Adres Email" PlaceholderColor="{DynamicResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                </Frame>
+                <Frame Margin="0,20,0,0" Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="20">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="{x:Static config:Icons.AuthLock}" Aspect="Fill"/>
+                        </Frame>
+                        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Hasło" PlaceholderColor="{StaticResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                    </StackLayout>
+                </Frame>
+                <HorizontalStackLayout Margin="0,10,0,0" Padding="0">
+                    <CheckBox IsChecked="{Binding RememberMe}"/>
+                    <Label Text="Zapamiętaj mnie" TextColor="{StaticResource Gray600}" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                </HorizontalStackLayout>
+                <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding SignInCommand}" TextColor="{StaticResource Secondary}"></Button>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
+                    <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignUpCommand}"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
-
-            </Frame>
-            <Frame Margin="0,20,0,0" Padding="0" BackgroundColor="Transparent" BorderColor="{DynamicResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="20">
-                <StackLayout Orientation="Horizontal">
-                    <Frame BackgroundColor="{DynamicResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
-                        <Image Source="icons8_lock_100.png" Aspect="Fill"/>
-                    </Frame>
-                    <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Hasło" PlaceholderColor="{DynamicResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,20,0,0" Padding="0">
+                    <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="End" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ForgotPasswordCommand}"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
-            </Frame>
-            <HorizontalStackLayout Margin="0,10,0,0" Padding="0">
-                <CheckBox IsChecked="{Binding RememberMe}"/>
-                <Label Text="Zapamiętaj mnie" TextColor="{DynamicResource Gray600}" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-            </HorizontalStackLayout>
-            <Button Text="Zaloguj się" WidthRequest="200" Margin="0,15,0,0" Command="{Binding SignInCommand}" TextColor="{DynamicResource Secondary}"></Button>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,60,0,0" Padding="0">
-                <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignUpCommand}"></TapGestureRecognizer>
-                </StackLayout.GestureRecognizers>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,20,0,0" Padding="0">
-                <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="End" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ForgotPasswordCommand}"></TapGestureRecognizer>
-                </StackLayout.GestureRecognizers>
-            </StackLayout>
-        </StackLayout>
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <ActivityIndicator
+            HorizontalOptions="FillAndExpand"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="CenterAndExpand" />
+    </Grid>
 </ContentPage>

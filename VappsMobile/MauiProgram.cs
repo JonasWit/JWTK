@@ -4,6 +4,7 @@ using VappsMobile.Policies;
 using VappsMobile.Services;
 using VappsMobile.ViewModels;
 using VappsMobile.Views;
+using VappsMobile.Views.Popups;
 
 namespace VappsMobile
 {
@@ -37,15 +38,18 @@ namespace VappsMobile
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
             _ = builder.Services.AddSingleton<HealthService>();
-
             _ = builder.Services.AddSingleton<FlyoutHeader>();
 
             _ = builder.Services.AddTransient<LoginPageViewModel>();
+            _ = builder.Services.AddTransient<ErrorModalPageViewModel>();
+
             _ = builder.Services.AddSingleton<MainPageViewModel>();
             _ = builder.Services.AddSingleton<ShellViewModel>();
             _ = builder.Services.AddSingleton<VappsMasterPageViewModel>();
 
             _ = builder.Services.AddTransient<LoginPage>();
+            _ = builder.Services.AddTransient<ErrorModalPage>();
+
             _ = builder.Services.AddSingleton<RegisterPage>();
             _ = builder.Services.AddSingleton<VappsMasterPage>();
 
