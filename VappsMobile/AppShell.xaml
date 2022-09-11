@@ -6,7 +6,9 @@
     xmlns:local="clr-namespace:VappsMobile"
     xmlns:views="clr-namespace:VappsMobile.Views"
     xmlns:config="clr-namespace:VappsMobile.AppConfig"
-    BackgroundColor="{DynamicResource DefaultBackground}"
+    BackgroundColor="Transparent"
+    FlyoutBackgroundColor="{DynamicResource DefaultBackground}"
+    FlyoutBackgroundImageAspect="AspectFill"
     Shell.TabBarIsVisible="False">
 
     <ShellContent
@@ -17,14 +19,14 @@
         Route="LoginPage" />
 
     <FlyoutItem Route="VappsMasterPage" FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Vapps" Icon="{x:Static config:Icons.VappsTransparent}"  ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
-        <ShellContent Title="Contact" ContentTemplate="{DataTemplate views:ContactPage}"/>
-        <ShellContent Title="About" ContentTemplate="{DataTemplate views:AboutPage}"/>
+        <ShellContent Title="Aplikacje" Icon="{x:Static config:Icons.VappsTransparent}"  ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
+        <ShellContent Title="Kontakt" ContentTemplate="{DataTemplate views:ContactPage}"/>
+        <ShellContent Title="O Nas" ContentTemplate="{DataTemplate views:AboutPage}"/>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20">
-            <Button Text="Wyloguj" Command="{Binding SignOutCommand}"/>
+            <Button BackgroundColor="{DynamicResource Primary}" TextColor="{DynamicResource Secondary}" Text="Wyloguj" Command="{Binding SignOutCommand}"/>
         </StackLayout>
     </Shell.FlyoutFooter>
 

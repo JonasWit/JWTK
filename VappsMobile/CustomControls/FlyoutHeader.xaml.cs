@@ -2,12 +2,9 @@ namespace VappsMobile.CustomControls;
 
 public partial class FlyoutHeader : ContentView
 {
-    public FlyoutHeader()
+    public FlyoutHeader(string email)
     {
         InitializeComponent();
-        if (App.UserInfo is not null)
-        {
-            lblUserName.Text = App.UserInfo.Email;
-        }
+        lblUserName.Text = email;
     }
 }

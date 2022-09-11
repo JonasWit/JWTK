@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Security.Claims;
-using System.Text;
 using AspNetCoreRateLimit;
 using AutoMapper;
 using FluentValidation.AspNetCore;
@@ -21,6 +16,11 @@ using Microsoft.OpenApi.Models;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Claims;
+using System.Text;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.Repositories;
@@ -33,18 +33,22 @@ using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
 
-var builder = WebApplication.CreateBuilder(args);
-if (builder.Environment.IsDevelopment()) builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    _ = builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5000));
+}
 
 // Secrets injection
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) =>
 {
-    config.AddJsonFile(AppConstants.Paths.SecretSettings, true, true);
+    _ = config.AddJsonFile(AppConstants.Paths.SecretSettings, true, true);
 });
 
 // Logging
 if (builder.Environment.IsProduction())
-    builder.Host.UseSerilog((context, config) =>
+{
+    _ = builder.Host.UseSerilog((context, config) =>
     {
         var connectionString = context.Configuration.GetConnectionString("Master");
 
@@ -58,19 +62,22 @@ if (builder.Environment.IsProduction())
             {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb)}
         };
 
-        config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
+        _ = config.WriteTo.PostgreSQL(connectionString, "Logs", columnWriters)
             .MinimumLevel.Information();
     });
+}
 
 if (builder.Environment.IsDevelopment())
-    builder.Host.UseSerilog((context, config) => { config.WriteTo.Console(); });
+{
+    _ = builder.Host.UseSerilog((context, config) => { _ = config.WriteTo.Console(); });
+}
 
 // Swagger
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddSwaggerGen(c =>
+    _ = builder.Services.AddSwaggerGen(c =>
     {
-        c.SwaggerDoc("v1", new OpenApiInfo {Title = "systemywp", Version = "v1"});
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "systemywp", Version = "v1" });
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -100,10 +107,10 @@ if (builder.Environment.IsDevelopment())
             }
         });
     });
-    builder.Services.AddFluentValidationRulesToSwagger();
+    _ = builder.Services.AddFluentValidationRulesToSwagger();
 }
 
-var configuration = builder.Configuration;
+ConfigurationManager configuration = builder.Configuration;
 
 builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
@@ -114,7 +121,12 @@ builder.Services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRate
 builder.Services.AddInMemoryRateLimiting();
 
 // Data Access Layer
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Master"), serverAction =>
+{
+    _ = serverAction.EnableRetryOnFailure(3);
+    _ = serverAction.CommandTimeout(20);
+}));
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Mapper with additional data from URL Service
@@ -141,7 +153,11 @@ builder.Services.AddAuthentication("OAuth").AddJwtBearer("OAuth", config =>
     var secretBytes = Encoding.UTF8.GetBytes(configuration.GetValue("AuthSettings:SecretKey", ""));
     var key = new SymmetricSecurityKey(secretBytes);
 
-    if (builder.Environment.IsDevelopment()) config.RequireHttpsMetadata = false;
+    if (builder.Environment.IsDevelopment())
+    {
+        config.RequireHttpsMetadata = false;
+    }
+
     config.SaveToken = true;
     config.TokenValidationParameters = new TokenValidationParameters
     {
@@ -195,15 +211,15 @@ builder.Services.AddCors(options => options.AddPolicy(AppConstants.CorsName.Clie
 
 if (builder.Environment.IsProduction())
 {
-    builder.Services.AddHsts(options =>
+    _ = builder.Services.AddHsts(options =>
     {
         options.Preload = true;
         options.MaxAge = TimeSpan.FromDays(60);
     });
 
-    builder.Services.AddHttpsRedirection(options =>
+    _ = builder.Services.AddHttpsRedirection(options =>
     {
-        options.RedirectStatusCode = (int) HttpStatusCode.TemporaryRedirect;
+        options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
         options.HttpsPort = 443;
     });
 }
@@ -211,21 +227,21 @@ if (builder.Environment.IsProduction())
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
 // Build the app
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Dev only
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseDeveloperExceptionPage();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 // Prod only
 if (app.Environment.IsProduction())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    _ = app.UseExceptionHandler("/Error");
+    _ = app.UseHsts();
 }
 
 app.UseIpRateLimiting();
@@ -235,7 +251,7 @@ app.UseCors(AppConstants.CorsName.ClientApp);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+app.UseEndpoints(endpoints => { _ = endpoints.MapDefaultControllerRoute(); });
 
 DbManager.PrepareDatabase(app);
 Console.WriteLine($"--> Master App Settings used: {app.Configuration.GetValue("ConfigSet", "No config Set")}");

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using VappsMobile.AppConfig;
-using VappsMobile.Models;
+using VappsMobile.Models.AuthModels;
 using VappsMobile.Policies;
 
 namespace VappsMobile.Services

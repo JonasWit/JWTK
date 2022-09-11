@@ -1,4 +1,6 @@
-﻿namespace VappsMobile.AppConfig
+﻿using VappsMobile.Models.GeneralModels;
+
+namespace VappsMobile.AppConfig
 {
     public static class AppConstants
     {
@@ -13,5 +15,15 @@
         {
             public const string PopCurrent = "..";
         }
+
+        public struct StoredPreferenceName
+        {
+            public const string JWTToken = nameof(JWTToken);
+        }
+
+        public static List<Vapp> GetAvailableVapps() => new()
+            {
+                new Vapp { Name = "Gastro-Apka", Description = "opis", Image = Icons.GastroAppDefault  }
+            };
     }
 }

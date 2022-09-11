@@ -1,4 +1,4 @@
-﻿namespace VappsMobile.Models
+﻿namespace VappsMobile.Models.AuthModels
 {
     public class HealthCheckResponse
     {

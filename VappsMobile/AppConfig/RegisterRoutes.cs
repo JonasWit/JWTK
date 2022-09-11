@@ -17,13 +17,6 @@ namespace VappsMobile.AppConfig
             {
                 Routing.RegisterRoute(page.Name, page);
             }
-
-            //Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            //Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
-            //Routing.RegisterRoute(nameof(VappsMasterPage), typeof(VappsMasterPage));
-            //Routing.RegisterRoute(nameof(ContactPage), typeof(ContactPage));
-            //Routing.RegisterRoute(nameof(AboutPage), typeof(AboutPage));
-            //Routing.RegisterRoute(nameof(LoadingPage), typeof(LoadingPage));
         }
     }
 }

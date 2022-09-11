@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using SystemyWP.API.Gastronomy.Data;
 using SystemyWP.API.Gastronomy.Data.Repositories;
 using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
@@ -24,12 +24,17 @@ if (builder.Environment.IsDevelopment())
     builder.Host.UseSerilog((context, config) =>
     {
         config.WriteTo.Console();
-    }); 
+    });
 }
 
 var configuration = builder.Configuration;
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Gastronomy")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Gastronomy"), serverAction =>
+{
+    _ = serverAction.EnableRetryOnFailure(3);
+    _ = serverAction.CommandTimeout(20);
+}));
+
 builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IDishRepository, DishRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();

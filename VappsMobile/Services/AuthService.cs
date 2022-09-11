@@ -1,5 +1,6 @@
-﻿using VappsMobile.AppConfig;
-using VappsMobile.Models;
+﻿using System.Net.Http.Json;
+using VappsMobile.AppConfig;
+using VappsMobile.Models.AuthModels;
 using VappsMobile.Policies;
 
 namespace VappsMobile.Services
@@ -9,6 +10,9 @@ namespace VappsMobile.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClientPolicy _httpClientPolicy;
 
+        public UserInfo UserInfo { get; set; }
+        public HttpClient Client => _httpClientFactory.CreateClient(ApiConfig.HttpClientsNames.AuthClient);
+
         public AuthService(
             IHttpClientFactory httpClientFactory,
             HttpClientPolicy httpClientPolicy)
@@ -17,34 +21,65 @@ namespace VappsMobile.Services
             _httpClientPolicy = httpClientPolicy;
         }
 
-        public void GetStoredUser()
+        public async Task<bool> GetStoredUser()
         {
-
-        }
-
-        private HttpClient GetClient(string name)
-        {
-            HttpClient client = _httpClientFactory.CreateClient(name);
-            return client;
-        }
-
-        public async Task<UserInfo> SignIn(string email, string password)
-        {
-            if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
+            var token = await SecureStorage.GetAsync(AppConstants.StoredPreferenceName.JWTToken);
+            if (string.IsNullOrEmpty(token))
             {
-
-                HttpClient client = GetClient(ApiConfig.HttpClientsNames.AuthClient);
-
-                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => client.GetAsync("health"));
-
+                return false;
             }
-            return null;
+
+            UserInfo = new UserInfo(token);
+            return true;
         }
 
-        public bool IsSignedIn()
+        public bool SignOut()
         {
+            try
+            {
+                _ = SecureStorage.Remove(AppConstants.StoredPreferenceName.JWTToken);
+                UserInfo = null;
 
-            return true;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SignIn(string email, string password, bool remember)
+        {
+            try
+            {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    return false;
+                }
+
+                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => Client.PostAsJsonAsync(ApiConfig.ApiAuthController.Authenticate, new { Email = email, Password = password }));
+
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    return false;
+                }
+
+                AuthorizeResponse token = await response.Content.ReadFromJsonAsync<AuthorizeResponse>();
+
+                if (remember)
+                {
+                    _ = SecureStorage.Remove(AppConstants.StoredPreferenceName.JWTToken);
+                    await SecureStorage.SetAsync(AppConstants.StoredPreferenceName.JWTToken, token.Token);
+                }
+
+                UserInfo = new UserInfo(token.Token);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

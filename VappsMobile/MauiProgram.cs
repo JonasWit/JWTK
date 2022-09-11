@@ -1,4 +1,5 @@
 ﻿using VappsMobile.AppConfig;
+using VappsMobile.CustomControls;
 using VappsMobile.Policies;
 using VappsMobile.Services;
 using VappsMobile.ViewModels;
@@ -20,10 +21,10 @@ namespace VappsMobile
             var url = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5000";
             _ = builder.Services.AddHttpClient<VappsHttpClient>(
             ApiConfig.HttpClientsNames.AuthClient,
-            httpClient => httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiControllers.Auth}"));
+            httpClient => { httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiAuthController.BasePath}/"); httpClient.Timeout = TimeSpan.FromSeconds(15); });
             _ = builder.Services.AddHttpClient<VappsHttpClient>(
             ApiConfig.HttpClientsNames.HealthClient,
-            httpClient => httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiControllers.Health}"));
+            httpClient => { httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiHealthController.BasePath}/"); httpClient.Timeout = TimeSpan.FromSeconds(15); });
 #else
             _ = builder.Services.AddHttpClient<VappsHttpClient>(
             ApiConfig.HttpClientsNames.AuthClient,
@@ -36,6 +37,8 @@ namespace VappsMobile
             _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<AuthService>();
             _ = builder.Services.AddSingleton<HealthService>();
+
+            _ = builder.Services.AddSingleton<FlyoutHeader>();
 
             _ = builder.Services.AddTransient<LoginPageViewModel>();
             _ = builder.Services.AddSingleton<MainPageViewModel>();

@@ -7,10 +7,15 @@
             public const string MasterService = @"https://api.systemywp.pl";
         }
 
-        public struct ApiControllers
+        public struct ApiAuthController
         {
-            public const string Auth = nameof(Auth);
-            public const string Health = nameof(Health);
+            public const string BasePath = "auth";
+            public const string Authenticate = "authenticate";
+        }
+
+        public struct ApiHealthController
+        {
+            public const string BasePath = "health";
         }
 
         public struct HttpClientsNames

@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Text.Json;
 using VappsMobile.AppConfig;
 using VappsMobile.CustomControls;
-using VappsMobile.Models;
 using VappsMobile.Services;
 using VappsMobile.Views;
 
@@ -14,7 +12,17 @@ namespace VappsMobile.ViewModels
         private readonly AuthService _authService;
         private readonly HealthService _healthService;
 
+        //[ObservableProperty]
+        //private string _validationMessage;
+
+        //[ObservableProperty]
+        //private bool _validationVisible;
+
         [ObservableProperty]
+        private bool _rememberMe;
+
+        [ObservableProperty]
+
         private string _email;
 
         [ObservableProperty]
@@ -24,7 +32,21 @@ namespace VappsMobile.ViewModels
         {
             _authService = authService;
             _healthService = healthService;
+            RememberMe = true;
         }
+
+        //partial void OnEmailChanging(string value)
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //    {
+        //        _validationVisible = false;
+        //        _validationMessage = string.Empty;
+        //        return;
+        //    }
+
+        //    _validationVisible = true;
+        //    _validationMessage = value;
+        //}
 
         [RelayCommand]
         public async void SignIn()
@@ -32,43 +54,47 @@ namespace VappsMobile.ViewModels
             try
             {
                 await Shell.Current.GoToAsync(nameof(LoadingPage));
-                _ = await _healthService.CheckHealth();
+
+                if (await _authService.SignIn(_email, _password, _rememberMe))
+                {
+                    Shell.Current.FlyoutHeader = new FlyoutHeader(_authService.UserInfo.Email);
+                    await Shell.Current.GoToAsync($"//{nameof(VappsMasterPage)}");
+                    return;
+                }
+
+                await Shell.Current.GoToAsync(AppConstants.Navigation.PopCurrent);
             }
             catch (Exception)
-            {
-            }
-            finally
             {
                 await Shell.Current.GoToAsync(AppConstants.Navigation.PopCurrent);
             }
         }
 
         [RelayCommand]
-        public async void ForgotPassword()
+        public void ForgotPassword()
         {
 
         }
 
         [RelayCommand]
-        public async void SignUp()
+        public void SignUp()
         {
-            if (!string.IsNullOrEmpty(_email) && !string.IsNullOrEmpty(_password))
-            {
-                UserInfo user = await _authService.SignIn(_email, _password);
+            //if (!string.IsNullOrEmpty(_email) && !string.IsNullOrEmpty(_password))
+            //{
+            //    if (await _authService.SignIn(_email, _password))
+            //    {
 
-                if (Preferences.ContainsKey(nameof(UserInfo)))
-                {
-                    Preferences.Remove(nameof(UserInfo));
-                }
+            //    }
 
-                var userInfo = JsonSerializer.Serialize(user);
-                Preferences.Set(nameof(UserInfo), userInfo);
-                App.UserInfo = user;
+            //    if (Preferences.ContainsKey(nameof(UserInfo)))
+            //    {
+            //        Preferences.Remove(nameof(UserInfo));
+            //    }
 
-                Shell.Current.FlyoutHeader = new FlyoutHeader();
+            //    var userInfo = JsonSerializer.Serialize(user);
+            //    Preferences.Set(nameof(UserInfo), userInfo);
 
-                await Shell.Current.GoToAsync($"//{nameof(VappsMasterPage)}");
-            }
+            //}
         }
     }
 }

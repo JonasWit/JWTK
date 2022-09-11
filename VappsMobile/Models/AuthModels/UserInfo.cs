@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace VappsMobile.Models
+namespace VappsMobile.Models.AuthModels
 {
     public class UserInfo
     {
