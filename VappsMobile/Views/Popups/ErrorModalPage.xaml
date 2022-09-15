@@ -10,21 +10,12 @@
              Shell.PresentationMode="Modal"
              xmlns:config="clr-namespace:VappsMobile.AppConfig"
              Title="ErrorModalPage">
-    
-    <VerticalStackLayout Spacing="30">
 
-
-
+    <VerticalStackLayout VerticalOptions="Center" Spacing="50">
         <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="100" WidthRequest="100" CornerRadius="30" Padding="0">
             <Image Source="{x:Static config:Icons.Error}" Aspect="Fill"/>
         </Frame>
-
-
-        <Label Text="{Binding ErrorModalContent.Message}" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="0, 0, 0, 40"/>
-
-
-
-        <Button HorizontalOptions="Fill" Text="Wróć" WidthRequest="200" Margin="0,15,0,0"  Clicked="Button_Clicked" TextColor="{StaticResource Secondary}"></Button>
-        
+        <Label Text="{Binding ErrorModalContent.Message}" LineBreakMode="WordWrap" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold"/>
+        <Button HorizontalOptions="Fill" Text="Wróć" WidthRequest="150" Margin="0,15,0,0"  Clicked="Button_Clicked" TextColor="{StaticResource Secondary}"></Button>
     </VerticalStackLayout>
 </ContentPage>

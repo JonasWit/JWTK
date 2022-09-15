@@ -11,6 +11,9 @@
         {
             public const string BasePath = "auth";
             public const string Authenticate = "authenticate";
+            public const string Register = "register";
+            public const string DeleteAccount = "delete-account";
+            public const string ForgotPassword = "reset-password-request";
         }
 
         public struct ApiHealthController

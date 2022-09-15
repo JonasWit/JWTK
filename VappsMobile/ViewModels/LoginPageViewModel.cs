@@ -31,7 +31,7 @@ namespace VappsMobile.ViewModels
         }
 
         [RelayCommand]
-        public async void SignIn()
+        public async Task SignIn()
         {
             if (IsBusy)
             {
@@ -65,7 +65,7 @@ namespace VappsMobile.ViewModels
         }
 
         [RelayCommand]
-        public async void ForgotPassword()
+        public async Task ForgotPassword()
         {
             if (IsBusy)
             {
@@ -75,7 +75,7 @@ namespace VappsMobile.ViewModels
         }
 
         [RelayCommand]
-        public async void SignUp()
+        public async Task SignUp()
         {
             if (IsBusy)
             {

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.DTOs.General;
@@ -48,20 +48,22 @@ namespace SystemyWP.API.Controllers.MasterService
 
         [Authorize]
         [HttpGet("authorized-check")]
-        public IActionResult AuthorizedCheck() => Ok(new {Message= "Authorized Response", UserEmail, UserId });
+        public IActionResult AuthorizedCheck() => Ok(new { Message = "Authorized Response", UserEmail, UserId });
 
         [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> Register([FromBody] UserCredentialsForm userCredentialsForm)
         {
             try
             {
-                var emailAddressExists = _userRepository.GetUser(u =>
+                Data.Models.User emailAddressExists = _userRepository.GetUser(u =>
                     u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
-                if (emailAddressExists is not null) return BadRequest();
-                
+                if (emailAddressExists is not null)
+                {
+                    return BadRequest();
+                }
+
                 _userRepository.CreateUser(userCredentialsForm);
-                if (await _userRepository.SaveChanges() > 0) return Ok();
-                return BadRequest();
+                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }
             catch (Exception e)
             {
@@ -71,23 +73,26 @@ namespace SystemyWP.API.Controllers.MasterService
         }
 
         [HttpPost("authenticate", Name = "Authenticate")]
-        public async Task<IActionResult> Authenticate(UserCredentialsForm userCredentialsForm)
+        public async Task<IActionResult> Authenticate([FromBody] UserCredentialsForm userCredentialsForm)
         {
             try
             {
                 userCredentialsForm.Password = _encryptor.Encrypt(userCredentialsForm.Password);
-                
-                var loggedInUser = _userRepository
+
+                Data.Models.User loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
                                 u.Password == userCredentialsForm.Password);
-                if (loggedInUser is null) return NotFound();
-                
+                if (loggedInUser is null)
+                {
+                    return NotFound();
+                }
+
                 loggedInUser.LastLogin = DateTime.UtcNow;
-                _context.Update(loggedInUser);
-                await _context.SaveChangesAsync();
-                
+                _ = _context.Update(loggedInUser);
+                _ = await _context.SaveChangesAsync();
+
                 var token = _tokenService.GenerateJwtToken(loggedInUser);
-                return Ok(new TokenDto() {Token = token});
+                return Ok(new TokenDto() { Token = token });
             }
             catch (Exception e)
             {
@@ -95,7 +100,7 @@ namespace SystemyWP.API.Controllers.MasterService
                 return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
-        
+
         [Authorize]
         [HttpPost("delete-account", Name = "DeleteAccount")]
         public async Task<IActionResult> DeleteAccount()
@@ -103,11 +108,13 @@ namespace SystemyWP.API.Controllers.MasterService
             try
             {
                 _userRepository.DeleteAccount(UserId);
-                if (await _userRepository.SaveChanges() > 0) return NoContent();
-                
+                if (await _userRepository.SaveChanges() > 0)
+                {
+                    return NoContent();
+                }
+
                 // todo: remove all gastro data for access-key
-                
-                
+
                 return BadRequest();
             }
             catch (Exception e)
@@ -116,7 +123,7 @@ namespace SystemyWP.API.Controllers.MasterService
                 return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
-        
+
         [HttpPost("reset-password-request", Name = "ResetPasswordRequest")]
         public async Task<IActionResult> ResetPasswordRequest(
             [FromBody] UserEmailForm userEmailForm,
@@ -124,24 +131,27 @@ namespace SystemyWP.API.Controllers.MasterService
         {
             try
             {
-                var user = _userRepository.GetUser(user => user.Claims.Any(claim =>
+                Data.Models.User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
                     claim.ClaimType == ClaimTypes.Email && claim.ClaimValue == userEmailForm.Email));
 
-                if (user is null)  return Ok();
+                if (user is null)
+                {
+                    return Ok();
+                }
+
                 var resetToken = _tokenService.GeneratePasswordResetJwtToken(user);
 
                 _userRepository.UpdateResetPasswordTokenToken(user.Id, resetToken);
 
-                var qb = new QueryBuilder {{"target", "password-reset"}, {"token", resetToken}};
+                var qb = new QueryBuilder { { "target", "password-reset" }, { "token", resetToken } };
                 var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/reset-password/{qb}";
-                
-                await emailClient.SendEmailAsync(
+
+                _ = await emailClient.SendEmailAsync(
                     user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
                     "Reset Hasła",
                     EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
-                
-                if (await _userRepository.SaveChanges() > 0) return Ok();
-                return BadRequest();
+
+                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }
             catch (Exception e)
             {
@@ -149,25 +159,29 @@ namespace SystemyWP.API.Controllers.MasterService
                 return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
-        
+
         [HttpPost("reset-password-action", Name = "ResetPasswordAction")]
         public async Task<IActionResult> ResetPasswordAction([FromBody] UserPasswordResetForm userPasswordResetForm)
         {
             try
             {
-                if (!_tokenService.ValidateToken(userPasswordResetForm.Token)) return BadRequest();
-                
+                if (!_tokenService.ValidateToken(userPasswordResetForm.Token))
+                {
+                    return BadRequest();
+                }
+
                 var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
-                var user = _userRepository
+                Data.Models.User user = _userRepository
                     .GetUser(user => user.PasswordResetToken == userPasswordResetForm.Token && user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
-                if (user is null) return BadRequest();
-                
+                if (user is null)
+                {
+                    return BadRequest();
+                }
+
                 var password = _encryptor.Encrypt(userPasswordResetForm.Password);
                 _userRepository.ChangePassword(user.Id, password);
-                if (await _userRepository.SaveChanges() > 0) return Ok();
-                
-                return BadRequest();
+                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }
             catch (Exception e)
             {
@@ -175,23 +189,25 @@ namespace SystemyWP.API.Controllers.MasterService
                 return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
-        
+
         [Authorize]
         [HttpPost("change-password", Name = "ChangePassword")]
-        public async Task<IActionResult> ChangePassword(UserChangePasswordForm changePasswordForm)
+        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordForm changePasswordForm)
         {
             try
             {
                 var newPassword = _encryptor.Encrypt(changePasswordForm.NewPassword);
                 var oldPassword = _encryptor.Encrypt(changePasswordForm.OldPassword);
-                var loggedInUser = _userRepository
+                Data.Models.User loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == UserEmail) &&
                                   u.Password == oldPassword);
-                if (loggedInUser is null) return NotFound();
-                
+                if (loggedInUser is null)
+                {
+                    return NotFound();
+                }
+
                 _userRepository.ChangePassword(UserId, newPassword);
-                if (await _userRepository.SaveChanges() > 0) return Ok();
-                return BadRequest();
+                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }
             catch (Exception e)
             {

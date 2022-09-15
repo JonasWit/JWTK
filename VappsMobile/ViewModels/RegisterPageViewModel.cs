@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using VappsMobile.Models.GeneralModels;
 using VappsMobile.Services;
+using VappsMobile.Views.Popups;
 
 namespace VappsMobile.ViewModels
 {
@@ -19,5 +22,35 @@ namespace VappsMobile.ViewModels
 
         public RegisterPageViewModel(AuthService authService) => _authService = authService;
 
+        [RelayCommand]
+        public async Task SignUp()
+        {
+            if (IsBusy)
+            {
+                return;
+            }
+            IsBusy = true;
+
+            try
+            {
+
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.GoToAsync(nameof(ErrorModalPage), true, new Dictionary<string, object>
+                {
+                    {"ErrorModalContent", new ErrorModalContent{ Message = "Logowanie nie powiodło się", Exception = ex} }
+                });
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
     }
 }

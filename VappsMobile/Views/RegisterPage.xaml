@@ -2,13 +2,68 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VappsMobile.Views.RegisterPage"
+             xmlns:vms="clr-namespace:VappsMobile.ViewModels"
+             x:DataType="vms:RegisterPageViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:config="clr-namespace:VappsMobile.AppConfig"
              Shell.BackgroundColor="{StaticResource Primary}"
              Style="{StaticResource DefaultPage}"
              Title="Rejestracja">
-    <VerticalStackLayout>
-        <Label 
-            Text="register page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+    <VerticalStackLayout VerticalOptions="StartAndExpand" Spacing="30">
+        <Label Margin="0,20,0,0" Text="Stwórz nowe konto" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold"/>
+
+        <StackLayout  Orientation="Vertical" HorizontalOptions="CenterAndExpand" Margin="10" Spacing="10">
+            <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                <StackLayout Orientation="Horizontal">
+                    <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                        <Image Source="{x:Static config:Icons.AuthUser}" Aspect="Fill"/>
+                    </Frame>
+                    <Entry Text="{Binding Email}" Placeholder="Adres Email" PlaceholderColor="{StaticResource Gray600}"
+                           FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0">
+                        <Entry.Behaviors>
+                            <toolkit:EmailValidationBehavior 
+                                InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                ValidStyle="{StaticResource ValidEntryStyle}"
+                                Flags="ValidateOnValueChanged" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </StackLayout>
+            </Frame>
+            <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                <StackLayout Orientation="Horizontal">
+                    <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                        <Image Source="{x:Static config:Icons.AuthLock}" Aspect="Fill"/>
+                    </Frame>
+                    <Entry x:Name="PasswordEntry" IsPassword="True" Text="{Binding Password}" Placeholder="Hasło" PlaceholderColor="{StaticResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                </StackLayout>
+            </Frame>
+            <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                <StackLayout Orientation="Horizontal">
+                    <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                        <Image Source="{x:Static config:Icons.AuthLock}" Aspect="Fill"/>
+                    </Frame>
+                    <Entry IsPassword="True" Text="{Binding ConfirmPassword}" Placeholder="Powtórz Hasło" PlaceholderColor="{StaticResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0">
+                        <Entry.Behaviors>
+                            <toolkit:RequiredStringValidationBehavior 
+                            InvalidStyle="{StaticResource InvalidEntryStyle}"
+                            ValidStyle="{StaticResource ValidEntryStyle}"
+                            Flags="ValidateOnValueChanged"
+                            RequiredString="{Binding Source={x:Reference PasswordEntry}}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+        <Button Text="Zarejestruj się" WidthRequest="150" Command="{Binding SignUpCommand}" TextColor="{StaticResource Secondary}"></Button>
+
+        <ActivityIndicator
+            HorizontalOptions="FillAndExpand"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="CenterAndExpand" />
+
+
     </VerticalStackLayout>
+
 </ContentPage>

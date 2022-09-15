@@ -48,6 +48,25 @@ namespace VappsMobile.Services
             }
         }
 
+        public async Task<bool> SignUp(string email, string password)
+        {
+            try
+            {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    return false;
+                }
+
+                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => Client.PostAsJsonAsync(ApiConfig.ApiAuthController.Register, new { Email = email, Password = password }));
+
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> SignIn(string email, string password, bool remember)
         {
             try
