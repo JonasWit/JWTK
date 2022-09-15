@@ -22,6 +22,7 @@
         <ShellContent Title="Aplikacje" Icon="{x:Static config:Icons.VappsTransparent}"  ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
         <ShellContent Title="Kontakt" ContentTemplate="{DataTemplate views:ContactPage}"/>
         <ShellContent Title="O Nas" ContentTemplate="{DataTemplate views:AboutPage}"/>
+        <ShellContent Title="Ustawienia" ContentTemplate="{DataTemplate views:SettingsPage}"/>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

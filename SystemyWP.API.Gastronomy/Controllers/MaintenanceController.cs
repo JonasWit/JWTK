@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 namespace SystemyWP.API.Gastronomy.Controllers;
@@ -24,15 +24,15 @@ public class MaintenanceController : ControllerBase
         _maintenanceRepository = maintenanceRepository;
         _logger = logger;
     }
-    
+
     [HttpDelete("{key}", Name = "RemoveData")]
     public async Task<IActionResult> RemoveData(string key)
     {
         try
         {
             _maintenanceRepository.RemoveAllData(key);
-            if (await _maintenanceRepository.SaveChanges() > 0) return Ok();    
-            return BadRequest();
+            _ = await _maintenanceRepository.SaveChanges();
+            return Ok();
         }
         catch (Exception e)
         {
@@ -40,12 +40,4 @@ public class MaintenanceController : ControllerBase
             return Problem($"{nameof(RemoveData)} Error");
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
 }

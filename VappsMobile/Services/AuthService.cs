@@ -9,16 +9,15 @@ namespace VappsMobile.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClientPolicy _httpClientPolicy;
+        private readonly UserService _userService;
 
-        public UserInfo UserInfo { get; set; }
         public HttpClient Client => _httpClientFactory.CreateClient(ApiConfig.HttpClientsNames.AuthClient);
 
-        public AuthService(
-            IHttpClientFactory httpClientFactory,
-            HttpClientPolicy httpClientPolicy)
+        public AuthService(IHttpClientFactory httpClientFactory, HttpClientPolicy httpClientPolicy, UserService userService)
         {
             _httpClientFactory = httpClientFactory;
             _httpClientPolicy = httpClientPolicy;
+            _userService = userService;
         }
 
         public async Task<bool> GetStoredUser()
@@ -29,7 +28,13 @@ namespace VappsMobile.Services
                 return false;
             }
 
-            UserInfo = new UserInfo(token);
+            _userService.UserInfo = new UserInfo(token);
+            if (_userService.UserInfo.Expire <= DateTime.UtcNow)
+            {
+                _ = SecureStorage.Remove(AppConstants.StoredPreferenceName.JWTToken);
+                return false;
+            }
+
             return true;
         }
 
@@ -37,10 +42,31 @@ namespace VappsMobile.Services
         {
             try
             {
-                _ = SecureStorage.Remove(AppConstants.StoredPreferenceName.JWTToken);
-                UserInfo = null;
+                if (SecureStorage.Remove(AppConstants.StoredPreferenceName.JWTToken))
+                {
+                    _userService.UserInfo = null;
+                    return true;
+                }
 
-                return true;
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteAccount()
+        {
+            try
+            {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    return false;
+                }
+
+                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => Client.DeleteAsync(ApiConfig.ApiAuthController.DeleteAccount));
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception)
             {
@@ -91,7 +117,7 @@ namespace VappsMobile.Services
                     await SecureStorage.SetAsync(AppConstants.StoredPreferenceName.JWTToken, token.Token);
                 }
 
-                UserInfo = new UserInfo(token.Token);
+                _userService.UserInfo = new UserInfo(token.Token);
 
                 return true;
             }

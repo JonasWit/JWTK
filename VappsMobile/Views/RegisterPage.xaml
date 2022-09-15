@@ -56,14 +56,10 @@
             </Frame>
         </StackLayout>
         <Button Text="Zarejestruj się" WidthRequest="150" Command="{Binding SignUpCommand}" TextColor="{StaticResource Secondary}"></Button>
-
         <ActivityIndicator
             HorizontalOptions="FillAndExpand"
             IsRunning="{Binding IsBusy}"
             IsVisible="{Binding IsBusy}"
             VerticalOptions="CenterAndExpand" />
-
-
     </VerticalStackLayout>
-
 </ContentPage>

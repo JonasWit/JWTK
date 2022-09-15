@@ -12,7 +12,7 @@ namespace VappsMobile.ViewModels
     {
         private readonly AuthService _authService;
         private readonly HealthService _healthService;
-
+        private readonly UserService _userService;
         [ObservableProperty]
         private bool _rememberMe;
 
@@ -23,10 +23,11 @@ namespace VappsMobile.ViewModels
         [ObservableProperty]
         private string _password;
 
-        public LoginPageViewModel(AuthService authService, HealthService healthService)
+        public LoginPageViewModel(AuthService authService, HealthService healthService, UserService userService)
         {
             _authService = authService;
             _healthService = healthService;
+            _userService = userService;
             RememberMe = true;
         }
 
@@ -44,7 +45,7 @@ namespace VappsMobile.ViewModels
             {
                 if (await _authService.SignIn(_email, _password, _rememberMe))
                 {
-                    Shell.Current.FlyoutHeader = new FlyoutHeader(_authService.UserInfo.Email);
+                    Shell.Current.FlyoutHeader = new FlyoutHeader(_userService.UserInfo.Email);
                     await Shell.Current.GoToAsync($"//{nameof(VappsMasterPage)}");
                     return;
                 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using SystemyWP.API.Constants;
@@ -14,6 +15,7 @@ using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.Email;
+using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
 using SystemyWP.API.Utilities;
@@ -23,6 +25,7 @@ namespace SystemyWP.API.Controllers.MasterService
     [Route("[controller]")]
     public class AuthController : ApiControllerBase
     {
+        private readonly GastronomyHttpClient _gastronomyHttpClient;
         private readonly ILogger<AuthController> _logger;
         private readonly AppDbContext _context;
         private readonly IOptionsMonitor<CorsSettings> _corsSettings;
@@ -31,6 +34,7 @@ namespace SystemyWP.API.Controllers.MasterService
         private readonly TokenService _tokenService;
 
         public AuthController(
+            GastronomyHttpClient gastronomyHttpClient,
             ILogger<AuthController> logger,
             AppDbContext context,
             IOptionsMonitor<CorsSettings> corsSettings,
@@ -38,6 +42,7 @@ namespace SystemyWP.API.Controllers.MasterService
             IUserRepository userRepository,
             TokenService tokenService)
         {
+            _gastronomyHttpClient = gastronomyHttpClient;
             _logger = logger;
             _context = context;
             _corsSettings = corsSettings;
@@ -102,18 +107,21 @@ namespace SystemyWP.API.Controllers.MasterService
         }
 
         [Authorize]
-        [HttpPost("delete-account", Name = "DeleteAccount")]
+        [HttpDelete("delete-account", Name = "DeleteAccount")]
         public async Task<IActionResult> DeleteAccount()
         {
             try
             {
-                _userRepository.DeleteAccount(UserId);
-                if (await _userRepository.SaveChanges() > 0)
+                var key = _userRepository.GetUserAccessKey(UserId);
+                HttpStatusCode gastroCleanUp = await _gastronomyHttpClient.RemoveAllData(key);
+                if (gastroCleanUp == HttpStatusCode.OK)
                 {
-                    return NoContent();
+                    _userRepository.DeleteAccount(UserId);
+                    if (await _userRepository.SaveChanges() > 0)
+                    {
+                        return NoContent();
+                    }
                 }
-
-                // todo: remove all gastro data for access-key
 
                 return BadRequest();
             }
