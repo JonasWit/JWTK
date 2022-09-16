@@ -1,5 +1,6 @@
 using AspNetCoreRateLimit;
 using AutoMapper;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -185,8 +186,10 @@ builder.Services.AddAuthorization(options =>
             AppConstants.Roles.Admin));
 });
 
-builder.Services.AddControllers()
-    .AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Program).Assembly));
+builder.Services.AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 // Options from Settings
 builder.Services.Configure<ClusterServices>(configuration.GetSection(nameof(ClusterServices)));
