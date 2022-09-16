@@ -85,6 +85,11 @@ public class AppConstants
         public const string System = "system@vapps.pl";
     }
 
+    public struct EmailTemplates
+    {
+        public const string ResetPassword = "d-4a7a80089f7c431f8d6bba1b6ec02e3a";
+    }
+
     public struct Files
     {
         public struct Providers

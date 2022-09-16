@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Utilities;
@@ -26,6 +28,18 @@ namespace SystemyWP.API.Services.Email
                 "systemywp.pl - Zaproszenie"
                 , "",
                 EmailTemplates.InvitationEmailBody(link)
+            );
+
+            return _client.SendEmailAsync(msg);
+        }
+
+        public Task<Response> SendPasswordResetEmailAsync(string recipient, string url)
+        {
+            SendGridMessage msg = MailHelper.CreateSingleTemplateEmail(
+                new EmailAddress(AppConstants.Emails.System),
+                new EmailAddress(recipient),
+                AppConstants.EmailTemplates.ResetPassword,
+                JsonSerializer.Serialize(new Dictionary<string, string> { { "url", url } })
             );
 
             return _client.SendEmailAsync(msg);
