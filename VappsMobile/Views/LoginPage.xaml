@@ -1,56 +1,119 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vms="clr-namespace:VappsMobile.ViewModels"
-             x:DataType="vms:LoginPageViewModel"
-             x:Class="VappsMobile.Views.LoginPage"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Style="{StaticResource DefaultPage}"
-             xmlns:config="clr-namespace:VappsMobile.AppConfig"
-             Shell.NavBarIsVisible="False" 
-             Shell.BackgroundColor="{DynamicResource Primary}"
-             Title="Logowanie">
+<ContentPage
+    x:Class="VappsMobile.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:config="clr-namespace:VappsMobile.AppConfig"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vms="clr-namespace:VappsMobile.ViewModels"
+    Title="Logowanie"
+    x:DataType="vms:LoginPageViewModel"
+    Shell.BackgroundColor="{DynamicResource Primary}"
+    Shell.NavBarIsVisible="False"
+    Style="{StaticResource DefaultPage}">
 
     <Grid>
-        <VerticalStackLayout Margin="0,20,0,0" VerticalOptions="StartAndExpand" Spacing="50">
-            <Label Text="Logowanie" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" />
+        <VerticalStackLayout
+            Margin="0,20,0,0"
+            Spacing="50"
+            VerticalOptions="StartAndExpand">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Title"
+                HorizontalOptions="Center"
+                Text="Logowanie" />
 
-            <StackLayout Spacing="10"  Orientation="Vertical" HorizontalOptions="CenterAndExpand" Margin="10">
-                <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="10">
+            <StackLayout
+                Margin="10"
+                HorizontalOptions="CenterAndExpand"
+                Orientation="Vertical"
+                Spacing="10">
+                <Frame
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource Primary}"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand">
                     <StackLayout Orientation="Horizontal">
-                        <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
-                            <Image Source="{x:Static config:Icons.AuthUser}" Aspect="Fill"/>
+                        <Frame
+                            Margin="5"
+                            Padding="0"
+                            BackgroundColor="{StaticResource Primary}"
+                            CornerRadius="30"
+                            HeightRequest="40"
+                            WidthRequest="40">
+                            <Image Aspect="Fill" Source="{x:Static config:Icons.AuthUser}" />
                         </Frame>
-                        <Entry Text="{Binding Email}" Placeholder="Adres Email" PlaceholderColor="{StaticResource Gray600}"
-                           FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0">
+                        <Entry
+                            Margin="0,0,20,0"
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Adres Email"
+                            PlaceholderColor="{StaticResource Gray600}"
+                            Text="{Binding Email}"
+                            VerticalOptions="Center">
                             <Entry.Behaviors>
-                                <toolkit:EmailValidationBehavior 
-                                InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                ValidStyle="{StaticResource ValidEntryStyle}"
-                                Flags="ValidateOnValueChanged" />
+                                <toolkit:EmailValidationBehavior
+                                    x:Name="loginEmailValidation"
+                                    Flags="ValidateOnValueChanged"
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}" />
                             </Entry.Behaviors>
                         </Entry>
                     </StackLayout>
                 </Frame>
-                <Frame Padding="0" BackgroundColor="Transparent" BorderColor="{StaticResource Primary}" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                <Frame
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource Primary}"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand">
                     <StackLayout Orientation="Horizontal">
-                        <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
-                            <Image Source="{x:Static config:Icons.AuthLock}" Aspect="Fill"/>
+                        <Frame
+                            Margin="5"
+                            Padding="0"
+                            BackgroundColor="{StaticResource Primary}"
+                            CornerRadius="30"
+                            HeightRequest="40"
+                            WidthRequest="40">
+                            <Image Aspect="Fill" Source="{x:Static config:Icons.AuthLock}" />
                         </Frame>
-                        <Entry IsPassword="True" Text="{Binding Password}" Placeholder="Hasło" PlaceholderColor="{StaticResource Gray600}" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                        <Entry
+                            Margin="0,0,20,0"
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            IsPassword="True"
+                            Placeholder="Hasło"
+                            PlaceholderColor="{StaticResource Gray600}"
+                            Text="{Binding Password}"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
                     </StackLayout>
                 </Frame>
-                <HorizontalStackLayout HorizontalOptions="StartAndExpand" >
-                    <CheckBox IsChecked="{Binding RememberMe}"/>
-                    <Label Text="Zapamiętaj mnie" TextColor="{StaticResource Gray600}" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                <HorizontalStackLayout HorizontalOptions="StartAndExpand">
+                    <CheckBox IsChecked="{Binding RememberMe}" />
+                    <Label
+                        FontSize="Small"
+                        HorizontalTextAlignment="Center"
+                        Text="Zapamiętaj mnie"
+                        TextColor="{StaticResource Gray600}"
+                        VerticalTextAlignment="Center" />
                 </HorizontalStackLayout>
             </StackLayout>
-            <Button Text="Zaloguj się" WidthRequest="150" Command="{Binding SignInCommand}" TextColor="{StaticResource Secondary}"></Button>
+            <Button
+                Command="{Binding SignInCommand}"
+                Text="Zaloguj się"
+                TextColor="{StaticResource Secondary}"
+                WidthRequest="150" />
             <StackLayout Spacing="15">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" >
-                    <Label Text="Stwórz Konto" TextColor="Black" FontAttributes="Bold" FontSize="Small"/>
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Small"
+                        Text="Stwórz Konto"
+                        TextColor="Black" />
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignUpCommand}"></TapGestureRecognizer>
+                        <TapGestureRecognizer Command="{Binding SignUpCommand}" NumberOfTapsRequired="1" />
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
                 <!--<StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">

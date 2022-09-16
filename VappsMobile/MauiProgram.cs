@@ -47,6 +47,7 @@ namespace VappsMobile
             _ = builder.Services.AddSingleton<FlyoutHeader>();
             _ = builder.Services.AddSingleton<UserService>();
 
+            _ = builder.Services.AddTransient<IntroPage>();
             _ = builder.Services.AddTransient<LoginPageViewModel>();
             _ = builder.Services.AddTransient<ErrorModalPageViewModel>();
             _ = builder.Services.AddSingleton<MainPageViewModel>();

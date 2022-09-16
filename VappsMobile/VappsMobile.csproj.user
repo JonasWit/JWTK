@@ -26,6 +26,9 @@
     <MauiXaml Update="Views\ForgotPasswordPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\IntroPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\LoadingPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

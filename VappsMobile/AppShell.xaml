@@ -12,11 +12,11 @@
     Shell.TabBarIsVisible="False">
 
     <ShellContent
-        Title="Logowanie"
-        ContentTemplate="{DataTemplate views:LoginPage}"
+        Title="Intro"
+        ContentTemplate="{DataTemplate views:IntroPage}"
         FlyoutItemIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
-        Route="LoginPage" />
+        Route="IntroPage" />
 
     <FlyoutItem Route="VappsMasterPage" FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent Title="Aplikacje" Icon="{x:Static config:Icons.VappsTransparent}"  ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
