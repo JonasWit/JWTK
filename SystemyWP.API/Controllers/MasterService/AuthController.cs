@@ -12,6 +12,7 @@ using SystemyWP.API.Constants;
 using SystemyWP.API.Data;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.DTOs.General.UserForms;
+using SystemyWP.API.Data.Models;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.Auth;
 using SystemyWP.API.Services.Email;
@@ -139,7 +140,7 @@ namespace SystemyWP.API.Controllers.MasterService
         {
             try
             {
-                Data.Models.User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
+                User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
                     claim.ClaimType == ClaimTypes.Email && claim.ClaimValue == userEmailForm.Email));
 
                 if (user is null)
@@ -179,7 +180,7 @@ namespace SystemyWP.API.Controllers.MasterService
                 }
 
                 var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
-                Data.Models.User user = _userRepository
+                User user = _userRepository
                     .GetUser(user => user.PasswordResetToken == userPasswordResetForm.Token && user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
                 if (user is null)
