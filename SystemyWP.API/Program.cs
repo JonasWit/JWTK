@@ -190,13 +190,12 @@ builder.Services.AddControllers()
 
 // Options from Settings
 builder.Services.Configure<ClusterServices>(configuration.GetSection(nameof(ClusterServices)));
-builder.Services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
+builder.Services.Configure<EmailClientOptions>(configuration.GetSection(nameof(EmailClientOptions)));
 builder.Services.Configure<CorsSettings>(configuration.GetSection(nameof(CorsSettings)));
 builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSettings)));
 
 builder.Services.AddHttpClient<GastronomyHttpClient>(httpClient =>
     httpClient.BaseAddress = new Uri(configuration.GetValue<string>("ClusterServices:GastronomyService")));
-builder.Services.AddScoped<EmailClient>();
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddSingleton<UrlService>();

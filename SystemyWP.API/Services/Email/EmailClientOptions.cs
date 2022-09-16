@@ -1,8 +1,7 @@
 ﻿namespace SystemyWP.API.Services.Email
 {
-    public class SendGridOptions
+    public class EmailClientOptions
     {
         public string ApiKey { get; set; }
-        public string From { get; set; }
     }
 }

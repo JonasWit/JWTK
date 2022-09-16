@@ -53,12 +53,12 @@
                         <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SignUpCommand}"></TapGestureRecognizer>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                <!--<StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                     <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="End" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ForgotPasswordCommand}"></TapGestureRecognizer>
                     </StackLayout.GestureRecognizers>
-                </StackLayout>
+                </StackLayout>-->
             </StackLayout>
         </VerticalStackLayout>
         <ActivityIndicator

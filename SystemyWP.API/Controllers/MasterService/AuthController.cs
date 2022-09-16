@@ -15,11 +15,9 @@ using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Models;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.Auth;
-using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
-using SystemyWP.API.Utilities;
 
 namespace SystemyWP.API.Controllers.MasterService
 {
@@ -61,7 +59,7 @@ namespace SystemyWP.API.Controllers.MasterService
         {
             try
             {
-                Data.Models.User emailAddressExists = _userRepository.GetUser(u =>
+                User emailAddressExists = _userRepository.GetUser(u =>
                     u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
                 if (emailAddressExists is not null)
                 {
@@ -135,8 +133,7 @@ namespace SystemyWP.API.Controllers.MasterService
 
         [HttpPost("reset-password-request", Name = "ResetPasswordRequest")]
         public async Task<IActionResult> ResetPasswordRequest(
-            [FromBody] UserEmailForm userEmailForm,
-            [FromServices] EmailClient emailClient)
+            [FromBody] UserEmailForm userEmailForm)
         {
             try
             {
@@ -155,10 +152,10 @@ namespace SystemyWP.API.Controllers.MasterService
                 var qb = new QueryBuilder { { "target", "password-reset" }, { "token", resetToken } };
                 var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/reset-password/{qb}";
 
-                _ = await emailClient.SendEmailAsync(
-                    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
-                    "Reset Hasła",
-                    EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
+                //_ = await emailClient.SendEmailAsync(
+                //    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
+                //    "Reset Hasła",
+                //    EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
 
                 return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }
@@ -207,7 +204,7 @@ namespace SystemyWP.API.Controllers.MasterService
             {
                 var newPassword = _encryptor.Encrypt(changePasswordForm.NewPassword);
                 var oldPassword = _encryptor.Encrypt(changePasswordForm.OldPassword);
-                Data.Models.User loggedInUser = _userRepository
+                User loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == UserEmail) &&
                                   u.Password == oldPassword);
                 if (loggedInUser is null)
