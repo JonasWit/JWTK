@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VappsMobile.Views.AboutPage"
+             Shell.BackgroundColor="{DynamicResource Primary}"
+             Title="O Nas">
+    <VerticalStackLayout>
+        <Label 
+            Text="about"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>

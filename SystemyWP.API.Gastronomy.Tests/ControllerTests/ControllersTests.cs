@@ -17,7 +17,7 @@ public class ControllersTests
     {
         // Arrange
         await using var application = new DummyGastronomyApplication();
-        using var client = application.CreateClient();
+        using HttpClient client = application.CreateClient();
 
         var newIngredient = new IngredientCreateDto
         {
@@ -28,42 +28,41 @@ public class ControllersTests
             StackSize = 2,
             PricePerStack = 150
         };
-        
+
         // Act
-        var postResponse = await client.PostAsJsonAsync("/ingredient", newIngredient);
-        var createdObject = await postResponse.Content.ReadFromJsonAsync<IngredientDto>();
-        
-        var getResponse = await client.GetAsync($"/ingredient/{createdObject?.AccessKey}/{createdObject?.Id}");
-        var getObject = await getResponse.Content.ReadFromJsonAsync<IngredientDto>();
-        
-        
+        HttpResponseMessage postResponse = await client.PostAsJsonAsync("/ingredient", newIngredient);
+        IngredientDto? createdObject = await postResponse.Content.ReadFromJsonAsync<IngredientDto>();
+
+        HttpResponseMessage getResponse = await client.GetAsync($"/ingredient/{createdObject?.AccessKey}/{createdObject?.Id}");
+        IngredientDto? getObject = await getResponse.Content.ReadFromJsonAsync<IngredientDto>();
+
         // Assert
         Assert.Equal(HttpStatusCode.OK, postResponse.StatusCode);
         Assert.NotNull(createdObject);
-        Assert.Equal(createdObject?.AccessKey, newIngredient.AccessKey);      
-        Assert.Equal(createdObject?.Name, newIngredient.Name);           
-        Assert.Equal(createdObject?.Description, newIngredient.Description);    
-        Assert.Equal(createdObject?.MeasurementUnits, newIngredient.MeasurementUnits);    
-        Assert.Equal(createdObject?.StackSize, newIngredient.StackSize);    
-        Assert.Equal(createdObject?.PricePerStack, newIngredient.PricePerStack);           
-        
+        Assert.Equal(createdObject?.AccessKey, newIngredient.AccessKey);
+        Assert.Equal(createdObject?.Name, newIngredient.Name);
+        Assert.Equal(createdObject?.Description, newIngredient.Description);
+        Assert.Equal(createdObject?.MeasurementUnits, newIngredient.MeasurementUnits);
+        Assert.Equal(createdObject?.StackSize, newIngredient.StackSize);
+        Assert.Equal(createdObject?.PricePerStack, newIngredient.PricePerStack);
+
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
         Assert.NotNull(getObject);
-        Assert.Equal(getObject?.Id, createdObject?.Id);          
-        Assert.Equal(getObject?.AccessKey, createdObject?.AccessKey);      
-        Assert.Equal(getObject?.Name, createdObject?.Name);           
-        Assert.Equal(getObject?.Description, createdObject?.Description);    
-        Assert.Equal(getObject?.MeasurementUnits, createdObject?.MeasurementUnits);    
-        Assert.Equal(getObject?.StackSize, createdObject?.StackSize);    
+        Assert.Equal(getObject?.Id, createdObject?.Id);
+        Assert.Equal(getObject?.AccessKey, createdObject?.AccessKey);
+        Assert.Equal(getObject?.Name, createdObject?.Name);
+        Assert.Equal(getObject?.Description, createdObject?.Description);
+        Assert.Equal(getObject?.MeasurementUnits, createdObject?.MeasurementUnits);
+        Assert.Equal(getObject?.StackSize, createdObject?.StackSize);
         Assert.Equal(getObject?.PricePerStack, createdObject?.PricePerStack);
     }
-    
-        [Fact]
+
+    [Fact]
     public async Task CreateAndGetMultipleIngredientsTest()
     {
         // Arrange
         await using var application = new DummyGastronomyApplication();
-        using var client = application.CreateClient();
+        using HttpClient client = application.CreateClient();
 
         var newIngredients = new List<IngredientCreateDto>();
         for (var i = 0; i < 20; i++)
@@ -78,34 +77,34 @@ public class ControllersTests
                 PricePerStack = 150
             });
         }
-        
+
         // Act
         var postResponses = new List<HttpResponseMessage>();
-        foreach (var ni in newIngredients)
+        foreach (IngredientCreateDto ni in newIngredients)
         {
-            var postResponse = await client.PostAsJsonAsync("/ingredient", ni);
-            postResponses.Add(postResponse);             
+            HttpResponseMessage postResponse = await client.PostAsJsonAsync("/ingredient", ni);
+            postResponses.Add(postResponse);
         }
 
         var createdObjects = new List<IngredientDto>();
-        foreach (var pr in postResponses)
+        foreach (HttpResponseMessage pr in postResponses)
         {
             createdObjects.Add(await pr.Content.ReadFromJsonAsync<IngredientDto>());
         }
 
-        var getResponses = new List<HttpResponseMessage>(); 
-        foreach (var co in createdObjects)
+        var getResponses = new List<HttpResponseMessage>();
+        foreach (IngredientDto co in createdObjects)
         {
-            var getResponse = await client.GetAsync($"/ingredient/{co.AccessKey}/{co.Id}");
+            HttpResponseMessage getResponse = await client.GetAsync($"/ingredient/{co.AccessKey}/{co.Id}");
             getResponses.Add(getResponse);
         }
 
         var getObjects = new List<IngredientDto>();
-        foreach (var gr in getResponses)
+        foreach (HttpResponseMessage gr in getResponses)
         {
             getObjects.Add(await gr.Content.ReadFromJsonAsync<IngredientDto>());
         }
-        
+
         // Assert
         Assert.NotEmpty(postResponses);
         Assert.NotEmpty(getResponses);

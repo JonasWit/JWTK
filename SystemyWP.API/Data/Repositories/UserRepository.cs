@@ -1,8 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Models;
@@ -16,15 +16,19 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 
     public UserRepository(
         Encryptor encryptor,
-        AppDbContext context) : base(context)
-    {
-        _encryptor = encryptor;
-    }
+        AppDbContext context) : base(context) => _encryptor = encryptor;
 
     public void CreateUser(UserCredentialsForm userCredentialsForm)
     {
-        if (userCredentialsForm.Email is null) throw new ArgumentNullException(nameof(userCredentialsForm.Email));
-        if (userCredentialsForm.Password is null) throw new ArgumentNullException(nameof(userCredentialsForm.Password));
+        if (userCredentialsForm.Email is null)
+        {
+            throw new ArgumentNullException(nameof(userCredentialsForm.Email));
+        }
+
+        if (userCredentialsForm.Password is null)
+        {
+            throw new ArgumentNullException(nameof(userCredentialsForm.Password));
+        }
 
         var userId = Guid.NewGuid().ToString();
         var newUser = new User
@@ -57,47 +61,61 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
             }
         };
 
-        _context.Add(newUser);
+        _ = _context.Add(newUser);
     }
 
     public void DeleteAccount(string userId)
     {
-        if (userId is null) throw new ArgumentNullException(nameof(userId));
-        var user = _context.Users.Include(us => us.AccessKey).FirstOrDefault(user => user.Id == userId);
-        if (user is not null) _context.Remove(user);
+        if (userId is null)
+        {
+            throw new ArgumentNullException(nameof(userId));
+        }
+
+        User user = _context.Users.FirstOrDefault(user => user.Id == userId);
+        if (user is not null)
+        {
+            _ = _context.Remove(user);
+        }
     }
 
     public void ChangePassword(string userId, string password)
     {
-        if (userId is null) throw new ArgumentNullException(nameof(userId));
-        if (password is null) throw new ArgumentNullException(nameof(password));
+        if (userId is null)
+        {
+            throw new ArgumentNullException(nameof(userId));
+        }
 
-        var user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
-        if (user is null) return;
+        if (password is null)
+        {
+            throw new ArgumentNullException(nameof(password));
+        }
+
+        User user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
+        if (user is null)
+        {
+            return;
+        }
 
         user.PasswordResetToken = null;
         user.Password = password;
-        _context.Update(user);
+        _ = _context.Update(user);
     }
 
     public void UpdateResetPasswordTokenToken(string userId, string token)
     {
-        var user = _context.Users.FirstOrDefault(user => user.Id == userId);
-        if (user is null) throw new ArgumentNullException(nameof(userId));
+        User user = _context.Users.FirstOrDefault(user => user.Id == userId);
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(userId));
+        }
+
         user.PasswordResetToken = token;
-        _context.Update(user);
+        _ = _context.Update(user);
     }
 
-    public User GetUser(Func<User, bool> condition)
-    {
-        return _context.Users
+    public User GetUser(Func<User, bool> condition) => _context.Users
             .Include(x => x.Claims)
             .FirstOrDefault(condition);
-    }
 
-    public string GetUserAccessKey(string userId)
-    {
-        return _context.Users
-            .FirstOrDefault(user => user.Id == userId)?.Id;
-    }
+    public string GetUserAccessKey(string userId) => _context.Users.FirstOrDefault(user => user.Id == userId)?.AccessKey;
 }

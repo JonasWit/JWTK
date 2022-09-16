@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VappsMobile.Views.Popups.ErrorModalPage"
+             Shell.NavBarIsVisible="False" 
+             xmlns:vms="clr-namespace:VappsMobile.ViewModels"
+             x:DataType="vms:ErrorModalPageViewModel"
+             Shell.BackgroundColor="{DynamicResource Primary}"
+             Style="{StaticResource DefaultPage}"
+             Shell.PresentationMode="Modal"
+             xmlns:config="clr-namespace:VappsMobile.AppConfig"
+             Title="ErrorModalPage">
+
+    <VerticalStackLayout VerticalOptions="Center" Spacing="50">
+        <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="100" WidthRequest="100" CornerRadius="30" Padding="0">
+            <Image Source="{x:Static config:Icons.Error}" Aspect="Fill"/>
+        </Frame>
+        <Label Text="{Binding ErrorModalContent.Message}" LineBreakMode="WordWrap" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold"/>
+        <Button HorizontalOptions="Fill" Text="Wróć" WidthRequest="150" Margin="0,15,0,0"  Clicked="Button_Clicked" TextColor="{StaticResource Secondary}"></Button>
+    </VerticalStackLayout>
+</ContentPage>
