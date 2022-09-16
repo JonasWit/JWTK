@@ -15,9 +15,11 @@ using SystemyWP.API.Data.DTOs.General.UserForms;
 using SystemyWP.API.Data.Models;
 using SystemyWP.API.Data.Repositories;
 using SystemyWP.API.Services.Auth;
+using SystemyWP.API.Services.Email;
 using SystemyWP.API.Services.HttpServices;
 using SystemyWP.API.Services.JWTServices;
 using SystemyWP.API.Settings;
+using SystemyWP.API.Utilities;
 
 namespace SystemyWP.API.Controllers.MasterService
 {
@@ -133,7 +135,8 @@ namespace SystemyWP.API.Controllers.MasterService
 
         [HttpPost("reset-password-request", Name = "ResetPasswordRequest")]
         public async Task<IActionResult> ResetPasswordRequest(
-            [FromBody] UserEmailForm userEmailForm)
+            [FromBody] UserEmailForm userEmailForm,
+            [FromServices] EmailClient emailClient)
         {
             try
             {
@@ -152,10 +155,10 @@ namespace SystemyWP.API.Controllers.MasterService
                 var qb = new QueryBuilder { { "target", "password-reset" }, { "token", resetToken } };
                 var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/reset-password/{qb}";
 
-                //_ = await emailClient.SendEmailAsync(
-                //    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
-                //    "Reset Hasła",
-                //    EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
+                _ = await emailClient.SendEmailAsync(
+                    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
+                    "Reset Hasła",
+                    EmailTemplates.PasswordResetButtonEmailBody(callbackUrl));
 
                 return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }

@@ -5,10 +5,7 @@ namespace SystemyWP.API.Constants;
 
 public class AppConstants
 {
-    public static string ExceptionConsoleMessage(Exception e)
-    {
-        return $"--> Exception occured: {e.Message}";
-    }
+    public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
 
     public struct ResponseMessages
     {
@@ -85,9 +82,7 @@ public class AppConstants
 
     public struct Emails
     {
-        public const string SupportAddress = "wsparcie@systemywp.pl";
-        public const string ContactAddress = "kontakt@systemywp.pl";
-        public const string OfficeAddress = "biuro@systemywp.pl";
+        public const string System = "system@vapps.pl";
     }
 
     public struct Files
@@ -101,14 +96,8 @@ public class AppConstants
         private const string ProfilePrefix = "prof_pic_";
         private const string PortalPublicationPrefix = "portal_pub_";
 
-        public static string GenerateProfileFileName()
-        {
-            return $"{ProfilePrefix}{DateTime.Now.Ticks}.jpg";
-        }
+        public static string GenerateProfileFileName() => $"{ProfilePrefix}{DateTime.Now.Ticks}.jpg";
 
-        public static string GeneratePortalPublicationFileName()
-        {
-            return $"{PortalPublicationPrefix}{DateTime.Now.Ticks}.jpg";
-        }
+        public static string GeneratePortalPublicationFileName() => $"{PortalPublicationPrefix}{DateTime.Now.Ticks}.jpg";
     }
 }

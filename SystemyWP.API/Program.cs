@@ -199,6 +199,9 @@ builder.Services.Configure<AuthSettings>(configuration.GetSection(nameof(AuthSet
 
 builder.Services.AddHttpClient<GastronomyHttpClient>(httpClient =>
     httpClient.BaseAddress = new Uri(configuration.GetValue<string>("ClusterServices:GastronomyService")));
+
+builder.Services.AddScoped<EmailClient>();
+
 builder.Services.AddTransient<Encryptor>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddSingleton<UrlService>();
