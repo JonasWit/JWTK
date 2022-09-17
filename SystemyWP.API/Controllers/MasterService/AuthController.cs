@@ -181,7 +181,8 @@ namespace SystemyWP.API.Controllers.MasterService
 
                 var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
                 User user = _userRepository
-                    .GetUser(user => user.PasswordResetToken == userPasswordResetForm.Token && user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
+                    .GetUser(user => user.UserTokens.Any(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken) && ut.Value.Equals(userPasswordResetForm.Token)) &&
+                        user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
                 if (user is null)
                 {
@@ -189,6 +190,7 @@ namespace SystemyWP.API.Controllers.MasterService
                 }
 
                 var password = _encryptor.Encrypt(userPasswordResetForm.Password);
+
                 _userRepository.ChangePassword(user.Id, password);
                 return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
             }

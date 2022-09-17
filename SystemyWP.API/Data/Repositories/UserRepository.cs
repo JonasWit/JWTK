@@ -96,20 +96,23 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
             return;
         }
 
-        user.PasswordResetToken = null;
+        _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken));
         user.Password = password;
         _ = _context.Update(user);
     }
 
     public void UpdateResetPasswordTokenToken(string userId, string token)
     {
-        User user = _context.Users.FirstOrDefault(user => user.Id == userId);
+        User user = _context.Users
+            .Include(u => u.UserTokens)
+            .FirstOrDefault(user => user.Id == userId);
+
         if (user is null)
         {
             throw new ArgumentNullException(nameof(userId));
         }
-
-        user.PasswordResetToken = token;
+        _ = user.UserTokens.RemoveAll(pt => pt.Equals(AppConstants.UserTokenNames.PasswordResetToken));
+        user.UserTokens.Add(new UserToken { Name = AppConstants.UserTokenNames.PasswordResetToken, Value = token });
         _ = _context.Update(user);
     }
 

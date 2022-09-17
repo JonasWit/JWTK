@@ -46,7 +46,6 @@ namespace SystemyWP.API.Migrations
                     Id = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Password = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
-                    PasswordResetToken = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     Locked = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -78,9 +77,35 @@ namespace SystemyWP.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    UserId = table.Column<string>(type: "character varying(256)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
                 table: "UserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTokens_UserId",
+                table: "UserTokens",
                 column: "UserId");
         }
 
@@ -94,6 +119,9 @@ namespace SystemyWP.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
 
             migrationBuilder.DropTable(
                 name: "Users");

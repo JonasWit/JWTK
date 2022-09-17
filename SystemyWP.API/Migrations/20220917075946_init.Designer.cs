@@ -12,14 +12,14 @@ using SystemyWP.API.Data;
 namespace SystemyWP.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220703113643_init")]
+    [Migration("20220917075946_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -94,10 +94,6 @@ namespace SystemyWP.API.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<string>("PasswordResetToken")
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -132,6 +128,34 @@ namespace SystemyWP.API.Migrations
                     b.ToTable("UserClaims");
                 });
 
+            modelBuilder.Entity("SystemyWP.API.Data.Models.UserToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTokens");
+                });
+
             modelBuilder.Entity("SystemyWP.API.Data.Models.UserClaim", b =>
                 {
                     b.HasOne("SystemyWP.API.Data.Models.User", "User")
@@ -142,9 +166,21 @@ namespace SystemyWP.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SystemyWP.API.Data.Models.UserToken", b =>
+                {
+                    b.HasOne("SystemyWP.API.Data.Models.User", "User")
+                        .WithMany("UserTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SystemyWP.API.Data.Models.User", b =>
                 {
                     b.Navigation("Claims");
+
+                    b.Navigation("UserTokens");
                 });
 #pragma warning restore 612, 618
         }

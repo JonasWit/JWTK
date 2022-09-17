@@ -13,19 +13,25 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
     public DbSet<Log> Logs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserClaim> UserClaims { get; set; }
+    public DbSet<UserToken> UserTokens { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Log>().HasNoKey();
+        _ = modelBuilder.Entity<Log>().HasNoKey();
 
-        modelBuilder.Entity<User>()
+        _ = modelBuilder.Entity<User>()
             .HasMany(x => x.Claims)
             .WithOne(x => x.User)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Log>()
+        _ = modelBuilder.Entity<User>()
+            .HasMany(x => x.UserTokens)
+            .WithOne(x => x.User)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        _ = modelBuilder.Entity<Log>()
             .Property(b => b.Properties)
             .HasColumnType("jsonb");
     }

@@ -7,6 +7,11 @@ public class AppConstants
 {
     public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
 
+    public struct UserTokenNames
+    {
+        public const string PasswordResetToken = nameof(PasswordResetToken);
+    }
+
     public struct ResponseMessages
     {
         public const string DefaultExceptionMessage = "Error occured contact admin";

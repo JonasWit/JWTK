@@ -18,9 +18,6 @@ public class User
 
     public string Image { get; set; }
 
-    [MaxLength(AppConstants.DataLimits.LongKeyLimit)]
-    public string PasswordResetToken { get; set; }
-
     public bool EmailConfirmed { get; set; }
     public DateTime? Locked { get; set; }
     public DateTime? LastLogin { get; set; }
@@ -29,4 +26,6 @@ public class User
     [Required]
     [MaxLength(AppConstants.DataLimits.KeyLimit)]
     public string AccessKey { get; set; }
+
+    public List<UserToken> UserTokens { get; set; }
 }

@@ -2,10 +2,11 @@
 using SystemyWP.API.Constants;
 
 namespace SystemyWP.API.Data.Models
-{   // todo: add this with migration
+{
     public class MobileLog
     {
-        [Key] public long Id { get; set; }
+        [Key]
+        public long Id { get; set; }
 
         [Required]
         [MaxLength(AppConstants.DataLimits.DescriptionLimit)]
