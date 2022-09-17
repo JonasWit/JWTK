@@ -98,10 +98,9 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 
         _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken));
         user.Password = password;
-        _ = _context.Update(user);
     }
 
-    public void UpdateResetPasswordTokenToken(string userId, string token)
+    public void UpdateResetPasswordToken(string userId, string token)
     {
         User user = _context.Users
             .Include(u => u.UserTokens)
@@ -113,12 +112,27 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         }
         _ = user.UserTokens.RemoveAll(pt => pt.Equals(AppConstants.UserTokenNames.PasswordResetToken));
         user.UserTokens.Add(new UserToken { Name = AppConstants.UserTokenNames.PasswordResetToken, Value = token });
-        _ = _context.Update(user);
     }
 
     public User GetUser(Func<User, bool> condition) => _context.Users
-            .Include(x => x.Claims)
-            .FirstOrDefault(condition);
+        .Include(x => x.Claims)
+        .Include(x => x.UserTokens)
+        .FirstOrDefault(condition);
 
     public string GetUserAccessKey(string userId) => _context.Users.FirstOrDefault(user => user.Id == userId)?.AccessKey;
+
+    public void UpdateConfirmEmailToken(string userId, string token)
+    {
+        User user = _context.Users
+            .Include(u => u.UserTokens)
+            .FirstOrDefault(user => user.Id == userId);
+
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(userId));
+        }
+
+        _ = user.UserTokens.RemoveAll(pt => pt.Equals(AppConstants.UserTokenNames.ConfirmEmailToken));
+        user.UserTokens.Add(new UserToken { Name = AppConstants.UserTokenNames.ConfirmEmailToken, Value = token });
+    }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SystemyWP.API.Constants;
-using SystemyWP.API.Utilities;
 
 namespace SystemyWP.API.Services.Email
 {
@@ -20,20 +19,7 @@ namespace SystemyWP.API.Services.Email
             _client = new SendGridClient(_optionsMonitor.CurrentValue.ApiKey);
         }
 
-        public Task<Response> SendClientInvite(string email, string link)
-        {
-            SendGridMessage msg = MailHelper.CreateSingleEmail(
-                new EmailAddress(AppConstants.Emails.System),
-                new EmailAddress(email),
-                "systemywp.pl - Zaproszenie"
-                , "",
-                EmailTemplates.InvitationEmailBody(link)
-            );
-
-            return _client.SendEmailAsync(msg);
-        }
-
-        public Task<Response> SendPasswordResetEmailAsync(string recipient, string url)
+        public Task<Response> SendPasswordResetAsync(string recipient, string url)
         {
             SendGridMessage msg = MailHelper.CreateSingleTemplateEmail(
                 new EmailAddress(AppConstants.Emails.System),
@@ -45,14 +31,13 @@ namespace SystemyWP.API.Services.Email
             return _client.SendEmailAsync(msg);
         }
 
-        public Task<Response> SendEmailAsync(string email, string subject, string content)
+        public Task<Response> SendEmailConfirmationAsync(string recipient, string url)
         {
-            SendGridMessage msg = MailHelper.CreateSingleEmail(
+            SendGridMessage msg = MailHelper.CreateSingleTemplateEmail(
                 new EmailAddress(AppConstants.Emails.System),
-                new EmailAddress(email),
-                subject
-                , "",
-                content
+                new EmailAddress(recipient),
+                AppConstants.EmailTemplates.ConfirmEmail,
+                JsonSerializer.Serialize(new Dictionary<string, string> { { "url", url } })
             );
 
             return _client.SendEmailAsync(msg);

@@ -1,10 +1,10 @@
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using SystemyWP.API.Data.Models;
 using SystemyWP.API.Settings;
 
@@ -14,11 +14,8 @@ public class TokenService
 {
     private readonly IOptionsMonitor<AuthSettings> _optionsMonitor;
 
-    public TokenService(IOptionsMonitor<AuthSettings> optionsMonitor)
-    {
-        _optionsMonitor = optionsMonitor;
-    }
-    
+    public TokenService(IOptionsMonitor<AuthSettings> optionsMonitor) => _optionsMonitor = optionsMonitor;
+
     public bool ValidateToken(string token)
     {
         var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
@@ -26,7 +23,7 @@ public class TokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         try
         {
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            _ = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
@@ -35,7 +32,7 @@ public class TokenService
                 ValidAudience = _optionsMonitor.CurrentValue.Audience,
                 IssuerSigningKey = key,
                 ClockSkew = TimeSpan.Zero,
-            }, out var validatedToken);
+            }, out SecurityToken validatedToken);
         }
         catch
         {
@@ -46,7 +43,7 @@ public class TokenService
 
     public string GenerateJwtToken(User user)
     {
-        var claims = new[]
+        Claim[] claims = new[]
         {
             new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
             new Claim(ClaimTypes.Name, user.Claims.First(c => c.ClaimType == ClaimTypes.Name).ClaimValue),
@@ -71,10 +68,10 @@ public class TokenService
         var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
         return tokenJson;
     }
-    
+
     public string GeneratePasswordResetJwtToken(User user)
     {
-        var claims = new[]
+        Claim[] claims = new[]
         {
             new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
         };
@@ -95,7 +92,31 @@ public class TokenService
         var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
         return tokenJson;
     }
-    
+
+    public string GenerateEmailConfirmationToken(User user)
+    {
+        Claim[] claims = new[]
+        {
+            new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
+        };
+
+        var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
+        var key = new SymmetricSecurityKey(secretBytes);
+
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+        var token = new JwtSecurityToken(
+            _optionsMonitor.CurrentValue.Issuer,
+            _optionsMonitor.CurrentValue.Audience,
+            claims,
+            DateTime.UtcNow,
+            DateTime.UtcNow.AddMonths(1),
+            signingCredentials);
+
+        var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
+        return tokenJson;
+    }
+
     public string GetTokenClaim(string token, string claimName)
     {
         try

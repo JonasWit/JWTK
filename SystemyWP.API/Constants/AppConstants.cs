@@ -10,6 +10,7 @@ public class AppConstants
     public struct UserTokenNames
     {
         public const string PasswordResetToken = nameof(PasswordResetToken);
+        public const string ConfirmEmailToken = nameof(ConfirmEmailToken);
     }
 
     public struct ResponseMessages
@@ -93,6 +94,7 @@ public class AppConstants
     public struct EmailTemplates
     {
         public const string ResetPassword = "d-4a7a80089f7c431f8d6bba1b6ec02e3a";
+        public const string ConfirmEmail = "d-60af77336eec4146b29191d835fa795f";
     }
 
     public struct Files
