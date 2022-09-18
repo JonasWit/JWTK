@@ -17,12 +17,12 @@ public partial class IntroPage : ContentPage
         if (await _authService.GetStoredUser())
         {
             await Shell.Current.GoToAsync($"{nameof(VappsMasterPage)}");
-            return;
         }
         else
         {
             await Shell.Current.GoToAsync($"{nameof(LoginPage)}");
-            return;
         }
+
+        base.OnAppearing();
     }
 }

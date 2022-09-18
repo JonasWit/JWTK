@@ -18,9 +18,16 @@ namespace VappsMobile.ViewModels
         private string _password;
 
         [ObservableProperty]
+        private string _test;
+
+        [ObservableProperty]
         private string _confirmPassword;
 
-        public RegisterPageViewModel(AuthService authService) => _authService = authService;
+        public RegisterPageViewModel(AuthService authService)
+        {
+            _test = "TEST";
+            _authService = authService;
+        }
 
         [RelayCommand]
         public async Task SignUp()
@@ -33,11 +40,6 @@ namespace VappsMobile.ViewModels
 
             try
             {
-
-
-
-
-
 
             }
             catch (Exception ex)

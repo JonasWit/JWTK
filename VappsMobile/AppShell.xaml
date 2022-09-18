@@ -3,31 +3,45 @@
     x:Class="VappsMobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:config="clr-namespace:VappsMobile.AppConfig"
     xmlns:local="clr-namespace:VappsMobile"
     xmlns:views="clr-namespace:VappsMobile.Views"
-    xmlns:config="clr-namespace:VappsMobile.AppConfig"
     BackgroundColor="Transparent"
     FlyoutBackgroundColor="{DynamicResource DefaultBackground}"
     FlyoutBackgroundImageAspect="AspectFill"
     Shell.TabBarIsVisible="False">
 
     <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        FlyoutItemIsVisible="False"
+        Route="LoginPage"
+        Shell.FlyoutBehavior="Disabled" />
+
+    <!--<ShellContent
         Title="Intro"
         ContentTemplate="{DataTemplate views:IntroPage}"
         FlyoutItemIsVisible="False"
-        Shell.FlyoutBehavior="Disabled"
-        Route="IntroPage" />
+        Route="IntroPage"
+        Shell.FlyoutBehavior="Disabled" />-->
 
-    <FlyoutItem Route="VappsMasterPage" FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Aplikacje" Icon="{x:Static config:Icons.VappsTransparent}"  ContentTemplate="{DataTemplate views:VappsMasterPage}"/>
-        <ShellContent Title="Kontakt" ContentTemplate="{DataTemplate views:ContactPage}"/>
-        <ShellContent Title="O Nas" ContentTemplate="{DataTemplate views:AboutPage}"/>
-        <ShellContent Title="Ustawienia" ContentTemplate="{DataTemplate views:SettingsPage}"/>
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="VappsMasterPage">
+        <ShellContent
+            Title="Aplikacje"
+            ContentTemplate="{DataTemplate views:VappsMasterPage}"
+            Icon="{x:Static config:Icons.VappsTransparent}" />
+        <ShellContent Title="Kontakt" ContentTemplate="{DataTemplate views:ContactPage}" />
+        <ShellContent Title="O Nas" ContentTemplate="{DataTemplate views:AboutPage}" />
+        <ShellContent Title="Ustawienia" ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20">
-            <Button BackgroundColor="{DynamicResource Primary}" TextColor="{DynamicResource Secondary}" Text="Wyloguj" Command="{Binding SignOutCommand}"/>
+            <Button
+                BackgroundColor="{DynamicResource Primary}"
+                Command="{Binding SignOutCommand}"
+                Text="Wyloguj"
+                TextColor="{DynamicResource Secondary}" />
         </StackLayout>
     </Shell.FlyoutFooter>
 

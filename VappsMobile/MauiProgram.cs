@@ -4,7 +4,9 @@ using VappsMobile.CustomControls;
 using VappsMobile.Policies;
 using VappsMobile.Services;
 using VappsMobile.ViewModels;
+using VappsMobile.ViewModels.GastroApp;
 using VappsMobile.Views;
+using VappsMobile.Views.GastroApp;
 using VappsMobile.Views.Popups;
 
 namespace VappsMobile
@@ -41,25 +43,38 @@ namespace VappsMobile
             ApiConfig.HttpClientsNames.HealthClient,
             httpClient => { httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiHealthController.BasePath}/"); httpClient.Timeout = TimeSpan.FromSeconds(15); });
 
-            _ = builder.Services.AddSingleton<AppShell>();
+            // Services
             _ = builder.Services.AddSingleton<AuthService>();
             _ = builder.Services.AddSingleton<HealthService>();
-            _ = builder.Services.AddSingleton<FlyoutHeader>();
             _ = builder.Services.AddSingleton<UserService>();
 
-            _ = builder.Services.AddTransient<IntroPage>();
-            _ = builder.Services.AddTransient<LoginPageViewModel>();
-            _ = builder.Services.AddTransient<ErrorModalPageViewModel>();
-            _ = builder.Services.AddSingleton<MainPageViewModel>();
+            // Master Level
+            _ = builder.Services.AddSingleton<AppShell>();
             _ = builder.Services.AddSingleton<ShellViewModel>();
+
+            _ = builder.Services.AddSingleton<FlyoutHeader>();
+
+            _ = builder.Services.AddTransient<IntroPage>();
+
+            _ = builder.Services.AddSingleton<VappsMasterPage>();
             _ = builder.Services.AddSingleton<VappsMasterPageViewModel>();
+
+            _ = builder.Services.AddSingleton<SettingsPage>();
             _ = builder.Services.AddSingleton<SettingsPageViewModel>();
 
-            _ = builder.Services.AddTransient<LoginPage>();
             _ = builder.Services.AddTransient<ErrorModalPage>();
+            _ = builder.Services.AddTransient<ErrorModalPageViewModel>();
+
+            // Auth
+            _ = builder.Services.AddSingleton<LoginPage>();
+            _ = builder.Services.AddSingleton<LoginPageViewModel>();
+
             _ = builder.Services.AddSingleton<RegisterPage>();
-            _ = builder.Services.AddSingleton<VappsMasterPage>();
-            _ = builder.Services.AddSingleton<SettingsPage>();
+            _ = builder.Services.AddSingleton<RegisterPageViewModel>();
+
+            // Gastro App
+            _ = builder.Services.AddSingleton<GastroAppMasterPageViewModel>();
+            _ = builder.Services.AddSingleton<GastroAppMasterPage>();
 
             _ = builder
                 .UseMauiApp<App>()
@@ -70,6 +85,7 @@ namespace VappsMobile
                 });
 
             App = builder.Build();
+
             return App;
         }
     }

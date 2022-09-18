@@ -8,10 +8,7 @@ namespace VappsMobile.ViewModels
     {
         private readonly AuthService _authService;
 
-        public ShellViewModel(AuthService authService)
-        {
-            _authService = authService;
-        }
+        public ShellViewModel(AuthService authService) => _authService = authService;
 
         [RelayCommand]
         private async void SignOut()

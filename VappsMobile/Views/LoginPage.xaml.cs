@@ -5,17 +5,13 @@ namespace VappsMobile.Views;
 
 public partial class LoginPage : ContentPage
 {
-	private readonly LoginPageViewModel _loginPageViewModel;
 	private readonly AuthService _authService;
 
 	public LoginPage(LoginPageViewModel loginPageViewModel, AuthService authService)
 	{
 		InitializeComponent();
-
-		_loginPageViewModel = loginPageViewModel;
 		_authService = authService;
-
-		BindingContext = _loginPageViewModel;
+		BindingContext = loginPageViewModel;
 	}
 
 	protected override async void OnAppearing()

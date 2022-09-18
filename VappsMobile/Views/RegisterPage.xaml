@@ -83,7 +83,6 @@
                         Placeholder="Hasło"
                         PlaceholderColor="{StaticResource Gray600}"
                         Text="{Binding Password}"
-                        TextColor="Black"
                         VerticalOptions="Center" />
                 </StackLayout>
             </Frame>
@@ -111,16 +110,16 @@
                         Placeholder="Powtórz Hasło"
                         PlaceholderColor="{StaticResource Gray600}"
                         Text="{Binding ConfirmPassword}"
-                        TextColor="Black"
                         VerticalOptions="Center">
-                        <Entry.Behaviors>
+                        <!--<Entry.Behaviors>
                             <toolkit:RequiredStringValidationBehavior
                                 x:Name="registerConfirmPasswordValidation"
+                                ExactMatch="True"
                                 Flags="ValidateOnValueChanged"
                                 InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                RequiredString="{Binding Source={x:Reference PasswordEntry}}"
+                                RequiredString="{Binding Password}"
                                 ValidStyle="{StaticResource ValidEntryStyle}" />
-                        </Entry.Behaviors>
+                        </Entry.Behaviors>-->
                     </Entry>
                 </StackLayout>
             </Frame>

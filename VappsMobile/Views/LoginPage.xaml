@@ -6,10 +6,10 @@
     xmlns:config="clr-namespace:VappsMobile.AppConfig"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vms="clr-namespace:VappsMobile.ViewModels"
-    Title="Logowanie"
     x:DataType="vms:LoginPageViewModel"
+    Title="Logowanie"
     Shell.BackgroundColor="{DynamicResource Primary}"
-    Shell.NavBarIsVisible="False"
+    Shell.NavBarIsVisible="True"
     Style="{StaticResource DefaultPage}">
 
     <Grid>
@@ -116,12 +116,17 @@
                         <TapGestureRecognizer Command="{Binding SignUpCommand}" NumberOfTapsRequired="1" />
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-                <!--<StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                    <Label Text="Przpomnij Hasło" FontAttributes="Bold" HorizontalOptions="End" VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                    <Label
+                        FontAttributes="Bold"
+                        HorizontalOptions="End"
+                        HorizontalTextAlignment="End"
+                        Text="Przpomnij Hasło"
+                        VerticalTextAlignment="Center" />
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding ForgotPasswordCommand}"></TapGestureRecognizer>
+                        <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" NumberOfTapsRequired="1" />
                     </StackLayout.GestureRecognizers>
-                </StackLayout>-->
+                </StackLayout>
             </StackLayout>
         </VerticalStackLayout>
         <ActivityIndicator

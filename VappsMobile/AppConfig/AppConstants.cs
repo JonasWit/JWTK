@@ -1,4 +1,5 @@
 ﻿using VappsMobile.Models.GeneralModels;
+using VappsMobile.Views.GastroApp;
 
 namespace VappsMobile.AppConfig
 {
@@ -23,7 +24,7 @@ namespace VappsMobile.AppConfig
 
         public static List<Vapp> GetAvailableVapps() => new()
             {
-                new Vapp { Name = "Gastro-Apka", Description = "opis", Image = Icons.GastroAppDefault  }
+                new Vapp { Name = "Gastro-Apka", Description = "opis", Image = Icons.GastroAppDefault, MasterPageRoute = nameof(GastroAppMasterPage)  }
             };
     }
 }

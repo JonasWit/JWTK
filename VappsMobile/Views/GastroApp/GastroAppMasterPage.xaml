@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="VappsMobile.Views.GastroApp.GastroAppMasterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:config="clr-namespace:VappsMobile.AppConfig"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vms="clr-namespace:VappsMobile.ViewModels.GastroApp"
+    Title="GastroAppMasterPage"
+    x:DataType="vms:GastroAppMasterPageViewModel"
+    Shell.BackgroundColor="{DynamicResource Tertiary}"
+    Shell.NavBarIsVisible="True"
+    Style="{StaticResource DefaultPage}">
+    <VerticalStackLayout>
+        <Label
+            HorizontalOptions="Center"
+            Text="gastro app master page"
+            VerticalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
