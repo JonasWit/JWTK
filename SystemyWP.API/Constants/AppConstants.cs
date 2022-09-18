@@ -18,6 +18,14 @@ public class AppConstants
         public const string DefaultExceptionMessage = "Error occured contact admin";
     }
 
+    public struct ClientRoutes
+    {
+        public const string EmailConfirmed = "email-confirmation-success";
+        public const string EmailNotConfirmed = "email-confirmation-fail";
+        public const string PasswordReset = "password-reset-success";
+        public const string PasswordNotReset = "password-reset-fail";
+    }
+
     public struct CharacterSets
     {
         public const string StandardSet =

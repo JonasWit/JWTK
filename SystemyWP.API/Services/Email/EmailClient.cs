@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using SystemyWP.API.Constants;
 
@@ -25,7 +23,7 @@ namespace SystemyWP.API.Services.Email
                 new EmailAddress(AppConstants.Emails.System),
                 new EmailAddress(recipient),
                 AppConstants.EmailTemplates.ResetPassword,
-                JsonSerializer.Serialize(new Dictionary<string, string> { { "url", url } })
+                new { url }
             );
 
             return _client.SendEmailAsync(msg);
@@ -37,7 +35,7 @@ namespace SystemyWP.API.Services.Email
                 new EmailAddress(AppConstants.Emails.System),
                 new EmailAddress(recipient),
                 AppConstants.EmailTemplates.ConfirmEmail,
-                JsonSerializer.Serialize(new Dictionary<string, string> { { "url", url } })
+                new { url }
             );
 
             return _client.SendEmailAsync(msg);

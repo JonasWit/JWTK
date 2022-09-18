@@ -93,11 +93,11 @@ public class TokenService
         return tokenJson;
     }
 
-    public string GenerateEmailConfirmationToken(User user)
+    public string GenerateEmailConfirmationToken(string email)
     {
         Claim[] claims = new[]
         {
-            new Claim(ClaimTypes.Email, user.Claims.First(c => c.ClaimType == ClaimTypes.Email).ClaimValue),
+            new Claim(ClaimTypes.Email, email),
         };
 
         var secretBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);

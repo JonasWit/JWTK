@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SendGrid;
 using System;
 using System.Linq;
 using System.Net;
@@ -65,35 +68,78 @@ namespace SystemyWP.API.Controllers.MasterService
             {
                 User emailAddressExists = _userRepository.GetUser(u =>
                     u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
+
                 if (emailAddressExists is not null)
                 {
                     return BadRequest();
                 }
 
-                _userRepository.CreateUser(userCredentialsForm);
+                var ecToken = _tokenService.GenerateEmailConfirmationToken(userCredentialsForm.Email);
 
-                if (await _userRepository.SaveChanges() > 0)
+                var qb = new QueryBuilder { { "token", ecToken } };
+                var callbackUrl = $@"{_corsSettings.CurrentValue.ApiUrl}/auth/confirm-email/{qb}";
+
+                Response sgResponse = await _emailClient.SendEmailConfirmationAsync(
+                userCredentialsForm.Email,
+                callbackUrl);
+
+                if (sgResponse.StatusCode != HttpStatusCode.Accepted)
                 {
-                    User user = _userRepository.GetUser(u =>
-                        u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
-
-                    var ecToken = _tokenService.GenerateEmailConfirmationToken(user);
-
-                    var qb = new QueryBuilder { { "target", "confirm-email" }, { "token", ecToken } };
-                    var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/confirm-email/{qb}";
-
-                    _userRepository.UpdateConfirmEmailToken(user.Id, ecToken);
-
-                    _ = await _emailClient.SendPasswordResetAsync(
-                    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
-                    callbackUrl);
+                    throw new Exception("Confirmation email not sent");
                 }
 
-                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
+                _userRepository.CreateUser(userCredentialsForm);
+                if (await _userRepository.SaveChanges() == 0)
+                {
+                    throw new Exception("User not created");
+                }
+
+                User user = _userRepository.GetUser(u =>
+                    u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
+
+                _userRepository.UpdateConfirmEmailToken(user.Id, ecToken);
+
+                return await _userRepository.SaveChanges() == 0 ? throw new Exception("Confirmation token not saved") : (IActionResult)Ok();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Issue during Registration");
+                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
+            }
+        }
+
+        [HttpGet("confirm-email", Name = "ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token)
+        {
+            try
+            {
+                if (!_tokenService.ValidateToken(token))
+                {
+                    return BadRequest();
+                }
+
+                var email = _tokenService.GetTokenClaim(token, ClaimTypes.Email);
+                User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
+                    claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
+
+                if (user is null)
+                {
+                    return Ok();
+                }
+
+                _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.ConfirmEmailToken));
+                user.EmailConfirmed = true;
+
+                if (await _userRepository.SaveChanges() > 0)
+                {
+                    return Redirect($@"{_corsSettings.CurrentValue.PortalUrl}/{AppConstants.ClientRoutes.EmailConfirmed}");
+                }
+
+                return Redirect($@"{_corsSettings.CurrentValue.PortalUrl}/{AppConstants.ClientRoutes.EmailNotConfirmed}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Issue during Password Reset Request");
                 return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
             }
         }
@@ -108,7 +154,13 @@ namespace SystemyWP.API.Controllers.MasterService
                 User loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
                                 u.Password == userCredentialsForm.Password);
+
                 if (loggedInUser is null)
+                {
+                    return NotFound();
+                }
+
+                if (!loggedInUser.EmailConfirmed)
                 {
                     return NotFound();
                 }
@@ -129,12 +181,19 @@ namespace SystemyWP.API.Controllers.MasterService
 
         [Authorize]
         [HttpDelete("delete-account", Name = "DeleteAccount")]
-        public async Task<IActionResult> DeleteAccount()
+        public async Task<IActionResult> DeleteAccount([FromServices] IWebHostEnvironment env)
         {
             try
             {
                 var key = _userRepository.GetUserAccessKey(UserId);
+
                 HttpStatusCode gastroCleanUp = await _gastronomyHttpClient.RemoveAllData(key);
+
+                if (env.IsDevelopment())
+                {
+                    return NoContent();
+                }
+
                 if (gastroCleanUp == HttpStatusCode.OK)
                 {
                     _userRepository.DeleteAccount(UserId);
@@ -168,16 +227,20 @@ namespace SystemyWP.API.Controllers.MasterService
 
                 var resetToken = _tokenService.GeneratePasswordResetJwtToken(user);
 
+                var qb = new QueryBuilder { { "token", resetToken } };
+                var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/reset-password/{qb}";
+
+                Response sgResponse = await _emailClient.SendPasswordResetAsync(
+                        user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
+                        callbackUrl);
+
+                if (sgResponse.StatusCode != HttpStatusCode.Accepted)
+                {
+                    throw new Exception("Reset email not sent");
+                }
+
                 _userRepository.UpdateResetPasswordToken(user.Id, resetToken);
-
-                var qb = new QueryBuilder { { "target", "password-reset" }, { "token", resetToken } };
-                var callbackUrl = $@"{_corsSettings.CurrentValue.PortalUrl}/auth/reset-password/{qb}";
-
-                _ = await _emailClient.SendPasswordResetAsync(
-                    user.Claims.FirstOrDefault(c => c.ClaimType == ClaimTypes.Email)?.ClaimValue,
-                    callbackUrl);
-
-                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
+                return await _userRepository.SaveChanges() == 0 ? throw new Exception("Reset token not saved") : (IActionResult)Ok();
             }
             catch (Exception e)
             {
@@ -186,38 +249,7 @@ namespace SystemyWP.API.Controllers.MasterService
             }
         }
 
-        [HttpPost("confirm-email/{token}", Name = "ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail(string token)
-        {
-            try
-            {
-                if (!_tokenService.ValidateToken(token))
-                {
-                    return BadRequest();
-                }
-
-                var email = _tokenService.GetTokenClaim(token, ClaimTypes.Email);
-                User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
-                    claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
-
-                if (user is null)
-                {
-                    return Ok();
-                }
-
-                _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.ConfirmEmailToken));
-                user.EmailConfirmed = true;
-
-                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Issue during Password Reset Request");
-                return Problem(AppConstants.ResponseMessages.DefaultExceptionMessage);
-            }
-        }
-
-        [HttpPost("reset-password-action", Name = "ResetPasswordAction")]
+        [HttpPost("reset-password", Name = "ResetPasswordAction")]
         public async Task<IActionResult> ResetPasswordAction([FromBody] UserPasswordResetForm userPasswordResetForm)
         {
             try
@@ -240,7 +272,13 @@ namespace SystemyWP.API.Controllers.MasterService
                 var password = _encryptor.Encrypt(userPasswordResetForm.Password);
 
                 _userRepository.ChangePassword(user.Id, password);
-                return await _userRepository.SaveChanges() > 0 ? Ok() : BadRequest();
+                _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken));
+
+                if (await _userRepository.SaveChanges() > 0)
+                {
+                    return Redirect($@"{_corsSettings.CurrentValue.PortalUrl}/{AppConstants.ClientRoutes.PasswordReset}");
+                }
+                return Redirect($@"{_corsSettings.CurrentValue.PortalUrl}/{AppConstants.ClientRoutes.PasswordNotReset}");
             }
             catch (Exception e)
             {
