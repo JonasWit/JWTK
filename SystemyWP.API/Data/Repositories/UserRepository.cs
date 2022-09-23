@@ -20,14 +20,9 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 
     public void CreateUser(UserCredentialsForm userCredentialsForm)
     {
-        if (userCredentialsForm.Email is null)
+        if (userCredentialsForm is null)
         {
-            throw new ArgumentNullException(nameof(userCredentialsForm.Email));
-        }
-
-        if (userCredentialsForm.Password is null)
-        {
-            throw new ArgumentNullException(nameof(userCredentialsForm.Password));
+            throw new ArgumentNullException(nameof(userCredentialsForm));
         }
 
         var userId = Guid.NewGuid().ToString();
@@ -35,9 +30,13 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         {
             Id = userId,
             Password = _encryptor.Encrypt(userCredentialsForm.Password),
-            AccessKey = Guid.NewGuid().ToString(),
             Claims = new List<UserClaim>
             {
+                new()
+                {
+                    ClaimType = AppConstants.ClaimNames.UserAccessKey,
+                    ClaimValue = Guid.NewGuid().ToString()
+                },
                 new()
                 {
                     ClaimType = ClaimTypes.Role,
@@ -119,7 +118,9 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         .Include(x => x.UserTokens)
         .FirstOrDefault(condition);
 
-    public string GetUserAccessKey(string userId) => _context.Users.FirstOrDefault(user => user.Id == userId)?.AccessKey;
+    public string GetUserAccessKey(string userId) => _context.UserClaims
+        .FirstOrDefault(uc => uc.UserId.Equals(userId) && uc.ClaimType.Equals(AppConstants.ClaimNames.UserAccessKey))?
+        .ClaimValue;
 
     public void UpdateConfirmEmailToken(string userId, string token)
     {

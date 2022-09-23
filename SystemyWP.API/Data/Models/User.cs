@@ -23,9 +23,5 @@ public class User
     public DateTime? LastLogin { get; set; }
     public List<UserClaim> Claims { get; set; } = new();
 
-    [Required]
-    [MaxLength(AppConstants.DataLimits.KeyLimit)]
-    public string AccessKey { get; set; }
-
     public List<UserToken> UserTokens { get; set; }
 }

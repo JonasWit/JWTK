@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 
 namespace SystemyWP.API.Constants;
 
@@ -16,6 +15,11 @@ public class AppConstants
     public struct ResponseMessages
     {
         public const string DefaultExceptionMessage = "Error occured contact admin";
+    }
+
+    public struct ClaimNames
+    {
+        public const string UserAccessKey = nameof(UserAccessKey);
     }
 
     public struct ClientRoutes
@@ -80,12 +84,6 @@ public class AppConstants
     {
         public const string User = nameof(User);
         public const string Admin = nameof(Admin);
-    }
-
-    public struct Claims
-    {
-        public static readonly Claim UserClaim = new(ClaimTypes.Role, Roles.User);
-        public static readonly Claim AdminClaim = new(ClaimTypes.Role, Roles.Admin);
     }
 
     public struct Roles
