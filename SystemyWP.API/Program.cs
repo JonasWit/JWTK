@@ -128,7 +128,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configu
     _ = serverAction.CommandTimeout(20);
 }));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 // Mapper with additional data from URL Service
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>

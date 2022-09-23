@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.Data.DTOs.Gastronomy.Dishes;
 using SystemyWP.API.Data.DTOs.General;
@@ -26,12 +26,12 @@ public class GastronomyDishesController : ApiControllerBase
     private readonly ILogger<GastronomyDishesController> _logger;
     private readonly IMapper _mapper;
     private readonly UrlService _urlService;
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
 
     public GastronomyDishesController(
         IOptionsMonitor<ClusterServices> clusterServicesSettings,
         UrlService urlService,
-        IUserRepository userRepository,
+        UserRepository userRepository,
         IMapper mapper,
         GastronomyHttpClient gastronomyHttpClient,
         ILogger<GastronomyDishesController> logger)
@@ -57,7 +57,7 @@ public class GastronomyDishesController : ApiControllerBase
             var ingredientDto = await _gastronomyHttpClient.CreateDish(dishCreateDto);
             if (ingredientDto is null) throw new Exception();
 
-            return CreatedAtRoute(nameof(GetDish), new {ingredientDto.Id}, ingredientDto);
+            return CreatedAtRoute(nameof(GetDish), new { ingredientDto.Id }, ingredientDto);
         }
         catch (Exception e)
         {
@@ -74,7 +74,7 @@ public class GastronomyDishesController : ApiControllerBase
             var key = _userRepository.GetUserAccessKey(UserId);
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
-            var dishServiceDto = await _gastronomyHttpClient.GetDish(new ResourceAccessPass {Id = id, AccessKey = key});
+            var dishServiceDto = await _gastronomyHttpClient.GetDish(new ResourceAccessPass { Id = id, AccessKey = key });
             if (dishServiceDto is null) return NotFound();
 
             return Ok(new DishDto
@@ -124,7 +124,7 @@ public class GastronomyDishesController : ApiControllerBase
             if (string.IsNullOrEmpty(key)) return BadRequest();
 
             var responseCode =
-                await _gastronomyHttpClient.RemoveDish(new ResourceAccessPass {Id = id, AccessKey = key});
+                await _gastronomyHttpClient.RemoveDish(new ResourceAccessPass { Id = id, AccessKey = key });
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),

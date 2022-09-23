@@ -34,7 +34,7 @@ namespace SystemyWP.API.Controllers.MasterService
         private readonly AppDbContext _context;
         private readonly IOptionsMonitor<CorsSettings> _corsSettings;
         private readonly Encryptor _encryptor;
-        private readonly IUserRepository _userRepository;
+        private readonly UserRepository _userRepository;
         private readonly TokenService _tokenService;
 
         public AuthController(
@@ -44,7 +44,7 @@ namespace SystemyWP.API.Controllers.MasterService
             AppDbContext context,
             IOptionsMonitor<CorsSettings> corsSettings,
             Encryptor encryptor,
-            IUserRepository userRepository,
+            UserRepository userRepository,
             TokenService tokenService)
         {
             _emailClient = emailClient;
@@ -141,7 +141,6 @@ namespace SystemyWP.API.Controllers.MasterService
             try
             {
                 userCredentialsForm.Password = _encryptor.Encrypt(userCredentialsForm.Password);
-
                 User loggedInUser = _userRepository
                     .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
                                 u.Password == userCredentialsForm.Password);

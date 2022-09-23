@@ -1,11 +1,11 @@
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 using SystemyWP.API.Controllers.MasterService;
 using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 using SystemyWP.API.Data.DTOs.General;
@@ -21,10 +21,10 @@ public class GastronomyIngredientsController : ApiControllerBase
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<GastronomyIngredientsController> _logger;
     private readonly IMapper _mapper;
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
 
     public GastronomyIngredientsController(
-        IUserRepository userRepository,
+        UserRepository userRepository,
         IMapper mapper,
         GastronomyHttpClient gastronomyHttpClient,
         ILogger<GastronomyIngredientsController> logger)
@@ -35,25 +35,28 @@ public class GastronomyIngredientsController : ApiControllerBase
         _logger = logger;
     }
 
-    private string ErrorMessage(string methodName)
-    {
-        return $"Gastronomy Service Controller {methodName} Error";
-    }
+    private string ErrorMessage(string methodName) => $"Gastronomy Service Controller {methodName} Error";
 
     [HttpPost(Name = "CreateIngredient")]
     public async Task<IActionResult> CreateIngredient([FromBody] IngredientCreatePayload ingredientCreatePayload)
     {
         try
         {
-            var ingredientCreateDto = _mapper.Map<IngredientCreateDto>(ingredientCreatePayload);
+            IngredientCreateDto ingredientCreateDto = _mapper.Map<IngredientCreateDto>(ingredientCreatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
             ingredientCreateDto.AccessKey = key;
-            var ingredientDto = await _gastronomyHttpClient.CreateIngredient(ingredientCreateDto);
-            if (ingredientDto is null) throw new Exception();
+            IngredientDto ingredientDto = await _gastronomyHttpClient.CreateIngredient(ingredientCreateDto);
+            if (ingredientDto is null)
+            {
+                throw new Exception();
+            }
 
-            return CreatedAtRoute(nameof(GetIngredient), new {ingredientDto.Id}, ingredientDto);
+            return CreatedAtRoute(nameof(GetIngredient), new { ingredientDto.Id }, ingredientDto);
         }
         catch (Exception e)
         {
@@ -68,11 +71,17 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var ingredientDto =
-                await _gastronomyHttpClient.GetIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
-            if (ingredientDto is null) return NotFound();
+            IngredientDto ingredientDto =
+                await _gastronomyHttpClient.GetIngredient(new ResourceAccessPass { Id = id, AccessKey = key });
+            if (ingredientDto is null)
+            {
+                return NotFound();
+            }
 
             return Ok(ingredientDto);
         }
@@ -93,10 +102,17 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var ingredients = await _gastronomyHttpClient.GetIngredients(key);
-            if (ingredients is null) return NotFound();
+            System.Collections.Generic.List<IngredientDto> ingredients = await _gastronomyHttpClient.GetIngredients(key);
+            if (ingredients is null)
+            {
+                return NotFound();
+            }
+
             return Ok(ingredients);
         }
         catch (Exception e)
@@ -112,10 +128,17 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var ingredients = await _gastronomyHttpClient.CountIngredients(key);
-            if (ingredients is null) return NotFound();
+            Data.DTOs.Gastronomy.ElementCountDto ingredients = await _gastronomyHttpClient.CountIngredients(key);
+            if (ingredients is null)
+            {
+                return NotFound();
+            }
+
             return Ok(ingredients);
         }
         catch (Exception e)
@@ -131,10 +154,17 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
-            if (ingredients is null) return NotFound();
+            System.Collections.Generic.List<IngredientDto> ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
+            if (ingredients is null)
+            {
+                return NotFound();
+            }
+
             return Ok(ingredients);
         }
         catch (Exception e)
@@ -150,10 +180,13 @@ public class GastronomyIngredientsController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var responseCode =
-                await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass {Id = id, AccessKey = key});
+            HttpStatusCode responseCode =
+                await _gastronomyHttpClient.RemoveIngredient(new ResourceAccessPass { Id = id, AccessKey = key });
             return responseCode switch
             {
                 HttpStatusCode.NoContent => Ok(),
@@ -174,12 +207,16 @@ public class GastronomyIngredientsController : ApiControllerBase
     {
         try
         {
-            var ingredientUpdateDto = _mapper.Map<IngredientUpdateDto>(ingredientUpdatePayload);
+            IngredientUpdateDto ingredientUpdateDto = _mapper.Map<IngredientUpdateDto>(ingredientUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
             ingredientUpdateDto.AccessKey = key;
 
-            var responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientUpdateDto);
+            HttpStatusCode responseCode = await _gastronomyHttpClient.UpdateIngredient(ingredientUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),

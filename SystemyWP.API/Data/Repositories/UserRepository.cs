@@ -10,7 +10,7 @@ using SystemyWP.API.Services.Auth;
 
 namespace SystemyWP.API.Data.Repositories;
 
-internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
+public class UserRepository : RepositoryBase<AppDbContext>
 {
     private readonly Encryptor _encryptor;
 
@@ -162,5 +162,4 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
 
     public bool UserExists(string email) => _context.Users
         .Any(user => user.Claims.Any(claim => claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
-    void IUserRepository.CreateUser(UserCredentialsForm userCredentialsForm) => throw new NotImplementedException();
 }
