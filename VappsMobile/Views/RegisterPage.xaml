@@ -111,7 +111,7 @@
                         PlaceholderColor="{StaticResource Gray600}"
                         Text="{Binding ConfirmPassword}"
                         VerticalOptions="Center">
-                        <!--<Entry.Behaviors>
+                        <Entry.Behaviors>
                             <toolkit:RequiredStringValidationBehavior
                                 x:Name="registerConfirmPasswordValidation"
                                 ExactMatch="True"
@@ -119,7 +119,7 @@
                                 InvalidStyle="{StaticResource InvalidEntryStyle}"
                                 RequiredString="{Binding Password}"
                                 ValidStyle="{StaticResource ValidEntryStyle}" />
-                        </Entry.Behaviors>-->
+                        </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
             </Frame>

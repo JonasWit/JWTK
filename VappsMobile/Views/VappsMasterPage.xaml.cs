@@ -7,7 +7,6 @@ public partial class VappsMasterPage : ContentPage
 	public VappsMasterPage(VappsMasterPageViewModel vappsMasterPageViewModel)
 	{
 		InitializeComponent();
-
 		BindingContext = vappsMasterPageViewModel;
 	}
 }
