@@ -13,7 +13,6 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
     public DbSet<Log> Logs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserClaim> UserClaims { get; set; }
-    public DbSet<UserToken> UserTokens { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
@@ -23,11 +22,6 @@ public class AppDbContext : DbContext, IDataProtectionKeyContext
 
         _ = modelBuilder.Entity<User>()
             .HasMany(x => x.Claims)
-            .WithOne(x => x.User)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        _ = modelBuilder.Entity<User>()
-            .HasMany(x => x.UserTokens)
             .WithOne(x => x.User)
             .OnDelete(DeleteBehavior.Cascade);
 

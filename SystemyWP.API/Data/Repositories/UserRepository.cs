@@ -18,7 +18,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         Encryptor encryptor,
         AppDbContext context) : base(context) => _encryptor = encryptor;
 
-    public void CreateUser(UserCredentialsForm userCredentialsForm)
+    public User CreateUser(UserCredentialsForm userCredentialsForm)
     {
         if (userCredentialsForm is null)
         {
@@ -61,6 +61,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         };
 
         _ = _context.Add(newUser);
+        return newUser;
     }
 
     public void DeleteAccount(string userId)
@@ -75,6 +76,23 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
         {
             _ = _context.Remove(user);
         }
+    }
+
+    public void ConfirmEmail(string userId)
+    {
+        if (userId is null)
+        {
+            throw new ArgumentNullException(nameof(userId));
+        }
+
+        User user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
+        if (user is null)
+        {
+            return;
+        }
+
+        _ = user.Claims.RemoveAll(claim => claim.ClaimType.Equals(AppConstants.ClaimNames.EmailConfirmationToken));
+        user.EmailConfirmed = true;
     }
 
     public void ChangePassword(string userId, string password)
@@ -95,27 +113,26 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
             return;
         }
 
-        _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken));
+        _ = user.Claims.RemoveAll(claim => claim.ClaimType.Equals(AppConstants.ClaimNames.PasswordResetToken));
         user.Password = password;
     }
 
     public void UpdateResetPasswordToken(string userId, string token)
     {
         User user = _context.Users
-            .Include(u => u.UserTokens)
+            .Include(u => u.Claims)
             .FirstOrDefault(user => user.Id == userId);
 
         if (user is null)
         {
             throw new ArgumentNullException(nameof(userId));
         }
-        _ = user.UserTokens.RemoveAll(pt => pt.Equals(AppConstants.UserTokenNames.PasswordResetToken));
-        user.UserTokens.Add(new UserToken { Name = AppConstants.UserTokenNames.PasswordResetToken, Value = token });
+        _ = user.Claims.RemoveAll(claim => claim.ClaimType.Equals(AppConstants.ClaimNames.PasswordResetToken));
+        user.Claims.Add(new UserClaim { ClaimType = AppConstants.ClaimNames.PasswordResetToken, ClaimValue = token });
     }
 
     public User GetUser(Func<User, bool> condition) => _context.Users
         .Include(x => x.Claims)
-        .Include(x => x.UserTokens)
         .FirstOrDefault(condition);
 
     public string GetUserAccessKey(string userId) => _context.UserClaims
@@ -125,7 +142,7 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
     public void UpdateConfirmEmailToken(string userId, string token)
     {
         User user = _context.Users
-            .Include(u => u.UserTokens)
+            .Include(u => u.Claims)
             .FirstOrDefault(user => user.Id == userId);
 
         if (user is null)
@@ -133,7 +150,17 @@ internal class UserRepository : RepositoryBase<AppDbContext>, IUserRepository
             throw new ArgumentNullException(nameof(userId));
         }
 
-        _ = user.UserTokens.RemoveAll(pt => pt.Equals(AppConstants.UserTokenNames.ConfirmEmailToken));
-        user.UserTokens.Add(new UserToken { Name = AppConstants.UserTokenNames.ConfirmEmailToken, Value = token });
+        _ = user.Claims.RemoveAll(pt => pt.Equals(AppConstants.ClaimNames.EmailConfirmationToken));
+        user.Claims.Add(new UserClaim { ClaimType = AppConstants.ClaimNames.EmailConfirmationToken, ClaimValue = token });
     }
+
+    public User GetUser(string email) => _context.Users
+        .FirstOrDefault(user => user.Claims.Any(claim => claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
+
+    public string GetUserId(string email) => _context.Users
+        .FirstOrDefault(user => user.Claims.Any(claim => claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)))?.Id;
+
+    public bool UserExists(string email) => _context.Users
+        .Any(user => user.Claims.Any(claim => claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
+    void IUserRepository.CreateUser(UserCredentialsForm userCredentialsForm) => throw new NotImplementedException();
 }

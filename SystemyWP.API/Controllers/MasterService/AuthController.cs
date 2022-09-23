@@ -66,10 +66,7 @@ namespace SystemyWP.API.Controllers.MasterService
         {
             try
             {
-                User emailAddressExists = _userRepository.GetUser(u =>
-                    u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
-
-                if (emailAddressExists is not null)
+                if (_userRepository.UserExists(userCredentialsForm.Email))
                 {
                     return BadRequest();
                 }
@@ -88,17 +85,13 @@ namespace SystemyWP.API.Controllers.MasterService
                     throw new Exception("Confirmation email not sent");
                 }
 
-                _userRepository.CreateUser(userCredentialsForm);
+                User newUser = _userRepository.CreateUser(userCredentialsForm);
                 if (await _userRepository.SaveChanges() == 0)
                 {
                     throw new Exception("User not created");
                 }
 
-                User user = _userRepository.GetUser(u =>
-                    u.Claims.Any(uc => uc.ClaimType == ClaimTypes.Email && uc.ClaimValue == userCredentialsForm.Email));
-
-                _userRepository.UpdateConfirmEmailToken(user.Id, ecToken);
-
+                _userRepository.UpdateConfirmEmailToken(newUser.Id, ecToken);
                 return await _userRepository.SaveChanges() == 0 ? throw new Exception("Confirmation token not saved") : (IActionResult)Ok();
             }
             catch (Exception e)
@@ -119,16 +112,14 @@ namespace SystemyWP.API.Controllers.MasterService
                 }
 
                 var email = _tokenService.GetTokenClaim(token, ClaimTypes.Email);
-                User user = _userRepository.GetUser(user => user.Claims.Any(claim =>
-                    claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
+                var user = _userRepository.GetUserId(email);
 
                 if (user is null)
                 {
                     return Ok();
                 }
 
-                _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.ConfirmEmailToken));
-                user.EmailConfirmed = true;
+                _userRepository.UpdateConfirmEmailToken(user, token);
 
                 if (await _userRepository.SaveChanges() > 0)
                 {
@@ -261,7 +252,7 @@ namespace SystemyWP.API.Controllers.MasterService
 
                 var email = _tokenService.GetTokenClaim(userPasswordResetForm.Token, ClaimTypes.Email);
                 User user = _userRepository
-                    .GetUser(user => user.UserTokens.Any(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken) && ut.Value.Equals(userPasswordResetForm.Token)) &&
+                    .GetUser(user => user.Claims.Any(claim => claim.ClaimType.Equals(AppConstants.ClaimNames.PasswordResetToken) && claim.ClaimType.Equals(userPasswordResetForm.Token)) &&
                         user.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == email));
 
                 if (user is null)
@@ -270,9 +261,7 @@ namespace SystemyWP.API.Controllers.MasterService
                 }
 
                 var password = _encryptor.Encrypt(userPasswordResetForm.Password);
-
                 _userRepository.ChangePassword(user.Id, password);
-                _ = user.UserTokens.RemoveAll(ut => ut.Name.Equals(AppConstants.UserTokenNames.PasswordResetToken));
 
                 if (await _userRepository.SaveChanges() > 0)
                 {

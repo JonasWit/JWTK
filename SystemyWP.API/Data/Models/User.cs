@@ -22,6 +22,4 @@ public class User
     public DateTime? Locked { get; set; }
     public DateTime? LastLogin { get; set; }
     public List<UserClaim> Claims { get; set; } = new();
-
-    public List<UserToken> UserTokens { get; set; }
 }

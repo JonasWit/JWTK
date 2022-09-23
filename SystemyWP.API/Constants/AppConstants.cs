@@ -6,12 +6,6 @@ public class AppConstants
 {
     public static string ExceptionConsoleMessage(Exception e) => $"--> Exception occured: {e.Message}";
 
-    public struct UserTokenNames
-    {
-        public const string PasswordResetToken = nameof(PasswordResetToken);
-        public const string ConfirmEmailToken = nameof(ConfirmEmailToken);
-    }
-
     public struct ResponseMessages
     {
         public const string DefaultExceptionMessage = "Error occured contact admin";
@@ -20,6 +14,8 @@ public class AppConstants
     public struct ClaimNames
     {
         public const string UserAccessKey = nameof(UserAccessKey);
+        public const string EmailConfirmationToken = nameof(EmailConfirmationToken);
+        public const string PasswordResetToken = nameof(PasswordResetToken);
     }
 
     public struct ClientRoutes

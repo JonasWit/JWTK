@@ -6,11 +6,14 @@ namespace SystemyWP.API.Data.Repositories;
 
 public interface IUserRepository : IRepositoryBase
 {
-    void CreateUser(UserCredentialsForm userCredentialsForm);
+    User CreateUser(UserCredentialsForm userCredentialsForm);
     void DeleteAccount(string userId);
     void UpdateResetPasswordToken(string userId, string token);
     void UpdateConfirmEmailToken(string userId, string token);
     void ChangePassword(string userId, string password);
     User GetUser(Func<User, bool> condition);
+    User GetUser(string email);
+    string GetUserId(string email);
+    bool UserExists(string email);
     string GetUserAccessKey(string userId);
 }
