@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Logistics", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Logistics.Tests", "SystemyWP.API.Logistics.Tests\SystemyWP.API.Logistics.Tests.csproj", "{338C456E-FE17-49D0-AACA-97AEB3969024}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VappsMobile", "VappsMobile\VappsMobile.csproj", "{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsMobile", "VappsMobile\VappsMobile.csproj", "{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VappsWeb", "VappsWeb\VappsWeb.csproj", "{65C7D78E-F93D-4E50-B4F0-AE54FA061DB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{65C7D78E-F93D-4E50-B4F0-AE54FA061DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C7D78E-F93D-4E50-B4F0-AE54FA061DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C7D78E-F93D-4E50-B4F0-AE54FA061DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C7D78E-F93D-4E50-B4F0-AE54FA061DB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
