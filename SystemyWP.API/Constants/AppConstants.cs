@@ -16,6 +16,7 @@ public class AppConstants
         public const string UserAccessKey = nameof(UserAccessKey);
         public const string EmailConfirmationToken = nameof(EmailConfirmationToken);
         public const string PasswordResetToken = nameof(PasswordResetToken);
+        public const string ConfirmedAccount = nameof(ConfirmedAccount);
     }
 
     public struct ClientRoutes

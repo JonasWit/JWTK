@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;
@@ -85,14 +84,8 @@ namespace SystemyWP.API.Controllers.MasterService
                     throw new Exception("Confirmation email not sent");
                 }
 
-                User newUser = _userRepository.CreateUser(userCredentialsForm);
-                if (await _userRepository.SaveChanges() == 0)
-                {
-                    throw new Exception("User not created");
-                }
-
-                _userRepository.UpdateConfirmEmailToken(newUser.Id, ecToken);
-                return await _userRepository.SaveChanges() == 0 ? throw new Exception("Confirmation token not saved") : (IActionResult)Ok();
+                User newUser = _userRepository.CreateUser(userCredentialsForm, ecToken);
+                return await _userRepository.SaveChanges() == 0 ? throw new Exception("User not created") : (IActionResult)Ok();
             }
             catch (Exception e)
             {
@@ -112,15 +105,14 @@ namespace SystemyWP.API.Controllers.MasterService
                 }
 
                 var email = _tokenService.GetTokenClaim(token, ClaimTypes.Email);
-                var user = _userRepository.GetUserId(email);
+                var userId = _userRepository.GetUserId(email);
 
-                if (user is null)
+                if (userId is null)
                 {
                     return Ok();
                 }
 
-                _userRepository.UpdateConfirmEmailToken(user, token);
-
+                _userRepository.ConfirmEmail(userId);
                 if (await _userRepository.SaveChanges() > 0)
                 {
                     return Redirect($@"{_corsSettings.CurrentValue.PortalUrl}/{AppConstants.ClientRoutes.EmailConfirmed}");
@@ -140,27 +132,21 @@ namespace SystemyWP.API.Controllers.MasterService
         {
             try
             {
-                userCredentialsForm.Password = _encryptor.Encrypt(userCredentialsForm.Password);
-                User loggedInUser = _userRepository
-                    .GetUser(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue == userCredentialsForm.Email) &&
-                                u.Password == userCredentialsForm.Password);
-
-                if (loggedInUser is null)
-                {
-                    return NotFound();
-                }
-
-                if (!loggedInUser.EmailConfirmed)
+                User loggedInUser = _userRepository.GetUser(userCredentialsForm.Email, _encryptor.Encrypt(userCredentialsForm.Password));
+                if (loggedInUser is null || !loggedInUser.EmailConfirmed)
                 {
                     return NotFound();
                 }
 
                 loggedInUser.LastLogin = DateTime.UtcNow;
                 _ = _context.Update(loggedInUser);
-                _ = await _context.SaveChangesAsync();
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    var token = _tokenService.GenerateJwtToken(loggedInUser);
+                    return Ok(new TokenDto() { Token = token });
+                }
 
-                var token = _tokenService.GenerateJwtToken(loggedInUser);
-                return Ok(new TokenDto() { Token = token });
+                return Problem();
             }
             catch (Exception e)
             {
@@ -176,24 +162,20 @@ namespace SystemyWP.API.Controllers.MasterService
             try
             {
                 var key = _userRepository.GetUserAccessKey(UserId);
-
                 HttpStatusCode gastroCleanUp = await _gastronomyHttpClient.RemoveAllData(key);
 
-                if (env.IsDevelopment())
+                if (gastroCleanUp != HttpStatusCode.OK)
+                {
+                    return Problem();
+                }
+
+                _userRepository.DeleteAccount(UserId);
+                if (await _userRepository.SaveChanges() > 0)
                 {
                     return NoContent();
                 }
 
-                if (gastroCleanUp == HttpStatusCode.OK)
-                {
-                    _userRepository.DeleteAccount(UserId);
-                    if (await _userRepository.SaveChanges() > 0)
-                    {
-                        return NoContent();
-                    }
-                }
-
-                return BadRequest();
+                return Problem();
             }
             catch (Exception e)
             {

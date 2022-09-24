@@ -18,13 +18,8 @@ public class UserRepository : RepositoryBase<AppDbContext>
         Encryptor encryptor,
         AppDbContext context) : base(context) => _encryptor = encryptor;
 
-    public User CreateUser(UserCredentialsForm userCredentialsForm)
+    public User CreateUser(UserCredentialsForm userCredentialsForm, string confirmationToken)
     {
-        if (userCredentialsForm is null)
-        {
-            throw new ArgumentNullException(nameof(userCredentialsForm));
-        }
-
         var userId = Guid.NewGuid().ToString();
         var newUser = new User
         {
@@ -56,21 +51,16 @@ public class UserRepository : RepositoryBase<AppDbContext>
                 {
                     ClaimType = ClaimTypes.NameIdentifier,
                     ClaimValue = userId
-                }
+                },
+                new () { ClaimType = AppConstants.ClaimNames.EmailConfirmationToken, ClaimValue = confirmationToken }
             }
         };
-
         _ = _context.Add(newUser);
         return newUser;
     }
 
     public void DeleteAccount(string userId)
     {
-        if (userId is null)
-        {
-            throw new ArgumentNullException(nameof(userId));
-        }
-
         User user = _context.Users.FirstOrDefault(user => user.Id == userId);
         if (user is not null)
         {
@@ -80,11 +70,6 @@ public class UserRepository : RepositoryBase<AppDbContext>
 
     public void ConfirmEmail(string userId)
     {
-        if (userId is null)
-        {
-            throw new ArgumentNullException(nameof(userId));
-        }
-
         User user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
         if (user is null)
         {
@@ -97,16 +82,6 @@ public class UserRepository : RepositoryBase<AppDbContext>
 
     public void ChangePassword(string userId, string password)
     {
-        if (userId is null)
-        {
-            throw new ArgumentNullException(nameof(userId));
-        }
-
-        if (password is null)
-        {
-            throw new ArgumentNullException(nameof(password));
-        }
-
         User user = _context.Users.FirstOrDefault(u => u.Id.Equals(userId));
         if (user is null)
         {
@@ -135,24 +110,18 @@ public class UserRepository : RepositoryBase<AppDbContext>
         .Include(x => x.Claims)
         .FirstOrDefault(condition);
 
+    public User GetUser(string email, string password) => _context.Users
+        .Include(x => x.Claims)
+        .FirstOrDefault(u => u.Claims.Any(cl => cl.ClaimType == ClaimTypes.Email && cl.ClaimValue.Equals(email)) && u.Password.Equals(password));
+
     public string GetUserAccessKey(string userId) => _context.UserClaims
         .FirstOrDefault(uc => uc.UserId.Equals(userId) && uc.ClaimType.Equals(AppConstants.ClaimNames.UserAccessKey))?
         .ClaimValue;
 
-    public void UpdateConfirmEmailToken(string userId, string token)
-    {
-        User user = _context.Users
-            .Include(u => u.Claims)
-            .FirstOrDefault(user => user.Id == userId);
-
-        if (user is null)
-        {
-            throw new ArgumentNullException(nameof(userId));
-        }
-
-        _ = user.Claims.RemoveAll(pt => pt.Equals(AppConstants.ClaimNames.EmailConfirmationToken));
-        user.Claims.Add(new UserClaim { ClaimType = AppConstants.ClaimNames.EmailConfirmationToken, ClaimValue = token });
-    }
+    public void RemoveClaim(string userId, string claimType) => _context.UserClaims
+        .Where(claim => claim.UserId.Equals(userId))
+        .ToList()
+        .RemoveAll(claim => claim.ClaimType.Equals(claimType));
 
     public User GetUser(string email) => _context.Users
         .FirstOrDefault(user => user.Claims.Any(claim => claim.ClaimType.Equals(ClaimTypes.Email) && claim.ClaimValue.Equals(email)));
