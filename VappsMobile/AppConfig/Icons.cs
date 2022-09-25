@@ -11,6 +11,9 @@
         public const string AuthUser = "icons8_male_user_100.png";
 
         public const string Error = "icons8_error_100.png";
+        public const string Done = "icons8_done_100.png";
+
+
 
     }
 }

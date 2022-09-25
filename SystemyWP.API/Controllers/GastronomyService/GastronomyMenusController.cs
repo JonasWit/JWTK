@@ -24,11 +24,11 @@ public class GastronomyMenusController : ApiControllerBase
     private readonly ILogger<GastronomyMenusController> _logger;
     private readonly IMapper _mapper;
     private readonly UrlService _urlService;
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
 
     public GastronomyMenusController(
         UrlService urlService,
-        IUserRepository userRepository,
+        UserRepository userRepository,
         IMapper mapper,
         GastronomyHttpClient gastronomyHttpClient,
         ILogger<GastronomyMenusController> logger)
@@ -40,19 +40,24 @@ public class GastronomyMenusController : ApiControllerBase
         _logger = logger;
     }
 
-
     [HttpPost(Name = "CreateMenu")]
     public async Task<IActionResult> CreateMenu([FromBody] MenuCreatePayload menuCreatePayload)
     {
         try
         {
-            var menuCreateDto = _mapper.Map<MenuCreateDto>(menuCreatePayload);
+            MenuCreateDto menuCreateDto = _mapper.Map<MenuCreateDto>(menuCreatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
             menuCreateDto.AccessKey = key;
-            var menuDto = await _gastronomyHttpClient.CreateMenu(menuCreateDto);
-            if (menuDto is null) throw new Exception();
+            MenuDto menuDto = await _gastronomyHttpClient.CreateMenu(menuCreateDto);
+            if (menuDto is null)
+            {
+                throw new Exception();
+            }
 
             return CreatedAtRoute(nameof(GetMenu), new { menuDto.Id }, menuDto);
         }
@@ -69,10 +74,16 @@ public class GastronomyMenusController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass { Id = id, AccessKey = key });
-            if (menuServiceDto is null) return NotFound();
+            MenuServiceDto menuServiceDto = await _gastronomyHttpClient.GetMenu(new ResourceAccessPass { Id = id, AccessKey = key });
+            if (menuServiceDto is null)
+            {
+                return NotFound();
+            }
 
             return Ok(_mapper.Map<MenuDto>(menuServiceDto));
         }
@@ -89,9 +100,12 @@ public class GastronomyMenusController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var responseCode =
+            HttpStatusCode responseCode =
                 await _gastronomyHttpClient.RemoveMenu(new ResourceAccessPass { Id = id, AccessKey = key });
             return responseCode switch
             {
@@ -114,10 +128,16 @@ public class GastronomyMenusController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var menus = await _gastronomyHttpClient.GetMenus(key);
-            if (menus is null) return NotFound();
+            List<MenuServiceDto> menus = await _gastronomyHttpClient.GetMenus(key);
+            if (menus is null)
+            {
+                return NotFound();
+            }
 
             return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
@@ -134,10 +154,17 @@ public class GastronomyMenusController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var elementCountDto = await _gastronomyHttpClient.CountMenus(key);
-            if (elementCountDto is null) return NotFound();
+            Data.DTOs.Gastronomy.ElementCountDto elementCountDto = await _gastronomyHttpClient.CountMenus(key);
+            if (elementCountDto is null)
+            {
+                return NotFound();
+            }
+
             return Ok(elementCountDto);
         }
         catch (Exception e)
@@ -152,12 +179,16 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            var menuUpdateDto = _mapper.Map<MenuUpdateDto>(menuUpdatePayload);
+            MenuUpdateDto menuUpdateDto = _mapper.Map<MenuUpdateDto>(menuUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
             menuUpdateDto.AccessKey = key;
 
-            var responseCode = await _gastronomyHttpClient.UpdateMenu(menuUpdateDto);
+            HttpStatusCode responseCode = await _gastronomyHttpClient.UpdateMenu(menuUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),
@@ -179,10 +210,16 @@ public class GastronomyMenusController : ApiControllerBase
         try
         {
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
 
-            var menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
-            if (menus is null) return NotFound();
+            List<MenuServiceDto> menus = await _gastronomyHttpClient.GetPaginatedMenus(key, cursor, take);
+            if (menus is null)
+            {
+                return NotFound();
+            }
 
             return Ok(_mapper.Map<List<MenuDto>>(menus));
         }
@@ -198,12 +235,16 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            var menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
+            MenuDishUpdateDto menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
             menuDishUpdateDto.AccessKey = key;
 
-            var responseCode = await _gastronomyHttpClient.AddDishToMenu(menuDishUpdateDto);
+            HttpStatusCode responseCode = await _gastronomyHttpClient.AddDishToMenu(menuDishUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.OK => Ok(),
@@ -225,12 +266,16 @@ public class GastronomyMenusController : ApiControllerBase
     {
         try
         {
-            var menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
+            MenuDishUpdateDto menuDishUpdateDto = _mapper.Map<MenuDishUpdateDto>(menuDishUpdatePayload);
             var key = _userRepository.GetUserAccessKey(UserId);
-            if (string.IsNullOrEmpty(key)) return BadRequest();
+            if (string.IsNullOrEmpty(key))
+            {
+                return BadRequest();
+            }
+
             menuDishUpdateDto.AccessKey = key;
 
-            var responseCode = await _gastronomyHttpClient.RemoveDishFromMenu(menuDishUpdateDto);
+            HttpStatusCode responseCode = await _gastronomyHttpClient.RemoveDishFromMenu(menuDishUpdateDto);
             return responseCode switch
             {
                 HttpStatusCode.NoContent => NoContent(),

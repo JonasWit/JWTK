@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using VappsMobile.AppConfig;
 using VappsMobile.CustomControls;
 using VappsMobile.Models.GeneralModels;
 using VappsMobile.Services;
@@ -52,11 +53,18 @@ namespace VappsMobile.ViewModels
 
                 throw new Exception();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await Shell.Current.GoToAsync(nameof(ErrorModalPage), true, new Dictionary<string, object>
+                await Shell.Current.GoToAsync(nameof(DefaultModalPage), true, new Dictionary<string, object>
                 {
-                    {"ErrorModalContent", new ErrorModalContent{ Message = "Logowanie nie powiodło się", Exception = ex} }
+                    {
+                        "ErrorModalContent", new DefaultModalContent
+                        {
+                            Message = "Logowanie nie powiodło się",
+                            Icon = Icons.Error,
+                            OnClickAction = () => Shell.Current.GoToAsync("..")
+                        }
+                    }
                 });
             }
             finally

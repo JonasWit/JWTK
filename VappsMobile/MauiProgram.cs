@@ -62,8 +62,8 @@ namespace VappsMobile
             _ = builder.Services.AddSingleton<SettingsPage>();
             _ = builder.Services.AddSingleton<SettingsPageViewModel>();
 
-            _ = builder.Services.AddTransient<ErrorModalPage>();
-            _ = builder.Services.AddTransient<ErrorModalPageViewModel>();
+            _ = builder.Services.AddTransient<DefaultModalPage>();
+            _ = builder.Services.AddTransient<DefaultModalPageViewModel>();
 
             // Auth
             _ = builder.Services.AddSingleton<LoginPage>();

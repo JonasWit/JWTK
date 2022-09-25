@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 using SystemyWP.API.Constants;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
@@ -13,12 +13,12 @@ namespace SystemyWP.API.Controllers.MasterService;
 [Route("[controller]")]
 public class HealthController : ApiControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
     private readonly GastronomyHttpClient _gastronomyHttpClient;
     private readonly ILogger<HealthController> _logger;
 
     public HealthController(
-        IUserRepository userRepository,
+        UserRepository userRepository,
         GastronomyHttpClient gastronomyHttpClient,
         ILogger<HealthController> logger)
     {
@@ -26,7 +26,7 @@ public class HealthController : ApiControllerBase
         _gastronomyHttpClient = gastronomyHttpClient;
         _logger = logger;
     }
-    
+
     [DisableCors]
     [HttpGet]
     public async Task<IActionResult> Get()

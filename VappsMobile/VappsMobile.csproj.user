@@ -38,7 +38,7 @@
     <MauiXaml Update="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\Popups\ErrorModalPage.xaml">
+    <MauiXaml Update="Views\Popups\DefaultModalPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\RegisterPage.xaml">

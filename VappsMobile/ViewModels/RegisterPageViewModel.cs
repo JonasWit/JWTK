@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using VappsMobile.AppConfig;
 using VappsMobile.Models.GeneralModels;
 using VappsMobile.Services;
 using VappsMobile.Views.Popups;
@@ -18,16 +19,9 @@ namespace VappsMobile.ViewModels
         private string _password;
 
         [ObservableProperty]
-        private string _test;
-
-        [ObservableProperty]
         private string _confirmPassword;
 
-        public RegisterPageViewModel(AuthService authService)
-        {
-            _test = "TEST";
-            _authService = authService;
-        }
+        public RegisterPageViewModel(AuthService authService) => _authService = authService;
 
         [RelayCommand]
         public async Task SignUp()
@@ -40,13 +34,35 @@ namespace VappsMobile.ViewModels
 
             try
             {
-
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.GoToAsync(nameof(ErrorModalPage), true, new Dictionary<string, object>
+                if (await _authService.SignUp(_email, _password))
                 {
-                    {"ErrorModalContent", new ErrorModalContent{ Message = "Logowanie nie powiodło się", Exception = ex} }
+                    await Shell.Current.GoToAsync($"../{nameof(DefaultModalPage)}", true, new Dictionary<string, object>
+                    {
+                        {
+                            "DefaultModalContent", new DefaultModalContent
+                            {
+                                Message = "Rejestracja powiodła się, potwierdź rejestracjęklikając link w otrzymanym mailu",
+                                Icon = Icons.Done,
+                                OnClickAction = () => Shell.Current.GoToAsync("..")
+                            }
+                        }
+                    });
+                }
+
+                throw new Exception();
+            }
+            catch (Exception)
+            {
+                await Shell.Current.GoToAsync(nameof(DefaultModalPage), true, new Dictionary<string, object>
+                {
+                    {
+                        "DefaultModalContent", new DefaultModalContent
+                        {
+                            Message = "Rejestracja nie powiodła się, sprawdź połączenie z internetem",
+                            Icon = Icons.Error,
+                            OnClickAction = () => Shell.Current.GoToAsync("..")
+                        }
+                    }
                 });
             }
             finally
