@@ -11,4 +11,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    <Application.MainPage>
+
+
+
+
+
+    </Application.MainPage>
 </Application>

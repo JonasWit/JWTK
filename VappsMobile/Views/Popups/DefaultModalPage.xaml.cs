@@ -1,13 +1,14 @@
+using VappsMobile.CustomAttributes;
+using VappsMobile.ViewModels;
+
 namespace VappsMobile.Views.Popups;
 
+[ServiceRegistrationType(ServiceLifetime.Transient)]
 public partial class DefaultModalPage : ContentPage
 {
-	private readonly DefaultModalPage _defaultModalPage;
-
-	public DefaultModalPage(DefaultModalPage defaultModalPage)
+	public DefaultModalPage(DefaultModalPageViewModel defaultModalPageViewModel)
 	{
 		InitializeComponent();
-		_defaultModalPage = defaultModalPage;
-		BindingContext = _defaultModalPage;
+		BindingContext = defaultModalPageViewModel;
 	}
 }

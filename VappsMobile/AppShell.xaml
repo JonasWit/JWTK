@@ -6,6 +6,9 @@
     xmlns:config="clr-namespace:VappsMobile.AppConfig"
     xmlns:local="clr-namespace:VappsMobile"
     xmlns:views="clr-namespace:VappsMobile.Views"
+    xmlns:vms="clr-namespace:VappsMobile.ViewModels"
+    x:Name="Shell"
+    x:DataType="vms:ShellViewModel"
     BackgroundColor="Transparent"
     FlyoutBackgroundColor="{DynamicResource DefaultBackground}"
     FlyoutBackgroundImageAspect="AspectFill"
@@ -18,22 +21,20 @@
         Route="LoginPage"
         Shell.FlyoutBehavior="Disabled" />
 
-    <!--<ShellContent
-        Title="Intro"
-        ContentTemplate="{DataTemplate views:IntroPage}"
-        FlyoutItemIsVisible="False"
-        Route="IntroPage"
-        Shell.FlyoutBehavior="Disabled" />-->
-
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="VappsMasterPage">
+
         <ShellContent
             Title="Aplikacje"
             ContentTemplate="{DataTemplate views:VappsMasterPage}"
-            Icon="{x:Static config:Icons.VappsTransparent}" />
+            Icon="{x:Static config:Icons.VappsDefault}" />
         <ShellContent Title="Kontakt" ContentTemplate="{DataTemplate views:ContactPage}" />
         <ShellContent Title="O Nas" ContentTemplate="{DataTemplate views:AboutPage}" />
         <ShellContent Title="Ustawienia" ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
+
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout />
+    </Shell.FlyoutHeader>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20">
@@ -44,5 +45,4 @@
                 TextColor="{DynamicResource Secondary}" />
         </StackLayout>
     </Shell.FlyoutFooter>
-
 </Shell>

@@ -1,8 +1,10 @@
+using VappsMobile.CustomAttributes;
 using VappsMobile.Services;
 using VappsMobile.ViewModels;
 
 namespace VappsMobile.Views;
 
+[ServiceRegistrationType(ServiceLifetime.Transient)]
 public partial class LoginPage : ContentPage
 {
 	private readonly LoginPageViewModel _loginPageViewModel;

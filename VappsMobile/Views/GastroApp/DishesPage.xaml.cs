@@ -4,11 +4,11 @@ using VappsMobile.ViewModels.GastroApp;
 namespace VappsMobile.Views.GastroApp;
 
 [ServiceRegistrationType(ServiceLifetime.Singleton)]
-public partial class GastroAppMasterPage : ContentPage
+public partial class DishesPage : ContentPage
 {
-	public GastroAppMasterPage(GastroAppMasterPageViewModel gastroAppMasterPageViewModel)
+	public DishesPage(DishesPageViewModel dishesPageViewModel)
 	{
 		InitializeComponent();
-		BindingContext = gastroAppMasterPageViewModel;
+		BindingContext = dishesPageViewModel;
 	}
 }

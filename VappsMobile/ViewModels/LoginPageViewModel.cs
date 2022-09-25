@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VappsMobile.AppConfig;
-using VappsMobile.CustomControls;
 using VappsMobile.Models.GeneralModels;
 using VappsMobile.Services;
 using VappsMobile.Views;
@@ -46,7 +45,6 @@ namespace VappsMobile.ViewModels
             {
                 if (await _authService.SignIn(_email, _password, _rememberMe))
                 {
-                    Shell.Current.FlyoutHeader = new FlyoutHeader(_userService.UserInfo.Email);
                     await Shell.Current.GoToAsync($"//{nameof(VappsMasterPage)}");
                     return;
                 }

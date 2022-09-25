@@ -1,7 +1,9 @@
+using VappsMobile.CustomAttributes;
 using VappsMobile.Services;
 
 namespace VappsMobile.Views;
 
+[ServiceRegistrationType(ServiceLifetime.Transient)]
 public partial class IntroPage : ContentPage
 {
     private readonly AuthService _authService;

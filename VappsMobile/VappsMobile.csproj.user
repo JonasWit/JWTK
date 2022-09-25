@@ -26,13 +26,19 @@
     <MauiXaml Update="Views\ForgotPasswordPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\GastroApp\DishesPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\GastroApp\GastroAppMasterPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\IntroPage.xaml">
+    <MauiXaml Update="Views\GastroApp\IngredientsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\LoadingPage.xaml">
+    <MauiXaml Update="Views\GastroApp\MenusPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\IntroPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\LoginPage.xaml">

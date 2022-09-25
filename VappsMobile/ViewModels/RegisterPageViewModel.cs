@@ -36,17 +36,18 @@ namespace VappsMobile.ViewModels
             {
                 if (await _authService.SignUp(_email, _password))
                 {
-                    await Shell.Current.GoToAsync($"../{nameof(DefaultModalPage)}", true, new Dictionary<string, object>
+                    await Shell.Current.GoToAsync($"{nameof(DefaultModalPage)}", true, new Dictionary<string, object>
                     {
                         {
                             "DefaultModalContent", new DefaultModalContent
                             {
                                 Message = "Rejestracja powiodła się, potwierdź rejestracjęklikając link w otrzymanym mailu",
                                 Icon = Icons.Done,
-                                OnClickAction = () => Shell.Current.GoToAsync("..")
+                                OnClickAction = () => Shell.Current.GoToAsync("../..")
                             }
                         }
                     });
+                    return;
                 }
 
                 throw new Exception();

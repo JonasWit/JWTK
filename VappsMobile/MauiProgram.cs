@@ -1,13 +1,11 @@
 ﻿using System.Net.Http.Headers;
+using System.Reflection;
 using VappsMobile.AppConfig;
+using VappsMobile.CustomAttributes;
 using VappsMobile.CustomControls;
 using VappsMobile.Policies;
 using VappsMobile.Services;
 using VappsMobile.ViewModels;
-using VappsMobile.ViewModels.GastroApp;
-using VappsMobile.Views;
-using VappsMobile.Views.GastroApp;
-using VappsMobile.Views.Popups;
 
 namespace VappsMobile
 {
@@ -43,6 +41,54 @@ namespace VappsMobile
             ApiConfig.HttpClientsNames.HealthClient,
             httpClient => { httpClient.BaseAddress = new Uri($"{url}/{ApiConfig.ApiHealthController.BasePath}/"); httpClient.Timeout = TimeSpan.FromSeconds(15); });
 
+            IEnumerable<TypeInfo> appDefinedTypes = typeof(MauiProgram).Assembly.DefinedTypes;
+
+            var pages = appDefinedTypes
+                   .Where(t => t.Name.Contains("Page") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ContentPage)) && t.GetCustomAttribute(typeof(ServiceRegistrationType)) != null)
+                   .Select(t => t.AsType())
+                   .ToList();
+
+            var viewModels = appDefinedTypes
+                   .Where(t => t.Name.Contains("ViewModel") && !t.Name.Contains("Base") && t.IsSubclassOf(typeof(ViewModelBase)))
+                   .Select(t => t.AsType())
+                   .ToList();
+
+            foreach (Type page in pages)
+            {
+                var registrationType = page.GetCustomAttribute(typeof(ServiceRegistrationType)) as ServiceRegistrationType;
+                Type vm = viewModels.FirstOrDefault(vm => vm.Name.Equals($"{page.Name}ViewModel"));
+
+                switch (registrationType.Lifetime)
+                {
+                    case ServiceLifetime.Singleton:
+                        _ = builder.Services.AddSingleton(page);
+                        if (vm is not null)
+                        {
+                            _ = builder.Services.AddSingleton(vm);
+                        }
+
+                        break;
+                    case ServiceLifetime.Scoped:
+                        _ = builder.Services.AddScoped(page);
+                        if (vm is not null)
+                        {
+                            _ = builder.Services.AddScoped(vm);
+                        }
+
+                        break;
+                    case ServiceLifetime.Transient:
+                        _ = builder.Services.AddTransient(page);
+                        if (vm is not null)
+                        {
+                            _ = builder.Services.AddTransient(vm);
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             // Services
             _ = builder.Services.AddSingleton<AuthService>();
             _ = builder.Services.AddSingleton<HealthService>();
@@ -54,27 +100,27 @@ namespace VappsMobile
 
             _ = builder.Services.AddSingleton<FlyoutHeader>();
 
-            _ = builder.Services.AddTransient<IntroPage>();
+            //_ = builder.Services.AddTransient<IntroPage>();
 
-            _ = builder.Services.AddSingleton<VappsMasterPage>();
-            _ = builder.Services.AddSingleton<VappsMasterPageViewModel>();
+            //_ = builder.Services.AddSingleton<VappsMasterPage>();
+            //_ = builder.Services.AddSingleton<VappsMasterPageViewModel>();
 
-            _ = builder.Services.AddSingleton<SettingsPage>();
-            _ = builder.Services.AddSingleton<SettingsPageViewModel>();
+            //_ = builder.Services.AddSingleton<SettingsPage>();
+            //_ = builder.Services.AddSingleton<SettingsPageViewModel>();
 
-            _ = builder.Services.AddTransient<DefaultModalPage>();
-            _ = builder.Services.AddTransient<DefaultModalPageViewModel>();
+            //_ = builder.Services.AddTransient<DefaultModalPage>();
+            //_ = builder.Services.AddTransient<DefaultModalPageViewModel>();
 
             // Auth
-            _ = builder.Services.AddSingleton<LoginPage>();
-            _ = builder.Services.AddSingleton<LoginPageViewModel>();
+            //_ = builder.Services.AddSingleton<LoginPage>();
+            //_ = builder.Services.AddSingleton<LoginPageViewModel>();
 
-            _ = builder.Services.AddSingleton<RegisterPage>();
-            _ = builder.Services.AddSingleton<RegisterPageViewModel>();
+            //_ = builder.Services.AddSingleton<RegisterPage>();
+            //_ = builder.Services.AddSingleton<RegisterPageViewModel>();
 
             // Gastro App
-            _ = builder.Services.AddSingleton<GastroAppMasterPageViewModel>();
-            _ = builder.Services.AddSingleton<GastroAppMasterPage>();
+            //_ = builder.Services.AddSingleton<GastroAppMasterPageViewModel>();
+            //_ = builder.Services.AddSingleton<GastroAppMasterPage>();
 
             _ = builder
                 .UseMauiApp<App>()
