@@ -1,12 +1,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using SystemyWP.API.Controllers.MasterService;
+using SystemyWP.API.Data.DTOs.Gastronomy;
 using SystemyWP.API.Data.DTOs.Gastronomy.Ingredients;
 using SystemyWP.API.Data.DTOs.General;
 using SystemyWP.API.Data.Repositories;
@@ -93,10 +94,6 @@ public class GastronomyIngredientsController : ApiControllerBase
     }
 
     [HttpGet("list", Name = "GetIngredients")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetIngredients()
     {
         try
@@ -107,7 +104,7 @@ public class GastronomyIngredientsController : ApiControllerBase
                 return BadRequest();
             }
 
-            System.Collections.Generic.List<IngredientDto> ingredients = await _gastronomyHttpClient.GetIngredients(key);
+            List<IngredientDto> ingredients = await _gastronomyHttpClient.GetIngredients(key);
             if (ingredients is null)
             {
                 return NotFound();
@@ -133,7 +130,7 @@ public class GastronomyIngredientsController : ApiControllerBase
                 return BadRequest();
             }
 
-            Data.DTOs.Gastronomy.ElementCountDto ingredients = await _gastronomyHttpClient.CountIngredients(key);
+            ElementCountDto ingredients = await _gastronomyHttpClient.CountIngredients(key);
             if (ingredients is null)
             {
                 return NotFound();
@@ -159,7 +156,7 @@ public class GastronomyIngredientsController : ApiControllerBase
                 return BadRequest();
             }
 
-            System.Collections.Generic.List<IngredientDto> ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
+            List<IngredientDto> ingredients = await _gastronomyHttpClient.GetPaginatedIngredients(key, cursor, take);
             if (ingredients is null)
             {
                 return NotFound();

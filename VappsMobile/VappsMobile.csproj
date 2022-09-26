@@ -55,6 +55,7 @@
 	  <None Remove="Resources\Images\GastroApka\icons8_ingredients_100.png" />
 	  <None Remove="Resources\Images\GastroApka\icons8_meal_100.png" />
 	  <None Remove="Resources\Images\GastroApka\icons8_menu_vertical_100.png" />
+	  <None Remove="Resources\Images\Generic\icons8_cancel_100.png" />
 	  <None Remove="Resources\Images\Generic\icons8_done_100.png" />
 	</ItemGroup>
 
@@ -70,7 +71,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Behaviours\" />
-	  <Folder Include="Models\GastroAppModels\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,6 +93,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\GastroApp\IngredientsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\GastroApp\IngredientsUpdatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\GastroApp\MenusPage.xaml">

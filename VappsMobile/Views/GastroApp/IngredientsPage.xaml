@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:config="clr-namespace:VappsMobile.AppConfig"
+    xmlns:models="clr-namespace:VappsMobile.Models.GastroAppModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vms="clr-namespace:VappsMobile.ViewModels.GastroApp"
     Title="Składniki"
@@ -11,10 +12,55 @@
     Shell.BackgroundColor="{DynamicResource Tertiary}"
     Shell.NavBarIsVisible="True"
     Style="{StaticResource DefaultPage}">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="ingredients"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="*, 20">
+        <CollectionView
+            Grid.Row="0"
+            ItemsSource="{Binding IngredientDtos}"
+            SelectionMode="None">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="100">
+                    <Image
+                        HorizontalOptions="CenterAndExpand"
+                        Source="{x:Static config:Icons.Error}"
+                        VerticalOptions="CenterAndExpand" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:IngredientDto">
+                    <Grid Padding="10">
+                        <Frame HeightRequest="125" Style="{StaticResource CardView}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MonkeysViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <Grid Padding="0" ColumnDefinitions="125,*">
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="125"
+                                    Source="{Binding Image}"
+                                    WidthRequest="125" />
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Padding="10"
+                                    VerticalOptions="Center">
+                                    <Label Style="{StaticResource LargeLabel}" Text="{Binding Name}" />
+                                    <Label Style="{StaticResource MediumLabel}" Text="{Binding Description}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+
+
+        <Border
+            Grid.Row="1"
+            Margin="0"
+            Padding="0"
+            BackgroundColor="PaleVioletRed" />
+
+    </Grid>
 </ContentPage>
