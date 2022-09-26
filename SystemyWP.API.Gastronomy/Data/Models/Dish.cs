@@ -12,6 +12,8 @@ public record Dish : BaseModel
     [MaxLength(AppConstants.DataLimits.DescriptionLimit)]
     public string Description { get; set; } = "";
 
+    public string Image { get; set; }
+
     public List<Ingredient> Ingredients { get; set; } = new();
 
     public List<Menu> Menus { get; set; } = new();

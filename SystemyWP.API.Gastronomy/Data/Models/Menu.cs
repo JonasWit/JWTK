@@ -12,6 +12,8 @@ namespace SystemyWP.API.Gastronomy.Data.Models
         [MaxLength(AppConstants.DataLimits.DescriptionLimit)]
         public string Description { get; set; } = "";
 
+        public string Image { get; set; }
+
         public List<Dish> Dishes { get; set; } = new();
     }
 }
