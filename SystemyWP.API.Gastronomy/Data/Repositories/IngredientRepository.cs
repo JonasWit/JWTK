@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using SystemyWP.API.Gastronomy.Data.DTOs;
 using SystemyWP.API.Gastronomy.Data.Models;
 using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
@@ -14,51 +14,47 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
     {
     }
 
-    public void CreateIngredient(Ingredient ingredient)
-    {
-        _context.Add(ingredient);
-    }
+    public void CreateIngredient(Ingredient ingredient) => _context.Add(ingredient);
 
-    public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass)
-    {
-        return _context.Ingredients
+    public Task<Ingredient> GetIngredient(ResourceAccessPass resourceAccessPass) => _context.Ingredients
             .FilterAllowedEntity(resourceAccessPass).FirstOrDefaultAsync();
-    }
 
-    public Task<List<Ingredient>> GetIngredients(string accessKey)
-    {
-        return _context.Ingredients
+    public Task<List<Ingredient>> GetIngredients(string accessKey) => _context.Ingredients
             .FilterAllowedEntities(accessKey)
             .ToListAsync();
-    }
 
-    public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take)
-    {
-        return _context.Ingredients
+    public Task<List<Ingredient>> GetIngredients(string accessKey, int cursor, int take) => _context.Ingredients
             .FilterAllowedEntities(accessKey)
             .OrderBy(x => x.Id)
             .Skip(cursor)
             .Take(take)
             .ToListAsync();
-    }
 
     public void RemoveIngredient(ResourceAccessPass resourceAccessPass)
     {
-        var ingredient = _context.Ingredients
+        Ingredient ingredient = _context.Ingredients
             .FilterAllowedEntity(resourceAccessPass)
             .FirstOrDefault();
-        if (ingredient is null) return;
-        _context.Remove(ingredient);
+        if (ingredient is null)
+        {
+            return;
+        }
+
+        _ = _context.Remove(ingredient);
     }
 
     public void UpdateIngredient(Ingredient ingredient)
     {
-        var entity =
+        Ingredient entity =
             _context.Ingredients
                 .FilterAllowedEntity(ingredient.Id, ingredient.AccessKey)
                 .FirstOrDefault();
-        if (entity is null) return;
+        if (entity is null)
+        {
+            return;
+        }
 
+        entity.Image = ingredient.Image;
         entity.Description = ingredient.Description;
         entity.Name = ingredient.Name;
         entity.MeasurementUnits = ingredient.MeasurementUnits;
@@ -67,8 +63,5 @@ public class IngredientRepository : RepositoryBase<AppDbContext>, IIngredientRep
         entity.Category = ingredient.Category;
     }
 
-    public Task<int> CountIngredients(string accessKey)
-    {
-        return _context.Ingredients.CountAsync(d => d.AccessKey == accessKey);
-    }
+    public Task<int> CountIngredients(string accessKey) => _context.Ingredients.CountAsync(d => d.AccessKey == accessKey);
 }
