@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Logistics.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsMobile", "VappsMobile\VappsMobile.csproj", "{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VappsWeb", "VappsWeb\VappsWeb.csproj", "{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsWeb", "VappsWeb\VappsWeb.csproj", "{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWASMSandbox", "BlazorWASMSandbox\BlazorWASMSandbox.csproj", "{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
