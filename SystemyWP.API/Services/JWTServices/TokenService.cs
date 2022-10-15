@@ -61,7 +61,7 @@ public class TokenService
             _optionsMonitor.CurrentValue.Audience,
             claims,
             DateTime.UtcNow,
-            DateTime.UtcNow.AddDays(14),
+            DateTime.UtcNow.AddMonths(1),
             signingCredentials);
 
         var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);

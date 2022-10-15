@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using BlazorWASMSandbox;
+using BlazorWASMSandbox.Services;
 using BlazorWASMSandbox.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,6 +12,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<NumberViewModel>();
+
+builder.Services.AddSingleton<TokenService>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthorizationCore();
