@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsMobile", "VappsMobile\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsWeb", "VappsWeb\VappsWeb.csproj", "{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWASMSandbox", "BlazorWASMSandbox\BlazorWASMSandbox.csproj", "{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWASMSandbox", "BlazorWASMSandbox\BlazorWASMSandbox.csproj", "{E57A3CA7-ACA1-4624-BA29-551F51E0C7AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
