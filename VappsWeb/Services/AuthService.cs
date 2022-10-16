@@ -1,7 +1,7 @@
-﻿using Blazored.LocalStorage;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using VappsWeb.Config;
 using VappsWeb.Models;
+using VappsWeb.Services.Interfaces;
 
 namespace VappsWeb.Services
 {
@@ -9,20 +9,21 @@ namespace VappsWeb.Services
     {
         private readonly HttpClient _httpClient;
         private readonly HttpClientPolicy _httpClientPolicy;
-        private readonly ILocalStorageService _localStorage;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(HttpClient httpClient, HttpClientPolicy httpClientPolicy, ILocalStorageService LocalStorage)
+        public AuthService(HttpClient httpClient, HttpClientPolicy httpClientPolicy, ITokenService tokenService)
         {
             _httpClient = httpClient;
             _httpClientPolicy = httpClientPolicy;
-            _localStorage = LocalStorage;
+            _tokenService = tokenService;
         }
 
         public async Task<bool> SignIn(string email, string password)
         {
             try
             {
-                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() => _httpClient.PostAsJsonAsync(AppConfig.ApiRoutes.LoginPath, new { Email = email, Password = password }));
+                HttpResponseMessage response = await _httpClientPolicy.ExponentialHttpRetry.ExecuteAsync(() =>
+                    _httpClient.PostAsJsonAsync(AppConfig.ApiRoutes.LoginPath, new { Email = email, Password = password }));
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     return false;
@@ -34,13 +35,12 @@ namespace VappsWeb.Services
                     return false;
                 }
 
-                await _localStorage.SetItemAsync(AppConfig.LocalStoreItems.AuthorizationToken, token);
+                await _tokenService.StoreToken(token);
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
                 return false;
             }
         }

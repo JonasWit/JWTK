@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using VappsWeb;
 using VappsWeb.Config;
 using VappsWeb.Services;
+using VappsWeb.Services.Interfaces;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -26,6 +27,7 @@ if (builder.HostEnvironment.IsDevelopment())
 builder.Services.AddMudServices();
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddBlazoredLocalStorage();
 await builder.Build().RunAsync();

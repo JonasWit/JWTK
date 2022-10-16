@@ -11,11 +11,11 @@
                 <MudCardContent>
                     <MudTextField Label="Email" Class="mt-3"
                                   @bind-Value="_model.Email" For="@(() => _model.Email)" />
-                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                    <MudTextField Label="Password" Class="mt-3"
                                   @bind-Value="_model.Password" For="@(() => _model.Password)" InputType="InputType.Password" />
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Sign In</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>

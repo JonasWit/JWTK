@@ -36,12 +36,12 @@ namespace VappsWeb.Pages
         {
             if (await AuthService.SignIn(_model.Email, _model.Password))
             {
-                _ = Snackbar.Add("Zalogowano", Severity.Success);
+                _ = Snackbar.Add("Logged in!", Severity.Success);
                 Navigation.NavigateTo("/");
                 return;
             }
 
-            _ = Snackbar.Add("Logowanie nie powiodło się", Severity.Error);
+            _ = Snackbar.Add("Sign in failed! Please try again", Severity.Error);
             StateHasChanged();
         }
     }

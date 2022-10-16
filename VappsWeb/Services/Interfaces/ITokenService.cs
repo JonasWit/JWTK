@@ -1,14 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using VappsWeb.Models;
 
 namespace VappsWeb.Services.Interfaces
 {
     public interface ITokenService
     {
-        string GetTokenFromStore();
-        bool StoreToken(string token);
-        bool ValidateToken(string token);
+        ValueTask<AuthorizeResponse> GetTokenFromStore();
+        ValueTask StoreToken(AuthorizeResponse token);
+        bool ValidateToken(AuthorizeResponse token);
         bool ValidateStoredToken();
-        JwtSecurityToken ExtractToken(string token);
+        JwtSecurityToken ExtractToken(AuthorizeResponse token);
         JwtSecurityToken? ExtractStoredToken();
     }
 }
