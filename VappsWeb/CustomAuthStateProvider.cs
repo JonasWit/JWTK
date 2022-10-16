@@ -1,46 +1,51 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using VappsWeb.Models;
+using VappsWeb.Services.Interfaces;
 
 namespace VappsWeb
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
-        private readonly ILocalStorageService _localStorage;
+        private readonly ITokenService _tokenService;
         private readonly HttpClient _http;
 
-        public CustomAuthStateProvider(ILocalStorageService localStorage, HttpClient http)
+        public CustomAuthStateProvider(ITokenService tokenService, HttpClient http)
         {
-            _localStorage = localStorage;
+            _tokenService = tokenService;
             _http = http;
         }
 
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-
-            var token = string.Empty;
-
+            AuthorizeResponse? authResponse = await _tokenService.GetTokenFromStore();
             var identity = new ClaimsIdentity();
-            _http.DefaultRequestHeaders.Authorization = null;
 
-            if (!string.IsNullOrEmpty(token))
+            if (authResponse is null)
             {
-                JwtSecurityToken securityToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
-                _ = securityToken.ValidTo;
+                _http.DefaultRequestHeaders.Authorization = null;
+                var cp = new ClaimsPrincipal(identity);
+                var st = new AuthenticationState(cp);
 
-                identity = new ClaimsIdentity(securityToken.Claims, "jwt");
-                _http.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
+                NotifyAuthenticationStateChanged(Task.FromResult(st));
+                return st;
             }
+
+            JwtSecurityToken securityToken = new JwtSecurityTokenHandler().ReadJwtToken(authResponse.Token);
+            _ = securityToken.ValidTo;
+
+            identity = new ClaimsIdentity(securityToken.Claims, "jwt");
+            _http.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", authResponse.Token);
 
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);
 
             NotifyAuthenticationStateChanged(Task.FromResult(state));
 
-            return Task.FromResult(state);
+            return state;
 
             //var identity = new ClaimsIdentity();
             //_http.DefaultRequestHeaders.Authorization = null;
