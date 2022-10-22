@@ -46,23 +46,6 @@ namespace VappsWeb
             NotifyAuthenticationStateChanged(Task.FromResult(state));
 
             return state;
-
-            //var identity = new ClaimsIdentity();
-            //_http.DefaultRequestHeaders.Authorization = null;
-
-            //if (!string.IsNullOrEmpty(token))
-            //{
-            //    identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
-            //    _http.DefaultRequestHeaders.Authorization =
-            //        new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
-            //}
-
-            //var user = new ClaimsPrincipal(identity);
-            //var state = new AuthenticationState(user);
-
-            //NotifyAuthenticationStateChanged(Task.FromResult(state));
-
-            //return Task.FromResult(state);
         }
     }
 }
