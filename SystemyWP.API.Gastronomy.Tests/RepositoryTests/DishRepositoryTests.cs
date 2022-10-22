@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.Data.Repositories;
-using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
-using SystemyWP.API.Gastronomy.Tests.Utilities;
+using MasterService.API.Gastronomy.Data;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.Repositories;
+using MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+using MasterService.API.Gastronomy.Tests.Utilities;
 using Xunit;
 
-namespace SystemyWP.API.Gastronomy.Tests.RepositoryTests;
+namespace MasterService.API.Gastronomy.Tests.RepositoryTests;
 
 public class DishRepositoryTests
 {

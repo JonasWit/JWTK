@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace SystemyWP.API.Gastronomy.Controllers;
+namespace MasterService.API.Gastronomy.Controllers;
 
 [ApiController]
 [Route("[controller]")]

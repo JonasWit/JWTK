@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SystemyWP.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.DTOs;
 
-namespace SystemyWP.API.Gastronomy.Data.Models
+namespace MasterService.API.Gastronomy.Data.Models
 {
     public record Ingredient : BaseModel
     {

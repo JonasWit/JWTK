@@ -1,12 +1,12 @@
 using System.Linq;
 using AutoMapper;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
-using SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.DTOs.DishDTOs;
+using MasterService.API.Gastronomy.Data.DTOs.IngredientDTOs;
+using MasterService.API.Gastronomy.Data.DTOs.MenuDTOs;
+using MasterService.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.API.Gastronomy.Profiles;
+namespace MasterService.API.Gastronomy.Profiles;
 
 public class RestaurantAppProfile : Profile
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SystemyWP.API.Gastronomy.Data.Models;
+namespace MasterService.API.Gastronomy.Data.Models;
 
 public abstract record BaseModel
 {

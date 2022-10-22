@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace SystemyWP.API.Gastronomy.Middleware
+namespace MasterService.API.Gastronomy.Middleware
 {
     public static class ServiceStatusMiddlewareExtensions
     {

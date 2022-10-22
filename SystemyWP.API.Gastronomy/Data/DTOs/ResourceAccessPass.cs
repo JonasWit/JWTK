@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Gastronomy.Data.DTOs;
+namespace MasterService.API.Gastronomy.Data.DTOs;
 
 public class ResourceAccessPass
 {

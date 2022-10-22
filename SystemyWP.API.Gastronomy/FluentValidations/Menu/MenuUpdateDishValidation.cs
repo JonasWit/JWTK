@@ -1,7 +1,7 @@
 using FluentValidation;
-using SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
+using MasterService.API.Gastronomy.Data.DTOs.MenuDTOs;
 
-namespace SystemyWP.API.Gastronomy.FluentValidations.Menu;
+namespace MasterService.API.Gastronomy.FluentValidations.Menu;
 
 public class MenuUpdateDishValidation: AbstractValidator<MenuDishUpdateDto>
 {

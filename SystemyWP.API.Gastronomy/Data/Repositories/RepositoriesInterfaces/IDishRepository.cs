@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+namespace MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
 public interface IDishRepository : IRepositoryBase
 {

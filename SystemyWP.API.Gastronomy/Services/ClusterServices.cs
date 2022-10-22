@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Gastronomy.Services;
+namespace MasterService.API.Gastronomy.Services;
 
 public class ClusterServices
 {

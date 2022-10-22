@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
-using SystemyWP.API.Gastronomy.Tests.Utilities;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.DTOs.IngredientDTOs;
+using MasterService.API.Gastronomy.Tests.Utilities;
 using Xunit;
 
-namespace SystemyWP.API.Gastronomy.Tests.ControllerTests;
+namespace MasterService.API.Gastronomy.Tests.ControllerTests;
 
 public class ControllersTests
 {

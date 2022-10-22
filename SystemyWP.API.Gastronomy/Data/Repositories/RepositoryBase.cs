@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+using MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
-namespace SystemyWP.API.Gastronomy.Data.Repositories;
+namespace MasterService.API.Gastronomy.Data.Repositories;
 
 public abstract class RepositoryBase<TContext> : IRepositoryBase where TContext : DbContext 
 {

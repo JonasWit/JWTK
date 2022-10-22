@@ -1,7 +1,7 @@
 using FluentValidation;
-using SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
+using MasterService.API.Gastronomy.Data.DTOs.IngredientDTOs;
 
-namespace SystemyWP.API.Gastronomy.FluentValidations.Ingredient;
+namespace MasterService.API.Gastronomy.FluentValidations.Ingredient;
 
 public class IngredientCreateDtoValidation : AbstractValidator<IngredientCreateDto>
 {

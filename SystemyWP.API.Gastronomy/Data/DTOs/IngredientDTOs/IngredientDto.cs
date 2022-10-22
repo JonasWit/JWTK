@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Gastronomy.Data.DTOs.IngredientDTOs;
+namespace MasterService.API.Gastronomy.Data.DTOs.IngredientDTOs;
 
 public class IngredientDto
 {

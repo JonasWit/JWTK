@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SystemyWP.API.Gastronomy.Data;
+namespace MasterService.API.Gastronomy.Data;
 
 public class DbManager
 {

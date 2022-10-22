@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SystemyWP.API.Gastronomy.Data.Models;
+namespace MasterService.API.Gastronomy.Data.Models;
 
 public record Dish : BaseModel
 {

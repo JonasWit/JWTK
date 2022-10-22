@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.DTOs.DishDTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
-using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.DTOs.DishDTOs;
+using MasterService.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
-namespace SystemyWP.API.Gastronomy.Controllers;
+namespace MasterService.API.Gastronomy.Controllers;
 
 [ApiController]
 [Route("[controller]")]

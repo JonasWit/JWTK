@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.API.Gastronomy.Tests.Utilities;
+namespace MasterService.API.Gastronomy.Tests.Utilities;
 
 public class GastronomySeed
 {

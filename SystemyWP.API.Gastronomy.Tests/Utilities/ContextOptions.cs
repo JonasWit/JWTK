@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace SystemyWP.API.Gastronomy.Tests.Utilities;
+namespace MasterService.API.Gastronomy.Tests.Utilities;
 
 public class ContextOptions
 {

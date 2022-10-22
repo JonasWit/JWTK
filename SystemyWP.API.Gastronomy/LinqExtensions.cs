@@ -1,8 +1,8 @@
 using System.Linq;
-using SystemyWP.API.Gastronomy.Data.DTOs;
-using SystemyWP.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.DTOs;
+using MasterService.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.API.Gastronomy;
+namespace MasterService.API.Gastronomy;
 
 public static class LinqExtensions
 {

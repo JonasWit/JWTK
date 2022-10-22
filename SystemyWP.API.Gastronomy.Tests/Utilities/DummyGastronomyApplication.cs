@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SystemyWP.API.Gastronomy.Data;
+using MasterService.API.Gastronomy.Data;
 
-namespace SystemyWP.API.Gastronomy.Tests.Utilities;
+namespace MasterService.API.Gastronomy.Tests.Utilities;
 
 internal class DummyGastronomyApplication : WebApplicationFactory<Program>
 {

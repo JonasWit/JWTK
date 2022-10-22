@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SystemyWP.API.Gastronomy.Data.Models;
+using MasterService.API.Gastronomy.Data.Models;
 
-namespace SystemyWP.API.Gastronomy.Data
+namespace MasterService.API.Gastronomy.Data
 {
     public class AppDbContext : DbContext
     {

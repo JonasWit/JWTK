@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+using MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
-namespace SystemyWP.API.Gastronomy.Controllers;
+namespace MasterService.API.Gastronomy.Controllers;
 
 [ApiController]
 [Route("[controller]")]

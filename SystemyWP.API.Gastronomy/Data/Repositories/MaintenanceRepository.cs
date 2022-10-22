@@ -1,7 +1,7 @@
 using System.Linq;
-using SystemyWP.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
+using MasterService.API.Gastronomy.Data.Repositories.RepositoriesInterfaces;
 
-namespace SystemyWP.API.Gastronomy.Data.Repositories;
+namespace MasterService.API.Gastronomy.Data.Repositories;
 
 public class MaintenanceRepository: RepositoryBase<AppDbContext>, IMaintenanceRepository
 {

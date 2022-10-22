@@ -1,4 +1,4 @@
-namespace SystemyWP.API.Gastronomy.Data.DTOs.MenuDTOs;
+namespace MasterService.API.Gastronomy.Data.DTOs.MenuDTOs;
 
 public class MenuBasicDto
 {
