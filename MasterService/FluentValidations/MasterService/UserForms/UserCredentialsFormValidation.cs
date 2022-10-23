@@ -1,13 +1,13 @@
-﻿using FluentValidation;
-using MasterService.API.Data.DTOs.General.UserForms;
+﻿using Domain.MasterServiceShared.DTOs;
+using FluentValidation;
 
-namespace MasterService.API.FluentValidations.MasterService.UserForms;
+namespace MasterService.FluentValidations.MasterService.UserForms;
 
 public class UserCredentialsFormValidation : AbstractValidator<UserCredentialsForm>
 {
     public UserCredentialsFormValidation()
     {
-        RuleFor(x => x.Email).NotEmpty().EmailAddress();
-        RuleFor(x => x.Password).NotEmpty().MinimumLength(12);
+        _ = RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        _ = RuleFor(x => x.Password).NotEmpty().MinimumLength(12);
     }
 }

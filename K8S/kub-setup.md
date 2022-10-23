@@ -13,6 +13,7 @@ docker push systemywp/master:gate
 docker push systemywp/master:gastronomy
 docker push systemywp/master:client
 
+docker run -p 8080:80 -d 'name'
 docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 systemywp/master:client_v1
 docker run -d -p 8080:80 --name myapp systemywp/master:gate_v2
 

@@ -1,4 +1,4 @@
-using MasterService.API.Data.DTOs.General.UserForms;
+using Domain.MasterServiceShared.DTOs;
 using MasterService.API.Services.JWTServices;
 using MasterService.Tests.Utilities;
 using Microsoft.Extensions.DependencyInjection;

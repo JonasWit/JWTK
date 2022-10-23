@@ -1,18 +1,18 @@
+using Domain.MasterServiceShared.DTOs;
+using MasterService.API.Constants;
+using MasterService.API.Data.DTOs.Gastronomy;
+using MasterService.API.Data.DTOs.Gastronomy.Dishes;
+using MasterService.API.Data.DTOs.Gastronomy.Ingredients;
+using MasterService.API.Data.DTOs.Gastronomy.Menus;
+using MasterService.API.Policies;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using MasterService.API.Constants;
-using MasterService.API.Data.DTOs.Gastronomy;
-using MasterService.API.Data.DTOs.Gastronomy.Dishes;
-using MasterService.API.Data.DTOs.Gastronomy.Ingredients;
-using MasterService.API.Data.DTOs.Gastronomy.Menus;
-using MasterService.API.Data.DTOs.General;
-using MasterService.API.Policies;
 
-namespace MasterService.API.Services.HttpServices;
+namespace MasterService.Services.HttpServices;
 
 public class GastronomyHttpClient
 {

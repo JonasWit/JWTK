@@ -1,12 +1,9 @@
+using Domain.MasterServiceShared.DTOs;
 using FluentValidation;
-using MasterService.API.Data.DTOs.General.UserForms;
 
-namespace MasterService.API.FluentValidations.MasterService.UserForms;
+namespace MasterService.FluentValidations.MasterService.UserForms;
 
 public class UserEmailFormValidation : AbstractValidator<UserEmailForm>
 {
-    public UserEmailFormValidation()
-    {
-        RuleFor(x => x.Email).NotEmpty().EmailAddress();
-    }
+    public UserEmailFormValidation() => RuleFor(x => x.Email).NotEmpty().EmailAddress();
 }

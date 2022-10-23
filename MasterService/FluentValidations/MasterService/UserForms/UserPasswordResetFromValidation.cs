@@ -1,5 +1,5 @@
+using Domain.Shared.MasterServiceShared.DTOs;
 using FluentValidation;
-using MasterService.API.Data.DTOs.General.UserForms;
 
 namespace MasterService.API.FluentValidations.MasterService.UserForms;
 

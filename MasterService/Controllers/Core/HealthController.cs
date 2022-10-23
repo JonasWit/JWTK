@@ -1,7 +1,7 @@
+using Domain.MasterServiceShared.DTOs;
 using MasterService.API.Constants;
-using MasterService.API.Data.DTOs.General;
-using MasterService.API.Data.Repositories;
-using MasterService.API.Services.HttpServices;
+using MasterService.Data.Repositories;
+using MasterService.Services.HttpServices;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

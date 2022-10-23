@@ -15,5 +15,9 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 		<PackageReference Include="Polly" Version="7.2.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Domain\Domain.csproj" />
 	</ItemGroup>	
 </Project>

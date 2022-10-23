@@ -1,11 +1,11 @@
 using AutoMapper;
+using Domain.MasterServiceShared.DTOs;
 using MasterService.API.Data.DTOs.Gastronomy;
 using MasterService.API.Data.DTOs.Gastronomy.Dishes;
-using MasterService.API.Data.DTOs.General;
-using MasterService.API.Data.Repositories;
-using MasterService.API.Services.HttpServices;
 using MasterService.API.Settings;
 using MasterService.Controllers.Core;
+using MasterService.Data.Repositories;
+using MasterService.Services.HttpServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

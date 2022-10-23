@@ -3,7 +3,7 @@ using AutoMapper;
 using MasterService.API.Data.DTOs.Gastronomy.Dishes;
 using MasterService.API.Data.DTOs.Gastronomy.Ingredients;
 using MasterService.API.Data.DTOs.Gastronomy.Menus;
-using MasterService.API.Services.HttpServices;
+using MasterService.Services.HttpServices;
 
 namespace MasterService.API.Profiles;
 

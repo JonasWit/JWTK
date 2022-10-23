@@ -39,6 +39,10 @@
 		<InternalsVisibleTo Include="SystemyWP.API.Tests" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Domain\Domain.csproj" />
+	</ItemGroup>
+
 	<ProjectExtensions>
 		<VisualStudio>
 			<UserProperties appsettings_1development_1json__JsonSchema="https://github.com/fbecart/zinoma/releases/latest/download/zinoma-schema.json" />

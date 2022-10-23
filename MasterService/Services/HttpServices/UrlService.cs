@@ -1,9 +1,9 @@
+using Domain.MasterServiceShared.DTOs;
+using MasterService.API.Settings;
 using Microsoft.Extensions.Options;
 using System;
-using MasterService.API.Data.DTOs.General;
-using MasterService.API.Settings;
 
-namespace MasterService.API.Services.HttpServices;
+namespace MasterService.Services.HttpServices;
 
 public class UrlService
 {

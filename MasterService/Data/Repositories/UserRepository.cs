@@ -1,14 +1,16 @@
+using Domain.MasterServiceShared.DTOs;
+using MasterService.API.Constants;
+using MasterService.API.Data;
+using MasterService.API.Data.Models;
+using MasterService.API.Data.Repositories;
+using MasterService.API.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using MasterService.API.Constants;
-using MasterService.API.Data.DTOs.General.UserForms;
-using MasterService.API.Data.Models;
-using MasterService.API.Services.Auth;
 
-namespace MasterService.API.Data.Repositories;
+namespace MasterService.Data.Repositories;
 
 public class UserRepository : RepositoryBase<AppDbContext>
 {
