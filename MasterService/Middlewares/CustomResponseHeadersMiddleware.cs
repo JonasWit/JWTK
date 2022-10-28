@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace MasterService.API.Middleware
+namespace MasterService.Middlewares
 {
     public static class CustomResponseHeadersMiddlewareExtensions
     {

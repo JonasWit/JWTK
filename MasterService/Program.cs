@@ -4,7 +4,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MasterService.API.Constants;
 using MasterService.API.Data;
-using MasterService.API.Middleware;
 using MasterService.API.Policies;
 using MasterService.API.Profiles;
 using MasterService.API.Services.Auth;
@@ -12,6 +11,7 @@ using MasterService.API.Services.Email;
 using MasterService.API.Services.JWTServices;
 using MasterService.API.Settings;
 using MasterService.Data.Repositories;
+using MasterService.Middlewares;
 using MasterService.Services.HttpServices;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -230,6 +230,7 @@ if (builder.Environment.IsProduction())
 }
 
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 // Build the app
 WebApplication app = builder.Build();
@@ -255,6 +256,8 @@ app.UseRouting();
 app.UseCors(AppConstants.CorsName.ClientApp);
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseEndpoints(endpoints => { _ = endpoints.MapDefaultControllerRoute(); });
 
