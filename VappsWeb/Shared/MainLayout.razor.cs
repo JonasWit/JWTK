@@ -1,5 +1,4 @@
 using MudBlazor;
-using VappsWeb.Config;
 
 namespace VappsWeb.Shared
 {
@@ -9,9 +8,9 @@ namespace VappsWeb.Shared
         {
             Palette = new Palette()
             {
-                Primary = AppConfig.Colors.Primary,
-                Secondary = AppConfig.Colors.Secondary,
-                AppbarBackground = AppConfig.Colors.Primary,
+                Primary = Colors.Blue.Darken4,
+                Secondary = Colors.Indigo.Darken4,
+                AppbarBackground = Colors.Blue.Darken4,
             },
         };
 
