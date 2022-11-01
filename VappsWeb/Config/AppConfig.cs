@@ -4,7 +4,8 @@
     {
         public struct LocalStoreItems
         {
-            public const string AuthorizationToken = "jwt_auth";
+            public const string AuthorizationToken = nameof(AuthorizationToken);
+            public const string Culture = "culture";
         }
 
         public struct ApiRoutes
