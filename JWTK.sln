@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Gastronomy", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemyWP.API.Gastronomy.Tests", "SystemyWP.API.Gastronomy.Tests\SystemyWP.API.Gastronomy.Tests.csproj", "{B780BAF5-30B2-4D39-8CB9-00009280342D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsMobile", "VappsMobile\VappsMobile.csproj", "{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VappsWeb", "VappsWeb\VappsWeb.csproj", "{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MasterService", "MasterService\MasterService.csproj", "{8D9F811A-2AA5-4A86-A61D-3CE8B35BE0D1}"
@@ -16,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MasterService.Tests", "MasterService.Tests\MasterService.Tests.csproj", "{7CA07102-4DE9-4080-8A76-FADBC735C34A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WASMWebNet7", "WASMWebNet7\WASMWebNet7.csproj", "{076FBCB1-0C56-4AC1-AB73-FAE7952121A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,12 +31,6 @@ Global
 		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B780BAF5-30B2-4D39-8CB9-00009280342D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BAC8323-8934-412C-8222-AFA1DC9D9AF1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E44E2F-8CFA-4EBA-B1C0-1A663254D9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +47,10 @@ Global
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{076FBCB1-0C56-4AC1-AB73-FAE7952121A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076FBCB1-0C56-4AC1-AB73-FAE7952121A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076FBCB1-0C56-4AC1-AB73-FAE7952121A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076FBCB1-0C56-4AC1-AB73-FAE7952121A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
