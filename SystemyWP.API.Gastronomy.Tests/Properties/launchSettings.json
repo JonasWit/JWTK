@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SystemyWP.API.Gastronomy.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58521;http://localhost:58522"
+    }
+  }
+}

@@ -11,13 +11,7 @@
         <MudSpacer />
         <MudSwitch @bind-Checked="@_isDarkMode" ThumbIcon="@(_isDarkMode==true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)" ThumbIconColor="@(_isDarkMode==true ? Color.Success : Color.Warning)"></MudSwitch>
 
-
-            <CultureDropdown></CultureDropdown>
-
-
-    
-
-
+ 
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>

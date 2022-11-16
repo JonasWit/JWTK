@@ -1,6 +1,13 @@
-﻿<MudNavMenu>
+﻿@using VappsWeb.Components.Localization
+
+<MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
     <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
     <MudNavLink Href="fetchdata" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Fetch data</MudNavLink>
     <MudNavLink Href="login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Login">Zaloguj się</MudNavLink>
+    
+ 
+            <CultureDropdown></CultureDropdown>
+
+ 
 </MudNavMenu>
