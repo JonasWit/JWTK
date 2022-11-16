@@ -14,5 +14,13 @@
             public const string MasterServiceDEV = @"http://localhost:5000";
             public const string LoginPath = @"/auth/authenticate";
         }
+
+        public struct CultureKeys
+        {
+            public const string EN = "en-US";
+            public const string PL = "pl-PL";
+            public const string ENISO = "en";
+            public const string PLISO = "pl";
+        }
     }
 }

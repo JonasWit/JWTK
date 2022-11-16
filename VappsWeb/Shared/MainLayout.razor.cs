@@ -6,12 +6,12 @@ namespace VappsWeb.Shared
     {
         private readonly MudTheme _theme = new()
         {
-            Palette = new Palette()
-            {
-                Primary = Colors.Blue.Darken4,
-                Secondary = Colors.Indigo.Darken4,
-                AppbarBackground = Colors.Blue.Darken4,
-            },
+            //Palette = new Palette()
+            //{
+            //    Primary = Colors.Blue.Darken4,
+            //    Secondary = Colors.Indigo.Darken4,
+            //    AppbarBackground = Colors.Blue.Darken4,
+            //},
         };
 
         private bool _isDarkMode;

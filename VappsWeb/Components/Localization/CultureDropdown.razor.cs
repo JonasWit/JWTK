@@ -7,7 +7,7 @@ namespace VappsWeb.Components.Localization
 {
     public partial class CultureDropdown
     {
-        private readonly CultureInfo[] _cultures = new[] { new CultureInfo("en-US"), new CultureInfo("pl-PL"), };
+        private readonly CultureInfo[] _cultures = new[] { new CultureInfo(AppConfig.CultureKeys.EN), new CultureInfo(AppConfig.CultureKeys.PL), };
 
         [Inject]
         public NavigationManager NavManager { get; set; } = null!;
