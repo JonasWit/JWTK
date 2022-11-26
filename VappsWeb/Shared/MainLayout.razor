@@ -5,6 +5,8 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
+<MudElement HtmlTag="link" rel="icon" type="image/png" href="images/logo-sm-color.png"></MudElement>
+
 <MudLayout>
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
@@ -15,7 +17,14 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">VappsWeb</MudText>
+            @if (_isDarkMode)
+            {
+                <MudImage Src="images/logo-sm-bw-wide.png" />
+            }
+            else
+            {
+                <MudImage Src="images/logo-sm-color-wide.png" />
+            }
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
