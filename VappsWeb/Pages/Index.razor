@@ -1,10 +1,204 @@
 ﻿@page "/"
+@using MudBlazor.Services
 @inject IStringLocalizer<Resource> localizer
-
 
 <PageTitle>VAPPS</PageTitle>
 
+<MudStack>
 
-<MudText Typo="Typo.h3" GutterBottom="true">@localizer[LocalizationKeys.IndexPage.TestText]</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
-<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
+
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h6">Aplikacje jakie tylko sobie wymarzysz.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudPaper Class="d-flex justify-space-between flex-grow-1 gap-2" Elevation="0">
+                    <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                        <MudText Align="Align.Center" Typo="Typo.h3">Aplikacje jakie tylko sobie wymarzysz.</MudText>
+                        <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                        <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    </MudStack>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                </MudPaper>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h3">E-Commerce.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudPaper Class="d-flex justify-space-between flex-grow-1 gap-2" Elevation="0">
+                        <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                        <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">E-Commerce</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                        </MudStack>
+                    </MudPaper>
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h6">AI</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudPaper Elevation="0" Width="400">
+                        <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">AI</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                        </MudStack>
+                    </MudPaper>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h6">Blog</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudPaper Elevation="0" Width="400">
+                        <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Blog</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                        </MudStack>
+                    </MudPaper>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h6">Automatyzacje dla Biznesu</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudPaper Elevation="0" Width="400">
+                        <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Automatyzacje dla Biznesu</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                        </MudStack>
+                    </MudPaper>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudBreakpointProvider>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudPaper Elevation="0">
+                <MudStack>
+                    <MudText Align="Align.Center" Typo="Typo.h6">Cloud</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                    <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="5" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudPaper Elevation="0">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudPaper Elevation="0" Width="400">
+                        <MudStack Class="pa-2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Cloud</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla wszystkich branż.</MudText>
+                            <MudText Align="Align.Center" Typo="Typo.subtitle2">Dla każdego rodzaju prowadzonej firmy.</MudText>
+                        </MudStack>
+                    </MudPaper>
+                    <MudImage Width="500" Fluid="true" Src="images/placeholder-image.png" Alt="Image" Elevation="0" />
+                </MudStack>
+            </MudPaper>
+        </MudHidden>
+    </MudBreakpointProvider>
+
+
+    <MudPaper>
+        <MudStack>
+            <MudText Align="Align.Center" Typo="Typo.h5">Dowiedz się Więcej</MudText>
+            <MudExpansionPanels>
+                <MudExpansionPanel Text="Panel One" MaxHeight="150">
+                    Panel One Content
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="Panel Two" MaxHeight="500">
+                    Panel Two Content
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="Panel Three" MaxHeight="1000">
+                    Panel Three Content
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="Panel Four">
+                    Panel Four Content
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudStack>
+    </MudPaper>
+    <MudDivider />
+    <MudPaper>
+        <MudStack>
+            <MudText Align="Align.Center" Typo="Typo.h5">Masz więcej pytań? Napisz na office@vapps.pl</MudText>
+            <MudText Align="Align.Center">Tworzymy rozwiązania wykorzystujące AI</MudText>
+        </MudStack>
+    </MudPaper>
+
+
+
+
+
+</MudStack>
+
