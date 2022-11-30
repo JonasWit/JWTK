@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MasterService.Tests", "Mast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MudBlazorTemplates1", "MudBlazorTemplates1\MudBlazorTemplates1.csproj", "{5EF34CAF-D82E-432C-806D-094B13D05A1E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD590836-0CD8-40B4-AA36-6CB1E9E4CB1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EF34CAF-D82E-432C-806D-094B13D05A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EF34CAF-D82E-432C-806D-094B13D05A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EF34CAF-D82E-432C-806D-094B13D05A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EF34CAF-D82E-432C-806D-094B13D05A1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
